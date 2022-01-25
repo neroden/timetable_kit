@@ -1,3 +1,11 @@
+# Data directories for timetable_kit
+wikipedia/
+amtrak_stations/
+amtrak_station_stats/
+
+# Typical downloaded GTFS files
+gtfs-amtrak.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
