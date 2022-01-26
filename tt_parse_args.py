@@ -13,10 +13,11 @@ The --type argument determines the type of timetable:
   updown - one direction down, other direction up
   fancy - generated from template
   template - create template for use with fancy (edit this by hand afterwards)
+  test - do internal testing (do not generate timetable)
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','updown','fancy','template'],
+        choices=['single','updown','fancy','template','test'],
         help='Type of timetable or template to generate.',
         )
     parser.add_argument('--gtfs','-g',

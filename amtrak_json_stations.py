@@ -108,6 +108,17 @@ def load_stations_json():
         stations_json = stations_json_local_file.read()
     return stations_json
 
+def make_station_name_lookup_table():
+    '''
+    Return a dict which takes a station code and returns a suitable printable station name.
+    Expects json stations to be downloaded already
+    '''
+    stations_json = load_stations_json()
+    # Believe it or not, this line JUST WORKS!!!!  Wow!
+    stations = pd.io.json.read_json(stations_json,orient='records')
+    lookup_station_name = dict( zip(stations.code, stations.autoFillName) )
+    return lookup_station_name
+
 def download_station_details(station_code: str):
     '''
     Download station details for one station as json text; return it.

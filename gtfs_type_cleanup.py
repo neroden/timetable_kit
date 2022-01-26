@@ -60,7 +60,7 @@ def type_corrected_trips(trips):
     new_trips = trips.astype({'route_id': 'int32',
                               'service_id':'int32',
                               'trip_id': 'int64',
-                              'trip_short_name': 'int32', # This is the Amtrak train number
+                              # 'trip_short_name': 'int32', # This is the Amtrak train number.  It is a number, but don't treat it as one.
                               'direction_id': 'int32' # This is 0 for west, 1 for east on the LSL only
                               }) # Note that shape_id does not exist in Amtrak data
     return new_trips

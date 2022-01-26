@@ -18,6 +18,7 @@ import operator # for opperator.not_
 import tt_parse_args
 import gtfs_type_cleanup
 import amtrak_agency_cleanup
+import amtrak_json_stations
 import text_presentation
 from text_presentation import TimeTuple
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -41,6 +42,8 @@ enhanced_agency=None
 lookup_route_id=None
 # Trip lookup table, currently unused
 trip_lookup_table=None
+# Lookup table from station code to desired printed station name, overwritten later
+lookup_station_name=None
 
 # GLOBAL VARIABLES
 # Known problems in Amtrak data
@@ -91,12 +94,38 @@ def initialize_feed():
     trip_lookup_table = indexed_trips.to_dict('index')
     # print(trip_lookup_table) # this worked
 
+    # This is Amtrak-specific
+    fix_known_errors(feed)
+    return
+
+def fix_known_errors(feed):
+    '''
+    Changes the feed in place to fix known errors.
+    '''
+    # Cardinal 1051 (DST switch date) with wrong direction ID
+
+    # There's an error in the trips. Attempt to fix it.
+    # THIS WORKS for fixing errors in a feed.  REMEMBER IT.
+    my_trips = feed.trips
+    problem_index = my_trips.index[my_trips["trip_short_name"] == "1051"]
+    # print (problem_index)
+    # print (my_trips.iloc[problem_index])
+    my_trips.at[problem_index,"direction_id"] = 0 # set in place
+    # print (my_trips.iloc[problem_index])
+    # Error fixed.  Put back into the feed.
+    feed.trips = my_trips
+    return
+
 ### END OF INITIALIZATION CODE
 
 # Convenience function for the route_id lookup table
 def route_id(route_name):
     "Given a route long name, return the ID."
     return lookup_route_id[route_name]
+
+def station_name(code):
+    "Given a station code, return the printable name."
+    return lookup_station_name[code]
 
 def filter_calendar_by_effective_date(calendar, effective_date: int):
     "Return version of the calendar DataFrame only containing rows with service_ids valid on the given date.  effective_date is a GTFS date string (YYYYMMDD) converted to an integer for fast comparison"
@@ -131,6 +160,12 @@ def filter_trips_by_calendar(trips, calendar):
     service_ids = calendar["service_id"].array
     filtered_trips = trips[trips.service_id.isin(service_ids)]
     return filtered_trips
+
+def filter_trips_by_short_name(trips, train_number):
+    ''' "Short name" is actually the Amtrak train number. '''
+    my_trips = trips
+    my_trips = my_trips[my_trips.trip_short_name == train_number]
+    return my_trips
 
 #def filter_trips_by_effective_date(trips, effective_date)
 #    "Return version of the trips DataFrame only containing trips with service_ids valid on the given date."
@@ -467,25 +502,6 @@ def filter_trips_for_timetable(trips, route_ids, direction=None, date=reference_
     if (direction in [0,1]):
         my_trips = my_trips[my_trips.direction_id == direction]
     return my_trips
-    pass
-
-def fix_known_errors(feed):
-    '''
-    Changes the feed in place to fix known errors.
-    '''
-    # Cardinal 1051 (DST switch date) with wrong direction ID
-
-    # There's an error in the trips. Attempt to fix it.
-    # THIS WORKS for fixing errors in a feed.  REMEMBER IT.
-    my_trips = feed.trips
-    problem_index = my_trips.index[my_trips["trip_short_name"] == 1051]
-    # print (problem_index)
-    # print (my_trips.iloc[problem_index])
-    my_trips.at[problem_index,"direction_id"] = 0 # set in place
-    # print (my_trips.iloc[problem_index])
-    # Error fixed.  Put back into the feed.
-    feed.trips = my_trips
-    return
 
 def parse_timetable_spec(filename):
     '''
@@ -513,6 +529,25 @@ def parse_timetable_spec(filename):
 
     return (trains_list, stations_list)
 
+
+def prep_spec():
+    # Creates a prototype timetable.  It will definitely need to be manipulated by hand.
+    # Totally incomplete.
+    '''put to one side for testing purposes'''
+    route_ids = [route_id("Illini"),route_id("Saluki"),route_id("City Of New Orleans")]
+
+    my_trips = feed.trips
+    # reference_date is currently a global
+    upbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=0, date=reference_date)
+    print("Upbound:")
+    print(upbound_trips)
+    downbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=1, date=reference_date)
+    print("Downbound:")
+    print(downbound_trips)
+    allbound_trips = filter_trips_for_timetable(my_trips, route_ids, date=reference_date)
+    print("Allbound:")
+    print(allbound_trips)
+
 def compute_prototype_timetable(stations_list):
     '''
     Given a stations list as returned by parse_timetable_spec,
@@ -533,98 +568,138 @@ def compute_prototype_timetable(stations_list):
     # This gives us the prototype timetable
     return tt_df
 
+def compute_station_names_df(stations_list):
+    '''
+    Given a stations list as returned by parse_timetable_spec,
+    return a DataFrame with three columns, (0, stop_sequence), (0, stop_id),
+    and (0, station) containing the station names.
+    Severe duplication with compute_prototype_timetable.  Oh well.
+    '''
+    tt_stations_list = stations_list
+    # Set up parallel station names list
+    tt_station_names_list = [station_name(code) for code in tt_stations_list]
+
+    # Convert both to parallel DataFrames
+    tt_stations_list_df = pd.DataFrame(tt_stations_list, columns=[(0,'stop_id')])
+    tt_station_names_list_df = pd.DataFrame(tt_station_names_list, columns=[(0,"station")])
+
+    # Assemble the two and set the station code as the index (for future use)
+    tt_df = pd.concat([tt_stations_list_df, tt_station_names_list_df], axis="columns")
+    tt_df = tt_df.set_index((0, 'stop_id'))
+    # This gives us the prototype timetable
+    return tt_df
+
+
 def main_func_future():
 
-    # We need a prototype timetable.  If we aren't ready to prototype yet, we can do without it,
-    # but we'll have to bail out partway through
-    prototyping = True
-    if prototyping:
-        # FIXME -- hardwired to the CONO
-        spec_pathname = ''.join([output_dirname, "/", "cono.spec"])
-        [tt_trains_list, tt_stations_list] = parse_timetable_spec(spec_pathname)
-        print ("we got this...")
-        print (tt_trains_list)
-        print ("and this...")
-        tt_df = compute_prototype_timetable(tt_stations_list)
-        print (tt_df)
-
-    '''put to one side for testing purposes'''
-    route_ids = [route_id("Illini"),route_id("Saluki"),route_id("City Of New Orleans")]
-
-    fix_known_errors(feed)
-
-    my_trips = feed.trips
-    # reference_date is currently a global
-    upbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=0, date=reference_date)
-    print("Upbound:")
-    print(upbound_trips)
-    downbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=1, date=reference_date)
-    print("Downbound:")
-    print(downbound_trips)
-    allbound_trips = filter_trips_for_timetable(my_trips, route_ids, date=reference_date)
-    print("Allbound:")
-    print(allbound_trips)
-
-
-    # So.  In order to combine the timetables, we need a prior and exterior stop list
+    # In order to combine the timetables, we need a prior and exterior stop list
     # which specifies the order the stops will appear in *in the timetable*.
     # This has to be human-curated; consider Silver Service with the split in the Carolinas.
     # Which branch gets listed first?  Can't be automatically determined.
-    # This is tt_df, from compute_prototype_timetable
-    if prototyping:
-        list_of_timetables = [tt_df]
-    else:
-        list_of_timetables = []
+    #
+    # So we need a prototype timetable.
+    # FIXME -- hardwired to the CONO
+    spec_pathname = ''.join([output_dirname, "/", "illini.spec"])
+    [tt_trains_list, tt_stations_list] = parse_timetable_spec(spec_pathname)
+    print ("Trains in order:", tt_trains_list)
+    print ("Stations in order: ")
+    tt_df = compute_prototype_timetable(tt_stations_list)
+    print (tt_df)
+
+
+    todays_calendar = filter_calendar_by_effective_date(feed.calendar, reference_date)
+    todays_trips = filter_trips_by_calendar(feed.trips, todays_calendar)
+
+    list_of_timetables = [tt_df]
     list_of_train_numbers = []
-    for trip in allbound_trips.itertuples(index=False):
+    for train_number in tt_trains_list:
+        if (train_number in ["station","stations"]):
+            tt_station_names_df = compute_station_names_df(tt_stations_list)
+            # Sort by station ID...
+            # tt_station_names_df = tt_station_names_df.set_index((0, 'stop_id'))
+            # It's set as the index in compute_station_names; can't set it twice
 
-        stop_times = single_trip_stop_times(trip.trip_id)
-        stop_times.reset_index(inplace=True)
-        train_number = trip.trip_short_name
+            list_of_timetables.append(tt_station_names_df)
+            list_of_train_numbers.append("station")
+            print(tt_station_names_df)
 
-        # Multi-index is clunky, so just use tuples as column names
-        # which is completely valid
-        # Use "0" to mean "shared between trains"
-        # This worked but felt ugly.
-        # For debugging reasons, massively shorten column names
-        # new_index_map = { 'stop_sequence'  : (train_number, 'stop_sequence'),
-        #                  'trip_id'        : (train_number, 'trip_id'),
-        #                  'arrival_time'   : (train_number, 'arrival_time'),
-        #                  'departure_time' : (train_number, 'departure_time'),
-        #                  'pickup_type'    : (train_number, 'pickup_type'),
-        #                  'drop_off_type'  : (train_number, 'drop_off_type'),
-        #                  'stop_id'        : (0, 'stop_id')
-        #                }
+        else: # column is not "stations"
+            # In future this will be more complex with two trains in one column, but for now...
+            desired_trips = filter_trips_by_short_name(todays_trips, train_number)
+            how_many = len(desired_trips)
+            if (how_many == 0):
+                print( ''.join(["No trips for ",train_number,", skipping"]) )
+            elif (how_many >= 2):
+                print("Error: filter found two trips with the same train number:")
+                print(desired_trips)
+                quit()
+                # FIXME: use exceptions here
+            # This should now be a single-item list, so extract the item...
+            my_trip = desired_trips.iloc[0]
+            stop_times = single_trip_stop_times(my_trip.trip_id)
+            stop_times.reset_index(inplace=True)
 
-        # Rename columns to allow concat to work...
-        new_index_map = { 'stop_sequence'  : (train_number, 'seq'),
-                          'trip_id'        : (train_number, 'trip_id'),
-                          'arrival_time'   : (train_number, 'ar_t'),
-                          'departure_time' : (train_number, 'dp_t'),
-                          'pickup_type'    : (train_number, 'p'),
-                          'drop_off_type'  : (train_number, 'd'),
-                          'stop_id'        : (0, 'stop_id')
-                        }
-        stop_times = stop_times.rename(new_index_map,axis='columns')
+            # Sanity check:
+            proper_train_number = my_trip.trip_short_name
+            if (proper_train_number != train_number):
+                print( ''.join(["Weirdness: trip for ", train_number," has train number ", proper_train_number]) )
+                quit()
 
-        # Sort by station ID...
-        stop_times = stop_times.set_index((0, 'stop_id'))
-        list_of_timetables.append(stop_times)
-        list_of_train_numbers.append(train_number)
-        print (stop_times)
+            # Multi-index is clunky, so just use tuples as column names
+            # which is completely valid
+            # Use "0" to mean "shared between trains"
+            # This worked but felt ugly.
+            # For debugging reasons, massively shorten column names
+            # new_index_map = { 'stop_sequence'  : (train_number, 'stop_sequence'),
+            #                  'trip_id'        : (train_number, 'trip_id'),
+            #                  'arrival_time'   : (train_number, 'arrival_time'),
+            #                  'departure_time' : (train_number, 'departure_time'),
+            #                  'pickup_type'    : (train_number, 'pickup_type'),
+            #                  'drop_off_type'  : (train_number, 'drop_off_type'),
+            #                  'stop_id'        : (0, 'stop_id')
+            #                }
+
+            # Rename columns to allow concat to work...
+            new_index_map = { 'stop_sequence'  : (train_number, 'seq'),
+                              'trip_id'        : (train_number, 'trip_id'),
+                              'arrival_time'   : (train_number, 'ar_t'),
+                              'departure_time' : (train_number, 'dp_t'),
+                              'pickup_type'    : (train_number, 'p'),
+                              'drop_off_type'  : (train_number, 'd'),
+                              'stop_id'        : (0, 'stop_id')
+                            }
+            stop_times = stop_times.rename(new_index_map,axis='columns')
+
+            # Sort by station ID...
+            stop_times = stop_times.set_index((0, 'stop_id'))
+            list_of_timetables.append(stop_times)
+            list_of_train_numbers.append(train_number)
+            print (stop_times)
 
     # Out of the for loop now.  Merge the pieces.
     # Note that this merges on the index, which is carefully set to be the same for all pieces
     # (namely, it's set on (0, 'stop_id')
     full_timetable = pd.concat(list_of_timetables,axis="columns")
+
+    # NOTE!  This is a huge issue!  This works for the CONO, but if you try it for the Illini,
+    # it will add back in all the CONO stations!  That is not what is wanted.
+    # It becomes essential to filter out stops which have NaN in the stop_sequence column.
+    # FIXME
+
     # Drop columns which are not important to the main merge algorithm, for readability
+    # Ignore errors if some of the columns to be dropped don't exist
     trimmed_timetable = full_timetable
     for train_number in list_of_train_numbers:
-        trimmed_timetable = trimmed_timetable.drop((train_number,'trip_id'),axis='columns')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'p'),axis='columns')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'d'),axis='columns')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'ar_t'),axis='columns')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'seq'),axis='columns')
+        trimmed_timetable = trimmed_timetable.drop((train_number,'trip_id'),
+                                                    axis='columns', errors='ignore')
+        trimmed_timetable = trimmed_timetable.drop((train_number,'p'),
+                                                    axis='columns', errors='ignore')
+        trimmed_timetable = trimmed_timetable.drop((train_number,'d'),
+                                                    axis='columns', errors='ignore')
+        trimmed_timetable = trimmed_timetable.drop((train_number,'ar_t'),
+                                                    axis='columns', errors='ignore')
+        trimmed_timetable = trimmed_timetable.drop((train_number,'seq'),
+                                                    axis='columns', errors='ignore')
     print(trimmed_timetable)
 
     quit()
@@ -684,16 +759,50 @@ if __name__ == "__main__":
         reference_date = args.reference_date
 
     initialize_feed() # This sets various globals
+
+    # Create the station name lookup table, a global
+    # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
+    lookup_station_name = amtrak_json_stations.make_station_name_lookup_table()
+
     dumptable(feed.routes, "routes") # Generates routes.html
 
     if not (args.type):
         print ("No type of timetable specified.")
         quit()
 
+    if (args.type == "test"):
+        name = lookup_station_name["BUF"]
+        print(name);
+        quit()
+
     if (args.type == "single"):
         # Single timetable.
         # This is the old, one-train printer.
         # It works, bit is not good.  Hardcoded to Cardinal.
+
+        route_ids = [route_id("Cardinal")]
+
+        my_trips = feed.trips
+        # reference_date is currently a global
+        upbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=0, date=reference_date)
+        print("Upbound:")
+        print(upbound_trips)
+        downbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=1, date=reference_date)
+        print("Downbound:")
+        print(downbound_trips)
+        allbound_trips = filter_trips_for_timetable(my_trips, route_ids, date=reference_date)
+        print("Allbound:")
+        print(allbound_trips)
+
+        for trip in allbound_trips.itertuples(index=False):
+            print_single_trip_tt(trip)
+            break
+            # Doesn't actually work for multiple trips.  Oh dear.
+        quit()
+
+    if (args.type == "updown"):
+        # Single-service "up down" timetable.
+        # Work in progress
 
         fix_known_errors(feed)
 
