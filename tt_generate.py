@@ -23,6 +23,7 @@ import text_presentation
 from text_presentation import TimeTuple
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_styling import style_timetable_for_html
+from timetable_styling import amtrak_station_name_to_html
 
 # GLOBAL VARIABLES
 # Will be changed by command-line arguments, hopefully!
@@ -49,6 +50,63 @@ lookup_station_name=None
 # Known problems in Amtrak data
 global_bad_service_ids = [2819372, # Cardinal one-day service when it doesn't run on that day
                          ]
+
+# "Major stations".  This is for timetable styling: making them bigger and bolder.
+# This should really be per-timetable but this is a start
+# (Empire doesn't call out NEC stations on connecting trains)
+# (Vermonter only callse out NY and DC on NEC)
+major_stations_list = ( "BOS", # NEC timetable stations first
+    "NHV",
+    "NYP",
+    "NYG", # Just in case there's a reroute
+    "PHL",
+    "WAS",
+    "LYH", # Virginia service timetable
+    "RVR",
+    "NFK",
+    "HAR", # Keystone timetable
+    "PIT",
+    "ALB", # Empire timetable
+    "BFX",
+    "TWO",
+    "MTR", # Adirondack
+    "ESX", # Vermonter
+    "SPG",
+    "RUD", # Ethan Allen -- will change to Burlington
+    "RGH", # Carolinian/Piedmont
+    "CLT",
+    "ATL", # Crescent
+    "BHM",
+    "NOL",
+#    "ALT", # Pennsylvanian -- I think I won't emphasize this one.
+    "CVS", # Cardinal
+    "CIN",
+    "IND",
+    "CHI",
+    "CLE", # LSL / CL
+    "TOL",
+    "GRR", # Michigan services
+    "PTH",
+    "DET",
+    "PNT",
+    "CHM", # CONO/Illini/Saluki
+    "CDL",
+    "MEM",
+    "JAN",
+    "STL", # River Runner
+    "KCY",
+    "QCY", # Quincy service
+    "MKE", # Hiawathas
+    "SAN", # California Coastal
+    "LAX",
+    "SBA",
+    "SLO",
+    "SJC",
+    "OKJ",
+    "SAC",
+    "SKN", # San Joaquins
+    "BFD",
+    )
 
 # Useful debugging function for Pandas tables
 def dumptable(table, filename):
@@ -220,11 +278,16 @@ def format_single_trip_timetable(stop_times,
     # CSS class "shortcuts"
     # in future, color will likely be changed
     bg_color_css     = "color-cornsilk"
+    font_css = "font-sans-serif"
     heading_extra_css = "align-vcenter align-center heading-font"
-    heading_css      = " ".join([bg_color_css, "border-top-heavy border-bottom-heavy", heading_extra_css])
-    data_css         = " ".join([bg_color_css, "border-top-light border-bottom-light", "align-top"])
-    data_css_final   = " ".join([bg_color_css, "border-top-light border-bottom-heavy", "align-top"])
-    data_css_initial = " ".join([bg_color_css, "border-top-heavy border-bottom-light", "align-top"])
+    heading_css      = " ".join([bg_color_css, font_css,
+                                 "border-top-heavy border-bottom-heavy", heading_extra_css])
+    data_css         = " ".join([bg_color_css, font_css,
+                                 "border-top-light border-bottom-light", "align-top"])
+    data_css_final   = " ".join([bg_color_css, font_css,
+                                 "border-top-light border-bottom-heavy", "align-top"])
+    data_css_initial = " ".join([bg_color_css, font_css,
+                                 "border-top-heavy border-bottom-light", "align-top"])
     # left-right border shortcuts
     left_css = "border-left noborder-right"
     center_css = "noborder-left noborder-right"
@@ -255,7 +318,7 @@ def format_single_trip_timetable(stop_times,
     tt_dict["Time"] = [time_column_header]
     if (infrequent):
         tt_dict["Days"] = ["Days"]
-    tt_dict["StationCode"] = ["Station Code"]
+    tt_dict["StationCode"] = ["Station"]
     # Stop_sequences is generally indexed 1+; so 0 is a safe index value, probably
     # Which is good because I don't know how to set any other index!
     tt_row = pd.DataFrame(tt_dict)
@@ -367,6 +430,21 @@ def format_single_trip_timetable(stop_times,
             arrival_departure_str = linebreak.join([departure_str,arrival_str])
             styler_one_row = False
 
+        # Prettyprint the station name
+        station_name_raw = lookup_station_name[timepoint.stop_id]
+        if (timepoint.stop_id in major_stations_list):
+            major = True
+        else:
+            major = False
+
+        if (doing_html):
+            station_name_str = amtrak_station_name_to_html(station_name_raw, major)
+        else:
+            if (major):
+                station_name_str = station_name_raw.upper()
+            else:
+                station_name_str = station_name_raw
+
         # This is *not* order-dependent; the order is set by the first row, up above.
         tt_row_dict = {}
         tt_row_dict["NB"]          = [rd_str]
@@ -374,7 +452,7 @@ def format_single_trip_timetable(stop_times,
         tt_row_dict["Time"]        = [arrival_departure_str]
         if (infrequent):
             tt_row_dict["Days"]    = [daystring]
-        tt_row_dict["StationCode"] = [timepoint.stop_id]
+        tt_row_dict["StationCode"] = [station_name_str]
         tt_row = pd.DataFrame(tt_row_dict, index=[timepoint.Index])
         list_of_timetable_rows.append(tt_row)
 
@@ -599,7 +677,7 @@ def main_func_future():
     #
     # So we need a prototype timetable.
     # FIXME -- hardwired to the CONO
-    spec_pathname = ''.join([output_dirname, "/", "illini.spec"])
+    spec_pathname = ''.join([output_dirname, "/", "cono.spec"])
     [tt_trains_list, tt_stations_list] = parse_timetable_spec(spec_pathname)
     print ("Trains in order:", tt_trains_list)
     print ("Stations in order: ")
@@ -684,11 +762,12 @@ def main_func_future():
     # NOTE!  This is a huge issue!  This works for the CONO, but if you try it for the Illini,
     # it will add back in all the CONO stations!  That is not what is wanted.
     # It becomes essential to filter out stops which have NaN in the stop_sequence column.
+    proper_timetable = full_timetable[full_timetable[(0,'stop_sequence')].notna()]
     # FIXME
 
     # Drop columns which are not important to the main merge algorithm, for readability
     # Ignore errors if some of the columns to be dropped don't exist
-    trimmed_timetable = full_timetable
+    trimmed_timetable = proper_timetable
     for train_number in list_of_train_numbers:
         trimmed_timetable = trimmed_timetable.drop((train_number,'trip_id'),
                                                     axis='columns', errors='ignore')
@@ -763,16 +842,12 @@ if __name__ == "__main__":
     # Create the station name lookup table, a global
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
     lookup_station_name = amtrak_json_stations.make_station_name_lookup_table()
+    # NOTE: redundant copy is present in text_presentation.py FIXME
 
     dumptable(feed.routes, "routes") # Generates routes.html
 
     if not (args.type):
         print ("No type of timetable specified.")
-        quit()
-
-    if (args.type == "test"):
-        name = lookup_station_name["BUF"]
-        print(name);
         quit()
 
     if (args.type == "single"):
@@ -833,5 +908,11 @@ if __name__ == "__main__":
     if (args.type == "fancy"):
         # Use a template (work in progress)
         main_func_future();
+        quit()
+
+    if (args.type == "test"):
+        name = lookup_station_name["BUF"]
+        fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
+        print(fancy_name);
         quit()
 

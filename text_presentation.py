@@ -105,3 +105,4 @@ def time_short_str(time: TimeTuple) -> str:
                 ]
     time_str = ''.join(time_text) # No separator!
     return time_str
+

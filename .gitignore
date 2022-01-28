@@ -5,6 +5,11 @@ amtrak_station_stats/
 
 # Typical downloaded GTFS files
 gtfs-amtrak.zip
+gtfs-amtrak/
+
+# Generated output files
+*.pdf
+*.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

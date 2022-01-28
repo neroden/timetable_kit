@@ -1,0 +1,5 @@
+The HTML file can (and sometimes should) be converted to PDF.  
+I am currently using WeasyPrint for this because it is also a Python package.
+Unfortunately, it increases the default font size, which is problematic; must figure out how to fix this.
+
+- The elegant styling on the "single" timetable needs to be completely copied over to style a complex timetable.  Very messy.

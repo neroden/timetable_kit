@@ -108,6 +108,7 @@ def load_stations_json():
         stations_json = stations_json_local_file.read()
     return stations_json
 
+# This one is called by the main timetable program.
 def make_station_name_lookup_table():
     '''
     Return a dict which takes a station code and returns a suitable printable station name.

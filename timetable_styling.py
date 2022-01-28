@@ -12,19 +12,40 @@ from pandas.io.formats.style import Styler
 # This stylesheet (global variable) will be prepended to HTML output.
 # The class "timetable-css-class" must match the one assigned to the table
 # in the Styler.
+
 separate_stylesheet = '''<style type="text/css">
+@page {
+    /* For printing */
+    size: Letter; /* change from default A4, since this is the US */
+    margin: 0cm; /* default throws part of the Cardinal timetable onto page 2 */
+}
+.heading-font {
+    font-weight: bold;
+}
 strong {
     font-size: 200%;
     font-weight: bold;
 }
-.tt-table {
-    border-collapse: collapse;
+.font-sans-serif {
+    font-family: Sans-Serif;
+}
+.major-station {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: normal;
+}
+.minor-station {
+    font-weight: normal;
+}
+.station-footnotes {
+    font-weight: normal;
+    font-size: smaller;
 }
 .color-cornsilk {
     background-color: cornsilk;
 }
-.heading-font {
-    font-weight: bold;
+.tt-table {
+    border-collapse: collapse;
 }
 .align-top {
     vertical-align: top;
@@ -105,3 +126,44 @@ def style_timetable_for_html(timetable, styler):
     # We MUST prepend the border-collapse part of the stylesheet, since the styler can't do it.
     finished_timetable_html = ''.join([separate_stylesheet, styled_timetable_html])
     return finished_timetable_html
+    
+def amtrak_station_name_to_html(station_name: str, major=False ) -> str:
+    '''
+    Given an Amtrak station name in one of these two forms:
+    Champaign-Urbana, IL (CHM)
+    New Orleans, LA - Union Passenger Terminal (NOL)
+    Produce a pretty-printable HTML version
+    If "major", then make the station name bigger and bolder
+    '''
+
+    if (" - " in station_name):
+        (city_state_name, second_part) = station_name.split(" - ", 1)
+        (facility_name, suffix) = second_part.split(" (", 1)
+        (station_code, junk) = suffix.split(")",1)
+    else:
+        facility_name = None
+        (city_state_name, suffix) = station_name.split(" (", 1)
+        (station_code, junk) = suffix.split(")",1)
+
+    if (major):
+        enhanced_city_state_name = ''.join(["<span class=major-station >",
+                                            city_state_name,"</span>"])
+    else:
+        enhanced_city_state_name = ''.join(["<span class=minor-station >",
+                                            city_state_name,"</span>"])
+
+    enhanced_station_code = ''.join(["<span class=station-footnotes>(",
+                                     station_code,")</span>"])
+
+    if (facility_name):
+        enhanced_facility_name = ''.join(["<br><span class=station-footnotes>",
+                                          " - ", facility_name,"</span>"])
+    else:
+        enhanced_facility_name = ''
+
+    fancy_name = ' '.join([enhanced_city_state_name,
+                           enhanced_station_code,
+                           enhanced_facility_name
+                          ])
+    return fancy_name
+
