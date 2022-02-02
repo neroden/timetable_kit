@@ -17,7 +17,7 @@ The --type argument determines the type of timetable:
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','updown','fancy','template','test'],
+        choices=['single','updown','fancy-one','fancy-two','template','test'],
         help='Type of timetable or template to generate.',
         )
     parser.add_argument('--gtfs','-g',
@@ -25,6 +25,14 @@ The --type argument determines the type of timetable:
         help='''Directory containing GTFS static data files,
                 or zipped GTFS static data feed,
                 or URL for zipped GTFS static data feed''',
+        )
+    parser.add_argument('--template','-l',
+        dest='template_filename',
+        help='''CSV file containing template for timetable (with no times).
+                Top row should have train numbers (slash indicates two trains in one row).
+                Left column should have station codes.
+                Format is a work in progress.
+             ''',
         )
     parser.add_argument('--reference-date','--date','-d',
         dest='reference_date',

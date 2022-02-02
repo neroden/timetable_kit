@@ -480,6 +480,242 @@ def format_single_trip_timetable(stop_times,
     styler = styler_base.append(list_of_styler_rows)
     return (timetable, styler)
 
+def fill_and_format_prototyped_timetable(stop_times,
+                                 calendar=False,
+                                 infrequent=False,
+                                 doing_html=False,
+                                 min_dwell=0,
+                                 reverse=False,
+                                 train_number="" ):
+    """
+    Unfinished routine to fill and format a prototyped timetable
+    Make a workable timetable for a single trip of the Cardinal or Sunset Limited.
+    Assumes that stop_times has been indexed by stop_sequence, and sorted.
+
+    doing_html: output text with HTML annotations rather than plaintext (newline vs. <br>, use of <b>, etc.)
+
+    min_dwell: if dwell time is less than this number of minutes,
+    only departure times are shown, and arrival times are unpublished.
+    This is useful for shortening public timetables.
+
+    reverse: reverses Ar/Dp -- an ugly hack for upside-down timetables.  The timetable must
+    still be turned upside down manually afterwards.
+
+    infrequent: if False (the default) the calendar is ignored.  (FOR NOW.  FIXME)
+    calendar: a calendar with a single row containing the correct calendar for the service.  Optional.
+    train_number: used as header for the times column
+    """
+    if (doing_html):
+        linebreak = "<br>"
+    else:
+        linebreak = "\n"
+
+    # CSS class "shortcuts"
+    # in future, color will likely be changed
+    bg_color_css     = "color-cornsilk"
+    font_css = "font-sans-serif"
+    heading_extra_css = "align-vcenter align-center heading-font"
+    heading_css      = " ".join([bg_color_css, font_css,
+                                 "border-top-heavy border-bottom-heavy", heading_extra_css])
+    data_css         = " ".join([bg_color_css, font_css,
+                                 "border-top-light border-bottom-light", "align-top"])
+    data_css_final   = " ".join([bg_color_css, font_css,
+                                 "border-top-light border-bottom-heavy", "align-top"])
+    data_css_initial = " ".join([bg_color_css, font_css,
+                                 "border-top-heavy border-bottom-light", "align-top"])
+    # left-right border shortcuts
+    left_css = "border-left noborder-right"
+    center_css = "noborder-left noborder-right"
+    right_css = "noborder-left border-right"
+    both_css = "border-left border-right"
+
+    # Define the columns, in order, and create empty DataFrames for timetable & styler
+    # By defining the columns first we avoid order dependency later
+    timetable_columns = pd.Index(["NB","ArDp","Time","StationCode"])
+    if (infrequent):
+        timetable_columns = pd.Index(["NB","ArDp","Time","Days","StationCode"])
+    timetable_base = pd.DataFrame(columns=timetable_columns)
+    styler_base = pd.DataFrame(columns=timetable_columns)
+
+    list_of_timetable_rows = [] # accumulate, then append to blank base
+    list_of_styler_rows = [] # accumulate, then append to blank base
+
+    # Use the train number as the column header for times
+    time_column_prefix = "Train #"
+    time_column_header = "".join([time_column_prefix, str(train_number)])
+    if (doing_html):
+        time_column_header = ''.join([time_column_prefix,"<br>","<strong>",str(train_number),"</strong>"])
+
+    # This is the output table header row
+    tt_dict = {}
+    tt_dict["NB"] = [""]
+    tt_dict["ArDp"] = [""]
+    tt_dict["Time"] = [time_column_header]
+    if (infrequent):
+        tt_dict["Days"] = ["Days"]
+    tt_dict["StationCode"] = ["Station"]
+    # Stop_sequences is generally indexed 1+; so 0 is a safe index value, probably
+    # Which is good because I don't know how to set any other index!
+    tt_row = pd.DataFrame(tt_dict)
+    list_of_timetable_rows.append(tt_row)
+
+    # This is the parallel styler table (header row)
+    # The styler table must be the exact same shape as the output table
+    # -- styles will apply to each cell specifically
+    styler_dict = {}
+    styler_dict["NB"]            = [" ".join([heading_css, left_css])]
+    styler_dict["ArDp"]          = [" ".join([heading_css, center_css])]
+    if (infrequent):
+        styler_dict["Time"]      = [" ".join([heading_css, center_css])]
+        styler_dict["Days"]      = [" ".join([heading_css, right_css])]
+    else:
+        styler_dict["Time"]      = [" ".join([heading_css, right_css])]
+    styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
+    styler_row = pd.DataFrame(styler_dict)
+    list_of_styler_rows.append(styler_row)
+
+    # This gets the first and last stop index number.  Helps with pretty-printing...
+    stop_sequence_numbers = stop_times.index
+    first_stop_number = stop_sequence_numbers.min()
+    last_stop_number = stop_sequence_numbers.max()
+
+    for timepoint in stop_times.itertuples():
+        # print(timepoint)
+
+        # Decide whether to suppress dwell
+        departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
+        arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
+        dwell_secs = departure_secs - arrival_secs
+        suppress_dwell = False
+        if (dwell_secs < min_dwell * 60):
+            suppress_dwell = True
+
+        # Prep string to print for time
+        arrival = text_presentation.explode_timestr(timepoint.arrival_time)
+        arrival_str = text_presentation.time_short_str(arrival)
+        # HTML bold annotation for PM
+        if (arrival.pm == 1 and doing_html):
+            arrival_str = ''.join(["<b>",arrival_str,"</b>"])
+
+        departure = text_presentation.explode_timestr(timepoint.departure_time)
+        departure_str = text_presentation.time_short_str(departure)
+        # HTML bold annotation for PM
+        if (departure.pm == 1 and doing_html):
+            departure_str = ''.join(["<b>",departure_str,"</b>"])
+
+        # For infrequent services, get the "MoWeFr" string.
+        daystring = ""
+        if (infrequent):
+          daystring = text_presentation.day_string(calendar, offset=departure.day)
+
+        # Special treatment of first and last stops
+        is_first_stop = False;
+        is_last_stop = False;
+        if (timepoint.Index == first_stop_number):
+            is_first_stop = True;
+        if (timepoint.Index == last_stop_number):
+            is_last_stop = True;
+
+        # Receive-only / Discharge-only annotation
+        rd_str = ""
+        receive_only = False;
+        discharge_only = False;
+        if (is_first_stop):
+            receive_only = True; # Logically speaking... but don't annotate it
+        if (is_last_stop):
+            discharge_only = True; # Logically speaking... but don't annotate it
+        if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
+            if (not is_first_stop): # This is obvious at the first station
+                receive_only = True;
+                rd_str = "R" # Receive passengers only
+                if (doing_html):
+                    rd_str = "<b>R</b>"
+        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
+            if (not is_last_stop): # This is obvious at the last station
+                discharge_only = True;
+                rd_str = "D" # Discharge passengers only
+                if (doing_html):
+                    rd_str = "<b>D</b>"
+        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 1):
+            rd_str = "*" # Not for ordinary passengers (staff only, perhaps)
+        elif (timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2):
+            rd_str = "F" # Flag stop of some type
+
+        # Important note: there's currently no way to mark the infamous "L",
+        # which means that the train or bus is allowed to depart ahead of time
+
+        if (receive_only or suppress_dwell):
+            # One row
+            ardp_str = ""
+            arrival_departure_str = departure_str
+            styler_one_row = True
+        elif (discharge_only):
+            # One row
+            ardp_str = ""
+            arrival_departure_str = arrival_str
+            styler_one_row = True
+        elif (not reverse):
+            # Dual row for time
+            ardp_str = linebreak.join(["Ar","Dp"])
+            arrival_departure_str = linebreak.join([arrival_str,departure_str])
+            styler_one_row = False
+        else: #reverse
+            # Dual row for time, for reversing
+            ardp_str = linebreak.join(["Dp","Ar"])
+            arrival_departure_str = linebreak.join([departure_str,arrival_str])
+            styler_one_row = False
+
+        # Prettyprint the station name
+        station_name_raw = lookup_station_name[timepoint.stop_id]
+        if (timepoint.stop_id in major_stations_list):
+            major = True
+        else:
+            major = False
+
+        if (doing_html):
+            station_name_str = amtrak_station_name_to_html(station_name_raw, major)
+        else:
+            if (major):
+                station_name_str = station_name_raw.upper()
+            else:
+                station_name_str = station_name_raw
+
+        # This is *not* order-dependent; the order is set by the first row, up above.
+        tt_row_dict = {}
+        tt_row_dict["NB"]          = [rd_str]
+        tt_row_dict["ArDp"]        = [ardp_str]
+        tt_row_dict["Time"]        = [arrival_departure_str]
+        if (infrequent):
+            tt_row_dict["Days"]    = [daystring]
+        tt_row_dict["StationCode"] = [station_name_str]
+        tt_row = pd.DataFrame(tt_row_dict, index=[timepoint.Index])
+        list_of_timetable_rows.append(tt_row)
+
+        # Special top-bottom border treatment on first and last row
+        my_data_css = data_css
+        if (is_first_stop):
+            my_data_css = data_css_initial
+        if (is_last_stop):
+            my_data_css = data_css_final
+        # This is *not* order-dependent; the order is set by the first row, up above.
+        sr_dict = {}
+        sr_dict["NB"]           = [" ".join([my_data_css, "align-right", left_css])]
+        sr_dict["ArDp"]         = [" ".join([my_data_css, "align-right", center_css])]
+        if (infrequent):
+            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", center_css])]
+            sr_dict["Days"]     = [" ".join([my_data_css, "align-left", right_css])]
+        else:
+            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", right_css])]
+        sr_dict["StationCode"]  = [" ".join([my_data_css, "align-left", both_css])]
+        styler_row = pd.DataFrame(sr_dict, index=[timepoint.Index])
+        list_of_styler_rows.append(styler_row)
+
+    timetable = timetable_base.append(list_of_timetable_rows)
+    print(timetable)
+    styler = styler_base.append(list_of_styler_rows)
+    return (timetable, styler)
+
+
 #def generate_triplist_for_route(route_ids,
 #                                 effective_date,
 #                                 direction="twoway",
@@ -667,6 +903,30 @@ def compute_station_names_df(stations_list):
     # This gives us the prototype timetable
     return tt_df
 
+def load_template(csv_filename):
+    '''
+    Load a template from a CSV file
+    '''
+    template = pd.read_csv(csv_filename, index_col=False, header=None, dtype = str)
+    return template
+
+def fill_template(template):
+    '''
+    Fill a template using GTFS data
+    '''
+    tt = template.copy(); # "deep" copy
+    [row_count, column_count] = template.shape
+    for x in range(1, column_count): # First (0) column is the station code
+        train_names_str = template.iloc[0, x] # row 0, column x
+        train_names_list = train_names_str.split("/")
+        train_names = list(map(str.strip,train_names_list)) # Remove excess whitespace
+        for y in range(1, row_count): # First (0) row is the header
+            station_code = template.iloc[y, 0] # row y, column 0
+            print(train_names)
+            print(station_code)
+            placeholder = train_names[0] + station_code
+            tt.iloc[y,x] = placeholder
+    return (tt, template) # This is all wrong, it should be tt, styler, but for testing
 
 def main_func_future():
 
@@ -905,9 +1165,18 @@ if __name__ == "__main__":
         # Make a template (work in progress)
         compare_similar_services(route_id("Cardinal"))
 
-    if (args.type == "fancy"):
+    if (args.type == "fancy-one"):
         # Use a template (work in progress)
         main_func_future();
+        quit()
+
+    if (args.type == "fancy-two"):
+        template = load_template(args.template_filename)
+        (timetable, styler_table) = fill_template(template)
+        print (template)
+        print (timetable)
+        # timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+        # print_to_file(timetable_styled_html, ''.join([output_dirname, "/tt_",str(train_number)]
         quit()
 
     if (args.type == "test"):
