@@ -47,7 +47,7 @@ The --type argument determines the type of timetable:
         dest='trip_short_name',
         help='''For the stations option only, this specifies which trip_short_name to use
                 to generate the list of stations.  For instance, if it's "51", train 51
-                will be used, and the output will be 51_stations.csv.
+                will be used, and the output will be tt_51_stations.csv.
              '''
         )
     parser.add_argument('--output-directory','-o',

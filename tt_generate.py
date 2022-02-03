@@ -1242,7 +1242,7 @@ if __name__ == "__main__":
         tsn = tsn.strip() # Avoid whitespace problems
 
         station_list_df = station_list_from_trip_short_name(tsn)
-        output_filename = "".join([output_dirname, "/", tsn, "_","stations.csv"])
+        output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
         station_list_df.to_csv(output_filename,index=False)
         # Note: this will put "stop_id" in top row, which is OK
         quit()
