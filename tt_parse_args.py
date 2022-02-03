@@ -11,13 +11,15 @@ def make_tt_arg_parser():
 The --type argument determines the type of timetable:
   single - single one-way timetable
   updown - one direction down, other direction up
-  fancy - generated from template
-  template - create template for use with fancy (edit this by hand afterwards)
+  fancy-one - generated from template
+  fancy-two - generated from CSV template
+  stations - create station list CSV file, in order, from single train number (for making templates)
+  template - create template for use with fancy (edit this by hand afterwards - unfinished)
   test - do internal testing (do not generate timetable)
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','updown','fancy-one','fancy-two','template','test'],
+        choices=['single','updown','fancy-one','fancy-two','template','stations', 'test'],
         help='Type of timetable or template to generate.',
         )
     parser.add_argument('--gtfs','-g',
@@ -41,9 +43,21 @@ The --type argument determines the type of timetable:
                 this produces the timetable valid as of the reference date.
              '''
         )
+    parser.add_argument('--trip',
+        dest='trip_short_name',
+        help='''For the stations option only, this specifies which trip_short_name to use
+                to generate the list of stations.  For instance, if it's "51", train 51
+                will be used, and the output will be 51_stations.csv.
+             '''
+        )
     parser.add_argument('--output-directory','-o',
         dest='output_dirname',
         help="Directory to put output HTML timetable files in.  Default is current directory."
+        )
+    parser.add_argument('--no-debug',
+        dest='debug',
+        help="Don't print extra debugging information during operation (debugging is normally on)",
+        action='store_false',
         )
     return parser;
 

@@ -16,9 +16,12 @@ import operator # for opperator.not_
 
 # Local module imports: note namespaces are separate for each file/module
 import tt_parse_args
+from tt_errors import GTFSError
+
 import gtfs_type_cleanup
 import amtrak_agency_cleanup
 import amtrak_json_stations
+
 import text_presentation
 from text_presentation import TimeTuple
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -27,6 +30,8 @@ from timetable_styling import amtrak_station_name_to_html
 
 # GLOBAL VARIABLES
 # Will be changed by command-line arguments, hopefully!
+# Debugging on?
+debug = True
 # The Amtrak GTFS feed file
 gtfs_filename="./gtfs-amtrak.zip"
 # The output directory
@@ -194,7 +199,7 @@ def filter_calendar_by_effective_date(calendar, effective_date: int):
     return double_filtered_calendar
 
 def filter_calendar_by_service(calendar, service_ids):
-    "Retun a much shorter version of the calendar DataFrame containing only the specified services."
+    "Return a much shorter version of the calendar DataFrame containing only the specified services."
     filtered_calendar = calendar[calendar.service_id.isin(service_ids)]
     return filtered_calendar
 
@@ -213,17 +218,28 @@ def filter_trips_by_service(trips, service_ids):
     filtered_trips = trips[trips.service_id.isin(service_ids)]
     return filtered_trips
 
+def filter_trips_by_short_name(trips, train_number):
+    '''
+    Return a shorter version of the trips DataFrame containing only trips
+    with the specified short_name.
+    "Short name" is actually the Amtrak train number.
+    '''
+    filtered_trips = trips[trips.trip_short_name == train_number]
+    return filtered_trips
+
+def filter_trips_by_short_names(trips, short_names):
+    """
+    Return a much shorter version of the trips DataFrame containing only the trips with
+    the specified short names.  Note that short names for Amtrak are train numbers.
+    """
+    filtered_trips = trips[trips.trip_short_name.isin(short_names)]
+    return filtered_trips
+
 def filter_trips_by_calendar(trips, calendar):
     "Return a much shorter version of the trips DataFrame containing only trips with service_ids in the specified calendar."
     service_ids = calendar["service_id"].array
     filtered_trips = trips[trips.service_id.isin(service_ids)]
     return filtered_trips
-
-def filter_trips_by_short_name(trips, train_number):
-    ''' "Short name" is actually the Amtrak train number. '''
-    my_trips = trips
-    my_trips = my_trips[my_trips.trip_short_name == train_number]
-    return my_trips
 
 #def filter_trips_by_effective_date(trips, effective_date)
 #    "Return version of the trips DataFrame only containing trips with service_ids valid on the given date."
@@ -862,6 +878,34 @@ def prep_spec():
     print("Allbound:")
     print(allbound_trips)
 
+def station_list_from_trip_short_name(short_name):
+    # Produces a station list from a single train number.
+    # This is generally used to make a template, not directly.
+
+    # Note that reference_date and feed are globals.
+    my_trips = feed.trips
+    todays_calendar = filter_calendar_by_effective_date(feed.calendar, reference_date)
+
+    these_trips = filter_trips_by_short_name(my_trips, short_name)
+    these_trips_today = filter_trips_by_calendar(these_trips, todays_calendar)
+    if (debug):
+        print(these_trips_today)
+
+    # There should be only one trip.
+    num_rows = these_trips_today.shape[0]
+    if (num_rows == 0):
+        raise GTFSError("No trips for that short_name on that day")
+    elif (num_rows > 1):
+        raise GTFSError("Too many trips with the same ID for that short_name on that day")
+    this_trip_today = these_trips_today.iloc[0]
+
+    this_trip_id = this_trip_today.trip_id
+    stop_times = single_trip_stop_times(this_trip_id)
+    station_list = stop_times['stop_id']
+    if (debug):
+        print (station_list)
+    return station_list
+
 def compute_prototype_timetable(stations_list):
     '''
     Given a stations list as returned by parse_timetable_spec,
@@ -919,13 +963,23 @@ def fill_template(template):
     for x in range(1, column_count): # First (0) column is the station code
         train_names_str = template.iloc[0, x] # row 0, column x
         train_names_list = train_names_str.split("/")
-        train_names = list(map(str.strip,train_names_list)) # Remove excess whitespace
+        train_names = [item.strip() for item in train_names_list] # Remove excess whitespace
         for y in range(1, row_count): # First (0) row is the header
             station_code = template.iloc[y, 0] # row y, column 0
-            print(train_names)
-            print(station_code)
-            placeholder = train_names[0] + station_code
-            tt.iloc[y,x] = placeholder
+            # Consider, here, whether to build parallel tables.
+            # This allows for the addition of extra rows.
+            if (tt.iloc[y,x]):
+                # It already has a value.
+                # This is probably special text like "to Chicago".
+                # We keep this.
+                pass
+            else:
+                # Blank to be filled in.
+                print(train_names)
+                print(station_code)
+                placeholder = train_names[0] + station_code
+                tt.iloc[y,x] = placeholder
+
     return (tt, template) # This is all wrong, it should be tt, styler, but for testing
 
 def main_func_future():
@@ -1090,6 +1144,7 @@ if __name__ == "__main__":
     args = my_arg_parser.parse_args()
     # These have defaults; override from command line.
     # NOTE!  We are not in a function so don't need global keyword
+    debug = args.debug
     if (args.gtfs_filename):
         gtfs_filename = args.gtfs_filename
     if (args.output_dirname):
@@ -1179,9 +1234,23 @@ if __name__ == "__main__":
         # print_to_file(timetable_styled_html, ''.join([output_dirname, "/tt_",str(train_number)]
         quit()
 
+    if (args.type == "stations"):
+        # This one is working.
+        tsn = args.trip_short_name
+        if (not tsn):
+            raise ValueError("Can't generate a station list without a specific trip.")
+        tsn = tsn.strip() # Avoid whitespace problems
+
+        station_list_df = station_list_from_trip_short_name(tsn)
+        output_filename = "".join([output_dirname, "/", tsn, "_","stations.csv"])
+        station_list_df.to_csv(output_filename,index=False)
+        # Note: this will put "stop_id" in top row, which is OK
+        quit()
+
     if (args.type == "test"):
-        name = lookup_station_name["BUF"]
-        fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
-        print(fancy_name);
+
+        # name = lookup_station_name["BUF"]
+        # fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
+        # print(fancy_name);
         quit()
 

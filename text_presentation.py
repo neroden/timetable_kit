@@ -7,9 +7,8 @@ import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
 
-class DataError(ValueError):
-    """Exception for unexpected data in the GTFS feed."""
-    pass
+# These are mine
+from tt_errors import GTFSError
 
 def day_string(calendar, offset=0):
     '''Given a calendar DataTable which contains only a single row for a single service, this
@@ -19,9 +18,9 @@ def day_string(calendar, offset=0):
     days_of_service_list = calendar.to_dict('records')
     # if there are zero or duplicate service records, we error out.
     if (len(days_of_service_list) == 0):
-        raise DataError("daystring() can't handle an empty calendar")
+        raise GTFSError("daystring() can't handle an empty calendar")
     elif (len(days_of_service_list) >= 2):
-        raise DataError("daystring() can't handle two calendars for service_id: ", days_of_service_list)
+        raise GTFSError("daystring() can't handle two calendars for service_id: ", days_of_service_list)
     days_of_service = days_of_service_list[0]
 
     # print(days_of_service)
