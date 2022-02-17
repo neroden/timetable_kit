@@ -1,7 +1,13 @@
 The HTML file can (and sometimes should) be converted to PDF.  
 I am currently using WeasyPrint for this because it is also a Python package.
-Unfortunately, it increases the default font size, which is problematic; must figure out how to fix this.
+
+-- It is hard to test PDFs.  At least on my monitor...
+--- Okular needs to be set at 90% zoom to show it real size.
+--- Evince needs to be set at 50% zoom to show it real size.
+
+
 
 - The elegant styling on the "single" timetable needs to be completely copied over to style a complex timetable.  Very messy.
 
 - Consider test-template.csv as the primary format template.  Can be edited in a spreadsheet.
+

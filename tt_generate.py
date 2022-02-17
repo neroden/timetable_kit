@@ -12,7 +12,9 @@ from pathlib import Path
 import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
-import operator # for opperator.not_
+import operator # for operator.not_
+from weasyprint import HTML as weasyHTML
+from weasyprint import CSS as weasyCSS
 
 # Local module imports: note namespaces are separate for each file/module
 import tt_parse_args
@@ -26,6 +28,7 @@ import text_presentation
 from text_presentation import TimeTuple
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_styling import style_timetable_for_html
+from timetable_styling import finish_html_timetable
 from timetable_styling import amtrak_station_name_to_html
 
 # GLOBAL VARIABLES
@@ -294,7 +297,7 @@ def format_single_trip_timetable(stop_times,
     # CSS class "shortcuts"
     # in future, color will likely be changed
     bg_color_css     = "color-cornsilk"
-    font_css = "font-sans-serif"
+    font_css = "font-sans-serif font-data-size"
     heading_extra_css = "align-vcenter align-center heading-font"
     heading_css      = " ".join([bg_color_css, font_css,
                                  "border-top-heavy border-bottom-heavy", heading_extra_css])
@@ -1131,8 +1134,16 @@ def print_single_trip_tt(trip):
                                     train_number=train_number)
     # Run the styler on the timetable...
     timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+    page_title = "Timetable for Amtrak Train #" + str(train_number)
+    timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
+    print_to_file(timetable_finished_html, ''.join([output_dirname, "/tt_",str(train_number)]) )
 
-    print_to_file(timetable_styled_html, ''.join([output_dirname, "/tt_",str(train_number)]) )
+    # Now rerun it for weasyprint...
+    html_str_for_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
+                                             for_weasyprint=True)
+    html_for_weasy = weasyHTML(string=html_str_for_weasy)
+    html_for_weasy.write_pdf(''.join([output_dirname, "/tt_",str(train_number),".pdf"]) )
+    return
 
 ##########################
 #### NEW MAIN PROGRAM ####
