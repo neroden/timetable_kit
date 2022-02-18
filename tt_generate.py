@@ -733,16 +733,34 @@ def augment_template(raw_template):
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
     return
 
-def get_dwell_secs (station_code, train_name):
+def get_timepoint (trip_short_name, station_code):
+    '''
+    Given a trip_short_name (Amtrak train number) and station_code,
+    extract the single timepoint (as a Series) from the stop_times GTFS feed
+    '''
+    trip_id = trip_id_from_trip_short_name(trip_short_name)
+    stop_times = single_trip_stop_times(trip_id)
+    timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
+    if (timepoint_df.shape[0] == 0):
+        raise GTFSError(' '.join(["Train number", trip_short_name,
+                                  "does not stop at station code",
+                                  station_code,
+                                 ]) )
+    if (timepoint_df.shape[0] > 1):
+        raise GTFSError(' '.join(["Train number", trip_short_name,
+                                  "stops at station code",
+                                  station_code,
+                                  "more than once"
+                                 ]) )
+    timepoint = timepoint_df.iloc[0] # Pull out the one remaining row
+    return timepoint
+
+def get_dwell_secs (trip_short_name, station_code):
     '''
     Unimplemented
     Gets dwell time in seconds for a specific train at a specific station
     '''
-
-    trip_id = trip_id_from_trip_short_name(train_name)
-    stop_times = single_trip_stop_times(trip.trip_id)
-    print(stop_times)
-    timepoint = stop_times[stop_id == train_name]
+    timepoint = get_timepoint(trip_short_name, station_code)
 
     departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
     arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
@@ -1076,10 +1094,10 @@ if __name__ == "__main__":
 
     if (args.type == "test"):
         template = load_template(args.template_filename)
-        print(template)
-        new_template = augment_template(template)
-        print(new_template)
-        print(stations_list_from_template(new_template))
+        template = augment_template(template)
+        dwell_secs = get_dwell_secs("59","CDL")
+        print("Dwell is", dwell_secs)
+        # print(stations_list_from_template(new_template))
         # name = lookup_station_name["BUF"]
         # fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
         # print(fancy_name);
