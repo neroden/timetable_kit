@@ -79,7 +79,7 @@ def explode_timestr(timestr: str) -> TimeTuple:
     try:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
     except:
-        raise DataError("Timestr didn't parse right", timestr)
+        raise GTFSError("Timestr didn't parse right", timestr)
     [days, hours24] = divmod(longhours, 24)
     [pm, hours] = divmod(hours24, 12)
     my_time = TimeTuple(day=days,pm=pm,hour=hours,min=mins,sec=secs)

@@ -19,10 +19,13 @@ from weasyprint import CSS as weasyCSS
 # Local module imports: note namespaces are separate for each file/module
 import tt_parse_args
 from tt_errors import GTFSError
+from tt_errors import InputError
+
 
 import gtfs_type_cleanup
 import amtrak_agency_cleanup
 import amtrak_json_stations
+import amtrak_helpers
 
 import text_presentation
 from text_presentation import TimeTuple
@@ -54,67 +57,7 @@ trip_lookup_table=None
 # Lookup table from station code to desired printed station name, overwritten later
 lookup_station_name=None
 
-# GLOBAL VARIABLES
-# Known problems in Amtrak data
-global_bad_service_ids = [2819372, # Cardinal one-day service when it doesn't run on that day
-                         ]
 
-# "Major stations".  This is for timetable styling: making them bigger and bolder.
-# This should really be per-timetable but this is a start
-# (Empire doesn't call out NEC stations on connecting trains)
-# (Vermonter only callse out NY and DC on NEC)
-major_stations_list = ( "BOS", # NEC timetable stations first
-    "NHV",
-    "NYP",
-    "NYG", # Just in case there's a reroute
-    "PHL",
-    "WAS",
-    "LYH", # Virginia service timetable
-    "RVR",
-    "NFK",
-    "HAR", # Keystone timetable
-    "PIT",
-    "ALB", # Empire timetable
-    "BFX",
-    "TWO",
-    "MTR", # Adirondack
-    "ESX", # Vermonter
-    "SPG",
-    "RUD", # Ethan Allen -- will change to Burlington
-    "RGH", # Carolinian/Piedmont
-    "CLT",
-    "ATL", # Crescent
-    "BHM",
-    "NOL",
-#    "ALT", # Pennsylvanian -- I think I won't emphasize this one.
-    "CVS", # Cardinal
-    "CIN",
-    "IND",
-    "CHI",
-    "CLE", # LSL / CL
-    "TOL",
-    "GRR", # Michigan services
-    "PTH",
-    "DET",
-    "PNT",
-    "CHM", # CONO/Illini/Saluki
-    "CDL",
-    "MEM",
-    "JAN",
-    "STL", # River Runner
-    "KCY",
-    "QCY", # Quincy service
-    "MKE", # Hiawathas
-    "SAN", # California Coastal
-    "LAX",
-    "SBA",
-    "SLO",
-    "SJC",
-    "OKJ",
-    "SAC",
-    "SKN", # San Joaquins
-    "BFD",
-    )
 
 # Useful debugging function for Pandas tables
 def dumptable(table, filename):
@@ -451,7 +394,7 @@ def format_single_trip_timetable(stop_times,
 
         # Prettyprint the station name
         station_name_raw = lookup_station_name[timepoint.stop_id]
-        if (timepoint.stop_id in major_stations_list):
+        if ( amtrak_helpers.is_standard_major_station(timepoint.stop_id) ):
             major = True
         else:
             major = False
@@ -498,242 +441,6 @@ def format_single_trip_timetable(stop_times,
     print(timetable)
     styler = styler_base.append(list_of_styler_rows)
     return (timetable, styler)
-
-def fill_and_format_prototyped_timetable(stop_times,
-                                 calendar=False,
-                                 infrequent=False,
-                                 doing_html=False,
-                                 min_dwell=0,
-                                 reverse=False,
-                                 train_number="" ):
-    """
-    Unfinished routine to fill and format a prototyped timetable
-    Make a workable timetable for a single trip of the Cardinal or Sunset Limited.
-    Assumes that stop_times has been indexed by stop_sequence, and sorted.
-
-    doing_html: output text with HTML annotations rather than plaintext (newline vs. <br>, use of <b>, etc.)
-
-    min_dwell: if dwell time is less than this number of minutes,
-    only departure times are shown, and arrival times are unpublished.
-    This is useful for shortening public timetables.
-
-    reverse: reverses Ar/Dp -- an ugly hack for upside-down timetables.  The timetable must
-    still be turned upside down manually afterwards.
-
-    infrequent: if False (the default) the calendar is ignored.  (FOR NOW.  FIXME)
-    calendar: a calendar with a single row containing the correct calendar for the service.  Optional.
-    train_number: used as header for the times column
-    """
-    if (doing_html):
-        linebreak = "<br>"
-    else:
-        linebreak = "\n"
-
-    # CSS class "shortcuts"
-    # in future, color will likely be changed
-    bg_color_css     = "color-cornsilk"
-    font_css = "font-sans-serif"
-    heading_extra_css = "align-vcenter align-center heading-font"
-    heading_css      = " ".join([bg_color_css, font_css,
-                                 "border-top-heavy border-bottom-heavy", heading_extra_css])
-    data_css         = " ".join([bg_color_css, font_css,
-                                 "border-top-light border-bottom-light", "align-top"])
-    data_css_final   = " ".join([bg_color_css, font_css,
-                                 "border-top-light border-bottom-heavy", "align-top"])
-    data_css_initial = " ".join([bg_color_css, font_css,
-                                 "border-top-heavy border-bottom-light", "align-top"])
-    # left-right border shortcuts
-    left_css = "border-left noborder-right"
-    center_css = "noborder-left noborder-right"
-    right_css = "noborder-left border-right"
-    both_css = "border-left border-right"
-
-    # Define the columns, in order, and create empty DataFrames for timetable & styler
-    # By defining the columns first we avoid order dependency later
-    timetable_columns = pd.Index(["NB","ArDp","Time","StationCode"])
-    if (infrequent):
-        timetable_columns = pd.Index(["NB","ArDp","Time","Days","StationCode"])
-    timetable_base = pd.DataFrame(columns=timetable_columns)
-    styler_base = pd.DataFrame(columns=timetable_columns)
-
-    list_of_timetable_rows = [] # accumulate, then append to blank base
-    list_of_styler_rows = [] # accumulate, then append to blank base
-
-    # Use the train number as the column header for times
-    time_column_prefix = "Train #"
-    time_column_header = "".join([time_column_prefix, str(train_number)])
-    if (doing_html):
-        time_column_header = ''.join([time_column_prefix,"<br>","<strong>",str(train_number),"</strong>"])
-
-    # This is the output table header row
-    tt_dict = {}
-    tt_dict["NB"] = [""]
-    tt_dict["ArDp"] = [""]
-    tt_dict["Time"] = [time_column_header]
-    if (infrequent):
-        tt_dict["Days"] = ["Days"]
-    tt_dict["StationCode"] = ["Station"]
-    # Stop_sequences is generally indexed 1+; so 0 is a safe index value, probably
-    # Which is good because I don't know how to set any other index!
-    tt_row = pd.DataFrame(tt_dict)
-    list_of_timetable_rows.append(tt_row)
-
-    # This is the parallel styler table (header row)
-    # The styler table must be the exact same shape as the output table
-    # -- styles will apply to each cell specifically
-    styler_dict = {}
-    styler_dict["NB"]            = [" ".join([heading_css, left_css])]
-    styler_dict["ArDp"]          = [" ".join([heading_css, center_css])]
-    if (infrequent):
-        styler_dict["Time"]      = [" ".join([heading_css, center_css])]
-        styler_dict["Days"]      = [" ".join([heading_css, right_css])]
-    else:
-        styler_dict["Time"]      = [" ".join([heading_css, right_css])]
-    styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
-    styler_row = pd.DataFrame(styler_dict)
-    list_of_styler_rows.append(styler_row)
-
-    # This gets the first and last stop index number.  Helps with pretty-printing...
-    stop_sequence_numbers = stop_times.index
-    first_stop_number = stop_sequence_numbers.min()
-    last_stop_number = stop_sequence_numbers.max()
-
-    for timepoint in stop_times.itertuples():
-        # print(timepoint)
-
-        # Decide whether to suppress dwell
-        departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
-        arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
-        dwell_secs = departure_secs - arrival_secs
-        suppress_dwell = False
-        if (dwell_secs < min_dwell * 60):
-            suppress_dwell = True
-
-        # Prep string to print for time
-        arrival = text_presentation.explode_timestr(timepoint.arrival_time)
-        arrival_str = text_presentation.time_short_str(arrival)
-        # HTML bold annotation for PM
-        if (arrival.pm == 1 and doing_html):
-            arrival_str = ''.join(["<b>",arrival_str,"</b>"])
-
-        departure = text_presentation.explode_timestr(timepoint.departure_time)
-        departure_str = text_presentation.time_short_str(departure)
-        # HTML bold annotation for PM
-        if (departure.pm == 1 and doing_html):
-            departure_str = ''.join(["<b>",departure_str,"</b>"])
-
-        # For infrequent services, get the "MoWeFr" string.
-        daystring = ""
-        if (infrequent):
-          daystring = text_presentation.day_string(calendar, offset=departure.day)
-
-        # Special treatment of first and last stops
-        is_first_stop = False;
-        is_last_stop = False;
-        if (timepoint.Index == first_stop_number):
-            is_first_stop = True;
-        if (timepoint.Index == last_stop_number):
-            is_last_stop = True;
-
-        # Receive-only / Discharge-only annotation
-        rd_str = ""
-        receive_only = False;
-        discharge_only = False;
-        if (is_first_stop):
-            receive_only = True; # Logically speaking... but don't annotate it
-        if (is_last_stop):
-            discharge_only = True; # Logically speaking... but don't annotate it
-        if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
-            if (not is_first_stop): # This is obvious at the first station
-                receive_only = True;
-                rd_str = "R" # Receive passengers only
-                if (doing_html):
-                    rd_str = "<b>R</b>"
-        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
-            if (not is_last_stop): # This is obvious at the last station
-                discharge_only = True;
-                rd_str = "D" # Discharge passengers only
-                if (doing_html):
-                    rd_str = "<b>D</b>"
-        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 1):
-            rd_str = "*" # Not for ordinary passengers (staff only, perhaps)
-        elif (timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2):
-            rd_str = "F" # Flag stop of some type
-
-        # Important note: there's currently no way to mark the infamous "L",
-        # which means that the train or bus is allowed to depart ahead of time
-
-        if (receive_only or suppress_dwell):
-            # One row
-            ardp_str = ""
-            arrival_departure_str = departure_str
-            styler_one_row = True
-        elif (discharge_only):
-            # One row
-            ardp_str = ""
-            arrival_departure_str = arrival_str
-            styler_one_row = True
-        elif (not reverse):
-            # Dual row for time
-            ardp_str = linebreak.join(["Ar","Dp"])
-            arrival_departure_str = linebreak.join([arrival_str,departure_str])
-            styler_one_row = False
-        else: #reverse
-            # Dual row for time, for reversing
-            ardp_str = linebreak.join(["Dp","Ar"])
-            arrival_departure_str = linebreak.join([departure_str,arrival_str])
-            styler_one_row = False
-
-        # Prettyprint the station name
-        station_name_raw = lookup_station_name[timepoint.stop_id]
-        if (timepoint.stop_id in major_stations_list):
-            major = True
-        else:
-            major = False
-
-        if (doing_html):
-            station_name_str = amtrak_station_name_to_html(station_name_raw, major)
-        else:
-            if (major):
-                station_name_str = station_name_raw.upper()
-            else:
-                station_name_str = station_name_raw
-
-        # This is *not* order-dependent; the order is set by the first row, up above.
-        tt_row_dict = {}
-        tt_row_dict["NB"]          = [rd_str]
-        tt_row_dict["ArDp"]        = [ardp_str]
-        tt_row_dict["Time"]        = [arrival_departure_str]
-        if (infrequent):
-            tt_row_dict["Days"]    = [daystring]
-        tt_row_dict["StationCode"] = [station_name_str]
-        tt_row = pd.DataFrame(tt_row_dict, index=[timepoint.Index])
-        list_of_timetable_rows.append(tt_row)
-
-        # Special top-bottom border treatment on first and last row
-        my_data_css = data_css
-        if (is_first_stop):
-            my_data_css = data_css_initial
-        if (is_last_stop):
-            my_data_css = data_css_final
-        # This is *not* order-dependent; the order is set by the first row, up above.
-        sr_dict = {}
-        sr_dict["NB"]           = [" ".join([my_data_css, "align-right", left_css])]
-        sr_dict["ArDp"]         = [" ".join([my_data_css, "align-right", center_css])]
-        if (infrequent):
-            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", center_css])]
-            sr_dict["Days"]     = [" ".join([my_data_css, "align-left", right_css])]
-        else:
-            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", right_css])]
-        sr_dict["StationCode"]  = [" ".join([my_data_css, "align-left", both_css])]
-        styler_row = pd.DataFrame(sr_dict, index=[timepoint.Index])
-        list_of_styler_rows.append(styler_row)
-
-    timetable = timetable_base.append(list_of_timetable_rows)
-    print(timetable)
-    styler = styler_base.append(list_of_styler_rows)
-    return (timetable, styler)
-
 
 #def generate_triplist_for_route(route_ids,
 #                                 effective_date,
@@ -804,7 +511,7 @@ def compare_similar_services(route_id):
     See how many services with different dates are actually the same service
     '''
     my_trips = filter_trips_by_route(feed.trips, [route_id])
-    my_trips = filter_trips_for_garbage(my_trips, global_bad_service_ids)
+    my_trips = filter_trips_for_garbage(my_trips, amtrak_helpers.global_bad_service_ids)
 
     print("Downbound:")
     downbound_trips = my_trips[my_trips.direction_id == 0] # W for LSL
@@ -836,9 +543,30 @@ def filter_trips_for_timetable(trips, route_ids, direction=None, date=reference_
         my_trips = my_trips[my_trips.direction_id == direction]
     return my_trips
 
+
+def stations_list_from_template(template):
+    '''
+    Given a template dataframe, return the station list as a list of strings
+    '''
+    stations_df = template.iloc[1:,0]
+    stations_list_raw = stations_df.to_list()
+    stations_list_strings = [str(i) for i in stations_list_raw]
+    stations_list = [i.strip() for i in stations_list_strings if i.strip() != '']
+    return stations_list
+
+def trains_list_from_template(template):
+    '''
+    Given a template dataframe, return the trains list as a list of strings
+    '''
+    trains_df = template.iloc[0,1:]
+    trains_list_raw = trains_df.to_list()
+    trains_list_strings = [str(i) for i in trains_list_raw]
+    trains_list = [i.strip() for i in trains_list_strings]
+    return trains_list
+
 def parse_timetable_spec(filename):
     '''
-    Parse a timetable spec file.
+    Given aParse a timetable spec file.
     The specs for this are still evolving, however:
     - First line: a list of train numbers in correct column order,
         with the word "station" (no quotes) for where the station names go
@@ -881,10 +609,13 @@ def prep_spec():
     print("Allbound:")
     print(allbound_trips)
 
-def station_list_from_trip_short_name(short_name):
-    # Produces a station list from a single train number.
-    # This is generally used to make a template, not directly.
-
+def trip_from_trip_short_name(short_name):
+    '''
+    Given a single train number (short_name)
+    -- with an assumed global reference date
+    -- and using the global feed.trips
+    produces the trip record associated therewith.
+    '''
     # Note that reference_date and feed are globals.
     my_trips = feed.trips
     todays_calendar = filter_calendar_by_effective_date(feed.calendar, reference_date)
@@ -901,8 +632,29 @@ def station_list_from_trip_short_name(short_name):
     elif (num_rows > 1):
         raise GTFSError("Too many trips with the same ID for that short_name on that day")
     this_trip_today = these_trips_today.iloc[0]
+    return this_trip_today
 
+def trip_id_from_trip_short_name(short_name):
+    '''
+    Given a single train number (short_name)
+    -- with an assumed global reference date
+    -- and using the global feed.trips
+    produces the trip_id number associated therewith.
+    '''
+
+    this_trip_today = trip_from_trip_short_name(short_name)
     this_trip_id = this_trip_today.trip_id
+    return this_trip_id
+
+
+def stations_list_from_trip_short_name(short_name):
+    '''
+    Produces a station list from a single train number.
+    This is generally used to make a template, not directly.
+    '''
+
+    this_trip_id = trip_id_from_trip_short_name(short_name)
+
     stop_times = single_trip_stop_times(this_trip_id)
     station_list = stop_times['stop_id']
     if (debug):
@@ -957,50 +709,128 @@ def load_template(csv_filename):
     template = pd.read_csv(csv_filename, index_col=False, header=None, dtype = str)
     return template
 
-def fill_template(template):
+def augment_template(raw_template):
+    '''
+    Fill in the station list for a template if it has a key code.
+    Cell 0,0 is normally blank.
+    If it is "Stations of 59", then (a) assume there is only one template row;
+    (b) get the stations for 59 and fill the rows in from that
+    '''
+    if (pd.isna(raw_template.iloc[0,0]) ):
+        # No key code, nothing to do
+        return template
+    key_code = str(raw_template.iloc[0,0])
+    if (debug):
+        print("Key code: " + key_code)
+    if key_code.startswith("stations of "):
+        key_train_name = key_code[len("stations of "):]
+        stations_df = stations_list_from_trip_short_name(key_train_name)
+        new_template = raw_template.iloc[0:,] # Get first row
+        new_template.iloc[0,0] = float("nan") # Blank out key_code
+        newer_template = pd.concat([new_template,stations_df]) # Yes, this works
+        return newer_template
+
+    raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
+    return
+
+def get_dwell_secs (station_code, train_name):
+    '''
+    Unimplemented
+    Gets dwell time in seconds for a specific train at a specific station
+    '''
+
+    trip_id = trip_id_from_trip_short_name(train_name)
+    stop_times = single_trip_stop_times(trip.trip_id)
+    print(stop_times)
+    timepoint = stop_times[stop_id == train_name]
+
+    departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
+    arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
+    dwell_secs = departure_secs - arrival_secs
+    return dwell_secs
+
+def return_true (station_code):
+    '''
+    Takes one argument; returns True
+    '''
+    return True
+
+def return_false (station_code):
+    '''
+    Takes one argument; returns True
+    '''
+    return False
+
+def fill_template(template, is_major_station=False, is_ardp_station=False):
     '''
     Fill a template using GTFS data
+    is_major_station: pass a function which says whether a station should be "major";
+        Defaults to "False" meaning false for all
+    is_ardp_station: pass a function which says whether a station should have arrival times;
+        Defaults to "False" meaning false for all, but "True" is also an option
     '''
-    tt = template.copy(); # "deep" copy
-    [row_count, column_count] = template.shape
+
+    new_template = augment_template(template) # Fill in stations list if key code
+    tt = new_template.copy() # "deep" copy
+
+    # Load variable functions for is_ardp_station or is_major_station
+    if (is_major_station == False):
+        is_major_station = return_false
+    if not callable(is_major_station):
+        raise TypeError ("Received is_major_station which is not callable: ", is_major_station)
+    if (is_ardp_station == False):
+        is_ardp_station = return_false
+    elif (is_ardp_station == True):
+        is_ardp_station = return_true
+    if not callable(is_ardp_station):
+        raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
+
+    [row_count, column_count] = new_template.shape
     for x in range(1, column_count): # First (0) column is the station code
-        train_names_str = template.iloc[0, x] # row 0, column x
+        train_names_str = new_template.iloc[0, x] # row 0, column x
         train_names_list = train_names_str.split("/")
         train_names = [item.strip() for item in train_names_list] # Remove excess whitespace
         for y in range(1, row_count): # First (0) row is the header
-            station_code = template.iloc[y, 0] # row y, column 0
+            station_code = new_template.iloc[y, 0] # row y, column 0
+            print ("We are at ", y, " ", x)
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
-            if (tt.iloc[y,x]):
+            if (pd.isna(tt.iloc[y,x])):
+                # Blank to be filled in.
+                # 
+                print(train_names)
+                print(station_code)
+                placeholder = ' '.join([ train_names[0],
+                                         station_code,
+                                         ("M" if is_major_station(station_code) else ""),
+                                         ("ArDp" if is_ardp_station(station_code) else ""),
+                                       ])
+                print(placeholder)
+                tt.iloc[y,x] = placeholder
+            else:
                 # It already has a value.
                 # This is probably special text like "to Chicago".
                 # We keep this.
                 pass
-            else:
-                # Blank to be filled in.
-                print(train_names)
-                print(station_code)
-                placeholder = train_names[0] + station_code
-                tt.iloc[y,x] = placeholder
 
-    return (tt, template) # This is all wrong, it should be tt, styler, but for testing
+    return (tt, new_template) # This is all wrong, it should be tt, styler, but for testing
 
-def main_func_future():
-
+def main_func_future(template):
     # In order to combine the timetables, we need a prior and exterior stop list
     # which specifies the order the stops will appear in *in the timetable*.
     # This has to be human-curated; consider Silver Service with the split in the Carolinas.
     # Which branch gets listed first?  Can't be automatically determined.
     #
-    # So we need a prototype timetable.
-    # FIXME -- hardwired to the CONO
-    spec_pathname = ''.join([output_dirname, "/", "cono.spec"])
-    [tt_trains_list, tt_stations_list] = parse_timetable_spec(spec_pathname)
+    # So we need a prototype timetable, passed in.
+    print(template)
+    tt_trains_list = trains_list_from_template(template)
     print ("Trains in order:", tt_trains_list)
-    print ("Stations in order: ")
+    tt_stations_list = stations_list_from_template(template)
+    print ("Stations in order: ", tt_stations_list)
+    print ("Recalculated timetable: ")
     tt_df = compute_prototype_timetable(tt_stations_list)
     print (tt_df)
-
+    quit()
 
     todays_calendar = filter_calendar_by_effective_date(feed.calendar, reference_date)
     todays_trips = filter_trips_by_calendar(feed.trips, todays_calendar)
@@ -1025,10 +855,7 @@ def main_func_future():
             if (how_many == 0):
                 print( ''.join(["No trips for ",train_number,", skipping"]) )
             elif (how_many >= 2):
-                print("Error: filter found two trips with the same train number:")
-                print(desired_trips)
-                quit()
-                # FIXME: use exceptions here
+                raise GTFSError("Error: filter found two trips with the same train number:", desired_trips)
             # This should now be a single-item list, so extract the item...
             my_trip = desired_trips.iloc[0]
             stop_times = single_trip_stop_times(my_trip.trip_id)
@@ -1037,8 +864,7 @@ def main_func_future():
             # Sanity check:
             proper_train_number = my_trip.trip_short_name
             if (proper_train_number != train_number):
-                print( ''.join(["Weirdness: trip for ", train_number," has train number ", proper_train_number]) )
-                quit()
+                raise GTFSError( ''.join(["Weirdness: trip for ", train_number," has train number ", proper_train_number]) )
 
             # Multi-index is clunky, so just use tuples as column names
             # which is completely valid
@@ -1176,29 +1002,27 @@ if __name__ == "__main__":
         print ("No type of timetable specified.")
         quit()
 
+    if (args.type == "stations"):
+        # This one is working.
+        tsn = args.trip_short_name
+        if (not tsn):
+            raise ValueError("Can't generate a station list without a specific trip.")
+        tsn = tsn.strip() # Avoid whitespace problems
+
+        station_list_df = stations_list_from_trip_short_name(tsn)
+        output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
+        station_list_df.to_csv(output_filename,index=False)
+        # Note: this will put "stop_id" in top row, which is OK
+        quit()
+
     if (args.type == "single"):
         # Single timetable.
         # This is the old, one-train printer.
-        # It works, bit is not good.  Hardcoded to Cardinal.
+        # It works, but is not good.
 
-        route_ids = [route_id("Cardinal")]
-
-        my_trips = feed.trips
-        # reference_date is currently a global
-        upbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=0, date=reference_date)
-        print("Upbound:")
-        print(upbound_trips)
-        downbound_trips = filter_trips_for_timetable(my_trips, route_ids, direction=1, date=reference_date)
-        print("Downbound:")
-        print(downbound_trips)
-        allbound_trips = filter_trips_for_timetable(my_trips, route_ids, date=reference_date)
-        print("Allbound:")
-        print(allbound_trips)
-
-        for trip in allbound_trips.itertuples(index=False):
-            print_single_trip_tt(trip)
-            break
-            # Doesn't actually work for multiple trips.  Oh dear.
+        trip_short_name = args.trip_short_name
+        trip = trip_from_trip_short_name(trip_short_name)
+        print_single_trip_tt(trip)
         quit()
 
     if (args.type == "updown"):
@@ -1222,7 +1046,7 @@ if __name__ == "__main__":
         print(allbound_trips)
 
         for trip in allbound_trips.itertuples(index=False):
-            print_single_trip_tt(trip)
+            print_single_trip_tt(trip.trip_id)
             break
             # Doesn't actually work for multiple trips.  Oh dear.
         quit()
@@ -1233,33 +1057,29 @@ if __name__ == "__main__":
 
     if (args.type == "fancy-one"):
         # Use a template (work in progress)
-        main_func_future();
+        template = load_template(args.template_filename)
+        template = augment_template(template)
+        main_func_future(template);
         quit()
 
     if (args.type == "fancy-two"):
         template = load_template(args.template_filename)
-        (timetable, styler_table) = fill_template(template)
+        (timetable, styler_table) = fill_template(template,
+                      is_major_station=amtrak_helpers.is_standard_major_station,
+                      is_ardp_station=True)
         print (template)
+        print ("getting going")
         print (timetable)
         # timetable_styled_html = style_timetable_for_html(timetable, styler_table)
         # print_to_file(timetable_styled_html, ''.join([output_dirname, "/tt_",str(train_number)]
         quit()
 
-    if (args.type == "stations"):
-        # This one is working.
-        tsn = args.trip_short_name
-        if (not tsn):
-            raise ValueError("Can't generate a station list without a specific trip.")
-        tsn = tsn.strip() # Avoid whitespace problems
-
-        station_list_df = station_list_from_trip_short_name(tsn)
-        output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
-        station_list_df.to_csv(output_filename,index=False)
-        # Note: this will put "stop_id" in top row, which is OK
-        quit()
-
     if (args.type == "test"):
-
+        template = load_template(args.template_filename)
+        print(template)
+        new_template = augment_template(template)
+        print(new_template)
+        print(stations_list_from_template(new_template))
         # name = lookup_station_name["BUF"]
         # fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
         # print(fancy_name);
