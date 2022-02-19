@@ -19,6 +19,8 @@ from weasyprint import CSS as weasyCSS
 # Local module imports: note namespaces are separate for each file/module
 import tt_parse_args
 from tt_errors import GTFSError
+from tt_errors import NoStopError
+from tt_errors import TwoStopsError
 from tt_errors import InputError
 
 
@@ -622,8 +624,6 @@ def trip_from_trip_short_name(short_name):
 
     these_trips = filter_trips_by_short_name(my_trips, short_name)
     these_trips_today = filter_trips_by_calendar(these_trips, todays_calendar)
-    if (debug):
-        print(these_trips_today)
 
     # There should be only one trip.
     num_rows = these_trips_today.shape[0]
@@ -733,21 +733,25 @@ def augment_template(raw_template):
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
     return
 
+
+
 def get_timepoint (trip_short_name, station_code):
     '''
     Given a trip_short_name (Amtrak train number) and station_code,
     extract the single timepoint (as a Series) from the stop_times GTFS feed
+    Throw NoStopError if it doesn't stop here.
+    Throw TwoStopsError if it stops here twice.
     '''
     trip_id = trip_id_from_trip_short_name(trip_short_name)
     stop_times = single_trip_stop_times(trip_id)
     timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     if (timepoint_df.shape[0] == 0):
-        raise GTFSError(' '.join(["Train number", trip_short_name,
+        raise NoStopError(' '.join(["Train number", trip_short_name,
                                   "does not stop at station code",
                                   station_code,
                                  ]) )
     if (timepoint_df.shape[0] > 1):
-        raise GTFSError(' '.join(["Train number", trip_short_name,
+        raise TwoStopsError(' '.join(["Train number", trip_short_name,
                                   "stops at station code",
                                   station_code,
                                   "more than once"
@@ -760,12 +764,57 @@ def get_dwell_secs (trip_short_name, station_code):
     Unimplemented
     Gets dwell time in seconds for a specific train at a specific station
     '''
-    timepoint = get_timepoint(trip_short_name, station_code)
+    try:
+        timepoint = get_timepoint(trip_short_name, station_code)
+    except (NoStopError):
+        # If the train doesn't stop there, the dwell time is zero;
+        # and we need thie behavior for make_stations_max_dwell_map
+        return 0
 
     departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
     arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
     dwell_secs = departure_secs - arrival_secs
     return dwell_secs
+
+def split_trains_str (trains_str):
+    '''
+    Given a string like "59 / 174 / 22", return a list {"59, "174", "22"}
+    Used to separate specs for multiple trains in the same timetable column.
+    A single "59" will simply give {"59"}
+    '''
+    raw_list = trains_str.split("/")
+    clean_list = [item.strip() for item in raw_list] # remove whitespace
+    return clean_list
+
+
+def make_stations_max_dwell_map (template, dwell_secs_cutoff):
+    '''
+    Extract list of stations and list of train names from template.
+    Create a dict from station_code to dwell_secs
+    If any train in train_names has a dwell time of dwell_secs or longer at a station,
+    then the dict returns True, otherwise False
+    '''
+    stations_dict = {}
+    stations_list = stations_list_from_template(template)
+
+    trains_list = trains_list_from_template(template) # Note still contains "/" items
+    flattened_trains_list = []
+    for ts in trains_list:
+        train_names = split_trains_str(ts) # Separates at the "/"
+        flattened_trains_list = [*flattened_trains_list, *train_names]
+
+    for s in stations_list:
+        max_dwell_secs = 0
+        for t in flattened_trains_list:
+            if t in ["", "station"]:
+                # These aren't real station codes, they won't look up properly, skip them
+                continue
+            max_dwell_secs = max( max_dwell_secs, get_dwell_secs(t, s) )
+        if (max_dwell_secs >= dwell_secs_cutoff):
+            stations_dict[s] = True
+        else:
+            stations_dict[s] = False
+    return stations_dict
 
 def return_true (station_code):
     '''
@@ -779,17 +828,31 @@ def return_false (station_code):
     '''
     return False
 
-def fill_template(template, is_major_station=False, is_ardp_station=False):
+def fill_template(template, is_major_station=False,
+                            is_ardp_station="dwell", dwell_secs_cutoff=300
+                 ):
     '''
     Fill a template using GTFS data
+    Template must be complete (run augment_template first)
+
     is_major_station: pass a function which says whether a station should be "major";
         Defaults to "False" meaning false for all
     is_ardp_station: pass a function which says whether a station should have arrival times;
-        Defaults to "False" meaning false for all, but "True" is also an option
+        "False" means false for all; "True" means true for all
+        Set to "dwell" (case sensitive) to use dwell_secs_cutoff; this is the default
+    dwell_secs_cutoff: Show arrival & departure times if dwell time is this many seconds
+        or higher for some train in the template
+        Defaults to 300, meaning 5 minutes.
+        Probably don't want to ever make it less than 1 minute.
     '''
 
-    new_template = augment_template(template) # Fill in stations list if key code
-    tt = new_template.copy() # "deep" copy
+    tt = template.copy() # "deep" copy
+    dp_tt = template.copy()
+    ar_tt = template.copy()
+
+    # Prep max dwell map
+    stations_max_dwell_map = make_stations_max_dwell_map (template, dwell_secs_cutoff)
+    print (stations_max_dwell_map)
 
     # Load variable functions for is_ardp_station or is_major_station
     if (is_major_station == False):
@@ -800,22 +863,27 @@ def fill_template(template, is_major_station=False, is_ardp_station=False):
         is_ardp_station = return_false
     elif (is_ardp_station == True):
         is_ardp_station = return_true
+    elif (is_ardp_station == "dwell"):
+        is_ardp_station = lambda station_code : stations_max_dwell_map[station_code]
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
 
-    [row_count, column_count] = new_template.shape
+    [row_count, column_count] = template.shape
     for x in range(1, column_count): # First (0) column is the station code
-        train_names_str = new_template.iloc[0, x] # row 0, column x
-        train_names_list = train_names_str.split("/")
-        train_names = [item.strip() for item in train_names_list] # Remove excess whitespace
+        train_names_str = template.iloc[0, x] # row 0, column x
+        train_names = split_trains_str(train_names_str) # Separates at the "/"
         for y in range(1, row_count): # First (0) row is the header
-            station_code = new_template.iloc[y, 0] # row y, column 0
+            station_code = template.iloc[y, 0] # row y, column 0
             print ("We are at ", y, " ", x)
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
             if (pd.isna(tt.iloc[y,x])):
                 # Blank to be filled in.
-                # 
+                #
+                # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
+                # then the second train's times *if the first train doesn't stop there*
+                # If the first train terminates and the second train starts, we need to
+                # somehow make it an ArDp station with double lines... tricky, not done yet
                 print(train_names)
                 print(station_code)
                 placeholder = ' '.join([ train_names[0],
@@ -831,7 +899,7 @@ def fill_template(template, is_major_station=False, is_ardp_station=False):
                 # We keep this.
                 pass
 
-    return (tt, new_template) # This is all wrong, it should be tt, styler, but for testing
+    return (tt, template) # This is all wrong, it should be tt, styler, but for testing FIXME
 
 def main_func_future(template):
     # In order to combine the timetables, we need a prior and exterior stop list
@@ -1082,10 +1150,11 @@ if __name__ == "__main__":
 
     if (args.type == "fancy-two"):
         template = load_template(args.template_filename)
+        template = augment_template(template)
+        print (template)
         (timetable, styler_table) = fill_template(template,
                       is_major_station=amtrak_helpers.is_standard_major_station,
-                      is_ardp_station=True)
-        print (template)
+                      is_ardp_station="dwell")
         print ("getting going")
         print (timetable)
         # timetable_styled_html = style_timetable_for_html(timetable, styler_table)
