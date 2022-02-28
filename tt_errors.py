@@ -12,6 +12,12 @@ class NoStopError(GTFSError):
 class TwoStopsError(GTFSError):
     """Exception when a train stops at a station twice.  Frequently caught."""
 
+class NoTripError(GTFSError):
+    """Exception when no trips where one is expected."""
+
+class TwoTripsError(GTFSError):
+    """Exception when several trips where one is expected."""
+
 class InputError(ValueError):
     """Exception for unexpected data passed in by the user."""
     pass

@@ -15,11 +15,12 @@ The --type argument determines the type of timetable:
   fancy-two - generated from CSV template
   stations - create station list CSV file, in order, from single train number (for making templates)
   template - create template for use with fancy (edit this by hand afterwards - unfinished)
+  compare - compare timetables for trips on a single route (to spot schedule changes for template making -- do not generate timetable)
   test - do internal testing (do not generate timetable)
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','updown','fancy-one','fancy-two','template','stations', 'test'],
+        choices=['single','updown','fancy-one','fancy-two','template','compare','stations', 'test'],
         help='Type of timetable or template to generate.',
         )
     parser.add_argument('--gtfs','-g',
@@ -49,6 +50,13 @@ The --type argument determines the type of timetable:
                 This specifies which trip_short_name to use
                 to generate the list of stations.  For instance, if it's "51", train 51
                 will be used, and the output will be tt_51_stations.csv.
+             '''
+        )
+    parser.add_argument('--route',
+        dest='route_long_name',
+        help='''For the compare option only.
+                This specifies which route_long_name to use.
+                For instance "Cardinal" or "Lake Shore Limited".
              '''
         )
     parser.add_argument('--output-directory','-o',
