@@ -176,7 +176,7 @@ def get_rd_str( timepoint,
         # This seems to be the only way to identify the infamous "L",
         # which means that the train or bus is allowed to depart ahead of time
         print ("timepoint column found") # Should not happen with existing data
-        if (timepoint.timepoint = 0): # and it says times aren't exact
+        if (timepoint.timepoint == 0): # and it says times aren't exact
             if (not is_arrival_line): # This goes on departure line, always
                 rd_str = "L"
 
