@@ -18,6 +18,12 @@ separate_stylesheet = '''
     size: Letter; /* change from default A4, since this is the US */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
+.spaces-preformatted {
+    /* Special formatting for the cell containing the actual time. */
+    /* This has to have no space collapses and no line wrapping. */
+    /* It also needs to be monospaced, but we have to do that over in .font-preformatted. */
+    white-space: pre;
+}
 .heading-font {
     font-weight: bold;
 }
@@ -118,6 +124,9 @@ font_size_screen_css='''
 .font-sans-serif {
     font-family: "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
 }
+.font-preformatted {
+    font-family: "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+}
 .font-data-size {
     /* Font size for screen use */
     /* Amtrak's old timetables were basically 6 pt, or maybe even smaller */
@@ -128,6 +137,9 @@ font_size_screen_css='''
 font_size_weasyprint_css='''
 .font-sans-serif {
     font-family: "Deja Vu Sans", "Bitstream Vera Sans", sans-serif;
+}
+.font-preformatted {
+    font-family: "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
 }
 .font-data-size {
     /* Font size for feeding through weasyprint */
