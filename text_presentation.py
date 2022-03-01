@@ -153,7 +153,7 @@ def get_rd_str( timepoint,
     '''
     # Important note: there's currently no way to identify the infamous "L",
     # which means the train or bus is allowed to depart ahead of time
-    rd_str = " " # NOTE the default is one blank space, to support fixed width.
+    rd_str = " " # NOTE the default is one blank space, for plaintext output.
 
     if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
         if (not is_first_stop): # This is obvious at the first station
@@ -180,20 +180,20 @@ def get_rd_str( timepoint,
             if (not is_arrival_line): # This goes on departure line, always
                 rd_str = "L"
 
-    if (doing_html and (rd_str != " ") ):
-        # Boldface it:
-        rd_str = ''.join(["<b>",rd_str,"</b>"])
+    # Now: this is an utterly stupid hack used for HTML width testing:
+    # Not for production code.  Enable if you need to recheck CSS span widths.
+    # if (timepoint.stop_id=="CLF"):
+    #     rd_str = "M"
+    # if (timepoint.stop_id=="CVS"):
+    #     rd_str = "M"
+
+    if (doing_html):
+        if (rd_str != " "):
+            # Boldface it:
+            rd_str = ''.join(['<b>',rd_str,'</b>'])
+        # Always wrap it in the span, even if it's a blank space:
+        rd_str = ''.join([ '<span class="box-rd">', rd_str, '</span>' ])
     return rd_str
-
-def wrap_preformatted_for_html( plain_str: str):
-    '''
-    Wrap the preformatted string in a suitable "span" or "div"
-    so it will get the correct CSS styles to be monospaced and aligned
-
-    The CSS for this is over in timetable_styling.py
-    '''
-    wrapped_str = ''.join(['<span class="spaces-preformatted font-preformatted">', plain_str, "</span>"])
-    return wrapped_str
 
 def timepoint_str ( timepoint,
                     two_row=False,
@@ -249,25 +249,66 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time)
-    departure_str = time_str(departure)
-    # HTML bold annotation for PM (even in 24-hour case)
-    if (departure.pm == 1 and doing_html):
-        departure_str = ''.join(["<b>",departure_str,"</b>"])
+    departure_time_str = time_str(departure)
+    if doing_html:
+        if (bold_pm and departure.pm == 1):
+            departure_time_str = ''.join(["<b>",departure_time_str,"</b>"])
+        if (use_24):
+            departure_time_str = ''.join([ '<span class="box-time24">', departure_time_str, '</span>' ])
+        else:
+            departure_time_str = ''.join([ '<span class="box-time12">', departure_time_str, '</span>' ])
+
+    # Fill the TimeTuple and prep string for actual time
+    arrival = explode_timestr(timepoint.arrival_time)
+    arrival_time_str = time_str(arrival)
+    # HTML bold annotation for PM
+    if doing_html:
+        if (bold_pm and arrival.pm == 1):
+            arrival_time_str = ''.join(["<b>",arrival_time_str,"</b>"])
+        if (use_24):
+            arrival_time_str = ''.join([ '<span class="box-time24">', arrival_time_str, '</span>' ])
+        else:
+            arrival_time_str = ''.join([ '<span class="box-time12">', arrival_time_str, '</span>' ])
+
+    # Fill in the day strings, if we're using it
+    departure_daystring = ""
+    arrival_daystring = ""
     if (use_daystring):
         # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
         # It must be last and the entire time field must be left-justified as a result
         departure_daystring = day_string(calendar, offset=departure.day)
-        departure_str = ''.join([departure_str," ",departure_daystring])
-
-    # Fill the TimeTuple and prep string for actual time
-    arrival = explode_timestr(timepoint.arrival_time)
-    arrival_str = time_str(arrival)
-    # HTML bold annotation for PM
-    if (arrival.pm == 1 and doing_html):
-        arrival_str = ''.join(["<b>",arrival_str,"</b>"])
-    if (use_daystring):
         arrival_daystring = day_string(calendar, offset=arrival.day)
-        arrival_str = ''.join([arrival_str," ",arrival_daystring])
+        if (doing_html):
+            departure_daystring= ''.join([ '<span class="box-days">', departure_daystring, '</span>' ])
+            arrival_daystring= ''.join([ '<span class="box-days">', arrival_daystring, '</span>' ])
+        else:
+            # Add a necessary spacer: CSS does it for us in HTML
+            departure_daystring = ''.join([" ", departure_daystring])
+            arrival_daystring = ''.join([" ", arrival_daystring])
+
+
+    ar_str = "" # If we are not adding the padding at all -- unwise with two_row
+    dp_str = "" # Again, if we are not adding the "Ar/Dp" at all
+    if (use_ar_dp_str):
+        if doing_html:
+            ar_str='<span class="box-ardp">Ar</span>'
+            dp_str='<span class="box-ardp">Dp</span>'
+        else:
+            ar_str = "Ar "
+            dp_str = "Dp "
+            ardp_spacer = "   "
+
+    # Determine whether we are looking at receive-only or discharge-only
+    receive_only = False;
+    discharge_only = False;
+    if (is_first_stop):
+        receive_only = True; # Logically speaking
+    if (is_last_stop):
+        discharge_only = True; # Logically speaking
+    if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
+        receive_only = True;
+    elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
+        discharge_only = True;
 
     # One-row version: easier logic.  Returns early.
     if (not two_row):
@@ -276,43 +317,26 @@ def timepoint_str ( timepoint,
                              is_first_stop=is_first_stop,
                              is_last_stop=is_last_stop,
                            )
+
         ar_dp_str = "" # If we are not adding the padding at all
         if (use_ar_dp_str):
-            ar_dp_str = "   " # Three spaces, like "Ar ", on most stops
-            if (is_first_stop):
-                ar_dp_str = "Dp " # Mark departure on first stop
-            elif (is_last_stop):
-                ar_dp_str = "Ar " # Mark arrival on last stop
-        if (discharge_only):
-            # Discharge only, arrival time is all that matters
-            complete_line_str = ''.join([ar_dp_str, rd_str, arrival_str])
-        else:
-            # Departure time is all that matters.
-            complete_line_str = ''.join([ar_dp_str, rd_str, departure_str])
-        if (doing_html):
-            complete_line_str = wrap_preformatted_for_html(complete_str)
+            if not doing_html: # HTML spaces this using the boxes
+                ar_dp_str = ardp_spacer # Two spaces, like "Ar", on most stops
+        if (is_first_stop):
+            ar_dp_str = dp_str # Mark departure on first stop
+        elif (is_last_stop):
+            ar_dp_str = ar_str # Mark arrival on last stop
+
+        # Each element joined herein includes HTML annotations, and is completely blank if unused
+        complete_line_str = ''.join([ ar_dp_str,
+                                      rd_str,
+                                      arrival_time_str if discharge_only else departure_time_str,
+                                      arrival_daystring if discharge_only else departure_daystring,
+                                    ])
         return complete_line_str
 
     # Two row version follows:
     else: # two_row
-
-        # Determine whether we are looking at receive-only or discharge-only
-        receive_only = False;
-        discharge_only = False;
-        if (is_first_stop):
-            receive_only = True; # Logically speaking
-        if (is_last_stop):
-            discharge_only = True; # Logically speaking
-        if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
-            receive_only = True;
-        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
-            discharge_only = True;
-
-        ar_str = "" # If we are not adding the padding at all -- unwise with two_row
-        dp_str = "" # Again, if we are not adding the "Ar/Dp" at all
-        if (use_ar_dp_str):
-            ar_str = "Ar "
-            dp_str = "Dp "
 
         # Start assembling the two lines.
         if (receive_only):
@@ -324,7 +348,11 @@ def timepoint_str ( timepoint,
                                           is_second_line=(reverse),
                                           is_arrival_line=True,
                                         )
-            arrival_line_str=''.join([ar_str, rd_str, arrival_str])
+            arrival_line_str = ''.join([ ar_str,
+                                         arrival_rd_str,
+                                         arrival_time_str,
+                                         arrival_daystring,
+                                        ])
         if (discharge_only):
             departure_line_str = ''
         else:
@@ -334,7 +362,11 @@ def timepoint_str ( timepoint,
                                            is_first_line=(not reverse),
                                            is_departure_line=True,
                                           )
-            departure_line_str=''.join([dp_str, rd_str, departure_str])
+            departure_line_str = ''.join([ dp_str,
+                                           departure_rd_str,
+                                           departure_time_str,
+                                           departure_daystring,
+                                          ])
 
         if (discharge_only and (not reverse) and second_timepoint):
             # Fill the second line from a different train service.
@@ -373,8 +405,6 @@ def timepoint_str ( timepoint,
             complete_line_str = linebreak.join([arrival_line_str, departure_line_str])
         else: # reverse
             complete_line_str = linebreak.join([departure_line_str, arrival_line_str])
-        if (doing_html):
-            complete_line_str = wrap_preformatted_for_html(complete_str)
         return complete_line_str
 
     # We should not reach here; we should have returned earlier.

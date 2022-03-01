@@ -350,10 +350,6 @@ def format_single_trip_timetable(stop_times,
     calendar: a calendar with a single row containing the correct calendar for the service.  Optional.
     train_number: used as header for the times column
     """
-    if (doing_html):
-        linebreak = "<br>"
-    else:
-        linebreak = "\n"
 
     # CSS class "shortcuts"
     # in future, color will likely be changed
@@ -376,9 +372,7 @@ def format_single_trip_timetable(stop_times,
 
     # Define the columns, in order, and create empty DataFrames for timetable & styler
     # By defining the columns first we avoid order dependency later
-    timetable_columns = pd.Index(["NB","ArDp","Time","StationCode"])
-    if (infrequent):
-        timetable_columns = pd.Index(["NB","ArDp","Time","Days","StationCode"])
+    timetable_columns = pd.Index(["Time","StationCode"])
     timetable_base = pd.DataFrame(columns=timetable_columns)
     styler_base = pd.DataFrame(columns=timetable_columns)
 
@@ -393,11 +387,7 @@ def format_single_trip_timetable(stop_times,
 
     # This is the output table header row
     tt_dict = {}
-    tt_dict["NB"] = [""]
-    tt_dict["ArDp"] = [""]
     tt_dict["Time"] = [time_column_header]
-    if (infrequent):
-        tt_dict["Days"] = ["Days"]
     tt_dict["StationCode"] = ["Station"]
     # Stop_sequences is generally indexed 1+; so 0 is a safe index value, probably
     # Which is good because I don't know how to set any other index!
@@ -408,13 +398,7 @@ def format_single_trip_timetable(stop_times,
     # The styler table must be the exact same shape as the output table
     # -- styles will apply to each cell specifically
     styler_dict = {}
-    styler_dict["NB"]            = [" ".join([heading_css, left_css])]
-    styler_dict["ArDp"]          = [" ".join([heading_css, center_css])]
-    if (infrequent):
-        styler_dict["Time"]      = [" ".join([heading_css, center_css])]
-        styler_dict["Days"]      = [" ".join([heading_css, right_css])]
-    else:
-        styler_dict["Time"]      = [" ".join([heading_css, right_css])]
+    styler_dict["Time"]      = [" ".join([heading_css, both_css])]
     styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
     styler_row = pd.DataFrame(styler_dict)
     list_of_styler_rows.append(styler_row)
@@ -435,24 +419,6 @@ def format_single_trip_timetable(stop_times,
         if (dwell_secs < min_dwell * 60):
             suppress_dwell = True
 
-        # Prep string to print for time
-        arrival = text_presentation.explode_timestr(timepoint.arrival_time)
-        arrival_str = text_presentation.time_short_str(arrival)
-        # HTML bold annotation for PM
-        if (arrival.pm == 1 and doing_html):
-            arrival_str = ''.join(["<b>",arrival_str,"</b>"])
-
-        departure = text_presentation.explode_timestr(timepoint.departure_time)
-        departure_str = text_presentation.time_short_str(departure)
-        # HTML bold annotation for PM
-        if (departure.pm == 1 and doing_html):
-            departure_str = ''.join(["<b>",departure_str,"</b>"])
-
-        # For infrequent services, get the "MoWeFr" string.
-        daystring = ""
-        if (infrequent):
-          daystring = text_presentation.day_string(calendar, offset=departure.day)
-
         # Special treatment of first and last stops
         is_first_stop = False;
         is_last_stop = False;
@@ -461,8 +427,7 @@ def format_single_trip_timetable(stop_times,
         if (timepoint.Index == last_stop_number):
             is_last_stop = True;
 
-        # Receive-only / Discharge-only annotation
-        rd_str = ""
+        # Receive-only / Discharge-only
         receive_only = False;
         discharge_only = False;
         if (is_first_stop):
@@ -470,45 +435,26 @@ def format_single_trip_timetable(stop_times,
         if (is_last_stop):
             discharge_only = True; # Logically speaking... but don't annotate it
         if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
-            if (not is_first_stop): # This is obvious at the first station
-                receive_only = True;
-                rd_str = "R" # Receive passengers only
-                if (doing_html):
-                    rd_str = "<b>R</b>"
+            receive_only = True;
         elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
-            if (not is_last_stop): # This is obvious at the last station
-                discharge_only = True;
-                rd_str = "D" # Discharge passengers only
-                if (doing_html):
-                    rd_str = "<b>D</b>"
-        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 1):
-            rd_str = "*" # Not for ordinary passengers (staff only, perhaps)
-        elif (timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2):
-            rd_str = "F" # Flag stop of some type
+            discharge_only = True;
 
-        # Important note: there's currently no way to mark the infamous "L",
-        # which means that the train or bus is allowed to depart ahead of time
-
-        if (receive_only or suppress_dwell):
-            # One row
-            ardp_str = ""
-            arrival_departure_str = departure_str
+        # One row or two?
+        if (receive_only or discharge_only or suppress_dwell):
             styler_one_row = True
-        elif (discharge_only):
-            # One row
-            ardp_str = ""
-            arrival_departure_str = arrival_str
-            styler_one_row = True
-        elif (not reverse):
-            # Dual row for time
-            ardp_str = linebreak.join(["Ar","Dp"])
-            arrival_departure_str = linebreak.join([arrival_str,departure_str])
-            styler_one_row = False
         else: #reverse
-            # Dual row for time, for reversing
-            ardp_str = linebreak.join(["Dp","Ar"])
-            arrival_departure_str = linebreak.join([departure_str,arrival_str])
             styler_one_row = False
+
+        # Big bad subroutine call
+        arrival_departure_str = text_presentation.timepoint_str( timepoint,
+                two_row=(not styler_one_row),
+                use_ar_dp_str=True,
+                doing_html = doing_html,
+                use_daystring = infrequent,
+                calendar = calendar,
+                is_first_stop = is_first_stop,
+                is_last_stop = is_last_stop,
+            )
 
         # Prettyprint the station name
         station_name_raw = lookup_station_name[timepoint.stop_id]
@@ -527,11 +473,7 @@ def format_single_trip_timetable(stop_times,
 
         # This is *not* order-dependent; the order is set by the first row, up above.
         tt_row_dict = {}
-        tt_row_dict["NB"]          = [rd_str]
-        tt_row_dict["ArDp"]        = [ardp_str]
         tt_row_dict["Time"]        = [arrival_departure_str]
-        if (infrequent):
-            tt_row_dict["Days"]    = [daystring]
         tt_row_dict["StationCode"] = [station_name_str]
         tt_row = pd.DataFrame(tt_row_dict, index=[timepoint.Index])
         list_of_timetable_rows.append(tt_row)
@@ -544,13 +486,7 @@ def format_single_trip_timetable(stop_times,
             my_data_css = data_css_final
         # This is *not* order-dependent; the order is set by the first row, up above.
         sr_dict = {}
-        sr_dict["NB"]           = [" ".join([my_data_css, "align-right", left_css])]
-        sr_dict["ArDp"]         = [" ".join([my_data_css, "align-right", center_css])]
-        if (infrequent):
-            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", center_css])]
-            sr_dict["Days"]     = [" ".join([my_data_css, "align-left", right_css])]
-        else:
-            sr_dict["Time"]     = [" ".join([my_data_css, "align-right", right_css])]
+        sr_dict["Time"]     = [" ".join([my_data_css, "align-right", both_css])]
         sr_dict["StationCode"]  = [" ".join([my_data_css, "align-left", both_css])]
         styler_row = pd.DataFrame(sr_dict, index=[timepoint.Index])
         list_of_styler_rows.append(styler_row)
@@ -589,7 +525,8 @@ def print_single_trip_tt(trip):
                                     infrequent=infrequent,
                                     doing_html=True,
                                     min_dwell=5,
-                                    train_number=train_number)
+                                    train_number=train_number,
+                                    )
     # Run the styler on the timetable...
     timetable_styled_html = style_timetable_for_html(timetable, styler_table)
     page_title = "Timetable for Amtrak Train #" + str(train_number)
@@ -601,6 +538,16 @@ def print_single_trip_tt(trip):
                                              for_weasyprint=True)
     html_for_weasy = weasyHTML(string=html_str_for_weasy)
     html_for_weasy.write_pdf(''.join([output_dirname, "/tt_",str(train_number),".pdf"]) )
+
+    # Now rerun it as plaintext for CSV...
+    [timetable_txt, dummy_table] = format_single_trip_timetable( stop_times, 
+                                    calendar=this_feed.calendar, 
+                                    infrequent=infrequent,
+                                    doing_html=False,
+                                    min_dwell=5,
+                                    train_number=train_number,
+                                    )
+    timetable_txt.to_csv("test_out.csv", index=False, header=False)
     return
 
 #### The muddle of work in progress

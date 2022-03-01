@@ -18,12 +18,6 @@ separate_stylesheet = '''
     size: Letter; /* change from default A4, since this is the US */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
-.spaces-preformatted {
-    /* Special formatting for the cell containing the actual time. */
-    /* This has to have no space collapses and no line wrapping. */
-    /* It also needs to be monospaced, but we have to do that over in .font-preformatted. */
-    white-space: pre;
-}
 .heading-font {
     font-weight: bold;
 }
@@ -124,9 +118,6 @@ font_size_screen_css='''
 .font-sans-serif {
     font-family: "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
 }
-.font-preformatted {
-    font-family: "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-}
 .font-data-size {
     /* Font size for screen use */
     /* Amtrak's old timetables were basically 6 pt, or maybe even smaller */
@@ -138,12 +129,50 @@ font_size_weasyprint_css='''
 .font-sans-serif {
     font-family: "Deja Vu Sans", "Bitstream Vera Sans", sans-serif;
 }
-.font-preformatted {
-    font-family: "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-}
 .font-data-size {
     /* Font size for feeding through weasyprint */
     font-size: 10pt;
+}
+'''
+
+
+# The cell with the actual time in it is a particularly sticky problem.
+# To satisfy screen readers, we don't want nested tables.
+# We effectively want a mini-table, however, in order to do alignment.
+# This is the lowest-cost way of doing it.
+time_boxes_css='''
+.box-ardp {
+    /* Two letters: Ar or Dp, with a little space: fixed width */
+    display: inline-block;
+    text-align: left;
+    width: 1.5em; /* Must be fixed to align all the text left */
+}
+.box-rd {
+    /* Single bold letter like R or D: fixed width */
+    display: inline-block;
+    text-align: right;
+    width: 1em;
+}
+.box-time12 {
+    /* 12:00P, six characters, may be bold: fixed width */
+    display: inline-block;
+    text-align: right;
+    width: 6ch; /* six zeroes; any less is too small */
+    padding-right: 1mm;
+}
+.box-time24 {
+    /* 13:59, five characters, may be bold: fixed width */
+    display: inline-block;
+    text-align: right;
+    width: 5ch; /* five zeroes; any less is too small */
+    padding-right: 1mm;
+}
+.box-days {
+    /* MoWeFr, align left */
+    /* There can only be one variable-width field and this is it */
+    display: inline-block;
+    text-align: left;
+    padding-right: 1mm;
 }
 '''
 
@@ -196,6 +225,7 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
                                          "<style>",
                                          separate_stylesheet,
                                          font_size_css,
+                                         time_boxes_css,
                                          "</style>",
                                          "</head><body>",
                                          styled_timetable_html,
