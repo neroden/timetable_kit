@@ -119,9 +119,87 @@ def time_short_str(time: TimeTuple) -> str:
     time_str = ''.join(time_text) # No separator!
     return time_str
 
+def get_rd_str( timepoint,
+                doing_html=False,
+                is_first_stop=False,
+                is_last_stop=False,
+                is_first_line=False,
+                is_second_line=False,
+                is_arrival_line=False,
+                is_departure_line=False
+              ):
+    '''
+    Return a single character (default " ") with receive-only / discharge-only annotation.
+    "R" = Receive-only
+    "D" = Discharge-only
+    "L" = May leave early (unimplemented)
+    "F" = Flag stop
+    "*" = Not a regular passenger stop
+    " " = Anything else
+
+    Subroutine of timepoint_str.
+
+    doing_html determines whether to produce this letter as HTML (boldfaced) or not.
+    is_first_stop suppresses the R for "receive only"
+    is_last_stop suppresses the D for "discharge only"
+
+    If you are producing a two-line string,
+    is_first_line,
+    is_second_line,
+    is_arrival_line, and
+    is_departure_line
+    determine which line gets the letter (it looks ugly for both to get it).
+    These should all be false when producing a one-line string.
+    '''
+    # Important note: there's currently no way to identify the infamous "L",
+    # which means the train or bus is allowed to depart ahead of time
+    rd_str = " " # NOTE the default is one blank space, to support fixed width.
+
+    if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
+        if (not is_first_stop): # This is obvious at the first station
+            if (not is_arrival_line): # put on departure line
+                rd_str = "R" # Receive passengers only
+    elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
+        if (not is_last_stop): # This is obvious at the last station
+            if (not is_departure_line): # put on arrival line
+                rd_str = "D" # Discharge passengers only
+    elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 1):
+        if (not is_second_line): # it'll be on the first line
+            rd_str = "*" # Not for ordinary passengers (staff only, perhaps)
+    elif (timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2):
+        if (not is_second_line): # it'll be on the first line
+            rd_str = "F" # Flag stop of some type
+    elif ("timepoint" in timepoint):
+        # If the "timepoint" column has been supplied
+        # IMPORTANT NOTE: Amtrak has not implemented this yet.
+        # FIXME: request that Alan Burnstine implement this if possible
+        # This seems to be the only way to identify the infamous "L",
+        # which means that the train or bus is allowed to depart ahead of time
+        print ("timepoint column found") # Should not happen with existing data
+        if (timepoint.timepoint = 0): # and it says times aren't exact
+            if (not is_arrival_line): # This goes on departure line, always
+                rd_str = "L"
+
+    if (doing_html and (rd_str != " ") ):
+        # Boldface it:
+        rd_str = ''.join(["<b>",rd_str,"</b>"])
+    return rd_str
+
+def wrap_preformatted_for_html( plain_str: str):
+    '''
+    Wrap the preformatted string in a suitable "span" or "div"
+    so it will get the correct CSS styles to be monospaced and aligned
+
+    The CSS for this is over in timetable_styling.py
+    '''
+    wrapped_str = ''.join(['<span class="spaces-preformatted font-preformatted">', plain_str, "</span>"])
+    return wrapped_str
+
 def timepoint_str ( timepoint,
                     two_row=False,
                     second_timepoint=None,
+                    use_ar_dp_str=False,
+                    reverse=False,
                     doing_html=False,
                     bold_pm=True,
                     use_24=False,
@@ -129,14 +207,14 @@ def timepoint_str ( timepoint,
                     calendar=None,
                     is_first_stop=False,
                     is_last_stop=False,
-                   )
+                   ):
     '''
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
     This is quite complex: I would have used tables-within-tables but they're screen-reader-unfriendly.
 
     It MUST be printed in a fixed-width font and formatting MUST be preserved: quite ugly work really
 
-    The most excrutiatingly complex variant looks like:
+    The most excruciatingly complex variant looks like:
     Ar F 9:59P Daily
     Dp F10:00P WeFrSu
 
@@ -146,6 +224,8 @@ def timepoint_str ( timepoint,
     -- two_row: This timepoint gets both arrival and departure rows (default is just one row)
     -- second_timepoint: Used for a very tricky thing with connecting trains to show them in the
         same column at the same station; normally None, specified at that particular station
+    -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
+    -- reverse: This piece of the timetable is running upward (departure time above arrival time)
     -- doing_html: output HTML (default is plaintext)
     -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
     -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html
@@ -189,42 +269,114 @@ def timepoint_str ( timepoint,
         arrival_daystring = day_string(calendar, offset=arrival.day)
         arrival_str = ''.join([arrival_str," ",arrival_daystring])
 
-    # Receive-only / Discharge-only annotation
-    # Important note: there's currently no way to mark the infamous "L",
-    # which means the train or bus is allowed to depart ahead of time
-    rd_str = " " # NOTE the default is one blank space, to support fixed width.
-    receive_only = False;
-    discharge_only = False;
-    if (is_first_stop):
-        receive_only = True; # Logically speaking... but don't annotate it
-    if (is_last_stop):
-        discharge_only = True; # Logically speaking... but don't annotate it
+    # One-row version: easier logic.  Returns early.
+    if (not two_row):
+        rd_str = get_rd_str( timepoint,
+                             doing_html=doing_html,
+                             is_first_stop=is_first_stop,
+                             is_last_stop=is_last_stop,
+                           )
+        ar_dp_str = "" # If we are not adding the padding at all
+        if (use_ar_dp_str):
+            ar_dp_str = "   " # Three spaces, like "Ar ", on most stops
+            if (is_first_stop):
+                ar_dp_str = "Dp " # Mark departure on first stop
+            elif (is_last_stop):
+                ar_dp_str = "Ar " # Mark arrival on last stop
+        if (discharge_only):
+            # Discharge only, arrival time is all that matters
+            complete_line_str = ''.join([ar_dp_str, rd_str, arrival_str])
+        else:
+            # Departure time is all that matters.
+            complete_line_str = ''.join([ar_dp_str, rd_str, departure_str])
+        if (doing_html):
+            complete_line_str = wrap_preformatted_for_html(complete_str)
+        return complete_line_str
 
-    if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
-        receive_only = True;
-        if (not is_first_stop): # This is obvious at the first station
-            rd_str = "R" # Receive passengers only
-            if (doing_html):
-                rd_str = "<b>R</b>"
-    elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
-        discharge_only = True;
-        if (not is_last_stop): # This is obvious at the last station
-            rd_str = "D" # Discharge passengers only
-            if (doing_html):
-                rd_str = "<b>D</b>"
-    elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 1):
-        rd_str = "*" # Not for ordinary passengers (staff only, perhaps)
-    elif (timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2):
-        rd_str = "F" # Flag stop of some type
+    # Two row version follows:
+    else: # two_row
 
-    # IMPORTANT NOTE: Amtrak has not implemented this yet.
-    # FIXME: request that Alan Burnstine implement this if possible
-    # This seems to be the only way to identify the infamous "L",
-    # which means that the train or bus is allowed to depart ahead of time
-    if ("timepoint" in timepoint):  # The "timepoint" column has been supplied
-        print ("timepoint column found") # Should not happen with existing data
-        if (timepoint.timepoint = 0): # and it says times aren't exact
-            rd_str = "L"
+        # Determine whether we are looking at receive-only or discharge-only
+        receive_only = False;
+        discharge_only = False;
+        if (is_first_stop):
+            receive_only = True; # Logically speaking
+        if (is_last_stop):
+            discharge_only = True; # Logically speaking
+        if (timepoint.drop_off_type == 1 and timepoint.pickup_type == 0):
+            receive_only = True;
+        elif (timepoint.pickup_type == 1 and timepoint.drop_off_type == 0):
+            discharge_only = True;
 
-    # WORK IN PROGRESS
+        ar_str = "" # If we are not adding the padding at all -- unwise with two_row
+        dp_str = "" # Again, if we are not adding the "Ar/Dp" at all
+        if (use_ar_dp_str):
+            ar_str = "Ar "
+            dp_str = "Dp "
+
+        # Start assembling the two lines.
+        if (receive_only):
+            arrival_line_str = ''
+        else:
+            arrival_rd_str  = get_rd_str( timepoint,
+                                          doing_html=doing_html, is_first_stop=is_first_stop, is_last_stop=is_last_stop,
+                                          is_first_line=(not reverse), #arrival is first unless reversing
+                                          is_second_line=(reverse),
+                                          is_arrival_line=True,
+                                        )
+            arrival_line_str=''.join([ar_str, rd_str, arrival_str])
+        if (discharge_only):
+            departure_line_str = ''
+        else:
+            departure_rd_str = get_rd_str( timepoint,
+                                           doing_html=doing_html, is_first_stop=is_first_stop, is_last_stop=is_last_stop,
+                                           is_second_line=(reverse),    #departure is second unless reversing
+                                           is_first_line=(not reverse),
+                                           is_departure_line=True,
+                                          )
+            departure_line_str=''.join([dp_str, rd_str, departure_str])
+
+        if (discharge_only and (not reverse) and second_timepoint):
+            # Fill the second line from a different train service.
+            # Shamefully untested.  FIXME
+            departure_line_str = timepoint_str( second_timepoint,
+                                                two_row=False,
+                                                second_timepoint=None,
+                                                use_ar_dp_str=use_ar_dp_str,
+                                                doing_html=doing_html,
+                                                bold_pm=bold_pm,
+                                                use_24=use_24,
+                                                use_daystring=use_daystring,
+                                                calendar=None, # would need to be calendar for second timepoint; FIXME
+                                                is_first_stop=True, # Suppress "R"; effectively first stop of connecting train
+                                                is_last_stop=False,
+                                               )
+
+        if (receive_only and (reverse) and second_timepoint):
+            # Fill the second line from a different train service.
+            # Shamefully untested.  FIXME
+            arrival_line_str = timepoint_str( second_timepoint,
+                                              two_row=False,
+                                              second_timepoint=None,
+                                              use_ar_dp_str=use_ar_dp_str,
+                                              doing_html=doing_html,
+                                              bold_pm=bold_pm,
+                                              use_24=use_24,
+                                              use_daystring=use_daystring,
+                                              calendar=None, # would need to be calendar for second timepoint; FIXME
+                                              is_first_stop=True,
+                                              is_last_stop=True, # Suppress "D"; effectively last stop of connecting-from train
+                                             )
+
+        # Patch the two rows together.
+        if (not reverse):
+            complete_line_str = linebreak.join([arrival_line_str, departure_line_str])
+        else: # reverse
+            complete_line_str = linebreak.join([departure_line_str, arrival_line_str])
+        if (doing_html):
+            complete_line_str = wrap_preformatted_for_html(complete_str)
+        return complete_line_str
+
+    # We should not reach here; we should have returned earlier.
+    assert False
     return
