@@ -18,11 +18,64 @@ separate_stylesheet = '''
     size: Letter; /* change from default A4, since this is the US */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
+.tt-table {
+    /* Stuff for the table as a whole */
+    border-collapse: collapse;
+
+    /* Table *outer* border -- NOT the individual cell borders */
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
+
+}
+.col_heading {
+    /* When PANDAS styles a table,
+       most unfortunately we cannot set custom CSS clases on the headers.
+       The "col_heading" class is pre-chosen for us, and we're stuck with it.
+       This is necessary to get the left-to-right borders between headings right.
+       Specifying the background color per-header requires multiple selectors...
+     */
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
+
+    /* And again, we can't apply these as classes, so they have to come in here. */
+    vertical-align: center;
+    text-align: center;
+
+    /* And again, can't apply as classes. */
+    font-weight: bold;
+
+    /* Set the background color (should really be per-column) */
+    background-color: cornsilk;
+}
+.col_heading.col1 {
+    /* A clever way to only alter column heading one, but very manual */
+    /* background-color: cornflowerblue; */
+}
 .heading-font {
     font-weight: bold;
 }
 strong {
-    font-size: 200%;
+    font-size: 150%;
     font-weight: bold;
 }
 .major-station {
@@ -40,9 +93,6 @@ strong {
 }
 .color-cornsilk {
     background-color: cornsilk;
-}
-.tt-table {
-    border-collapse: collapse;
 }
 .align-top {
     vertical-align: top;
@@ -115,26 +165,25 @@ strong {
 # and Liberation Sans (good, but uglier I think)
 
 font_size_screen_css='''
-.font-sans-serif {
+/* We can't assign extra classes to the column heading */
+.font-sans-serif, .col_heading {
     font-family: "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
 }
-.font-data-size {
-    /* Font size for screen use */
+/* We can't assign extra classes to the column heading */
+.font-data-size, .col_heading {
+    /* Font size for screen and print use */
     /* Amtrak's old timetables were basically 6 pt, or maybe even smaller */
     /* But that's unnecessarily grim for screen use, probably */
-    font-size: 10pt;
+    font-size: 10.5pt;
 }
-'''
-font_size_weasyprint_css='''
-.font-sans-serif {
-    font-family: "Deja Vu Sans", "Bitstream Vera Sans", sans-serif;
-}
-.font-data-size {
-    /* Font size for feeding through weasyprint */
-    font-size: 10pt;
+.col_heading {
+    /* Font size for headers -- just a tad larger */
+    font-size: 12pt;
 }
 '''
 
+# Right now there's no difference, but we might make a difference later.
+font_size_weasyprint_css=font_size_screen_css
 
 # The cell with the actual time in it is a particularly sticky problem.
 # To satisfy screen readers, we don't want nested tables.
@@ -190,7 +239,10 @@ def style_timetable_for_html(timetable, styler):
 
     # Remove headings: index is arbitrary numbers, not interesting to the final reader;
     # column headers aren't elegant enough for us, so we build our own 'header' in the top row
-    s1 = s0.hide_index().hide_columns()
+    # s1 = s0.hide_index().hide_columns()
+
+    # Aaargh, screen readers want column headers!  Find a way to style them SOMEHOW
+    s1 = s0.hide_index()
     # Apply the styler classes.  This is where the main work is done.
     s2 = s1.set_td_classes(styler)
     styled_timetable_html = s2.render()

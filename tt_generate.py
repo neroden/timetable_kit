@@ -355,9 +355,9 @@ def format_single_trip_timetable(stop_times,
     # in future, color will likely be changed
     bg_color_css     = "color-cornsilk"
     font_css = "font-sans-serif font-data-size"
-    heading_extra_css = "align-vcenter align-center heading-font"
-    heading_css      = " ".join([bg_color_css, font_css,
-                                 "border-top-heavy border-bottom-heavy", heading_extra_css])
+    # Pandas won't let us do this.  Heading has to be styled using preexisting classes.
+    # heading_css      = " ".join([bg_color_css, font_css,
+    #                             "border-top-heavy border-bottom-heavy", heading_extra_css])
     data_css         = " ".join([bg_color_css, font_css,
                                  "border-top-light border-bottom-light", "align-top"])
     data_css_final   = " ".join([bg_color_css, font_css,
@@ -376,32 +376,12 @@ def format_single_trip_timetable(stop_times,
     timetable_base = pd.DataFrame(columns=timetable_columns)
     styler_base = pd.DataFrame(columns=timetable_columns)
 
-    list_of_timetable_rows = [] # accumulate, then append to blank base
-    list_of_styler_rows = [] # accumulate, then append to blank base
-
-    # Use the train number as the column header for times
-    time_column_prefix = "Train #"
-    time_column_header = "".join([time_column_prefix, str(train_number)])
-    if (doing_html):
-        time_column_header = ''.join([time_column_prefix,"<br>","<strong>",str(train_number),"</strong>"])
-
-    # This is the output table header row
-    tt_dict = {}
-    tt_dict["Time"] = [time_column_header]
-    tt_dict["StationCode"] = ["Station"]
-    # Stop_sequences is generally indexed 1+; so 0 is a safe index value, probably
-    # Which is good because I don't know how to set any other index!
-    tt_row = pd.DataFrame(tt_dict)
-    list_of_timetable_rows.append(tt_row)
-
-    # This is the parallel styler table (header row)
     # The styler table must be the exact same shape as the output table
     # -- styles will apply to each cell specifically
-    styler_dict = {}
-    styler_dict["Time"]      = [" ".join([heading_css, both_css])]
-    styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
-    styler_row = pd.DataFrame(styler_dict)
-    list_of_styler_rows.append(styler_row)
+    # Header styling has to be done separately, with a big yuck...
+
+    list_of_timetable_rows = [] # accumulate, then append to blank base
+    list_of_styler_rows = [] # accumulate, then append to blank base
 
     # This gets the first and last stop index number.  Helps with pretty-printing...
     stop_sequence_numbers = stop_times.index
@@ -492,9 +472,38 @@ def format_single_trip_timetable(stop_times,
         list_of_styler_rows.append(styler_row)
 
     timetable = timetable_base.append(list_of_timetable_rows)
-    print(timetable)
     styler = styler_base.append(list_of_styler_rows)
-    return (timetable, styler)
+
+    # OK.  Whew.  Now we rename the column headers....
+    # Use the train number as the column header for times
+    time_column_prefix = "Train #"
+    time_column_header = "".join([time_column_prefix, str(train_number)])
+    if (doing_html):
+        time_column_header = ''.join([time_column_prefix,"<br>","<strong>",str(train_number),"</strong>"])
+
+    # This is the output table header, which will rename the columns at the end
+    tt_new_dict = {}
+    tt_new_dict["Time"] = time_column_header
+    tt_new_dict["StationCode"] = "Station"
+
+    # This lets us rename the columns so the parallel styler table works.
+    # It does *not* let us style the headers, sadly.
+    styler_new_dict = {}
+    styler_new_dict["Time"]        = tt_new_dict["Time"]
+    styler_new_dict["StationCode"] = tt_new_dict["StationCode"]
+
+    # We want to do the styling we used to do this way another way:
+    # styler_dict["Time"]      = [" ".join([heading_css, both_css])]
+    # styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
+    # UNFINISHED, FIXME
+    header_styling = {}
+
+    # OK.  Now really rename the column headers...
+    new_timetable = timetable.rename(columns=tt_new_dict)
+    new_styler = styler.rename(columns=styler_new_dict)
+
+    print(new_timetable)
+    return (new_timetable, new_styler, header_styling)
 
 def print_single_trip_tt(trip):
     '''
@@ -520,34 +529,39 @@ def print_single_trip_tt(trip):
         # Trains which don't run overnight should never be marked "infrequent", because
         # the days can be at the top of the column instead of next to the time.
 
-    [timetable, styler_table] = format_single_trip_timetable( stop_times,
+    # Output filename without the .html, .pdf, and .csv suffix:
+    output_pathname_before_suffix = ''.join([output_dirname, "/tt_",str(train_number)])
+
+    # Main run to generate HTML:
+    [timetable, styler_table, header_styling] = format_single_trip_timetable( stop_times,
                                     calendar=this_feed.calendar,
                                     infrequent=infrequent,
                                     doing_html=True,
                                     min_dwell=5,
                                     train_number=train_number,
                                     )
+
     # Run the styler on the timetable...
     timetable_styled_html = style_timetable_for_html(timetable, styler_table)
     page_title = "Timetable for Amtrak Train #" + str(train_number)
     timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
-    print_to_file(timetable_finished_html, ''.join([output_dirname, "/tt_",str(train_number)]) )
+    print_to_file( timetable_finished_html, output_pathname_before_suffix ) # suffix is automatic for this FIXME
 
     # Now rerun it for weasyprint...
     html_str_for_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
                                              for_weasyprint=True)
     html_for_weasy = weasyHTML(string=html_str_for_weasy)
-    html_for_weasy.write_pdf(''.join([output_dirname, "/tt_",str(train_number),".pdf"]) )
+    html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
 
-    # Now rerun it as plaintext for CSV...
-    [timetable_txt, dummy_table] = format_single_trip_timetable( stop_times, 
+    # Finally rerun the main routine as plaintext for CSV...
+    [timetable_txt, dummy_table, dummy_styling] = format_single_trip_timetable( stop_times, 
                                     calendar=this_feed.calendar, 
                                     infrequent=infrequent,
                                     doing_html=False,
                                     min_dwell=5,
                                     train_number=train_number,
                                     )
-    timetable_txt.to_csv("test_out.csv", index=False, header=False)
+    timetable_txt.to_csv(output_pathname_before_suffix + ".csv", index=False)
     return
 
 #### The muddle of work in progress
