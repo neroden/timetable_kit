@@ -5,9 +5,10 @@ I am currently using WeasyPrint for this because it is also a Python package.
 --- Okular needs to be set at 90% zoom to show it real size.
 --- Evince needs to be set at 50% zoom to show it real size.
 
+Amtrak train numbers are in the "trip_short_name" field of GTFS static data
+Amtrak station codes are in the "stop_id" field of GTFS static data.
 
-
-- The elegant styling on the "single" timetable needs to be completely copied over to style a complex timetable.  Very messy.
-
-- Consider test-template.csv as the primary format template.  Can be edited in a spreadsheet.
-
+Station full names are retrieved from the Amtrak station data on the Web which is on the web in json format;
+the json files for the station data must be downloaded in advance, 
+using './json_stations.py download' into the ./stations/ directory.
+This is to avoid beating too hard on Amtrak's website.

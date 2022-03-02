@@ -1,0 +1,72 @@
+The timetable generating kit generates a pretty timetable, as HTML, PDF, or CSV, from three things:
+- GTFS static data
+- Amtrak station name information (in json form) from Amtrak's website
+- A template, written by the user.
+
+It is necessary to have a template system because timetable design is actually
+an art.  A timetable can list a train but not all the stations it goes to;
+a station but not all the trains that stop at it; connecting trains; and notes like
+"continues to Chicago".  In traditional Amtrak timetables, the same train might be
+listed in four different timetables, but from different perspectives: the Coast Starlight,
+for instance, has its own timetable, and appears in the Pacific Surfliner, Cascades,
+San Joaquins, and California Coastal Services timetables as well.  
+
+This document describes the template format.
+
+The template format remains a work in progress and may change at any time.
+
+Note the following:
+Amtrak train numbers are in the "trip_short_name" field of GTFS static data
+Amtrak station codes are in the "stop_id" field of GTFS static data.
+I will use "trip_short_name" and "train number" interchangeably.
+I will used "station code" and "stop_id" interchangeably.
+
+----
+The template format is a CSV file.  It can (and should) be edited in a spreadsheet program.
+
+The top left cell is a "Key" cell: it is blank for a complete template.
+For a "shorthand" template, see below.
+
+The left column (except for the top Key cell) contains station codes (stop_id) in order,
+exactly the order the rows will appear in the timetable.
+
+A blank cell can be left in the left column to use a line for something other than station times. *not yet
+This can be used to provide a line which has a "header" for a "connecting train" section.
+
+The special code "train name" can be used to generate cells containing the name of the train (route_long_name) *not yet
+
+For a "shorthand" template, the Key cell contains the words "stations of XXX", 
+where XXX is a train number (trip_short_name).  This will fill the left column with all the stations
+from train number XXX in the correct order.  This makes simple timetables simpler, but doesn't allow all layouts.
+If this is done, there should be only one row in the template (the top row).
+
+The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
+in exactly the order the columns will appear in the timetable.
+
+The special code "station" can be used to generate cells containing the name and details of the station.
+This is retrieved from the Amtrak station data on the Web which is on the web in json format;
+the json files for the station data must be downloaded in advance, 
+using './json_stations.py download' into the ./stations/ directory.
+This is to avoid beating too hard on Amtrak's website.
+
+Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
+This will allow them to share a single column.  Be careful about using this as it is fragile:
+it is intended for "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
+This will give a complex stacked cell for "train name".
+
+The internal cells (not the top row or left column) of the table should be mostly left blank.
+The program fills these in from the GTFS and Amtrak station data.
+
+However, if you want to include special text, you can free-write it in a cell,
+and it will be copied into the final table. *not yet
+Examples include putting "to Chicago" in the cell after the last listed station for a train which
+continues to Chicago after leaving the last station listed in the timetable.
+Free-written text should be HTML (important if you have line breaks or want to color it).
+Unfortunately, that means it will pass through as HTML in the plaintext/csv output; 
+the plaintext/csv output is intended to be manually manipulated by a user, however, so this is probably OK for now.
+
+Template files should end with .tt-spec. * May want to change this.
+
+I am hoping to add more bells and whistles.  When I do, my plan is to put auxilliary information for a template,
+showing how to generate a final timetable from it, in a JSON file which should end with .tt-json. *not yet
+
