@@ -71,7 +71,7 @@ def filter_by_service_ids(self, service_ids):
     '''
     new_feed = self.copy()
     # First the calendar
-    new_feed.calendar = self.calendar[self.trips.service_id.isin(service_ids)]
+    new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
     # Kill any service_ids not in the (new) calendar.
     service_ids = new_feed.calendar["service_id"].array
     # Then filter the trips.
