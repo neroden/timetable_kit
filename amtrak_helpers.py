@@ -1,16 +1,15 @@
-#! /usr/bin/env python3
 # amtrak_helpers.py
 # Part of timetable_kit
 #
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-'''
+"""
 This module includes Amtrak *data* which isn't provided by Amtrak.
 This includes the list of which stations are major,
 which trains carry checked baggage (not implemented FIXME),
 known problems with Amtrak's GTFS data, and similar.
 (Functions for extracting data from Amtrak's JSON stations database is elsewhere.)
-'''
+"""
 
 # GLOBAL VARIABLES
 #
@@ -76,7 +75,5 @@ major_stations_list = ( "BOS", # NEC timetable stations first
     )
 
 def is_standard_major_station(station_code):
-    '''
-    Is a station on the list of standard 'major stations' for Amtrak
-    '''
+    """Is a station on the list of standard 'major stations' for Amtrak?"""
     return (station_code in major_stations_list)
