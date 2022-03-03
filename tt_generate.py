@@ -18,10 +18,10 @@ from weasyprint import CSS as weasyCSS
 
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
-from tt_errors import GTFSError
-from tt_errors import NoStopError
-from tt_errors import TwoStopsError
-from tt_errors import InputError
+from timetable_errors import GTFSError
+from timetable_errors import NoStopError
+from timetable_errors import TwoStopsError
+from timetable_errors import InputError
 import tt_parse_args
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early

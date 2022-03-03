@@ -214,7 +214,7 @@ def do_station_processing():
 def make_arg_parser():
     # Argument parser setup code
     arg_parser = argparse.ArgumentParser(
-        description='''Download or run tests on Amtrak's JSON stations data.  With no arguments, does nothing.'''
+        description='''Download and/or run tests on Amtrak's JSON stations data.  With no arguments, does nothing.'''
         )
     arg_parser.add_argument('--download',
         help='Download Amtrak stations data; otherwise a local copy must exist',
@@ -222,7 +222,7 @@ def make_arg_parser():
         action='store_true',
         )
     arg_parser.add_argument('--process',
-        help='Process Amtrak stations data; a local copy must exist. INCOMPLETE',
+        help='Process Amtrak stations data, running tests; a local copy must exist. INCOMPLETE',
         dest='process',
         action='store_true',
         )

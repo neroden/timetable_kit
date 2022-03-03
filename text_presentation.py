@@ -7,7 +7,7 @@ import gtfs_kit as gk
 from collections import namedtuple
 
 # These are mine
-from tt_errors import GTFSError
+from timetable_errors import GTFSError
 
 def day_string(calendar, offset=0):
     '''Given a calendar DataTable which contains only a single row for a single service, this
