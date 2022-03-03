@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
-# tt_generate.py
+# timetable.py
 # Part of timetable_kit
-#
-# This is the main program
-#
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+'''Generate timetables
+timetable.py is the main program for generating timetables
+and related things
+'''
 
 # Other people's packages
 import argparse
