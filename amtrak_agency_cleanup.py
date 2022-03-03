@@ -2,9 +2,9 @@
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-'''
+"""
 Subroutines to clean up Amtrak's names for agencies, which are less than helpful
-'''
+"""
 
 import pandas as pd
 import gtfs_kit as gk
@@ -13,8 +13,10 @@ import gtfs_kit as gk
 import gtfs_type_cleanup
 
 def indexed_agency(agency):
-    "Take type-correted agency DataFrame.  Set agency ID (which must be an integer) as index."
-    "Sort by it.  Cannot be repeated."
+    """
+    Take type-correted agency DataFrame.  Set agency ID (which must be an integer) as index.
+    Sort by it.  Cannot be repeated.
+    """
     # Not as helpful as we first supposed.
     # NOTE that this eliminates the ability to refer to it by the agency_id name;
     # it must only be "index" now
@@ -25,7 +27,9 @@ def indexed_agency(agency):
 
 # Method 1
 def lookup_agency_name_1(agency, agency_id):
-    "Takes agency_id (a string), returns agency_name (a string).  With duplicate IDs, grabs the first"
+    """
+    Takes agency_id (a string), returns agency_name (a string).  With duplicate IDs, grabs the first
+    """
     return agency[(agency.agency_id == agency_id)]['agency_name'].iloc[0]
 
 # Method 2
