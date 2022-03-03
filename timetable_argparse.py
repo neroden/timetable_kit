@@ -2,12 +2,16 @@
 # timetable_argparse.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-'''Argument parser for generate_timetable
-make_tt_arg_parser
-'''
+"""
+Argument parser for timetable.py
+
+The only function for external use is make_tt_arg_parser.
+"""
+
 import argparse
 
 def make_tt_arg_parser():
+    """Make argument parser for timetable.py"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='''Produce printable HTML timetable.
