@@ -3,10 +3,10 @@
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-'''
+"""
 Routines for extracting Amtrak's JSON station data and working with it.
 Amtrak's entire station database is exposed as JSON, which is very useful.
-'''
+"""
 
 # "./json_stations.py download"
 # will download Amtrak's station files into the './stations/' directory
@@ -35,15 +35,11 @@ stations_json_url = "https://www.amtrak.com/services/data.stations.json"
 stations_json_local_pathname = station_details_local_path_prefix + "data.stations.json"
 
 def stations_json_local_path():
-    '''
-    Local path for the data.stations.json file
-    '''
+    """Return local path for the data.stations.json file as a Path"""
     return Path(stations_json_local_pathname);
 
-def station_details_filename(station_code: str):
-    '''
-    Filename of an Amtrak station details JSON file
-    '''
+def station_details_filename(station_code: str) -> str:
+    """Return filename for a Amtrak station details JSON file"""
     # Step one: validate the station code
     if (len(station_code) != 3):
         raise ValueError("Station code not of length 3")
@@ -58,11 +54,12 @@ def station_details_filename(station_code: str):
                    ])
     return filename;
 
-def station_details_url(station_code: str):
-    '''
+def station_details_url(station_code: str) -> str:
+    """
     Given an Amtrak station code, return the URL for the station details in JSON form.
-    But watch out for 403 forbidden nonsense...
-    '''
+
+    Watch out for "403 forbidden" issues...
+    """
     # Step one: validate the station code
     if (len(station_code) != 3):
         raise ValueError("Station code not of length 3")
@@ -72,10 +69,8 @@ def station_details_url(station_code: str):
                    ])
     return url;
 
-def station_details_local_path(station_code: str):
-    '''
-    Local pathname of an Amtrak station details JSON file
-    '''
+def station_details_local_path(station_code: str) -> str:
+    """Return local pathname for an Amtrak station details JSON file"""
     # Step one: validate the station code
     if (len(station_code) != 3):
         raise ValueError("Station code not of length 3")
@@ -85,68 +80,58 @@ def station_details_local_path(station_code: str):
                        ])
     return Path(pathname);
 
-def download_stations_json():
-    '''
-    Download Amtrak's basic stations database as json text; return it.
-    '''
+def download_stations_json() -> str:
+    """Download Amtrak's basic stations database as json text; return it."""
     # This uses the 'requests' package to download it
     response = requests.get(stations_json_url)
     return response.text
 
 def save_stations_json(stations_json: str):
-    '''
-    Save Amtrak's basic stations databse (json text) to a suitable file.
-    '''
+    """Save Amtrak's basic stations databse (json text) to a suitable file."""
     with open(stations_json_local_path(),'w') as stations_json_local_file:
         print ( stations_json, file=stations_json_local_file )
 
 def load_stations_json():
-    '''
-    Load Amtrak's basic stations databse (json text) from a suitable file.
-    '''
+    """Load Amtrak's basic stations databse (json text) from a suitable file.  Return it."""
     with open(stations_json_local_path(),'r') as stations_json_local_file:
         stations_json = stations_json_local_file.read()
     return stations_json
 
 # This one is called by the main timetable program.
 def make_station_name_lookup_table():
-    '''
+    """
     Return a dict which takes a station code and returns a suitable printable station name.
-    Expects json stations to be downloaded already
-    '''
+
+    Expects json stations to be downloaded already, in a suitable local file
+    """
     stations_json = load_stations_json()
     # Believe it or not, this line JUST WORKS!!!!  Wow!
     stations = pd.io.json.read_json(stations_json,orient='records')
     lookup_station_name = dict( zip(stations.code, stations.autoFillName) )
     return lookup_station_name
 
-def download_station_details(station_code: str):
-    '''
-    Download station details for one station as json text; return it.
-    '''
+def download_station_details(station_code: str) -> str:
+    """Download station details for one station as json text; return it."""
     response = requests.get(station_details_url(station_code))
     return response.text
 
-def save_station_details(station_code: str, station_details: str ):
-    '''
-    Save station details for one station to a suitable file.
-    '''
+def save_station_details(station_code: str, station_details: str):
+    """Save station details for one station to a suitable file."""
     with open(station_details_local_path(station_code),'w') as station_details_local_file:
         print ( station_details, file=station_details_local_file)
 
-def load_station_details(station_code: str):
-    '''
-    Load station details for one station as json text from a suitable file; return it.
-    '''
+def load_station_details(station_code: str) -> str:
+    """Load station details for one station as json text from a suitable file; return it."""
     with open(station_details_local_path(station_code),'r') as station_details_local_file:
         station_details = station_details_local_file.read()
     return station_details
 
 def download_all_stations():
-    '''
-    Download all of Amtrak's station details files;
-    by pre-downloading, avoids hammering Amtrak's website
-    '''
+    """
+    Download all of Amtrak's station details files.
+
+    By pre-downloading, avoids hammering Amtrak's website
+    """
     # First, get the main station database
     stations_json = download_stations_json()
     save_stations_json(stations_json)
