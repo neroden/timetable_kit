@@ -2,6 +2,15 @@
 # Part of timetable_kit
 # Copyright 2021 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
+"""
+Module for presenting small bits of text for the timetable.
+
+This produces strings like "MoWeFr" and "Ar D11:49P".
+Some routines have HTML variants and plaintext variants.
+
+All the "character twiddling" operations are in here.
+"""
+
 import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
@@ -9,11 +18,15 @@ from collections import namedtuple
 # These are mine
 from timetable_errors import GTFSError
 
-def day_string(calendar, offset=0):
-    '''Given a calendar DataTable which contains only a single row for a single service, this
+def day_string(calendar, offset=0) -> str:
+    """
+    Return "MoWeFr" style string for days of week.
+
+    Given a calendar DataTable which contains only a single row for a single service, this
     returns a string like "Daily" or "MoWeFr" for the serviced days of the week.
+
     Use offset to get the string for stops which are more than 24 hours after initial depature.
-    '''
+    """
     days_of_service_list = calendar.to_dict('records')
     # if there are zero or duplicate service records, we error out.
     if (len(days_of_service_list) == 0):
@@ -74,8 +87,9 @@ def day_string(calendar, offset=0):
 TimeTuple = namedtuple('TimeTuple', ['day', 'pm', 'hour', 'hour24', 'min', 'sec'])
 def explode_timestr(timestr: str) -> TimeTuple:
     """
-    Given a GTFS timestr, return a namedtuple giving 'day', 'pm', 'hour', 'min', 'sec'
-    and also 'hour24' for 24-hour time
+    Given a GTFS timestr, return a TimeTuple.
+
+    TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour), 'hour24' ,'min', 'sec'.
     """
     try:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
@@ -90,6 +104,7 @@ def explode_timestr(timestr: str) -> TimeTuple:
 def time_short_str_24(time: TimeTuple) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
+
     But do it in "military" format from 0:00 to 23:59.
     """
     # Note that this is very explicitly designed to be fixed width
@@ -105,6 +120,7 @@ ampm_str = ["A", "P"] # index into this to get the am or pm string
 def time_short_str(time: TimeTuple) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
+
     Do it with AM and PM.
     """
     # Note that this is very explicitly designed to be fixed width
@@ -128,7 +144,7 @@ def get_rd_str( timepoint,
                 is_arrival_line=False,
                 is_departure_line=False
               ):
-    '''
+    """
     Return a single character (default " ") with receive-only / discharge-only annotation.
     "R" = Receive-only
     "D" = Discharge-only
@@ -150,7 +166,7 @@ def get_rd_str( timepoint,
     is_departure_line
     determine which line gets the letter (it looks ugly for both to get it).
     These should all be false when producing a one-line string.
-    '''
+    """
     # Important note: there's currently no way to identify the infamous "L",
     # which means the train or bus is allowed to depart ahead of time
     rd_str = " " # NOTE the default is one blank space, for plaintext output.
@@ -208,11 +224,15 @@ def timepoint_str ( timepoint,
                     is_first_stop=False,
                     is_last_stop=False,
                    ):
-    '''
+    """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
-    This is quite complex: I would have used tables-within-tables but they're screen-reader-unfriendly.
 
-    It MUST be printed in a fixed-width font and formatting MUST be preserved: quite ugly work really
+    This is quite complex: I would have used tables-within-tables but they're screen-reader-unfriendly.
+    Trying to do it with fixed-width fonts was too ugly.
+
+    So the the HTML version uses spans with inline-block layout.
+
+    The CSS is elsewhere.
 
     The most excruciatingly complex variant looks like:
     Ar F 9:59P Daily
@@ -234,7 +254,7 @@ def timepoint_str ( timepoint,
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
     -- is_last_stop: suppress "discharge only" notation
-    '''
+    """
 
     if (doing_html):
         linebreak = "<br>"
