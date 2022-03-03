@@ -245,7 +245,13 @@ def style_timetable_for_html(timetable, styler):
     s1 = s0.hide_index()
     # Apply the styler classes.  This is where the main work is done.
     s2 = s1.set_td_classes(styler)
-    styled_timetable_html = s2.render()
+    styled_timetable_html = s2.to_html()
+
+    # NOTE That this generates an unwanted blank style sheet...
+    unwanted_prefix='''<style type="text/css">
+</style>
+'''
+    styled_timetable_html = styled_timetable_html.removeprefix(unwanted_prefix)
     return styled_timetable_html;
 
 # Start of HTML document
