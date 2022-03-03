@@ -16,7 +16,8 @@ from collections import namedtuple
 from weasyprint import HTML as weasyHTML
 from weasyprint import CSS as weasyCSS
 
-# Local module imports: note namespaces are separate for each file/module
+# My packages: Local module imports
+# Note namespaces are separate for each file/module
 from tt_errors import GTFSError
 from tt_errors import NoStopError
 from tt_errors import TwoStopsError
@@ -32,7 +33,6 @@ import amtrak_json_stations
 import amtrak_helpers
 
 import text_presentation
-from text_presentation import TimeTuple
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_styling import (
     style_timetable_for_html,
@@ -159,6 +159,8 @@ def augment_template(raw_template):
     Cell 0,0 is normally blank.
     If it is "Stations of 59", then (a) assume there is only one template row;
     (b) get the stations for 59 and fill the rows in from that
+
+    Uses the globals master_feed and reference_date.
     '''
     if (pd.isna(raw_template.iloc[0,0]) ):
         # No key code, nothing to do
@@ -168,7 +170,10 @@ def augment_template(raw_template):
         print("Key code: " + key_code)
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
-        stations_df = stations_list_from_trip_short_name(key_train_name)
+        # Filter the feed down to a single date...
+        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+        # And pull the stations list
+        stations_df = stations_list_from_trip_short_name(today_feed, key_train_name)
         new_template = raw_template.iloc[0:,] # Get first row
         new_template.iloc[0,0] = float("nan") # Blank out key_code
         newer_template = pd.concat([new_template,stations_df]) # Yes, this works
@@ -566,47 +571,48 @@ def print_single_trip_tt(trip):
 
 #### The muddle of work in progress
 
-def trip_from_trip_short_name(trip_short_name):
+def trip_from_trip_short_name(today_feed, trip_short_name):
     '''
     Given a single train number (trip_short_name)
-    -- with an assumed global reference date
-    -- and using the global master_feed.trips
+    -- and a feed, which should already be reduced by dates to one day --
     produces the trip record associated therewith.
-    Raises an error if trip_short_name generates more than one trip for that date.
+    Raises an error if trip_short_name generates more than one trip
+    (probably because the feed has multiple dates in it)
     '''
     # Note that reference_date and master_feed are globals.
-    reduced_feed = master_feed.filter_by_trip_short_names([trip_short_name])
-    today_feed = reduced_feed.filter_by_dates(reference_date, reference_date)
+    single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
+    this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
 
-    # There should be only one trip.  This checks and raises errors.
-    this_trip_today = today_feed.get_single_trip()
     return this_trip_today
 
-def stations_list_from_trip_short_name(trip_short_name):
+def stations_list_from_trip_short_name(today_feed, trip_short_name):
     '''
-    Produces a station list from a single train number.
-    This is generally used to make a template, not directly.
+    Given a single train number (trip_short_name)
+    -- and a feed, which should already be reduced by dates to one day --
+    Produces a station list dataframe.
+    This is used in augment_template, and via the "stations" command.
     '''
 
-    trip_id = trip_from_trip_short_name(trip_short_name).trip_id
+    trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
 
-    stop_times = master_feed.filter_by_trip_ids([trip_id]).stop_times
-    station_list = stop_times['stop_id']
+    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
+    sorted_station_list = sorted_stop_times['stop_id']
     if (debug):
-        print (station_list)
-    return station_list
+        print (sorted_station_list)
+    return sorted_station_list
 
-def get_timepoint (trip_short_name, station_code):
+def get_timepoint (today_feed, trip_short_name, station_code):
     '''
     Given a trip_short_name (Amtrak train number) and station_code,
+    -- and a feed, which should already be reduced by dates to one day --
     extract the single timepoint (as a Series) from the stop_times GTFS feed
 
     Throw TwoStopsError if it stops here twice.
 
     Throw NoStopError if it doesn't stop here.  This is expensive and should be changed.
     '''
-    trip_id = trip_from_trip_short_name(trip_short_name).trip_id
-    stop_times = master_feed.filter_by_trip_ids([trip_id]).stop_times
+    trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
+    stop_times = today_feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     if (timepoint_df.shape[0] == 0):
         raise NoStopError(' '.join(["Train number", trip_short_name,
@@ -622,12 +628,12 @@ def get_timepoint (trip_short_name, station_code):
     timepoint = timepoint_df.iloc[0] # Pull out the one remaining row
     return timepoint
 
-def get_dwell_secs (trip_short_name, station_code):
+def get_dwell_secs (today_feed, trip_short_name, station_code):
     '''
     Gets dwell time in seconds for a specific train at a specific station
     '''
     try:
-        timepoint = get_timepoint(trip_short_name, station_code)
+        timepoint = get_timepoint(today_feed, trip_short_name, station_code)
     except (NoStopError):
         # If the train doesn't stop there, the dwell time is zero;
         # and we need thie behavior for make_stations_max_dwell_map
@@ -645,16 +651,22 @@ def make_stations_max_dwell_map (template, dwell_secs_cutoff):
     If any train in train_names has a dwell time of dwell_secs or longer at a station,
     then the dict returns True, otherwise False
     '''
-    stations_dict = {}
+    # First get stations and trains list from template.
     stations_list = stations_list_from_template(template)
-
     trains_list = trains_list_from_template(template) # Note still contains "/" items
     flattened_trains_set = flatten_trains_list(trains_list)
 
+    # Now create a reduced GTFS database to look through
+    # Note that reference_date and master_feed are globals.
+    reduced_feed = master_feed.filter_by_trip_short_names(flattened_trains_set)
+    today_feed = reduced_feed.filter_by_dates(reference_date, reference_date)
+
+    # Prepare the dict to return
+    stations_dict = {}
     for s in stations_list:
         max_dwell_secs = 0
         for t in flattened_trains_set:
-            max_dwell_secs = max( max_dwell_secs, get_dwell_secs(t, s) )
+            max_dwell_secs = max( max_dwell_secs, get_dwell_secs(today_feed, t, s) )
         if (max_dwell_secs >= dwell_secs_cutoff):
             stations_dict[s] = True
         else:
@@ -968,7 +980,11 @@ if __name__ == "__main__":
             raise ValueError("Can't generate a station list without a specific trip.")
         tsn = tsn.strip() # Avoid whitespace problems
 
-        station_list_df = stations_list_from_trip_short_name(tsn)
+        # Filter the feed down to one date
+        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+        # And pull the station list -- NOTE, these are not in the right order!
+        station_list_df = stations_list_from_trip_short_name(today_feed, tsn)
         output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
         station_list_df.to_csv(output_filename,index=False)
         # Note: this will put "stop_id" in top row, which is OK
@@ -980,7 +996,8 @@ if __name__ == "__main__":
         # It works, but is not good.
 
         trip_short_name = args.trip_short_name
-        trip = trip_from_trip_short_name(trip_short_name)
+        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+        trip = trip_from_trip_short_name(today_feed, trip_short_name)
         print_single_trip_tt(trip)
         quit()
 
@@ -1023,13 +1040,18 @@ if __name__ == "__main__":
         quit()
 
     if (args.type == "test"):
+        print(master_feed.get_trip_short_name(55792814913))
+        quit()
+
         template = load_template(args.template_filename)
         template = augment_template(template)
         dwell_secs = get_dwell_secs("59","CDL")
         print("Dwell is", dwell_secs)
-        # print(stations_list_from_template(new_template))
-        # name = lookup_station_name["BUF"]
-        # fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
-        # print(fancy_name);
+        quit()
+
+        print(stations_list_from_template(new_template))
+        name = lookup_station_name["BUF"]
+        fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
+        print(fancy_name);
         quit()
 

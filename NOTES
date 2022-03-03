@@ -7,6 +7,7 @@ I am currently using WeasyPrint for this because it is also a Python package.
 
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data
 Amtrak station codes are in the "stop_id" field of GTFS static data.
+Amtrak trip_ids currently consist of the trip_short_name with the service_id concatenated after it.  This might change.
 
 Station full names are retrieved from the Amtrak station data on the Web which is on the web in json format;
 the json files for the station data must be downloaded in advance, 

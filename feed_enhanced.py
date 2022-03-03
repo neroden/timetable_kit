@@ -135,15 +135,16 @@ def filter_by_trip_ids(self, trip_ids):
 
 def get_single_trip(self):
     '''
-    If there's only one trip, return it.
-    Otherwise throw a suitable error.
-    Used for checking that we've reduced the trips table enough but not too much.
+    With no arguments:
+    -- If there's only one trip, return it.
+    -- Otherwise throw a suitable error.
+    -- Used for checking that we've reduced the trips table enough but not too much.
     '''
     num_rows = self.trips.shape[0]
     if (num_rows == 0):
-        raise NoTripError("Expected single trip: no trips in filtered trips table")
+        raise NoTripError("Expected single trip: no trips in filtered trips table", self.trips)
     elif (num_rows > 1):
-        raise TwoTripsError("Expected single trip: too many trips in filtered trips table")
+        raise TwoTripsError("Expected single trip: too many trips in filtered trips table", self.trips)
     this_trip_today = self.trips.iloc[0]
     return this_trip_today
 
@@ -158,6 +159,20 @@ def get_single_trip_stop_times(self, trip_id):
     stop_times_3 = stop_times_2.sort_index()
     return stop_times_3
 
+def get_trip_short_name(self, trip_id):
+    '''
+    Given a trip_id, recover the trip_short_name
+    Since trip_ids are supposed to be unique, this should be an easy process.
+    Very useful for debugging since trip_short_name is human-meaningful,
+    and trip_id isn't.
+    '''
+    my_trips = self.trips[self.trips["trip_id"] == trip_id]
+    if (my_trips.shape[0] == 0):
+        raise NoTripError("No trip with trip_id ", trip_id)
+    elif (my_trips.shape[0] > 1):
+        raise TwoTripsError("Multiple trips with trip_id ", trip_id)
+    my_trip = my_trips.iloc[0]
+    return my_trip.trip_short_name
 
 # Monkey patch starts here
 gk.Feed.filter_by_dates = filter_by_dates
@@ -168,6 +183,7 @@ gk.Feed.filter_by_trip_short_names = filter_by_trip_short_names
 gk.Feed.filter_by_trip_ids = filter_by_trip_ids
 gk.Feed.get_single_trip = get_single_trip
 gk.Feed.get_single_trip_stop_times = get_single_trip_stop_times
+gk.Feed.get_trip_short_name = get_trip_short_name
 
 # TESTING CODE
 if __name__ == "__main__":
