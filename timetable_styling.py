@@ -2,6 +2,15 @@
 # Part of timetable_kit
 # Copyright 2021 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
+"""
+Style a timetable.
+
+This module uses Pandas's Styler to apply CSS classes to a timetable;
+then renders HTML, including a lot of complicated extra bits.
+
+It has a ton of embedded generated CSS.
+
+"""
 
 # Other people's packages
 import pandas as pd
@@ -226,7 +235,7 @@ time_boxes_css='''
 '''
 
 def style_timetable_for_html(timetable, styler):
-    ''' Take a timetable DataFrame with parallel styler DataFrame and style it for output. '''
+    """Take a timetable DataFrame with parallel styler DataFrame and style it for output."""
     # Time to try the styler
     # Note that the styler doesn't escape HTML per default --> yay
     # Make the table more readable by not using cell IDs.
@@ -262,7 +271,7 @@ html_header='''<!DOCTYPE html>
 '''
 
 def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False):
-    ''' Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.'''
+    """Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS."""
 
     # We need to add the extras to make this a full HTML & CSS file now.
     if not title:
@@ -292,14 +301,16 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     return finished_timetable_html
 
 def amtrak_station_name_to_multiline_text(station_name: str, major=False ) -> str:
-    '''
+    """
+    Produce pretty Amtrak station name for plaintext -- multi-line.
+
     Given an Amtrak station name in one of these two forms:
     Champaign-Urbana, IL (CHM)
     New Orleans, LA - Union Passenger Terminal (NOL)
     Produce a pretty-printable text version (possibly multiple lines)
     If "major", then make the station name bigger and bolder
     We want to avoid very long lines as they mess up timetable formats
-    '''
+    """
     if (" - " in station_name):
         (city_state_name, second_part) = station_name.split(" - ", 1)
         (facility_name, suffix) = second_part.split(" (", 1)
@@ -329,23 +340,26 @@ def amtrak_station_name_to_multiline_text(station_name: str, major=False ) -> st
     return fancy_name
 
 def amtrak_station_name_to_single_line_text(station_name: str, major=False ) -> str:
-    '''
-    The easy one.
-    Station name to single line text.
-    '''
+    """
+    Produce pretty Amtrak station name for plaintext -- single line.
+
+    The easy version.  Station name to single line text.
+    """
     if (major):
         return station_name.upper()
     else:
         return station_name
 
 def amtrak_station_name_to_html(station_name: str, major=False ) -> str:
-    '''
+    """
+    Produce pretty Amtrak station name for HTML -- potentially multiline, and complex.
+
     Given an Amtrak station name in one of these two forms:
     Champaign-Urbana, IL (CHM)
     New Orleans, LA - Union Passenger Terminal (NOL)
     Produce a pretty-printable HTML version
     If "major", then make the station name bigger and bolder
-    '''
+    """
 
     if (" - " in station_name):
         (city_state_name, second_part) = station_name.split(" - ", 1)
