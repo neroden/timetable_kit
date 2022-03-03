@@ -1,7 +1,9 @@
 # timetable_errors.py
 # Part of timetable_kit
 # Copyright 2021 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-'''Errors for timetable_kit
+"""
+Errors for timetable_kit
+
 Contains:
 GTFSError
 NoStopError
@@ -9,7 +11,7 @@ TwoStopsError
 NoTripError
 TwoTripsError
 InputError
-'''
+"""
 
 class GTFSError(ValueError):
     """Exception for unexpected data in the GTFS feed."""
