@@ -2,6 +2,15 @@
 # get_wiki_stations.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+"""
+Unused module.
+
+Designed to pull Amtrak station data from Wikipedia.
+
+Probably not needed because we can get it from Amtrak's website.
+"""
+
 import argparse
 
 arg_parser = argparse.ArgumentParser(
@@ -72,10 +81,11 @@ if (True):
     split_bus_stop = re.compile(re_split_bus_stop)
 
 def split_bus_stop_name(name):
-    '''
+    """
     Splits a name like "Place (PLC)" into two columns, ("Place","PLC")
+
     If formatted wrong like "Name", returns ("Name", "")
-    '''
+    """
     match = split_bus_stop.match(name)
     if not match:
         # Didn't match; leave stop code blank
