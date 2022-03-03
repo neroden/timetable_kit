@@ -22,7 +22,7 @@ from timetable_errors import GTFSError
 from timetable_errors import NoStopError
 from timetable_errors import TwoStopsError
 from timetable_errors import InputError
-import tt_parse_args
+from timetable_argparse import make_tt_arg_parser
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 import feed_enhanced
@@ -953,7 +953,7 @@ def main_func_future(template):
 if __name__ == "__main__":
     print ("Made it to the main program")
 
-    my_arg_parser = tt_parse_args.make_tt_arg_parser()
+    my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
     # These have defaults; override from command line.
     # NOTE!  We are not in a function so don't need global keyword

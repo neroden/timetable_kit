@@ -1,7 +1,10 @@
 #! /usr/bin/env python3
-# tt_parse_args.py
+# timetable_argparse.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+'''Argument parser for generate_timetable
+make_tt_arg_parser
+'''
 import argparse
 
 def make_tt_arg_parser():
