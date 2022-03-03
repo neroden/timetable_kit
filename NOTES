@@ -11,5 +11,5 @@ Amtrak trip_ids currently consist of the trip_short_name with the service_id con
 
 Station full names are retrieved from the Amtrak station data on the Web which is on the web in json format;
 the json files for the station data must be downloaded in advance, 
-using './json_stations.py download' into the ./stations/ directory.
+using './amtrak_json_stations.py download' into the ./amtrak-stations/ directory.
 This is to avoid beating too hard on Amtrak's website.

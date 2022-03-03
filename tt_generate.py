@@ -769,12 +769,15 @@ def fill_template(template,
                     major = amtrak_helpers.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
+                elif train_names_str in ["services"]: # Column for station services codes
+                    pass # FIXME
                 else: # It's a train number.
                     #
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
+                    train_name = train_names[0]
                     print(train_names)
                     print(station_code)
                     placeholder = ' '.join([ train_names[0],
@@ -785,7 +788,9 @@ def fill_template(template,
                     print(placeholder)
                     tt.iloc[y,x] = placeholder
 
-    return (tt, template) # This is all wrong, it should be tt, styler, but for testing FIXME
+    # Now we have to delete the placeholder left column
+    tt = tt.drop(labels=0, axis="columns")
+    return (tt, tt) # This is all wrong, it should be tt, styler, but for testing FIXME
 
 #### Work for "fancy-one"
 

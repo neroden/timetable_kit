@@ -2,13 +2,18 @@
 # amtrak_helpers.py
 # Part of timetable_kit
 #
-# Helper functions which are very specific to Amtrak.
-# Depend on specific quirks of Amtrak (like which stations are "major", etc.)
-#
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
+'''
+This module includes Amtrak *data* which isn't provided by Amtrak.
+This includes the list of which stations are major,
+which trains carry checked baggage (not implemented FIXME),
+known problems with Amtrak's GTFS data, and similar.
+(Functions for extracting data from Amtrak's JSON stations database is elsewhere.)
+'''
+
 # GLOBAL VARIABLES
-# 
+#
 # Known problems in Amtrak data
 global_bad_service_ids = [2819372, # Cardinal one-day service when it doesn't run on that day
                          ]
