@@ -1,0 +1,29 @@
+/* 
+fonts_screen.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+NOTE: Most PDF viewers display PDFs at the wrong size.
+Okular, for instance, is only "correct" size if displayed at 90%!
+Screen fonts are probably OK for print as well.
+
+I like the look of DejaVu Sans.
+Other fonts to consider include Quicksand (pretty, art-decoish)
+and Liberation Sans (good, but uglier I think)
+*/
+
+/* Note: Pandas Styler can't assign extra classes to the column heading, must use .col_heading for selector */
+
+.font-sans-serif, .col_heading, .symbol-key {
+    font-family: "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
+}
+.font-data-size, .col_heading, .symbol-key {
+    /* Font size for screen and print use */
+    /* Amtrak's old timetables were basically 6 pt, or maybe even smaller */
+    /* But that's unnecessarily grim for screen use, probably */
+    font-size: 10.5pt;
+}
+.col_heading {
+    /* Font size for headers -- just a tad larger */
+    font-size: 12pt;
+}

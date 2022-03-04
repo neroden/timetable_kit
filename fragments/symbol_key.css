@@ -1,0 +1,12 @@
+/* 
+symbol_key.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+CSS fragment file for the symbol key table (except fonts) 
+*/
+
+/* This selects table data cells descended from something (such as the table) of class symbol-key */
+.symbol-key td {
+    vertical-align: top;
+}

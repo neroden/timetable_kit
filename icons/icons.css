@@ -1,0 +1,17 @@
+/*
+icons.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is code to size and style the SVG icons which are in the icons folder.
+
+The icon sizing and alignment code is from Font Awesome and is probably uncopyrightable,
+but if it isn't it's under the MIT license or the CC-BY-4.0 license.
+
+*/
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em
+}

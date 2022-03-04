@@ -1,0 +1,142 @@
+/*
+timetable_main.css
+Part of timetable_kit
+Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This CSS fragment is the majority of the CSS code for styling the actual timetable.
+
+It depends heavily on Pandas adding custom classes to the cells.
+
+Fonts are separated into their own file in case we want to change them for print.
+*/
+
+.tt-table {
+    /* Stuff for the table as a whole */
+    border-collapse: collapse;
+
+    /* Table *outer* border -- NOT the individual cell borders */
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
+
+}
+.col_heading {
+    /* When PANDAS styles a table,
+       most unfortunately we cannot set custom CSS clases on the headers.
+       The "col_heading" class is pre-chosen for us, and we're stuck with it.
+       This is necessary to get the left-to-right borders between headings right.
+       Specifying the background color per-header requires multiple selectors...
+     */
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
+
+    /* And again, we can't apply these as classes, so they have to come in here. */
+    vertical-align: center;
+    text-align: center;
+
+    /* And again, can't apply as classes. */
+    font-weight: bold;
+
+    /* Set the background color (should really be per-column) */
+    background-color: cornsilk;
+}
+.col_heading.col1 {
+    /* A clever way to only alter column heading one, but very manual */
+    /* background-color: cornflowerblue; */
+}
+.heading-font {
+    font-weight: bold;
+}
+strong {
+    font-size: 150%;
+    font-weight: bold;
+}
+.major-station {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: normal;
+}
+.minor-station {
+    font-weight: normal;
+}
+.station-footnotes {
+    font-weight: normal;
+/* The following does not work with weasyprint: font-size: smaller; */
+    font-size: 80%;
+}
+.color-cornsilk {
+    background-color: cornsilk;
+}
+.align-top {
+    vertical-align: top;
+}
+.align-vcenter {
+    vertical-align: center;
+}
+.align-bottom {
+    vertical-align: bottom;
+}
+.align-left {
+    text-align: left;
+}
+.align-right {
+    text-align: right;
+}
+.align-center {
+    text-align: center;
+}
+.border-top-heavy {
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: black;
+}
+.border-bottom-heavy {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+}
+.border-top-light {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: gray;
+}
+.border-bottom-light {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: gray;
+}
+.border-left {
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+}
+.noborder-left {
+    border-left-style: hidden
+}
+.border-right {
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
+}
+.noborder-right {
+    border-right-style: hidden
+}

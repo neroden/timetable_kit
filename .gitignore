@@ -8,8 +8,9 @@ gtfs-amtrak.zip
 gtfs-amtrak/
 
 # Generated output files
-*.pdf
-*.html
+tt_*.pdf
+tt_*.html
+tt_*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
