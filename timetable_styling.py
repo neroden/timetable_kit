@@ -36,7 +36,11 @@ def style_timetable_for_html(timetable, styler):
     s1 = s0.hide_index()
     # Apply the styler classes.  This is where the main work is done.
     s2 = s1.set_td_classes(styler)
-    styled_timetable_html = s2.to_html()
+
+    # Produce HTML.
+    # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
+    table_attrs = 'class="tt-table" role="main" aria-label="Timetable" ' # FIXME: the aria label should be more specific
+    styled_timetable_html = s2.to_html(table_attributes=table_attrs)
 
     # NOTE That this generates an unwanted blank style sheet...
     unwanted_prefix='''<style type="text/css">
@@ -70,17 +74,8 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     with open(fragments_dirname + "timetable_main.css", "r") as timetable_main_css_file:
         timetable_main_css = timetable_main_css_file.read()
     # And the specific internal pseudo-table layout for the individual cells displaying times:
-    with open(fragments_dirname + "timetable_main.css", "r") as time_boxes_css_file:
+    with open(fragments_dirname + "time_boxes.css", "r") as time_boxes_css_file:
         time_boxes_css = time_boxes_css_file.read()
-
-    # We may want different fonts and font sizes for screen and print.
-    if for_weasyprint:
-        with open(fragments_dirname + "fonts_screen.css", "r") as fonts_css_file:
-            fonts_css = fonts_css_file.read()
-    else:
-        # ...but for now, use the same fonts
-        with open(fragments_dirname + "fonts_screen.css", "r") as fonts_css_file:
-            fonts_css = fonts_css_file.read()
 
     # Get the symbol key and its associated CSS
     with open(fragments_dirname + "symbol_key.html", "r") as symbol_key_html_file:
@@ -88,13 +83,30 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     with open(fragments_dirname + "symbol_key.css", "r") as symbol_key_css_file:
         symbol_key_css = symbol_key_css_file.read()
 
+    # fonts:
+    # We may want different fonts and font sizes for screen and print.
+    if for_weasyprint:
+        with open(fragments_dirname + "font_choice_screen.css", "r") as font_choice_css_file:
+            font_choice_css = font_choice_css_file.read()
+    else:
+        # ...but for now, use the same font_choice
+        with open(fragments_dirname + "font_choice_screen.css", "r") as font_choice_css_file:
+            font_choice_css = font_choice_css_file.read()
+
+    # The @font-face directives:
+    fonts_dirname = "./fonts/"
+    fonts_css_list = []
+    for font in ["Roboto", "B612"]:
+        with open(fonts_dirname + font + ".css", "r") as font_css_file:
+            fonts_css_list.append( font_css_file.read() )
+    fonts_css = ''.join(fonts_css_list)
+
     # Icons:
     icons_dirname = "./icons/"
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
     # This is used every time an icon is inserted...
     with open(icons_dirname + "icons.css", "r") as icons_css_file:
         icons_css = icons_css_file.read()
-
     # This allowed embedded SVGs, but Weasyprint can't handle it.
     # Consider doing two versions, one for Weasy, one not for Weasy (yee-haw! FIXME)
     # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
@@ -102,7 +114,6 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     # svg_symbols_html = ""
     # with open(icons_dirname + "suitcase-solid.svg", "r") as baggage_svg_file:
     #     svg_symbols_html += baggage_svg_file.read()
-
 
     # We write and prepend an entirely separate stylesheet.
     # We MUST prepend the border-collapse part of the stylesheet, since the styler can't do it.
@@ -112,9 +123,10 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
                                          "</title>",
                                          "<style>",
                                          page_css,
-                                         timetable_main_css,
+                                         font_choice_css,
                                          fonts_css,
                                          icons_css,
+                                         timetable_main_css,
                                          time_boxes_css,
                                          symbol_key_css,
                                          "</style>",

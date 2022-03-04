@@ -13,6 +13,8 @@ timetable.py --help gives documentation
 # Other people's packages
 import argparse
 from pathlib import Path
+import os.path # for os.path abilities
+
 import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
@@ -571,6 +573,10 @@ def print_single_trip_tt(trip):
     weasy_html_pathname = output_pathname_before_suffix + '_weasy.html'
     with open( weasy_html_pathname , 'w' ) as outfile:
 	    print(timetable_finished_html, file=outfile)
+    # weasy_base_dir = os.path.realpath(os.path.dirname(__file__))
+    # my_base_url = "file://" + weasy_base_dir + "/"
+    # print (my_base_url)
+    # html_for_weasy = weasyHTML(filename=weasy_html_pathname, base_url=my_base_url)
     html_for_weasy = weasyHTML(filename=weasy_html_pathname)
     html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
 

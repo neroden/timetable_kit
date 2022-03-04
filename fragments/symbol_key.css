@@ -6,6 +6,12 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 CSS fragment file for the symbol key table (except fonts) 
 */
 
+.symbol-key {
+    border-collapse: collapse;
+    /* Symbol key in small print.  .symbol-key has the base font size set on it elsewhere */
+    font-size: 80%;
+}
+
 /* This selects table data cells descended from something (such as the table) of class symbol-key */
 .symbol-key td {
     vertical-align: top;

@@ -3,7 +3,7 @@ symbol_key.html: HTML fragment file for symbols key for timetable
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 -->
-<table class="symbol-key">
+<table role="complementary" aria-label="Key for Symbols" class="symbol-key">
   <thead>
     <tr style="display: none;">
       <th>Symbol</th>
@@ -28,7 +28,7 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <td>Flag stop<br>(only stops if passengers are ticketed in advance)</td>
     </tr>
     <tr>
-      <td><img class="icon" src="icons/suitcase-solid.svg" alt="Baggage" title="Checked Baggage" /></td>
+      <td><span class="baggage-symbol"><img class="icon-img" src="icons/suitcase-solid.svg" alt="Baggage" title="Checked Baggage" /></span></td>
       <td>Checked baggage service available</td>
     </tr>
   </tbody>

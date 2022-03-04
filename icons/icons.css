@@ -10,8 +10,14 @@ but if it isn't it's under the MIT license or the CC-BY-4.0 license.
 
 */
 
-.icon {
+/* 
+.icon-inline: For use with inline SVGs on the web.
+.icon-img: For use for IMG-referenced SVGs for Weasyprint.
+COMMA means selector acts on both
+*/
+
+.icon-inline, .icon-img {
     width: 1em;
     height: 1em;
-    vertical-align: -0.125em
+    vertical-align: -0.125em;
 }
