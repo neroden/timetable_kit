@@ -89,15 +89,20 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
         symbol_key_css = symbol_key_css_file.read()
 
     # Icons:
-    # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
-    # 'baggage' is the only one so far
     icons_dirname = "./icons/"
-    svg_symbols_html = ""
-    with open(icons_dirname + "suitcase-solid.svg", "r") as baggage_svg_file:
-        svg_symbols_html += baggage_svg_file.read()
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
+    # This is used every time an icon is inserted...
     with open(icons_dirname + "icons.css", "r") as icons_css_file:
         icons_css = icons_css_file.read()
+
+    # This allowed embedded SVGs, but Weasyprint can't handle it.
+    # Consider doing two versions, one for Weasy, one not for Weasy (yee-haw! FIXME)
+    # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
+    # 'baggage' is the only one so far
+    # svg_symbols_html = ""
+    # with open(icons_dirname + "suitcase-solid.svg", "r") as baggage_svg_file:
+    #     svg_symbols_html += baggage_svg_file.read()
+
 
     # We write and prepend an entirely separate stylesheet.
     # We MUST prepend the border-collapse part of the stylesheet, since the styler can't do it.
@@ -114,7 +119,6 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
                                          symbol_key_css,
                                          "</style>",
                                          "</head><body>",
-                                         svg_symbols_html,
                                          styled_timetable_html,
                                          symbol_key_html,
                                          "</body></html>",

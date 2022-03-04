@@ -1,6 +1,9 @@
 The HTML file can (and sometimes should) be converted to PDF.  
 I am currently using WeasyPrint for this because it is also a Python package.
 
+-- Weasyprint can't handle inline SVGs.  AAARGH!
+-- OK, Weasyprint is the best option, but the SVGs have to be done as images.
+
 -- It is hard to test PDFs.  At least on my monitor...
 --- Okular needs to be set at 90% zoom to show it real size.
 --- Evince needs to be set at 50% zoom to show it real size.

@@ -83,8 +83,6 @@ def print_to_file(string, filename):
 
     Needs work, obviously, but good enough for now.
     """
-    with open(''.join([output_dirname, '/',filename,'.html']),'w') as outfile:
-	    print(string, file=outfile)
 
 
 #### INITIALIZATION CODE
@@ -557,19 +555,28 @@ def print_single_trip_tt(trip):
 
     # Run the styler on the timetable...
     timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+
+    # Produce the final complete page...
     page_title = "Timetable for Amtrak Train #" + str(train_number)
     timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
-    print_to_file( timetable_finished_html, output_pathname_before_suffix ) # suffix is automatic for this FIXME
+    with open( output_pathname_before_suffix + '.html' , 'w' ) as outfile:
+	    print(timetable_finished_html, file=outfile)
 
-    # Now rerun it for weasyprint...
-    html_str_for_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
+    # Now rebuild the final complete page for Weasyprint...
+    # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
+    timetable_finished_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
                                              for_weasyprint=True)
-    html_for_weasy = weasyHTML(string=html_str_for_weasy)
+    # Need an intermediate file in order to resolve the image references correctly
+    # And Weasy can't handle inline SVG images, so we need external image references.
+    weasy_html_pathname = output_pathname_before_suffix + '_weasy.html'
+    with open( weasy_html_pathname , 'w' ) as outfile:
+	    print(timetable_finished_html, file=outfile)
+    html_for_weasy = weasyHTML(filename=weasy_html_pathname)
     html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
 
     # Finally rerun the main routine as plaintext for CSV...
-    [timetable_txt, dummy_table, dummy_styling] = format_single_trip_timetable( stop_times, 
-                                    calendar=this_feed.calendar, 
+    [timetable_txt, dummy_table, dummy_styling] = format_single_trip_timetable( stop_times,
+                                    calendar=this_feed.calendar,
                                     infrequent=infrequent,
                                     doing_html=False,
                                     min_dwell=5,
