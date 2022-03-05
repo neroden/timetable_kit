@@ -33,8 +33,9 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
 }
 .box-days {
     /* MoWeFr, align left */
-    /* There can only be one variable-width field and this is it */
+    /* This can't be variable-width because it misaligns the digits if it is */
     display: inline-block;
     text-align: left;
     padding-right: 0.5mm;
+    width: 4em;
 }

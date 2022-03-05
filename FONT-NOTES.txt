@@ -40,12 +40,17 @@ Slightly *wider* than other fonts: fewer columns per page.
 
 Here's the only problem: Spartan has non-tabular numbers!
 
+Raleway is fairly clean, but has non-tabular nums.  Second best so far.
+
+
 Tabular number fonts include DejaVu, Open Sans, Roboto, 
 Roboto Condensed (unreadable), Titillium Web (too tall vertically and unreadable,
 Varela Round (no bold).
 
-Canterall is supposed to be readable at small sizes on mobile phones.
-Raleway is fairly clean.
-National Park is elegant but probably non-tabular.
+National Park is elegant, non-tabular, and not good at small sizes at all.  :-(
+
+Cantarell is supposed to be readable at small sizes on mobile phones.  It's... OK, but not good.
+However, it DOES have tabular numerals.  Which is a big point in its favor.  It has tall lines though.
+
 ----
 "cursive" backup font-family tells us "Font didn't load".  Not a real backup family.  Used for debugging. FIXME.

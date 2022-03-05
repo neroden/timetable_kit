@@ -4,6 +4,8 @@ Google Fonts says this is a free font under the Open Font License.
 It appears to be by Matt Bailey and Mirko Velimirovic, but the version from Google Fonts
 *** does not match *** the upstream versions at their github sites.
 
+This version is internally recorded as version 1.004.  The newer versions are *not acceptable*.
+
 In small print, this version has shorter, wider characters than most of the readily-available 
 Matt Bailey versions of Spartan.  This is highly, highly desirable for readability: it is substantially
 superior to other versions for my purposes.  That's why I'm saving it here.
@@ -11,3 +13,5 @@ superior to other versions for my purposes.  That's why I'm saving it here.
 However, it does not come with tabular numerals.
 Accordingly, I am creating a variant (SpartanT) with tabular numerals as an option.
 The tabular numbers will be monospaced across ***all*** weights, so they can be used interchangably.
+
+In the meantime, I have boxed each individual character -- tedious and not flexible.

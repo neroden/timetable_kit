@@ -26,7 +26,7 @@ Designed for very small text.
     /* For forcing non-tabular fonts to act tabular. */
     display: inline-block;
     text-align: center;
-    width: 1.57mm;
+    width: 1.5mm;
     padding: 0;
 }
 .box-colon {
@@ -40,6 +40,6 @@ Designed for very small text.
     /* For forcing non-tabular fonts to act tabular: A or P */
     display: inline-block;
     text-align: center;
-    width: 1.57mm;
+    width: 1.5mm;
     padding: 0;
 }

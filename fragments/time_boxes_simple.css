@@ -15,12 +15,14 @@ This is the "simple" version: really wants a tabular-nums font.
     display: inline-block;
     text-align: right;
     width: 7ch;
-    font-variant-numeric: tabular-nums; /* often not available */
+    /* font-variant-numeric: tabular-nums; /* often not available */
+    font-variant-numeric: lining-nums;
 }
 .box-time24 {
     /* 13:59, five characters, may be bold: fixed width */
     display: inline-block;
     text-align: right;
     width: 5ch;
-    font-variant-numeric: tabular-nums; /* often not available */
+    /* font-variant-numeric: tabular-nums; /* often not available */
+    font-variant-numeric: lining-nums;
 }
