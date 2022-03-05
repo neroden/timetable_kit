@@ -108,12 +108,7 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     # The @font-face directives:
     fonts_dirname = "./fonts/"
     fonts_css_list = []
-    for font in ["Spartan_TMB","Spartan_MB","Spartan_MB_Web",
-                "Spartan","League_Spartan",
-                "Roboto", "Roboto_Condensed", "B612",
-                "Open_Sans", "Clear_Sans",
-                "Varela_Round", "Titillium_Web", "NationalPark",
-                "Raleway", "Cantarell",
+    for font in ["Spartan",
                 ]:
         with open(fonts_dirname + font + ".css", "r") as file:
             fonts_css_list.append( file.read() )
