@@ -18,7 +18,13 @@ Authors
 =======
 Copyright 2021, 2022 Nathanael Nerode.
 
+Some fonts and icons are from other sources and have their own copyrights and licenses,
+noted in their directories or files.
+
 Notes
 =====
 Licensed under GNU Affero GPL v.3 or later.
 I do not consider produced timetables to be derived works.
+
+Some fonts and icons are from other sources and have their own copyrights and licenses.
+They are all free, libre, and open-source.
