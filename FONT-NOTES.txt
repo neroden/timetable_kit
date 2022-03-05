@@ -1,0 +1,51 @@
+Notes on choice of font for timetables.
+
+----    
+Font size.
+
+We want a very small font to fit a lot on the printed page.  It is difficult to find a readable one.
+    
+Amtrak's old timetables were basically 6 pt, or maybe even smaller.
+Note: 6pt is 8px.
+
+Spartan (from Google) is readable at 6pt.  Practically nothing else is.
+    
+6pt may be unnecessarily grim for screen use, or even print use perhaps.
+    
+The WAVE accessibility checker complains about sizes less than 13.75 px / 10.35pt
+10.35pt is the minimum for DejaVu Sans (given that smaller text is at 80%)
+10.35pt is the minimum for Roboto (given that smaller text is at 80%)
+
+-----
+
+Be aware: Most PDF viewers display PDFs at the wrong size.
+Okular, for instance, is only "correct" size if displayed at 90%!
+Screen fonts are probably OK for print as well.
+
+----
+I like the look of DejaVu Sans.  It seems the most reliable.  But it is not good when tiny.
+
+Other fonts to consider include Quicksand (pretty, art-decoish)
+and Liberation Sans (good, but uglier I think)
+Roboto is clean and good and small sizes; narrower than Deja Vu.
+B612 is also worth considering
+
+Spartan (from Google) appears to be based on the classic Spartan Classified font, possibly
+good for small sizes?  League Spartan is slighly heavier.
+
+Spartan (from Google) is better than League Spartan.  But use Medium, not Regular
+
+Spartan (from Google) has highly compressed verticals: more lines per page.
+Slightly *wider* than other fonts: fewer columns per page.
+
+Here's the only problem: Spartan has non-tabular numbers!
+
+Tabular number fonts include DejaVu, Open Sans, Roboto, 
+Roboto Condensed (unreadable), Titillium Web (too tall vertically and unreadable,
+Varela Round (no bold).
+
+Canterall is supposed to be readable at small sizes on mobile phones.
+Raleway is fairly clean.
+National Park is elegant but probably non-tabular.
+----
+"cursive" backup font-family tells us "Font didn't load".  Not a real backup family.  Used for debugging. FIXME.

@@ -1,13 +1,19 @@
 /*
-time_boxes.css
+time_boxes_extras.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 Specific code to create a properly-aligned internal "pseudo-table" within each
 cell which displays time (and date, and discharge-only, etc.)
 
+These are the "extras": code letters, days of week, etc.
+Also includes padding to the right of the time.
+
+The rest of the formatting of the actual time is elsewhere.
+
 To satisfy screen readers, we don't want nested tables.  This is the cleanest way.
 */
+
 
 .box-ardp {
     /* Two letters: Ar or Dp, with a little space: fixed width */
@@ -21,24 +27,14 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: right;
     width: 1em;
 }
-.box-time12 {
-    /* 12:00P, six characters, may be bold: fixed width */
-    display: inline-block;
-    text-align: right;
-    width: 6ch; /* six zeroes; any less is too small */
-    padding-right: 1mm;
-}
-.box-time24 {
-    /* 13:59, five characters, may be bold: fixed width */
-    display: inline-block;
-    text-align: right;
-    width: 5ch; /* five zeroes; any less is too small */
-    padding-right: 1mm;
+.box-time12, box-time24 {
+    /* Padding between time and date or between time and right border */
+    padding-right: 0.5mm;
 }
 .box-days {
     /* MoWeFr, align left */
     /* There can only be one variable-width field and this is it */
     display: inline-block;
     text-align: left;
-    padding-right: 1mm;
+    padding-right: 0.5mm;
 }

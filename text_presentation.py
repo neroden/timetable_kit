@@ -101,27 +101,38 @@ def explode_timestr(timestr: str) -> TimeTuple:
     # could do as dict, but seems cleaner this way
     return my_time
 
-def time_short_str_24(time: TimeTuple) -> str:
+def time_short_str_24(time: TimeTuple, box_characters=False) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
     But do it in "military" format from 0:00 to 23:59.
+    doing_html: Box each character in an html span, to simulate tabular numbers with non-tabular fonts.
     """
     # Note that this is very explicitly designed to be fixed width
     time_text = ["{: >2}".format(time.hour24),
                  ":",
                  "{:0>2}".format(time.min)
                 ]
-    time_str = ''.join(time_text) # No separator!
+    time_str = ''.join(time_text) # String suitable for plaintext
+    if (box_characters):
+        # There are exactly five characters, by construction.  23:59 is largest.
+        html_time_str = ''.join([
+            '<span class="box-digit">', time_str[0],'</span>',
+            '<span class="box-digit">', time_str[1],'</span>',
+            '<span class="box-colon">', time_str[2],'</span>',
+            '<span class="box-digit">', time_str[3],'</span>',
+            '<span class="box-digit">', time_str[4],'</span>',
+            ])
     return time_str
 
 # Named constant useful for the next method:
 ampm_str = ["A", "P"] # index into this to get the am or pm string
-def time_short_str(time: TimeTuple) -> str:
+def time_short_str_12(time: TimeTuple, box_characters=False) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
     Do it with AM and PM.
+    doing_html: Box each character in an html span, to simulate tabular numbers with non-tabular fonts.
     """
     # Note that this is very explicitly designed to be fixed width
     hour = time.hour
@@ -132,7 +143,18 @@ def time_short_str(time: TimeTuple) -> str:
                  "{:0>2}".format(time.min),
                  ampm_str[time.pm]
                 ]
-    time_str = ''.join(time_text) # No separator!
+    time_str = ''.join(time_text) # String suitable for plaintext
+    if (box_characters):
+        # There are exactly six characters, by construction. 12:59P is largest.
+        html_time_str = ''.join([
+            '<span class="box-1">',     time_str[0],'</span>',
+            '<span class="box-digit">', time_str[1],'</span>',
+            '<span class="box-colon">', time_str[2],'</span>',
+            '<span class="box-digit">', time_str[3],'</span>',
+            '<span class="box-digit">', time_str[4],'</span>',
+            '<span class="box-ap">',    time_str[5],'</span>',
+            ])
+        time_str = html_time_str
     return time_str
 
 def get_rd_str( timepoint,
@@ -198,10 +220,10 @@ def get_rd_str( timepoint,
 
     # Now: this is an utterly stupid hack used for HTML width testing:
     # Not for production code.  Enable if you need to recheck CSS span widths.
-    # if (timepoint.stop_id=="CLF"):
-    #     rd_str = "M"
-    # if (timepoint.stop_id=="CVS"):
-    #     rd_str = "M"
+    if (timepoint.stop_id=="CLF"):
+        rd_str = "M"
+    if (timepoint.stop_id=="CVS"):
+        rd_str = "M"
 
     if (doing_html):
         if (rd_str != " "):
@@ -265,11 +287,11 @@ def timepoint_str ( timepoint,
     if (use_24):
         time_str = time_short_str_24
     else:
-        time_str = time_short_str
+        time_str = time_short_str_12
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time)
-    departure_time_str = time_str(departure)
+    departure_time_str = time_str(departure, box_characters=doing_html) # Box for HTML FIXME
     if doing_html:
         if (bold_pm and departure.pm == 1):
             departure_time_str = ''.join(["<b>",departure_time_str,"</b>"])
@@ -280,7 +302,7 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual time
     arrival = explode_timestr(timepoint.arrival_time)
-    arrival_time_str = time_str(arrival)
+    arrival_time_str = time_str(arrival, box_characters=doing_html) # Box for HTML FIXME
     # HTML bold annotation for PM
     if doing_html:
         if (bold_pm and arrival.pm == 1):

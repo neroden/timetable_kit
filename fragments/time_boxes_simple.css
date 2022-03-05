@@ -1,0 +1,26 @@
+/*
+time_boxes_simple.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Specific code to create a properly-aligned internal "pseudo-table" within each
+cell which displays time (and date, and discharge-only, etc.)
+
+This does the actual time part.
+This is the "simple" version: really wants a tabular-nums font.
+*/
+
+.box-time12 {
+    /* 12:00P, six characters, may be bold: fixed width */
+    display: inline-block;
+    text-align: right;
+    width: 7ch;
+    font-variant-numeric: tabular-nums; /* often not available */
+}
+.box-time24 {
+    /* 13:59, five characters, may be bold: fixed width */
+    display: inline-block;
+    text-align: right;
+    width: 5ch;
+    font-variant-numeric: tabular-nums; /* often not available */
+}

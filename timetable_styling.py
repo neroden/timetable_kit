@@ -67,46 +67,64 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
         title="An Amtrak Timetable" # FIXME
 
     # CSS for the whole page, not an individual table
-    with open(fragments_dirname + "page.css", "r") as page_css_file:
-        page_css = page_css_file.read()
+    with open(fragments_dirname + "page.css", "r") as file:
+        page_css = file.read()
 
     # Main CSS for the actual timetable
-    with open(fragments_dirname + "timetable_main.css", "r") as timetable_main_css_file:
-        timetable_main_css = timetable_main_css_file.read()
+    with open(fragments_dirname + "timetable_main.css", "r") as file:
+        timetable_main_css = file.read()
     # And the specific internal pseudo-table layout for the individual cells displaying times:
-    with open(fragments_dirname + "time_boxes.css", "r") as time_boxes_css_file:
-        time_boxes_css = time_boxes_css_file.read()
+    with open(fragments_dirname + "time_boxes_extras.css", "r") as file:
+        time_boxes_extras_css = file.read()
+
+    box_characters=True
+    if (box_characters):
+        if (for_weasyprint):
+            with open(fragments_dirname + "time_box_characters.css", "r") as file:
+                time_boxes_main_css = file.read()
+        else: # not for_weasyprint
+            with open(fragments_dirname + "time_box_characters_weasy.css", "r") as file:
+                time_boxes_main_css = file.read()
+    else: # not box_characters
+        with open(fragments_dirname + "time_boxes_simple.css", "r") as file:
+            time_boxes_main_css = file.read()
 
     # Get the symbol key and its associated CSS
-    with open(fragments_dirname + "symbol_key.html", "r") as symbol_key_html_file:
-        symbol_key_html = symbol_key_html_file.read()
-    with open(fragments_dirname + "symbol_key.css", "r") as symbol_key_css_file:
-        symbol_key_css = symbol_key_css_file.read()
+    with open(fragments_dirname + "symbol_key.html", "r") as file:
+        symbol_key_html = file.read()
+    with open(fragments_dirname + "symbol_key.css", "r") as file:
+        symbol_key_css = file.read()
 
     # fonts:
     # We may want different fonts and font sizes for screen and print.
     if for_weasyprint:
-        with open(fragments_dirname + "font_choice_screen.css", "r") as font_choice_css_file:
-            font_choice_css = font_choice_css_file.read()
+        with open(fragments_dirname + "font_choice_screen.css", "r") as file:
+            font_choice_css = file.read()
     else:
         # ...but for now, use the same font_choice
-        with open(fragments_dirname + "font_choice_screen.css", "r") as font_choice_css_file:
-            font_choice_css = font_choice_css_file.read()
+        with open(fragments_dirname + "font_choice_screen.css", "r") as file:
+            font_choice_css = file.read()
 
     # The @font-face directives:
     fonts_dirname = "./fonts/"
     fonts_css_list = []
-    for font in ["Roboto", "B612"]:
-        with open(fonts_dirname + font + ".css", "r") as font_css_file:
-            fonts_css_list.append( font_css_file.read() )
+    for font in ["Spartan_TMB","Spartan_MB","Spartan_MB_Web",
+                "Spartan","League_Spartan",
+                "Roboto", "Roboto_Condensed", "B612",
+                "Open_Sans", "Clear_Sans",
+                "Varela_Round", "Titillium_Web", "NationalPark",
+                "Raleway", "Cantarell",
+                ]:
+        with open(fonts_dirname + font + ".css", "r") as file:
+            fonts_css_list.append( file.read() )
     fonts_css = ''.join(fonts_css_list)
 
     # Icons:
     icons_dirname = "./icons/"
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
     # This is used every time an icon is inserted...
-    with open(icons_dirname + "icons.css", "r") as icons_css_file:
-        icons_css = icons_css_file.read()
+    with open(icons_dirname + "icons.css", "r") as file:
+        icons_css = file.read()
     # This allowed embedded SVGs, but Weasyprint can't handle it.
     # Consider doing two versions, one for Weasy, one not for Weasy (yee-haw! FIXME)
     # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
@@ -127,7 +145,8 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
                                          fonts_css,
                                          icons_css,
                                          timetable_main_css,
-                                         time_boxes_css,
+                                         time_boxes_main_css,
+                                         time_boxes_extras_css,
                                          symbol_key_css,
                                          "</style>",
                                          "</head><body>",

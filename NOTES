@@ -3,8 +3,11 @@ I am currently using WeasyPrint for this because it is also a Python package.
 
 -- Weasyprint can't handle inline SVGs.  AAARGH!
 -- OK, Weasyprint is the best option, but the SVGs have to be done as images.
+
 This means we really want two different HTML files: one for Weasy with image files,
 and one with embedded SVGs.  This means a major fork in all the code.  Most annoying!
+
+Weasyprint also can't handle variable-weight fonts.  Oh Well.
 
 -- It is hard to test PDFs.  At least on my monitor...
 --- Okular needs to be set at 90% zoom to show it real size.
