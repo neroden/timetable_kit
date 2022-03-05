@@ -562,7 +562,7 @@ def print_single_trip_tt(trip):
     page_title = "Timetable for Amtrak Train #" + str(train_number)
     timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
     with open( output_pathname_before_suffix + '.html' , 'w' ) as outfile:
-	    print(timetable_finished_html, file=outfile)
+        print(timetable_finished_html, file=outfile)
 
     # Now rebuild the final complete page for Weasyprint...
     # (We will probably need to rerun the entire routine due to the annoying inline-image issue)

@@ -77,13 +77,13 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     with open(fragments_dirname + "time_boxes_extras.css", "r") as file:
         time_boxes_extras_css = file.read()
 
-    box_characters=True
+    box_characters=True # FIXME, pass this down
     if (box_characters):
         if (for_weasyprint):
-            with open(fragments_dirname + "time_box_characters.css", "r") as file:
+            with open(fragments_dirname + "time_box_characters_weasy.css", "r") as file:
                 time_boxes_main_css = file.read()
         else: # not for_weasyprint
-            with open(fragments_dirname + "time_box_characters_weasy.css", "r") as file:
+            with open(fragments_dirname + "time_box_characters.css", "r") as file:
                 time_boxes_main_css = file.read()
     else: # not box_characters
         with open(fragments_dirname + "time_boxes_simple.css", "r") as file:

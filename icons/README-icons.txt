@@ -4,16 +4,30 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This folder contains icons used for timetable display.
 
-These SVG images are all from Font Awesome Free.
-In SVG form, they are subject to the CC BY 4.0 license, which requires only attribution.
+----
+The "suitcase-solid" SVG image is from Font Awesome Free.
+In SVG form, it is subject to the CC BY 4.0 license, which requires only attribution.
 
-The images had to be edited to add alt-text for screen readers.
-This is done by adding a "title" field as the first child of the SVG.
+"suitcase-solid-inline.svg": In order to use it in inline form, I edited it to "suitcase-solid-inline.svg".
+(This is currently not used because Weasyprint can't handle inline SVGs with references.)
+Inline SVG with reference is done by defining a "symbol".
+The inline SVG has to have alt-text foro screen readers;
+this is done by adding a "title" field as the first child of the SVG.
 
-They also had to be edited to wrap them to define a "symbol" to avoid duplication.  
-That way, the "symbol" gets referenced.
+This is retained as a sample for future conversion to inline SVGs.
 
-I did this manually, though it might perhaps be worth doing it
-programmatically.  So these are slightly modified from the downloaded icons.
+----
+
+The "source_icons_large-suitcase.svg" image is from iconoir.com.  It is subject to the MIT license.
+"large-suitcase-fixed.svg": Cleaned up the metadata.
+This doesn't look as nice as the solid briefcase in tiny mode.
+
+----
+I wasn't happy with either of these, so I went to a lot of effort to make a "hollow briefcase" of my own.
+This is on a 512x512 grid like the FontAwesome briefcase, but is a different shape and size,
+optimized for very small font sizes.
+
+This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
+This one WORKS at very small print sizes.
 
 --Nathanael
