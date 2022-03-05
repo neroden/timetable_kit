@@ -675,9 +675,11 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     dwell_secs = departure_secs - arrival_secs
     return dwell_secs
 
-def make_stations_max_dwell_map (template, dwell_secs_cutoff):
+def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
     """
     Return a dict from station_code to True/False, based on the trains in the template.
+
+    Expects a feed already filtered to a single date.
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
@@ -693,8 +695,7 @@ def make_stations_max_dwell_map (template, dwell_secs_cutoff):
 
     # Now create a reduced GTFS database to look through
     # Note that reference_date and master_feed are globals.
-    reduced_feed = master_feed.filter_by_trip_short_names(flattened_trains_set)
-    today_feed = reduced_feed.filter_by_dates(reference_date, reference_date)
+    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
 
     # Prepare the dict to return
     stations_dict = {}
@@ -745,6 +746,9 @@ def fill_template(template,
         Probably don't want to ever make it less than 1 minute.
     """
 
+    # Filter the feed to the relevant day.  master_feed and reference_date are globals.
+    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
     tt = template.copy() # "deep" copy
     dp_tt = template.copy()
     ar_tt = template.copy()
@@ -775,7 +779,7 @@ def fill_template(template,
         is_ardp_station = return_true
     elif (is_ardp_station == "dwell"):
         # Prep max dwell map
-        stations_max_dwell_map = make_stations_max_dwell_map (template, dwell_secs_cutoff)
+        stations_max_dwell_map = make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff)
         is_ardp_station = lambda station_code : stations_max_dwell_map[station_code]
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
@@ -801,6 +805,7 @@ def fill_template(template,
                     major = amtrak_helpers.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
+                    # FIXME: need to show time zone...
                 elif train_names_str in ["services"]: # Column for station services codes
                     pass # FIXME
                 else: # It's a train number.
@@ -810,8 +815,10 @@ def fill_template(template,
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     train_name = train_names[0]
-                    print(train_names)
-                    print(station_code)
+                    print( ''.join(["Trains: ", str(train_names), "; Stations:", station_code]) )
+                    timepoint = get_timepoint(today_feed,train_name,station_code)
+
+                    # FIXME -- current working location
                     placeholder = ' '.join([ train_names[0],
                                              station_code,
                                              ("M" if is_major_station(station_code) else ""),
