@@ -27,7 +27,23 @@ Fonts are separated into their own file in case we want to change them for print
     border-right-style: solid;
     border-right-width: 2px;
     border-right-color: black;
+}
 
+.tt-table td {
+    /* Stuff for every data cell in the tt_table */
+    /* FIXME: we are transitioning to this schema */
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: gray;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: gray;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-left-color: black;
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: black;
 }
 .col_heading {
     /* When PANDAS styles a table,
@@ -44,7 +60,7 @@ Fonts are separated into their own file in case we want to change them for print
     border-bottom-color: black;
     border-left-style: solid;
     border-left-width: 2px;
-    border-left-color: black;
+    border-left-color: gray;
     border-right-style: solid;
     border-right-width: 2px;
     border-right-color: black;

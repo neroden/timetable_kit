@@ -234,11 +234,11 @@ def get_rd_str( timepoint,
     return rd_str
 
 def timepoint_str ( timepoint,
+                    doing_html=False,
+                    reverse=False,
                     two_row=False,
                     second_timepoint=None,
                     use_ar_dp_str=False,
-                    reverse=False,
-                    doing_html=False,
                     bold_pm=True,
                     use_24=False,
                     use_daystring=False,

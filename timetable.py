@@ -79,14 +79,6 @@ def dumptable(table, filename):
     with open(''.join([output_dirname,'/',filename,'.html']),'w') as outfile:
 	    print(table.to_html(), file=outfile)
 
-def print_to_file(string, filename):
-    """
-    Print a string, probably html, to a file, for output.  Directory and suffix are added.
-
-    Needs work, obviously, but good enough for now.
-    """
-
-
 #### INITIALIZATION CODE
 def initialize_feed():
     global master_feed
@@ -225,8 +217,8 @@ def flatten_trains_list(trains_list):
     """
     flattened_trains_list = []
     for ts in trains_list:
-        train_names = split_trains_str(ts) # Separates at the "/"
-        flattened_trains_list = [*flattened_trains_list, *train_names]
+        train_nums = split_trains_str(ts) # Separates at the "/"
+        flattened_trains_list = [*flattened_trains_list, *train_nums]
     flattened_trains_set = set(flattened_trains_list)
     flattened_trains_set.discard("station")
     flattened_trains_set.discard("stations")
@@ -633,7 +625,8 @@ def get_timepoint (today_feed, trip_short_name, station_code):
 
     Throw TwoStopsError if it stops here twice.
 
-    Throw NoStopError if it doesn't stop here.  This is expensive and should be changed.
+    Return "None" if it doesn't stop here.  This is not an error.
+    (Used to throw NoStopError if it doesn't stop here.  Too common.)
 
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
@@ -642,10 +635,11 @@ def get_timepoint (today_feed, trip_short_name, station_code):
     stop_times = today_feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     if (timepoint_df.shape[0] == 0):
-        raise NoStopError(' '.join(["Train number", trip_short_name,
-                                  "does not stop at station code",
-                                  station_code,
-                                 ]) )
+        return None
+        # raise NoStopError(' '.join(["Train number", trip_short_name,
+        #                          "does not stop at station code",
+        #                          station_code,
+        #                         ]) )
     if (timepoint_df.shape[0] > 1):
         raise TwoStopsError(' '.join(["Train number", trip_short_name,
                                   "stops at station code",
@@ -663,9 +657,8 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
     """
-    try:
-        timepoint = get_timepoint(today_feed, trip_short_name, station_code)
-    except (NoStopError):
+    timepoint = get_timepoint(today_feed, trip_short_name, station_code)
+    if (timepoint is None):
         # If the train doesn't stop there, the dwell time is zero;
         # and we need thie behavior for make_stations_max_dwell_map
         return 0
@@ -685,7 +678,7 @@ def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
 
     First we extract the list of stations and the list of train names from the template.
 
-    If any train in train_names has a dwell time of dwell_secs or longer at a station,
+    If any train in train_nums has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
     # First get stations and trains list from template.
@@ -750,8 +743,16 @@ def fill_template(template,
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     tt = template.copy() # "deep" copy
-    dp_tt = template.copy()
-    ar_tt = template.copy()
+    styler_t = template.copy() # another "deep" copy, parallel
+
+    # Base CSS for every cell.  We probably shouldn't do this but it tests that the styler works.
+    # TO DO: move the base stuff into a .tt_table td rule.
+    base_cell_css="color-cornsilk font-sans-serif font-data-size"
+    align_top_css="align_top"
+    borders_normal_css="border-top-light border-bottom-light"
+    borders_final_css="border-top-light border-bottom-heavy"
+    borders_initial_css="border-top-heavy border-bottom-light"
+    # Have to add "initial" and "final" with heavy borders
 
     # Load variable function for station name printing
     prettyprint_station_name = None
@@ -784,52 +785,93 @@ def fill_template(template,
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
 
+    # Go through the trains to spot reversed trains
+
+    # Go through the columns to get an ardp columns map -- cleaner than current implementation
+    # FIXME
+
     [row_count, column_count] = template.shape
+    this_column_gets_ardp = True # First column should
+    next_column_gets_ardp = False # Subsequent columns shouldn't... usually
     for x in range(1, column_count): # First (0) column is the station code
-        train_names_str = str(template.iloc[0, x]).strip() # row 0, column x
-        train_names = split_trains_str(train_names_str) # Separates at the "/"
+        train_nums_str = str(template.iloc[0, x]).strip() # row 0, column x
+        train_nums = split_trains_str(train_nums_str) # Separates at the "/"
+
+        train_num = train_nums[0]
+        if len(train_nums) > 1:
+            raise InputError("Two trains in one column not implemented")
+        # Check for reversed train. FIXME
+
         for y in range(1, row_count): # First (0) row is the header
             station_code = template.iloc[y, 0] # row y, column 0
             print ("We are at ", y, " ", x)
+            # Reset the styler string:
+            cell_css_list = [base_cell_css]
+
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
             if (not pd.isna(tt.iloc[y,x])):
                 # It already has a value.
                 # This is probably special text like "to Chicago".
                 # We keep this.  (But note: should we HTML-ize it? FIXME )
-                pass
+
+                # But we have to set the styler.
+                cell_css_list.append("special-cell")
             else:
                 # Blank to be filled in -- the usual case.
-                if train_names_str in ["station","stations"]: # Column for station names
+                if train_nums_str in ["station","stations"]: # Column for station names
+                    cell_css_list.append("align-left")
                     station_name_raw = lookup_station_name[station_code]
                     major = amtrak_helpers.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
                     # FIXME: need to show time zone...
-                elif train_names_str in ["services"]: # Column for station services codes
+                    next_column_gets_ardp = True # Put ardp in the column after the station names
+                elif train_nums_str in ["services"]: # Column for station services codes
                     pass # FIXME
+                    cell_css_list.append("align-left")
+                    next_column_gets_ardp = True # Put ardp in the column after the station services
                 else: # It's a train number.
-                    #
+                    cell_css_list.append("align-right")
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
-                    train_name = train_names[0]
-                    print( ''.join(["Trains: ", str(train_names), "; Stations:", station_code]) )
-                    timepoint = get_timepoint(today_feed,train_name,station_code)
+                    print( ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
+                    timepoint = get_timepoint(today_feed,train_num,station_code)
+                    # Need to insert complicated for loop here for multiple trains
+                    # TODO FIXME
 
+                    # MUST figure out whether the train is running in reverse
+                    # MUST figure first_stop and last_stop
+                    # ...which means we need to make earlier passes through the t
+
+                    # If this is an infrequent train, MAYBE put use_daystring & calendar FIXME
+                    cell_text = text_presentation.timepoint_str(
+                                    timepoint,
+                                    doing_html=doing_html,
+                                    two_row = is_ardp_station(station_code),
+                                    use_ar_dp_str=this_column_gets_ardp,
+                                    )
                     # FIXME -- current working location
-                    placeholder = ' '.join([ train_names[0],
-                                             station_code,
-                                             ("M" if is_major_station(station_code) else ""),
-                                             ("ArDp" if is_ardp_station(station_code) else ""),
-                                           ])
-                    print(placeholder)
-                    tt.iloc[y,x] = placeholder
-
+                    # placeholder = ' '.join([ train_nums[0],
+                    #                         station_code,
+                    #                         ("M" if is_major_station(station_code) else ""),
+                    #                         ("ArDp" if is_ardp_station(station_code) else ""),
+                    #                       ])
+                    # print(placeholder)
+                    tt.iloc[y,x] = cell_text
+            # Fill the styler.  We MUST overwrite every single cell of the styler.
+            styler_t.iloc[y,x] = ' '.join(cell_css_list)
+        # Set up for the next column:
+        this_column_gets_ardp=next_column_gets_ardp
+        next_column_gets_ardp=False
     # Now we have to delete the placeholder left column
     tt = tt.drop(labels=0, axis="columns")
-    return (tt, tt) # This is all wrong, it should be tt, styler, but for testing FIXME
+    styler_t = styler_t.drop(labels=0, axis="columns")
+
+    # FIXME -- seriously need to patch the header
+    return (tt, styler_t)
 
 #### Work for "fancy-one"
 
@@ -1074,17 +1116,65 @@ if __name__ == "__main__":
         quit()
 
     if (args.type == "fancy-two"):
-        template = load_template(args.template_filename)
+
+        # Accept with or without .spec
+        tt_filename_base = args.template_filename.removesuffix(".spec")
+        template_filename = tt_filename_base + ".spec"
+
+        template = load_template(template_filename)
         template = augment_template(template)
         print (template)
+
+        # CSV version first:
         (timetable, styler_table) = fill_template(template,
                       is_major_station=amtrak_helpers.is_standard_major_station,
                       is_ardp_station="dwell")
-        timetable.to_csv("test_out.csv", index=False, header=False)
-        print ("getting going")
-        print (timetable)
-        # timetable_styled_html = style_timetable_for_html(timetable, styler_table)
-        # print_to_file(timetable_styled_html, ''.join([output_dirname, "/tt_",str(train_number)]
+        # NOTE, need to add the header
+        timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
+        print ("CSV done")
+
+        # HTML version nest:
+        (timetable, styler_table) = fill_template(template,
+                      is_major_station=amtrak_helpers.is_standard_major_station,
+                      is_ardp_station="dwell",
+                      doing_html=True)
+
+        # Temporary output, until styler work is done
+        #tt_html = timetable.to_html()
+        #with open(tt_filename_base + "-unstyled.html",'w') as outfile:
+	    #    print(tt_html, file=outfile)
+
+        # Style the timetable.
+        timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+
+        print ("HTML styled")
+
+        # Produce the final complete page...
+        output_pathname_before_suffix = tt_filename_base
+        page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
+        timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
+        with open( "tt_" + output_pathname_before_suffix + '.html' , 'w' ) as outfile:
+            print(timetable_finished_html, file=outfile)
+
+        print ("Finished HTML done")
+
+        # Now rebuild the final complete page for Weasyprint...
+        # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
+        timetable_finished_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
+                                             for_weasyprint=True)
+        # Need an intermediate file in order to resolve the image references correctly
+        # And Weasy can't handle inline SVG images, so we need external image references.
+        weasy_html_pathname = "tt_" + output_pathname_before_suffix + '_weasy.html'
+        with open( weasy_html_pathname , 'w' ) as outfile:
+            print(timetable_finished_html, file=outfile)
+        # weasy_base_dir = os.path.realpath(os.path.dirname(__file__))
+        # my_base_url = "file://" + weasy_base_dir + "/"
+        # print (my_base_url)
+        # html_for_weasy = weasyHTML(filename=weasy_html_pathname, base_url=my_base_url)
+        html_for_weasy = weasyHTML(filename=weasy_html_pathname)
+        html_for_weasy.write_pdf("tt_" + output_pathname_before_suffix + ".pdf")
+
+        print ("Weasy done")
         quit()
 
     if (args.type == "test"):
