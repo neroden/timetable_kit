@@ -11,3 +11,7 @@ Amtrak timetables traditionally used very small fonts to fit in lots of data.
 .tt-table, .symbol-key {
     font-size: 6pt;
 }
+/* this is in (a span in) a header but should be small */
+.services-header-text {
+    font-size: 6pt;
+}

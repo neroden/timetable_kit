@@ -245,6 +245,7 @@ def flatten_trains_list(trains_list):
     flattened_trains_set = set(flattened_trains_list)
     flattened_trains_set.discard("station")
     flattened_trains_set.discard("stations")
+    flattened_trains_set.discard("services")
     flattened_trains_set.discard("")
     return flattened_trains_set
 
@@ -813,9 +814,9 @@ def fill_template(template,
             header_replacement_list.append(station_column_header)
             header_styling_list.append("") # could include background color
         elif train_nums_str in ["services"]:
-            services_column_header = text_presentation.get_services_column_header(doing_html=doing_html)
+            services_column_header = text_presentation.get_services_column_header(doing_html=doing_html) # in a span
             header_replacement_list.append(services_column_header)
-            header_styling_list.append("") # could include background color
+            header_styling_list.append("") # could include background color;
         else: # it's actually a train
             # A leading "-" in the trainspec means reversed column
             reverse = is_column_reversed(train_nums_str)
@@ -859,7 +860,9 @@ def fill_template(template,
                 elif train_nums_str in ["services"]: # Column for station services codes
                     cell_css_list.append("services-cell")
                     next_column_gets_ardp = True # Put ardp in the column after the station services
-                    pass # FIXME
+                    # Here is where we should call out to the Amtrak stations database and look up
+                    # the actual services.  FIXME.
+                    tt.iloc[y,x] = ""
                 else: # It's a train number.
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*

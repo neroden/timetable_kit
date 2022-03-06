@@ -80,3 +80,8 @@ Colors have their own file for tweaking reasons.
 /* The following does not work with weasyprint: font-size: smaller; */
     font-size: 80%;
 }
+
+/* Text transform for station services header span: */
+.services-header-text {
+    transform: rotate(-90deg);
+}

@@ -486,8 +486,9 @@ def get_services_column_header(doing_html=False):
     Return the header for a column of station services icons.
 
     Tricky because the column should be very narrow.
+    Wraps with a special CSS div, so it can be rotated.
     """
     if (doing_html):
-        return '<span class="services-column-header">Services</span>'
+        return '<div class="services-header-text">Station<br>Services</div>'
     else:
         return "Services"
