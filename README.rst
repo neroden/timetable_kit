@@ -13,6 +13,7 @@ Dependencies
 Timetable Kit was developed with Python 3.9.9, and may not work with earlier versions.
 It relies on `GTFS Kit <https://github.com/mrcagney/gtfs_kit>` to parse GTFS.
 Like GTFS Kit, it uses `PANDAS <https://pandas.pydata.org>` to do the heavy lifting.
+It was tested with PANDAS 1.4.
 
 Authors
 =======

@@ -16,14 +16,56 @@ This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder.
 import pandas as pd
 from pandas.io.formats.style import Styler
 
-def style_timetable_for_html(timetable, styler):
-    """Take a timetable DataFrame with parallel styler DataFrame and style it for output."""
-    # Time to try the styler
+# My packages
+import amtrak_helpers
+
+def get_time_column_stylings(trains_spec, type="attributes"):
+    """
+    Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
+
+    In practice, trains_spec is currently a train number (trip_short_name).
+
+    This mostly picks a color.
+
+    If type is "attribute", prints the attributes -- used for the header cells.  This is the default.
+    If type is "class", prints a class instead of an attribute -- used for cells.
+
+    Note that these two colors may be complementary rather than identical.  (But this is not the case right now.)
+    """
+    if (type not in ["class", "attributes"]):
+        raise InputError("expected class or attributes")
+
+    train_number = trains_spec # Because we aren't parsing trains_spec yet -- FIXME
+    if amtrak_helpers.is_sleeper_train(train_number):
+        color_css = "background-color: thistle;"
+        color_css_class = "color-sleeper" # thistle
+    elif amtrak_helpers.is_bus(train_number):
+        color_css = "background-color: darkseagreen;"
+        color_css_class = "color-bus"
+    else:
+        color_css = "background-color: cornsilk;"
+        color_css_class = "color-day-train"
+    if (type == "class"):
+        return color_css_class
+    else:
+        return color_css
+
+def style_timetable_for_html(timetable, styler_df, table_classes=""):
+    """
+    Take a timetable DataFrame, with parallel styler DataFrame, and separate header styler map, and style it for output.
+
+    table_classes is a string of extra CSS classes to add to the table; it will always have 'tt-table'.
+    """
+
+    table_classes += ' tt-table'
+    table_attributes = ''.join(['class="',table_classes,'"'])
+
     # Note that the styler doesn't escape HTML per default --> yay
     # Make the table more readable by not using cell IDs.
     # Load the table attributes up front, to apply the table-wide border attributes
-    s0 = Styler(data=timetable, uuid_len=0, cell_ids=False,
-                table_attributes='class="tt-table"')
+    # I was passing uuid_len=0, but I don't know why
+    s0 = Styler(data=timetable, cell_ids=False,
+                table_attributes=table_attributes)
     # N. B. !!! It is essential to have the tt-table class for border-collapse.
     # Border-collapse doesn't work when applied to an ID
     # and must be applied to "table" (not td/th) or to a class defined on a table.
@@ -32,10 +74,13 @@ def style_timetable_for_html(timetable, styler):
     # column headers aren't elegant enough for us, so we build our own 'header' in the top row
     # s1 = s0.hide_index().hide_columns()
 
-    # Aaargh, screen readers want column headers!  Find a way to style them SOMEHOW
-    s1 = s0.hide_index()
+    # Screen readers want column headers.  It is *impossible* to add classes to the column headers,
+    # without redoing the Jinja2 template (which we will probably do eventually).  FIXME.
+
+    # We do not want the row headers.
+    s1 = s0.hide(axis="index")
     # Apply the styler classes.  This is where the main work is done.
-    s2 = s1.set_td_classes(styler)
+    s2 = s1.set_td_classes(styler_df)
 
     # Produce HTML.
     # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
@@ -49,6 +94,20 @@ def style_timetable_for_html(timetable, styler):
     styled_timetable_html = styled_timetable_html.removeprefix(unwanted_prefix)
     return styled_timetable_html;
 
+
+def make_header_styling_css(header_styling_list) -> str:
+    """
+    Given a list of strings, which maps from column numbers (the index) to CSS attributes, return suitable CSS.
+
+    Assumes PANDAS-standard classes col_heading, col0, col1, etc.  I see no other way to do it.  :-(
+    """
+    accumulated_css=""
+    # The CSS selector is: a descendant of .tt_table which is both th, .col_heading, and .col0 (or whatever number)
+    for col_num, attributes in enumerate(header_styling_list):
+        this_css = ''.join([ ".tt-table th.col_heading.col", str(col_num), " { ", attributes, " }\n" ])
+        accumulated_css += this_css
+    return accumulated_css
+
 # Start of HTML document
 html_header='''<!DOCTYPE html>
 <html lang="en-US">
@@ -56,8 +115,15 @@ html_header='''<!DOCTYPE html>
 <meta charset="utf-8">
 '''
 
-def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False):
-    """Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS."""
+def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False):
+    """
+    Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
+
+    The header_styling_list has CSS attributes (not classes) for each header column
+    (indexed by zero-based column number).  This is due to inefficiencies in PANDAS.
+    """
+
+    header_styling_css = make_header_styling_css(header_styling_list)
 
     # Directory containing CSS and HTML fragments
     fragments_dirname = "./fragments/"
@@ -73,6 +139,13 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     # Main CSS for the actual timetable
     with open(fragments_dirname + "timetable_main.css", "r") as file:
         timetable_main_css = file.read()
+    # Main CSS for the headers
+    with open(fragments_dirname + "timetable_headers.css", "r") as file:
+        timetable_headers_css = file.read()
+    # CSS for the colors
+    with open(fragments_dirname + "timetable_colors.css", "r") as file:
+        timetable_colors_css = file.read()
+
     # And the specific internal pseudo-table layout for the individual cells displaying times:
     with open(fragments_dirname + "time_boxes_extras.css", "r") as file:
         time_boxes_extras_css = file.read()
@@ -100,10 +173,14 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
     if for_weasyprint:
         with open(fragments_dirname + "font_choice_screen.css", "r") as file:
             font_choice_css = file.read()
+        with open(fragments_dirname + "font_size_screen.css", "r") as file:
+            font_size_css = file.read()
     else:
         # ...but for now, use the same font_choice
         with open(fragments_dirname + "font_choice_screen.css", "r") as file:
             font_choice_css = file.read()
+        with open(fragments_dirname + "font_size_screen.css", "r") as file:
+            font_size_css = file.read()
 
     # The @font-face directives:
     fonts_dirname = "./fonts/"
@@ -136,10 +213,14 @@ def finish_html_timetable(styled_timetable_html, title="", for_weasyprint=False)
                                          "</title>",
                                          "<style>",
                                          page_css,
-                                         font_choice_css,
                                          fonts_css,
+                                         font_choice_css,
+                                         font_size_css,
                                          icons_css,
                                          timetable_main_css,
+                                         timetable_headers_css,
+                                         header_styling_css,
+                                         timetable_colors_css,
                                          time_boxes_main_css,
                                          time_boxes_extras_css,
                                          symbol_key_css,

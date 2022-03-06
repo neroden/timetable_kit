@@ -8,6 +8,8 @@ This CSS fragment is the majority of the CSS code for styling the actual timetab
 It depends heavily on Pandas adding custom classes to the cells.
 
 Fonts are separated into their own file in case we want to change them for print.
+
+Colors have their own file for tweaking reasons.
 */
 
 .tt-table {
@@ -32,6 +34,8 @@ Fonts are separated into their own file in case we want to change them for print
 .tt-table td {
     /* Stuff for every data cell in the tt_table */
     /* FIXME: we are transitioning to this schema */
+    /* There is a problem: this has higher specificity than the custom classes! */
+    /* This could be solved by using td.custom_class for those selectors */
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: gray;
@@ -44,48 +48,25 @@ Fonts are separated into their own file in case we want to change them for print
     border-right-style: solid;
     border-right-width: 2px;
     border-right-color: black;
-}
-.col_heading {
-    /* When PANDAS styles a table,
-       most unfortunately we cannot set custom CSS clases on the headers.
-       The "col_heading" class is pre-chosen for us, and we're stuck with it.
-       This is necessary to get the left-to-right borders between headings right.
-       Specifying the background color per-header requires multiple selectors...
-     */
-    border-top-style: solid;
-    border-top-width: 2px;
-    border-top-color: black;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: black;
-    border-left-style: solid;
-    border-left-width: 2px;
-    border-left-color: gray;
-    border-right-style: solid;
-    border-right-width: 2px;
-    border-right-color: black;
 
-    /* And again, we can't apply these as classes, so they have to come in here. */
-    vertical-align: center;
+    /* Every data cell should have its contents top-aligned.  This is a non-inherited property! */
+    vertical-align: top;
+}
+
+/* Align station names to the left of their cell... */
+.station-cell {
+    text-align: left;
+}
+/* ...and times to the right of their cell. */
+.time-cell {
+    text-align: right;
+}
+/* ...and station service icons to the center. */
+.services-cell {
     text-align: center;
+}
 
-    /* And again, can't apply as classes. */
-    font-weight: bold;
-
-    /* Set the background color (should really be per-column) */
-    background-color: cornsilk;
-}
-.col_heading.col1 {
-    /* A clever way to only alter column heading one, but very manual */
-    /* background-color: cornflowerblue; */
-}
-.heading-font {
-    font-weight: bold;
-}
-strong {
-    font-size: 150%;
-    font-weight: bold;
-}
+/* Text transforms for station text spans: */
 .major-station {
     text-transform: uppercase;
     font-weight: bold;
@@ -98,61 +79,4 @@ strong {
     font-weight: normal;
 /* The following does not work with weasyprint: font-size: smaller; */
     font-size: 80%;
-}
-.color-cornsilk {
-    background-color: cornsilk;
-}
-.align-top {
-    vertical-align: top;
-}
-.align-vcenter {
-    vertical-align: center;
-}
-.align-bottom {
-    vertical-align: bottom;
-}
-.align-left {
-    text-align: left;
-}
-.align-right {
-    text-align: right;
-}
-.align-center {
-    text-align: center;
-}
-.border-top-heavy {
-    border-top-style: solid;
-    border-top-width: 2px;
-    border-top-color: black;
-}
-.border-bottom-heavy {
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: black;
-}
-.border-top-light {
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-top-color: gray;
-}
-.border-bottom-light {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: gray;
-}
-.border-left {
-    border-left-style: solid;
-    border-left-width: 2px;
-    border-left-color: black;
-}
-.noborder-left {
-    border-left-style: hidden
-}
-.border-right {
-    border-right-style: solid;
-    border-right-width: 2px;
-    border-right-color: black;
-}
-.noborder-right {
-    border-right-style: hidden
 }

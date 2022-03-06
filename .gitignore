@@ -12,6 +12,9 @@ tt_*.pdf
 tt_*.html
 tt_*.csv
 
+# Working files for Nano editor
+.*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

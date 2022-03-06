@@ -16,19 +16,17 @@ def make_tt_arg_parser():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='''Produce printable HTML timetable.
 The --type argument determines the type of timetable:
-  single - single one-way timetable
-  updown - one direction down, other direction up
-  fancy-one - generated from template
-  fancy-two - generated from CSV template
-  stations - create station list CSV file, in order, from single train number (for making templates)
-  template - create template for use with fancy (edit this by hand afterwards - unfinished)
+  single - single one-way timetable (mostly for testing)
+  fill - timetable made by filling a CSV tt-spec template
+  stations - create station list CSV file, in order, from single train number (for making tt-spec templates)
+  make-spec - create template for use with fancy (edit this by hand afterwards - not working)
   compare - compare timetables for trips on a single route (to spot schedule changes for template making -- do not generate timetable)
   test - do internal testing (do not generate timetable)
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','updown','fancy-one','fancy-two','template','compare','stations', 'test'],
-        help='Type of timetable or template to generate.',
+        choices=['single','fill','stations','make-spec','compare','test'],
+        help='What to do: type of timetable or template to generate.',
         )
     parser.add_argument('--gtfs','-g',
         dest='gtfs_filename',
@@ -36,11 +34,15 @@ The --type argument determines the type of timetable:
                 or zipped GTFS static data feed,
                 or URL for zipped GTFS static data feed''',
         )
-    parser.add_argument('--template','-l',
+    parser.add_argument('--spec','-l',
         dest='template_filename',
-        help='''CSV file containing template for timetable (with no times).
-                Top row should have train numbers (slash indicates two trains in one row).
-                Left column should have station codes.
+        help='''CSV file containing tt-spec template for timetable.
+                Top row should have a train number in each column except the first.
+                A minus sign in front of train number indicates that column is read upward;
+                a slash between trains indicates two trains in one column).
+                The left column should have station codes in every row except the first.
+                They are in the order they will be in in the finished timetable.
+                The rest of the file should usually be blank.
                 Format is a work in progress.
              ''',
         )

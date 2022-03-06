@@ -46,6 +46,7 @@ from timetable_styling import (
     amtrak_station_name_to_html,
     amtrak_station_name_to_multiline_text,
     amtrak_station_name_to_single_line_text,
+    get_time_column_stylings,
     )
 
 # GLOBAL VARIABLES
@@ -122,12 +123,13 @@ def fix_known_errors(feed):
 
     # There's an error in the trips. Attempt to fix it.
     # THIS WORKS for fixing errors in a feed.  REMEMBER IT.
+    # Revised for PANDAS 1.4.
     my_trips = feed.trips
-    problem_index = my_trips.index[my_trips["trip_short_name"] == "1051"]
-    # print (problem_index)
-    # print (my_trips.iloc[problem_index])
-    my_trips.at[problem_index,"direction_id"] = 0 # set in place
-    # print (my_trips.iloc[problem_index])
+
+    # print ( my_trips[my_trips["trip_short_name"] == "1051"] )
+    my_trips.loc[my_trips["trip_short_name"] == "1051","direction_id"] = 0
+    # print ( my_trips[my_trips["trip_short_name"] == "1051"] )
+
     # Error fixed.  Put back into the feed.
     feed.trips = my_trips
     return
@@ -146,13 +148,13 @@ def station_name(code):
 ### Template loading and parsing code
 
 def load_template(csv_filename):
-    """Load a template from a CSV file"""
+    """Load a tt-spec template from a CSV file"""
     template = pd.read_csv(csv_filename, index_col=False, header=None, dtype = str)
     return template
 
 def augment_template(raw_template):
     """
-    Fill in the station list for a template if it has a key code.
+    Fill in the station list for a tt-spec template if it has a key code.
 
     Cell 0,0 is normally blank.
     If it is "Stations of 59", then (a) assume there is only one template row;
@@ -164,8 +166,7 @@ def augment_template(raw_template):
         # No key code, nothing to do
         return template
     key_code = str(raw_template.iloc[0,0])
-    if (debug):
-        print("Key code: " + key_code)
+    # print("Key code: " + key_code)
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
         # Filter the feed down to a single date...
@@ -196,15 +197,37 @@ def trains_list_from_template(template):
     trains_list = [i.strip() for i in trains_list_strings]
     return trains_list
 
-def split_trains_str (trains_str):
+def is_column_reversed(trains_spec):
     """
-    Given a string like "59 / 174 / 22", return a list {"59, "174", "22"}
+    Given a string like "-59 / 174 / 22", return True if the timetable column should read bottom to top, False otherwise.
+
+    All this actually does is check for a leading minus sign.  If it's present, this is a bottom-to-top timetable column.
+    This applies to the ENTIRE column, so the minus sign must be on the FIRST train number (only).
+    """
+    clean_trains_spec = trains_spec.lstrip()
+    reverse=False
+    if (clean_trains_spec[0]=="-"):
+        reverse=True
+    return reverse
+
+def split_trains_spec(trains_spec):
+    """
+    Given a string like "-59 / 174 / 22", return a structured list:
+
+    [["59, "174", "22"], True]
 
     Used to separate specs for multiple trains in the same timetable column.
-    A single "59" will simply give {"59"}
+    A single "59" will simply give {"59"}.
+
+    A leading minus sign (-) means the column is reversed (read bottom to top);
+    this is stripped by this method.
     """
-    raw_list = trains_str.split("/")
-    clean_list = [item.strip() for item in raw_list] # remove whitespace
+    # Remove leading whitespace and possible leading minus sign
+    clean_trains_spec = trains_spec.lstrip()
+    cleaner_trains_spec = clean_trains_spec.lstrip("-")
+
+    raw_list = cleaner_trains_spec.split("/")
+    clean_list = [item.strip() for item in raw_list] # remove whitespace again
     return clean_list
 
 def flatten_trains_list(trains_list):
@@ -217,7 +240,7 @@ def flatten_trains_list(trains_list):
     """
     flattened_trains_list = []
     for ts in trains_list:
-        train_nums = split_trains_str(ts) # Separates at the "/"
+        train_nums = split_trains_spec(ts) # Separates at the "/"
         flattened_trains_list = [*flattened_trains_list, *train_nums]
     flattened_trains_set = set(flattened_trains_list)
     flattened_trains_set.discard("station")
@@ -307,7 +330,7 @@ def compare_similar_services(route_id):
 
 ### Timetable prototype generation (nonfunctional)
 
-def prep_spec():
+def make_spec():
     """Not ready to use: put to one side for testing purposes"""
     # Creates a prototype timetable.  It will definitely need to be manipulated by hand.
     # Totally incomplete. FIXME
@@ -358,22 +381,7 @@ def format_single_trip_timetable(stop_times,
 
     # CSS class "shortcuts"
     # in future, color will likely be changed
-    bg_color_css     = "color-cornsilk"
-    font_css = "font-sans-serif font-data-size"
-    # Pandas won't let us do this.  Heading has to be styled using preexisting classes.
-    # heading_css      = " ".join([bg_color_css, font_css,
-    #                             "border-top-heavy border-bottom-heavy", heading_extra_css])
-    data_css         = " ".join([bg_color_css, font_css,
-                                 "border-top-light border-bottom-light", "align-top"])
-    data_css_final   = " ".join([bg_color_css, font_css,
-                                 "border-top-light border-bottom-heavy", "align-top"])
-    data_css_initial = " ".join([bg_color_css, font_css,
-                                 "border-top-heavy border-bottom-light", "align-top"])
-    # left-right border shortcuts
-    left_css = "border-left noborder-right"
-    center_css = "noborder-left noborder-right"
-    right_css = "noborder-left border-right"
-    both_css = "border-left border-right"
+    bg_cornsilk_css     = "color-cornsilk"
 
     # Define the columns, in order, and create empty DataFrames for timetable & styler
     # By defining the columns first we avoid order dependency later
@@ -463,16 +471,10 @@ def format_single_trip_timetable(stop_times,
         tt_row = pd.DataFrame(tt_row_dict, index=[timepoint.Index])
         list_of_timetable_rows.append(tt_row)
 
-        # Special top-bottom border treatment on first and last row
-        my_data_css = data_css
-        if (is_first_stop):
-            my_data_css = data_css_initial
-        if (is_last_stop):
-            my_data_css = data_css_final
         # This is *not* order-dependent; the order is set by the first row, up above.
         sr_dict = {}
-        sr_dict["Time"]     = [" ".join([my_data_css, "align-right", both_css])]
-        sr_dict["StationCode"]  = [" ".join([my_data_css, "align-left", both_css])]
+        sr_dict["Time"]     = [" ".join(["time_column", bg_cornsilk_css])]
+        sr_dict["StationCode"]  = [" ".join(["stations_column", ])]
         styler_row = pd.DataFrame(sr_dict, index=[timepoint.Index])
         list_of_styler_rows.append(styler_row)
 
@@ -497,18 +499,18 @@ def format_single_trip_timetable(stop_times,
     styler_new_dict["Time"]        = tt_new_dict["Time"]
     styler_new_dict["StationCode"] = tt_new_dict["StationCode"]
 
-    # We want to do the styling we used to do this way another way:
-    # styler_dict["Time"]      = [" ".join([heading_css, both_css])]
-    # styler_dict["StationCode"]   = [" ".join([heading_css, both_css])]
-    # UNFINISHED, FIXME
-    header_styling = {}
-
     # OK.  Now really rename the column headers...
     new_timetable = timetable.rename(columns=tt_new_dict)
     new_styler = styler.rename(columns=styler_new_dict)
 
+    # Revisit the heading styling:
+    # Build a list to keep track of the header styles
+    header_styling_list = [ " background-color: cornsilk; ",
+                            " ",
+                          ]
+
     print(new_timetable)
-    return (new_timetable, new_styler, header_styling)
+    return (new_timetable, new_styler, header_styling_list)
 
 def print_single_trip_tt(trip):
     """
@@ -539,7 +541,7 @@ def print_single_trip_tt(trip):
     output_pathname_before_suffix = ''.join([output_dirname, "/tt_",str(train_number)])
 
     # Main run to generate HTML:
-    [timetable, styler_table, header_styling] = format_single_trip_timetable( stop_times,
+    [timetable, styler_table, header_styling_list] = format_single_trip_timetable( stop_times,
                                     calendar=this_feed.calendar,
                                     infrequent=infrequent,
                                     doing_html=True,
@@ -552,13 +554,13 @@ def print_single_trip_tt(trip):
 
     # Produce the final complete page...
     page_title = "Timetable for Amtrak Train #" + str(train_number)
-    timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
+    timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title)
     with open( output_pathname_before_suffix + '.html' , 'w' ) as outfile:
         print(timetable_finished_html, file=outfile)
 
     # Now rebuild the final complete page for Weasyprint...
     # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
-    timetable_finished_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
+    timetable_finished_weasy=finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title,
                                              for_weasyprint=True)
     # Need an intermediate file in order to resolve the image references correctly
     # And Weasy can't handle inline SVG images, so we need external image references.
@@ -583,7 +585,7 @@ def print_single_trip_tt(trip):
     timetable_txt.to_csv(output_pathname_before_suffix + ".csv", index=False)
     return
 
-#### The muddle of work in progress
+#### Subroutines for fill_template
 
 def trip_from_trip_short_name(today_feed, trip_short_name):
     """
@@ -613,8 +615,7 @@ def stations_list_from_trip_short_name(today_feed, trip_short_name):
 
     sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
     sorted_station_list = sorted_stop_times['stop_id']
-    if (debug):
-        print (sorted_station_list)
+    # print (sorted_station_list)
     return sorted_station_list
 
 def get_timepoint (today_feed, trip_short_name, station_code):
@@ -656,6 +657,9 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     Should be passed a feed containing only one day.
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
+
+    Used primarily to determine whether to put both arrival and departure times
+    in the timetable for this station.
     """
     timepoint = get_timepoint(today_feed, trip_short_name, station_code)
     if (timepoint is None):
@@ -663,6 +667,12 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
         # and we need thie behavior for make_stations_max_dwell_map
         return 0
 
+    # There's a catch!  If this station is "discharge only" or "receive only",
+    # it effectively has no official dwell time, and should not get two lines
+    if (timepoint.drop_off_type == 1 or timepoint.pickup_type == 1):
+        return 0
+
+    # Normal case:
     departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
     arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
     dwell_secs = departure_secs - arrival_secs
@@ -702,7 +712,7 @@ def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
             stations_dict[s] = False
     return stations_dict
 
-### Work for "fancy-two"
+### Work for main multi-train timetable factory:
 
 def return_true (station_code):
     """Takes one argument; returns True"""
@@ -719,9 +729,9 @@ def fill_template(template,
                   is_ardp_station="dwell", dwell_secs_cutoff=300,
                  ):
     """
-    Fill a template using GTFS data
+    Fill a tt-spec template using GTFS data
 
-    Template must be complete (run augment_template first)
+    The tt-spec template must be complete (run augment_template first)
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
     doing_multiline_text: Produce multiline text in cells.  Ignored if doing_html.
         Default is True.
@@ -744,15 +754,6 @@ def fill_template(template,
 
     tt = template.copy() # "deep" copy
     styler_t = template.copy() # another "deep" copy, parallel
-
-    # Base CSS for every cell.  We probably shouldn't do this but it tests that the styler works.
-    # TO DO: move the base stuff into a .tt_table td rule.
-    base_cell_css="color-cornsilk font-sans-serif font-data-size"
-    align_top_css="align_top"
-    borders_normal_css="border-top-light border-bottom-light"
-    borders_final_css="border-top-light border-bottom-heavy"
-    borders_initial_css="border-top-heavy border-bottom-light"
-    # Have to add "initial" and "final" with heavy borders
 
     # Load variable function for station name printing
     prettyprint_station_name = None
@@ -788,23 +789,51 @@ def fill_template(template,
     # Go through the trains to spot reversed trains
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
-    # FIXME
+    # FIXME.
+
+    # Base CSS for every data cell.  We probably shouldn't do this but it tests that the styler works.
+    base_cell_css=""
+
+    # NOTE, border variations not implemented yet FIXME
+    # borders_final_css="border-bottom-heavy"
+    # borders_initial_css="border-top-heavy"
+    # Have to add "initial" and "final" with heavy borders
 
     [row_count, column_count] = template.shape
+
+    header_replacement_list = [] # list, will fill in as we go
+    header_styling_list = [] # list, to match column numbers.  Will fill in as we go
     this_column_gets_ardp = True # First column should
     next_column_gets_ardp = False # Subsequent columns shouldn't... usually
     for x in range(1, column_count): # First (0) column is the station code
         train_nums_str = str(template.iloc[0, x]).strip() # row 0, column x
-        train_nums = split_trains_str(train_nums_str) # Separates at the "/"
 
-        train_num = train_nums[0]
-        if len(train_nums) > 1:
-            raise InputError("Two trains in one column not implemented")
-        # Check for reversed train. FIXME
+        if train_nums_str in ["station","stations"]:
+            station_column_header = text_presentation.get_station_column_header(doing_html=doing_html)
+            header_replacement_list.append(station_column_header)
+            header_styling_list.append("") # could include background color
+        elif train_nums_str in ["services"]:
+            services_column_header = text_presentation.get_services_column_header(doing_html=doing_html)
+            header_replacement_list.append(services_column_header)
+            header_styling_list.append("") # could include background color
+        else: # it's actually a train
+            # A leading "-" in the trainspec means reversed column
+            reverse = is_column_reversed(train_nums_str)
+            # Separate train numbers by "/"
+            train_nums = split_trains_spec(train_nums_str)
+            train_num = train_nums[0]
+            if len(train_nums) > 1:
+                raise InputError("Two trains in one column not implemented")
+            time_column_header = text_presentation.get_time_column_header(train_num, doing_html=doing_html)
+            header_replacement_list.append(time_column_header)
+            if (doing_html):
+                time_column_stylings = get_time_column_stylings(train_num)
+                header_styling_list.append(time_column_stylings)
+            else: # plaintext
+                header_styling_list.append("")
 
         for y in range(1, row_count): # First (0) row is the header
             station_code = template.iloc[y, 0] # row y, column 0
-            print ("We are at ", y, " ", x)
             # Reset the styler string:
             cell_css_list = [base_cell_css]
 
@@ -816,11 +845,11 @@ def fill_template(template,
                 # We keep this.  (But note: should we HTML-ize it? FIXME )
 
                 # But we have to set the styler.
-                cell_css_list.append("special-cell")
+                cell_css_list.append("special-cell") # can use row and col numbers to find it
             else:
                 # Blank to be filled in -- the usual case.
                 if train_nums_str in ["station","stations"]: # Column for station names
-                    cell_css_list.append("align-left")
+                    cell_css_list.append("station-cell")
                     station_name_raw = lookup_station_name[station_code]
                     major = amtrak_helpers.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
@@ -828,209 +857,70 @@ def fill_template(template,
                     # FIXME: need to show time zone...
                     next_column_gets_ardp = True # Put ardp in the column after the station names
                 elif train_nums_str in ["services"]: # Column for station services codes
-                    pass # FIXME
-                    cell_css_list.append("align-left")
+                    cell_css_list.append("services-cell")
                     next_column_gets_ardp = True # Put ardp in the column after the station services
+                    pass # FIXME
                 else: # It's a train number.
-                    cell_css_list.append("align-right")
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
-                    print( ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
+                    #
+                    # print( ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
                     timepoint = get_timepoint(today_feed,train_num,station_code)
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
 
-                    # MUST figure out whether the train is running in reverse
                     # MUST figure first_stop and last_stop
-                    # ...which means we need to make earlier passes through the t
+                    # ...which means we need to make earlier passes through the table FIXME
 
-                    # If this is an infrequent train, MAYBE put use_daystring & calendar FIXME
-                    cell_text = text_presentation.timepoint_str(
+                    # Only assign the stylings if the train hasn't ended.  Tricky!  Dunno how to do it!
+                    # Probably requires that earlier pass through the table.
+                    if (timepoint is None):
+                        # This train does not stop at this station
+                        # Blank cell -- need to be cleverer about this FIXME
+                        tt.iloc[y,x] = ""
+                        cell_css_list.append("blank-cell")
+                        # Confusing: we want to style some of these and not others.  Woof.
+                        cell_css_list.append( get_time_column_stylings(train_num, "class") )
+                    else:
+                        cell_css_list.append("time-cell")
+                        cell_css_list.append( get_time_column_stylings(train_num, "class") )
+
+                        # If this is an infrequent train, MAYBE put use_daystring & calendar FIXME
+                
+                        cell_text = text_presentation.timepoint_str(
                                     timepoint,
                                     doing_html=doing_html,
+                                    reverse=reverse,
                                     two_row = is_ardp_station(station_code),
                                     use_ar_dp_str=this_column_gets_ardp,
                                     )
-                    # FIXME -- current working location
-                    # placeholder = ' '.join([ train_nums[0],
-                    #                         station_code,
-                    #                         ("M" if is_major_station(station_code) else ""),
-                    #                         ("ArDp" if is_ardp_station(station_code) else ""),
-                    #                       ])
-                    # print(placeholder)
-                    tt.iloc[y,x] = cell_text
+                        tt.iloc[y,x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.
             styler_t.iloc[y,x] = ' '.join(cell_css_list)
         # Set up for the next column:
         this_column_gets_ardp=next_column_gets_ardp
         next_column_gets_ardp=False
+
     # Now we have to delete the placeholder left column
     tt = tt.drop(labels=0, axis="columns")
     styler_t = styler_t.drop(labels=0, axis="columns")
 
-    # FIXME -- seriously need to patch the header
-    return (tt, styler_t)
+    # And the placeholder top row
+    tt = tt.drop(labels=0, axis="rows")
+    styler_t = styler_t.drop(labels=0, axis="rows")
 
-#### Work for "fancy-one"
-
-def compute_prototype_timetable(stations_list):
-    """
-    Given a stations list from a template, return a DataFrame with two columns, (0, stop_sequence) and (0, stop_id)
-
-    These reflect how the timetable should be arranged.
-    This is used in the fancy-one algorithm, which will likely be abandoned.
-    """
-    tt_stations_list = stations_list
-    # Set up stations list in correct order
-    tt_stations_list_df = pd.DataFrame(tt_stations_list, columns=[(0,"stop_id")])
-
-    # Set up 1-indexed list for stop_sequence
-    tt_stop_seq_list = [*range(1,len(tt_stations_list)+ 1, 1)] # Note * 'unpacks'
-    tt_stop_seq_df = pd.DataFrame(tt_stop_seq_list, columns=[(0,"stop_sequence")])
-
-    # Assemble the two and set the station code as the index (for future use)
-    tt_df = pd.concat([tt_stop_seq_df, tt_stations_list_df], axis="columns")
-    tt_df = tt_df.set_index((0, 'stop_id'))
-    # This gives us the prototype timetable
-    return tt_df
-
-def compute_station_names_df(stations_list):
-    """
-    Given a stations list from a template,
-    return a DataFrame with three columns, (0, stop_sequence), (0, stop_id),
-    and (0, station) containing the station names.
-
-    Severe duplication with compute_prototype_timetable.  Oh well.
-
-    This is used in the fancy-one algorithm, which will likely be abandoned.
-    """
-    tt_stations_list = stations_list
-    # Set up parallel station names list
-    tt_station_names_list = [station_name(code) for code in tt_stations_list]
-
-    # Convert both to parallel DataFrames
-    tt_stations_list_df = pd.DataFrame(tt_stations_list, columns=[(0,'stop_id')])
-    tt_station_names_list_df = pd.DataFrame(tt_station_names_list, columns=[(0,"station")])
-
-    # Assemble the two and set the station code as the index (for future use)
-    tt_df = pd.concat([tt_stations_list_df, tt_station_names_list_df], axis="columns")
-    tt_df = tt_df.set_index((0, 'stop_id'))
-    # This gives us the prototype timetable
-    return tt_df
-
-
-
-def main_func_future(template):
-    # In order to combine the timetables, we need a prior and exterior stop list
-    # which specifies the order the stops will appear in *in the timetable*.
-    # This has to be human-curated; consider Silver Service with the split in the Carolinas.
-    # Which branch gets listed first?  Can't be automatically determined.
+    # And now we have to rename the headers.  This is kind of ugly!
+    # This is quite fragile and should be checked regularly.
+    # It depends on having removed the placeholder column already.
     #
-    # So we need a prototype timetable, passed in.
-    print(template)
-    tt_trains_list = trains_list_from_template(template)
-    print ("Trains in order:", tt_trains_list)
-    tt_stations_list = stations_list_from_template(template)
-    print ("Stations in order: ", tt_stations_list)
-    print ("Recalculated timetable: ")
-    tt_df = compute_prototype_timetable(tt_stations_list)
-    print (tt_df)
+    # We have to do the styler and the tt at the same time,
+    # or the styler will fail.
+    tt.columns = header_replacement_list
+    styler_t.columns = header_replacement_list
 
-    todays_feed = master_feed.filter_by_dates(reference_date, reference_date)
-    reduced_feed = todays_feed # FIXME -- preemptively remove irrelevant data
-
-    list_of_timetables = [tt_df]
-    list_of_train_numbers = []
-    for train_number in tt_trains_list:
-        if (train_number in ["station","stations"]):
-            tt_station_names_df = compute_station_names_df(tt_stations_list)
-            # Sort by station ID...
-            # tt_station_names_df = tt_station_names_df.set_index((0, 'stop_id'))
-            # It's set as the index in compute_station_names; can't set it twice
-
-            list_of_timetables.append(tt_station_names_df)
-            list_of_train_numbers.append("station")
-            print(tt_station_names_df)
-
-        else: # column is not "stations"
-            # In future this will be more complex with two trains in one column, but for now...
-            desired_feed = reduced_feed.filter_by_trip_short_names([train_number])
-            try:
-                # This should now be a single-item list, so extract the item...
-                my_trip = desired_feed.get_single_trip()
-            except NoTripError:
-                print( ''.join(["No trip for ",train_number,", skipping"]) )
-            except TwoTripsError:
-                raise TwoTripsError("Error: filter found two trips with the same train number:", desired_feed.trips)
-            stop_times = desired_feed.get_single_trip_stop_times(my_trip.trip_id)
-            stop_times.reset_index(inplace=True)
-
-            # Sanity check:
-            proper_train_number = my_trip.trip_short_name
-            if (proper_train_number != train_number):
-                raise GTFSError( ''.join(["Weirdness: trip for ", train_number," has train number ", proper_train_number]) )
-
-            # Multi-index is clunky, so just use tuples as column names
-            # which is completely valid
-            # Use "0" to mean "shared between trains"
-            # This worked but felt ugly.
-            # For debugging reasons, massively shorten column names
-            # new_index_map = { 'stop_sequence'  : (train_number, 'stop_sequence'),
-            #                  'trip_id'        : (train_number, 'trip_id'),
-            #                  'arrival_time'   : (train_number, 'arrival_time'),
-            #                  'departure_time' : (train_number, 'departure_time'),
-            #                  'pickup_type'    : (train_number, 'pickup_type'),
-            #                  'drop_off_type'  : (train_number, 'drop_off_type'),
-            #                  'stop_id'        : (0, 'stop_id')
-            #                }
-
-            # Rename columns to allow concat to work...
-            new_index_map = { 'stop_sequence'  : (train_number, 'seq'),
-                              'trip_id'        : (train_number, 'trip_id'),
-                              'arrival_time'   : (train_number, 'ar_t'),
-                              'departure_time' : (train_number, 'dp_t'),
-                              'pickup_type'    : (train_number, 'p'),
-                              'drop_off_type'  : (train_number, 'd'),
-                              'stop_id'        : (0, 'stop_id')
-                            }
-            stop_times = stop_times.rename(new_index_map,axis='columns')
-
-            # Sort by station ID...
-            stop_times = stop_times.set_index((0, 'stop_id'))
-            list_of_timetables.append(stop_times)
-            list_of_train_numbers.append(train_number)
-            print (stop_times)
-
-    # Out of the for loop now.  Merge the pieces.
-    # Note that this merges on the index, which is carefully set to be the same for all pieces
-    # (namely, it's set on (0, 'stop_id')
-    full_timetable = pd.concat(list_of_timetables,axis="columns")
-
-    # NOTE!  This is a huge issue!  This works for the CONO, but if you try it for the Illini,
-    # it will add back in all the CONO stations!  That is not what is wanted.
-    # It becomes essential to filter out stops which have NaN in the stop_sequence column.
-    proper_timetable = full_timetable[full_timetable[(0,'stop_sequence')].notna()]
-    # FIXME
-
-    # Drop columns which are not important to the main merge algorithm, for readability
-    # Ignore errors if some of the columns to be dropped don't exist
-    trimmed_timetable = proper_timetable
-    for train_number in list_of_train_numbers:
-        trimmed_timetable = trimmed_timetable.drop((train_number,'trip_id'),
-                                                    axis='columns', errors='ignore')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'p'),
-                                                    axis='columns', errors='ignore')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'d'),
-                                                    axis='columns', errors='ignore')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'ar_t'),
-                                                    axis='columns', errors='ignore')
-        trimmed_timetable = trimmed_timetable.drop((train_number,'seq'),
-                                                    axis='columns', errors='ignore')
-    print(trimmed_timetable)
-
-    quit()
+    return (tt, styler_t, header_styling_list)
 
 ##########################
 #### NEW MAIN PROGRAM ####
@@ -1091,16 +981,10 @@ if __name__ == "__main__":
         print_single_trip_tt(trip)
         quit()
 
-    if (args.type == "updown"):
-        # Single-service "up down" timetable.
-        # Work in progress
-        # prep_spec was an attempt to do this which failed... FIXME
-        print("unimplemented")
-        quit()
-
-    if (args.type == "template"):
+    if (args.type == "make-spec"):
         # Make a template (work in progress)
         print ("unfinished")
+        make_spec()
         quit()
 
     if (args.type == "compare"):
@@ -1108,33 +992,26 @@ if __name__ == "__main__":
         compare_similar_services(route_id(route_long_name))
         quit()
 
-    if (args.type == "fancy-one"):
-        # Use a template (work in progress)
-        template = load_template(args.template_filename)
-        template = augment_template(template)
-        main_func_future(template);
-        quit()
-
-    if (args.type == "fancy-two"):
+    if (args.type == "fill"):
 
         # Accept with or without .spec
-        tt_filename_base = args.template_filename.removesuffix(".spec")
-        template_filename = tt_filename_base + ".spec"
+        tt_filename_base = args.template_filename.removesuffix(".tt-spec")
+        template_filename = tt_filename_base + ".tt-spec"
 
         template = load_template(template_filename)
         template = augment_template(template)
-        print (template)
+        print ("template loaded and augmented")
 
         # CSV version first:
-        (timetable, styler_table) = fill_template(template,
+        (timetable, styler_table, header_styling) = fill_template(template,
                       is_major_station=amtrak_helpers.is_standard_major_station,
                       is_ardp_station="dwell")
         # NOTE, need to add the header
         timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
         print ("CSV done")
 
-        # HTML version nest:
-        (timetable, styler_table) = fill_template(template,
+        # HTML version next:
+        (timetable, styler_table, header_styling_list) = fill_template(template,
                       is_major_station=amtrak_helpers.is_standard_major_station,
                       is_ardp_station="dwell",
                       doing_html=True)
@@ -1152,7 +1029,7 @@ if __name__ == "__main__":
         # Produce the final complete page...
         output_pathname_before_suffix = tt_filename_base
         page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
-        timetable_finished_html = finish_html_timetable(timetable_styled_html, title=page_title)
+        timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title)
         with open( "tt_" + output_pathname_before_suffix + '.html' , 'w' ) as outfile:
             print(timetable_finished_html, file=outfile)
 
@@ -1160,7 +1037,7 @@ if __name__ == "__main__":
 
         # Now rebuild the final complete page for Weasyprint...
         # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
-        timetable_finished_weasy=finish_html_timetable(timetable_styled_html, title=page_title,
+        timetable_finished_weasy=finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title,
                                              for_weasyprint=True)
         # Need an intermediate file in order to resolve the image references correctly
         # And Weasy can't handle inline SVG images, so we need external image references.

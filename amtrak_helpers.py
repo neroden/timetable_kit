@@ -77,3 +77,30 @@ major_stations_list = ( "BOS", # NEC timetable stations first
 def is_standard_major_station(station_code):
     """Is a station on the list of standard 'major stations' for Amtrak?"""
     return (station_code in major_stations_list)
+
+def is_bus(train_number):
+    """Is this a bus?"""
+    if int(train_number) >= 3000:
+        return True
+    return False
+
+sleeper_trains = ( "52","53", # Auto Train
+    "5", "6", # CZ
+    "29", "30", # CL
+    "50", "51", # Cardinal
+    "58", "59", # CONO
+    "11", "14", # CS
+    "19", "20", # Crescent
+    "7", "8", "27", "28", # EB
+    "48", "49", "448", "449", # LSL
+    "65", "66", "67", # Night Owl
+    "97", "98", # Silver Meteor
+    "91", "92", # Silver Star
+    "3", "4", # SWC
+    "1", "2", # SL
+    "21", "22", "421", "422", # TE -- also 321/322?
+    )
+
+def is_sleeper_train(train_number):
+    """Does this train have sleeper cars?"""
+    return train_number in sleeper_trains

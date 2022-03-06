@@ -452,3 +452,42 @@ def timepoint_str ( timepoint,
     # We should not reach here; we should have returned earlier.
     assert False
     return
+
+def get_time_column_header(trains_spec, doing_html=False):
+    """
+    Return the header for a column of times.
+
+    Input should be. trains_spec, which is a list of train numbers separated by slashes.
+    Possibly with a minus sign in front.  It may have to be parsed.
+
+    Currently we don't parse it, and input is a single train number.
+    """
+    train_number = trains_spec # Because we haven't implemented complex train specs FIXME
+    time_column_prefix = "Train #"
+    if (doing_html):
+        # For HTML, let's get FANCY... May change this later.
+        time_column_header = ''.join(["<small>",time_column_prefix,"</small>",
+                                      "<br>","<strong>",str(train_number),"</strong>"])
+    else:
+        # For plaintext, keep it simple: just the train number
+        time_column_header = "".join([str(train_number)])
+    return time_column_header
+
+def get_station_column_header(doing_html=False):
+    """
+    Return the header for a column of station names.
+
+    Currently just the word "Station".
+    """
+    return "Station"
+
+def get_services_column_header(doing_html=False):
+    """
+    Return the header for a column of station services icons.
+
+    Tricky because the column should be very narrow.
+    """
+    if (doing_html):
+        return '<span class="services-column-header">Services</span>'
+    else:
+        return "Services"

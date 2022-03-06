@@ -11,21 +11,13 @@ Spartan-MB is a new version but lines are taller.
 Note: Pandas Styler can't assign extra classes to the column heading:
 must use .col_heading for selector 
 
+We set the font for the entire table at once; it can be overridden in the cells.
+
 Also ".symbol-key td" is a data cell IN the symbol key;
 while ".tt-table td" is a data cell IN the main timetable.
 
 */
 
-.font-sans-serif, .col_heading, .symbol-key td {
+.tt-table, .symbol-key {
     font-family: "Spartan", cursive;
-}
-.font-data-size, .col_heading, .symbol-key td {
-    font-size: 6pt;
-}
-.col_heading {
-    /* 
-    Font size for headers -- just a tad larger
-    I have been using 12pt but that's not definitive
-    */
-    font-size: 8pt;
 }
