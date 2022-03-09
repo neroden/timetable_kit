@@ -185,7 +185,7 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     # The @font-face directives:
     fonts_dirname = "./fonts/"
     fonts_css_list = []
-    for font in ["Spartan",
+    for font in ["Spartan","Spartan_MB","Spartan1004",
                 ]:
         with open(fonts_dirname + font + ".css", "r") as file:
             fonts_css_list.append( file.read() )
