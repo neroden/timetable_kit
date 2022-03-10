@@ -115,7 +115,7 @@ html_header='''<!DOCTYPE html>
 <meta charset="utf-8">
 '''
 
-def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False):
+def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False, box_characters=False):
     """
     Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
 
@@ -150,7 +150,6 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     with open(fragments_dirname + "time_boxes_extras.css", "r") as file:
         time_boxes_extras_css = file.read()
 
-    box_characters=True # FIXME, pass this down
     if (box_characters):
         if (for_weasyprint):
             with open(fragments_dirname + "time_box_characters_weasy.css", "r") as file:

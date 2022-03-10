@@ -235,6 +235,7 @@ def get_rd_str( timepoint,
 
 def timepoint_str ( timepoint,
                     doing_html=False,
+                    box_characters=False,
                     reverse=False,
                     two_row=False,
                     second_timepoint=None,
@@ -269,6 +270,9 @@ def timepoint_str ( timepoint,
     -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
     -- reverse: This piece of the timetable is running upward (departure time above arrival time)
     -- doing_html: output HTML (default is plaintext)
+    -- box_characters: put each character in the time in an HTML box; default is False.
+        For use with fonts which don't have tabular nums.  A nasty hack; best to use a font
+        which does have tabular nums.
     -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
     -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
@@ -283,6 +287,9 @@ def timepoint_str ( timepoint,
     else:
         linebreak = "\n"
 
+    if not doing_html:
+        box_characters = False
+
     # Pick function for the actual time printing
     if (use_24):
         time_str = time_short_str_24
@@ -291,7 +298,7 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time)
-    departure_time_str = time_str(departure, box_characters=doing_html) # Box for HTML FIXME
+    departure_time_str = time_str(departure, box_characters=box_characters)
     if doing_html:
         if (bold_pm and departure.pm == 1):
             departure_time_str = ''.join(["<b>",departure_time_str,"</b>"])
@@ -302,7 +309,7 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual time
     arrival = explode_timestr(timepoint.arrival_time)
-    arrival_time_str = time_str(arrival, box_characters=doing_html) # Box for HTML FIXME
+    arrival_time_str = time_str(arrival, box_characters=box_characters)
     # HTML bold annotation for PM
     if doing_html:
         if (bold_pm and arrival.pm == 1):

@@ -8,21 +8,28 @@ cell which displays time (and date, and discharge-only, etc.)
 
 This does the actual time part.
 This is the "simple" version: really wants a tabular-nums font.
+
+Now, we want to use "ch" widths -- but they fail horribly!
+Weasyprint makes them too NARROW and overwrites the columns;
+Firefox makes them too WIDE and leaves tons of extra space.
+
+We'll try "em"s.  These work, but, uh... yuck?
+We probably should do more tricks.  TODO.
 */
 
 .box-time12 {
     /* 12:00P, six characters, may be bold: fixed width */
     display: inline-block;
     text-align: right;
-    width: 7ch;
-    /* font-variant-numeric: tabular-nums; /* often not available */
-    font-variant-numeric: lining-nums;
+    width: 4.25em;
+    font-variant-numeric: tabular-nums;
+    /* font-variant-numeric: lining-nums; */
 }
 .box-time24 {
     /* 13:59, five characters, may be bold: fixed width */
     display: inline-block;
     text-align: right;
-    width: 5ch;
-    /* font-variant-numeric: tabular-nums; /* often not available */
-    font-variant-numeric: lining-nums;
+    width: 3.75em; /* untested */
+    font-variant-numeric: tabular-nums;
+    /* font-variant-numeric: lining-nums; */
 }
