@@ -719,14 +719,6 @@ def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
 
 ### Work for main multi-train timetable factory:
 
-def return_true (station_code):
-    """Takes one argument; returns True"""
-    return True
-
-def return_false (station_code):
-    """Takes one argument; returns False"""
-    return False
-
 def fill_template(template,
                   doing_html=False,
                   box_characters=False,
@@ -778,16 +770,16 @@ def fill_template(template,
 
     # Load variable functions for is_ardp_station and is_major_station
     if (is_major_station == False):
-        is_major_station = return_false
+        is_major_station = ( lambda station_code : False )
     elif (is_major_station == "standard"):
         is_major_station = amtrak_helpers.is_standard_major_station
     if not callable(is_major_station):
         raise TypeError ("Received is_major_station which is not callable: ", is_major_station)
 
     if (is_ardp_station == False):
-        is_ardp_station = return_false
+        is_ardp_station = ( lambda station_code : False )
     elif (is_ardp_station == True):
-        is_ardp_station = return_true
+        is_ardp_station = ( lambda station_code : True )
     elif (is_ardp_station == "dwell"):
         # Prep max dwell map
         stations_max_dwell_map = make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff)
