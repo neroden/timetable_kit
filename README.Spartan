@@ -3,7 +3,7 @@ SPARTAN 1.004
 Matt Bailey's Spartan is the best font I have found for displaying small-print timetables
 -- with some caveats.
 
-The "upstream" directory contains the version of Spartan I downloaded from Google Fonts.
+The "fonts/upstream" directory contains the version of Spartan I downloaded from Google Fonts.
 This is a free font under the Open Font License.
 
 This is version *1.004* by Matt Bailey and Mirko Velimirovic.  It's on their github site,
