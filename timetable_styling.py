@@ -9,6 +9,7 @@ This module uses Pandas's Styler to apply CSS classes to a timetable;
 then renders HTML, including a lot of complicated extra bits.
 
 This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder.
+This uses Jinja2, via the load_resources module.
 
 """
 
@@ -18,6 +19,12 @@ from pandas.io.formats.style import Styler
 
 # My packages
 import amtrak_helpers
+
+# These are for finish_html_timetable
+from load_resources import get_fragment
+from load_resources import get_font_css
+from load_resources import get_icon_css
+from load_resources import template_environment
 
 def get_time_column_stylings(trains_spec, type="attributes"):
     """
@@ -125,82 +132,57 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
 
     header_styling_css = make_header_styling_css(header_styling_list)
 
-    # Directory containing CSS and HTML fragments
-    fragments_dirname = "./fragments/"
-
     # We need to add the extras to make this a full HTML & CSS file now.
     if not title:
         title="An Amtrak Timetable" # FIXME
 
-    # CSS for the whole page, not an individual table
-    with open(fragments_dirname + "page.css", "r") as file:
-        page_css = file.read()
-
     # Main CSS for the actual timetable
-    with open(fragments_dirname + "timetable_main.css", "r") as file:
-        timetable_main_css = file.read()
+    timetable_main_css = get_fragment("timetable_main.css")
+
     # Main CSS for the headers
-    with open(fragments_dirname + "timetable_headers.css", "r") as file:
-        timetable_headers_css = file.read()
+    timetable_headers_css = get_fragment("timetable_headers.css")
+
     # CSS for the colors
-    with open(fragments_dirname + "timetable_colors.css", "r") as file:
-        timetable_colors_css = file.read()
+    timetable_colors_css = get_fragment("timetable_colors.css")
 
     # And the specific internal pseudo-table layout for the individual cells displaying times:
-    with open(fragments_dirname + "time_boxes_extras.css", "r") as file:
-        time_boxes_extras_css = file.read()
+    time_boxes_extras_css = get_fragment("time_boxes_extras.css")
 
     if (box_characters):
         if (for_weasyprint):
-            with open(fragments_dirname + "time_box_characters_weasy.css", "r") as file:
-                time_boxes_main_css = file.read()
+            time_boxes_main_css = get_fragment("time_box_characters_weasy.css")
         else: # not for_weasyprint
-            with open(fragments_dirname + "time_box_characters.css", "r") as file:
-                time_boxes_main_css = file.read()
+            time_boxes_main_css = get_fragment("time_box_characters.css")
     else: # not box_characters
-        with open(fragments_dirname + "time_boxes_simple.css", "r") as file:
-            time_boxes_main_css = file.read()
+        time_boxes_main_css = get_fragment("time_boxes_simple.css")
 
     # Get the symbol key and its associated CSS
-    with open(fragments_dirname + "symbol_key.html", "r") as file:
-        symbol_key_html = file.read()
-    with open(fragments_dirname + "symbol_key.css", "r") as file:
-        symbol_key_css = file.read()
+    symbol_key_html = get_fragment("symbol_key.html")
+    symbol_key_css = get_fragment("symbol_key.css")
 
     # fonts:
-    # We may want different fonts and font sizes for screen and print.
-    if for_weasyprint:
-        with open(fragments_dirname + "font_choice_screen.css", "r") as file:
-            font_choice_css = file.read()
-        with open(fragments_dirname + "font_size_screen.css", "r") as file:
-            font_size_css = file.read()
-    else:
-        # ...but for now, use the same font_choice
-        with open(fragments_dirname + "font_choice_screen.css", "r") as file:
-            font_choice_css = file.read()
-        with open(fragments_dirname + "font_size_screen.css", "r") as file:
-            font_size_css = file.read()
+    font_choice_css = get_fragment("font_choice.css")
+    font_size_css = get_fragment("font_size.css")
 
     # The @font-face directives:
-    fonts_dirname = "./fonts/"
     fonts_css_list = []
-    for font in ["Spartan",
-#                    "Spartan_MB",
-#                    "Spartan1004",
-                    "SpartanTT",
+    for font in ["SpartanTT",
+#                "Spartan",
+#                "Spartan_MB",
+#                "Spartan1004",
                 ]:
-        with open(fonts_dirname + font + ".css", "r") as file:
-            fonts_css_list.append( file.read() )
-    fonts_css = ''.join(fonts_css_list)
+        fonts_css_list.append( get_font_css(font) )
+    font_faces_css = ''.join(fonts_css_list)
 
     # Icons:
-    icons_dirname = "./icons/"
+
+    # For icons as imgs.
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
     # This is used every time an icon is inserted...
-    with open(icons_dirname + "icons.css", "r") as file:
-        icons_css = file.read()
-    # This allowed embedded SVGs, but Weasyprint can't handle it.
-    # Consider doing two versions, one for Weasy, one not for Weasy (yee-haw! FIXME)
+    icons_css = get_icon_css("icons.css")
+
+    # TODO FIXME: add the alternative embedded SVG version.
+    # Weasy can't handle SVG references within HTML.
     # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
     # 'baggage' is the only one so far
     # svg_symbols_html = ""
@@ -209,29 +191,37 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
 
     # We write and prepend an entirely separate stylesheet.
     # We MUST prepend the border-collapse part of the stylesheet, since the styler can't do it.
-    finished_timetable_html = '\n'.join([html_header,
-                                         "<title>",
-                                         title,
-                                         "</title>",
-                                         "<style>",
-                                         page_css,
-                                         fonts_css,
-                                         font_choice_css,
-                                         font_size_css,
-                                         icons_css,
-                                         timetable_main_css,
-                                         timetable_headers_css,
-                                         header_styling_css,
-                                         timetable_colors_css,
-                                         time_boxes_main_css,
-                                         time_boxes_extras_css,
-                                         symbol_key_css,
-                                         "</style>",
-                                         "</head><body>",
-                                         styled_timetable_html,
-                                         symbol_key_html,
-                                         "</body></html>",
-                                        ])
+
+    stylesheet_params = {
+        'font_faces': font_faces_css,
+        'font_choice': font_choice_css,
+        'font_size': font_size_css,
+        'icons': icons_css,
+        'main': timetable_main_css,
+        'headers': timetable_headers_css,
+        'header_styling': header_styling_css,
+        'colors': timetable_colors_css,
+        'time_boxes': time_boxes_main_css,
+        'time_boxes_extras': time_boxes_extras_css,
+        'symbol_key_css': symbol_key_css,
+    }
+    html_params = {
+        'lang': "en-US",
+        'encoding': "utf-8",
+        'title': title,
+        'internal_stylesheet': True,
+        'heading': title, # FIXME: do better
+        'timetable': styled_timetable_html,
+        'symbol_key_html': symbol_key_html
+    }
+    # Dictionary merge, html_params take priority, Python 3.9
+    full_page_params = stylesheet_params | html_params
+
+    # Get the Jinja template environment (set up in load_resources module)
+    # and use it to retrieve the correct template...
+    page_tpl = template_environment.get_template("page_standard.html")
+    # ...then render it.
+    finished_timetable_html = page_tpl.render(full_page_params)
     return finished_timetable_html
 
 def amtrak_station_name_to_multiline_text(station_name: str, major=False ) -> str:

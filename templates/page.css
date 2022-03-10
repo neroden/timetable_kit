@@ -1,13 +1,13 @@
-/* 
+{# 
 page.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-CSS fragment file related to the full page layout, rather than to individual tables
-*/
+CSS Jinja template file related to the full page layout, rather than to individual tables
+#}
 
 @page {
     /* For printing */
-    size: Letter; /* change from default A4, since this is the US */
+    size: Letter; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
