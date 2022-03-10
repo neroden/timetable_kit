@@ -3,10 +3,14 @@ font_choice_screen.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-Spartan is best.
-Spartan-MB is a new version but lines are taller.
+Spartan (Version 1.004) by Matt Bailey is the best I've found.
+(Spartan-MB is version 1.006 but lines are taller and characters narrower.)
 
--- "cursive" backup font-family tells us "Font didn't load".  Not a real backup family. FIXME
+SpartanTT is my hacked version of Spartan 1.004 with:
+-- alternate "a" from 1.006
+-- tabular nums which are the same width in medium and bold.
+
+* The "cursive" backup font-family tells us "Font didn't load".  Not a real backup family. FIXME
 
 Note: Pandas Styler can't assign extra classes to the column heading:
 must use .col_heading for selector 
@@ -19,5 +23,5 @@ while ".tt-table td" is a data cell IN the main timetable.
 */
 
 .tt-table, .symbol-key {
-    font-family: "Spartan", cursive;
+    font-family: "SpartanTT", cursive;
 }

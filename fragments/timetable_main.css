@@ -83,5 +83,5 @@ Colors have their own file for tweaking reasons.
 
 /* Text transform for station services header span: */
 .services-header-text {
-    transform: rotate(-90deg);
+    transform: rotate(-45deg);
 }

@@ -1,0 +1,13 @@
+/*
+Fragment of CSS for importing the Spartan MB font family, version 1.004
+*/
+
+@font-face {
+    font-family: "Spartan1004";
+    src: url("fonts/Spartan1004/Spartan-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Spartan";
+    src: url("fonts/Spartan1004/Spartan-Bold.ttf") format("truetype");
+    font-weight: bold;
+}

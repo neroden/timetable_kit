@@ -1,17 +1,40 @@
+SPARTAN 1.004
+-------------
+Matt Bailey's Spartan is the best font I have found for displaying small-print timetables
+-- with some caveats.
+
 The "upstream" directory contains the version of Spartan I downloaded from Google Fonts.
-Google Fonts says this is a free font under the Open Font License.
+This is a free font under the Open Font License.
 
-It appears to be by Matt Bailey and Mirko Velimirovic, but the version from Google Fonts
-*** does not match *** the upstream versions at their github sites.
+This is version *1.004* by Matt Bailey and Mirko Velimirovic.  It's on their github site,
+but you have to download the 1.004 version.  The newer versions are not acceptable.
 
-This version is internally recorded as version 1.004.  The newer versions are *not acceptable*.
+In small print, this version has shorter, wider characters than the more recent 1.006 version of Spartan.
 
-In small print, this version has shorter, wider characters than most of the readily-available 
-Matt Bailey versions of Spartan.  This is highly, highly desirable for readability: it is substantially
-superior to other versions for my purposes.  That's why I'm saving it here.
+This is highly, highly desirable for readability, and for fitting more lines into the 
+timetable: it is substantially superior to other versions for my purposes.  That's why I'm saving it here.
 
-However, it does not come with tabular numerals.
-Accordingly, I am creating a variant (SpartanT) with tabular numerals as an option.
-The tabular numbers will be monospaced across ***all*** weights, so they can be used interchangably.
+However, Spartan does not come with tabular numerals.
 
-In the meantime, I have boxed each individual character -- tedious and not flexible.
+In addition, the "a" is hard to distinguish from "o" in small font sizes.
+
+SPARTAN TT
+----------
+So I (Nathanael Nerode) created a variant (SpartanTT) which has tabular numerals as an option.
+For now, I've only done the Medium and Bold versions, since that's what I'm using.
+The FontForge files are in the fonts folder with .sfd suffix.
+
+The tabular numbers are monospaced across ***all*** weights, so weights can be used interchangeably.
+The letters "A" and "P" also have tabular number variants.
+So does the colon ":" -- so that a Bold colon will line up with a Medium colon
+-- though the colon is half-width (I am considering doing the same with the period and comma).
+
+In addition, I ported the alternate "a" from Spartan 1.006 back to 1.004
+(recovering 1.004 advance width and height, but not fixing the narrow stroke width issues).
+This is hoped to be slightly more readable.  Because most browsers (including Chrome)
+can't pick individual character variants, this becomes the standard version and the 
+formerly-standard "a" becomes an alternate character.
+
+This font is, of course, under the Open Font License, like the original Spartan.
+
+All typography credit goes to Matt Bailey and Mirko Velimirovic.  I just adjusted spacing.

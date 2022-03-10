@@ -1,0 +1,13 @@
+/*
+Fragment of CSS for importing the SpartanTT font family
+*/
+
+@font-face {
+    font-family: "SpartanTT";
+    src: url("fonts/SpartanTT/SpartanTT-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "SpartanTT";
+    src: url("fonts/SpartanTT/SpartanTT-Bold.ttf") format("truetype");
+    font-weight: bold;
+}
