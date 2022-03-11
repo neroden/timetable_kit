@@ -62,6 +62,9 @@ This is to avoid beating too hard on Amtrak's website.
 
 The special code "services" can be used to generate cells containing icons for the station services.  *not yet
 
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank. *not yet -- maybe?
+Remember to set it in reverse for the other side of the timetable.
+
 If the cell begins wih the minus sign ("-"), it indicates that the column is in reverse order:
 that is, the earliest times are at the bottom, and the latest times at the top.  Otherwise the timetable generator
 assumes the earliest times are at the top and the latest times at the bottom; layout will be confused if this is
@@ -75,6 +78,29 @@ This will give a complex stacked cell for "train name".  You will want to do som
 The minus sign, if used, must still be at the start of the entire cell (-314/304, not 314/-304).
 
 Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).
+
+SECOND ROW
+----------
+This is not implemented yet. *not yet
+
+If the first column of the second row contains the text "column-options" (without the quotes), then the second row
+is treated as a list of specifications for how to render the columns.
+
+It MUST be the second row.
+
+This row will be entirely removed before rendering the timetable; it does not generate a real row.
+
+If a cell is blank, this means that column should be rendered with default options.
+If there's more than one option for a column, they are separated by internal commas (in a CSV table this means the cell must be quoted)
+
+No options have been defined yet.
+Options which I might implement, but have not implemented, include:
+reverse -- replacement for the "minus sign" notation
+days -- include string for days of operation (MoWeFr) in this time column
+
+ardp -- include "Ar" and "Dp"
+color -- background colors for this column.  If the train numbers are separated by slashes, so are the background colors?
+tz -- include timezone in this column
 
 REST OF SPEC
 ------------
