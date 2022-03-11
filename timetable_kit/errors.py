@@ -1,4 +1,4 @@
-# timetable_errors.py
+# errors.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """

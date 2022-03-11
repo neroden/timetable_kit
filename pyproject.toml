@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "timetable_kit"
+version = "0.0.0.dev0"
+description = "Kit for making printable timetables for trains and buses"
+authors = ["Nathanael Nerode <ncn_floss10@fastmail.fm>"]
+license = "GNU Affero General Public License v3.0 or later"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+gtfs-kit = "^5.2.0"
+pandas = "^1.4.1"
+Jinja2 = "^3.0.3"
+weasyprint = "^54.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

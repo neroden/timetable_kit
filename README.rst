@@ -31,6 +31,10 @@ It was tested with PANDAS 1.4.
 Timetable Kit also requires the jinja2 package.  PANDAS depends on jinja2, but also
 timetable_kit uses the Jinja2 template system directly.
 
+It uses Weasyprint to convert HTML timetables to PDF timetables.
+
+It's packaged as a package with Poetry, so presumably requires Poetry to install.
+
 Authors
 =======
 Copyright 2021, 2022 Nathanael Nerode.

@@ -13,9 +13,11 @@ with error checking to make sure there's exactly one trip.
 """
 import gtfs_kit as gk
 from operator import not_  # Needed for bad_service_id filter
-from timetable_errors import GTFSError
-from timetable_errors import NoTripError
-from timetable_errors import TwoTripsError
+from timetable_kit.errors import (
+    GTFSError,
+    NoTripError,
+    TwoTripsError,
+    )
 
 def filter_by_dates(self, first_date, last_date):
     """

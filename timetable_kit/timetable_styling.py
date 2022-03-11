@@ -18,13 +18,16 @@ import pandas as pd
 from pandas.io.formats.style import Styler
 
 # My packages
-import amtrak_helpers
+# This imports the module by name
+from timetable_kit import amtrak_helpers
 
 # These are for finish_html_timetable
-from load_resources import get_fragment
-from load_resources import get_font_css
-from load_resources import get_icon_css
-from load_resources import template_environment
+from timetable_kit.load_resources import (
+    get_fragment,
+    get_font_css,
+    get_icon_css,
+    template_environment,
+)
 
 def get_time_column_stylings(trains_spec, type="attributes"):
     """

@@ -15,6 +15,9 @@ import argparse
 from pathlib import Path
 import os.path # for os.path abilities
 
+# Solely for sys.path
+import sys
+
 import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
@@ -24,23 +27,26 @@ from weasyprint import CSS as weasyCSS
 
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
-from timetable_errors import GTFSError
-from timetable_errors import NoStopError
-from timetable_errors import TwoStopsError
-from timetable_errors import InputError
-from timetable_argparse import make_tt_arg_parser
+# Also note: python packaging is really sucky for direct script testing.
+from timetable_kit.errors import (
+    GTFSError,
+    NoStopError,
+    TwoStopsError,
+    InputError
+)
+from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
-import feed_enhanced
+from timetable_kit import feed_enhanced
 
-import gtfs_type_cleanup
-import amtrak_agency_cleanup
-import amtrak_json_stations
-import amtrak_helpers
+from timetable_kit import gtfs_type_cleanup
+from timetable_kit import amtrak_agency_cleanup
+from timetable_kit import amtrak_json_stations
+from timetable_kit import amtrak_helpers
 
-import text_presentation
+from timetable_kit import text_presentation
 # This is the big styler routine, lots of CSS; keep out of main namespace
-from timetable_styling import (
+from timetable_kit.timetable_styling import (
     style_timetable_for_html,
     finish_html_timetable,
     amtrak_station_name_to_html,
@@ -930,6 +936,8 @@ def fill_template(template,
 #### NEW MAIN PROGRAM ####
 ##########################
 if __name__ == "__main__":
+    print ( "Dumping sys.path for clarity:")
+    print ( sys.path )
     print ("Made it to the main program")
 
     my_arg_parser = make_tt_arg_parser()

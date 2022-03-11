@@ -1,0 +1,28 @@
+Since I'm new to Python packaging, and it's very bizarre, this explains
+how to hack on the timetable_kit package.
+
+This complexity is necessary so that the scripts within the timetable_kit
+package can actually find the timetable_kit package *as a module*.  Python
+actually makes this extremely difficult.    
+
+1. Make the venv directory:
+
+python -m venv venv
+
+2. Use it:
+
+source venv/bin/activate
+
+3. Install the current directory as an *editable* package search location:
+(should be parent of the actual package directory)
+
+pip install -e .
+
+4. Get out of the venv:
+
+deactivate
+
+5.  When you want to hack on it again, just activate the venv:
+
+source venv/bin/activate
+

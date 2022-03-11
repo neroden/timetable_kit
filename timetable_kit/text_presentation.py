@@ -16,7 +16,7 @@ import gtfs_kit as gk
 from collections import namedtuple
 
 # These are mine
-from timetable_errors import GTFSError
+from timetable_kit.errors import GTFSError
 
 def day_string(calendar, offset=0) -> str:
     """
