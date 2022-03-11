@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-# amtrak_station_url.py
+# amtrak/station_url.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
@@ -10,7 +10,7 @@ Utility program for the user.  Not used by the timetable program.
 import argparse
 
 # These are mine
-import amtrak_json_stations
+from timetable_kit import amtrak
 
 arg_parser = argparse.ArgumentParser(
     formatter_class = argparse.RawDescriptionHelpFormatter,
@@ -24,5 +24,5 @@ if __name__ == "__main__":
 
     args = arg_parser.parse_args()
     station_code = args.code
-    print(amtrak_json_stations.station_details_url(station_code))
+    print(amtrak.json_stations.station_details_url(station_code))
     quit()

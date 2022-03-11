@@ -40,12 +40,12 @@ from timetable_kit.timetable_argparse import make_tt_arg_parser
 from timetable_kit import feed_enhanced
 
 from timetable_kit import gtfs_type_cleanup
-from timetable_kit import amtrak_json_stations
 
-from timetable_kit import amtrak as amtrak #  so we don't have to say "timetable_kit.amtrak"
-# Note that we will call out amtrak.special_data every time, to make it easier
-# to isolate Amtrak dependencies in the main code
-# Same with amtrak.agency_cleanup
+from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
+# To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
+# amtrak.special_data
+# amtrak.agency_cleanup
+# amtrak.json_stations
 
 from timetable_kit import text_presentation
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -964,7 +964,7 @@ if __name__ == "__main__":
 
     # Create the station name lookup table, a global
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
-    lookup_station_name = amtrak_json_stations.make_station_name_lookup_table()
+    lookup_station_name = amtrak.json_stations.make_station_name_lookup_table()
     # NOTE: redundant copy is present in text_presentation.py FIXME
 
     dumptable(master_feed.routes, "routes") # Generates routes.html

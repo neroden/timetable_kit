@@ -5,7 +5,9 @@
 
 """
 Routines for extracting Amtrak's JSON station data and working with it.
+
 Amtrak's entire station database is exposed as JSON, which is very useful.
+In order to download it, this must be run as a program.
 """
 
 # "./json_stations.py download"
@@ -17,7 +19,7 @@ import sys
 import pandas as pd
 import requests
 import json # better for the details import
-# from time import sleep # Avoid slamming Amtrak's server too fast -- not needed
+from time import sleep # Avoid slamming Amtrak's server too fast -- not needed
 import argparse
 
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
@@ -33,20 +35,25 @@ station_details_url_postfix = ".json"
 stations_json_url = "https://www.amtrak.com/services/data.stations.json"
 
 # Now, where to put the local cached copy?
-# module_location = Path(__file__).parent
-# stations_under_module = module_location / "stations"
-#
-# working_directory = Path(".")
-# stations_under_wd = working_directory / "stations"
+module_location = Path(__file__).parent
+stations_under_module = module_location / "stations"
 
-station_details_dir = Path("./amtrak_stations")
+working_directory = Path(".")
+stations_under_wd = working_directory / "amtrak_stations"
+
+# Default to the one inside the module.
+station_details_dir = stations_under_module
 
 def stations_json_local_path():
     """Return local path for the data.stations.json file as a Path"""
     return station_details_dir / "data.stations.json"
 
 def station_details_filename(station_code: str) -> str:
-    """Return filename for a Amtrak station details JSON file"""
+    """
+    Return filename for a Amtrak station details JSON file
+
+    This does uppercase/lowercase correction.
+    """
     # Step one: validate the station code
     if (len(station_code) != 3):
         raise ValueError("Station code not of length 3")
@@ -118,7 +125,17 @@ def make_station_name_lookup_table():
 def download_station_details(station_code: str) -> str:
     """Download station details for one station as json text; return it."""
     response = requests.get(station_details_url(station_code))
-    return response.text
+    # This suffers from the possibility of failure.
+    my_text = response.text
+    if (response.status_code != requests.codes.ok):
+        print( "".join(["Download for ",
+                        station_code,
+                        " returned error ",
+                        str(response.status_code),
+                        "; blanking file."
+                       ]) )
+        my_text = "{}" # Don't fill with whatever garbage we got; this is valid JSON
+    return my_text
 
 def save_station_details(station_code: str, station_details: str):
     """Save station details for one station to a suitable file."""
@@ -131,26 +148,41 @@ def load_station_details(station_code: str) -> str:
         station_details = station_details_local_file.read()
     return station_details
 
-def download_all_stations():
+def download_one_station(station_code: str):
+    """
+    Download one of Amtrak's station details files.
+
+    Usually used directly when a hiccup has screwed up one of the downloads.
+    """
+    print (station_code)
+    station_details = download_station_details(station_code)
+    save_station_details(station_code, station_details)
+
+
+def download_all_stations(sleep_secs: float = 0.0):
     """
     Download all of Amtrak's station details files.
 
     By pre-downloading, avoids hammering Amtrak's website
+
+    sleep_secs: Sleep between downloads for this many secs (a float)
+    to avoid hammering Amtrak's website.
     """
     # First, get the main station database
     stations_json = download_stations_json()
     save_stations_json(stations_json)
 
+    if (sleep_secs != 0.0):
+        sleep(sleep_secs)
+
     # Then, cycle through the station codes
     stations = pd.io.json.read_json(stations_json,orient='records')
     for code in stations["code"].array:
-        print (code)
-        station_details = download_station_details(code)
-        save_station_details(code, station_details)
+        download_one_station(code)
+        if (sleep_secs != 0.0):
+            sleep(sleep_secs)
         # When debugging, don't loop...
         # break
-        # This is where I considered adding a 'sleep' statement but it worked without it
-        #sleep(0.05)
 
 
 # Notes on station details:
@@ -191,33 +223,61 @@ def do_station_processing():
     stations_csv_path = Path("./stations.csv")
     stations.to_csv(stations_csv_path, index=False)
     print ("stations.csv dumped")
-    # Note: 'country' is blank or CA for Canada (nothing else); stationAlias is of little valu
+    # Note: 'country' is blank or CA for Canada (nothing else); stationAlias is of little value
+
+    # FIXME: the following is not actually doing anything at this time
 
     # OK, so there are stations with defective details JSON records (aaaargh!)
     # Should report that to Amtrak TODO
     # BAT has a webpage.  The others are just blank.
+    # Originally on this list but fixed: MOH
+
     station_list = stations["code"].array
-    bad_station_list = ["BAT","MOH", "BNN","DTR","PDT","AVC","TAP","WBT"]
+    bad_station_list = []
+    for code in station_list:
+        station_details_json = load_station_details(code)
+        if (station_details_json in ["{}", "{}\n"]):  # Quick and dirty; FIXME
+            bad_station_list.append(code)
+        parsed_json = json.loads(station_details_json)
+    # bad_station_list = ["BAT","BNN","DTR","PDT","AVC","TAP","WBT"]
+    bad_station_list_path = Path("./bad_stations.csv")
+
+    # Use PANDAS to dump to file, one per line
+    df = pd.DataFrame(bad_station_list)
+    df.to_csv(bad_station_list_path, index=False, header=False)
+    print("bad_stations.csv dumped")
+
     cleaned_station_list = list(filter(lambda x : not x in bad_station_list, station_list))
     return cleaned_station_list;
 
 def make_arg_parser():
-    # Argument parser setup code
+    """Make argument parser for amtrak/json_stations.py"""
     arg_parser = argparse.ArgumentParser(
-        description='''Download and/or run tests on Amtrak's JSON stations data.  With no arguments, does nothing.'''
+        description="""Download and/or run tests on Amtrak's JSON stations data.  With no arguments, does nothing."""
         )
-    arg_parser.add_argument('--download',
-        help='Download Amtrak stations data; otherwise a local copy must exist',
-        dest='download',
-        action='store_true',
+    subparsers = arg_parser.add_subparsers(dest='command_name')
+    download_parser = subparsers.add_parser("download",
+        help="Download Amtrak stations data; otherwise a local copy must exist",
+        aliases=['down','d'],
         )
-    arg_parser.add_argument('--process',
+    download_parser.add_argument("--station-code","--station","--code","-c",
+        help="Station code to download.  If not specified, downloads all stations.",
+        dest="station_code",
+        )
+    download_parser.add_argument("--sleep", "-s",
+        help="Number of seconds to wait between downloads.  Used to avoid hammering Amtrak's servers.  Default 0.",
+        dest="sleep_secs",
+        type=float,
+        default=float(0),
+        )
+    process_parser = subparsers.add_parser("process",
         help='Process Amtrak stations data, running tests; a local copy must exist. INCOMPLETE',
-        dest='process',
-        action='store_true',
+        aliases=['p'],
         )
     arg_parser.add_argument('--directory','-d',
-        help='Local directory to store Amtrak JSON station details in: default is [module]/stations',
+        help="""Local directory to store Amtrak JSON station details in.
+Default is within the module timetable_kit/amtrak/stations; but this might not be writable.
+Another good option is ./amtrak_stations""",
         dest='stations_dir_name',
         )
     return arg_parser;
@@ -228,6 +288,9 @@ if __name__ == "__main__":
     arg_parser = make_arg_parser()
     args = arg_parser.parse_args()
 
+    if (args.command_name is None):
+        arg_parser.print_help()
+
     # This is ugly, clean it up later
     if (args.stations_dir_name):
         # Possibly change the stations directory path globals
@@ -237,7 +300,10 @@ if __name__ == "__main__":
     if not ( station_details_dir.exists() ):
         station_details_dir.mkdir(parents=True)
 
-    if (args.download):
-        download_all_stations()
-    if (args.process):
+    if (args.command_name == "download"):
+        if (args.station_code is None):
+            download_all_stations(sleep_secs=args.sleep_secs)
+        else:
+            download_one_station(str.upper(args.station_code))
+    if (args.command_name == "process"):
         do_station_processing()

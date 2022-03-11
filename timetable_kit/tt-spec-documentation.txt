@@ -57,7 +57,7 @@ in exactly the order the columns will appear in the timetable.
 The special code "station" can be used to generate cells containing the name and details of the station.
 This is retrieved from the Amtrak station data on the Web which is on the web in json format;
 the json files for the station data must be downloaded in advance, 
-using './amtrak_json_stations.py download' into the ./amtrak-stations/ directory.
+using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.
 This is to avoid beating too hard on Amtrak's website.
 
 The special code "services" can be used to generate cells containing icons for the station services.  *not yet

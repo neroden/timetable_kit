@@ -4,11 +4,12 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Unused module.
+This pulls the Amtrak station data from Wikipedia.
 
-Designed to pull Amtrak station data from Wikipedia.
+This is only used by accessibility_check.py, which uses it to ignore bus stops
+and only analyze train stations.
 
-Probably not needed because we can get it from Amtrak's website.
+Amtrak's JSON station data does not distinguish between train stations and bus stops.
 """
 
 import argparse
