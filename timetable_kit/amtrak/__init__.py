@@ -14,3 +14,6 @@ from . import (
     station_name_styling,
     json_stations, # this is the big one
     )
+
+# Trying this, not sure about it
+from .get_gtfs import gtfs_zip_local_path

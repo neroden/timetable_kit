@@ -65,8 +65,8 @@ from timetable_kit.amtrak.station_name_styling import (
 # Will be changed by command-line arguments, hopefully!
 # Debugging on?
 debug = True
-# The Amtrak GTFS feed file
-gtfs_filename="./gtfs-amtrak.zip"
+# The Amtrak GTFS feed file -- FIXME, this is hackish
+gtfs_filename = str( amtrak.gtfs_zip_local_path )
 # The output directory
 output_dirname="."
 # The date we are preparing timetables for (overrideable on command line)
@@ -97,9 +97,8 @@ def initialize_feed():
     global master_feed
     global enhanced_agency
     global lookup_route_id
-    # The following is read-only
-    # global gtfs_filename
 
+    print ("Using GTFS file " + gtfs_filename)
     path = Path(gtfs_filename)
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
