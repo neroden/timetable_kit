@@ -1,14 +1,16 @@
-# amtrak_helpers.py
+# amtrak/special_data.py
 # Part of timetable_kit
 #
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
 This module includes Amtrak *data* which isn't provided by Amtrak.
+
 This includes the list of which stations are major,
 which trains carry checked baggage (not implemented FIXME),
 known problems with Amtrak's GTFS data, and similar.
-(Functions for extracting data from Amtrak's JSON stations database is elsewhere.)
+
+(Functions for extracting data from Amtrak's JSON stations database are elsewhere.)
 """
 
 # GLOBAL VARIABLES

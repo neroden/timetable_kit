@@ -42,7 +42,9 @@ from timetable_kit import feed_enhanced
 from timetable_kit import gtfs_type_cleanup
 from timetable_kit import amtrak_agency_cleanup
 from timetable_kit import amtrak_json_stations
-from timetable_kit import amtrak_helpers
+from timetable_kit import amtrak as amtrak #  so we don't have to say "timetable_kit.amtrak"
+# Note that we will call out amtrak.special_data every time, to make it easier
+# to isolate Amtrak dependencies in the main code
 
 from timetable_kit import text_presentation
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -320,7 +322,7 @@ def compare_similar_services(route_id):
     Used to see how many services with different dates are actually the same service
     """
     route_feed = master_feed.filter_by_route_ids([route_id])
-    feed = route_feed.filter_bad_service_ids(amtrak_helpers.global_bad_service_ids)
+    feed = route_feed.filter_bad_service_ids(amtrak.special_data.global_bad_service_ids)
 
     print("Calendar:")
     print(feed.calendar)
@@ -464,7 +466,7 @@ def format_single_trip_timetable(stop_times,
 
         # Prettyprint the station name
         station_name_raw = lookup_station_name[timepoint.stop_id]
-        if ( amtrak_helpers.is_standard_major_station(timepoint.stop_id) ):
+        if ( amtrak.special_data.is_standard_major_station(timepoint.stop_id) ):
             major = True
         else:
             major = False
@@ -781,7 +783,7 @@ def fill_template(template,
     if (is_major_station == False):
         is_major_station = ( lambda station_code : False )
     elif (is_major_station == "standard"):
-        is_major_station = amtrak_helpers.is_standard_major_station
+        is_major_station = amtrak.special_data.is_standard_major_station
     if not callable(is_major_station):
         raise TypeError ("Received is_major_station which is not callable: ", is_major_station)
 
@@ -861,7 +863,7 @@ def fill_template(template,
                 if train_nums_str in ["station","stations"]: # Column for station names
                     cell_css_list.append("station-cell")
                     station_name_raw = lookup_station_name[station_code]
-                    major = amtrak_helpers.is_standard_major_station(station_code)
+                    major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
                     # FIXME: need to show time zone...
@@ -1019,7 +1021,7 @@ if __name__ == "__main__":
 
         # CSV version first:
         (timetable, styler_table, header_styling) = fill_template(template,
-                      is_major_station=amtrak_helpers.is_standard_major_station,
+                      is_major_station=amtrak.special_data.is_standard_major_station,
                       is_ardp_station="dwell")
         # NOTE, need to add the header
         timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
@@ -1027,7 +1029,7 @@ if __name__ == "__main__":
 
         # HTML version next:
         (timetable, styler_table, header_styling_list) = fill_template(template,
-                      is_major_station=amtrak_helpers.is_standard_major_station,
+                      is_major_station=amtrak.special_data.is_standard_major_station,
                       is_ardp_station="dwell",
                       doing_html=True,
                       box_characters=False,)

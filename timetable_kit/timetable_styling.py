@@ -18,8 +18,8 @@ import pandas as pd
 from pandas.io.formats.style import Styler
 
 # My packages
-# This imports the module by name
-from timetable_kit import amtrak_helpers
+# This imports the subpackage by name so we can just call it "amtrak"
+from timetable_kit import amtrak
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
@@ -46,10 +46,10 @@ def get_time_column_stylings(trains_spec, type="attributes"):
         raise InputError("expected class or attributes")
 
     train_number = trains_spec # Because we aren't parsing trains_spec yet -- FIXME
-    if amtrak_helpers.is_sleeper_train(train_number):
+    if amtrak.special_data.is_sleeper_train(train_number):
         color_css = "background-color: thistle;"
         color_css_class = "color-sleeper" # thistle
-    elif amtrak_helpers.is_bus(train_number):
+    elif amtrak.special_data.is_bus(train_number):
         color_css = "background-color: darkseagreen;"
         color_css_class = "color-bus"
     else:
