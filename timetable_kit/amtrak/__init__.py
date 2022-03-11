@@ -9,6 +9,7 @@
 #   amtrak.special_data.whatever
 # later on.  This doesn't seem to work without these lines.
 from . import (
+    agency_cleanup,
     special_data,
     station_name_styling,
     )

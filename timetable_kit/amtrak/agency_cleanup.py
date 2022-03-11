@@ -1,4 +1,4 @@
-# amtrak_agency_cleanup.py
+# amtrak/agency_cleanup.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
@@ -10,7 +10,7 @@ import pandas as pd
 import gtfs_kit as gk
 
 # This one is mine
-import gtfs_type_cleanup
+from timetable_kit import gtfs_type_cleanup # import the module name
 
 def indexed_agency(agency):
     """

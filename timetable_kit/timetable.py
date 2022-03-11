@@ -40,11 +40,12 @@ from timetable_kit.timetable_argparse import make_tt_arg_parser
 from timetable_kit import feed_enhanced
 
 from timetable_kit import gtfs_type_cleanup
-from timetable_kit import amtrak_agency_cleanup
 from timetable_kit import amtrak_json_stations
+
 from timetable_kit import amtrak as amtrak #  so we don't have to say "timetable_kit.amtrak"
 # Note that we will call out amtrak.special_data every time, to make it easier
 # to isolate Amtrak dependencies in the main code
+# Same with amtrak.agency_cleanup
 
 from timetable_kit import text_presentation
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -111,7 +112,9 @@ def initialize_feed():
 
     # Clean up Amtrak agency list.  Includes fixing types.
     # This is non-reversible, so give it its own variable.
-    enhanced_agency = amtrak_agency_cleanup.revised_amtrak_agencies(master_feed.agency)
+    enhanced_agency = amtrak.agency_cleanup.revised_amtrak_agencies(master_feed.agency)
+    # Go ahead and change the master feed copy.
+    master_feed.agency = enhanced_agency
 
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
