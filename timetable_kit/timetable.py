@@ -47,12 +47,15 @@ from timetable_kit import amtrak_helpers
 from timetable_kit import text_presentation
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
+    get_time_column_stylings,
     style_timetable_for_html,
     finish_html_timetable,
+    )
+
+from timetable_kit.amtrak.station_name_styling import (
     amtrak_station_name_to_html,
     amtrak_station_name_to_multiline_text,
     amtrak_station_name_to_single_line_text,
-    get_time_column_stylings,
     )
 
 # GLOBAL VARIABLES
