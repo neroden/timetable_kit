@@ -26,17 +26,24 @@ import argparse
 # GLOBAL VARIABLES
 # This is the station detail list for one station.
 station_details_url_prefix = "https://www.amtrak.com/content/amtrak/en-us/stations/"
-station_details_local_path_prefix = "./amtrak_stations/"
 station_details_url_infix = ".stationTabContainer."
 station_details_url_postfix = ".json"
 
 # This is the entire station list as json -- names and all.
 stations_json_url = "https://www.amtrak.com/services/data.stations.json"
-stations_json_local_pathname = station_details_local_path_prefix + "data.stations.json"
+
+# Now, where to put the local cached copy?
+# module_location = Path(__file__).parent
+# stations_under_module = module_location / "stations"
+#
+# working_directory = Path(".")
+# stations_under_wd = working_directory / "stations"
+
+station_details_dir = Path("./amtrak_stations")
 
 def stations_json_local_path():
     """Return local path for the data.stations.json file as a Path"""
-    return Path(stations_json_local_pathname);
+    return station_details_dir / "data.stations.json"
 
 def station_details_filename(station_code: str) -> str:
     """Return filename for a Amtrak station details JSON file"""
@@ -75,10 +82,8 @@ def station_details_local_path(station_code: str) -> str:
     if (len(station_code) != 3):
         raise ValueError("Station code not of length 3")
     filename = station_details_filename(station_code)
-    pathname = ''.join([station_details_local_path_prefix,
-                        filename,
-                       ])
-    return Path(pathname);
+    path = station_details_dir / filename
+    return path;
 
 def download_stations_json() -> str:
     """Download Amtrak's basic stations database as json text; return it."""
@@ -212,7 +217,7 @@ def make_arg_parser():
         action='store_true',
         )
     arg_parser.add_argument('--directory','-d',
-        help='Local directory to store Amtrak JSON station details in: default is ./amtrak_stations',
+        help='Local directory to store Amtrak JSON station details in: default is [module]/stations',
         dest='stations_dir_name',
         )
     return arg_parser;
@@ -224,16 +229,13 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     # This is ugly, clean it up later
-    stations_dir_name = "./amtrak_stations"
     if (args.stations_dir_name):
         # Possibly change the stations directory path globals
         # NOTE, we are not in a function so do not need global keyword
-        stations_dir_name = args.stations_dir_name
-        station_details_local_path_prefix = args.stations_dir_name + "/"
-        stations_json_local_pathname = station_details_local_path_prefix + "data.stations.json"
+        station_details_dir = Path(args.stations_dir_name)
     # Create the directory if it does not exist
-    if not ( Path(stations_dir_name).exists() ):
-        Path(stations_dir_name).mkdir(parents=True)
+    if not ( station_details_dir.exists() ):
+        station_details_dir.mkdir(parents=True)
 
     if (args.download):
         download_all_stations()
