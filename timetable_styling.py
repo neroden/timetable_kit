@@ -217,7 +217,7 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     # Dictionary merge, html_params take priority, Python 3.9
     full_page_params = stylesheet_params | html_params
 
-    # Get the Jinja template environment (set up in load_resources module)
+    # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template...
     page_tpl = template_environment.get_template("page_standard.html")
     # ...then render it.
@@ -315,4 +315,5 @@ def amtrak_station_name_to_html(station_name: str, major=False ) -> str:
                            enhanced_facility_name
                           ])
     return fancy_name
+
 
