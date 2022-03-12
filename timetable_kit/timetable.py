@@ -637,6 +637,23 @@ def stations_list_from_trip_short_name(today_feed, trip_short_name):
     # print (sorted_station_list)
     return sorted_station_list
 
+def service_dates_from_trip_id(feed, trip_id):
+    """
+    Given a single trip_id, get the associated service dates by looking up the service_id in the calendar
+
+    Returns an ordered pair (start_date, end_date)
+    """
+    # FIXME: The goal is to get the latest start date and earliest end date
+    # for all trains in a list.  Do this in a more "pandas" fashion.
+    service_id = feed.trips[feed.trips.trip_id == trip_id]["service_id"].squeeze()
+
+    calendar_row = feed.calendar[feed.calendar.service_id == service_id]
+
+    start_date = (calendar_row.start_date).squeeze()
+    end_date = (calendar_row.end_date).squeeze()
+
+    return [start_date, end_date]
+
 def get_timepoint (today_feed, trip_short_name, station_code):
     """
     Given a single train number (trip_short_name),  station_code, and a feed containing only one day, extract a single timepoint.
@@ -766,6 +783,8 @@ def fill_tt_spec(tt_spec,
 
     # Filter the feed to the relevant day.  master_feed and reference_date are globals.
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+    # To save time, here we must filter out all unwanted trains TODO
 
     tt = tt_spec.copy() # "deep" copy
     styler_t = tt_spec.copy() # another "deep" copy, parallel
@@ -1083,9 +1102,12 @@ if __name__ == "__main__":
         quit()
 
     if (args.type == "test"):
+        result = service_dates_from_trip_id(master_feed, 5002831767)
+        print (result)
+        quit()
+
         new_feed = master_feed.filter_remove_one_day_calendars()
         printable_calendar = gtfs_type_cleanup.type_uncorrected_calendar(new_feed.calendar)
-
         module_dir = Path(__file__).parent
         printable_calendar.to_csv( module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False)
         print ("calendar without one-day calendars created")
