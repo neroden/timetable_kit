@@ -17,3 +17,4 @@ from . import (
 
 # Trying this, not sure about it
 from .get_gtfs import gtfs_zip_local_path
+from .get_gtfs import gtfs_unzipped_local_path

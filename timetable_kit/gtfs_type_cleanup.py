@@ -14,16 +14,16 @@ import gtfs_kit as gk
 
 def type_corrected_agency(agency):
     """
-    Return copy of agency DataFrame with integer types in appropriate columns.  Sort by agency_id.
+    Return copy of agency DataFrame with integer types in appropriate columns.
 
-    Take raw agency DataFrame, type-correct the agency ID, sort by it.  Can be repeated.
+    Take raw agency DataFrame, type-correct the agency ID.  Can be repeated.
     """
     new_agency = agency.astype({'agency_id': 'int32'})
-    new_agency_2 = new_agency.sort_values(by=['agency_id'])
-    return new_agency_2
+    # new_agency_2 = new_agency.sort_values(by=['agency_id'])
+    return new_agency
 
 def type_corrected_calendar(calendar):
-    """Return copy of calendar DataFrame with integer types in appropriate columns.  Sort by service_id."""
+    """Return copy of calendar DataFrame with integer types in appropriate columns."""
     new_calendar = calendar.astype({'service_id': 'int32',
                                     'monday': 'bool',
                                     'tuesday': 'bool',
@@ -35,27 +35,42 @@ def type_corrected_calendar(calendar):
                                     'start_date': 'int32',
                                     'end_date': 'int32'
                                    })
-    new_calendar_2 = new_calendar.sort_values(by=['service_id'])
-    return new_calendar_2
+    # new_calendar_2 = new_calendar.sort_values(by=['service_id'])
+    return new_calendar
+
+def type_uncorrected_calendar(calendar):
+    """Return copy of calendar DataFrame with bools cast back to ints."""
+    new_calendar = calendar.astype({'service_id': 'int32',
+                                    'monday': 'int32',
+                                    'tuesday': 'int32',
+                                    'wednesday': 'int32',
+                                    'thursday': 'int32',
+                                    'friday': 'int32',
+                                    'saturday': 'int32',
+                                    'sunday': 'int32',
+                                    'start_date': 'int32',
+                                    'end_date': 'int32'
+                                   })
+    return new_calendar
 
 def type_corrected_routes(routes):
-    """Return copy of routes DataFrame with integer types in appropriate columns.  Sort by route_id."""
+    """Return copy of routes DataFrame with integer types in appropriate columns."""
     new_routes = routes.astype({'route_id': 'int32',
                                 'agency_id': 'int32',
                                 'route_type': 'int32' # 2 for trains, 3 for buses
                                })
-    new_routes_2 = new_routes.sort_values(by=['route_id'])
-    return new_routes_2
+    # new_routes_2 = new_routes.sort_values(by=['route_id'])
+    return new_routes
 
 def type_corrected_stop_times(stop_times):
-    """Return copy of stop_times with integer types in appropriate columns.  Sort by trip_id."""
+    """Return copy of stop_times with integer types in appropriate columns."""
     new_stop_times = stop_times.astype({'trip_id': 'int64',
                                         'stop_sequence': 'int32',
                                         'pickup_type': 'int32', # 1 = dropoff only, 2/3 = flag stop
                                         'drop_off_type': 'int32' # 1 = pickup only, 2/3 = flag stop
                                        })
-    new_stop_times_2 = new_stop_times.sort_values(by=['trip_id'])
-    return new_stop_times_2
+    # new_stop_times_2 = new_stop_times.sort_values(by=['trip_id'])
+    return new_stop_times
 
 def type_corrected_trips(trips):
     """

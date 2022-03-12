@@ -102,6 +102,25 @@ def filter_bad_service_ids(self, bad_service_ids):
     new_feed.calendar = filtered_calendar
     return new_feed
 
+def filter_remove_one_day_calendars(self):
+    """
+    Remove all service_ids which are effective for only one day.
+
+    Amtrak has a bad habit of listing one-day calendars in its GTFS.  This isn't really
+    what we want for a printed timetable.  Worse, some of them actually overlap with the
+    calendars for other dates.  Brute-force the problem by eliminating all of them.
+    """
+    new_feed = self.copy()
+    # First filter the calendar
+    filtered_calendar = self.calendar[self.calendar.start_date != self.calendar.end_date]
+    new_feed.calendar = filtered_calendar
+    # Kill service_ids not in the new calendar
+    service_ids = new_feed.calendar["service_id"].array
+    # Then filter the trips.
+    new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
+    return new_feed
+
+
 def filter_by_trip_short_names(self, trip_short_names):
     """
     Filter the entire feed to include only services with the specified trip_short_names (a list)
@@ -154,6 +173,8 @@ def get_single_trip(self):
     if (num_rows == 0):
         raise NoTripError("Expected single trip: no trips in filtered trips table", self.trips)
     elif (num_rows > 1):
+        # FIXME: important to print this now
+        print( self.trips )
         raise TwoTripsError("Expected single trip: too many trips in filtered trips table", self.trips)
     this_trip_today = self.trips.iloc[0]
     return this_trip_today
@@ -192,6 +213,7 @@ gk.Feed.filter_by_dates = filter_by_dates
 gk.Feed.filter_by_route_ids = filter_by_route_ids
 gk.Feed.filter_by_service_ids = filter_by_service_ids
 gk.Feed.filter_bad_service_ids = filter_bad_service_ids
+gk.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
 gk.Feed.filter_by_trip_short_names = filter_by_trip_short_names
 gk.Feed.filter_by_trip_ids = filter_by_trip_ids
 gk.Feed.get_single_trip = get_single_trip

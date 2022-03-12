@@ -17,16 +17,16 @@ def make_tt_arg_parser():
         description='''Produce printable HTML timetable.
 The --type argument determines the type of timetable:
   single - single one-way timetable (mostly for testing)
-  fill - timetable made by filling a CSV tt-spec template
-  stations - create station list CSV file, in order, from single train number (for making tt-spec templates)
-  make-spec - create template for use with fancy (edit this by hand afterwards - not working)
-  compare - compare timetables for trips on a single route (to spot schedule changes for template making -- do not generate timetable)
+  fill - timetable made from a tt-spec
+  stations - create station list CSV file, in order, from single train number (for making tt-specs)
+  make-spec - create tt-spec for use with fancy (edit this by hand afterwards - not working)
+  compare - compare timetables for trips on a single route (to spot schedule changes for tt-spec making -- do not generate timetable)
   test - do internal testing (do not generate timetable)
 ''',
         )
     parser.add_argument('--type','-t',
         choices=['single','fill','stations','make-spec','compare','test'],
-        help='What to do: type of timetable or template to generate.',
+        help='What to do: type of timetable or tt-spec to generate.',
         )
     parser.add_argument('--gtfs','-g',
         dest='gtfs_filename',
@@ -35,7 +35,7 @@ The --type argument determines the type of timetable:
                 or URL for zipped GTFS static data feed''',
         )
     parser.add_argument('--spec','-l',
-        dest='template_filename',
+        dest='tt_spec_filename',
         help='''CSV file containing tt-spec template for timetable.
                 Top row should have a train number in each column except the first.
                 A minus sign in front of train number indicates that column is read upward;

@@ -12,11 +12,12 @@ timetable.py --help gives documentation
 
 # Other people's packages
 import argparse
+
 from pathlib import Path
 import os.path # for os.path abilities
+import sys # Solely for sys.path
 
-# Solely for sys.path
-import sys
+import datetime # for current date, tommorrow, etc.
 
 import pandas as pd
 import gtfs_kit as gk
@@ -65,12 +66,12 @@ from timetable_kit.amtrak.station_name_styling import (
 # Will be changed by command-line arguments, hopefully!
 # Debugging on?
 debug = True
-# The Amtrak GTFS feed file -- FIXME, this is hackish
-gtfs_filename = str( amtrak.gtfs_zip_local_path )
+# The Amtrak GTFS feed files -- FIXME, this is hackish
+gtfs_filename = str( amtrak.gtfs_unzipped_local_path )
 # The output directory
 output_dirname="."
-# The date we are preparing timetables for (overrideable on command line)
-reference_date = 20211202
+# The date we are preparing timetables for (redefine after reading command line)
+reference_date = None
 
 # GLOBAL VARIABLES
 # The master variable for the feed; overwritten in initialize_feed
@@ -158,27 +159,27 @@ def station_name(code):
     """Given a station code, return the printable name."""
     return lookup_station_name[code]
 
-### Template loading and parsing code
+### tt-spec loading and parsing code
 
-def load_template(csv_filename):
-    """Load a tt-spec template from a CSV file"""
-    template = pd.read_csv(csv_filename, index_col=False, header=None, dtype = str)
-    return template
+def load_tt_spec(filename):
+    """Load a tt-spec from a CSV file"""
+    tt_spec = pd.read_csv(filename, index_col=False, header=None, dtype = str)
+    return tt_spec
 
-def augment_template(raw_template):
+def augment_tt_spec(raw_tt_spec):
     """
-    Fill in the station list for a tt-spec template if it has a key code.
+    Fill in the station list for a tt-spec if it has a key code.
 
     Cell 0,0 is normally blank.
-    If it is "Stations of 59", then (a) assume there is only one template row;
+    If it is "Stations of 59", then (a) assume there is only one tt-spec row;
     (b) get the stations for 59 and fill the rows in from that
 
     Uses the globals master_feed and reference_date.
     """
-    if (pd.isna(raw_template.iloc[0,0]) ):
+    if (pd.isna(raw_tt_spec.iloc[0,0]) ):
         # No key code, nothing to do
-        return template
-    key_code = str(raw_template.iloc[0,0])
+        return tt_spec
+    key_code = str(raw_tt_spec.iloc[0,0])
     # print("Key code: " + key_code)
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
@@ -186,25 +187,25 @@ def augment_template(raw_template):
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
         # And pull the stations list
         stations_df = stations_list_from_trip_short_name(today_feed, key_train_name)
-        new_template = raw_template.iloc[0:,] # Get first row
-        new_template.iloc[0,0] = float("nan") # Blank out key_code
-        newer_template = pd.concat([new_template,stations_df]) # Yes, this works
-        return newer_template
+        new_tt_spec = raw_tt_spec.iloc[0:,] # Get first row
+        new_tt_spec.iloc[0,0] = float("nan") # Blank out key_code
+        newer_tt_spec = pd.concat([new_tt_spec,stations_df]) # Yes, this works
+        return newer_tt_spec
 
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
     return
 
-def stations_list_from_template(template):
-    """Given a template dataframe, return the station list as a list of strings"""
-    stations_df = template.iloc[1:,0]
+def stations_list_from_tt_spec(tt_spec):
+    """Given a tt_spec dataframe, return the station list as a list of strings"""
+    stations_df = tt_spec.iloc[1:,0]
     stations_list_raw = stations_df.to_list()
     stations_list_strings = [str(i) for i in stations_list_raw]
     stations_list = [i.strip() for i in stations_list_strings if i.strip() != '']
     return stations_list
 
-def trains_list_from_template(template):
-    """Given a template dataframe, return the trains list as a list of strings"""
-    trains_df = template.iloc[0,1:]
+def trains_list_from_tt_spec(tt_spec):
+    """Given a tt_spec dataframe, return the trains list as a list of strings"""
+    trains_df = tt_spec.iloc[0,1:]
     trains_list_raw = trains_df.to_list()
     trains_list_strings = [str(i) for i in trains_list_raw]
     trains_list = [i.strip() for i in trains_list_strings]
@@ -247,7 +248,7 @@ def flatten_trains_list(trains_list):
     """
     Take a nested list of trains and make a flast list of trains.
 
-    Take a list of trains as specified in a template such as [NaN,'174','178/21','stations','23/1482']
+    Take a list of trains as specified in a tt_spec such as [NaN,'174','178/21','stations','23/1482']
     and make a flat list of all trains involved ['174','178','21','23','1482']
     without the special keywords like "station".
     """
@@ -603,7 +604,7 @@ def print_single_trip_tt(trip):
     timetable_txt.to_csv(output_pathname_before_suffix + ".csv", index=False)
     return
 
-#### Subroutines for fill_template
+#### Subroutines for fill_tt_spec
 
 def trip_from_trip_short_name(today_feed, trip_short_name):
     """
@@ -623,7 +624,7 @@ def stations_list_from_trip_short_name(today_feed, trip_short_name):
     Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list.
 
     Produces a station list dataframe.
-    This is used in augment_template, and via the "stations" command.
+    This is used in augment_tt_spec, and via the "stations" command.
 
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
@@ -696,22 +697,22 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     dwell_secs = departure_secs - arrival_secs
     return dwell_secs
 
-def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
+def make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff):
     """
-    Return a dict from station_code to True/False, based on the trains in the template.
+    Return a dict from station_code to True/False, based on the trains in the tt_spec.
 
     Expects a feed already filtered to a single date.
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
-    First we extract the list of stations and the list of train names from the template.
+    First we extract the list of stations and the list of train names from the tt_spec.
 
     If any train in train_nums has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
-    # First get stations and trains list from template.
-    stations_list = stations_list_from_template(template)
-    trains_list = trains_list_from_template(template) # Note still contains "/" items
+    # First get stations and trains list from tt_spec.
+    stations_list = stations_list_from_tt_spec(tt_spec)
+    trains_list = trains_list_from_tt_spec(tt_spec) # Note still contains "/" items
     flattened_trains_set = flatten_trains_list(trains_list)
 
     # Now create a reduced GTFS database to look through
@@ -732,7 +733,7 @@ def make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff):
 
 ### Work for main multi-train timetable factory:
 
-def fill_template(template,
+def fill_tt_spec(tt_spec,
                   doing_html=False,
                   box_characters=False,
                   doing_multiline_text=True,
@@ -740,9 +741,9 @@ def fill_template(template,
                   is_ardp_station="dwell", dwell_secs_cutoff=300,
                  ):
     """
-    Fill a tt-spec template using GTFS data
+    Fill a timetable from a tt-spec template using GTFS data
 
-    The tt-spec template must be complete (run augment_template first)
+    The tt-spec must be complete (run augment_tt_spec first)
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
     box_characters: Box every character in the time in an HTML box to make them line up.
         For use with fonts which don't have tabular nums.
@@ -758,7 +759,7 @@ def fill_template(template,
         "False" means false for all; "True" means true for all
         Default is "dwell" (case sensitive), which uses dwell_secs_cutoff.
     dwell_secs_cutoff: Show arrival & departure times if dwell time is this many seconds
-        or higher for some train in the template
+        or higher for some train in the tt_spec
         Defaults to 300, meaning 5 minutes.
         Probably don't want to ever make it less than 1 minute.
     """
@@ -766,8 +767,8 @@ def fill_template(template,
     # Filter the feed to the relevant day.  master_feed and reference_date are globals.
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
-    tt = template.copy() # "deep" copy
-    styler_t = template.copy() # another "deep" copy, parallel
+    tt = tt_spec.copy() # "deep" copy
+    styler_t = tt_spec.copy() # another "deep" copy, parallel
 
     # Load variable function for station name printing
     prettyprint_station_name = None
@@ -795,7 +796,7 @@ def fill_template(template,
         is_ardp_station = ( lambda station_code : True )
     elif (is_ardp_station == "dwell"):
         # Prep max dwell map
-        stations_max_dwell_map = make_stations_max_dwell_map (today_feed, template, dwell_secs_cutoff)
+        stations_max_dwell_map = make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff)
         is_ardp_station = lambda station_code : stations_max_dwell_map[station_code]
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
@@ -813,14 +814,14 @@ def fill_template(template,
     # borders_initial_css="border-top-heavy"
     # Have to add "initial" and "final" with heavy borders
 
-    [row_count, column_count] = template.shape
+    [row_count, column_count] = tt_spec.shape
 
     header_replacement_list = [] # list, will fill in as we go
     header_styling_list = [] # list, to match column numbers.  Will fill in as we go
     this_column_gets_ardp = True # First column should
     next_column_gets_ardp = False # Subsequent columns shouldn't... usually
     for x in range(1, column_count): # First (0) column is the station code
-        train_nums_str = str(template.iloc[0, x]).strip() # row 0, column x
+        train_nums_str = str(tt_spec.iloc[0, x]).strip() # row 0, column x
 
         if train_nums_str in ["station","stations"]:
             station_column_header = text_presentation.get_station_column_header(doing_html=doing_html)
@@ -847,7 +848,7 @@ def fill_template(template,
                 header_styling_list.append("")
 
         for y in range(1, row_count): # First (0) row is the header
-            station_code = template.iloc[y, 0] # row y, column 0
+            station_code = tt_spec.iloc[y, 0] # row y, column 0
             # Reset the styler string:
             cell_css_list = [base_cell_css]
 
@@ -943,9 +944,9 @@ def fill_template(template,
 #### NEW MAIN PROGRAM ####
 ##########################
 if __name__ == "__main__":
-    print ( "Dumping sys.path for clarity:")
-    print ( sys.path )
-    print ("Made it to the main program")
+    # print ( "Dumping sys.path for clarity:")
+    # print ( sys.path )
+    # print ("Made it to the main program")
 
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
@@ -956,8 +957,15 @@ if __name__ == "__main__":
         gtfs_filename = args.gtfs_filename
     if (args.output_dirname):
         output_dirname = args.output_dirname
+
     if (args.reference_date):
-        reference_date = args.reference_date
+        reference_date = int( args.reference_date.strip() )
+    else:
+        # Use tomorrow as the reference date.
+        # After all, you aren't catching a train today, right?
+        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+        reference_date = int( tomorrow.strftime('%Y%m%d') )
+    print("Working with reference date ", reference_date, ".", sep="")
 
     initialize_feed() # This sets various globals
 
@@ -1001,7 +1009,7 @@ if __name__ == "__main__":
         quit()
 
     if (args.type == "make-spec"):
-        # Make a template (work in progress)
+        # Make a tt_spec (work in progress)
         print ("unfinished")
         make_spec()
         quit()
@@ -1014,15 +1022,15 @@ if __name__ == "__main__":
     if (args.type == "fill"):
 
         # Accept with or without .spec
-        tt_filename_base = args.template_filename.removesuffix(".tt-spec")
-        template_filename = tt_filename_base + ".tt-spec"
+        tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
+        tt_spec_filename = tt_filename_base + ".tt-spec"
 
-        template = load_template(template_filename)
-        template = augment_template(template)
-        print ("template loaded and augmented")
+        tt_spec = load_tt_spec(tt_spec_filename)
+        tt_spec = augment_tt_spec(tt_spec)
+        print ("tt-spec loaded and augmented")
 
         # CSV version first:
-        (timetable, styler_table, header_styling) = fill_template(template,
+        (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
                       is_major_station=amtrak.special_data.is_standard_major_station,
                       is_ardp_station="dwell")
         # NOTE, need to add the header
@@ -1030,7 +1038,7 @@ if __name__ == "__main__":
         print ("CSV done")
 
         # HTML version next:
-        (timetable, styler_table, header_styling_list) = fill_template(template,
+        (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
                       is_major_station=amtrak.special_data.is_standard_major_station,
                       is_ardp_station="dwell",
                       doing_html=True,
@@ -1075,16 +1083,24 @@ if __name__ == "__main__":
         quit()
 
     if (args.type == "test"):
+        new_feed = master_feed.filter_remove_one_day_calendars()
+        printable_calendar = gtfs_type_cleanup.type_uncorrected_calendar(new_feed.calendar)
+
+        module_dir = Path(__file__).parent
+        printable_calendar.to_csv( module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False)
+        print ("calendar without one-day calendars created")
+        quit()
+        
         print(master_feed.get_trip_short_name(55792814913))
         quit()
 
-        template = load_template(args.template_filename)
-        template = augment_template(template)
+        tt_spec = load_tt_spec(args.tt_spec_filename)
+        tt_spec = augment_tt_spec(tt_spec)
         dwell_secs = get_dwell_secs("59","CDL")
         print("Dwell is", dwell_secs)
         quit()
 
-        print(stations_list_from_template(new_template))
+        print(stations_list_from_tt_spec(new_tt_spec))
         name = lookup_station_name["BUF"]
         fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
         print(fancy_name);
