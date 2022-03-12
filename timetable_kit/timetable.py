@@ -33,6 +33,8 @@ from timetable_kit.errors import (
     GTFSError,
     NoStopError,
     TwoStopsError,
+    NoTripError,
+    TwoTripsError,
     InputError
 )
 from timetable_kit.timetable_argparse import make_tt_arg_parser
@@ -615,8 +617,11 @@ def trip_from_trip_short_name(today_feed, trip_short_name):
     """
     # Note that reference_date and master_feed are globals.
     single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
-    this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
-
+    try:
+        this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
+    except NoTripError:
+        print ("Found no trips for ", trip_short_name)
+        raise
     return this_trip_today
 
 def stations_list_from_trip_short_name(today_feed, trip_short_name):
@@ -987,6 +992,8 @@ if __name__ == "__main__":
     print("Working with reference date ", reference_date, ".", sep="")
 
     initialize_feed() # This sets various globals
+
+    print("Feed initialized")
 
     # Create the station name lookup table, a global
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
