@@ -106,8 +106,9 @@ def initialize_feed():
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
     master_feed = gk.read_feed(path, dist_units='mi')
-
-    master_feed.validate()
+    print("Feed loaded.")
+    # Don't waste time.
+    # master_feed.validate()
 
     # Fix types on every table in the feed
     gtfs_type_cleanup.fix(master_feed)
@@ -168,7 +169,7 @@ def load_tt_spec(filename):
     tt_spec = pd.read_csv(filename, index_col=False, header=None, dtype = str)
     return tt_spec
 
-def augment_tt_spec(raw_tt_spec):
+def augment_tt_spec(raw_tt_spec, *, feed, reference_date):
     """
     Fill in the station list for a tt-spec if it has a key code.
 
@@ -176,7 +177,7 @@ def augment_tt_spec(raw_tt_spec):
     If it is "Stations of 59", then (a) assume there is only one tt-spec row;
     (b) get the stations for 59 and fill the rows in from that
 
-    Uses the globals master_feed and reference_date.
+    Requires a feed and a reference_date.
     """
     if (pd.isna(raw_tt_spec.iloc[0,0]) ):
         # No key code, nothing to do
@@ -186,7 +187,7 @@ def augment_tt_spec(raw_tt_spec):
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
         # Filter the feed down to a single date...
-        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+        today_feed = feed.filter_by_dates(reference_date, reference_date)
         # And pull the stations list
         stations_df = stations_list_from_trip_short_name(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.iloc[0:,] # Get first row
@@ -267,7 +268,7 @@ def flatten_trains_list(trains_list):
 
 ### "Compare" Debugging routines to check for changes in timetable
 
-def compare_stop_lists(base_trip, trips):
+def compare_stop_lists(base_trip, trips, *, feed):
     """
     Find the diff between one trip and a bunch of other (presumably similar) trips.
 
@@ -286,10 +287,10 @@ def compare_stop_lists(base_trip, trips):
         print ("Only 1 trip, stopping.")
         return
     # Drop the trip_id because it will always compare differently
-    base_stop_times = master_feed.get_single_trip_stop_times(base_trip["trip_id"])
+    base_stop_times = feed.get_single_trip_stop_times(base_trip["trip_id"])
     base_stop_times = base_stop_times.drop(["trip_id"], axis="columns")
     for trip in (trips.itertuples()):
-        stop_times = master_feed.get_single_trip_stop_times(trip.trip_id)
+        stop_times = feed.get_single_trip_stop_times(trip.trip_id)
         stop_times = stop_times.drop(["trip_id"],axis="columns")
         # Use powerful features of DataTable
         comparison = base_stop_times.compare(stop_times, align_axis="columns", keep_shape=True)
@@ -320,29 +321,28 @@ def compare_stop_lists(base_trip, trips):
             print( enhanced_comparison )
     return
 
-def compare_similar_services(route_id):
+def compare_similar_services(route_id, *, feed):
     """
     Find timing differences on a route between similar services.
 
     Used to see how many services with different dates are actually the same service
     """
-    route_feed = master_feed.filter_by_route_ids([route_id])
-    feed = route_feed.filter_bad_service_ids(amtrak.special_data.global_bad_service_ids)
+    route_feed = feed.filter_by_route_ids([route_id])
 
     print("Calendar:")
-    print(feed.calendar)
+    print(route_feed.calendar)
 
     print("Downbound:")
-    downbound_trips = feed.trips[feed.trips.direction_id == 0] # W for LSL
+    downbound_trips = route_feed.trips[route_feed.trips.direction_id == 0] # W for LSL
     print(downbound_trips)
     base_trip = downbound_trips.iloc[0, :] # row 0, all columns
-    compare_stop_lists(base_trip,downbound_trips)
+    compare_stop_lists(base_trip,downbound_trips, feed=route_feed)
 
     print("Upbound:")
-    upbound_trips = feed.trips[feed.trips.direction_id == 1] # E for LSL
+    upbound_trips = route_feed.trips[route_feed.trips.direction_id == 1] # E for LSL
     print(upbound_trips)
     base_trip = upbound_trips.iloc[0, :] # row 0, all columns
-    compare_stop_lists(base_trip,upbound_trips)
+    compare_stop_lists(base_trip,upbound_trips, feed=route_feed)
     return
 
 ### Timetable prototype generation (nonfunctional)
@@ -674,6 +674,7 @@ def get_timepoint (today_feed, trip_short_name, station_code):
     (probably because the feed has multiple dates in it)
     """
     trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
+    print("debug in get_timepoint:", trip_short_name, trip_id)
     stop_times = today_feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     if (timepoint_df.shape[0] == 0):
@@ -702,6 +703,7 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     Used primarily to determine whether to put both arrival and departure times
     in the timetable for this station.
     """
+    print("debug:", trip_short_name, station_code)
     timepoint = get_timepoint(today_feed, trip_short_name, station_code)
     if (timepoint is None):
         # If the train doesn't stop there, the dwell time is zero;
@@ -1042,7 +1044,7 @@ if __name__ == "__main__":
 
     if (args.type == "compare"):
         route_long_name = args.route_long_name
-        compare_similar_services(route_id(route_long_name))
+        compare_similar_services(route_id(route_long_name), feed=master_feed)
         quit()
 
     if (args.type == "fill"):
@@ -1052,7 +1054,7 @@ if __name__ == "__main__":
         tt_spec_filename = tt_filename_base + ".tt-spec"
 
         tt_spec = load_tt_spec(tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec)
+        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, reference_date=reference_date)
         print ("tt-spec loaded and augmented")
 
         # CSV version first:
@@ -1124,7 +1126,7 @@ if __name__ == "__main__":
         quit()
 
         tt_spec = load_tt_spec(args.tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec)
+        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, reference_date=reference_date)
         dwell_secs = get_dwell_secs("59","CDL")
         print("Dwell is", dwell_secs)
         quit()

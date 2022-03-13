@@ -51,10 +51,11 @@ def filter_by_route_ids(self, route_ids):
     Returns a new filtered feed (original feed unchanged)
     - filters routes and trips (direct)
     - filters calendar (by service_ids in trips)
+    - filters stop_times (by trip_ids in trips)
     - FIXME: no other second-layer filtering
     - filtered trips is used for timetable generation
     - filtered routes is not currently used
-    - filtered calendar and trips are used in compare_similar_services
+    - filtered calendar, trips, and stop_times are used in compare_similar_services
     """
     new_feed = self.copy()
     filtered_trips = self.trips[self.trips.route_id.isin(route_ids)]
@@ -64,6 +65,10 @@ def filter_by_route_ids(self, route_ids):
     # Now filter the calendar by the service_ids in the trips array
     service_ids = new_feed.trips["service_id"].array
     new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
+    # Now filter the stop_times by the trip_ids in the trips array
+    trip_ids = new_feed.trips["trip_id"].array
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+
     return new_feed
 
 def filter_by_service_ids(self, service_ids):
