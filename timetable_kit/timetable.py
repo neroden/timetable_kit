@@ -153,10 +153,7 @@ def fix_known_errors(feed):
 
 ### END OF INITIALIZATION CODE
 
-# Convenience functions for the currently-global route_id and station_name lookup tables
-def route_id(route_name):
-    """Given a route long name, return the ID."""
-    return lookup_route_id[route_name]
+# Convenience functions for the currently-global station_name lookup tables
 
 def station_name(code):
     """Given a station code, return the printable name."""
@@ -344,29 +341,6 @@ def compare_similar_services(route_id, *, feed):
     base_trip = upbound_trips.iloc[0, :] # row 0, all columns
     compare_stop_lists(base_trip,upbound_trips, feed=route_feed)
     return
-
-### Timetable prototype generation (nonfunctional)
-
-def make_spec():
-    """Not ready to use: put to one side for testing purposes"""
-    # Creates a prototype timetable.  It will definitely need to be manipulated by hand.
-    # Totally incomplete. FIXME
-    route_ids = [route_id("Illini"),route_id("Saluki"),route_id("City Of New Orleans")]
-
-    route_feed = master_feed.filter_by_route_ids(route_ids)
-    today_feed = route_feed.filter_by_dates(reference_date, reference_date)
-    # reference_date is currently a global
-
-    print("Allbound:")
-    print(today_feed.trips)
-
-    print("Upbound:")
-    up_trips = today_feed.trips[today_feed.trips.direction_id == 0]
-    print(up_trips)
-
-    print("Downbound:")
-    down_trips = today_feed.trips[today_feed.trips.direction_id == 1]
-    print(down_trips)
 
 ### First, simplistic, timetable production attempt
 
@@ -1038,13 +1012,14 @@ if __name__ == "__main__":
 
     if (args.type == "make-spec"):
         # Make a tt_spec (work in progress)
-        print ("unfinished")
-        make_spec()
+        print ("unimplemented")
         quit()
 
     if (args.type == "compare"):
         route_long_name = args.route_long_name
-        compare_similar_services(route_id(route_long_name), feed=master_feed)
+        route_id = lookup_route_id[route_long_name]
+
+        compare_similar_services(route_id, feed=master_feed)
         quit()
 
     if (args.type == "fill"):
