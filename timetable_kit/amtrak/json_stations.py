@@ -159,7 +159,7 @@ def download_one_station(station_code: str):
     save_station_details(station_code, station_details)
 
 
-def download_all_stations(sleep_secs: float = 0.0):
+def download_all_stations(sleep_secs: float = 1.0):
     """
     Download all of Amtrak's station details files.
 
