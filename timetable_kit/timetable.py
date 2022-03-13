@@ -166,7 +166,7 @@ def load_tt_spec(filename):
     tt_spec = pd.read_csv(filename, index_col=False, header=None, dtype = str)
     return tt_spec
 
-def augment_tt_spec(raw_tt_spec, *, feed, reference_date):
+def augment_tt_spec(raw_tt_spec, *, feed, date):
     """
     Fill in the station list for a tt-spec if it has a key code.
 
@@ -174,7 +174,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, reference_date):
     If it is "Stations of 59", then (a) assume there is only one tt-spec row;
     (b) get the stations for 59 and fill the rows in from that
 
-    Requires a feed and a reference_date.
+    Requires a feed and a date (the reference date; the train may change by date).
     """
     if (pd.isna(raw_tt_spec.iloc[0,0]) ):
         # No key code, nothing to do
@@ -184,7 +184,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, reference_date):
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
         # Filter the feed down to a single date...
-        today_feed = feed.filter_by_dates(reference_date, reference_date)
+        today_feed = feed.filter_by_dates(date, date)
         # And pull the stations list
         stations_df = stations_list_from_trip_short_name(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.iloc[0:,] # Get first row
@@ -506,11 +506,12 @@ def format_single_trip_timetable(stop_times,
     print(new_timetable)
     return (new_timetable, new_styler, header_styling_list)
 
-def print_single_trip_tt(trip, *, feed):
+def print_single_trip_tt(trip, *, feed, date):
     """
     Print a single trip timetable (including Cardinal and Sunset but not Texas Eagle)
 
     Probably not that useful, but proof of concept
+    Requires a feed and a date
     """
 
     stop_times = feed.get_single_trip_stop_times(trip.trip_id)
@@ -518,7 +519,7 @@ def print_single_trip_tt(trip, *, feed):
 
     # Extract the service days of the week
     # Filter to the calendar for the specific service
-    today_feed = feed.filter_by_dates(reference_date, reference_date)
+    today_feed = feed.filter_by_dates(date, date)
     this_feed = today_feed.filter_by_service_ids([trip.service_id])
 
     # Should give exactly one calendar -- we don't test that here, though
@@ -589,7 +590,6 @@ def trip_from_trip_short_name(today_feed, trip_short_name):
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
     """
-    # Note that reference_date and master_feed are globals.
     single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
     try:
         this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
@@ -714,7 +714,6 @@ def make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff):
     flattened_trains_set = flatten_trains_list(trains_list)
 
     # Now create a reduced GTFS database to look through
-    # Note that reference_date and master_feed are globals.
     reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
 
     # Prepare the dict to return
@@ -732,16 +731,23 @@ def make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff):
 ### Work for main multi-train timetable factory:
 
 def fill_tt_spec(tt_spec,
+                  *,
+                  feed,
+                  date,
                   doing_html=False,
                   box_characters=False,
                   doing_multiline_text=True,
                   is_major_station="standard",
-                  is_ardp_station="dwell", dwell_secs_cutoff=300,
+                  is_ardp_station="dwell",
+                  dwell_secs_cutoff=300,
                  ):
     """
     Fill a timetable from a tt-spec template using GTFS data
 
     The tt-spec must be complete (run augment_tt_spec first)
+    feed: GTFS feed to work with.  Mandatory.
+    date: Reference date to get timetable for.  Default passed at command line. FIXME
+
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
     box_characters: Box every character in the time in an HTML box to make them line up.
         For use with fonts which don't have tabular nums.
@@ -762,8 +768,13 @@ def fill_tt_spec(tt_spec,
         Probably don't want to ever make it less than 1 minute.
     """
 
-    # Filter the feed to the relevant day.  master_feed and reference_date are globals.
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+    if feed is None:
+        raise InputError("No feed passed to fill_tt_spec")
+    if date is None:
+        raise InputError("No date passed to fill_tt_spec")
+
+    # Filter the feed to the relevant day.
+    today_feed = feed.filter_by_dates(date, date)
 
     # To save time, here we must filter out all unwanted trains TODO
 
@@ -1008,7 +1019,7 @@ if __name__ == "__main__":
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
         trip = trip_from_trip_short_name(today_feed, trip_short_name)
 
-        print_single_trip_tt(trip, feed=today_feed)
+        print_single_trip_tt(trip, feed=today_feed, date=reference_date)
         quit()
 
     if (args.type == "make-spec"):
@@ -1030,23 +1041,27 @@ if __name__ == "__main__":
         tt_spec_filename = tt_filename_base + ".tt-spec"
 
         tt_spec = load_tt_spec(tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, reference_date=reference_date)
+        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
         print ("tt-spec loaded and augmented")
 
         # CSV version first:
         (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
-                      is_major_station=amtrak.special_data.is_standard_major_station,
-                      is_ardp_station="dwell")
+                        feed = master_feed,
+                        date = reference_date,
+                        is_major_station=amtrak.special_data.is_standard_major_station,
+                        is_ardp_station="dwell")
         # NOTE, need to add the header
         timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
         print ("CSV done")
 
         # HTML version next:
         (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
-                      is_major_station=amtrak.special_data.is_standard_major_station,
-                      is_ardp_station="dwell",
-                      doing_html=True,
-                      box_characters=False,)
+                        feed = master_feed,
+                        date = reference_date,
+                        is_major_station=amtrak.special_data.is_standard_major_station,
+                        is_ardp_station="dwell",
+                        doing_html=True,
+                        box_characters=False,)
 
         # Temporary output, until styler work is done
         #tt_html = timetable.to_html()
@@ -1097,12 +1112,12 @@ if __name__ == "__main__":
         printable_calendar.to_csv( module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False)
         print ("calendar without one-day calendars created")
         quit()
-        
+
         print(master_feed.get_trip_short_name(55792814913))
         quit()
 
         tt_spec = load_tt_spec(args.tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, reference_date=reference_date)
+        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
         dwell_secs = get_dwell_secs("59","CDL")
         print("Dwell is", dwell_secs)
         quit()
