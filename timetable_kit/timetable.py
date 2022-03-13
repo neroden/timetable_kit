@@ -506,19 +506,19 @@ def format_single_trip_timetable(stop_times,
     print(new_timetable)
     return (new_timetable, new_styler, header_styling_list)
 
-def print_single_trip_tt(trip):
+def print_single_trip_tt(trip, *, feed):
     """
     Print a single trip timetable (including Cardinal and Sunset but not Texas Eagle)
 
     Probably not that useful, but proof of concept
     """
 
-    stop_times = master_feed.get_single_trip_stop_times(trip.trip_id)
+    stop_times = feed.get_single_trip_stop_times(trip.trip_id)
     train_number = trip.trip_short_name
 
     # Extract the service days of the week
     # Filter to the calendar for the specific service
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+    today_feed = feed.filter_by_dates(reference_date, reference_date)
     this_feed = today_feed.filter_by_service_ids([trip.service_id])
 
     # Should give exactly one calendar -- we don't test that here, though
@@ -1007,7 +1007,8 @@ if __name__ == "__main__":
         trip_short_name = args.trip_short_name
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
         trip = trip_from_trip_short_name(today_feed, trip_short_name)
-        print_single_trip_tt(trip)
+
+        print_single_trip_tt(trip, feed=today_feed)
         quit()
 
     if (args.type == "make-spec"):
