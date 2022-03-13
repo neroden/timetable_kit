@@ -70,8 +70,7 @@ from timetable_kit.amtrak.station_name_styling import (
 debug = True
 # The Amtrak GTFS feed files -- FIXME, this is hackish
 gtfs_filename = str( amtrak.gtfs_unzipped_local_path )
-# The output directory
-output_dirname="."
+
 # The date we are preparing timetables for (redefine after reading command line)
 reference_date = None
 
@@ -82,18 +81,8 @@ master_feed=None
 enhanced_agency=None
 # Lookup table from route name to route id, likewise
 lookup_route_id=None
-# Trip lookup table, currently unused
-trip_lookup_table=None
 # Lookup table from station code to desired printed station name, overwritten later
 lookup_station_name=None
-
-
-
-# Useful debugging function for Pandas tables
-def dumptable(table, filename):
-    """Print an table as HTML to a file, for debugging.  Directory and suffix are added."""
-    with open(''.join([output_dirname,'/',filename,'.html']),'w') as outfile:
-	    print(table.to_html(), file=outfile)
 
 #### INITIALIZATION CODE
 def initialize_feed():
@@ -122,12 +111,6 @@ def initialize_feed():
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
 
-    # Create a lookup table by trip id... all trips... belongs elsewhere
-    indexed_trips = master_feed.trips.set_index('trip_id')
-    global trip_lookup_table
-    trip_lookup_table = indexed_trips.to_dict('index')
-    # print(trip_lookup_table) # this worked
-
     # This is Amtrak-specific
     fix_known_errors(master_feed)
     return
@@ -152,12 +135,6 @@ def fix_known_errors(feed):
     return
 
 ### END OF INITIALIZATION CODE
-
-# Convenience functions for the currently-global station_name lookup tables
-
-def station_name(code):
-    """Given a station code, return the printable name."""
-    return lookup_station_name[code]
 
 ### tt-spec loading and parsing code
 
@@ -506,7 +483,7 @@ def format_single_trip_timetable(stop_times,
     print(new_timetable)
     return (new_timetable, new_styler, header_styling_list)
 
-def print_single_trip_tt(trip, *, feed, date):
+def print_single_trip_tt(trip, *, feed, date, output_dirname):
     """
     Print a single trip timetable (including Cardinal and Sunset but not Texas Eagle)
 
@@ -968,6 +945,9 @@ if __name__ == "__main__":
         gtfs_filename = args.gtfs_filename
     if (args.output_dirname):
         output_dirname = args.output_dirname
+    else:
+        output_dirname="."
+
 
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )
@@ -987,7 +967,10 @@ if __name__ == "__main__":
     lookup_station_name = amtrak.json_stations.make_station_name_lookup_table()
     # NOTE: redundant copy is present in text_presentation.py FIXME
 
-    dumptable(master_feed.routes, "routes") # Generates routes.html
+    # Generate routes.html
+    routes_html_path = Path(output_dirname) / "routes.html"
+    with open(routes_html_path,'w') as outfile:
+        print(master_feed.routes.to_html(), file=outfile)
 
     if not (args.type):
         print ("No type of timetable specified.")
@@ -1019,7 +1002,7 @@ if __name__ == "__main__":
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
         trip = trip_from_trip_short_name(today_feed, trip_short_name)
 
-        print_single_trip_tt(trip, feed=today_feed, date=reference_date)
+        print_single_trip_tt(trip, feed=today_feed, date=reference_date, output_dirname=output_dirname)
         quit()
 
     if (args.type == "make-spec"):
