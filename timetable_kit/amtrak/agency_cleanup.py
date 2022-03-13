@@ -3,7 +3,13 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Subroutines to clean up Amtrak's names for agencies, which are less than helpful
+Subroutines to clean up Amtrak's names for agencies.
+
+These are obsolete since Amtrak's GTFS data now has correct agency names.
+
+They are retained merely as reference code for how to do this, should it be necessary in the future.
+
+The code is dead.  They are not called.
 """
 
 import pandas as pd
@@ -58,6 +64,7 @@ def revised_amtrak_agencies (agency):
     # Produce a lookup table:
     agency_lookup_table = dict(zip(revised_indexed_agency.index, revised_indexed_agency.agency_name))
     # Edit the lookup table:
+    # This was only needed for pre-2022 Amtrak data.
     agency_lookup_table[174] = "Amtrak Directly Operated Thruway Bus" # Is "Amtrak" in feed
     agency_lookup_table[192] = "Thruway Bus Operator 192"
     agency_lookup_table[1206] = "Thruway Bus Operator 1206"

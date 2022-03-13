@@ -47,7 +47,6 @@ from timetable_kit import gtfs_type_cleanup
 from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
 # To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
 # amtrak.special_data
-# amtrak.agency_cleanup
 # amtrak.json_stations
 
 from timetable_kit import text_presentation
@@ -68,8 +67,6 @@ from timetable_kit.amtrak.station_name_styling import (
 # Will be changed by command-line arguments, hopefully!
 # Debugging on?
 debug = True
-# The Amtrak GTFS feed files -- FIXME, this is hackish
-gtfs_filename = str( amtrak.gtfs_unzipped_local_path )
 
 # The date we are preparing timetables for (redefine after reading command line)
 reference_date = None
@@ -77,36 +74,32 @@ reference_date = None
 # GLOBAL VARIABLES
 # The master variable for the feed; overwritten in initialize_feed
 master_feed=None
-# The enhanced agency list; likewise
-enhanced_agency=None
 # Lookup table from route name to route id, likewise
 lookup_route_id=None
 # Lookup table from station code to desired printed station name, overwritten later
 lookup_station_name=None
 
 #### INITIALIZATION CODE
-def initialize_feed():
+def initialize_feed(gtfs):
+    """
+    Initialize the master_feed and related variables.
+
+    gtfs: may be a filename or a Path.
+    """
     global master_feed
-    global enhanced_agency
     global lookup_route_id
 
-    print ("Using GTFS file " + gtfs_filename)
-    path = Path(gtfs_filename)
+    print ("Using GTFS file " + str(gtfs) )
+    gtfs_path = Path(gtfs)
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
-    master_feed = gk.read_feed(path, dist_units='mi')
+    master_feed = gk.read_feed(gtfs_path, dist_units='mi')
     print("Feed loaded.")
     # Don't waste time.
     # master_feed.validate()
 
     # Fix types on every table in the feed
     gtfs_type_cleanup.fix(master_feed)
-
-    # Clean up Amtrak agency list.  Includes fixing types.
-    # This is non-reversible, so give it its own variable.
-    enhanced_agency = amtrak.agency_cleanup.revised_amtrak_agencies(master_feed.agency)
-    # Go ahead and change the master feed copy.
-    master_feed.agency = enhanced_agency
 
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
@@ -943,6 +936,10 @@ if __name__ == "__main__":
     debug = args.debug
     if (args.gtfs_filename):
         gtfs_filename = args.gtfs_filename
+    else:
+        # Default to Amtrak
+        gtfs_filename = amtrak.gtfs_unzipped_local_path
+
     if (args.output_dirname):
         output_dirname = args.output_dirname
     else:
@@ -958,7 +955,8 @@ if __name__ == "__main__":
         reference_date = int( tomorrow.strftime('%Y%m%d') )
     print("Working with reference date ", reference_date, ".", sep="")
 
-    initialize_feed() # This sets various globals
+    # Currently this still sets globals...
+    initialize_feed(gtfs=gtfs_filename)
 
     print("Feed initialized")
 
