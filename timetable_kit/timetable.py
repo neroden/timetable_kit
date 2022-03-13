@@ -21,7 +21,7 @@ import datetime # for current date, tommorrow, etc.
 
 import pandas as pd
 import gtfs_kit as gk
-from collections import namedtuple
+# from collections import namedtuple
 # import operator # for operator.not_
 from weasyprint import HTML as weasyHTML
 from weasyprint import CSS as weasyCSS
