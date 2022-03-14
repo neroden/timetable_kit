@@ -72,10 +72,11 @@ The --type argument determines the type of timetable:
         dest='output_dirname',
         help="Directory to put output HTML timetable files in.  Default is current directory."
         )
-    parser.add_argument('--no-debug',
+    parser.add_argument('--debug',
         dest='debug',
-        help="Don't print extra debugging information during operation (debugging is normally on)",
-        action='store_false',
+        help="Set debugging level, from 0 to 3 (default 1)",
+        type=int,
+        action='store',
         )
     return parser;
 

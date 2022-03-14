@@ -44,6 +44,8 @@ from timetable_kit import feed_enhanced
 
 from timetable_kit import gtfs_type_cleanup
 
+from timetable_kit.debug import (set_debug_level, debug_print)
+
 from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
 # To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
 # amtrak.special_data
@@ -63,18 +65,6 @@ from timetable_kit.amtrak.station_name_styling import (
     amtrak_station_name_to_single_line_text,
     )
 
-# GLOBAL VARIABLES
-# Will be changed by command-line arguments, hopefully!
-# Debugging on?
-debug = True
-
-# The date we are preparing timetables for (redefine after reading command line)
-reference_date = None
-
-# GLOBAL VARIABLES
-# The master variable for the feed; overwritten in initialize_feed
-master_feed=None
-
 #### INITIALIZATION CODE
 def initialize_feed(gtfs):
     """
@@ -84,12 +74,12 @@ def initialize_feed(gtfs):
     """
     global master_feed
 
-    print ("Using GTFS file " + str(gtfs) )
+    debug_print(1, "Using GTFS file " + str(gtfs) )
     gtfs_path = Path(gtfs)
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
     master_feed = gk.read_feed(gtfs_path, dist_units='mi')
-    print("Feed loaded.")
+    debug_print(1, "Feed loaded.")
     # Don't waste time.
     # master_feed.validate()
 
@@ -111,9 +101,9 @@ def fix_known_errors(feed):
     # Revised for PANDAS 1.4.
     my_trips = feed.trips
 
-    # print ( my_trips[my_trips["trip_short_name"] == "1051"] )
+    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
     my_trips.loc[my_trips["trip_short_name"] == "1051","direction_id"] = 0
-    # print ( my_trips[my_trips["trip_short_name"] == "1051"] )
+    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
 
     # Error fixed.  Put back into the feed.
     feed.trips = my_trips
@@ -142,7 +132,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
         # No key code, nothing to do
         return tt_spec
     key_code = str(raw_tt_spec.iloc[0,0])
-    # print("Key code: " + key_code)
+    debug_print(3, "Key code: " + key_code)
     if key_code.startswith("stations of "):
         key_train_name = key_code[len("stations of "):]
         # Filter the feed down to a single date...
@@ -357,7 +347,7 @@ def format_single_trip_timetable(stop_times,
     last_stop_number = stop_sequence_numbers.max()
 
     for timepoint in stop_times.itertuples():
-        # print(timepoint)
+        debug_print(2, timepoint)
 
         # Decide whether to suppress dwell
         departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
@@ -465,7 +455,7 @@ def format_single_trip_timetable(stop_times,
                             " ",
                           ]
 
-    print(new_timetable)
+    debug_print(1, new_timetable)
     return (new_timetable, new_styler, header_styling_list)
 
 def print_single_trip_tt(trip, *, feed, date, output_dirname):
@@ -575,7 +565,7 @@ def stations_list_from_trip_short_name(today_feed, trip_short_name):
 
     sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
     sorted_station_list = sorted_stop_times['stop_id']
-    # print (sorted_station_list)
+    debug_print(3, sorted_station_list)
     return sorted_station_list
 
 def service_dates_from_trip_id(feed, trip_id):
@@ -610,7 +600,7 @@ def get_timepoint (today_feed, trip_short_name, station_code):
     (probably because the feed has multiple dates in it)
     """
     trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
-    print("debug in get_timepoint:", trip_short_name, trip_id)
+    debug_print(2, "debug in get_timepoint:", trip_short_name, trip_id)
     stop_times = today_feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     if (timepoint_df.shape[0] == 0):
@@ -639,7 +629,7 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     Used primarily to determine whether to put both arrival and departure times
     in the timetable for this station.
     """
-    print("debug:", trip_short_name, station_code)
+    debug_print(2, "debug:", trip_short_name, station_code)
     timepoint = get_timepoint(today_feed, trip_short_name, station_code)
     if (timepoint is None):
         # If the train doesn't stop there, the dwell time is zero;
@@ -856,7 +846,7 @@ def fill_tt_spec(tt_spec,
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
-                    # print( ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
+                    debug_print(3, ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
                     timepoint = get_timepoint(today_feed,train_num,station_code)
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
@@ -917,15 +907,15 @@ def fill_tt_spec(tt_spec,
 #### NEW MAIN PROGRAM ####
 ##########################
 if __name__ == "__main__":
-    # print ( "Dumping sys.path for clarity:")
-    # print ( sys.path )
-    # print ("Made it to the main program")
+    debug_print (3, "Dumping sys.path for clarity:", sys.path )
 
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
     # These have defaults; override from command line.
     # NOTE!  We are not in a function so don't need global keyword
-    debug = args.debug
+    if (args.debug):
+        set_debug_level(args.debug)
+
     if (args.gtfs_filename):
         gtfs_filename = args.gtfs_filename
     else:
@@ -945,12 +935,12 @@ if __name__ == "__main__":
         # After all, you aren't catching a train today, right?
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         reference_date = int( tomorrow.strftime('%Y%m%d') )
-    print("Working with reference date ", reference_date, ".", sep="")
+    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     # Currently this still sets globals...
     initialize_feed(gtfs=gtfs_filename)
 
-    print("Feed initialized")
+    debug_print(1, "Feed initialized")
 
     # Create the station name lookup table.
     # This is a global in amtrak.json_stations called
@@ -1019,7 +1009,7 @@ if __name__ == "__main__":
 
         tt_spec = load_tt_spec(tt_spec_filename)
         tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
-        print ("tt-spec loaded and augmented")
+        debug_print(1, "tt-spec loaded and augmented")
 
         # CSV version first:
         (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
@@ -1029,7 +1019,7 @@ if __name__ == "__main__":
                         is_ardp_station="dwell")
         # NOTE, need to add the header
         timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
-        print ("CSV done")
+        debug_print(1, "CSV done")
 
         # HTML version next:
         (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
@@ -1048,7 +1038,7 @@ if __name__ == "__main__":
         # Style the timetable.
         timetable_styled_html = style_timetable_for_html(timetable, styler_table)
 
-        print ("HTML styled")
+        debug_print(1, "HTML styled")
 
         # Produce the final complete page...
         output_pathname_before_suffix = tt_filename_base
@@ -1057,7 +1047,7 @@ if __name__ == "__main__":
         with open( "tt_" + output_pathname_before_suffix + '.html' , 'w' ) as outfile:
             print(timetable_finished_html, file=outfile)
 
-        print ("Finished HTML done")
+        debug_print(1, "Finished HTML done")
 
         # Now rebuild the final complete page for Weasyprint...
         # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
@@ -1075,7 +1065,7 @@ if __name__ == "__main__":
         html_for_weasy = weasyHTML(filename=weasy_html_pathname)
         html_for_weasy.write_pdf("tt_" + output_pathname_before_suffix + ".pdf")
 
-        print ("Weasy done")
+        debug_print(1, "Weasy done")
         quit()
 
     if (args.type == "test"):
@@ -1100,7 +1090,7 @@ if __name__ == "__main__":
         quit()
 
         print(stations_list_from_tt_spec(new_tt_spec))
-        name = lookup_station_name["BUF"]
+        name = amtrak.json_stations.lookup_station_name["BUF"]
         fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
         print(fancy_name);
         quit()
