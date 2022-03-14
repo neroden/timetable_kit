@@ -74,8 +74,6 @@ reference_date = None
 # GLOBAL VARIABLES
 # The master variable for the feed; overwritten in initialize_feed
 master_feed=None
-# Lookup table from station code to desired printed station name, overwritten later
-lookup_station_name=None
 
 #### INITIALIZATION CODE
 def initialize_feed(gtfs):
@@ -408,7 +406,7 @@ def format_single_trip_timetable(stop_times,
             )
 
         # Prettyprint the station name
-        station_name_raw = lookup_station_name[timepoint.stop_id]
+        station_name_raw = amtrak.json_stations.lookup_station_name[timepoint.stop_id]
         if ( amtrak.special_data.is_standard_major_station(timepoint.stop_id) ):
             major = True
         else:
@@ -840,7 +838,7 @@ def fill_tt_spec(tt_spec,
                 # Blank to be filled in -- the usual case.
                 if train_nums_str in ["station","stations"]: # Column for station names
                     cell_css_list.append("station-cell")
-                    station_name_raw = lookup_station_name[station_code]
+                    station_name_raw = amtrak.json_stations.lookup_station_name[station_code]
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
@@ -954,10 +952,11 @@ if __name__ == "__main__":
 
     print("Feed initialized")
 
-    # Create the station name lookup table, a global
+    # Create the station name lookup table.
+    # This is a global in amtrak.json_stations called
+    # amtrak.json_stations.lookup_station_name
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
-    lookup_station_name = amtrak.json_stations.make_station_name_lookup_table()
-    # NOTE: redundant copy is present in text_presentation.py FIXME
+    amtrak.json_stations.make_station_name_lookup_table()
 
     # Generate routes.html
     routes_html_path = Path(output_dirname) / "routes.html"

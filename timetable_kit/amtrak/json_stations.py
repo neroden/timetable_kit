@@ -8,6 +8,11 @@ Routines for extracting Amtrak's JSON station data and working with it.
 
 Amtrak's entire station database is exposed as JSON, which is very useful.
 In order to download it, this must be run as a program.
+
+The other routines here are for accessing it.
+
+make_station_name_lookup_table
+fills the global lookup_table
 """
 
 # "./json_stations.py download"
@@ -21,6 +26,9 @@ import requests
 import json # better for the details import
 from time import sleep # Avoid slamming Amtrak's server too fast -- not needed
 import argparse
+
+# This is exported.  It is filled by make_station_name_lookup_table.
+lookup_station_name = None
 
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
 
@@ -110,12 +118,17 @@ def load_stations_json():
     return stations_json
 
 # This one is called by the main timetable program.
+
 def make_station_name_lookup_table():
     """
     Return a dict which takes a station code and returns a suitable printable station name.
 
+    Also fills the module-level global "lookup_station_name", to avoid recomputation
+
     Expects json stations to be downloaded already, in a suitable local file
     """
+    global lookup_station_name
+
     stations_json = load_stations_json()
     # Believe it or not, this line JUST WORKS!!!!  Wow!
     stations = pd.io.json.read_json(stations_json,orient='records')
