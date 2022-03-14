@@ -74,8 +74,6 @@ reference_date = None
 # GLOBAL VARIABLES
 # The master variable for the feed; overwritten in initialize_feed
 master_feed=None
-# Lookup table from route name to route id, likewise
-lookup_route_id=None
 # Lookup table from station code to desired printed station name, overwritten later
 lookup_station_name=None
 
@@ -87,7 +85,6 @@ def initialize_feed(gtfs):
     gtfs: may be a filename or a Path.
     """
     global master_feed
-    global lookup_route_id
 
     print ("Using GTFS file " + str(gtfs) )
     gtfs_path = Path(gtfs)
@@ -100,9 +97,6 @@ def initialize_feed(gtfs):
 
     # Fix types on every table in the feed
     gtfs_type_cleanup.fix(master_feed)
-
-    # Create lookup table from route name to route id. Amtrak only has long names, not short names.
-    lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
 
     # This is Amtrak-specific
     fix_known_errors(master_feed)
@@ -1010,6 +1004,9 @@ if __name__ == "__main__":
 
     if (args.type == "compare"):
         route_long_name = args.route_long_name
+
+        # Create lookup table from route name to route id. Amtrak only has long names, not short names.
+        lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
         route_id = lookup_route_id[route_long_name]
 
         compare_similar_services(route_id, feed=master_feed)
