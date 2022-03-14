@@ -599,10 +599,14 @@ def get_timepoint (today_feed, trip_short_name, station_code):
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
     """
-    trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
-    debug_print(2, "debug in get_timepoint:", trip_short_name, trip_id)
-    stop_times = today_feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
-    timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
+    my_trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
+    debug_print(2, "debug in get_timepoint:", trip_short_name, my_trip_id)
+    # stop_times = today_feed.filter_by_trip_ids([my_trip_id]).stop_times # Unsorted
+    # timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
+    # The following is MUCH faster -- cuts test case from 35 secs to 20 secs:
+    timepoint_df = today_feed.stop_times[   ( today_feed.stop_times["trip_id"] == my_trip_id )
+                                          & ( today_feed.stop_times["stop_id"] == station_code )
+                                        ]
     if (timepoint_df.shape[0] == 0):
         return None
         # raise NoStopError(' '.join(["Train number", trip_short_name,
@@ -727,11 +731,26 @@ def fill_tt_spec(tt_spec,
 
     # Filter the feed to the relevant day.
     today_feed = feed.filter_by_dates(date, date)
+    debug_print(1, "Feed filtered by dates.")
 
-    # To save time, here we must filter out all unwanted trains TODO
+    # Find the train numbers involved
+    trains_list = trains_list_from_tt_spec(tt_spec) # Note still contains "/" items
+    flattened_trains_set = flatten_trains_list(trains_list)
+    # Reduce the feed, by eliminating stuff from other trains and wrong days.
+    # By reducing the stop_times table to be much smaller,
+    # this hopefully makes each subsequent search for a timepoint faster.
+    # This cuts a testcase runtime from 23 seconds to 20.
+    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
+    today_feed = reduced_feed
+    debug_print(1, "Feed filtered by trip_short_name.")
+
+    # Debugging for the reduced feed.  Seems to be fine.
+    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
+	#    print(today_feed.stop_times.to_csv(index=False), file=outfile)
 
     tt = tt_spec.copy() # "deep" copy
     styler_t = tt_spec.copy() # another "deep" copy, parallel
+    debug_print(1, "Copied tt-spec.")
 
     # Load variable function for station name printing
     prettyprint_station_name = None
@@ -761,6 +780,7 @@ def fill_tt_spec(tt_spec,
         # Prep max dwell map
         stations_max_dwell_map = make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff)
         is_ardp_station = lambda station_code : stations_max_dwell_map[station_code]
+        debug_print(1, "Dwell map prepared.")
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
 
@@ -777,6 +797,9 @@ def fill_tt_spec(tt_spec,
     # borders_initial_css="border-top-heavy"
     # Have to add "initial" and "final" with heavy borders
 
+
+    # NOTE that this routine is NOT FAST.  It's the bulk of the time usage in the program.
+    # It is much slower than the single-timetable program.
     [row_count, column_count] = tt_spec.shape
 
     header_replacement_list = [] # list, will fill in as we go
