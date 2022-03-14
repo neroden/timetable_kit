@@ -16,6 +16,7 @@ This uses Jinja2, via the load_resources module.
 # Other people's packages
 import pandas as pd
 from pandas.io.formats.style import Styler
+import datetime # for getting today's date for credit on the timetable
 
 # My packages
 # This imports the subpackage by name so we can just call it "amtrak"
@@ -208,6 +209,8 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'time_boxes_extras': time_boxes_extras_css,
         'symbol_key_css': symbol_key_css,
     }
+
+    production_date_str = datetime.date.today().isoformat()
     html_params = {
         'lang': "en-US",
         'encoding': "utf-8",
@@ -215,7 +218,9 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'internal_stylesheet': True,
         'heading': title, # FIXME: do better
         'timetable': styled_timetable_html,
-        'symbol_key_html': symbol_key_html
+        'symbol_key_html': symbol_key_html,
+        'timetable_kit_url': "https://github.com/neroden/timetable_kit",
+        'production_date': production_date_str,
     }
     # Dictionary merge, html_params take priority, Python 3.9
     full_page_params = stylesheet_params | html_params

@@ -11,7 +11,7 @@ Note that common ligatures like "ffi" look muddy in tiny fonts, so disable them
 with "font-variant-ligatures: no-common-ligatures;" if the font size is tiny.
 */
 
-.tt-table, .symbol-key {
+.tt-table, .symbol-key, .timetable_kit_credit {
     font-size: 6pt;
     font-variant-ligatures: no-common-ligatures;
 }

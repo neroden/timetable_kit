@@ -22,6 +22,6 @@ while ".tt-table td" is a data cell IN the main timetable.
 
 */
 
-.tt-table, .symbol-key {
+.tt-table, .symbol-key, .timetable_kit_credit {
     font-family: "SpartanTT", cursive;
 }
