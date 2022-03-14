@@ -136,9 +136,10 @@ def filter_by_trip_short_names(self, trip_short_names):
     - filters trips (direct)
     - filters stop_times (by trip_ids in trips)
     - FIXME: no other second-layer filtering
-    Usually used with one-element list to get a single trip
+    Often used with one-element list to get a single trip
     - filtered trips is used for retrieving a single trip_id, or a trip record
     - filtered stop_times is used for getting single trip stop times, but requires unique trip_id
+    Also used to speed up main timetable routine, by filtering irrelevancies out of stop_times.
     """
     new_feed = self.copy()
     # First filter the trips
