@@ -13,8 +13,7 @@ Directory Structure
 In keeping with the universal, if bizarre, Python package source directory structure,
 the entire package is in a subdirectory called timetable_kit.
 
-The only exceptions at this time are this file, LICENSE, and .gitignore.
-(There will probably be a few build files in future.)
+The only exceptions are certain build files, this file, and LICENSE.
 
 In particular, data resources and documentation are all inside the package directory at
 this time.  This may change.
