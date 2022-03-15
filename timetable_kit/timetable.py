@@ -37,14 +37,17 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError
 )
+from timetable_kit.debug import (set_debug_level, debug_print)
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
-from timetable_kit import gtfs_type_cleanup
+# To intialize the feed -- does type changes
+from timetable_kit.initialize import initialize_feed
 
-from timetable_kit.debug import (set_debug_level, debug_print)
+# For reversing the type changes to output GTFS again
+from timetable_kit import gtfs_type_cleanup
 
 from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
 # To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
@@ -52,6 +55,7 @@ from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak
 # amtrak.json_stations
 
 from timetable_kit import text_presentation
+
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
     get_time_column_stylings,
@@ -64,52 +68,6 @@ from timetable_kit.amtrak.station_name_styling import (
     amtrak_station_name_to_multiline_text,
     amtrak_station_name_to_single_line_text,
     )
-
-#### INITIALIZATION CODE
-def initialize_feed(gtfs):
-    """
-    Initialize the master_feed and related variables.
-
-    gtfs: may be a filename or a Path.
-    """
-    global master_feed
-
-    debug_print(1, "Using GTFS file " + str(gtfs) )
-    gtfs_path = Path(gtfs)
-    # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
-    # Also affects display miles so default to mi.
-    master_feed = gk.read_feed(gtfs_path, dist_units='mi')
-    debug_print(1, "Feed loaded.")
-    # Don't waste time.
-    # master_feed.validate()
-
-    # Fix types on every table in the feed
-    gtfs_type_cleanup.fix(master_feed)
-
-    # This is Amtrak-specific
-    fix_known_errors(master_feed)
-    return
-
-def fix_known_errors(feed):
-    """
-    Change the feed in place to fix known errors.
-    """
-    # Cardinal 1051 (DST switch date) with wrong direction ID
-
-    # There's an error in the trips. Attempt to fix it.
-    # THIS WORKS for fixing errors in a feed.  REMEMBER IT.
-    # Revised for PANDAS 1.4.
-    my_trips = feed.trips
-
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
-    my_trips.loc[my_trips["trip_short_name"] == "1051","direction_id"] = 0
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
-
-    # Error fixed.  Put back into the feed.
-    feed.trips = my_trips
-    return
-
-### END OF INITIALIZATION CODE
 
 ### tt-spec loading and parsing code
 
@@ -960,8 +918,7 @@ if __name__ == "__main__":
         reference_date = int( tomorrow.strftime('%Y%m%d') )
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    # Currently this still sets globals...
-    initialize_feed(gtfs=gtfs_filename)
+    master_feed = initialize_feed(gtfs=gtfs_filename)
 
     debug_print(1, "Feed initialized")
 
