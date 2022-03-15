@@ -1066,7 +1066,6 @@ if __name__ == "__main__":
         debug_print(1, "HTML styled")
 
         # Produce the final complete page...
-        output_pathname_before_suffix = tt_filename_base
         page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
         timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_time_characters=False,)
         with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
