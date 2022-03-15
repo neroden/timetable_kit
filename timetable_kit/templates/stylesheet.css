@@ -14,6 +14,10 @@
 {{ headers }}
 {{ header_styling }}
 {{ colors }}
-{{ time_boxes }}
-{{ time_boxes_extras }}
-{{ symbol_key_css }}
+{% if box_time_characters %}
+{% include "time_boxes_characters.css" %}
+{% else %}
+{% include "time_boxes_simple.css" %}
+{% endif %}
+{% include "time_boxes_extras.css" %}
+{% include "symbol_key.css" %}

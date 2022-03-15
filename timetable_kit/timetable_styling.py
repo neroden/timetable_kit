@@ -126,7 +126,7 @@ html_header='''<!DOCTYPE html>
 <meta charset="utf-8">
 '''
 
-def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False, box_characters=False):
+def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False, box_time_characters=False):
     """
     Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
 
@@ -149,20 +149,8 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     # CSS for the colors
     timetable_colors_css = get_fragment("timetable_colors.css")
 
-    # And the specific internal pseudo-table layout for the individual cells displaying times:
-    time_boxes_extras_css = get_fragment("time_boxes_extras.css")
-
-    if (box_characters):
-        if (for_weasyprint):
-            time_boxes_main_css = get_fragment("time_box_characters_weasy.css")
-        else: # not for_weasyprint
-            time_boxes_main_css = get_fragment("time_box_characters.css")
-    else: # not box_characters
-        time_boxes_main_css = get_fragment("time_boxes_simple.css")
-
     # Get the symbol key and its associated CSS
     symbol_key_html = get_fragment("symbol_key.html")
-    symbol_key_css = get_fragment("symbol_key.css")
 
     # fonts:
     font_choice_css = get_fragment("font_choice.css")
@@ -205,9 +193,7 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'headers': timetable_headers_css,
         'header_styling': header_styling_css,
         'colors': timetable_colors_css,
-        'time_boxes': time_boxes_main_css,
-        'time_boxes_extras': time_boxes_extras_css,
-        'symbol_key_css': symbol_key_css,
+        'box_time_characters': box_time_characters,
     }
 
     production_date_str = datetime.date.today().isoformat()

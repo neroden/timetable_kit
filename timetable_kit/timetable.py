@@ -300,7 +300,7 @@ def format_single_trip_timetable(stop_times,
                                  calendar=False,
                                  infrequent=False,
                                  doing_html=False,
-                                 box_characters=False,
+                                 box_time_characters=False,
                                  min_dwell=0,
                                  reverse=False,
                                  train_number="" ):
@@ -310,7 +310,7 @@ def format_single_trip_timetable(stop_times,
     Assumes that stop_times has been indexed by stop_sequence, and sorted.
 
     doing_html: output text with HTML annotations rather than plaintext (newline vs. <br>, use of <b>, etc.)
-    box_characters: for use with fonts which don't have tabular nums.  Avoid if possible.
+    box_time_characters: for use with fonts which don't have tabular nums.  Avoid if possible.
 
     min_dwell: if dwell time is less than this number of minutes,
     only departure times are shown, and arrival times are unpublished.
@@ -388,7 +388,7 @@ def format_single_trip_timetable(stop_times,
                 two_row=(not styler_one_row),
                 use_ar_dp_str=True,
                 doing_html = doing_html,
-                box_characters = box_characters,
+                box_time_characters = box_time_characters,
                 use_daystring = infrequent,
                 calendar = calendar,
                 is_first_stop = is_first_stop,
@@ -494,7 +494,7 @@ def print_single_trip_tt(trip, *, feed, date, output_dirname):
                                     min_dwell=5,
                                     train_number=train_number,
                                     doing_html=True,
-                                    box_characters=False,
+                                    box_time_characters=False,
                                     )
 
     # Run the styler on the timetable...
@@ -502,14 +502,14 @@ def print_single_trip_tt(trip, *, feed, date, output_dirname):
 
     # Produce the final complete page...
     page_title = "Timetable for Amtrak Train #" + str(train_number)
-    timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_characters=False)
+    timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_time_characters=False)
     with open( output_pathname_before_suffix + '.html' , 'w' ) as outfile:
         print(timetable_finished_html, file=outfile)
 
     # Now rebuild the final complete page for Weasyprint...
     # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
     timetable_finished_weasy=finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title,
-                                             for_weasyprint=True, box_characters=False)
+                                             for_weasyprint=True, box_time_characters=False)
     # Need an intermediate file in order to resolve the image references correctly
     # And Weasy can't handle inline SVG images, so we need external image references.
     weasy_html_pathname = output_pathname_before_suffix + '_weasy.html'
@@ -691,7 +691,7 @@ def fill_tt_spec(tt_spec,
                   feed,
                   date,
                   doing_html=False,
-                  box_characters=False,
+                  box_time_characters=False,
                   doing_multiline_text=True,
                   is_major_station="standard",
                   is_ardp_station="dwell",
@@ -705,7 +705,7 @@ def fill_tt_spec(tt_spec,
     date: Reference date to get timetable for.  Default passed at command line. FIXME
 
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
-    box_characters: Box every character in the time in an HTML box to make them line up.
+    box_time_characters: Box every character in the time in an HTML box to make them line up.
         For use with fonts which don't have tabular nums.
         Default is False.  Avoid if possible; fragile.
     doing_multiline_text: Produce multiline text in cells.  Ignored if doing_html.
@@ -895,7 +895,7 @@ def fill_tt_spec(tt_spec,
                         cell_text = text_presentation.timepoint_str(
                                     timepoint,
                                     doing_html=doing_html,
-                                    box_characters=box_characters,
+                                    box_time_characters=box_time_characters,
                                     reverse=reverse,
                                     two_row = is_ardp_station(station_code),
                                     use_ar_dp_str=this_column_gets_ardp,
@@ -1051,7 +1051,7 @@ if __name__ == "__main__":
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell",
                         doing_html=True,
-                        box_characters=False,)
+                        box_time_characters=False,)
 
         # Temporary output, until styler work is done
         #tt_html = timetable.to_html()
@@ -1066,7 +1066,7 @@ if __name__ == "__main__":
         # Produce the final complete page...
         output_pathname_before_suffix = tt_filename_base
         page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
-        timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_characters=False,)
+        timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_time_characters=False,)
         with open( "tt_" + output_pathname_before_suffix + '.html' , 'w' ) as outfile:
             print(timetable_finished_html, file=outfile)
 
@@ -1075,7 +1075,7 @@ if __name__ == "__main__":
         # Now rebuild the final complete page for Weasyprint...
         # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
         timetable_finished_weasy=finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title,
-                                             for_weasyprint=True, box_characters=False,)
+                                             for_weasyprint=True, box_time_characters=False,)
         # Need an intermediate file in order to resolve the image references correctly
         # And Weasy can't handle inline SVG images, so we need external image references.
         weasy_html_pathname = "tt_" + output_pathname_before_suffix + '_weasy.html'

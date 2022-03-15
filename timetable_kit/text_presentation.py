@@ -101,7 +101,7 @@ def explode_timestr(timestr: str) -> TimeTuple:
     # could do as dict, but seems cleaner this way
     return my_time
 
-def time_short_str_24(time: TimeTuple, box_characters=False) -> str:
+def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
@@ -114,7 +114,7 @@ def time_short_str_24(time: TimeTuple, box_characters=False) -> str:
                  "{:0>2}".format(time.min)
                 ]
     time_str = ''.join(time_text) # String suitable for plaintext
-    if (box_characters):
+    if (box_time_characters):
         # There are exactly five characters, by construction.  23:59 is largest.
         html_time_str = ''.join([
             '<span class="box-digit">', time_str[0],'</span>',
@@ -127,7 +127,7 @@ def time_short_str_24(time: TimeTuple, box_characters=False) -> str:
 
 # Named constant useful for the next method:
 ampm_str = ["A", "P"] # index into this to get the am or pm string
-def time_short_str_12(time: TimeTuple, box_characters=False) -> str:
+def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
     """
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
@@ -144,7 +144,7 @@ def time_short_str_12(time: TimeTuple, box_characters=False) -> str:
                  ampm_str[time.pm]
                 ]
     time_str = ''.join(time_text) # String suitable for plaintext
-    if (box_characters):
+    if (box_time_characters):
         # There are exactly six characters, by construction. 12:59P is largest.
         html_time_str = ''.join([
             '<span class="box-1">',     time_str[0],'</span>',
@@ -235,7 +235,7 @@ def get_rd_str( timepoint,
 
 def timepoint_str ( timepoint,
                     doing_html=False,
-                    box_characters=False,
+                    box_time_characters=False,
                     reverse=False,
                     two_row=False,
                     second_timepoint=None,
@@ -270,7 +270,7 @@ def timepoint_str ( timepoint,
     -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
     -- reverse: This piece of the timetable is running upward (departure time above arrival time)
     -- doing_html: output HTML (default is plaintext)
-    -- box_characters: put each character in the time in an HTML box; default is False.
+    -- box_time_characters: put each character in the time in an HTML box; default is False.
         For use with fonts which don't have tabular nums.  A nasty hack; best to use a font
         which does have tabular nums.
     -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
@@ -288,7 +288,7 @@ def timepoint_str ( timepoint,
         linebreak = "\n"
 
     if not doing_html:
-        box_characters = False
+        box_time_characters = False
 
     # Pick function for the actual time printing
     if (use_24):
@@ -298,7 +298,7 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time)
-    departure_time_str = time_str(departure, box_characters=box_characters)
+    departure_time_str = time_str(departure, box_time_characters=box_time_characters)
     if doing_html:
         if (bold_pm and departure.pm == 1):
             departure_time_str = ''.join(["<b>",departure_time_str,"</b>"])
@@ -309,7 +309,7 @@ def timepoint_str ( timepoint,
 
     # Fill the TimeTuple and prep string for actual time
     arrival = explode_timestr(timepoint.arrival_time)
-    arrival_time_str = time_str(arrival, box_characters=box_characters)
+    arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
     # HTML bold annotation for PM
     if doing_html:
         if (bold_pm and arrival.pm == 1):

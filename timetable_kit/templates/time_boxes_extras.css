@@ -1,4 +1,4 @@
-/*
+{#
 time_boxes_extras.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
@@ -12,9 +12,7 @@ Also includes padding to the right of the time.
 The rest of the formatting of the actual time is elsewhere.
 
 To satisfy screen readers, we don't want nested tables.  This is the cleanest way.
-*/
-
-
+#}
 .box-ardp {
     /* Two letters: Ar or Dp, with a little space: fixed width */
     display: inline-block;
