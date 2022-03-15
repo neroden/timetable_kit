@@ -7,8 +7,8 @@
 */{% endif %}{# external_stylesheet #}
 {% include "page.css" %}
 {{ font_faces }}
-{{ font_choice }}
-{{ font_size }}
+{% include "font_choice.css" %}
+{% include "font_size.css" %}
 {{ icons }}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}

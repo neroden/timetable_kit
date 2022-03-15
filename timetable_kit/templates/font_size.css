@@ -1,22 +1,20 @@
-/* 
-font_size_screen.css
+{# 
+font_size.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This is the base font size. Since other stuff is relative to it, it should go *first*.
 
 Amtrak timetables traditionally used very small fonts to fit in lots of data: 6 pt.
+Jinja2 template substitution fills in the actual font size, ("6pt").
 
 Note that common ligatures like "ffi" look muddy in tiny fonts, so disable them
 with "font-variant-ligatures: no-common-ligatures;" if the font size is tiny.
-*/
 
-.tt-table, .symbol-key, .timetable_kit_credit {
-    font-size: 6pt;
-    font-variant-ligatures: no-common-ligatures;
-}
-/* this is in (a span in) a header but should be small */
-.services-header-text {
-    font-size: 6pt;
-    font-variant-ligatures: no-common-ligatures;
+services_header_text is in a span in a header, which usually has enlarged fonts,
+but should have the same tiny font as the rest of the timetable.
+#}
+.tt-table, .symbol-key, .timetable_kit_credit, .services-header-text {
+    font-size: {{font_size}};{% if font_is_tiny %}
+    font-variant-ligatures: no-common-ligatures;{% endif %}
 }

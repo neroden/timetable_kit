@@ -134,21 +134,25 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     if not title:
         title="An Amtrak Timetable" # FIXME
 
-    # fonts:
-    font_choice_css = get_fragment("font_choice.css")
-    font_size_css = get_fragment("font_size.css")
+    ### FONTS
+    font_name = "SpartanTT"
+    font_size = "6pt"
+    font_is_tiny = True
+
+    debugging_fonts = True
+    if debugging_fonts:
+        # This makes it obvious when a font doesn't load
+        backup_font_name = "cursive"
+    else:
+        backup_font_name = "sans-serif"
 
     # The @font-face directives:
     fonts_css_list = []
-    for font in ["SpartanTT",
-#                "Spartan",
-#                "Spartan_MB",
-#                "Spartan1004",
-                ]:
+    for font in [font_name]:
         fonts_css_list.append( get_font_css(font) )
     font_faces_css = ''.join(fonts_css_list)
 
-    # Icons:
+    ### ICONS
 
     # For icons as imgs.
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
@@ -163,13 +167,14 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     # with open(icons_dirname + "suitcase-solid.svg", "r") as baggage_svg_file:
     #     svg_symbols_html += baggage_svg_file.read()
 
-    # We write and prepend an entirely separate stylesheet.
-    # We MUST prepend the border-collapse part of the stylesheet, since the styler can't do it.
+    ### Prepare Jinja template substitution:
 
     stylesheet_params = {
         'font_faces': font_faces_css,
-        'font_choice': font_choice_css,
-        'font_size': font_size_css,
+        'font_name' : font_name,
+        'backup_font_name' : backup_font_name,
+        'font_size': font_size, # 6pt
+        'font_is_tiny': font_is_tiny, # True
         'icons': icons_css,
         'header_styling': header_styling_css,
         'box_time_characters': box_time_characters,

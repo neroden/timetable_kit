@@ -1,7 +1,10 @@
-/* 
-font_choice_screen.css
+{#
+font_choice.css
 Part of timetable_kit
-Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.   
+
+Jinja2 template substitution fills in the
+font name (SpartanTT), and backup font name (sans-serif or cursive).
 
 Spartan (Version 1.004) by Matt Bailey is the best I've found.
 (Spartan-MB is version 1.006 but lines are taller and characters narrower.)
@@ -12,16 +15,12 @@ SpartanTT is my hacked version of Spartan 1.004 with:
 
 * The "cursive" backup font-family tells us "Font didn't load".  Not a real backup family. FIXME
 
-Note: Pandas Styler can't assign extra classes to the column heading:
-must use .col_heading for selector 
-
 We set the font for the entire table at once; it can be overridden in the cells.
+This sets the font for the timetable, for the symbol_key, and for the credit.
 
-Also ".symbol-key td" is a data cell IN the symbol key;
-while ".tt-table td" is a data cell IN the main timetable.
+TODO: set the font for the entire page.
 
-*/
-
+#}
 .tt-table, .symbol-key, .timetable_kit_credit {
-    font-family: "SpartanTT", cursive;
+    font-family: "{{ font_name }}", {{ backup_font_name }};
 }
