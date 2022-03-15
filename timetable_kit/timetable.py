@@ -1036,60 +1036,60 @@ if __name__ == "__main__":
         tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
         debug_print(1, "tt-spec loaded and augmented")
 
-        # CSV version first:
-        (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
+        # Quick hack to speed up testing cycle:
+        # implement this properly later TODO
+        do_csv = False
+        do_html = False
+        do_pdf = True
+        # Note that due to the inline images issue we may need to run
+        # a completely separate HTML version for weasyprint.  We avoid this so far.
+        # TODO
+        # Consider using the SpartanTT font to handle this.  We can make the font
+        # quasi-legit for screen readers by using correct Unicode code points.
+
+        if (do_csv):
+            (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
                         feed = master_feed,
                         date = reference_date,
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell")
-        # NOTE, need to add the header
-        timetable.to_csv(output_pathname_before_suffix + ".csv", index=False, header=True)
-        debug_print(1, "CSV done")
+            # NOTE, need to add the header
+            timetable.to_csv(output_pathname_before_suffix + ".csv", index=False, header=True)
+            debug_print(1, "CSV done")
 
-        # HTML version next:
-        (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
+        if (do_html or do_pdf):
+            # Main timetable, same for HTML and PDF
+            (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
                         feed = master_feed,
                         date = reference_date,
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell",
                         doing_html=True,
                         box_time_characters=False,)
+            timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+            debug_print(1, "HTML styled")
+            # We need a title for HTML and PDF pages
+            page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
 
-        # Temporary output, until styler work is done
-        #tt_html = timetable.to_html()
-        #with open(tt_filename_base + "-unstyled.html",'w') as outfile:
-	    #    print(tt_html, file=outfile)
+        if (do_html or do_pdf):
+            # Produce the final complete page...
+            timetable_finished_html = finish_html_timetable(
+                timetable_styled_html,
+                header_styling_list,
+                title=page_title,
+                box_time_characters=False,
+                )
+            with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
+                print(timetable_finished_html, file=outfile)
+            debug_print(1, "Finished HTML done")
 
-        # Style the timetable.
-        timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+        if (do_pdf):
+            # Pick up already-created HTML, convert to PDF
+            weasy_html_pathname = output_pathname_before_suffix + '.html'
+            html_for_weasy = weasyHTML(filename=weasy_html_pathname)
+            html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
+            debug_print(1, "Weasy done")
 
-        debug_print(1, "HTML styled")
-
-        # Produce the final complete page...
-        page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
-        timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_time_characters=False,)
-        with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
-            print(timetable_finished_html, file=outfile)
-
-        debug_print(1, "Finished HTML done")
-
-        # Now rebuild the final complete page for Weasyprint...
-        # (We will probably need to rerun the entire routine due to the annoying inline-image issue)
-        timetable_finished_weasy=finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title,
-                                             for_weasyprint=True, box_time_characters=False,)
-        # Need an intermediate file in order to resolve the image references correctly
-        # And Weasy can't handle inline SVG images, so we need external image references.
-        weasy_html_pathname = output_pathname_before_suffix + '_weasy.html'
-        with open( weasy_html_pathname , 'w' ) as outfile:
-            print(timetable_finished_html, file=outfile)
-        # weasy_base_dir = os.path.realpath(os.path.dirname(__file__))
-        # my_base_url = "file://" + weasy_base_dir + "/"
-        # print (my_base_url)
-        # html_for_weasy = weasyHTML(filename=weasy_html_pathname, base_url=my_base_url)
-        html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-        html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
-
-        debug_print(1, "Weasy done")
         quit()
 
     if (args.type == "test"):
