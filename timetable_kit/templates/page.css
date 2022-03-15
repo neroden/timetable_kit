@@ -3,9 +3,9 @@ page.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-CSS Jinja template file related to the full page layout, rather than to individual tables
+CSS Jinja template file related to the full page layout, rather than to individual tables.
+The @page directives are respected by Weasyprint.
 #}
-
 @page {
     /* For printing */
     size: Letter; /* change from default A4, for US timetables */

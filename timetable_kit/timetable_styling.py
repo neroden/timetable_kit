@@ -119,12 +119,6 @@ def make_header_styling_css(header_styling_list) -> str:
         accumulated_css += this_css
     return accumulated_css
 
-# Start of HTML document
-html_header='''<!DOCTYPE html>
-<html lang="en-US">
-<head>
-<meta charset="utf-8">
-'''
 
 def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False, box_time_characters=False):
     """
@@ -139,18 +133,6 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     # We need to add the extras to make this a full HTML & CSS file now.
     if not title:
         title="An Amtrak Timetable" # FIXME
-
-    # Main CSS for the actual timetable
-    timetable_main_css = get_fragment("timetable_main.css")
-
-    # Main CSS for the headers
-    timetable_headers_css = get_fragment("timetable_headers.css")
-
-    # CSS for the colors
-    timetable_colors_css = get_fragment("timetable_colors.css")
-
-    # Get the symbol key and its associated CSS
-    symbol_key_html = get_fragment("symbol_key.html")
 
     # fonts:
     font_choice_css = get_fragment("font_choice.css")
@@ -189,10 +171,7 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'font_choice': font_choice_css,
         'font_size': font_size_css,
         'icons': icons_css,
-        'main': timetable_main_css,
-        'headers': timetable_headers_css,
         'header_styling': header_styling_css,
-        'colors': timetable_colors_css,
         'box_time_characters': box_time_characters,
     }
 
@@ -204,7 +183,6 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'internal_stylesheet': True,
         'heading': title, # FIXME: do better
         'timetable': styled_timetable_html,
-        'symbol_key_html': symbol_key_html,
         'timetable_kit_url': "https://github.com/neroden/timetable_kit",
         'production_date': production_date_str,
     }
@@ -212,9 +190,8 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     full_page_params = stylesheet_params | html_params
 
     # Get the Jinja2 template environment (set up in load_resources module)
-    # and use it to retrieve the correct template...
+    # and use it to retrieve the correct template (complete with many includes)...
     page_tpl = template_environment.get_template("page_standard.html")
     # ...then render it.
     finished_timetable_html = page_tpl.render(full_page_params)
     return finished_timetable_html
-

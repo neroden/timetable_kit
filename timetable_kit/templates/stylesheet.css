@@ -10,10 +10,10 @@
 {{ font_choice }}
 {{ font_size }}
 {{ icons }}
-{{ main }}
-{{ headers }}
-{{ header_styling }}
-{{ colors }}
+{% include "timetable_main.css" %}
+{% include "timetable_colors.css" %}
+{% include "timetable_headers.css" %}
+{{ header_styling }}{# This has to be produced by the main program due to PANDAS limitations #}
 {% if box_time_characters %}
 {% include "time_boxes_characters.css" %}
 {% else %}

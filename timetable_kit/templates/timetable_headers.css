@@ -1,24 +1,27 @@
-/*
+{#
 timetable_headers.css
 Part of timetable_kit
 Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-This CSS fragment is for styling the headers of the timetable.
+This CSS is for styling the header cells of the timetable. It includes the logic
+related to cells with the .col_heading class.
 
 Unfortunately, PANDAS is unable to add custom classes to the header cells.
-Very annoying!
+Very annoying!  This means we cannot use the same techniques used in the rest of the
+timetable styling.
 
-The headers have class .col_heading and are cells of type <th>.
+The header cells have class .col_heading and are cells of type <th>.
 
 They also have a "colN" class (such as col0, col1), which is our only index into
 them from the main program.  (Unless we rewrite the Jinja2 template.)
 
 The program will generate additional code for bits which differ from one header
 column to the next (notably, background color)
-*/
-
+#}
 .tt-table .col_heading {
-    /* When PANDAS styles a table,
+    /* This selects a .col_heading within the .tt_table.
+
+       When PANDAS styles a table,
        most unfortunately we cannot set custom CSS clases on the headers.
        The "col_heading" class is pre-chosen for us, and we're stuck with it.
        This is necessary to get the left-to-right borders between headings right.
@@ -45,11 +48,11 @@ column to the next (notably, background color)
     font-weight: bold;
 
     /* Enlarge from underlying font */
-    font-size: 150%;
+    font-size: 140%;
 }
 
 /* Meaning of "<strong>" when inside a .col_heading element */
 .col_heading strong {
-    font-size: 150%;
+    font-size: 140%;
     font-weight: bold;
 }

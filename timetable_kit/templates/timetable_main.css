@@ -1,4 +1,4 @@
-/*
+{#
 timetable_main.css
 Part of timetable_kit
 Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
@@ -7,11 +7,10 @@ This CSS fragment is the majority of the CSS code for styling the actual timetab
 
 It depends heavily on Pandas adding custom classes to the cells.
 
-Fonts are separated into their own file in case we want to change them for print.
+Fonts and font sizes are separated into their own files.
+Colors have their own file.
 
-Colors have their own file for tweaking reasons.
-*/
-
+#}
 .tt-table {
     /* Stuff for the table as a whole */
     border-collapse: collapse;
