@@ -1029,6 +1029,8 @@ if __name__ == "__main__":
         # Accept with or without .spec
         tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
         tt_spec_filename = tt_filename_base + ".tt-spec"
+        # Output to "tt_" + filename  + ".whatever"
+        output_pathname_before_suffix = "tt_" + tt_filename_base
 
         tt_spec = load_tt_spec(tt_spec_filename)
         tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
@@ -1041,7 +1043,7 @@ if __name__ == "__main__":
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell")
         # NOTE, need to add the header
-        timetable.to_csv(tt_filename_base + ".csv", index=False, header=True)
+        timetable.to_csv(output_pathname_before_suffix + ".csv", index=False, header=True)
         debug_print(1, "CSV done")
 
         # HTML version next:
@@ -1067,7 +1069,7 @@ if __name__ == "__main__":
         output_pathname_before_suffix = tt_filename_base
         page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
         timetable_finished_html = finish_html_timetable(timetable_styled_html, header_styling_list, title=page_title, box_time_characters=False,)
-        with open( "tt_" + output_pathname_before_suffix + '.html' , 'w' ) as outfile:
+        with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
             print(timetable_finished_html, file=outfile)
 
         debug_print(1, "Finished HTML done")
@@ -1078,7 +1080,7 @@ if __name__ == "__main__":
                                              for_weasyprint=True, box_time_characters=False,)
         # Need an intermediate file in order to resolve the image references correctly
         # And Weasy can't handle inline SVG images, so we need external image references.
-        weasy_html_pathname = "tt_" + output_pathname_before_suffix + '_weasy.html'
+        weasy_html_pathname = output_pathname_before_suffix + '_weasy.html'
         with open( weasy_html_pathname , 'w' ) as outfile:
             print(timetable_finished_html, file=outfile)
         # weasy_base_dir = os.path.realpath(os.path.dirname(__file__))
@@ -1086,7 +1088,7 @@ if __name__ == "__main__":
         # print (my_base_url)
         # html_for_weasy = weasyHTML(filename=weasy_html_pathname, base_url=my_base_url)
         html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-        html_for_weasy.write_pdf("tt_" + output_pathname_before_suffix + ".pdf")
+        html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
 
         debug_print(1, "Weasy done")
         quit()
