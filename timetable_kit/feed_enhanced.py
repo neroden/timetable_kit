@@ -41,12 +41,10 @@ def filter_by_dates(self, first_date, last_date):
     new_feed.calendar = double_filtered_calendar
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
-    filtered_trips = self.trips[self.trips.service_id.isin(service_ids)]
-    new_feed.trips = filtered_trips
+    new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
     # Now filter stop_times by the trip_ids in trips
     trip_ids = new_feed.trips["trip_id"].array
-    filtered_stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
-    new_feed.stop_times = filtered_stop_times
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
 def filter_by_day_of_week(self, *,
@@ -99,12 +97,10 @@ def filter_by_day_of_week(self, *,
     new_feed.calendar = calendar
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
-    filtered_trips = self.trips[self.trips.service_id.isin(service_ids)]
-    new_feed.trips = filtered_trips
+    new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
     # Now filter stop_times by the trip_ids in trips
     trip_ids = new_feed.trips["trip_id"].array
-    filtered_stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
-    new_feed.stop_times = filtered_stop_times
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
 
@@ -122,10 +118,8 @@ def filter_by_route_ids(self, route_ids):
     - filtered calendar, trips, and stop_times are used in compare_similar_services
     """
     new_feed = self.copy()
-    filtered_trips = self.trips[self.trips.route_id.isin(route_ids)]
-    new_feed.trips = filtered_trips
-    filtered_routes = self.routes[self.routes.route_id.isin(route_ids)]
-    new_feed.routes = filtered_routes
+    new_feed.trips = self.trips[self.trips.route_id.isin(route_ids)]
+    new_feed.routes = self.routes[self.routes.route_id.isin(route_ids)]
     # Now filter the calendar by the service_ids in the trips array
     service_ids = new_feed.trips["service_id"].array
     new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
@@ -165,11 +159,9 @@ def filter_bad_service_ids(self, bad_service_ids):
     """
     new_feed = self.copy()
     # First filter the trips.
-    filtered_trips = self.trips[self.trips.service_id.isin(bad_service_ids).apply(not_)]
-    new_feed.trips = filtered_trips
+    new_feed.trips = self.trips[self.trips.service_id.isin(bad_service_ids).apply(not_)]
     # Then the calendar.  Apologies for the long line!
-    filtered_calendar = self.calendar[self.calendar.service_id.isin(bad_service_ids).apply(not_)]
-    new_feed.calendar = filtered_calendar
+    new_feed.calendar = self.calendar[self.calendar.service_id.isin(bad_service_ids).apply(not_)]
     return new_feed
 
 def filter_remove_one_day_calendars(self):
@@ -182,8 +174,7 @@ def filter_remove_one_day_calendars(self):
     """
     new_feed = self.copy()
     # First filter the calendar
-    filtered_calendar = self.calendar[self.calendar.start_date != self.calendar.end_date]
-    new_feed.calendar = filtered_calendar
+    new_feed.calendar = self.calendar[self.calendar.start_date != self.calendar.end_date]
     # Kill service_ids not in the new calendar
     service_ids = new_feed.calendar["service_id"].array
     # Then filter the trips.
@@ -207,8 +198,7 @@ def filter_by_trip_short_names(self, trip_short_names):
     """
     new_feed = self.copy()
     # First filter the trips
-    filtered_trips = self.trips[self.trips.trip_short_name.isin(trip_short_names)]
-    new_feed.trips = filtered_trips
+    new_feed.trips = self.trips[self.trips.trip_short_name.isin(trip_short_names)]
     # Then filter the stop_times
     trip_ids = new_feed.trips["trip_id"].array
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
@@ -225,11 +215,9 @@ def filter_by_trip_ids(self, trip_ids):
     """
     new_feed = self.copy()
     # First filter the trips
-    filtered_trips = self.trips[self.trips.trip_id.isin(trip_ids)]
-    new_feed.trips = filtered_trips
+    new_feed.trips = self.trips[self.trips.trip_id.isin(trip_ids)]
     # Then filter the stop_times
-    filtered_stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
-    new_feed.stop_times = filtered_stop_times
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
 def get_single_trip(self):
