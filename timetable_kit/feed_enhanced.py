@@ -44,6 +44,57 @@ def filter_by_dates(self, first_date, last_date):
     new_feed.trips = filtered_trips
     return new_feed
 
+def filter_by_day_of_week(self, *,
+                          monday=False,
+                          tuesday=False,
+                          wednesday=False,
+                          thursday=False,
+                          friday=False,
+                          saturday=False,
+                          sunday=False,
+                         ):
+    """
+    Filters the feed to trips which are running on all of the selected days.
+    (TODO: I'd rather do "at least one" but it's harder to write)
+
+    I did not want to write this.
+
+    However, certain Amtrak trips have identical train numbers
+    but different schedules on weekends vs. weekdays.
+    (Specifically:
+    79, 80, 1079, 20, 662, 88, 162, 89, 719,
+    350, 351, 352, 353, 354, 355,
+    6048, 6049, 6089, 6093, 6189, 6193,
+    8721, 8722, 8821, 8822, 8748, 8205,
+    8010, 8011, 8012, 8013, 8014, 8015, 8033,
+    8042, 7203, )
+    """
+    # NOTE this assumes bool type conversion.
+    # consider doing with original GTFS 1/0 data.
+    new_feed = self.copy()
+    calendar = self.calendar
+    if (monday):
+        calendar = calendar[calendar.monday == True]
+    if (tuesday):
+        calendar = calendar[calendar.tuesday == True]
+    if (wednesday):
+        calendar = calendar[calendar.wednesday == True]
+    if (thursday):
+        calendar = calendar[calendar.thursday == True]
+    if (friday):
+        calendar = calendar[calendar.friday == True]
+    if (saturday):
+        calendar = calendar[calendar.saturday == True]
+    if (sunday):
+        calendar = calendar[calendar.sunday == True]
+    new_feed.calendar = calendar
+    # Now filter trips by the service_ids in the calendar
+    service_ids = new_feed.calendar["service_id"].array
+    filtered_trips = self.trips[self.trips.service_id.isin(service_ids)]
+    new_feed.trips = filtered_trips
+    return new_feed
+
+
 def filter_by_route_ids(self, route_ids):
     """
     Filter the entire feed to include only the specified route_ids (a list)
@@ -217,6 +268,7 @@ def get_trip_short_name(self, trip_id):
 
 # Monkey patch starts here
 gk.Feed.filter_by_dates = filter_by_dates
+gk.Feed.filter_by_day_of_week = filter_by_day_of_week
 gk.Feed.filter_by_route_ids = filter_by_route_ids
 gk.Feed.filter_by_service_ids = filter_by_service_ids
 gk.Feed.filter_bad_service_ids = filter_bad_service_ids
