@@ -31,7 +31,12 @@ def make_tsn_to_trip_id_dict(feed):
     Make and return a dict mapping from trip_short_name to trip_id.
 
     The feed must be filtered down to where this is unique.
-    If it is not, raises an error.
+
+    If there are duplicates, the *last* one will be chosen.
+
+    This isn't ideal but deals with an Amtrak data problem where
+    multiple completely-identical entries are present in GTFS.
+    (So it doesn't matter which one we pick.)
     """
 
     tsns = feed.trips["trip_short_name"].array
@@ -47,6 +52,8 @@ def make_tsn_to_trip_id_dict(feed):
             tsn_set.add(x)
 
     trip_ids = feed.trips["trip_id"].array
+    # We have duplicates and will take the last one.
+    # but hopefully they're total duplicates so it doesn't matter...
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
     return tsn_to_trip_id
 
@@ -76,7 +83,7 @@ def find_tsn_dupes(feed):
 
     # Here, duplicates are likely so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
-    debug_print(1, "Finding duplicates, if any:)
+    debug_print(1, "Finding duplicates, if any:")
     tsn_set = set()
     for x in tsns:
         if x in tsn_set:
