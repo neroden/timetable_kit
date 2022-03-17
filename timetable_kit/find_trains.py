@@ -22,11 +22,13 @@ from timetable_kit import amtrak # For the path of the default GTFS feed
 from timetable_kit.debug import (debug_print, set_debug_level)
 from timetable_kit.tsn import (make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict)
 
-def find_trains(stop_one, stop_two, *, feed):
+def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
     """
     Returns a list of trip_short_names (train numbers) which stop at both stops.
 
     Preferably, use a feed restricted to a single day (today_feed).  Not required though.
+
+    Requires a trip_id_to_tsn map (dict).
 
     Consider returning trip_ids instead. FIXME
     Must be passed a feed, and two stop_ids.
@@ -34,18 +36,19 @@ def find_trains(stop_one, stop_two, *, feed):
     # Start by filtering the stop_times for stop one.
     filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one]
     # This is a bit tricky: attempt to maintain sorting order
-    filtered_stop_times_one.sort_values(by=["departure_time"])
-    debug_print(2, filtered_stop_times_one)
-    trip_ids_one = filtered_stop_times_one["trip_id"].array
+    sorted_filtered_stop_times_one = filtered_stop_times_one.sort_values(by=["departure_time"])
+    debug_print(2, sorted_filtered_stop_times_one)
+
     # Now make a dict from trip_id to stop_sequence.
     # Since we've filtered by stop_id, this should be unique.
-    stop_sequences_one = filtered_stop_times_one["stop_sequence"].array
+    trip_ids_one = sorted_filtered_stop_times_one["trip_id"].array
+    stop_sequences_one = sorted_filtered_stop_times_one["stop_sequence"].array
     trip_id_to_stop_sequence_one = dict(zip(trip_ids_one, stop_sequences_one))
 
     # Now for stop two.
     filtered_stop_times_two = feed.stop_times[feed.stop_times.stop_id == stop_two]
-    trip_ids_two = filtered_stop_times_two["trip_id"].array
     # And make another dict.
+    trip_ids_two = filtered_stop_times_two["trip_id"].array
     stop_sequences_two = filtered_stop_times_two["stop_sequence"].array
     trip_id_to_stop_sequence_two = dict(zip(trip_ids_two, stop_sequences_two))
 
@@ -60,19 +63,18 @@ def find_trains(stop_one, stop_two, *, feed):
     # And only the ones where stop one comes before stop two
     trip_ids_both = []
     for trip_id in trip_ids_one:
+        # Stops at the first station...
         if trip_id in trip_ids_two_set:
+            # Stops at the second station...
             if trip_id_to_stop_sequence_one[trip_id] < trip_id_to_stop_sequence_two[trip_id]:
+                # Stops at the first station before the second station...
                 trip_ids_both.append(trip_id)
 
-    filtered_trips = feed.trips[feed.trips.trip_id.isin(trip_ids_both)]
-    # OK.  Now this has the problem that it has trips in both directions.
-    directional_trips = feed.stop_times.sequence
-    
-    trip_short_names = filtered_trips["trip_short_name"].array
-    # trip_short_names_set = set(trip_short_names)
+    tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids_both]
 
-    print(trip_short_names)
-
+    # Should still be in the correct order
+    print("Found trains: ", tsns)
+    return tsns
 
 def make_spec(route_ids, feed):
     """Not ready to use: put to one side for testing purposes"""
@@ -147,12 +149,11 @@ if __name__ == "__main__":
 
     master_feed = initialize_feed(gtfs = gtfs_filename)
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-    today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
+    # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
     set_debug_level(2)
 
     # Make the two interconverting dicts
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
-    tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
-    quit()
+    # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
 
-    find_trains(stop_one, stop_two, feed=today_feed)
+    find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
