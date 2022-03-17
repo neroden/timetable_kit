@@ -171,14 +171,46 @@ def filter_remove_one_day_calendars(self):
     Amtrak has a bad habit of listing one-day calendars in its GTFS.  This isn't really
     what we want for a printed timetable.  Worse, some of them actually overlap with the
     calendars for other dates.  Brute-force the problem by eliminating all of them.
+
+    - Filters calendar (direct)
+    - Filters trips (by service_ids in calendar)
+    - Filters stop_times (by trip_ids in trips)
+    - FIXME: no other second-layer filtering
     """
     new_feed = self.copy()
     # First filter the calendar
     new_feed.calendar = self.calendar[self.calendar.start_date != self.calendar.end_date]
-    # Kill service_ids not in the new calendar
+    # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
-    # Then filter the trips.
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
+    # Now filter stop_times by the trip_ids in trips
+    trip_ids = new_feed.trips["trip_id"].array
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+    return new_feed
+
+def filter_find_one_day_calendars(self):
+    """
+    Filter to *only* find service_ids which are effective for only one day.
+
+    Amtrak has a bad habit of listing one-day calendars in its GTFS.  While we're usually
+    trying to get rid of them, we might also want to examine them.
+
+    Perhaps most useful for finding individual dates of "odd service".
+
+    - Filters calendar (direct)
+    - Filters trips (by service_ids in calendar)
+    - Filters stop_times (by trip_ids in trips)
+    - FIXME: no other second-layer filtering
+    """
+    new_feed = self.copy()
+    # First filter the calendar
+    new_feed.calendar = self.calendar[self.calendar.start_date == self.calendar.end_date]
+    # Now filter trips by the service_ids in the calendar
+    service_ids = new_feed.calendar["service_id"].array
+    new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
+    # Now filter stop_times by the trip_ids in trips
+    trip_ids = new_feed.trips["trip_id"].array
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
 
@@ -274,6 +306,7 @@ gk.Feed.filter_by_route_ids = filter_by_route_ids
 gk.Feed.filter_by_service_ids = filter_by_service_ids
 gk.Feed.filter_bad_service_ids = filter_bad_service_ids
 gk.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
+gk.Feed.filter_find_one_day_calendars = filter_find_one_day_calendars
 gk.Feed.filter_by_trip_short_names = filter_by_trip_short_names
 gk.Feed.filter_by_trip_ids = filter_by_trip_ids
 gk.Feed.get_single_trip = get_single_trip
