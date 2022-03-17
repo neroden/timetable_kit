@@ -27,6 +27,7 @@ def filter_by_dates(self, first_date, last_date):
     Must be in GTFS date format (string of YYYYMMDD)
     - Filters calendar (direct)
     - Filters trips (by service_ids in calendar)
+    - Filters stop_times (by trip_ids in trips)
     - FIXME: no other second-layer filtering
     Used for nearly all functions to get timetables effective for a single date
     """
@@ -42,6 +43,10 @@ def filter_by_dates(self, first_date, last_date):
     service_ids = new_feed.calendar["service_id"].array
     filtered_trips = self.trips[self.trips.service_id.isin(service_ids)]
     new_feed.trips = filtered_trips
+    # Now filter stop_times by the trip_ids in trips
+    trip_ids = new_feed.trips["trip_id"].array
+    filtered_stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+    new_feed.stop_times = filtered_stop_times
     return new_feed
 
 def filter_by_day_of_week(self, *,
@@ -56,6 +61,10 @@ def filter_by_day_of_week(self, *,
     """
     Filters the feed to trips which are running on all of the selected days.
     (TODO: I'd rather do "at least one" but it's harder to write)
+    - Filters calendar (direct)
+    - Filters trips (by service_ids in calendar)
+    - Filters stop_times (by trip_ids in trips)
+    - FIXME: no other second-layer filtering
 
     I did not want to write this.
 
@@ -92,6 +101,10 @@ def filter_by_day_of_week(self, *,
     service_ids = new_feed.calendar["service_id"].array
     filtered_trips = self.trips[self.trips.service_id.isin(service_ids)]
     new_feed.trips = filtered_trips
+    # Now filter stop_times by the trip_ids in trips
+    trip_ids = new_feed.trips["trip_id"].array
+    filtered_stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+    new_feed.stop_times = filtered_stop_times
     return new_feed
 
 
