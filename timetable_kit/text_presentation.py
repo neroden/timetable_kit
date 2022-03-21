@@ -310,7 +310,6 @@ def timepoint_str ( timepoint,
     # Fill the TimeTuple and prep string for actual time
     arrival = explode_timestr(timepoint.arrival_time)
     arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
-    # HTML bold annotation for PM
     if doing_html:
         if (bold_pm and arrival.pm == 1):
             arrival_time_str = ''.join(["<b>",arrival_time_str,"</b>"])
@@ -319,21 +318,34 @@ def timepoint_str ( timepoint,
         else:
             arrival_time_str = ''.join([ '<span class="box-time12">', arrival_time_str, '</span>' ])
 
+    # Need this for lines just containing "Ar" or "Dp"
+    blank_rd_str = ''
+    blank_time_str = ''
+    if doing_html:
+        blank_rd_str = ''.join([ '<span class="box-rd">', '', '</span>' ])
+        if (use_24):
+            blank_time_str = ''.join([ '<span class="box-time24">', '', '</span>' ])
+        else:
+            blank_time_str = ''.join([ '<span class="box-time12">', '', '</span>' ])
+
     # Fill in the day strings, if we're using it
     departure_daystring = ""
     arrival_daystring = ""
+    blank_daystring = ""
     if (use_daystring):
         # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
         # It must be last and the entire time field must be left-justified as a result
         departure_daystring = day_string(calendar, offset=departure.day)
         arrival_daystring = day_string(calendar, offset=arrival.day)
         if (doing_html):
-            departure_daystring= ''.join([ '<span class="box-days">', departure_daystring, '</span>' ])
-            arrival_daystring= ''.join([ '<span class="box-days">', arrival_daystring, '</span>' ])
+            departure_daystring = ''.join([ '<span class="box-days">', departure_daystring, '</span>' ])
+            arrival_daystring = ''.join([ '<span class="box-days">', arrival_daystring, '</span>' ])
+            blank_daystring = ''.join([ '<span class="box-days">', '', '</span>' ])
         else:
             # Add a necessary spacer: CSS does it for us in HTML
             departure_daystring = ''.join([" ", departure_daystring])
             arrival_daystring = ''.join([" ", arrival_daystring])
+            blank_daystring = ''
 
 
     ar_str = "" # If we are not adding the padding at all -- unwise with two_row
@@ -386,13 +398,24 @@ def timepoint_str ( timepoint,
 
     # Two row version follows:
     else: # two_row
+        # Special handling for two-row stations with no dwell
+        no_dwell = False
+        if (timepoint.departure_time == timepoint.arrival_time):
+            no_dwell = True
 
         # Start assembling the two lines.
-        if (receive_only):
-            arrival_line_str = ''
+        if receive_only or (no_dwell and not discharge_only):
+            # This just prints the "Ar" but does the alignment (hopefully)
+            arrival_line_str = ''.join([ ar_str,
+                                         blank_rd_str,
+                                         blank_time_str,
+                                         blank_daystring,
+                                        ])
         else:
             arrival_rd_str  = get_rd_str( timepoint,
-                                          doing_html=doing_html, is_first_stop=is_first_stop, is_last_stop=is_last_stop,
+                                          doing_html=doing_html,
+                                          is_first_stop=is_first_stop,
+                                          is_last_stop=is_last_stop,
                                           is_first_line=(not reverse), #arrival is first unless reversing
                                           is_second_line=(reverse),
                                           is_arrival_line=True,
@@ -403,10 +426,17 @@ def timepoint_str ( timepoint,
                                          arrival_daystring,
                                         ])
         if (discharge_only):
-            departure_line_str = ''
+            # This just prints the "Dp" but does the alignment (hopefully)
+            arrival_line_str = ''.join([ dp_str,
+                                         blank_rd_str,
+                                         blank_time_str,
+                                         blank_daystring,
+                                        ])
         else:
             departure_rd_str = get_rd_str( timepoint,
-                                           doing_html=doing_html, is_first_stop=is_first_stop, is_last_stop=is_last_stop,
+                                           doing_html=doing_html,
+                                           is_first_stop=is_first_stop,
+                                           is_last_stop=is_last_stop,
                                            is_second_line=(reverse),    #departure is second unless reversing
                                            is_first_line=(not reverse),
                                            is_departure_line=True,

@@ -805,6 +805,12 @@ def fill_tt_spec(tt_spec,
 
                 # But we have to set the styler.
                 cell_css_list.append("special-cell") # can use row and col numbers to find it
+            elif (pd.isna(station_code)):
+                # Line which has no station code -- freeform line.
+                # No times or station names here!
+                # Prefilled text was done above; blanks should be made truly blank, "".
+                tt.iloc[y,x] = ""
+                cell_css_list.append("special-cell")
             else:
                 # Blank to be filled in -- the usual case.
                 if train_nums_str in ["station","stations"]: # Column for station names
@@ -849,7 +855,7 @@ def fill_tt_spec(tt_spec,
                         cell_css_list.append( get_time_column_stylings(train_num, "class") )
 
                         # If this is an infrequent train, MAYBE put use_daystring & calendar FIXME
-                
+
                         cell_text = text_presentation.timepoint_str(
                                     timepoint,
                                     doing_html=doing_html,
