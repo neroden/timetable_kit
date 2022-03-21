@@ -427,7 +427,7 @@ def timepoint_str ( timepoint,
                                         ])
         if (discharge_only):
             # This just prints the "Dp" but does the alignment (hopefully)
-            arrival_line_str = ''.join([ dp_str,
+            departure_line_str = ''.join([ dp_str,
                                          blank_rd_str,
                                          blank_time_str,
                                          blank_daystring,
