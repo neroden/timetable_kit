@@ -68,6 +68,10 @@ from timetable_kit.amtrak.station_name_styling import (
     amtrak_station_name_to_multiline_text,
     amtrak_station_name_to_single_line_text,
     )
+from timetable_kit.tsn import (
+    make_trip_id_to_tsn_dict,
+    make_tsn_to_trip_id_dict,
+    )
 
 ### tt-spec loading and parsing code
 
@@ -96,7 +100,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
         # Filter the feed down to a single date...
         today_feed = feed.filter_by_dates(date, date)
         # And pull the stations list
-        stations_df = stations_list_from_trip_short_name(today_feed, key_train_name)
+        stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.iloc[0:,] # Get first row
         new_tt_spec.iloc[0,0] = float("nan") # Blank out key_code
         newer_tt_spec = pd.concat([new_tt_spec,stations_df]) # Yes, this works
@@ -493,7 +497,7 @@ def print_single_trip_tt(trip, *, feed, date, output_dirname):
 
 #### Subroutines for fill_tt_spec
 
-def trip_from_trip_short_name(today_feed, trip_short_name):
+def trip_from_tsn(today_feed, trip_short_name):
     """
     Given a single train number (trip_short_name), and a feed containing only one day, produces the trip record.
 
@@ -508,7 +512,7 @@ def trip_from_trip_short_name(today_feed, trip_short_name):
         raise
     return this_trip_today
 
-def stations_list_from_trip_short_name(today_feed, trip_short_name):
+def stations_list_from_tsn(today_feed, trip_short_name):
     """
     Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list.
 
@@ -519,7 +523,7 @@ def stations_list_from_trip_short_name(today_feed, trip_short_name):
     (probably because the feed has multiple dates in it)
     """
 
-    trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
+    trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
 
     sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
     sorted_station_list = sorted_stop_times['stop_id']
@@ -543,9 +547,30 @@ def service_dates_from_trip_id(feed, trip_id):
 
     return [start_date, end_date]
 
-def get_timepoint (today_feed, trip_short_name, station_code):
+def get_timepoint_from_tsn (today_feed, trip_short_name, station_code):
     """
     Given a single train number (trip_short_name),  station_code, and a feed containing only one day, extract a single timepoint.
+
+    This wraps get_timepoint_from_trip_id.
+
+    Converting from trip_short_name to trip_id is slow, so we don't want to do it every time.
+    If you can do it first and call get_timepoint_from_trip_id, that is better.
+
+    One trip_short_name will typically correspond to different trip_ids on different days.
+
+    This should raise an error, but does not, if the trip_short_name generates two different trips.
+    The reason it doesn't is errors in Amtrak's GTFS with identical-duplicate trips varying only
+    by trip_id (same calendar, same days of week, same service, etc.)
+    See trip_from_tsn for more.
+    """
+    my_trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
+    debug_print(2, "debug in get_timepoint_from_tsn:", trip_short_name, my_trip_id)
+
+    return get_timepoint_from_trip_id(today_feed, my_trip_id, station_code)
+
+def get_timepoint_from_trip_id (feed, trip_id, station_code):
+    """
+    Given a single trip_id, station_code, and a feed, extract a single timepoint.
 
     This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
 
@@ -553,28 +578,26 @@ def get_timepoint (today_feed, trip_short_name, station_code):
 
     Return "None" if it doesn't stop here.  This is not an error.
     (Used to throw NoStopError if it doesn't stop here.  Too common.)
-
-    Raises an error if trip_short_name generates more than one trip
-    (probably because the feed has multiple dates in it)
     """
-    my_trip_id = trip_from_trip_short_name(today_feed, trip_short_name).trip_id
-    debug_print(2, "debug in get_timepoint:", trip_short_name, my_trip_id)
-    # stop_times = today_feed.filter_by_trip_ids([my_trip_id]).stop_times # Unsorted
+    # Old, slower code:
+    # stop_times = feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     # timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
     # The following is MUCH faster -- cuts test case from 35 secs to 20 secs:
-    timepoint_df = today_feed.stop_times[   ( today_feed.stop_times["trip_id"] == my_trip_id )
-                                          & ( today_feed.stop_times["stop_id"] == station_code )
-                                        ]
+    timepoint_df = feed.stop_times[   ( feed.stop_times["trip_id"] == trip_id )
+                                    & ( feed.stop_times["stop_id"] == station_code )
+                                  ]
     if (timepoint_df.shape[0] == 0):
         return None
-        # raise NoStopError(' '.join(["Train number", trip_short_name,
-        #                          "does not stop at station code",
-        #                          station_code,
-        #                         ]) )
     if (timepoint_df.shape[0] > 1):
-        raise TwoStopsError(' '.join(["Train number", trip_short_name,
-                                  "stops at station code",
-                                  station_code,
+        # This is a bail-out error, it can afford to be slow:
+        # Note: the train number lookup only works if the feed is limited to one day,
+        # thus making the reverse lookup unique.
+        # It will throw an error otherwise.
+        trip_id_to_tsn_dict = make_trip_id_to_tsn_dict(feed)
+        tsn = trip_id_to_tsn_dict[my_trip_id]
+        raise TwoStopsError(' '.join(["Train number", tsn,
+                                  "with trip id", trip_id,
+                                  "stops at station code", station_code,
                                   "more than once"
                                  ]) )
     timepoint = timepoint_df.iloc[0] # Pull out the one remaining row
@@ -592,7 +615,7 @@ def get_dwell_secs (today_feed, trip_short_name, station_code):
     in the timetable for this station.
     """
     debug_print(2, "debug:", trip_short_name, station_code)
-    timepoint = get_timepoint(today_feed, trip_short_name, station_code)
+    timepoint = get_timepoint_from_tsn(today_feed, trip_short_name, station_code)
     if (timepoint is None):
         # If the train doesn't stop there, the dwell time is zero;
         # and we need thie behavior for make_stations_max_dwell_map
@@ -834,7 +857,7 @@ def fill_tt_spec(tt_spec,
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
                     debug_print(3, ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
-                    timepoint = get_timepoint(today_feed,train_num,station_code)
+                    timepoint = get_timepoint_from_tsn(today_feed,train_num,station_code)
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
 
@@ -954,7 +977,7 @@ if __name__ == "__main__":
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
         # And pull the station list -- NOTE, these are not in the right order!
-        station_list_df = stations_list_from_trip_short_name(today_feed, tsn)
+        station_list_df = stations_list_from_tsn(today_feed, tsn)
         output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
         station_list_df.to_csv(output_filename,index=False)
         # Note: this will put "stop_id" in top row, which is OK
@@ -967,7 +990,7 @@ if __name__ == "__main__":
 
         trip_short_name = args.trip_short_name
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-        trip = trip_from_trip_short_name(today_feed, trip_short_name)
+        trip = trip_from_tsn(today_feed, trip_short_name)
 
         print_single_trip_tt(trip, feed=today_feed, date=reference_date, output_dirname=output_dirname)
         quit()
