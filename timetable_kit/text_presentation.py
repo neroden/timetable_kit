@@ -220,10 +220,10 @@ def get_rd_str( timepoint,
 
     # Now: this is an utterly stupid hack used for HTML width testing:
     # Not for production code.  Enable if you need to recheck CSS span widths.
-    if (timepoint.stop_id=="CLF"):
-        rd_str = "M"
-    if (timepoint.stop_id=="CVS"):
-        rd_str = "M"
+    # if (timepoint.stop_id=="CLF"):
+    #    rd_str = "M"
+    # if (timepoint.stop_id=="CVS"):
+    #    rd_str = "M"
 
     if (doing_html):
         if (rd_str != " "):
