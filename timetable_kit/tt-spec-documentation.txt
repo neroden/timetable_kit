@@ -91,7 +91,7 @@ It MUST be the second row.
 This row will be entirely removed before rendering the timetable; it does not generate a real row.
 
 If a cell is blank, this means that column should be rendered with default options.
-If there's more than one option for a column, they are separated by internal commas (in a CSV table this means the cell must be quoted)
+If there's more than one option for a column, they are separated by WHITESPACE.
 
 No options have been defined yet.
 Options which I might implement, but have not implemented, include:

@@ -89,6 +89,9 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
     (b) get the stations for 59 and fill the rows in from that
 
     Requires a feed and a date (the reference date; the train may change by date).
+
+    Note that this tucks on the end of the tt_spec.  A "second row" for column-options
+    will therefore be unaffected.  Other second rows may result in confusing results.
     """
     if (pd.isna(raw_tt_spec.iloc[0,0]) ):
         # No key code, nothing to do
@@ -124,6 +127,31 @@ def trains_list_from_tt_spec(tt_spec):
     trains_list_strings = [str(i) for i in trains_list_raw]
     trains_list = [i.strip() for i in trains_list_strings]
     return trains_list
+
+def get_column_options(tt_spec):
+    """
+    Given a tt_spec dataframe with column-options in row 2, return a data structure for the column options.
+
+    This data structure is a list (indexed by column number) wherein each element is a list.
+    These inner lists are either empty, or a list of options.
+
+    Options are free-form; currently only "reverse" is defined.  More will be defined later.
+    Blank columns lead to a spurious "nan", but as long as we don't check for a "nan" option, who cares?
+    (Possibly fix this later.)
+
+    The column options are specified in row 2 of the table.  If they're not there, don't call this.
+    """
+    if (tt_spec.iloc[1,0] not in ["column-options", "column_options"]):
+        column_count = tt_spec.shape[1]
+        # What, there weren't any?  Make a list containing blank lists:
+        column_options = [[]] * column_count
+        return column_options
+    # Now for the main version
+    column_options_df = tt_spec.iloc[1,0:] # second row, all of it
+    column_options_list = column_options_df.to_list()
+    column_options_nested_list = [str(i).split() for i in column_options_list]
+    return column_options_nested_list
+
 
 def is_column_reversed(trains_spec):
     """
@@ -665,6 +693,8 @@ def make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff):
             stations_dict[s] = False
     return stations_dict
 
+
+
 ### Work for main multi-train timetable factory:
 
 def fill_tt_spec(tt_spec,
@@ -729,9 +759,15 @@ def fill_tt_spec(tt_spec,
     # with open( Path("./dump-stop-times.csv"),'w') as outfile:
 	#    print(today_feed.stop_times.to_csv(index=False), file=outfile)
 
-    tt = tt_spec.copy() # "deep" copy
-    styler_t = tt_spec.copy() # another "deep" copy, parallel
-    debug_print(1, "Copied tt-spec.")
+    # Extract a list of column options, if provided in the spec
+    # This must be in the second row (row 1) and first column (column 0)
+    # It ends up as a list (indexed by column number) of lists of options.
+    column_options = get_column_options(tt_spec)
+    if (tt_spec.iloc[1,0] in ["column-options", "column_options"]):
+        # Delete the problem line before further work.
+        # This drops by index and not by actual row number, irritatingly
+        # Thankfully they're currently the same
+        tt_spec = tt_spec.drop(1, axis="index")
 
     # Load variable function for station name printing
     prettyprint_station_name = None
@@ -764,6 +800,11 @@ def fill_tt_spec(tt_spec,
         debug_print(1, "Dwell map prepared.")
     if not callable(is_ardp_station):
         raise TypeError ("Received is_ardp_station which is not callable: ", is_ardp_station)
+
+
+    tt = tt_spec.copy() # "deep" copy
+    styler_t = tt_spec.copy() # another "deep" copy, parallel
+    debug_print(1, "Copied tt-spec.")
 
     # Go through the trains to spot reversed trains
 
