@@ -495,6 +495,7 @@ def fill_tt_spec(tt_spec,
             # Check column options for reverse, days:
             reverse = "reverse" in column_options[x]
             use_daystring = "days" in column_options[x]
+            long_days_box = "long-days-box" in column_options[x]
 
             # Separate train numbers by "/"
             train_nums = split_trains_spec(train_nums_str)
@@ -586,6 +587,7 @@ def fill_tt_spec(tt_spec,
                                     use_ar_dp_str=this_column_gets_ardp,
                                     use_daystring=use_daystring,
                                     calendar=calendar,
+                                    long_days_box=long_days_box,
                                     )
                         tt.iloc[y,x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.

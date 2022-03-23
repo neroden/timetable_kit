@@ -243,6 +243,7 @@ def timepoint_str ( timepoint,
                     bold_pm=True,
                     use_24=False,
                     use_daystring=False,
+                    long_days_box=False,
                     calendar=None,
                     is_first_stop=False,
                     is_last_stop=False,
@@ -276,6 +277,7 @@ def timepoint_str ( timepoint,
     -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
     -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
+    -- long_days_box: Extra-long space for days, for SuMoTuWeTh five-day calendars.
     -- calendar: a calendar with a single row containing the correct calendar for the service.
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
@@ -333,14 +335,18 @@ def timepoint_str ( timepoint,
     arrival_daystring = ""
     blank_daystring = ""
     if (use_daystring):
+        if (long_days_box):
+            days_box_class = "box-days-long"
+        else:
+            days_box_class = "box-days"
         # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
         # It must be last and the entire time field must be left-justified as a result
         departure_daystring = day_string(calendar, offset=departure.day)
         arrival_daystring = day_string(calendar, offset=arrival.day)
         if (doing_html):
-            departure_daystring = ''.join([ '<span class="box-days">', departure_daystring, '</span>' ])
-            arrival_daystring = ''.join([ '<span class="box-days">', arrival_daystring, '</span>' ])
-            blank_daystring = ''.join([ '<span class="box-days">', '', '</span>' ])
+            departure_daystring = ''.join([ '<span class="', days_box_class, '">', departure_daystring, '</span>' ])
+            arrival_daystring = ''.join([ '<span class="', days_box_class, '">', arrival_daystring, '</span>' ])
+            blank_daystring = ''.join([ '<span class="', days_box_class, '">', '', '</span>' ])
         else:
             # Add a necessary spacer: CSS does it for us in HTML
             departure_daystring = ''.join([" ", departure_daystring])
