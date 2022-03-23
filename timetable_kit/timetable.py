@@ -628,12 +628,7 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
     output_dirname = args.output_dirname
-
-    if (args.gtfs_filename):
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to Amtrak
-        gtfs_filename = amtrak.gtfs_unzipped_local_path
+    gtfs_filename = args.gtfs_filename
 
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )

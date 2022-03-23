@@ -12,13 +12,21 @@ Also includes routines for adding common arguments to parsers for other commands
 
 import argparse
 
+# Needed for defaulting the GTFS file:
+from timetable_kit import amtrak
+
+# Determine defaults in initialization code here:
+default_gtfs_filename = amtrak.gtfs_unzipped_local_path
+
 def add_gtfs_argument(parser: argparse.ArgumentParser):
     """Add the common --gtfs argument to a parser"""
     parser.add_argument('--gtfs','-g',
         dest='gtfs_filename',
         help='''Directory containing GTFS static data files,
                 or zipped GTFS static data feed,
-                or URL for zipped GTFS static data feed''',
+                or URL for zipped GTFS static data feed;
+                default is Amtrak''',
+        default = default_gtfs_filename,
         )
 
 def add_date_argument(parser: argparse.ArgumentParser):

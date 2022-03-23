@@ -36,8 +36,6 @@ from timetable_kit import feed_enhanced
 # To intialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
-from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
-
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
@@ -148,12 +146,7 @@ if __name__ == "__main__":
     args = my_arg_parser.parse_args()
 
     set_debug_level(args.debug)
-
-    if (args.gtfs_filename):
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to Amtrak
-        gtfs_filename = amtrak.gtfs_unzipped_local_path
+    gtfs_filename = args.gtfs_filename
 
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )
@@ -164,7 +157,7 @@ if __name__ == "__main__":
         reference_date = int( tomorrow.strftime('%Y%m%d') )
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    master_feed = initialize_feed(gtfs=gtfs_filename)
+    master_feed = initialize_feed(gtfs = gtfs_filename)
 
     route_long_name = args.route_long_name
 

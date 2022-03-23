@@ -18,7 +18,7 @@ import datetime
 from timetable_kit import feed_enhanced
 
 from timetable_kit.initialize import initialize_feed
-from timetable_kit import amtrak # For the path of the default GTFS feed
+
 from timetable_kit.debug import (debug_print, set_debug_level)
 from timetable_kit.tsn import (make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict)
 
@@ -129,12 +129,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     set_debug_level(args.debug)
-
-    if (args.gtfs_filename):
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to Amtrak
-        gtfs_filename = amtrak.gtfs_unzipped_local_path
+    gtfs_filename = args.gtfs_filename
 
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )
