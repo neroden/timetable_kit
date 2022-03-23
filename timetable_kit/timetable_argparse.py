@@ -16,8 +16,7 @@ def make_tt_arg_parser():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='''Produce printable HTML timetable.
 The --type argument determines the type of timetable:
-  single - single one-way timetable (mostly for testing)
-  fill - timetable made from a tt-spec
+  fill - timetable made from a tt-spec; the usual choice
   stations - create station list CSV file, in order, from single train number (for making tt-specs)
   make-spec - create tt-spec for use with fancy (edit this by hand afterwards - not working)
   compare - compare timetables for trips on a single route (to spot schedule changes for tt-spec making -- do not generate timetable)
@@ -25,7 +24,7 @@ The --type argument determines the type of timetable:
 ''',
         )
     parser.add_argument('--type','-t',
-        choices=['single','fill','stations','make-spec','compare','test'],
+        choices=['fill','stations','make-spec','compare','test'],
         help='What to do: type of timetable or tt-spec to generate.',
         )
     parser.add_argument('--gtfs','-g',
