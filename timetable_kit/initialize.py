@@ -33,7 +33,7 @@ def initialize_feed(gtfs):
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
     master_feed = gk.read_feed(gtfs_path, dist_units='mi')
-    debug_print(1, "Feed loaded.")
+    debug_print(1, "Feed loaded")
     # Don't waste time.
     # master_feed.validate()
 
@@ -42,6 +42,7 @@ def initialize_feed(gtfs):
 
     # This is Amtrak-specific
     fix_known_errors(master_feed)
+    debug_print(1, "Feed initialized")
     return master_feed
 
 def fix_known_errors(feed):
