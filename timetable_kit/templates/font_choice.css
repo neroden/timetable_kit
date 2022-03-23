@@ -16,11 +16,15 @@ SpartanTT is my hacked version of Spartan 1.004 with:
 * The "cursive" backup font-family tells us "Font didn't load".  Not a real backup family. FIXME
 
 We set the font for the entire table at once; it can be overridden in the cells.
-This sets the font for the timetable, for the symbol_key, and for the credit.
 
-TODO: set the font for the entire page.
+We set the font for the entire page at once (well, the body, not the head)
+TODO: use a class for this
+
+The following sets the font for the timetable, for the symbol_key, and for the credit.
+This is what we did before setting the font for the whole page at once:
+.tt-table, .symbol-key, .timetable_kit_credit {
 
 #}
-.tt-table, .symbol-key, .timetable_kit_credit {
+body {
     font-family: "{{ font_name }}", {{ backup_font_name }};
 }

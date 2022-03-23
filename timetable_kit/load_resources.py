@@ -19,17 +19,17 @@ Priority 3 location -- suitable subdirectory associated with THIS module
 
 Several loaders are provided:
 template_loader -- looks in "templates" folder
-fragment_loader -- looks in "fragments" folder
-fonts_loader -- looks in "fonts" folder
+font_loader -- looks in "fonts" folder
+icon_loader -- looks in "icons" folder
 
 Two matching jinja2 environments are available:
 template_environment
-fragment_environment
-fonts_environment
+font_environment
+icon_environment
 
 These functions are provided:
-get_fragment(filename: str) -> str
 get_font_css(fontname: str) -> str
+get_icon_css(fontname: str) -> str
 """
 
 import jinja2
@@ -47,15 +47,6 @@ template_loader = ChoiceLoader([
     ])
 template_environment = Environment(
     loader = template_loader,
-    autoescape = lambda x: False,
-    )
-
-fragment_loader = ChoiceLoader([
-    FileSystemLoader(['.', "fragments"]),
-    PackageLoader("load_resources", package_path="fragments"),
-    ])
-fragment_environment = Environment(
-    loader = fragment_loader,
     autoescape = lambda x: False,
     )
 
@@ -77,34 +68,24 @@ icon_environment = Environment(
     autoescape = lambda x: False,
     )
 
-"""
-Load a fragment file and return it as a string.
 
-This uses Jinja2, fragment_loader, and fragment_environment.
-"""
-def get_fragment(filename: str) -> str:
-    (fragment_str, returned_filename, uptodate) = (
-        fragment_loader.get_source(fragment_environment, filename)
-        )
-    return fragment_str
-
-"""
-Load a font CSS file (the ".css" will be appended -- don't include it) and return it as a string.
-
-This uses Jinja2, font_loader, and font_environment.
-"""
 def get_font_css(fontname: str) -> str:
+    """
+    Load a font CSS file (the ".css" will be appended -- don't include it) and return it as a string.
+
+    This uses Jinja2, font_loader, and font_environment.
+    """
     (font_css_str, returned_filename, uptodate) = (
         font_loader.get_source(font_environment, fontname + ".css")
         )
     return font_css_str
 
-"""
-Load an icon CSS file (specify full filename including .css) and return it as a string.
-
-This uses Jinja2, icon_loader, and icon_environment.
-"""
 def get_icon_css(filename: str) -> str:
+    """
+    Load an icon CSS file (specify full filename including .css) and return it as a string.
+
+    This uses Jinja2, icon_loader, and icon_environment.
+    """
     (icon_css_str, returned_filename, uptodate) = (
         icon_loader.get_source(icon_environment, filename)
         )
@@ -114,10 +95,6 @@ def get_icon_css(filename: str) -> str:
 # TESTING
 if __name__ == "__main__":
     page_tpl = template_environment.get_template("page_standard.html")
-
-    page_fragment = get_fragment("page.css")
-    print( "The page.css fragment is:" )
-    print( page_fragment )
 
     page_tpl_params = {
         'lang' : "en-US",

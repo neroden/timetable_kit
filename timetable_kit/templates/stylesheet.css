@@ -21,3 +21,4 @@
 {% endif %}
 {% include "time_boxes_extras.css" %}
 {% include "symbol_key.css" %}
+{% include "check_amtrak.css" %}
