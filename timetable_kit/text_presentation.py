@@ -15,8 +15,39 @@ import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
 
+from datetime import timedelta # for time zones
+from zoneinfo import ZoneInfo # still for time zones
 # These are mine
 from timetable_kit.errors import GTFSError
+
+def get_zonediff(local_zone, base_zone):
+    """
+    Get the hour difference which must be applied to a time in base_zone to get a time in local_zone
+
+    While I hate to reimplement time calculations, GTFS time data is really wacky.
+    """
+    base = ZoneInfo(base_zone)
+    local = ZoneInfo(local_zone)
+    diff_timedelta = local.utcoffset() - base.utcoffset()
+    one_hour = timedelta(hours=1)
+    no_time = timedelta(hours=0)
+    [diff_hours, diff_seconds] = divmod(diff_timedelta, one_hour)
+    if (diff_seconds != no_time):
+        raise ValueError("Can't handle timezone diffs which are not multiples of an hour")
+    return diff_hours
+
+# This is exceedingly US-centric, FIXME
+tz_letter_dict = {
+    "America/New_York": "E",
+    "America/Chicago": "C",
+    "America/Denver": "M",
+    "America/Los_Angeles": "P",
+}
+def get_tz_letter(zone_name):
+    """Return a one-letter abbreviation for an IANA time zone"""
+    return tz_letter_dict[zone_name]
+
+
 
 def day_string(calendar, offset=0) -> str:
     """
@@ -26,6 +57,7 @@ def day_string(calendar, offset=0) -> str:
     returns a string like "Daily" or "MoWeFr" for the serviced days of the week.
 
     Use offset to get the string for stops which are more than 24 hours after initial depature.
+    Beware of time zone changes!
     """
     days_of_service_list = calendar.to_dict('records')
     # if there are zero or duplicate service records, we error out.
@@ -234,6 +266,8 @@ def get_rd_str( timepoint,
     return rd_str
 
 def timepoint_str ( timepoint,
+                    stop_tz,
+                    agency_tz,
                     doing_html=False,
                     box_time_characters=False,
                     reverse=False,
@@ -262,8 +296,10 @@ def timepoint_str ( timepoint,
     Ar F 9:59P Daily
     Dp F10:00P WeFrSu
 
-    Mandatory argument:
+    Mandatory arguments:
     -- timepoint: a single row from stop_times.
+    -- stop_tz: timezone for the stop
+    -- agency_tz: timezone for the agency
     Options are many:
     -- two_row: This timepoint gets both arrival and departure rows (default is just one row)
     -- second_timepoint: Used for a very tricky thing with connecting trains to show them in the
@@ -297,6 +333,8 @@ def timepoint_str ( timepoint,
         time_str = time_short_str_24
     else:
         time_str = time_short_str_12
+
+
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time)

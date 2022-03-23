@@ -219,18 +219,6 @@ def service_dates_from_trip_id(feed, trip_id):
 
     return [start_date, end_date]
 
-def get_calendar_from_tsn (today_feed, trip_short_name):
-    """
-    Given a single train number (trip_short_name), and a feed containing only one day,
-    extract the single calendar line for that train.
-    """
-    trip = trip_from_tsn(today_feed, trip_short_name)
-    calendar = today_feed.calendar[today_feed.calendar.service_id == trip.service_id]
-    # Slower version:
-    # this_feed = today_feed.filter_by_service_ids([trip.service_id])
-    # calendar = this_feed.calendar
-    return calendar
-
 def get_timepoint_from_tsn (today_feed, trip_short_name, station_code):
     """
     Given a single train number (trip_short_name),  station_code, and a feed containing only one day, extract a single timepoint.
@@ -472,6 +460,11 @@ def fill_tt_spec(tt_spec,
     # Have to add "initial" and "final" with heavy borders
 
 
+    # Pick out the agency timezone (which is based on the train number, the route, etc.)
+    # TODO FIXME, brutal hack, assume it's Eastern since Amtrak is eastern and one
+    # dataset is not allowed by GTFS to have multiple agency timezones!
+    agency_tz = "America/New_York"
+
     # NOTE that this routine is NOT FAST.  It's the bulk of the time usage in the program.
     # It is much slower than the single-timetable program.
     [row_count, column_count] = tt_spec.shape
@@ -517,21 +510,29 @@ def fill_tt_spec(tt_spec,
 
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
-            if (not pd.isna(tt.iloc[y,x])):
-                # It already has a value.
-                # This is probably special text like "to Chicago".
-                # We keep this.  (But note: should we HTML-ize it? FIXME )
-
-                # But we have to set the styler.
-                cell_css_list.append("special-cell") # can use row and col numbers to find it
-            elif (pd.isna(station_code)):
+            if (pd.isna(station_code)):
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
                 # Prefilled text was done above; blanks should be made truly blank, "".
                 tt.iloc[y,x] = ""
                 cell_css_list.append("special-cell")
+            elif (not pd.isna(tt.iloc[y,x])):
+                # Line led by a station code, but cell already has a value.
+                # This is probably special text like "to Chicago".
+                # We keep this.  (But note: should we HTML-ize it? FIXME )
+
+                # But we have to set the styler.
+                cell_css_list.append("special-cell") # can use row and col numbers to find it
             else:
-                # Blank to be filled in -- the usual case.
+                # Normal line led by a station code.
+                # Blank cell to be filled in -- the usual case.
+
+                # TODO, check station code validity here!
+
+                # Pick out the stop timezone -- TODO, precache this as a dict
+                stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
+                stop_tz = stop_df.iloc[0].stop_timezone
+
                 if train_nums_str in ["station","stations"]: # Column for station names
                     cell_css_list.append("station-cell")
                     station_name_raw = amtrak.json_stations.lookup_station_name[station_code]
@@ -552,12 +553,17 @@ def fill_tt_spec(tt_spec,
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
-                    debug_print(3, ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
-                    timepoint = get_timepoint_from_tsn(today_feed,train_num,station_code)
+                    debug_print(3, ''.join(["Trains: ", str(train_nums), "; Station:", station_code]) )
 
-                    calendar = None # if not use_daystring
+                    # Extract calendar, timepoint
+                    my_trip = trip_from_tsn(today_feed, train_num)
+                    debug_print(2, "debug trip_id:", train_num, my_trip.trip_id)
+
+                    timepoint = get_timepoint_from_trip_id(today_feed, my_trip.trip_id, station_code)
+
+                    calendar = None # if not use_daystring, save time
                     if (use_daystring):
-                        calendar = get_calendar_from_tsn(today_feed, train_num)
+                        calendar = today_feed.calendar[today_feed.calendar.service_id == my_trip.service_id]
 
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
@@ -580,6 +586,8 @@ def fill_tt_spec(tt_spec,
 
                         cell_text = text_presentation.timepoint_str(
                                     timepoint,
+                                    stop_tz=stop_tz,
+                                    agency_tz=agency_tz,
                                     doing_html=doing_html,
                                     box_time_characters=box_time_characters,
                                     reverse=reverse,
