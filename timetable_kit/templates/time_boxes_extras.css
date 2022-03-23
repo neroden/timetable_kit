@@ -44,3 +44,10 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     padding-right: 0.5mm;
     width: 6.75em;
 }
+.box-tz {
+    /* Time zone letter */
+    display: inline-block;
+    text-align: left;
+    text-weight: normal;
+    width: 0.8em;
+}

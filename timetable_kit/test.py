@@ -36,6 +36,9 @@ from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak
 # Hack for the testing file -- pretend we're in timetable.py
 from timetable_kit.timetable import *
 
+# For testing!
+from timetable_kit import text_presentation
+
 if __name__ == "__main__":
     debug_print (3, "Dumping sys.path for clarity:", sys.path )
 
@@ -56,6 +59,10 @@ if __name__ == "__main__":
     # amtrak.json_stations.lookup_station_name
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
     amtrak.json_stations.make_station_name_lookup_table()
+
+    zd = text_presentation.get_zonediff("America/Los_Angeles","America/New_York")
+    print(zd)
+    quit()
 
     # Generate routes.html
     debug_print(1, "Dumping routes.html")

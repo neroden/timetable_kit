@@ -11,7 +11,7 @@ Jinja2 template substitution fills in the actual font size, ("6pt").
 Note that common ligatures like "ffi" look muddy in tiny fonts, so disable them
 with "font-variant-ligatures: no-common-ligatures;" if the font size is tiny.
 
-services_header_text is in a span in a header, which usually has enlarged fonts,
+services_header_text and timezone_header_text are both spans in a header, which usually has enlarged fonts,
 but should have the same tiny font as the rest of the timetable.
 
 This is the default font size: we apply it to the entire body.
@@ -20,7 +20,7 @@ Before setting the entire timetable, we did the following:
 .tt-table, .symbol-key, .timetable_kit_credit, .services-header-text {
 
 #}
-body {
+body, .services-header-text, .timezone-header-text {
     font-size: {{font_size}};{% if font_is_tiny %}
     font-variant-ligatures: no-common-ligatures;{% endif %}
 }

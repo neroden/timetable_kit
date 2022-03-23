@@ -197,6 +197,7 @@ def flatten_trains_list(trains_list):
     flattened_trains_set.discard("station")
     flattened_trains_set.discard("stations")
     flattened_trains_set.discard("services")
+    flattened_trains_set.discard("timezone")
     flattened_trains_set.discard("")
     return flattened_trains_set
 
@@ -484,6 +485,10 @@ def fill_tt_spec(tt_spec,
             services_column_header = text_presentation.get_services_column_header(doing_html=doing_html) # in a span
             header_replacement_list.append(services_column_header)
             header_styling_list.append("") # could include background color;
+        elif train_nums_str in ["timezone"]:
+            timezone_column_header = text_presentation.get_timezone_column_header(doing_html=doing_html) # in a span
+            header_replacement_list.append(timezone_column_header)
+            header_styling_list.append("") # could include background color;
         else: # it's actually a train
             # Check column options for reverse, days:
             reverse = "reverse" in column_options[x]
@@ -547,6 +552,9 @@ def fill_tt_spec(tt_spec,
                     # Here is where we should call out to the Amtrak stations database and look up
                     # the actual services.  FIXME.
                     tt.iloc[y,x] = ""
+                elif train_nums_str in ["timezone"]: # Column for time zone codes
+                    cell_css_list.append("timezone-cell")
+                    tt.iloc[y,x] = text_presentation.get_zone_str(stop_tz, doing_html=doing_html)
                 else: # It's a train number.
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*

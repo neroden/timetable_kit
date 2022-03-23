@@ -1,2 +1,2 @@
-stations of 5, 5, stations, 6
-column-options,days long-days-box,,reverse days long-days-box
+stations of 5, 5, timezone, stations, 6
+column-options,days long-days-box,,,reverse days long-days-box

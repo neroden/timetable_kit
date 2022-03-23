@@ -11,7 +11,7 @@ The headers have to be set elsewhere, in timetable_styling.py.
 We should fix this.  ***sigh***
 #}
 .color-sleeper {
-    background-color: thistle;
+    background-color: lavender;
 }
 .color-bus {
     background-color: darkseagreen;

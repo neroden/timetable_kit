@@ -64,6 +64,10 @@ Colors have their own file.
 .services-cell {
     text-align: center;
 }
+/* Time zone cells... */
+.timezone-cell {
+    text-align: center
+}
 
 /* Text transforms for station text spans: */
 .major-station {
@@ -83,4 +87,9 @@ Colors have their own file.
 /* Text transform for station services header span: */
 .services-header-text {
     transform: rotate(-45deg);
+}
+
+/* Text transform for timezone header span: */
+.timezone-header-text {
+    transform: rotate(-90deg);
 }

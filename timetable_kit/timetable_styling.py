@@ -47,8 +47,8 @@ def get_time_column_stylings(trains_spec, type="attributes"):
 
     train_number = trains_spec # Because we aren't parsing trains_spec yet -- FIXME
     if amtrak.special_data.is_sleeper_train(train_number):
-        color_css = "background-color: thistle;"
-        color_css_class = "color-sleeper" # thistle
+        color_css = "background-color: lavender;"
+        color_css_class = "color-sleeper" # same
     elif amtrak.special_data.is_bus(train_number):
         color_css = "background-color: darkseagreen;"
         color_css_class = "color-bus"

@@ -15,7 +15,7 @@ import pandas as pd
 import gtfs_kit as gk
 from collections import namedtuple
 
-from datetime import timedelta # for time zones
+from datetime import datetime, timedelta # for time zones
 from zoneinfo import ZoneInfo # still for time zones
 # These are mine
 from timetable_kit.errors import GTFSError
@@ -25,10 +25,13 @@ def get_zonediff(local_zone, base_zone):
     Get the hour difference which must be applied to a time in base_zone to get a time in local_zone
 
     While I hate to reimplement time calculations, GTFS time data is really wacky.
+    It may be easiest to hard code this, but this is the "clean" implementation...
     """
     base = ZoneInfo(base_zone)
     local = ZoneInfo(local_zone)
-    diff_timedelta = local.utcoffset() - base.utcoffset()
+
+    dt = datetime.today() # This is utterly fucking arbitrary
+    diff_timedelta = local.utcoffset(dt) - base.utcoffset(dt)
     one_hour = timedelta(hours=1)
     no_time = timedelta(hours=0)
     [diff_hours, diff_seconds] = divmod(diff_timedelta, one_hour)
@@ -43,11 +46,13 @@ tz_letter_dict = {
     "America/Denver": "M",
     "America/Los_Angeles": "P",
 }
-def get_tz_letter(zone_name):
-    """Return a one-letter abbreviation for an IANA time zone"""
-    return tz_letter_dict[zone_name]
-
-
+def get_zone_str(zone_name, doing_html=False):
+    """Return a one-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
+    letter = tz_letter_dict[zone_name]
+    if (doing_html):
+        return ''.join(['<span class="box-tz">', letter, '</span>'])
+    else:
+        return letter
 
 def day_string(calendar, offset=0) -> str:
     """
@@ -117,14 +122,17 @@ def day_string(calendar, offset=0) -> str:
 
 # Timestr functions
 TimeTuple = namedtuple('TimeTuple', ['day', 'pm', 'hour', 'hour24', 'min', 'sec'])
-def explode_timestr(timestr: str) -> TimeTuple:
+def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
     """
     Given a GTFS timestr, return a TimeTuple.
 
     TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour), 'hour24' ,'min', 'sec'.
+
+    zonediff is the number of hours to adjust to convert to local time before exploding.
     """
     try:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
+        longhours += zonediff # this is the timezone adjustment
     except:
         raise GTFSError("Timestr didn't parse right", timestr)
     [days, hours24] = divmod(longhours, 24)
@@ -334,10 +342,10 @@ def timepoint_str ( timepoint,
     else:
         time_str = time_short_str_12
 
-
+    zonediff = get_zonediff(stop_tz, agency_tz)
 
     # Fill the TimeTuple and prep string for actual departure time
-    departure = explode_timestr(timepoint.departure_time)
+    departure = explode_timestr(timepoint.departure_time, zonediff)
     departure_time_str = time_str(departure, box_time_characters=box_time_characters)
     if doing_html:
         if (bold_pm and departure.pm == 1):
@@ -348,7 +356,7 @@ def timepoint_str ( timepoint,
             departure_time_str = ''.join([ '<span class="box-time12">', departure_time_str, '</span>' ])
 
     # Fill the TimeTuple and prep string for actual time
-    arrival = explode_timestr(timepoint.arrival_time)
+    arrival = explode_timestr(timepoint.arrival_time, zonediff)
     arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
     if doing_html:
         if (bold_pm and arrival.pm == 1):
@@ -573,3 +581,15 @@ def get_services_column_header(doing_html=False):
         return '<div class="services-header-text">Station<br>Services</div>'
     else:
         return "Services"
+
+def get_timezone_column_header(doing_html=False):
+    """
+    Return the header for a column of station time zones.
+
+    Tricky because the column should be very narrow.
+    Wraps with a special CSS div, so it can be rotated.
+    """
+    if (doing_html):
+        return '<div class="timezone-header-text">Time<br>Zone</div>'
+    else:
+        return "Time Zone"
