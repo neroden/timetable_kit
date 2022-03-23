@@ -104,10 +104,14 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
         today_feed = feed.filter_by_dates(date, date)
         # And pull the stations list
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
-        new_tt_spec = raw_tt_spec.iloc[0:,] # Get first row
+        new_tt_spec = raw_tt_spec.copy() # Copy entire original spec
         new_tt_spec.iloc[0,0] = float("nan") # Blank out key_code
         newer_tt_spec = pd.concat([new_tt_spec,stations_df]) # Yes, this works
-        return newer_tt_spec
+        # The problem is that it leads to duplicate indices (ugh!)
+        # So fully reset the index
+        newest_tt_spec = newer_tt_spec.reset_index(drop=True)
+        debug_print(1, newest_tt_spec)
+        return newest_tt_spec
 
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
     return
@@ -568,6 +572,18 @@ def service_dates_from_trip_id(feed, trip_id):
 
     return [start_date, end_date]
 
+def get_calendar_from_tsn (today_feed, trip_short_name):
+    """
+    Given a single train number (trip_short_name), and a feed containing only one day,
+    extract the single calendar line for that train.
+    """
+    trip = trip_from_tsn(today_feed, trip_short_name)
+    calendar = today_feed.calendar[today_feed.calendar.service_id == trip.service_id]
+    # Slower version:
+    # this_feed = today_feed.filter_by_service_ids([trip.service_id])
+    # calendar = this_feed.calendar
+    return calendar
+
 def get_timepoint_from_tsn (today_feed, trip_short_name, station_code):
     """
     Given a single train number (trip_short_name),  station_code, and a feed containing only one day, extract a single timepoint.
@@ -833,8 +849,9 @@ def fill_tt_spec(tt_spec,
             header_replacement_list.append(services_column_header)
             header_styling_list.append("") # could include background color;
         else: # it's actually a train
-            # Check column options for reverse:
+            # Check column options for reverse, days:
             reverse = "reverse" in column_options[x]
+            use_daystring = "days" in column_options[x]
 
             # Separate train numbers by "/"
             train_nums = split_trains_spec(train_nums_str)
@@ -893,6 +910,11 @@ def fill_tt_spec(tt_spec,
                     #
                     debug_print(3, ''.join(["Trains: ", str(train_nums), "; Stations:", station_code]) )
                     timepoint = get_timepoint_from_tsn(today_feed,train_num,station_code)
+
+                    calendar = None # if not use_daystring
+                    if (use_daystring):
+                        calendar = get_calendar_from_tsn(today_feed, train_num)
+
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
 
@@ -912,8 +934,6 @@ def fill_tt_spec(tt_spec,
                         cell_css_list.append("time-cell")
                         cell_css_list.append( get_time_column_stylings(train_num, "class") )
 
-                        # If this is an infrequent train, MAYBE put use_daystring & calendar FIXME
-
                         cell_text = text_presentation.timepoint_str(
                                     timepoint,
                                     doing_html=doing_html,
@@ -921,6 +941,8 @@ def fill_tt_spec(tt_spec,
                                     reverse=reverse,
                                     two_row = is_ardp_station(station_code),
                                     use_ar_dp_str=this_column_gets_ardp,
+                                    use_daystring=use_daystring,
+                                    calendar=calendar,
                                     )
                         tt.iloc[y,x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.

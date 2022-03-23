@@ -95,15 +95,19 @@ If a cell is blank, this means that column should be rendered with default optio
 If there's more than one option for a column, they are separated by WHITESPACE.
 
 Implemented option:
-reverse -- This column must read bottom to top (earlier times below later times).
+reverse -- This column should read bottom to top (earlier times below later times).  (Default: top to bottom.)
+days -- include string for days of operation (MoWeFr) in the time cells for this column
 
 No other options have been defined yet.
 Options which I might implement, but have not implemented, include:
-days -- include string for days of operation (MoWeFr) in this time column
-
 ardp -- include "Ar" and "Dp"
 color -- background colors for this column.  If the train numbers are separated by slashes, so are the background colors?
 tz -- include timezone in this column
+
+The "days" option is suitable for less-than-daily trains which run across midnight.
+Less-than-daily trains which only run on one day might better have a day listed in
+a column header -- this will be implemented separately *notyet
+
 
 REST OF SPEC
 ------------
