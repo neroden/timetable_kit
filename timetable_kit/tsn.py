@@ -8,9 +8,15 @@ Routines to convert between trip_id and trip_short_name.
 In GTFS, trip_id is unique.  So a trip_id to trip_short_name map should be, too.
 However, trip_short_name isn't unique.  But it is unique on a given calendar day,
 so it should be possible to make a map from a restricted feed.
+
+Also contains other routines which look up trips by tsn.
 """
-from timetable_kit.errors import (GTFSError)
+from timetable_kit.errors import (GTFSError, NoTripError)
 from timetable_kit.debug import debug_print
+
+# This one monkey-patches gk.Feed (sneaky) so must be imported early
+from timetable_kit import feed_enhanced
+
 def make_trip_id_to_tsn_dict(feed):
     """
     Make and return a dict mapping from trip_id to trip_short_name.
@@ -91,3 +97,40 @@ def find_tsn_dupes(feed):
         else:
             tsn_set.add(x)
     return
+
+### These two are used routinely in the main timetable generator
+### And in the stations list generator
+
+def trip_from_tsn(today_feed, trip_short_name):
+    """
+    Given a single train number (trip_short_name), and a feed containing only one day, produces the trip record.
+
+    Raises an error if trip_short_name generates more than one trip
+    (probably because the feed has multiple dates in it)
+    """
+    single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
+    try:
+        this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
+    except NoTripError:
+        print ("Found no trips for ", trip_short_name)
+        raise
+    return this_trip_today
+
+def stations_list_from_tsn(today_feed, trip_short_name):
+    """
+    Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
+
+    Produces a station list dataframe.
+    This is used in augment_tt_spec, and via the "stations" command.
+
+    Raises an error if trip_short_name generates more than one trip
+    (probably because the feed has multiple dates in it)
+    """
+
+    trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
+
+    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
+    sorted_station_list = sorted_stop_times['stop_id']
+    debug_print(3, sorted_station_list)
+    return sorted_station_list
+

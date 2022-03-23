@@ -22,6 +22,13 @@ from timetable_kit import amtrak # For the path of the default GTFS feed
 from timetable_kit.debug import (debug_print, set_debug_level)
 from timetable_kit.tsn import (make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict)
 
+# Common arguments for the command line
+from timetable_kit.timetable_argparse import (
+    add_gtfs_argument,
+    add_date_argument,
+    add_debug_argument,
+    )
+
 def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
     """
     Returns a list of trip_short_names (train numbers) which stop at both stops.
@@ -101,26 +108,18 @@ def make_argparser():
     parser = argparse.ArgumentParser(
         description="""Produce list of trains (trip_short_name) from stop one to stop two.
                         Useful for making sure you found all the trains from NYP to PHL.
+                        Should be reviewed manually before generating tt-spec, especially for
+                        days-of-week issues.
                     """,
         )
+    add_gtfs_argument(parser)
+    add_date_argument(parser)
+    add_debug_argument(parser)
     parser.add_argument('stop_one',
         help="""First stop""",
         )
     parser.add_argument('stop_two',
         help="""Last stop""",
-        )
-    parser.add_argument('--gtfs','-g',
-        dest='gtfs_filename',
-        help='''Directory containing GTFS static data files,
-                or zipped GTFS static data feed,
-                or URL for zipped GTFS static data feed''',
-        )
-    parser.add_argument('--reference-date','--date','-d',
-        dest='reference_date',
-        help='''Reference date.
-                GTFS data contains timetables for multiple time periods;
-                this produces the timetable valid as of the reference date.
-             '''
         )
     return parser
 
@@ -128,8 +127,15 @@ def make_argparser():
 if __name__ == "__main__":
     parser = make_argparser()
     args = parser.parse_args()
-    stop_one = args.stop_one
-    stop_two = args.stop_two
+
+    set_debug_level(args.debug)
+
+    if (args.gtfs_filename):
+        gtfs_filename = args.gtfs_filename
+    else:
+        # Default to Amtrak
+        gtfs_filename = amtrak.gtfs_unzipped_local_path
+
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )
     else:
@@ -139,16 +145,14 @@ if __name__ == "__main__":
         reference_date = int( tomorrow.strftime('%Y%m%d') )
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    if (args.gtfs_filename):
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to Amtrak
-        gtfs_filename = amtrak.gtfs_unzipped_local_path
-
+    stop_one = args.stop_one
+    stop_two = args.stop_two
     print ("Finding trains from", stop_one, "to", stop_two)
 
     master_feed = initialize_feed(gtfs = gtfs_filename)
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+    # TODO: figure out how to filter by day of week
     # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
     set_debug_level(2)
 

@@ -71,6 +71,8 @@ from timetable_kit.amtrak.station_name_styling import (
 from timetable_kit.tsn import (
     make_trip_id_to_tsn_dict,
     make_tsn_to_trip_id_dict,
+    trip_from_tsn,
+    stations_list_from_tsn,
     )
 
 ### tt-spec loading and parsing code
@@ -282,39 +284,6 @@ def compare_similar_services(route_id, *, feed):
     return
 
 #### Subroutines for fill_tt_spec
-
-def trip_from_tsn(today_feed, trip_short_name):
-    """
-    Given a single train number (trip_short_name), and a feed containing only one day, produces the trip record.
-
-    Raises an error if trip_short_name generates more than one trip
-    (probably because the feed has multiple dates in it)
-    """
-    single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
-    try:
-        this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
-    except NoTripError:
-        print ("Found no trips for ", trip_short_name)
-        raise
-    return this_trip_today
-
-def stations_list_from_tsn(today_feed, trip_short_name):
-    """
-    Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list.
-
-    Produces a station list dataframe.
-    This is used in augment_tt_spec, and via the "stations" command.
-
-    Raises an error if trip_short_name generates more than one trip
-    (probably because the feed has multiple dates in it)
-    """
-
-    trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
-
-    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
-    sorted_station_list = sorted_stop_times['stop_id']
-    debug_print(3, sorted_station_list)
-    return sorted_station_list
 
 def service_dates_from_trip_id(feed, trip_id):
     """
@@ -735,22 +704,15 @@ if __name__ == "__main__":
 
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
-    # These have defaults; override from command line.
-    # NOTE!  We are not in a function so don't need global keyword
-    if (args.debug):
-        set_debug_level(args.debug)
+
+    set_debug_level(args.debug)
+    output_dirname = args.output_dirname
 
     if (args.gtfs_filename):
         gtfs_filename = args.gtfs_filename
     else:
         # Default to Amtrak
         gtfs_filename = amtrak.gtfs_unzipped_local_path
-
-    if (args.output_dirname):
-        output_dirname = args.output_dirname
-    else:
-        output_dirname="."
-
 
     if (args.reference_date):
         reference_date = int( args.reference_date.strip() )
@@ -762,8 +724,6 @@ if __name__ == "__main__":
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     master_feed = initialize_feed(gtfs=gtfs_filename)
-
-    debug_print(1, "Feed initialized")
 
     # Create the station name lookup table.
     # This is a global in amtrak.json_stations called
@@ -778,28 +738,6 @@ if __name__ == "__main__":
 
     if not (args.type):
         print ("No type of timetable specified.")
-        quit()
-
-    if (args.type == "stations"):
-        # This one is working.
-        tsn = args.trip_short_name
-        if (not tsn):
-            raise ValueError("Can't generate a station list without a specific trip.")
-        tsn = tsn.strip() # Avoid whitespace problems
-
-        # Filter the feed down to one date
-        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-
-        # And pull the station list -- NOTE, these are not in the right order!
-        station_list_df = stations_list_from_tsn(today_feed, tsn)
-        output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
-        station_list_df.to_csv(output_filename,index=False)
-        # Note: this will put "stop_id" in top row, which is OK
-        quit()
-
-    if (args.type == "make-spec"):
-        # Make a tt_spec (work in progress)
-        print ("unimplemented")
         quit()
 
     if (args.type == "compare"):
@@ -900,11 +838,3 @@ if __name__ == "__main__":
         dwell_secs = get_dwell_secs("59","CDL")
         print("Dwell is", dwell_secs)
         quit()
-
-        print(stations_list_from_tt_spec(new_tt_spec))
-        name = amtrak.json_stations.lookup_station_name["BUF"]
-        fancy_name = text_presentation.fancy_amtrak_station_name(name, major=True)
-        print(fancy_name);
-        quit()
-
-
