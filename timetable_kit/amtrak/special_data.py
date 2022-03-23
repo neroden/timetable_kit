@@ -74,6 +74,9 @@ major_stations_list = ( "BOS", # NEC timetable stations first
     "SAC",
     "SKN", # San Joaquins
     "BFD",
+    "DEN", # CZ -- Amtrak didn't, I should
+    "SLC",
+    "EMY", # CZ
     )
 
 def is_standard_major_station(station_code):
