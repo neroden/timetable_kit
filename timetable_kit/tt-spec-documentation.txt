@@ -47,7 +47,13 @@ SHORTHAND SPEC
 For a "shorthand" spec, the key cell contains the words "stations of XXX", 
 where XXX is a train number (trip_short_name).  This will fill the left column with all the stations
 from train number XXX in the correct order.  This makes simple timetables simpler, but doesn't allow all layouts.
-If this is done, there should be only one row in the spec (the top row).
+
+If this is done, there should be only one row in the spec (the top row)
+Or the special second row "column-options" may be included (see below),
+or perhaps extra free-form decorative header rows.
+
+Since the left column will be appended to the spec, any actual station rows listed will come before
+the automatically generated stations, which could give strange results.
 
 TOP ROW
 -------
@@ -65,26 +71,21 @@ The special code "services" can be used to generate cells containing icons for t
 The special code "ardp" generates cells containing "Ar" and "Dp", or blank. *not yet -- maybe?
 Remember to set it in reverse for the other side of the timetable.
 
-If the cell begins wih the minus sign ("-"), it indicates that the column is in reverse order:
-that is, the earliest times are at the bottom, and the latest times at the top.  Otherwise the timetable generator
-assumes the earliest times are at the top and the latest times at the bottom; layout will be confused if this is
-not specified correctly.  (This minus sign will be stripped before the program determines the train name.)
+If the column should be read bottom to top (earliest times at the bottom and latest at the top),
+include the special second row with the "reverse" keyword.  (See below.)  Layout will be confused if
+this is not specified correctly.
 
 Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
 This will allow them to share a single column.  Be careful about using this as it is fragile:
 it is intended for "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
 This will give a complex stacked cell for "train name".  You will want to do some manual cells (see below).
 
-The minus sign, if used, must still be at the start of the entire cell (-314/304, not 314/-304).
-
-Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).
+Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).  *not yet
 
 SECOND ROW
 ----------
-This is not implemented yet. *not yet
-
-If the first column of the second row contains the text "column-options" (without the quotes), then the second row
-is treated as a list of specifications for how to render the columns.
+If the first column of the second row contains the text "column-options" (without the quotes),
+then the second row is treated as a list of specifications for how to render the columns.
 
 It MUST be the second row.
 
@@ -93,9 +94,11 @@ This row will be entirely removed before rendering the timetable; it does not ge
 If a cell is blank, this means that column should be rendered with default options.
 If there's more than one option for a column, they are separated by WHITESPACE.
 
-No options have been defined yet.
+Implemented option:
+reverse -- This column must read bottom to top (earlier times below later times).
+
+No other options have been defined yet.
 Options which I might implement, but have not implemented, include:
-reverse -- replacement for the "minus sign" notation
 days -- include string for days of operation (MoWeFr) in this time column
 
 ardp -- include "Ar" and "Dp"

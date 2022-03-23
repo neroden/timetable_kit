@@ -141,6 +141,12 @@ def get_column_options(tt_spec):
 
     The column options are specified in row 2 of the table.  If they're not there, don't call this.
     """
+    def nan_to_blank(s):
+        if pd.isna(s):
+            return ""
+        else:
+            return s
+
     if (tt_spec.iloc[1,0] not in ["column-options", "column_options"]):
         column_count = tt_spec.shape[1]
         # What, there weren't any?  Make a list containing blank lists:
@@ -148,27 +154,15 @@ def get_column_options(tt_spec):
         return column_options
     # Now for the main version
     column_options_df = tt_spec.iloc[1,0:] # second row, all of it
-    column_options_list = column_options_df.to_list()
-    column_options_nested_list = [str(i).split() for i in column_options_list]
+    column_options_raw_list = column_options_df.to_list()
+    column_options_clean_list = [nan_to_blank(s) for s in column_options_raw_list]
+    column_options_nested_list = [str(i).split() for i in column_options_clean_list]
+    debug_print(1, column_options_nested_list)
     return column_options_nested_list
-
-
-def is_column_reversed(trains_spec):
-    """
-    Given a string like "-59 / 174 / 22", return True if the timetable column should read bottom to top, False otherwise.
-
-    All this actually does is check for a leading minus sign.  If it's present, this is a bottom-to-top timetable column.
-    This applies to the ENTIRE column, so the minus sign must be on the FIRST train number (only).
-    """
-    clean_trains_spec = trains_spec.lstrip()
-    reverse=False
-    if (clean_trains_spec[0]=="-"):
-        reverse=True
-    return reverse
 
 def split_trains_spec(trains_spec):
     """
-    Given a string like "-59 / 174 / 22", return a structured list:
+    Given a string like "59 / 174 / 22", return a structured list:
 
     [["59, "174", "22"], True]
 
@@ -180,9 +174,8 @@ def split_trains_spec(trains_spec):
     """
     # Remove leading whitespace and possible leading minus sign
     clean_trains_spec = trains_spec.lstrip()
-    cleaner_trains_spec = clean_trains_spec.lstrip("-")
 
-    raw_list = cleaner_trains_spec.split("/")
+    raw_list = clean_trains_spec.split("/")
     clean_list = [item.strip() for item in raw_list] # remove whitespace again
     return clean_list
 
@@ -840,8 +833,9 @@ def fill_tt_spec(tt_spec,
             header_replacement_list.append(services_column_header)
             header_styling_list.append("") # could include background color;
         else: # it's actually a train
-            # A leading "-" in the trainspec means reversed column
-            reverse = is_column_reversed(train_nums_str)
+            # Check column options for reverse:
+            reverse = "reverse" in column_options[x]
+
             # Separate train numbers by "/"
             train_nums = split_trains_spec(train_nums_str)
             train_num = train_nums[0]
