@@ -74,7 +74,7 @@ def day_string(calendar, offset=0) -> str:
 
     # print(days_of_service)
     # Fast exit: don't go through all the work if it's daily
-    if (days_of_service['sunday'] and
+    if (
         days_of_service['monday'] and
         days_of_service['tuesday'] and
         days_of_service['wednesday'] and
@@ -96,6 +96,18 @@ def day_string(calendar, offset=0) -> str:
         days_of_service['tuesday'] = days_of_service['monday']
         days_of_service['monday'] = new_monday
         offset = offset-1
+
+    while (offset < 0): # Possible if time zone change gave a -1 offset
+        # Roll the days of service backwards one: train started MoWeFr but it's now SuTuTh
+        new_sunday = days_of_service['monday']
+        days_of_service['monday'] = days_of_service['tuesday']
+        days_of_service['tuesday'] = days_of_service['wednesday']
+        days_of_service['wednesday'] = days_of_service['thursday']
+        days_of_service['thursday'] = days_of_service['friday']
+        days_of_service['friday'] = days_of_service['saturday']
+        days_of_service['saturday'] = days_of_service['sunday']
+        days_of_service['sunday'] = new_sunday
+        offset = offset+1
 
     daystring = ""
     if (days_of_service['monday']):
@@ -135,6 +147,9 @@ def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
         longhours += zonediff # this is the timezone adjustment
     except:
         raise GTFSError("Timestr didn't parse right", timestr)
+    # Note: the following does the right thing for negative hours
+    # (which can be created by the timezone adjustment)
+    # It will give -1 days and positive hours24.
     [days, hours24] = divmod(longhours, 24)
     [pm, hours] = divmod(hours24, 12)
     my_time = TimeTuple(day=days,pm=pm,hour=hours,hour24=hours24,min=mins,sec=secs)
