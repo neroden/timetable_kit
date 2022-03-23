@@ -637,100 +637,68 @@ if __name__ == "__main__":
     # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
     amtrak.json_stations.make_station_name_lookup_table()
 
-    # Generate routes.html
-    routes_html_path = Path(output_dirname) / "routes.html"
-    with open(routes_html_path,'w') as outfile:
-        print(master_feed.routes.to_html(), file=outfile)
+    # Accept with or without .spec
+    tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
+    tt_spec_filename = tt_filename_base + ".tt-spec"
+    # Output to "tt_" + filename  + ".whatever"
+    output_pathname_before_suffix = "tt_" + tt_filename_base
 
-    if not (args.type):
-        print ("No type of timetable specified.")
-        quit()
+    tt_spec = load_tt_spec(tt_spec_filename)
+    tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
+    debug_print(1, "tt-spec loaded and augmented")
 
-    if (args.type == "fill"):
+    # Quick hack to speed up testing cycle:
+    # implement this properly later TODO
+    do_csv = False
+    do_html = False
+    do_pdf = True
+    # Note that due to the inline images issue we may need to run
+    # a completely separate HTML version for weasyprint.  We avoid this so far.
+    # TODO
+    # Consider using the SpartanTT font to handle this.  We can make the font
+    # quasi-legit for screen readers by using correct Unicode code points.
 
-        # Accept with or without .spec
-        tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
-        tt_spec_filename = tt_filename_base + ".tt-spec"
-        # Output to "tt_" + filename  + ".whatever"
-        output_pathname_before_suffix = "tt_" + tt_filename_base
-
-        tt_spec = load_tt_spec(tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
-        debug_print(1, "tt-spec loaded and augmented")
-
-        # Quick hack to speed up testing cycle:
-        # implement this properly later TODO
-        do_csv = False
-        do_html = False
-        do_pdf = True
-        # Note that due to the inline images issue we may need to run
-        # a completely separate HTML version for weasyprint.  We avoid this so far.
-        # TODO
-        # Consider using the SpartanTT font to handle this.  We can make the font
-        # quasi-legit for screen readers by using correct Unicode code points.
-
-        if (do_csv):
-            (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
+    if (do_csv):
+        (timetable, styler_table, header_styling) = fill_tt_spec(tt_spec,
                         feed = master_feed,
                         date = reference_date,
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell")
-            # NOTE, need to add the header
-            timetable.to_csv(output_pathname_before_suffix + ".csv", index=False, header=True)
-            debug_print(1, "CSV done")
+        # NOTE, need to add the header
+        timetable.to_csv(output_pathname_before_suffix + ".csv", index=False, header=True)
+        debug_print(1, "CSV done")
 
-        if (do_html or do_pdf):
-            # Main timetable, same for HTML and PDF
-            (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
+    if (do_html or do_pdf):
+        # Main timetable, same for HTML and PDF
+        (timetable, styler_table, header_styling_list) = fill_tt_spec(tt_spec,
                         feed = master_feed,
                         date = reference_date,
                         is_major_station=amtrak.special_data.is_standard_major_station,
                         is_ardp_station="dwell",
                         doing_html=True,
                         box_time_characters=False,)
-            timetable_styled_html = style_timetable_for_html(timetable, styler_table)
-            debug_print(1, "HTML styled")
-            # We need a title for HTML and PDF pages
-            page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
+        timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+        debug_print(1, "HTML styled")
+        # We need a title for HTML and PDF pages
+        page_title = "Timetable for " + tt_filename_base.capitalize() # FIXME
 
-        if (do_html or do_pdf):
-            # Produce the final complete page...
-            timetable_finished_html = finish_html_timetable(
-                timetable_styled_html,
-                header_styling_list,
-                title=page_title,
-                box_time_characters=False,
-                )
-            with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
-                print(timetable_finished_html, file=outfile)
-            debug_print(1, "Finished HTML done")
+    if (do_html or do_pdf):
+        # Produce the final complete page...
+        timetable_finished_html = finish_html_timetable(
+            timetable_styled_html,
+            header_styling_list,
+            title=page_title,
+            box_time_characters=False,
+            )
+        with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
+            print(timetable_finished_html, file=outfile)
+        debug_print(1, "Finished HTML done")
 
-        if (do_pdf):
-            # Pick up already-created HTML, convert to PDF
-            weasy_html_pathname = output_pathname_before_suffix + '.html'
-            html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-            html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
-            debug_print(1, "Weasy done")
+    if (do_pdf):
+        # Pick up already-created HTML, convert to PDF
+        weasy_html_pathname = output_pathname_before_suffix + '.html'
+        html_for_weasy = weasyHTML(filename=weasy_html_pathname)
+        html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
+        debug_print(1, "Weasy done")
 
-        quit()
-
-    if (args.type == "test"):
-        result = service_dates_from_trip_id(master_feed, 5002831767)
-        print (result)
-        quit()
-
-        new_feed = master_feed.filter_remove_one_day_calendars()
-        printable_calendar = gtfs_type_cleanup.type_uncorrected_calendar(new_feed.calendar)
-        module_dir = Path(__file__).parent
-        printable_calendar.to_csv( module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False)
-        print ("calendar without one-day calendars created")
-        quit()
-
-        print(master_feed.get_trip_short_name(55792814913))
-        quit()
-
-        tt_spec = load_tt_spec(args.tt_spec_filename)
-        tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
-        dwell_secs = get_dwell_secs("59","CDL")
-        print("Dwell is", dwell_secs)
-        quit()
+    quit()

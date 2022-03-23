@@ -69,39 +69,23 @@ def make_tt_arg_parser():
     """Make argument parser for timetable.py"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='''Produce printable HTML timetable.
-The --type argument determines the type of timetable:
-  fill - timetable made from a tt-spec; the usual choice
-  compare - compare timetables for trips on a single route (to spot schedule changes for tt-spec making -- do not generate timetable)
-  test - do internal testing (do not generate timetable)
-''',
+        description="""Produce printable HTML timetable from a .tt-spec file.""",
         )
     add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
     add_output_dirname_argument(parser)
-    parser.add_argument('--type','-t',
-        choices=['fill','compare','test'],
-        help='What to do: type of timetable or tt-spec to generate.',
-        )
     parser.add_argument('--spec','-l',
         dest='tt_spec_filename',
-        help='''CSV file containing tt-spec template for timetable.
-                Top row should have a train number in each column except the first.
-                A minus sign in front of train number indicates that column is read upward;
-                a slash between trains indicates two trains in one column).
-                The left column should have station codes in every row except the first.
-                They are in the order they will be in in the finished timetable.
-                The rest of the file should usually be blank.
-                Format is a work in progress.
-             ''',
-        )
-    parser.add_argument('--route',
-        dest='route_long_name',
-        help='''For the compare option only.
-                This specifies which route_long_name to use.
-                For instance "Cardinal" or "Lake Shore Limited".
-             '''
+        help="""CSV file containing tt-spec template for timetable.
+                The tt-spec format is a work in progress.
+                For more information see the specifications.  Brief summary:
+                Top row should have a train number, "stations", or "services" in each column except the first.
+                Second row may have "column-options" in the first column and special codes in the other columns.
+                Left column should have a station code in every row except the first & second,
+                or be blank to pass through text on this row to the final timetable.
+                The center of the timetable will be filled in according to the train number and station code.
+             """,
         )
     return parser;
 
@@ -110,7 +94,6 @@ if __name__ == "__main__":
     print("Testing argument parser:")
     parser = make_tt_arg_parser()
     args = parser.parse_args()
-    print("Type: " + str(args.type))
     print("GTFS Filename: " + str(args.gtfs_filename))
     print("Reference Date: " + str(args.reference_date))
     print("Output Dirname: " + str(args.output_dirname))
