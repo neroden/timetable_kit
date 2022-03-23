@@ -15,14 +15,10 @@ import argparse
 
 from pathlib import Path
 import os.path # for os.path abilities
-import sys # Solely for sys.path
-
-import datetime # for current date, tommorrow, etc.
+import sys # Solely for sys.path and solely for debuggint
 
 import pandas as pd
 import gtfs_kit as gk
-# from collections import namedtuple
-# import operator # for operator.not_
 from weasyprint import HTML as weasyHTML
 from weasyprint import CSS as weasyCSS
 
@@ -628,18 +624,12 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
     output_dirname = args.output_dirname
+
     gtfs_filename = args.gtfs_filename
-
-    if (args.reference_date):
-        reference_date = int( args.reference_date.strip() )
-    else:
-        # Use tomorrow as the reference date.
-        # After all, you aren't catching a train today, right?
-        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int( tomorrow.strftime('%Y%m%d') )
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-
     master_feed = initialize_feed(gtfs=gtfs_filename)
+
+    reference_date = args.reference_date
+    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     # Create the station name lookup table.
     # This is a global in amtrak.json_stations called

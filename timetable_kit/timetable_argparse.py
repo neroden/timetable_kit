@@ -12,11 +12,18 @@ Also includes routines for adding common arguments to parsers for other commands
 
 import argparse
 
+# Needed for defaulting the reference date to tomorrow:
+import datetime
+
 # Needed for defaulting the GTFS file:
 from timetable_kit import amtrak
 
 # Determine defaults in initialization code here:
 default_gtfs_filename = amtrak.gtfs_unzipped_local_path
+# Use tomorrow as the default reference date.
+# After all, you aren't catching a train today, right?
+tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+default_reference_date = int( tomorrow.strftime('%Y%m%d') )
 
 def add_gtfs_argument(parser: argparse.ArgumentParser):
     """Add the common --gtfs argument to a parser"""
@@ -33,10 +40,12 @@ def add_date_argument(parser: argparse.ArgumentParser):
     """Add the common --date argument to a parser"""
     parser.add_argument('--reference-date','--date','-d',
         dest='reference_date',
-        help='''Reference date.
+        help="""Reference date.
                 GTFS data contains timetables for multiple time periods;
                 this produces the timetable valid as of the reference date.
-             '''
+             """,
+        type = int,
+        default = default_reference_date,
         )
 
 def add_debug_argument(parser: argparse.ArgumentParser):

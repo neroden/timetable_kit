@@ -17,18 +17,7 @@ import pandas as pd
 import gtfs_kit as gk
 
 # My packages: Local module imports
-# Note namespaces are separate for each file/module
-# Also note: python packaging is really sucky for direct script testing.
-from timetable_kit.errors import (
-    GTFSError,
-    NoStopError,
-    TwoStopsError,
-    NoTripError,
-    TwoTripsError,
-    InputError
-)
 from timetable_kit.debug import (set_debug_level, debug_print)
-from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
@@ -129,7 +118,6 @@ def make_argparser():
                     """,
         )
     add_gtfs_argument(parser)
-    add_date_argument(parser)
     add_debug_argument(parser)
     parser.add_argument("--route",
         dest="route_long_name",
@@ -139,24 +127,14 @@ def make_argparser():
         )
     return parser
 
-
 ### Main program
 if __name__ == "__main__":
     my_arg_parser = make_argparser()
     args = my_arg_parser.parse_args()
 
     set_debug_level(args.debug)
+
     gtfs_filename = args.gtfs_filename
-
-    if (args.reference_date):
-        reference_date = int( args.reference_date.strip() )
-    else:
-        # Use tomorrow as the reference date.
-        # After all, you aren't catching a train today, right?
-        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int( tomorrow.strftime('%Y%m%d') )
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-
     master_feed = initialize_feed(gtfs = gtfs_filename)
 
     route_long_name = args.route_long_name
@@ -166,4 +144,3 @@ if __name__ == "__main__":
     route_id = lookup_route_id[route_long_name]
 
     compare_similar_services(route_id, feed=master_feed)
-    quit()

@@ -129,23 +129,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     set_debug_level(args.debug)
-    gtfs_filename = args.gtfs_filename
 
-    if (args.reference_date):
-        reference_date = int( args.reference_date.strip() )
-    else:
-        # Use tomorrow as the reference date.
-        # After all, you aren't catching a train today, right?
-        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int( tomorrow.strftime('%Y%m%d') )
+    gtfs_filename = args.gtfs_filename
+    master_feed = initialize_feed(gtfs = gtfs_filename)
+
+    reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     stop_one = args.stop_one
     stop_two = args.stop_two
     print ("Finding trains from", stop_one, "to", stop_two)
-
-    master_feed = initialize_feed(gtfs = gtfs_filename)
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     # TODO: figure out how to filter by day of week
     # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
