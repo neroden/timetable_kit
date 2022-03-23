@@ -92,4 +92,5 @@ Colors have their own file.
 /* Text transform for timezone header span: */
 .timezone-header-text {
     transform: rotate(-90deg);
+    font-weight: normal;
 }
