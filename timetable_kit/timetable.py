@@ -518,15 +518,20 @@ def fill_tt_spec(tt_spec,
             if (pd.isna(station_code)):
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
-                # Prefilled text was done above; blanks should be made truly blank, "".
-                tt.iloc[y,x] = ""
-                cell_css_list.append("special-cell")
+                # Prefilled text gets retained.  (Should we HTML-ize it?  FIXME)
+                pass
+                # This is probably special text like "to Chicago".
+                if (pd.isna(tt.iloc[y,x])):
+                    # Make sure blanks become *string* blanks in this line.
+                    tt.iloc[y,x] = ""
+                # We have to set the styler.
+                cell_css_list.append("special-cell") # can use row and col numbers to find it
             elif (not pd.isna(tt.iloc[y,x])):
                 # Line led by a station code, but cell already has a value.
                 # This is probably special text like "to Chicago".
                 # We keep this.  (But note: should we HTML-ize it? FIXME )
-
-                # But we have to set the styler.
+                pass
+                # We have to set the styler.
                 cell_css_list.append("special-cell") # can use row and col numbers to find it
             else:
                 # Normal line led by a station code.
