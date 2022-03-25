@@ -5,7 +5,7 @@
 """
 Debugging routines
 
-print_debug()
+debug_print()
 """
 
 # Global variable controlling debugging status
@@ -15,6 +15,7 @@ print_debug()
 debug=1
 
 def set_debug_level(level: int):
+    global debug
     debug=level
     return
 
