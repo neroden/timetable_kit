@@ -11,6 +11,7 @@ TwoStopsError
 NoTripError
 TwoTripsError
 InputError
+FutureCodeError
 """
 
 class GTFSError(ValueError):
@@ -19,16 +20,24 @@ class GTFSError(ValueError):
 
 class NoStopError(GTFSError):
     """Exception when a train doesn't stop at a station.  Frequently caught."""
+    pass
 
 class TwoStopsError(GTFSError):
     """Exception when a train stops at a station twice.  Frequently caught."""
+    pass
 
 class NoTripError(GTFSError):
     """Exception when no trips where one is expected."""
+    pass
 
 class TwoTripsError(GTFSError):
     """Exception when several trips where one is expected."""
+    pass
 
 class InputError(ValueError):
     """Exception for unexpected data passed in by the user."""
+    pass
+
+class FutureCodeError(RuntimeError):
+    """Exception for calling functions which are unimplemented stubs."""
     pass

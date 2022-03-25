@@ -18,7 +18,7 @@ from collections import namedtuple
 from datetime import datetime, timedelta # for time zones
 from zoneinfo import ZoneInfo # still for time zones
 # These are mine
-from timetable_kit.errors import GTFSError
+from timetable_kit.errors import (GTFSError, FutureCodeError)
 
 def get_zonediff(local_zone, base_zone):
     """
@@ -288,6 +288,34 @@ def get_rd_str( timepoint,
         rd_str = ''.join([ '<span class="box-rd">', rd_str, '</span>' ])
     return rd_str
 
+baggage_box_prefix = '<span class="box-baggage">'
+baggage_box_postfix = '</span>'
+def get_baggage_str (doing_html=False):
+    """
+    Return a suitable string to indicate the presence of checked baggage.
+
+    Currently the HTML implementation references an external checked baggage icon.
+    There are inline alternatives to this but Weasyprint isn't nice about them.
+    """
+    if (not doing_html):
+        return "B"
+    return "".join([ baggage_box_prefix,
+        '<span class="baggage-symbol">',
+        '<img class="icon-img" src="icons/baggage-ncn.svg" alt="Baggage" title="Checked Baggage" />',
+        '</span>',
+        baggage_box_postfix,
+        ])
+
+def get_blank_baggage_str (doing_html=False):
+    """
+    Return a suitable string to indicate the absence of checked baggage.
+
+    The HTML implementation boxes it to line things up properly.
+    """
+    if (not doing_html):
+        return " "
+    return "".join([baggage_box_prefix, baggage_box_postfix])
+
 def timepoint_str ( timepoint,
                     stop_tz,
                     agency_tz,
@@ -304,6 +332,8 @@ def timepoint_str ( timepoint,
                     calendar=None,
                     is_first_stop=False,
                     is_last_stop=False,
+                    use_baggage_str=False,
+                    has_baggage=False,
                    ):
     """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
@@ -341,7 +371,13 @@ def timepoint_str ( timepoint,
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
     -- is_last_stop: suppress "discharge only" notation
+    -- use_baggage_str: True/False: leave space for baggage symbol
+    -- has_baggage: True/False: does this stop have checked baggage?
+        Ignored if use_baggage_str is False.
     """
+
+    if (second_timepoint):
+        raise FutureCodeError("Second_timepoint is not implemented.")
 
     if (doing_html):
         linebreak = "<br>"
@@ -455,8 +491,16 @@ def timepoint_str ( timepoint,
         elif (is_last_stop):
             ar_dp_str = ar_str # Mark arrival on last stop
 
+        if (not use_baggage_str):
+            baggage_str = ""
+        elif (has_baggage):
+            baggage_str = get_baggage_str()
+        else:
+            baggage_str = get_blank_baggage_str()
+
         # Each element joined herein includes HTML annotations, and is completely blank if unused
         complete_line_str = ''.join([ ar_dp_str,
+                                      baggage_str,
                                       rd_str,
                                       arrival_time_str if discharge_only else departure_time_str,
                                       arrival_daystring if discharge_only else departure_daystring,
@@ -470,10 +514,28 @@ def timepoint_str ( timepoint,
         if (timepoint.departure_time == timepoint.arrival_time):
             no_dwell = True
 
+        # Note, this won't work with a second timepoint (which isn't implemented anyway)
+        if (not use_baggage_str):
+            arrival_baggage_str = ""
+            departure_baggage_str = ""
+        elif (reverse):
+            if (has_baggage):
+                departure_baggage_str = get_baggage_str()
+            else:
+                departure_baggage_str = get_blank_baggage_str()
+            arrival_baggage_str = get_blank_baggage_str()
+        else:
+            if (has_baggage):
+                arrival_baggage_str = get_baggage_str()
+            else:
+                arrival_baggage_str = get_blank_baggage_str()
+            departure_baggage_str = get_blank_baggage_str()
+
         # Start assembling the two lines.
         if receive_only or (no_dwell and not discharge_only):
             # This just prints the "Ar" but does the alignment (hopefully)
             arrival_line_str = ''.join([ ar_str,
+                                         arrival_baggage_str,
                                          blank_rd_str,
                                          blank_time_str,
                                          blank_daystring,
@@ -488,6 +550,7 @@ def timepoint_str ( timepoint,
                                           is_arrival_line=True,
                                         )
             arrival_line_str = ''.join([ ar_str,
+                                         arrival_baggage_str,
                                          arrival_rd_str,
                                          arrival_time_str,
                                          arrival_daystring,
@@ -495,6 +558,7 @@ def timepoint_str ( timepoint,
         if (discharge_only):
             # This just prints the "Dp" but does the alignment (hopefully)
             departure_line_str = ''.join([ dp_str,
+                                         departure_baggage_str,
                                          blank_rd_str,
                                          blank_time_str,
                                          blank_daystring,
@@ -509,6 +573,7 @@ def timepoint_str ( timepoint,
                                            is_departure_line=True,
                                           )
             departure_line_str = ''.join([ dp_str,
+                                           departure_baggage_str,
                                            departure_rd_str,
                                            departure_time_str,
                                            departure_daystring,

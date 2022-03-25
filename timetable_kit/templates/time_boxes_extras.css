@@ -19,6 +19,12 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: left;
     width: 1.5em; /* Must be fixed to align all the text left */
 }
+.box-baggage {
+    /* Baggage icon (or blank space) */
+    display: inline-block;
+    text-align: center;
+    width: 1em;
+}
 .box-rd {
     /* Single bold letter like R or D: fixed width */
     display: inline-block;
