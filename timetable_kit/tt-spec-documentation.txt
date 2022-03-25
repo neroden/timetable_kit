@@ -1,5 +1,7 @@
 The ".tt-spec" file format is a template used to generate the timetable
-This document describes the "tt-spec" file format as currently implemented.
+This document describes the "tt-spec" file format as currently implemented,
+and the associated "tt-aux" file format.
+
 The tt-spec format remains a work in progress and may change at any time.
 
 RATIONALE
@@ -139,3 +141,15 @@ I am hoping to add more bells and whistles.  When I do, my plan is to put auxill
 showing how to generate a final timetable from it, in a JSON file which should end with .tt-json. *not yet
 
 In addition, there will be tools to generate lists of trains to help you design your spec.
+
+TT-AUX FILE
+-----------
+Associated with the .tt-spec file is a .tt-aux file with the same primary name.
+(so, for cz.tt-spec, use cz.tt-aux)
+
+This is a JSON file with a list of key-value pairs.  So far the defined keys are:
+{
+    "title": "This goes in the title bar of the HTML page",
+    "heading": "This is the heading at the top of the page",
+}
+There will be a lot more but this is a start.
