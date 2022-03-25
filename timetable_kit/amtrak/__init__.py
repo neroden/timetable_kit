@@ -18,3 +18,7 @@ from . import (
 # Trying this, not sure about it
 from .get_gtfs import gtfs_zip_local_path
 from .get_gtfs import gtfs_unzipped_local_path
+
+# definitely wanna export these
+from .baggage import station_has_checked_baggage
+from .special_data import train_has_checked_baggage

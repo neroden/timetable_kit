@@ -27,6 +27,21 @@ from timetable_kit.amtrak.json_stations import (
 #stations_csv_path = station_stats_dir / "json_stations.csv"
 #bad_stations_path = base_dir / "bad_stations.csv"
 
+# This is a global filled on first use
+checked_baggage_dict = None
+
+def station_has_checked_baggage(station_code: str) -> bool:
+    """
+    Does this station have checked baggage service?
+
+    Constructs and caches the data on first call.
+    Requires that the JSON stations database already be downloaded.
+    """
+    global checked_baggage_dict
+    if checked_baggage_dict is None:
+        checked_baggage_dict = make_checked_baggage_dict()
+    return checked_baggage_dict[station_code]
+
 def make_checked_baggage_dict() -> dict[str, bool]:
     """
     Make a dict which maps from station code to whether it supports checked baggage.
@@ -70,6 +85,8 @@ def make_checked_baggage_dict() -> dict[str, bool]:
 # TESTING
 if __name__ == "__main__":
     set_debug_level(2)
-    checked_baggage_dict = make_checked_baggage_dict()
-    print (checked_baggage_dict)
+    print(station_has_checked_baggage("NYP")) # This should generate and cache data
+    print(station_has_checked_baggage("CHI")) # This should use cached data
+    print(station_has_checked_baggage("SYR"))
+    print(station_has_checked_baggage("BON"))
     quit()
