@@ -1,0 +1,7 @@
+{
+    "title": "California Zephyr Timetable",
+    "heading": "Amtrak's California Zephyr",
+    "sleeper-color": "lavender", 
+    "bus-color": "darkseagreen",
+    "day-train-color": "cornsilk"
+}
