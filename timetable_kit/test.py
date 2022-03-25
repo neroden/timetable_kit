@@ -55,6 +55,15 @@ if __name__ == "__main__":
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
+    auxfile_filename = "cz.tt-aux"
+    with open(auxfile_filename, "r") as f:
+        auxfile_str = f.read()
+    print(auxfile_str)
+    aux = json.loads(auxfile_str)
+    print ("Title:", aux["title"])
+    print ("Heading:", aux["heading"])
+    print ("Sleeper color:", aux["sleeper-color"])
+
     quit()
 
     # Generate routes.html

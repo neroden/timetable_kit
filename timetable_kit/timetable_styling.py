@@ -123,7 +123,7 @@ def finish_html_timetable(styled_timetable_html,
         header_styling_list,
         *,
         author,
-        title="",
+        aux = dict(),
         for_weasyprint=False,
         box_time_characters=False
         ):
@@ -139,8 +139,20 @@ def finish_html_timetable(styled_timetable_html,
     header_styling_css = make_header_styling_css(header_styling_list)
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    if not title:
-        title="An Amtrak Timetable" # FIXME
+    if "title" in aux:
+        title = aux["title"]
+    else:
+        title="Timetable"
+
+    if "heading" in aux:
+        heading = aux["heading"]
+    else:
+        heading="Timetable"
+
+    if "for_rpa" in aux:
+        for_rpa = aux["for_rpa"]
+    else:
+        for_rpa = False
 
     ### FONTS
     font_name = "SpartanTT"
@@ -190,18 +202,17 @@ def finish_html_timetable(styled_timetable_html,
 
     production_date_str = datetime.date.today().isoformat()
 
-    for_rpa = True
     html_params = {
         'lang': "en-US",
         'encoding': "utf-8",
         'title': title,
         'internal_stylesheet': True,
-        'heading': title, # FIXME: do better
+        'heading': heading,
         'timetable': styled_timetable_html,
         'timetable_kit_url': "https://github.com/neroden/timetable_kit",
         'production_date': production_date_str,
         'author': author,
-        'for_rpa': for_rpa, # FIXME: currently always True
+        'for_rpa': for_rpa,
     }
     # Dictionary merge, html_params take priority, Python 3.9
     full_page_params = stylesheet_params | html_params

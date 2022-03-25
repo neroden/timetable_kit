@@ -16,6 +16,7 @@ import argparse
 from pathlib import Path
 import os.path # for os.path abilities
 import sys # Solely for sys.path and solely for debuggint
+import json
 
 import pandas as pd
 import gtfs_kit as gk
@@ -72,6 +73,21 @@ from timetable_kit.tsn import (
     )
 
 ### tt-spec loading and parsing code
+
+def load_tt_aux(filename):
+    """Load a tt-aux file in JSON format"""
+    path = Path(filename)
+    if path.is_file():
+        with open(path, "r") as f:
+            auxfile_str = f.read()
+            aux = json.loads(auxfile_str)
+            debug_print(1, "tt-aux file loaded")
+            return aux
+        print ("Shouldn't get here, file load failed.")
+    else:
+        # Make it blank, basically
+        debug_print(1, "No tt-aux file.")
+        return dict()
 
 def load_tt_spec(filename):
     """Load a tt-spec from a CSV file"""
@@ -672,6 +688,7 @@ if __name__ == "__main__":
     # Accept with or without .spec
     tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
     tt_spec_filename = tt_filename_base + ".tt-spec"
+    tt_aux_filename = tt_filename_base + ".tt-aux"
     # Output to "tt_" + filename  + ".whatever"
     output_pathname_before_suffix = "tt_" + tt_filename_base
 
@@ -679,10 +696,12 @@ if __name__ == "__main__":
     tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
     debug_print(1, "tt-spec loaded and augmented")
 
+    aux = load_tt_aux(tt_aux_filename)
+
     # Quick hack to speed up testing cycle:
     # implement this properly later TODO
     do_csv = False
-    do_html = False
+    do_html = True
     do_pdf = True
     # Note that due to the inline images issue we may need to run
     # a completely separate HTML version for weasyprint.  We avoid this so far.
@@ -720,7 +739,7 @@ if __name__ == "__main__":
             timetable_styled_html,
             header_styling_list,
             author=author,
-            title=page_title,
+            aux=aux,
             box_time_characters=False,
             )
         with open(output_pathname_before_suffix + '.html' , 'w' ) as outfile:
