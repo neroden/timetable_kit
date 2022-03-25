@@ -508,6 +508,8 @@ def fill_tt_spec(tt_spec,
             else: # plaintext
                 header_styling_list.append("")
 
+            train_has_checked_baggage = amtrak.train_has_checked_baggage(train_num)
+
         for y in range(1, row_count): # First (0) row is the header
             station_code = tt_spec.iloc[y, 0] # row y, column 0
             # Reset the styler string:
@@ -560,7 +562,8 @@ def fill_tt_spec(tt_spec,
                 elif train_nums_str in ["timezone"]: # Column for time zone codes
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y,x] = text_presentation.get_zone_str(stop_tz, doing_html=doing_html)
-                else: # It's a train number.
+                else:
+                    # It's a train number.
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*
                     # If the first train terminates and the second train starts, we need to
@@ -577,6 +580,11 @@ def fill_tt_spec(tt_spec,
                     calendar = None # if not use_daystring, save time
                     if (use_daystring):
                         calendar = today_feed.calendar[today_feed.calendar.service_id == my_trip.service_id]
+
+                    if (train_has_checked_baggage):
+                        has_baggage = amtrak.station_has_checked_baggage(station_code)
+                    else:
+                        has_baggage = False
 
                     # Need to insert complicated for loop here for multiple trains
                     # TODO FIXME
@@ -609,6 +617,8 @@ def fill_tt_spec(tt_spec,
                                     use_daystring=use_daystring,
                                     calendar=calendar,
                                     long_days_box=long_days_box,
+                                    use_baggage_str = train_has_checked_baggage,
+                                    has_baggage = has_baggage,
                                     )
                         tt.iloc[y,x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.

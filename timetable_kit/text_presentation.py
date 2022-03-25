@@ -494,16 +494,16 @@ def timepoint_str ( timepoint,
         if (not use_baggage_str):
             baggage_str = ""
         elif (has_baggage):
-            baggage_str = get_baggage_str()
+            baggage_str = get_baggage_str(doing_html=doing_html)
         else:
-            baggage_str = get_blank_baggage_str()
+            baggage_str = get_blank_baggage_str(doing_html=doing_html)
 
         # Each element joined herein includes HTML annotations, and is completely blank if unused
         complete_line_str = ''.join([ ar_dp_str,
-                                      baggage_str,
                                       rd_str,
                                       arrival_time_str if discharge_only else departure_time_str,
                                       arrival_daystring if discharge_only else departure_daystring,
+                                      baggage_str,
                                     ])
         return complete_line_str
 
@@ -514,31 +514,38 @@ def timepoint_str ( timepoint,
         if (timepoint.departure_time == timepoint.arrival_time):
             no_dwell = True
 
+        # Put baggage_str on line one, leave line two blank
         # Note, this won't work with a second timepoint (which isn't implemented anyway)
         if (not use_baggage_str):
             arrival_baggage_str = ""
             departure_baggage_str = ""
-        elif (reverse):
-            if (has_baggage):
-                departure_baggage_str = get_baggage_str()
-            else:
-                departure_baggage_str = get_blank_baggage_str()
-            arrival_baggage_str = get_blank_baggage_str()
+            blank_baggage_str = ""
         else:
+            blank_baggage_str = get_blank_baggage_str(doing_html=doing_html)
+            departure_baggage_str = blank_baggage_str
+            arrival_baggage_str = blank_baggage_str
             if (has_baggage):
-                arrival_baggage_str = get_baggage_str()
-            else:
-                arrival_baggage_str = get_blank_baggage_str()
-            departure_baggage_str = get_blank_baggage_str()
+                if receive_only or (no_dwell and not discharge_only):
+                    # On the only printed line
+                    departure_baggage_str = get_baggage_str(doing_html=doing_html)
+                elif discharge_only:
+                    # On the only printed line
+                    arrival_baggage_str = get_baggage_str(doing_html=doing_html)
+                elif (reverse):
+                    # On the first of two printed lines
+                    departure_baggage_str = get_baggage_str(doing_html=doing_html)
+                else:
+                    # On the first of two printed lines
+                    arrival_baggage_str = get_baggage_str(doing_html=doing_html)
 
         # Start assembling the two lines.
         if receive_only or (no_dwell and not discharge_only):
             # This just prints the "Ar" but does the alignment (hopefully)
             arrival_line_str = ''.join([ ar_str,
-                                         arrival_baggage_str,
                                          blank_rd_str,
                                          blank_time_str,
                                          blank_daystring,
+                                         blank_baggage_str,
                                         ])
         else:
             arrival_rd_str  = get_rd_str( timepoint,
@@ -550,18 +557,18 @@ def timepoint_str ( timepoint,
                                           is_arrival_line=True,
                                         )
             arrival_line_str = ''.join([ ar_str,
-                                         arrival_baggage_str,
                                          arrival_rd_str,
                                          arrival_time_str,
                                          arrival_daystring,
+                                         arrival_baggage_str,
                                         ])
         if (discharge_only):
             # This just prints the "Dp" but does the alignment (hopefully)
             departure_line_str = ''.join([ dp_str,
-                                         departure_baggage_str,
                                          blank_rd_str,
                                          blank_time_str,
                                          blank_daystring,
+                                         blank_baggage_str,
                                         ])
         else:
             departure_rd_str = get_rd_str( timepoint,
@@ -573,10 +580,10 @@ def timepoint_str ( timepoint,
                                            is_departure_line=True,
                                           )
             departure_line_str = ''.join([ dp_str,
-                                           departure_baggage_str,
                                            departure_rd_str,
                                            departure_time_str,
                                            departure_daystring,
+                                           departure_baggage_str,
                                           ])
 
         if (discharge_only and (not reverse) and second_timepoint):
