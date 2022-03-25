@@ -651,6 +651,11 @@ if __name__ == "__main__":
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
+    author = args.author
+    if (not author):
+        print("--author is mandatory!")
+        quit()
+
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
@@ -710,6 +715,7 @@ if __name__ == "__main__":
         timetable_finished_html = finish_html_timetable(
             timetable_styled_html,
             header_styling_list,
+            author=author,
             title=page_title,
             box_time_characters=False,
             )

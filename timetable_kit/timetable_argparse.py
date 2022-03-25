@@ -87,6 +87,12 @@ def make_tt_arg_parser():
                 The center of the timetable will be filled in according to the train number and station code.
              """,
         )
+    parser.add_argument("--author", "-a",
+        dest="author",
+        help="""Name of the person generating the timetable.
+                This is mandatory!
+             """,
+        )
     return parser;
 
 # Testing code

@@ -119,12 +119,21 @@ def make_header_styling_css(header_styling_list) -> str:
     return accumulated_css
 
 
-def finish_html_timetable(styled_timetable_html, header_styling_list, title="", for_weasyprint=False, box_time_characters=False):
+def finish_html_timetable(styled_timetable_html,
+        header_styling_list,
+        *,
+        author,
+        title="",
+        for_weasyprint=False,
+        box_time_characters=False
+        ):
     """
     Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
 
     The header_styling_list has CSS attributes (not classes) for each header column
     (indexed by zero-based column number).  This is due to inefficiencies in PANDAS.
+
+    The mandatory "author" argument gives the author of the timetable.
     """
 
     header_styling_css = make_header_styling_css(header_styling_list)
@@ -180,6 +189,8 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
     }
 
     production_date_str = datetime.date.today().isoformat()
+
+    for_rpa = True
     html_params = {
         'lang': "en-US",
         'encoding': "utf-8",
@@ -189,6 +200,8 @@ def finish_html_timetable(styled_timetable_html, header_styling_list, title="", 
         'timetable': styled_timetable_html,
         'timetable_kit_url': "https://github.com/neroden/timetable_kit",
         'production_date': production_date_str,
+        'author': author,
+        'for_rpa': for_rpa, # FIXME: currently always True
     }
     # Dictionary merge, html_params take priority, Python 3.9
     full_page_params = stylesheet_params | html_params
