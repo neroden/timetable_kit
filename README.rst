@@ -13,7 +13,7 @@ Directory Structure
 In keeping with the universal, if bizarre, Python package source directory structure,
 the entire package is in a subdirectory called timetable_kit.
 
-The only exceptions are certain build files, this file, and LICENSE.
+The only exceptions are HOWTO, certain build files, this file, and LICENSE.
 
 In particular, data resources and documentation are all inside the package directory at
 this time.  This may change.
@@ -33,6 +33,11 @@ timetable_kit uses the Jinja2 template system directly.
 It uses Weasyprint to convert HTML timetables to PDF timetables.
 
 It's packaged as a package with Poetry, so presumably requires Poetry to install.
+
+Further Documentation
+=====================
+Look in the HOWTO file for information on setting this up as an editable module.
+Look in the timetable_kit folder for the README.rst there for further info on using the program.
 
 Authors
 =======
