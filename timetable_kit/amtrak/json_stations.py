@@ -11,8 +11,7 @@ In order to download it, this must be run as a program.
 
 The other routines here are for accessing it.
 
-make_station_name_lookup_table
-fills the global lookup_table
+get_station_name is the primary one.
 """
 
 # "./json_stations.py download"
@@ -26,9 +25,6 @@ import requests
 import json # better for the details import
 from time import sleep # Avoid slamming Amtrak's server too fast -- not needed
 import argparse
-
-# This is exported.  It is filled by make_station_name_lookup_table.
-lookup_station_name = None
 
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
 
@@ -117,23 +113,33 @@ def load_stations_json():
         stations_json = stations_json_local_file.read()
     return stations_json
 
-# This one is called by the main timetable program.
+# For getting station names from station codes.
 
-def make_station_name_lookup_table():
+# This is cached.
+# It is filled by make_station_name_dict
+station_name_dict = None
+
+def get_station_name(station_code: str) -> str:
+    """
+    Given an Amtrak station code, return the long station name.
+
+    Creates a dict on first invocation, uses the dict subsequently.
+    """
+    global station_name_dict
+    if station_name_dict is None:
+        station_name_dict = make_station_name_dict()
+    return station_name_dict[station_code]
+
+def make_station_name_dict():
     """
     Return a dict which takes a station code and returns a suitable printable station name.
 
-    Also fills the module-level global "lookup_station_name", to avoid recomputation
-
     Expects json stations to be downloaded already, in a suitable local file
     """
-    global lookup_station_name
-
     stations_json = load_stations_json()
     # Believe it or not, this line JUST WORKS!!!!  Wow!
     stations = pd.io.json.read_json(stations_json,orient='records')
-    lookup_station_name = dict( zip(stations.code, stations.autoFillName) )
-    return lookup_station_name
+    return dict( zip(stations.code, stations.autoFillName) )
 
 def download_station_details(station_code: str) -> str:
     """Download station details for one station as json text; return it."""

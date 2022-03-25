@@ -547,7 +547,7 @@ def fill_tt_spec(tt_spec,
 
                 if train_nums_str in ["station","stations"]: # Column for station names
                     cell_css_list.append("station-cell")
-                    station_name_raw = amtrak.json_stations.lookup_station_name[station_code]
+                    station_name_raw = amtrak.get_station_name(station_code)
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y,x] = station_name_str
@@ -668,12 +668,6 @@ if __name__ == "__main__":
 
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-
-    # Create the station name lookup table.
-    # This is a global in amtrak.json_stations called
-    # amtrak.json_stations.lookup_station_name
-    # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
-    amtrak.json_stations.make_station_name_lookup_table()
 
     # Accept with or without .spec
     tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")

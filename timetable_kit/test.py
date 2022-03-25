@@ -12,6 +12,7 @@ Not intended for production use.
 import argparse
 import pandas as pd
 import gtfs_kit as gk
+import json
 
 # My packages
 from timetable_kit.errors import (
@@ -54,14 +55,6 @@ if __name__ == "__main__":
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    # Create the station name lookup table.
-    # This is a global in amtrak.json_stations called
-    # amtrak.json_stations.lookup_station_name
-    # Expects JSON stations to be downloaded already (go easy on Amtrak bandwidth!)
-    amtrak.json_stations.make_station_name_lookup_table()
-
-    zd = text_presentation.get_zonediff("America/Los_Angeles","America/New_York")
-    print(zd)
     quit()
 
     # Generate routes.html
