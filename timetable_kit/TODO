@@ -1,0 +1,38 @@
+-1 -- Timezones.
+0 -- Put appropriate title and heading on the page.
+1 -- Handle the ever-complicated baggage icon.
+2 -- Detect first_station / last_station. ***
+3 -- Handle "ArDp" with special column or with column option
+
+4 -- Print service dates on timetable.  See service_dates_from_trip_id.
+5 -- add "updown" special row
+6 -- add "days of week" special row
+
+7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
+     get_timepoint in particular is running slow inside an inner loop.
+     This is the lowest-hanging remaining fruit.
+
+8 -- Fix find_trains.py to sort in order by departure time.  (Better for prototyping.)
+
+9 -- Routine to print out calendar for a single route,
+     with out-of-period dates removed, for inspection
+
+10 -- Make both versions of the baggage icon (inline and not)
+
+11 -- Resolve other problematic directory references
+12 -- Resolve command-line functions in amtrak/ into a __main__.py
+
+13 -- Handle two trains in one column (oooglay)
+
+14 -- Improve calendar filtering for days of week
+    Still not clear what the best approach for this is.
+
+    Failing to filter for the days of the week can give two calendars
+    or zero, where I'm looking for one.
+
+    Amtrak, upsettingly, has a lot of weird one-day service calendars.
+    These are best described as "confusing".  This messed up the CONO
+    timetable generator for 20220312.
+
+    To make matters worse, there are calendar gaps in other timetables,
+    like the Cardinal one.  We need a better presentation on this crap.
