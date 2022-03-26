@@ -24,7 +24,7 @@ You must download the Wikipedia page locally first.
 Since this is for debugging, it will probably never be made more elegant than this.
 
 Input file:
-  ./wikipedia/List of Amtrak stations - Wikipedia.html
+  ./wikipedia/List_of_Amtrak_stations.html
 Output files:
   ./wikipedia/wiki-stations.csv
     One row for each station, in alphabetical order by station code
@@ -46,7 +46,7 @@ Duplicate station codes (if any) will be listed on standard output for debugging
 arg_parser.add_argument('--file',
     help='''HTML file of the List of Amtrak stations Wikipedia page''',
     dest="wiki_page_filename",
-    default = "./wikipedia/List of Amtrak stations - Wikipedia.html"
+    default = "./wikipedia/List_of_Amtrak_stations.html"
     )
 arg_parser.add_argument('--csv-out',
     help='''CSV output filename''',

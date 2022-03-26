@@ -15,9 +15,11 @@ be made indepenent of Amtrak, with the Amtrak-specific stuff here.
 
 This has several scripts:
 
+* get_gtfs.py -- download Amtrak's GTFS
 * json_stations.py -- download and process Amtrak's station database
-* get_wiki_stations.py -- get Amtrak's station list from Wikipedia
-* wiki_station_cleanup.py -- Clean up data from Wikipedia
 * station_url.py -- get the URL for the JSON station details for a station
 * accessibility_check.py -- make lists of Amtrak's stations with access problems
+* get_wiki_stations.py -- get Amtrak's station list from Wikipedia -- needs lxml installed
+    This is used by the accessibility_check.py
+* wiki_station_cleanup.py -- Clean up data from Wikipedia
 
