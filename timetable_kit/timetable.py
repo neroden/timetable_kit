@@ -535,9 +535,11 @@ def fill_tt_spec(tt_spec,
             # This allows for the addition of extra rows.
             if (station_code == "route-name"):
                 # Special line for route names.
-                if train_nums_str in ["station", "stations", "services", "timezone"]:
+                cell_css_list.append("route-name-cell")
+                if train_nums_str in ["station", "stations"]:
+                    tt.iloc[y,x] = "" # Consider putting "Route Names" here?
+                elif train_nums_str in ["services", "timezone"]:
                     tt.iloc[y,x] = ""
-                    cell_css_list.append("blank-route-name-cell")
                 else:
                     my_trip = trip_from_tsn(today_feed, tsn)
                     route_id = my_trip.route_id
@@ -545,7 +547,6 @@ def fill_tt_spec(tt_spec,
                     route_name = amtrak.get_route_name(today_feed, route_id)
                     styled_route_name = text_presentation.style_route_name_for_column(route_name, doing_html=doing_html)
                     tt.iloc[y,x] = styled_route_name
-                    cell_css_list.append("route-name-cell")
                     cell_css_list.append( get_time_column_stylings(tsn, "class") )
             elif (pd.isna(station_code)):
                 # Line which has no station code -- freeform line.
