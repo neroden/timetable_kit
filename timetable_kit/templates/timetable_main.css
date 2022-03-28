@@ -31,10 +31,9 @@ Colors have their own file.
 }
 
 .tt-table td {
-    /* Stuff for every data cell in the tt_table */
-    /* FIXME: we are transitioning to this schema */
+    /* Defaults for every data cell in the tt_table */
     /* There is a problem: this has higher specificity than the custom classes! */
-    /* This could be solved by using td.custom_class for those selectors */
+    /* This is solved by using td.custom_class for those selectors */
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: gray;
@@ -48,25 +47,39 @@ Colors have their own file.
     border-right-width: 2px;
     border-right-color: black;
 
-    /* Every data cell should have its contents top-aligned.  This is a non-inherited property! */
     vertical-align: top;
+    text-align: left;
 }
 
 /* Align station names to the left of their cell... */
-.station-cell {
+td.station-cell {
     text-align: left;
 }
 /* ...and times to the right of their cell. */
-.time-cell {
+td.time-cell {
     text-align: right;
 }
 /* ...and station service icons to the center. */
-.services-cell {
+td.services-cell {
     text-align: center;
 }
 /* Time zone cells... */
-.timezone-cell {
-    text-align: center
+td.timezone-cell {
+    text-align: center;
+}
+
+
+/* Route name cell.  Must override vertical-align! */
+td.route-name-cell {
+    vertical-align: middle;
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+}
+/* div or span for the route name */
+.box-route-name {
+    font-weight: bold;
 }
 
 /* Text transforms for station text spans: */

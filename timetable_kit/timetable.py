@@ -207,8 +207,8 @@ def flatten_trains_list(trains_list):
     """
     flattened_trains_list = []
     for ts in trains_list:
-        train_nums = split_trains_spec(ts) # Separates at the "/"
-        flattened_trains_list = [*flattened_trains_list, *train_nums]
+        tsns = split_trains_spec(ts) # Separates at the "/"
+        flattened_trains_list = [*flattened_trains_list, *tsns]
     flattened_trains_set = set(flattened_trains_list)
     flattened_trains_set.discard("station")
     flattened_trains_set.discard("stations")
@@ -331,7 +331,7 @@ def make_stations_max_dwell_map (today_feed, tt_spec, dwell_secs_cutoff):
 
     First we extract the list of stations and the list of train names from the tt_spec.
 
-    If any train in train_nums has a dwell time of dwell_secs or longer at a station,
+    If any train in tsns has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
     # First get stations and trains list from tt_spec.
@@ -512,19 +512,19 @@ def fill_tt_spec(tt_spec,
             long_days_box = "long-days-box" in column_options[x]
 
             # Separate train numbers by "/"
-            train_nums = split_trains_spec(train_nums_str)
-            train_num = train_nums[0]
-            if len(train_nums) > 1:
+            tsns = split_trains_spec(train_nums_str)
+            tsn = tsns[0]
+            if len(tsns) > 1:
                 raise InputError("Two trains in one column not implemented")
-            time_column_header = text_presentation.get_time_column_header(train_num, doing_html=doing_html)
+            time_column_header = text_presentation.get_time_column_header(tsn, doing_html=doing_html)
             header_replacement_list.append(time_column_header)
             if (doing_html):
-                time_column_stylings = get_time_column_stylings(train_num)
+                time_column_stylings = get_time_column_stylings(tsn)
                 header_styling_list.append(time_column_stylings)
             else: # plaintext
                 header_styling_list.append("")
 
-            train_has_checked_baggage = amtrak.train_has_checked_baggage(train_num)
+            train_has_checked_baggage = amtrak.train_has_checked_baggage(tsn)
 
         for y in range(1, row_count): # First (0) row is the header
             station_code = tt_spec.iloc[y, 0] # row y, column 0
@@ -533,7 +533,21 @@ def fill_tt_spec(tt_spec,
 
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
-            if (pd.isna(station_code)):
+            if (station_code == "route-name"):
+                # Special line for route names.
+                if train_nums_str in ["station", "stations", "services", "timezone"]:
+                    tt.iloc[y,x] = ""
+                    cell_css_list.append("blank-route-name-cell")
+                else:
+                    my_trip = trip_from_tsn(today_feed, tsn)
+                    route_id = my_trip.route_id
+                    # Clean this interface up later.  For now highly Amtrak-specific
+                    route_name = amtrak.get_route_name(today_feed, route_id)
+                    styled_route_name = text_presentation.style_route_name_for_column(route_name, doing_html=doing_html)
+                    tt.iloc[y,x] = styled_route_name
+                    cell_css_list.append("route-name-cell")
+                    cell_css_list.append( get_time_column_stylings(tsn, "class") )
+            elif (pd.isna(station_code)):
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
                 # Prefilled text gets retained.  (Should we HTML-ize it?  FIXME)
@@ -585,11 +599,11 @@ def fill_tt_spec(tt_spec,
                     # If the first train terminates and the second train starts, we need to
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
-                    debug_print(3, ''.join(["Trains: ", str(train_nums), "; Station:", station_code]) )
+                    debug_print(3, ''.join(["Trains: ", str(tsns), "; Station:", station_code]) )
 
                     # Extract calendar, timepoint
-                    my_trip = trip_from_tsn(today_feed, train_num)
-                    debug_print(2, "debug trip_id:", train_num, my_trip.trip_id)
+                    my_trip = trip_from_tsn(today_feed, tsn)
+                    debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
 
                     timepoint = get_timepoint_from_trip_id(today_feed, my_trip.trip_id, station_code)
 
@@ -616,10 +630,10 @@ def fill_tt_spec(tt_spec,
                         tt.iloc[y,x] = ""
                         cell_css_list.append("blank-cell")
                         # Confusing: we want to style some of these and not others.  Woof.
-                        cell_css_list.append( get_time_column_stylings(train_num, "class") )
+                        cell_css_list.append( get_time_column_stylings(tsn, "class") )
                     else:
                         cell_css_list.append("time-cell")
-                        cell_css_list.append( get_time_column_stylings(train_num, "class") )
+                        cell_css_list.append( get_time_column_stylings(tsn, "class") )
 
                         cell_text = text_presentation.timepoint_str(
                                     timepoint,

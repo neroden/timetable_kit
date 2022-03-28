@@ -41,7 +41,7 @@ column to the next (notably, background color)
     border-right-color: black;
 
     /* And again, we can't apply these as classes, so they have to come in here. */
-    vertical-align: center;
+    vertical-align: middle;
     text-align: center;
 
     /* And again, can't apply as classes. */
