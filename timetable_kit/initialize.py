@@ -34,6 +34,9 @@ def initialize_feed(gtfs):
     # Also affects display miles so default to mi.
     master_feed = gk.read_feed(gtfs_path, dist_units='mi')
     debug_print(1, "Feed loaded")
+
+    # Need to clean up times to zero-pad them for sorting.
+    master_feed = master_feed.clean_times()
     # Don't waste time.
     # master_feed.validate()
 
