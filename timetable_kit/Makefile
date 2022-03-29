@@ -15,3 +15,6 @@ empire:
 
 cz:
 	./timetable.py --author "$(AUTHOR)" --date 20220329 --spec cz # Arbitrary
+
+pennsylvanian:
+	./timetable.py --author "$(AUTHOR)" --date 20220330 --spec pennsylvanian # Arbitrary

@@ -52,6 +52,7 @@ from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak
 # amtrak.json_stations
 
 from timetable_kit import text_presentation
+from timetable_kit import icons
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
@@ -589,7 +590,12 @@ def fill_tt_spec(tt_spec,
                     next_column_gets_ardp = True # Put ardp in the column after the station services
                     # Here is where we should call out to the Amtrak stations database and look up
                     # the actual services.  FIXME.
-                    tt.iloc[y,x] = ""
+                    # FOR TESTING ONLY -- FIXME
+                    services_str = ""
+                    debug_print(1, station_code, amtrak.station_has_accessible_platform(station_code) )
+                    if amtrak.station_has_accessible_platform(station_code):
+                        services_str += icons.get_accessible_icon_html()
+                    tt.iloc[y,x] = services_str
                 elif train_nums_str in ["timezone"]: # Column for time zone codes
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y,x] = text_presentation.get_zone_str(stop_tz, doing_html=doing_html)
