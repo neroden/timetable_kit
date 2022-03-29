@@ -35,12 +35,17 @@ The accessibility icons were a pain too.  The one I finally used for accessible.
 is from https://commons.wikimedia.org/wiki/File:Wheelchair_symbol.svg and is in the public
 domain.  I copied this to accessible.svg.
 
-The more modern "racing" symbol is unrecognizable in small print.
+The more modern "racing" symbol, also in public domain, is unrecognizable in small print.
+
 I would prefer the "round-edged variant" of the wheelchair symbol as I think it will display
-better in small print but I can't find one in SVG at this time.
+better in small print but I can't find one in SVG at this time.  
+
+At https://svgsilh.com/image/26397.html, I found one (public domain/CC0), included
+as 26397.svg, but it looks worse than the standard symbol at small print.
 
 I want a "Non-accessible" symbol because non-accessible stations are rarer than accessible
 ones at this point, but I haven't found one which is readable at small print yet.
 I will probably have to make my own.
+
 
 --Nathanael
