@@ -693,12 +693,13 @@ def style_route_name_for_column(route_name, doing_html=False):
     # "Route name words" / "Route name lines"
     rnw = route_name.split()
     # If four words, combine last two if one is really short
-    if len(rnw) == 4:
+    if len(rnw) >= 4:
         if len(rnw[2]) <= 3 or len(rnw[3]) <= 3:
             rnw = [rnw[0], rnw[1], "".join([rnw[3]," ",rnw[4]]) ]
     # Combine first two words if one is really short
-    if len(rnw[0]) <= 3 or len(rnw[1]) <= 3:
-        rnw = ["".join([rnw[0]," ",rnw[1]]),*rnw[2:]]
+    if (len(rnw) >= 2:
+        if len(rnw[0]) <= 3 or len(rnw[1]) <= 3:
+            rnw = ["".join([rnw[0]," ",rnw[1]]),*rnw[2:]]
 
     linebroken_str = "<br>".join(rnw)
     final_str= "".join(['<div class="box-route-name">',linebroken_str,'</div>'])
