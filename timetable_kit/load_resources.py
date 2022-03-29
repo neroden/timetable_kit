@@ -29,7 +29,8 @@ icon_environment
 
 These functions are provided:
 get_font_css(fontname: str) -> str
-get_icon_css(fontname: str) -> str
+get_icon_css(filename: str) -> str
+get_icon_svg(filename: str) -> str
 """
 
 import jinja2
@@ -90,6 +91,18 @@ def get_icon_css(filename: str) -> str:
         icon_loader.get_source(icon_environment, filename)
         )
     return icon_css_str
+
+def get_icon_svg(filename: str) -> str:
+    """
+    Load an icon SVG file (specify full filename including .svg) and return it as a string.
+
+    This uses Jinja2, icon_loader, and icon_environment.
+    Technically this is the same code as get_icon_css right now.
+    """
+    (icon_svg_str, returned_filename, uptodate) = (
+        icon_loader.get_source(icon_environment, filename)
+        )
+    return icon_svg_str
 
 
 # TESTING

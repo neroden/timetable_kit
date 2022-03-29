@@ -20,6 +20,7 @@ from zoneinfo import ZoneInfo # still for time zones
 # These are mine
 from timetable_kit.errors import (GTFSError, FutureCodeError)
 from timetable_kit.debug import debug_print
+from timetable_kit.icons import (get_baggage_icon_html)
 
 def get_zonediff(local_zone, base_zone):
     """
@@ -302,7 +303,7 @@ def get_baggage_str (doing_html=False):
         return "B"
     return "".join([ baggage_box_prefix,
         '<span class="baggage-symbol">',
-        '<img class="icon-img" src="icons/baggage-ncn.svg" alt="Baggage" title="Checked Baggage" />',
+        get_baggage_icon_html(),
         '</span>',
         baggage_box_postfix,
         ])
