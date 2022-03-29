@@ -29,5 +29,18 @@ optimized for very small font sizes.
 
 This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
 This one WORKS at very small print sizes.
+----
+
+The accessibility icons were a pain too.  The one I finally used for accessible.svg
+is from https://commons.wikimedia.org/wiki/File:Wheelchair_symbol.svg and is in the public
+domain.  I copied this to accessible.svg.
+
+The more modern "racing" symbol is unrecognizable in small print.
+I would prefer the "round-edged variant" of the wheelchair symbol as I think it will display
+better in small print but I can't find one in SVG at this time.
+
+I want a "Non-accessible" symbol because non-accessible stations are rarer than accessible
+ones at this point, but I haven't found one which is readable at small print yet.
+I will probably have to make my own.
 
 --Nathanael

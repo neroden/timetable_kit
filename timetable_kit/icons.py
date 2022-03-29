@@ -54,7 +54,7 @@ def get_inaccessible_icon_html(embedded_svg=False) -> str:
 
 accessible_img_str = ' '.join(['<img',
                             'class="icon-img"',
-                            'src="icons/Wheelchair_symbol.svg"',
+                            'src="icons/accessible.svg"',
                             'alt="Accessible for wheelchairs"',
                             'title="Wheelchair accessible">',
                              ])
