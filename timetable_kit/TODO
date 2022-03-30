@@ -1,18 +1,14 @@
--1 -- Timezones.
-0 -- Put appropriate title and heading on the page.
-1 -- Handle the ever-complicated baggage icon.
-2 -- Detect first_station / last_station. ***
-3 -- Handle "ArDp" with special column or with column option
+1 -- Print service dates on timetable.  See service_dates_from_trip_id.
+2 -- add "days of week" special row
+3 -- add "inaccessible" icon (visually superior) & add access to key
+4 -- Improve title and heading on the page.
+5 -- Detect first_station / last_station. ***
+6 -- Handle "ArDp" with special column or with column option
+7 -- add "updown" special row
 
-4 -- Print service dates on timetable.  See service_dates_from_trip_id.
-5 -- add "updown" special row
-6 -- add "days of week" special row
-
-7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
+8 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
      get_timepoint in particular is running slow inside an inner loop.
      This is the lowest-hanging remaining fruit.
-
-8 -- Fix find_trains.py to sort in order by departure time.  (Better for prototyping.)
 
 9 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
