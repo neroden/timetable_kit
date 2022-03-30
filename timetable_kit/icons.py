@@ -22,42 +22,59 @@ from timetable_kit.load_resources import get_icon_svg
 # the fonts in Weasyprint.  :-(
 # U+1F6C4
 
-baggage_img_str = ' '.join(['<img',
-                            'class="icon-img"',
-                            'src="icons/baggage-ncn.svg"',
-                            'alt="Baggage"',
-                            'title="Checked Baggage">',
-                             ])
+baggage_img_str = " ".join(
+    [
+        "<img",
+        'class="icon-img"',
+        'src="icons/baggage-ncn.svg"',
+        'alt="Baggage"',
+        'title="Checked Baggage">',
+    ]
+)
+
+
 def get_baggage_icon_html(embedded_svg=False) -> str:
     """
     Return suitable HTML for displaying the baggage icon.
     """
     # TODO: provide the alternate versions.
-    if (not embedded_svg):
+    if not embedded_svg:
         return baggage_img_str
-    if (embedded_svg): # not tested
+    if embedded_svg:  # not tested
         str = get_icon_svg("baggage-ncn.svg")
         return str
     return icons_css
 
-inaccessible_img_str = ' '.join(['<img',
-                            'class="icon-img"',
-                            'src="icons/inaccessible.svg"',
-                            'alt="Inaccessible for wheelchairs"',
-                            'title="Not wheelchair accessible">',
-                             ])
+
+inaccessible_img_str = " ".join(
+    [
+        "<img",
+        'class="icon-img"',
+        'src="icons/inaccessible.svg"',
+        'alt="Inaccessible for wheelchairs"',
+        'title="Not wheelchair accessible">',
+    ]
+)
+
+
 def get_inaccessible_icon_html(embedded_svg=False) -> str:
     """
     Return suitable HTML for displaying the "no wheelchair access" icon.
     """
     return inaccessible_img_str
 
-accessible_img_str = ' '.join(['<img',
-                            'class="icon-img"',
-                            'src="icons/accessible.svg"',
-                            'alt="Accessible for wheelchairs"',
-                            'title="Wheelchair accessible">',
-                             ])
+
+accessible_img_str = " ".join(
+    [
+        "<img",
+        'class="icon-img"',
+        'src="icons/accessible.svg"',
+        'alt="Accessible for wheelchairs"',
+        'title="Wheelchair accessible">',
+    ]
+)
+
+
 def get_accessible_icon_html(embedded_svg=False) -> str:
     """
     Return suitable HTML for displaying the "wheelchair access" icon.

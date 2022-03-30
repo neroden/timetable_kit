@@ -19,15 +19,16 @@ from timetable_kit import feed_enhanced
 
 from timetable_kit.initialize import initialize_feed
 
-from timetable_kit.debug import (debug_print, set_debug_level)
-from timetable_kit.tsn import (make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict)
+from timetable_kit.debug import debug_print, set_debug_level
+from timetable_kit.tsn import make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_date_argument,
     add_debug_argument,
-    )
+)
+
 
 def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
     """
@@ -43,7 +44,9 @@ def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
     # Start by filtering the stop_times for stop one.
     filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one]
     # This is a bit tricky: attempt to maintain sorting order
-    sorted_filtered_stop_times_one = filtered_stop_times_one.sort_values(by=["departure_time"])
+    sorted_filtered_stop_times_one = filtered_stop_times_one.sort_values(
+        by=["departure_time"]
+    )
     debug_print(2, sorted_filtered_stop_times_one)
 
     # Now make a dict from trip_id to stop_sequence.
@@ -73,7 +76,10 @@ def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
         # Stops at the first station...
         if trip_id in trip_ids_two_set:
             # Stops at the second station...
-            if trip_id_to_stop_sequence_one[trip_id] < trip_id_to_stop_sequence_two[trip_id]:
+            if (
+                trip_id_to_stop_sequence_one[trip_id]
+                < trip_id_to_stop_sequence_two[trip_id]
+            ):
                 # Stops at the first station before the second station...
                 trip_ids_both.append(trip_id)
 
@@ -83,11 +89,16 @@ def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
     print("Found trains: ", tsns)
     return tsns
 
+
 def make_spec(route_ids, feed):
     """Not ready to use: put to one side for testing purposes"""
     # Creates a prototype timetable.  It will definitely need to be manipulated by hand.
     # Totally incomplete. FIXME
-    route_ids = [route_id("Illini"),route_id("Saluki"),route_id("City Of New Orleans")]
+    route_ids = [
+        route_id("Illini"),
+        route_id("Saluki"),
+        route_id("City Of New Orleans"),
+    ]
 
     route_feed = feed.filter_by_route_ids(route_ids)
     today_feed = route_feed.filter_by_dates(reference_date, reference_date)
@@ -104,6 +115,7 @@ def make_spec(route_ids, feed):
     down_trips = today_feed.trips[today_feed.trips.direction_id == 1]
     print(down_trips)
 
+
 def make_argparser():
     parser = argparse.ArgumentParser(
         description="""Produce list of trains (trip_short_name) from stop one to stop two.
@@ -111,17 +123,20 @@ def make_argparser():
                         Should be reviewed manually before generating tt-spec, especially for
                         days-of-week issues.
                     """,
-        )
+    )
     add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
-    parser.add_argument('stop_one',
+    parser.add_argument(
+        "stop_one",
         help="""First stop""",
-        )
-    parser.add_argument('stop_two',
+    )
+    parser.add_argument(
+        "stop_two",
         help="""Last stop""",
-        )
+    )
     return parser
+
 
 # MAIN PROGRAM
 if __name__ == "__main__":
@@ -131,7 +146,7 @@ if __name__ == "__main__":
     set_debug_level(args.debug)
 
     gtfs_filename = args.gtfs_filename
-    master_feed = initialize_feed(gtfs = gtfs_filename)
+    master_feed = initialize_feed(gtfs=gtfs_filename)
 
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
@@ -139,7 +154,7 @@ if __name__ == "__main__":
 
     stop_one = args.stop_one
     stop_two = args.stop_two
-    print ("Finding trains from", stop_one, "to", stop_two)
+    print("Finding trains from", stop_one, "to", stop_two)
 
     # TODO: figure out how to filter by day of week
     # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)

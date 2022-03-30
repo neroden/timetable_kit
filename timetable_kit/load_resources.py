@@ -39,35 +39,41 @@ from jinja2 import (
     ChoiceLoader,
     FileSystemLoader,
     PackageLoader,
-    )
+)
 
 # Here are the loaders and environments
-template_loader = ChoiceLoader([
-    FileSystemLoader(['.', "templates"]),
-    PackageLoader("load_resources", package_path="templates"),
-    ])
+template_loader = ChoiceLoader(
+    [
+        FileSystemLoader([".", "templates"]),
+        PackageLoader("load_resources", package_path="templates"),
+    ]
+)
 template_environment = Environment(
-    loader = template_loader,
-    autoescape = lambda x: False,
-    )
+    loader=template_loader,
+    autoescape=lambda x: False,
+)
 
-font_loader = ChoiceLoader([
-    FileSystemLoader(['.', "fonts"]),
-    PackageLoader("load_resources", package_path="fonts"),
-    ])
+font_loader = ChoiceLoader(
+    [
+        FileSystemLoader([".", "fonts"]),
+        PackageLoader("load_resources", package_path="fonts"),
+    ]
+)
 font_environment = Environment(
-    loader = font_loader,
-    autoescape = lambda x: False,
-    )
+    loader=font_loader,
+    autoescape=lambda x: False,
+)
 
-icon_loader = ChoiceLoader([
-    FileSystemLoader(['.', "icons"]),
-    PackageLoader("load_resources", package_path="icons"),
-    ])
+icon_loader = ChoiceLoader(
+    [
+        FileSystemLoader([".", "icons"]),
+        PackageLoader("load_resources", package_path="icons"),
+    ]
+)
 icon_environment = Environment(
-    loader = icon_loader,
-    autoescape = lambda x: False,
-    )
+    loader=icon_loader,
+    autoescape=lambda x: False,
+)
 
 
 def get_font_css(fontname: str) -> str:
@@ -76,10 +82,11 @@ def get_font_css(fontname: str) -> str:
 
     This uses Jinja2, font_loader, and font_environment.
     """
-    (font_css_str, returned_filename, uptodate) = (
-        font_loader.get_source(font_environment, fontname + ".css")
-        )
+    (font_css_str, returned_filename, uptodate) = font_loader.get_source(
+        font_environment, fontname + ".css"
+    )
     return font_css_str
+
 
 def get_icon_css(filename: str) -> str:
     """
@@ -87,10 +94,11 @@ def get_icon_css(filename: str) -> str:
 
     This uses Jinja2, icon_loader, and icon_environment.
     """
-    (icon_css_str, returned_filename, uptodate) = (
-        icon_loader.get_source(icon_environment, filename)
-        )
+    (icon_css_str, returned_filename, uptodate) = icon_loader.get_source(
+        icon_environment, filename
+    )
     return icon_css_str
+
 
 def get_icon_svg(filename: str) -> str:
     """
@@ -99,9 +107,9 @@ def get_icon_svg(filename: str) -> str:
     This uses Jinja2, icon_loader, and icon_environment.
     Technically this is the same code as get_icon_css right now.
     """
-    (icon_svg_str, returned_filename, uptodate) = (
-        icon_loader.get_source(icon_environment, filename)
-        )
+    (icon_svg_str, returned_filename, uptodate) = icon_loader.get_source(
+        icon_environment, filename
+    )
     return icon_svg_str
 
 
@@ -110,27 +118,27 @@ if __name__ == "__main__":
     page_tpl = template_environment.get_template("page_standard.html")
 
     page_tpl_params = {
-        'lang' : "en-US",
-        'encoding' : "utf-8",
-        'title' : "Test Title",
-        'heading' : "Test Heading",
-        'timetable' : "<p>No timetable</p>",
-        'symbol_key' : "<p>No Symbol Key</p>",
-        'external_stylesheet' : "foobar.css",
-        }
+        "lang": "en-US",
+        "encoding": "utf-8",
+        "title": "Test Title",
+        "heading": "Test Heading",
+        "timetable": "<p>No timetable</p>",
+        "symbol_key": "<p>No Symbol Key</p>",
+        "external_stylesheet": "foobar.css",
+    }
     rendered_page = page_tpl.render(page_tpl_params)
     with open("test_results_1.html", "w") as outfile:
         print(rendered_page, file=outfile)
 
     page_tpl_params = {
-        'lang' : "en-US",
-        'encoding' : "utf-8",
-        'title' : "Test Title",
-        'heading' : "Test Heading",
-        'timetable' : "<p>No timetable</p>",
-        'symbol_key' : "<p>No Symbol Key</p>",
-        'internal_stylesheet' : True,
-        }
+        "lang": "en-US",
+        "encoding": "utf-8",
+        "title": "Test Title",
+        "heading": "Test Heading",
+        "timetable": "<p>No timetable</p>",
+        "symbol_key": "<p>No Symbol Key</p>",
+        "internal_stylesheet": True,
+    }
     rendered_page = page_tpl.render(page_tpl_params)
     with open("test_results_2.html", "w") as outfile:
         print(rendered_page, file=outfile)

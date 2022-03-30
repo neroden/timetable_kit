@@ -8,6 +8,7 @@ Get all the stations for a particular train number (trip_short_name), in order.
 
 import argparse
 import datetime
+
 # import pandas as pd # we call pandas routines but only on dataframes
 # import gtfs_kit as gk
 
@@ -15,8 +16,8 @@ import datetime
 from timetable_kit import feed_enhanced
 
 from timetable_kit.initialize import initialize_feed
-from timetable_kit import amtrak # For the path of the default GTFS feed
-from timetable_kit.debug import (debug_print, set_debug_level)
+from timetable_kit import amtrak  # For the path of the default GTFS feed
+from timetable_kit.debug import debug_print, set_debug_level
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -24,11 +25,12 @@ from timetable_kit.timetable_argparse import (
     add_date_argument,
     add_debug_argument,
     add_output_dirname_argument,
-    )
+)
 
 from timetable_kit.tsn import (
     stations_list_from_tsn,
-    )
+)
+
 
 def make_argparser():
     parser = argparse.ArgumentParser(
@@ -36,19 +38,21 @@ def make_argparser():
                        Useful when making tt-specs.
                        Should be reviewed manually before generating tt-spec.
                     """,
-        )
+    )
     add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
     add_output_dirname_argument(parser)
-    parser.add_argument('--trip',
-        dest='trip_short_name',
-        help='''This specifies which trip_short_name to use to generate the list of stations.
+    parser.add_argument(
+        "--trip",
+        dest="trip_short_name",
+        help="""This specifies which trip_short_name to use to generate the list of stations.
                 For instance, if it's "51", train 51 will be used,
                 and the output will be tt_51_stations.csv.
-             '''
-        )
+             """,
+    )
     return parser
+
 
 if __name__ == "__main__":
     my_arg_parser = make_argparser()
@@ -57,32 +61,32 @@ if __name__ == "__main__":
     set_debug_level(args.debug)
     output_dirname = args.output_dirname
 
-    if (args.gtfs_filename):
+    if args.gtfs_filename:
         gtfs_filename = args.gtfs_filename
     else:
         # Default to Amtrak
         gtfs_filename = amtrak.gtfs_unzipped_local_path
 
-    if (args.reference_date):
-        reference_date = int( args.reference_date.strip() )
+    if args.reference_date:
+        reference_date = int(args.reference_date.strip())
     else:
         # Use tomorrow as the reference date.
         # After all, you aren't catching a train today, right?
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int( tomorrow.strftime('%Y%m%d') )
+        reference_date = int(tomorrow.strftime("%Y%m%d"))
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     tsn = args.trip_short_name
-    if (not tsn):
+    if not tsn:
         raise ValueError("Can't generate a station list without a specific trip.")
-    tsn = tsn.strip() # Avoid whitespace problems
+    tsn = tsn.strip()  # Avoid whitespace problems
 
-    master_feed = initialize_feed(gtfs = gtfs_filename)
+    master_feed = initialize_feed(gtfs=gtfs_filename)
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
-    output_filename = "".join([output_dirname, "/", "tt_", tsn, "_","stations.csv"])
-    station_list_df.to_csv(output_filename,index=False)
+    output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
+    station_list_df.to_csv(output_filename, index=False)
     # Note: this will put "stop_id" in top row, which is OK
     quit()

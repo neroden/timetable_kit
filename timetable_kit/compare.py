@@ -17,7 +17,7 @@ import pandas as pd
 import gtfs_kit as gk
 
 # My packages: Local module imports
-from timetable_kit.debug import (set_debug_level, debug_print)
+from timetable_kit.debug import set_debug_level, debug_print
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
@@ -30,9 +30,10 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_date_argument,
     add_debug_argument,
-    )
+)
 
 ### "Compare" Debugging routines to check for changes in timetable
+
 
 def compare_stop_lists(base_trip, trips, *, feed):
     """
@@ -46,26 +47,38 @@ def compare_stop_lists(base_trip, trips, *, feed):
     Prefers to start with stop_times tables with unique, but matching, indexes.
     Using stop_sequence as the index can usually provide this.
     """
-    if (len(trips) == 0):
-        print ("No trips, stopping.")
+    if len(trips) == 0:
+        print("No trips, stopping.")
         return
-    if (len(trips) == 1):
-        print ("Only 1 trip, stopping.")
+    if len(trips) == 1:
+        print("Only 1 trip, stopping.")
         return
     # Drop the trip_id because it will always compare differently
     base_stop_times = feed.get_single_trip_stop_times(base_trip["trip_id"])
     base_stop_times = base_stop_times.drop(["trip_id"], axis="columns")
-    for trip in (trips.itertuples()):
+    for trip in trips.itertuples():
         stop_times = feed.get_single_trip_stop_times(trip.trip_id)
-        stop_times = stop_times.drop(["trip_id"],axis="columns")
+        stop_times = stop_times.drop(["trip_id"], axis="columns")
         # Use powerful features of DataTable
-        comparison = base_stop_times.compare(stop_times, align_axis="columns", keep_shape=True)
-        if (not comparison.any(axis=None)):
-            print( " ".join(["Identical:", str(base_trip.trip_id), "and", str(trip.trip_id)]) + "." )
+        comparison = base_stop_times.compare(
+            stop_times, align_axis="columns", keep_shape=True
+        )
+        if not comparison.any(axis=None):
+            print(
+                " ".join(
+                    ["Identical:", str(base_trip.trip_id), "and", str(trip.trip_id)]
+                )
+                + "."
+            )
         else:
-            reduced_comparison = comparison.dropna(axis="index",how="all")
-            print( " ".join(["Comparing:",str(base_trip.trip_id),"vs.",str(trip.trip_id)]) + ":" )
-            #print( reduced_comparison )
+            reduced_comparison = comparison.dropna(axis="index", how="all")
+            print(
+                " ".join(
+                    ["Comparing:", str(base_trip.trip_id), "vs.", str(trip.trip_id)]
+                )
+                + ":"
+            )
+            # print( reduced_comparison )
             # Works up to here!
 
             # Please note the smart way to add an extra MultiIndex layer is with "concat".
@@ -74,18 +87,19 @@ def compare_stop_lists(base_trip, trips, *, feed):
             # We want to recover the stop_id for more comprehensibility.
             # Stupid program wants matching-depth MultiIndex.  There is no easy way to make it.
             # So make it the stupid way!  Build it exactly parallel to the real comparison.
-            fake_comparison = base_stop_times.compare(base_stop_times,
-                                                      align_axis="columns",
-                                                      keep_shape=True,
-                                                      keep_equal=True)
+            fake_comparison = base_stop_times.compare(
+                base_stop_times, align_axis="columns", keep_shape=True, keep_equal=True
+            )
             reduced_fake_comparison = fake_comparison.filter(
-                                            items=reduced_comparison.index.array,
-                                            axis="index"
-                                            )
-            enhanced_comparison = reduced_comparison.combine_first(reduced_fake_comparison)
+                items=reduced_comparison.index.array, axis="index"
+            )
+            enhanced_comparison = reduced_comparison.combine_first(
+                reduced_fake_comparison
+            )
             # And we're ready to print.
-            print( enhanced_comparison )
+            print(enhanced_comparison)
     return
+
 
 def compare_similar_services(route_id, *, feed):
     """
@@ -99,33 +113,36 @@ def compare_similar_services(route_id, *, feed):
     print(route_feed.calendar)
 
     print("Downbound:")
-    downbound_trips = route_feed.trips[route_feed.trips.direction_id == 0] # W for LSL
+    downbound_trips = route_feed.trips[route_feed.trips.direction_id == 0]  # W for LSL
     print(downbound_trips)
-    base_trip = downbound_trips.iloc[0, :] # row 0, all columns
-    compare_stop_lists(base_trip,downbound_trips, feed=route_feed)
+    base_trip = downbound_trips.iloc[0, :]  # row 0, all columns
+    compare_stop_lists(base_trip, downbound_trips, feed=route_feed)
 
     print("Upbound:")
-    upbound_trips = route_feed.trips[route_feed.trips.direction_id == 1] # E for LSL
+    upbound_trips = route_feed.trips[route_feed.trips.direction_id == 1]  # E for LSL
     print(upbound_trips)
-    base_trip = upbound_trips.iloc[0, :] # row 0, all columns
-    compare_stop_lists(base_trip,upbound_trips, feed=route_feed)
+    base_trip = upbound_trips.iloc[0, :]  # row 0, all columns
+    compare_stop_lists(base_trip, upbound_trips, feed=route_feed)
     return
+
 
 def make_argparser():
     parser = argparse.ArgumentParser(
         description="""Compare timetables for all trips on a single route.
                        Used to spot schedule changes for making tt-specs.
                     """,
-        )
+    )
     add_gtfs_argument(parser)
     add_debug_argument(parser)
-    parser.add_argument("--route",
+    parser.add_argument(
+        "--route",
         dest="route_long_name",
         help="""This specifies which route_long_name to use.
                 For instance "Cardinal" or "Lake Shore Limited".
-             """
-        )
+             """,
+    )
     return parser
+
 
 ### Main program
 if __name__ == "__main__":
@@ -135,12 +152,14 @@ if __name__ == "__main__":
     set_debug_level(args.debug)
 
     gtfs_filename = args.gtfs_filename
-    master_feed = initialize_feed(gtfs = gtfs_filename)
+    master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name
 
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
-    lookup_route_id = dict(zip(master_feed.routes.route_long_name, master_feed.routes.route_id))
+    lookup_route_id = dict(
+        zip(master_feed.routes.route_long_name, master_feed.routes.route_id)
+    )
     route_id = lookup_route_id[route_long_name]
 
     compare_similar_services(route_id, feed=master_feed)

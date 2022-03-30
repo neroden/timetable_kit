@@ -11,11 +11,12 @@ so it should be possible to make a map from a restricted feed.
 
 Also contains other routines which look up trips by tsn.
 """
-from timetable_kit.errors import (GTFSError, NoTripError)
+from timetable_kit.errors import GTFSError, NoTripError
 from timetable_kit.debug import debug_print
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
+
 
 def make_trip_id_to_tsn_dict(feed):
     """
@@ -31,6 +32,7 @@ def make_trip_id_to_tsn_dict(feed):
     tsns = feed.trips["trip_short_name"].array
     trip_id_to_tsn = dict(zip(trip_ids, tsns))
     return trip_id_to_tsn
+
 
 def make_tsn_to_trip_id_dict(feed):
     """
@@ -62,6 +64,7 @@ def make_tsn_to_trip_id_dict(feed):
     # but hopefully they're total duplicates so it doesn't matter...
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
     return tsn_to_trip_id
+
 
 def find_tsn_dupes(feed):
     """
@@ -98,8 +101,10 @@ def find_tsn_dupes(feed):
             tsn_set.add(x)
     return
 
+
 ### These two are used routinely in the main timetable generator
 ### And in the stations list generator
+
 
 def trip_from_tsn(today_feed, trip_short_name):
     """
@@ -110,11 +115,14 @@ def trip_from_tsn(today_feed, trip_short_name):
     """
     single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
     try:
-        this_trip_today = single_trip_feed.get_single_trip() # Raises errors if not exactly one trip
+        this_trip_today = (
+            single_trip_feed.get_single_trip()
+        )  # Raises errors if not exactly one trip
     except NoTripError:
-        print ("Found no trips for ", trip_short_name)
+        print("Found no trips for ", trip_short_name)
         raise
     return this_trip_today
+
 
 def stations_list_from_tsn(today_feed, trip_short_name):
     """
@@ -130,7 +138,6 @@ def stations_list_from_tsn(today_feed, trip_short_name):
     trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
 
     sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
-    sorted_station_list = sorted_stop_times['stop_id']
+    sorted_station_list = sorted_stop_times["stop_id"]
     debug_print(3, sorted_station_list)
     return sorted_station_list
-

@@ -28,11 +28,11 @@ def initialize_feed(gtfs):
     gtfs: may be a filename or a Path.
     """
 
-    debug_print(1, "Using GTFS file " + str(gtfs) )
+    debug_print(1, "Using GTFS file " + str(gtfs))
     gtfs_path = Path(gtfs)
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
-    master_feed = gk.read_feed(gtfs_path, dist_units='mi')
+    master_feed = gk.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 
     # Need to clean up times to zero-pad them for sorting.
@@ -48,6 +48,7 @@ def initialize_feed(gtfs):
     debug_print(1, "Feed initialized")
     return master_feed
 
+
 def fix_known_errors(feed):
     """
     Change the feed in place to fix known errors.
@@ -59,9 +60,9 @@ def fix_known_errors(feed):
     # Revised for PANDAS 1.4.
     my_trips = feed.trips
 
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
-    my_trips.loc[my_trips["trip_short_name"] == "1051","direction_id"] = 0
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"] )
+    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"])
+    my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
+    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"])
 
     # Error fixed.  Put back into the feed.
     feed.trips = my_trips

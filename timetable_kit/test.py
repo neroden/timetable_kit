@@ -21,9 +21,9 @@ from timetable_kit.errors import (
     TwoStopsError,
     NoTripError,
     TwoTripsError,
-    InputError
+    InputError,
 )
-from timetable_kit.debug import (set_debug_level, debug_print)
+from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
@@ -32,7 +32,7 @@ from timetable_kit import feed_enhanced
 # To intialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
-from timetable_kit import amtrak # so we don't have to say "timetable_kit.amtrak"
+from timetable_kit import amtrak  # so we don't have to say "timetable_kit.amtrak"
 
 # Hack for the testing file -- pretend we're in timetable.py
 from timetable_kit.timetable import *
@@ -41,7 +41,7 @@ from timetable_kit.timetable import *
 from timetable_kit import text_presentation
 
 if __name__ == "__main__":
-    debug_print (3, "Dumping sys.path for clarity:", sys.path )
+    debug_print(3, "Dumping sys.path for clarity:", sys.path)
 
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
@@ -60,16 +60,16 @@ if __name__ == "__main__":
         auxfile_str = f.read()
     print(auxfile_str)
     aux = json.loads(auxfile_str)
-    print ("Title:", aux["title"])
-    print ("Heading:", aux["heading"])
-    print ("Sleeper color:", aux["sleeper-color"])
+    print("Title:", aux["title"])
+    print("Heading:", aux["heading"])
+    print("Sleeper color:", aux["sleeper-color"])
 
     quit()
 
     # Generate routes.html
     debug_print(1, "Dumping routes.html")
     routes_html_path = Path(output_dirname) / "routes.html"
-    with open(routes_html_path,'w') as outfile:
+    with open(routes_html_path, "w") as outfile:
         print(master_feed.routes.to_html(), file=outfile)
 
     # Put testing code HERE
@@ -77,13 +77,14 @@ if __name__ == "__main__":
     new_feed = master_feed.filter_remove_one_day_calendars()
     printable_calendar = gtfs_type_cleanup.type_uncorrected_calendar(new_feed.calendar)
     module_dir = Path(__file__).parent
-    printable_calendar.to_csv( module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False)
-    print ("calendar without one-day calendars created")
+    printable_calendar.to_csv(
+        module_dir / "amtrak/gtfs/calendar_stripped.txt", index=False
+    )
+    print("calendar without one-day calendars created")
     quit()
 
     tt_spec = load_tt_spec(args.tt_spec_filename)
     tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
-    dwell_secs = get_dwell_secs("59","CDL")
+    dwell_secs = get_dwell_secs("59", "CDL")
     print("Dwell is", dwell_secs)
     quit()
-

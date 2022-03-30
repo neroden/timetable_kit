@@ -17,7 +17,8 @@ from timetable_kit.errors import (
     GTFSError,
     NoTripError,
     TwoTripsError,
-    )
+)
+
 
 def filter_by_dates(self, first_date, last_date):
     """
@@ -37,7 +38,9 @@ def filter_by_dates(self, first_date, last_date):
     # Calendar must stop on or after the first date of the period...
     filtered_calendar = self.calendar[self.calendar.end_date >= first_date]
     # ... and start on or before the last date of the period
-    double_filtered_calendar = filtered_calendar[filtered_calendar.start_date <= last_date]
+    double_filtered_calendar = filtered_calendar[
+        filtered_calendar.start_date <= last_date
+    ]
     new_feed.calendar = double_filtered_calendar
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
@@ -47,15 +50,18 @@ def filter_by_dates(self, first_date, last_date):
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
-def filter_by_day_of_week(self, *,
-                          monday=False,
-                          tuesday=False,
-                          wednesday=False,
-                          thursday=False,
-                          friday=False,
-                          saturday=False,
-                          sunday=False,
-                         ):
+
+def filter_by_day_of_week(
+    self,
+    *,
+    monday=False,
+    tuesday=False,
+    wednesday=False,
+    thursday=False,
+    friday=False,
+    saturday=False,
+    sunday=False,
+):
     """
     Filters the feed to trips which are running on all of the selected days.
     (TODO: I'd rather do "at least one" but it's harder to write)
@@ -80,19 +86,19 @@ def filter_by_day_of_week(self, *,
     # consider doing with original GTFS 1/0 data.
     new_feed = self.copy()
     calendar = self.calendar
-    if (monday):
+    if monday:
         calendar = calendar[calendar.monday == True]
-    if (tuesday):
+    if tuesday:
         calendar = calendar[calendar.tuesday == True]
-    if (wednesday):
+    if wednesday:
         calendar = calendar[calendar.wednesday == True]
-    if (thursday):
+    if thursday:
         calendar = calendar[calendar.thursday == True]
-    if (friday):
+    if friday:
         calendar = calendar[calendar.friday == True]
-    if (saturday):
+    if saturday:
         calendar = calendar[calendar.saturday == True]
-    if (sunday):
+    if sunday:
         calendar = calendar[calendar.sunday == True]
     new_feed.calendar = calendar
     # Now filter trips by the service_ids in the calendar
@@ -129,6 +135,7 @@ def filter_by_route_ids(self, route_ids):
 
     return new_feed
 
+
 def filter_by_service_ids(self, service_ids):
     """
     Filter the entire feed to include only the specified service_ids (a list)
@@ -148,6 +155,7 @@ def filter_by_service_ids(self, service_ids):
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
     return new_feed
 
+
 def filter_bad_service_ids(self, bad_service_ids):
     """
     Filter the entire feed to remove specified bad service_ids (a list)
@@ -161,8 +169,11 @@ def filter_bad_service_ids(self, bad_service_ids):
     # First filter the trips.
     new_feed.trips = self.trips[self.trips.service_id.isin(bad_service_ids).apply(not_)]
     # Then the calendar.  Apologies for the long line!
-    new_feed.calendar = self.calendar[self.calendar.service_id.isin(bad_service_ids).apply(not_)]
+    new_feed.calendar = self.calendar[
+        self.calendar.service_id.isin(bad_service_ids).apply(not_)
+    ]
     return new_feed
+
 
 def filter_remove_one_day_calendars(self):
     """
@@ -179,7 +190,9 @@ def filter_remove_one_day_calendars(self):
     """
     new_feed = self.copy()
     # First filter the calendar
-    new_feed.calendar = self.calendar[self.calendar.start_date != self.calendar.end_date]
+    new_feed.calendar = self.calendar[
+        self.calendar.start_date != self.calendar.end_date
+    ]
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
@@ -187,6 +200,7 @@ def filter_remove_one_day_calendars(self):
     trip_ids = new_feed.trips["trip_id"].array
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
+
 
 def filter_find_one_day_calendars(self):
     """
@@ -204,7 +218,9 @@ def filter_find_one_day_calendars(self):
     """
     new_feed = self.copy()
     # First filter the calendar
-    new_feed.calendar = self.calendar[self.calendar.start_date == self.calendar.end_date]
+    new_feed.calendar = self.calendar[
+        self.calendar.start_date == self.calendar.end_date
+    ]
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
@@ -236,6 +252,7 @@ def filter_by_trip_short_names(self, trip_short_names):
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
+
 def filter_by_trip_ids(self, trip_ids):
     """
     Filter the entire feed to include only services with the specified trip_ids (a list)
@@ -252,6 +269,7 @@ def filter_by_trip_ids(self, trip_ids):
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
+
 def get_single_trip(self):
     """
     If this feed contains only one trip, return the trip.
@@ -261,14 +279,19 @@ def get_single_trip(self):
     -- Used for checking that we've reduced the trips table enough but not too much.
     """
     num_rows = self.trips.shape[0]
-    if (num_rows == 0):
-        raise NoTripError("Expected single trip: no trips in filtered trips table", self.trips)
-    elif (num_rows > 1):
+    if num_rows == 0:
+        raise NoTripError(
+            "Expected single trip: no trips in filtered trips table", self.trips
+        )
+    elif num_rows > 1:
         # FIXME: important to print this now
-        print( self.trips )
-        raise TwoTripsError("Expected single trip: too many trips in filtered trips table", self.trips)
+        print(self.trips)
+        raise TwoTripsError(
+            "Expected single trip: too many trips in filtered trips table", self.trips
+        )
     this_trip_today = self.trips.iloc[0]
     return this_trip_today
+
 
 def get_single_trip_stop_times(self, trip_id):
     """
@@ -282,6 +305,7 @@ def get_single_trip_stop_times(self, trip_id):
     stop_times_3 = stop_times_2.sort_index()
     return stop_times_3
 
+
 def get_trip_short_name(self, trip_id):
     """
     Given a trip_id, recover the trip_short_name
@@ -292,12 +316,13 @@ def get_trip_short_name(self, trip_id):
     and trip_id isn't.
     """
     my_trips = self.trips[self.trips["trip_id"] == trip_id]
-    if (my_trips.shape[0] == 0):
+    if my_trips.shape[0] == 0:
         raise NoTripError("No trip with trip_id ", trip_id)
-    elif (my_trips.shape[0] > 1):
+    elif my_trips.shape[0] > 1:
         raise TwoTripsError("Multiple trips with trip_id ", trip_id)
     my_trip = my_trips.iloc[0]
     return my_trip.trip_short_name
+
 
 # Monkey patch starts here
 gk.Feed.filter_by_dates = filter_by_dates
@@ -317,9 +342,9 @@ gk.Feed.get_trip_short_name = get_trip_short_name
 if __name__ == "__main__":
     from pathlib import Path
 
-    gtfs_filename="./gtfs-amtrak.zip"
+    gtfs_filename = "./gtfs-amtrak.zip"
     gtfs_path = Path(gtfs_filename)
-    feed = gk.read_feed(gtfs_path, dist_units = "mi")
+    feed = gk.read_feed(gtfs_path, dist_units="mi")
     print(feed.calendar)
-    new_feed = feed.filter_by_dates("20220224","20220224")
+    new_feed = feed.filter_by_dates("20220224", "20220224")
     print(new_feed.calendar)
