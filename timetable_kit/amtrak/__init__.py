@@ -12,8 +12,8 @@ from . import (
     agency_cleanup,
     special_data,
     station_name_styling,
-    json_stations, # this is the big one
-    )
+    json_stations,  # this is the big one
+)
 
 # Trying this, not sure about it
 from .get_gtfs import gtfs_zip_local_path
@@ -24,5 +24,7 @@ from .baggage import station_has_checked_baggage
 from .special_data import train_has_checked_baggage
 from .json_stations import get_station_name
 from .route_names import get_route_name
-from .access import (station_has_accessible_platform,
-    station_has_inaccessible_platform, )
+from .access import (
+    station_has_accessible_platform,
+    station_has_inaccessible_platform,
+)

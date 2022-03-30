@@ -6,7 +6,8 @@
 Utility routines to style Amtrak station names as HTML or text.
 """
 
-def amtrak_station_name_to_multiline_text(station_name: str, major=False ) -> str:
+
+def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str:
     """
     Produce pretty Amtrak station name for plaintext -- multi-line.
 
@@ -17,46 +18,46 @@ def amtrak_station_name_to_multiline_text(station_name: str, major=False ) -> st
     If "major", then make the station name bigger and bolder
     We want to avoid very long lines as they mess up timetable formats
     """
-    if (" - " in station_name):
+    if " - " in station_name:
         (city_state_name, second_part) = station_name.split(" - ", 1)
         (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, junk) = suffix.split(")",1)
+        (station_code, junk) = suffix.split(")", 1)
     else:
         facility_name = None
         (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, junk) = suffix.split(")",1)
+        (station_code, junk) = suffix.split(")", 1)
 
-    if (major):
+    if major:
         enhanced_city_state_name = city_state_name.upper()
     else:
         enhanced_city_state_name = city_state_name
 
-    enhanced_station_code = ''.join(["(", station_code, ")"])
+    enhanced_station_code = "".join(["(", station_code, ")"])
 
-    if (facility_name):
-        enhanced_facility_name = ''.join(["\n", " - ", facility_name])
+    if facility_name:
+        enhanced_facility_name = "".join(["\n", " - ", facility_name])
     else:
-        enhanced_facility_name = ''
+        enhanced_facility_name = ""
 
-    fancy_name = ''.join([enhanced_city_state_name,
-                          " ",
-                          enhanced_station_code,
-                          enhanced_facility_name
-                         ])
+    fancy_name = "".join(
+        [enhanced_city_state_name, " ", enhanced_station_code, enhanced_facility_name]
+    )
     return fancy_name
 
-def amtrak_station_name_to_single_line_text(station_name: str, major=False ) -> str:
+
+def amtrak_station_name_to_single_line_text(station_name: str, major=False) -> str:
     """
     Produce pretty Amtrak station name for plaintext -- single line.
 
     The easy version.  Station name to single line text.
     """
-    if (major):
+    if major:
         return station_name.upper()
     else:
         return station_name
 
-def amtrak_station_name_to_html(station_name: str, major=False ) -> str:
+
+def amtrak_station_name_to_html(station_name: str, major=False) -> str:
     """
     Produce pretty Amtrak station name for HTML -- potentially multiline, and complex.
 
@@ -67,35 +68,36 @@ def amtrak_station_name_to_html(station_name: str, major=False ) -> str:
     If "major", then make the station name bigger and bolder
     """
 
-    if (" - " in station_name):
+    if " - " in station_name:
         (city_state_name, second_part) = station_name.split(" - ", 1)
         (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, junk) = suffix.split(")",1)
+        (station_code, junk) = suffix.split(")", 1)
     else:
         facility_name = None
         (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, junk) = suffix.split(")",1)
+        (station_code, junk) = suffix.split(")", 1)
 
-    if (major):
-        enhanced_city_state_name = ''.join(["<span class=major-station >",
-                                            city_state_name,"</span>"])
+    if major:
+        enhanced_city_state_name = "".join(
+            ["<span class=major-station >", city_state_name, "</span>"]
+        )
     else:
-        enhanced_city_state_name = ''.join(["<span class=minor-station >",
-                                            city_state_name,"</span>"])
+        enhanced_city_state_name = "".join(
+            ["<span class=minor-station >", city_state_name, "</span>"]
+        )
 
-    enhanced_station_code = ''.join(["<span class=station-footnotes>(",
-                                     station_code,")</span>"])
+    enhanced_station_code = "".join(
+        ["<span class=station-footnotes>(", station_code, ")</span>"]
+    )
 
-    if (facility_name):
-        enhanced_facility_name = ''.join(["<br><span class=station-footnotes>",
-                                          " - ", facility_name,"</span>"])
+    if facility_name:
+        enhanced_facility_name = "".join(
+            ["<br><span class=station-footnotes>", " - ", facility_name, "</span>"]
+        )
     else:
-        enhanced_facility_name = ''
+        enhanced_facility_name = ""
 
-    fancy_name = ' '.join([enhanced_city_state_name,
-                           enhanced_station_code,
-                           enhanced_facility_name
-                          ])
+    fancy_name = " ".join(
+        [enhanced_city_state_name, enhanced_station_code, enhanced_facility_name]
+    )
     return fancy_name
-
-

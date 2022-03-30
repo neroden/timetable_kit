@@ -15,22 +15,23 @@ import pandas as pd
 import json
 
 # These are mine
-from timetable_kit.debug import (set_debug_level, debug_print)
+from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.amtrak import json_stations
 from timetable_kit.amtrak.json_stations import (
     load_stations_json,
     load_station_details,
-    )
+)
 
 # FIXME: this should be relative to something.
-#base_dir = Path(__file__).parent
-#station_stats_dir = base_dir / "station_stats"
-#stations_csv_path = station_stats_dir / "json_stations.csv"
-#bad_stations_path = base_dir / "bad_stations.csv"
+# base_dir = Path(__file__).parent
+# station_stats_dir = base_dir / "station_stats"
+# stations_csv_path = station_stats_dir / "json_stations.csv"
+# bad_stations_path = base_dir / "bad_stations.csv"
 
 # This is a global filled on first use
 accessible_platform_dict = None
 inaccessible_platform_dict = None
+
 
 def station_has_inaccessible_platform(station_code: str) -> bool:
     """
@@ -45,6 +46,7 @@ def station_has_inaccessible_platform(station_code: str) -> bool:
         make_accessibility_dicts()
     return inaccessible_platform_dict[station_code]
 
+
 def station_has_accessible_platform(station_code: str) -> bool:
     """
     Does this station explicitly have an accessible platform?
@@ -58,6 +60,7 @@ def station_has_accessible_platform(station_code: str) -> bool:
         make_accessibility_dicts()
     return accessible_platform_dict[station_code]
 
+
 def make_accessibility_dicts() -> None:
     """
     Make dicts which map from station code to accessibility status.
@@ -67,7 +70,7 @@ def make_accessibility_dicts() -> None:
     stations_json = load_stations_json()
 
     # Believe it or not, this line JUST WORKS!!!!  Wow!
-    stations = pd.io.json.read_json(stations_json,orient='records')
+    stations = pd.io.json.read_json(stations_json, orient="records")
     station_list = stations["code"].array
 
     global accessible_platform_dict
@@ -78,7 +81,7 @@ def make_accessibility_dicts() -> None:
     for code in station_list:
         station_details_json = None
         station_details_json = load_station_details(code)
-        if (station_details_json in ["{}","{}\n"]):  # Bad station
+        if station_details_json in ["{}", "{}\n"]:  # Bad station
             debug_print(1, "Bad station details for", code, ": assuming nothing")
             accessible_platform_dict[code] = False
             inaccessible_platform_dict[code] = False
@@ -94,7 +97,7 @@ def make_accessibility_dicts() -> None:
                     if x["feature"] in ["Accessible platform"]:
                         accessible_platform_dict[code] = True
                         break
-            else: # Did not break out of the loop
+            else:  # Did not break out of the loop
                 accessible_platform_dict[code] = False
 
             # Second pass through for inaccessible platform:
@@ -103,7 +106,7 @@ def make_accessibility_dicts() -> None:
                     if x["feature"] in ["No accessible platform"]:
                         inaccessible_platform_dict[code] = True
                         break
-            else: # Did not break out of the loop
+            else:  # Did not break out of the loop
                 inaccessible_platform_dict[code] = False
 
             if accessible_platform_dict[code] and inaccessible_platform_dict[code]:
@@ -112,6 +115,7 @@ def make_accessibility_dicts() -> None:
     print("Built accessible platform dicts")
     # Finally out of the loop
     return
+
 
 # TESTING
 if __name__ == "__main__":

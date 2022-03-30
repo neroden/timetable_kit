@@ -16,7 +16,8 @@ import pandas as pd
 import gtfs_kit as gk
 
 # This one is mine
-from timetable_kit import gtfs_type_cleanup # import the module name
+from timetable_kit import gtfs_type_cleanup  # import the module name
+
 
 def indexed_agency(agency):
     """
@@ -27,16 +28,18 @@ def indexed_agency(agency):
     # NOTE that this eliminates the ability to refer to it by the agency_id name;
     # it must only be "index" now
     # Requires that agency_id already be an integer
-    revised_agency_3 = agency.set_index('agency_id')
-    revised_agency_3.sort_index(inplace=True);
-    return revised_agency_3;
+    revised_agency_3 = agency.set_index("agency_id")
+    revised_agency_3.sort_index(inplace=True)
+    return revised_agency_3
+
 
 # Method 1
 def lookup_agency_name_1(agency, agency_id):
     """
     Takes agency_id (a string), returns agency_name (a string).  With duplicate IDs, grabs the first
     """
-    return agency[(agency.agency_id == agency_id)]['agency_name'].iloc[0]
+    return agency[(agency.agency_id == agency_id)]["agency_name"].iloc[0]
+
 
 # Method 2
 def lookup_agency_name_2(agency, agency_id):
@@ -44,16 +47,18 @@ def lookup_agency_name_2(agency, agency_id):
     agency_lookup_table = dict(zip(agency.agency_id, agency.agency_name))
     return agency_lookup_table[agency_id]
 
+
 # Method 3
 def lookup_agency_name_3(agency, agency_id):
     # Sneaky use of set_index and to_dict
     # Expand the lookup table to fill in the nameless agencies
     # oh yeah
-    indexed_agency = agency.set_index('agency_id')
-    agency_lookup_table = indexed_agency.to_dict()['agency_name']
+    indexed_agency = agency.set_index("agency_id")
+    agency_lookup_table = indexed_agency.to_dict()["agency_name"]
     return agency_lookup_table[agency_id]
 
-def revised_amtrak_agencies (agency):
+
+def revised_amtrak_agencies(agency):
     # Expects a type corrected agency list, but play it safe; that routine is idempotent
     revised_agency = gtfs_type_cleanup.type_corrected_agency(agency)
 
@@ -62,10 +67,14 @@ def revised_amtrak_agencies (agency):
 
     # Manual edits to the agency lookup table for Amtrak
     # Produce a lookup table:
-    agency_lookup_table = dict(zip(revised_indexed_agency.index, revised_indexed_agency.agency_name))
+    agency_lookup_table = dict(
+        zip(revised_indexed_agency.index, revised_indexed_agency.agency_name)
+    )
     # Edit the lookup table:
     # This was only needed for pre-2022 Amtrak data.
-    agency_lookup_table[174] = "Amtrak Directly Operated Thruway Bus" # Is "Amtrak" in feed
+    agency_lookup_table[
+        174
+    ] = "Amtrak Directly Operated Thruway Bus"  # Is "Amtrak" in feed
     agency_lookup_table[192] = "Thruway Bus Operator 192"
     agency_lookup_table[1206] = "Thruway Bus Operator 1206"
     agency_lookup_table[1207] = "Thruway Bus Operator 1207"
@@ -80,5 +89,6 @@ def revised_amtrak_agencies (agency):
     revised_indexed_agency.insert(0, "agency_name", ser)
     # Mission accomplished.
     return revised_indexed_agency
+
 
 ### MAIN -- add testsuite

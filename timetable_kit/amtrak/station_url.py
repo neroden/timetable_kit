@@ -13,12 +13,13 @@ import argparse
 from timetable_kit import amtrak
 
 arg_parser = argparse.ArgumentParser(
-    formatter_class = argparse.RawDescriptionHelpFormatter,
-    description="Given an Amtrak three-letter station code, return the URL for that station's JSON details webpage."
-    )
-arg_parser.add_argument('code',
-    help='Amtrak station code',
-    )
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description="Given an Amtrak three-letter station code, return the URL for that station's JSON details webpage.",
+)
+arg_parser.add_argument(
+    "code",
+    help="Amtrak station code",
+)
 
 if __name__ == "__main__":
 
