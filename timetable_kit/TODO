@@ -1,6 +1,5 @@
 1 -- Print service dates on timetable.  See service_dates_from_trip_id.
 2 -- add "days of week" special row
-3 -- add "inaccessible" icon (visually superior) & add access to key
 4 -- Improve title and heading on the page.
 5 -- Detect first_station / last_station. ***
 6 -- Handle "ArDp" with special column or with column option
@@ -13,7 +12,7 @@
 9 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
 
-10 -- Make both versions of the baggage icon (inline and not)
+10 -- Make inline icon variants
 
 11 -- Resolve other problematic directory references
 12 -- Resolve command-line functions in amtrak/ into a __main__.py
