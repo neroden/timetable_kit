@@ -1,0 +1,10 @@
+/*
+baggage-ncn.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+*/
+.baggage-icon-img {
+    height: 1em;
+    width: 1em;
+    vertical-align: -0.125em;
+}

@@ -21,11 +21,11 @@ import datetime  # for getting today's date for credit on the timetable
 # My packages
 # This imports the subpackage by name so we can just call it "amtrak"
 from timetable_kit import amtrak
+from timetable_kit import icons
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
     get_font_css,
-    get_icon_css,
     template_environment,
 )
 
@@ -181,7 +181,7 @@ def finish_html_timetable(
     # For icons as imgs.
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
     # This is used every time an icon is inserted...
-    icons_css = get_icon_css("icons.css")
+    icons_css = icons.get_css_for_all_icons()
 
     # TODO FIXME: add the alternative embedded SVG version.
     # Weasy can't handle SVG references within HTML.
@@ -218,8 +218,17 @@ def finish_html_timetable(
         "author": author,
         "for_rpa": for_rpa,
     }
+
+    # Allows direct icon references in Jinja2
+    icon_params = {
+        "baggage_icon": icons.get_baggage_icon_html(),
+        "accessible_icon": icons.get_accessible_icon_html(),
+        "inaccessible_icon": icons.get_inaccessible_icon_html(),
+    }
+
     # Dictionary merge, html_params take priority, Python 3.9
-    full_page_params = stylesheet_params | html_params
+    # Not sure about associativity, but we don't plan to have duplicates anyway
+    full_page_params = stylesheet_params | icon_params | html_params
 
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...

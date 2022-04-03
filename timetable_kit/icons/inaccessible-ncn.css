@@ -1,0 +1,13 @@
+/*
+inaccessible-ncn.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is designed to make the size and baseline of the wheelchair icon the same
+as it is in accessible.css.
+*/
+.inaccessible-icon-img {
+    width: 1.22em;
+    height: 1.2em;
+    vertical-align: -0.325em;
+}

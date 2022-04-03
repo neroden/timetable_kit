@@ -652,6 +652,8 @@ def fill_tt_spec(
                     )
                     if amtrak.station_has_accessible_platform(station_code):
                         services_str += icons.get_accessible_icon_html()
+                    elif amtrak.station_has_inaccessible_platform(station_code):
+                        services_str += icons.get_inaccessible_icon_html()
                     tt.iloc[y, x] = services_str
                 elif train_nums_str in ["timezone"]:  # Column for time zone codes
                     cell_css_list.append("timezone-cell")

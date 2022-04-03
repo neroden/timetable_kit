@@ -1,10 +1,19 @@
-README-icons.txt
+README-icons.rst
+================
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This folder contains icons used for timetable display.
 
-----
+Each icon in use has a matching CSS file so it'll line up properly in font context.
+I may want to merge these into SpartanTT font at some point if I can find the right Unicode
+code points to put them out.
+
+Baggage icons:
+==============
+
+suitcase-solid.svg
+------------------
 The "suitcase-solid" SVG image is from Font Awesome Free.
 In SVG form, it is subject to the CC BY 4.0 license, which requires only attribution.
 
@@ -16,21 +25,20 @@ this is done by adding a "title" field as the first child of the SVG.
 
 This is retained as a sample for future conversion to inline SVGs.
 
-----
-
-The "source_icons_large-suitcase.svg" image is from iconoir.com.  It is subject to the MIT license.
-"large-suitcase-fixed.svg": Cleaned up the metadata.
-This doesn't look as nice as the solid briefcase in tiny mode.
-
-----
+baggage_ncn.svg
+---------------
 I wasn't happy with either of these, so I went to a lot of effort to make a "hollow briefcase" of my own.
 This is on a 512x512 grid like the FontAwesome briefcase, but is a different shape and size,
 optimized for very small font sizes.
 
 This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
 This one WORKS at very small print sizes.
-----
 
+Accessibility Icons
+===================
+
+accessible.svg
+--------------
 The accessibility icons were a pain too.  The one I finally used for accessible.svg
 is from https://commons.wikimedia.org/wiki/File:Wheelchair_symbol.svg and is in the public
 domain.  I copied this to accessible.svg.
@@ -40,12 +48,14 @@ The more modern "racing" symbol, also in public domain, is unrecognizable in sma
 I would prefer the "round-edged variant" of the wheelchair symbol as I think it will display
 better in small print but I can't find one in SVG at this time.  
 
-At https://svgsilh.com/image/26397.html, I found one (public domain/CC0), included
-as 26397.svg, but it looks worse than the standard symbol at small print.
+inaccessible-ncn.svg
+--------------------
+I decided I needed an inaccessible symbol because fully-inaccessible stations are rarer than
+accessible stations and need to stand out visually; a blank space doesn't stand out.
 
-I want a "Non-accessible" symbol because non-accessible stations are rarer than accessible
-ones at this point, but I haven't found one which is readable at small print yet.
-I will probably have to make my own.
+I made this myself in Inkscape based on accessible.svg.  I place it in the public domain.
+Other people's variants of this unreadable at small print.  However, I used
+https://commons.wikimedia.org/wiki/File:No_Accessibility_-_Original_Handicapped_Symbol.svg
+(also public domain) to find the correct color to use for the slash.
 
-
---Nathanael
+This color still looks right in greyscale, which is important.
