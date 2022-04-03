@@ -1,3 +1,6 @@
+=======
+TT-SPEC
+=======
 The ".tt-spec" file format is a template used to generate the timetable
 This document describes the "tt-spec" file format as currently implemented,
 and the associated "tt-aux" file format.
@@ -149,9 +152,11 @@ Associated with the .tt-spec file is a .tt-aux file with the same primary name.
 (so, for cz.tt-spec, use cz.tt-aux)
 
 This is a JSON file with a list of key-value pairs.  So far the defined keys are:
+::
 {
     "title": "This goes in the title bar of the HTML page",
     "heading": "This is the heading at the top of the page",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
 }
+::
 There will be a lot more but this is a start.
