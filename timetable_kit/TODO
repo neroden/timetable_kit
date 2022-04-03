@@ -1,3 +1,5 @@
+0 -- look up tt-aux and tt-spec files in a subdirectory, and develop
+     code for running multiple timetables at once (save on setup costs)
 1 -- Print service dates on timetable.  See service_dates_from_trip_id.
 2 -- add "days of week" special row
 4 -- Improve title and heading on the page.
