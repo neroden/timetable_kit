@@ -158,5 +158,5 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "heading": "This is the heading at the top of the page",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
  }
-::
+
 There will be a lot more but this is a start.
