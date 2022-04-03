@@ -11,10 +11,10 @@ Before running it to generate an Amtrak timetable, you will have to download the
 Amtrak GTFS file and the Amtrak stations database.  This is done in the amtrak/
 folder (see the file amtrak/README.rst in that folder).
 
-You will also need to write a tt-spec file.
+You will also need to write a tt-spec file, and an associated tt-aux file.
 
-tt-spec-documentation.txt contains documentation on the tt-spec format
-and future plans for it.
+tt-spec-documentation.rst contains documentation on the tt-spec format
+and future plans for it, and on the tt-aux format.
 
 find_trains.py gets all the trains from one station to another station (one way).
 get_station_list.py gets all the stations served by a particular train (in order).
