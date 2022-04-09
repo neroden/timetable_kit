@@ -751,31 +751,24 @@ def fill_tt_spec(
     return (tt, styler_t, header_styling_list)
 
 
-##########################
-#### NEW MAIN PROGRAM ####
-##########################
-if __name__ == "__main__":
-    debug_print(3, "Dumping sys.path for clarity:", sys.path)
+def produce_timetable(
+    *,
+    do_csv,
+    do_html,
+    do_pdf,
+    output_dirname,
+    master_feed,
+    author,
+    reference_date,
+    spec_filename,
+):
+    """
+    Produce a single timetable.  Assumes setup has been done.
 
-    my_arg_parser = make_tt_arg_parser()
-    args = my_arg_parser.parse_args()
-
-    set_debug_level(args.debug)
-    output_dirname = args.output_dirname
-
-    gtfs_filename = args.gtfs_filename
-    master_feed = initialize_feed(gtfs=gtfs_filename)
-
-    author = args.author
-    if not author:
-        print("--author is mandatory!")
-        quit()
-
-    reference_date = args.reference_date
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-
-    # Accept with or without .spec
-    tt_filename_base = args.tt_spec_filename.removesuffix(".tt-spec")
+    Intended to allow multiple timetables to be processed at once.
+    """
+    # Accept with or without .tt-spec
+    tt_filename_base = spec_filename.removesuffix(".tt-spec").removesuffix(".tt-aux")
     tt_spec_filename = tt_filename_base + ".tt-spec"
     tt_aux_filename = tt_filename_base + ".tt-aux"
     # Output to "tt_" + filename  + ".whatever"
@@ -787,11 +780,6 @@ if __name__ == "__main__":
 
     aux = load_tt_aux(tt_aux_filename)
 
-    # Quick hack to speed up testing cycle:
-    # implement this properly later TODO
-    do_csv = False
-    do_html = True
-    do_pdf = True
     # Note that due to the inline images issue we may need to run
     # a completely separate HTML version for weasyprint.  We avoid this so far.
     # TODO
@@ -848,4 +836,48 @@ if __name__ == "__main__":
         html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
         debug_print(1, "Weasy done")
 
+
+##########################
+#### NEW MAIN PROGRAM ####
+##########################
+if __name__ == "__main__":
+
+    debug_print(3, "Dumping sys.path for clarity:", sys.path)
+
+    my_arg_parser = make_tt_arg_parser()
+    args = my_arg_parser.parse_args()
+
+    set_debug_level(args.debug)
+
+    output_dirname = args.output_dirname
+
+    gtfs_filename = args.gtfs_filename
+    master_feed = initialize_feed(gtfs=gtfs_filename)
+
+    author = args.author
+    if not author:
+        print("--author is mandatory!")
+        quit()
+
+    reference_date = args.reference_date
+    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+
+    spec_filename = args.tt_spec_filename
+
+    # Quick hack to speed up testing cycle:
+    # implement this properly later TODO
+    do_csv = False
+    do_html = True
+    do_pdf = True
+
+    produce_timetable(
+        do_csv=do_csv,
+        do_html=do_html,
+        do_pdf=do_pdf,
+        output_dirname=output_dirname,
+        master_feed=master_feed,
+        author=author,
+        reference_date=reference_date,
+        spec_filename=spec_filename,
+    )
     quit()
