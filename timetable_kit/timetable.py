@@ -387,8 +387,7 @@ def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
 def fill_tt_spec(
     tt_spec,
     *,
-    feed,
-    date,
+    today_feed,
     doing_html=False,
     box_time_characters=False,
     doing_multiline_text=True,
@@ -400,7 +399,8 @@ def fill_tt_spec(
     Fill a timetable from a tt-spec template using GTFS data
 
     The tt-spec must be complete (run augment_tt_spec first)
-    feed: GTFS feed to work with.  Mandatory.
+    today_feed: GTFS feed to work with.  Mandatory.
+        This should be filtered to a single representative date.  This is not checked.
     date: Reference date to get timetable for.  Default passed at command line. FIXME
 
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
@@ -422,31 +422,6 @@ def fill_tt_spec(
         Defaults to 300, meaning 5 minutes.
         Probably don't want to ever make it less than 1 minute.
     """
-
-    if feed is None:
-        raise InputError("No feed passed to fill_tt_spec")
-    if date is None:
-        raise InputError("No date passed to fill_tt_spec")
-
-    # Filter the feed to the relevant day.
-    today_feed = feed.filter_by_dates(date, date)
-    debug_print(1, "Feed filtered by dates.")
-
-    # Find the train numbers involved
-    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
-    flattened_trains_set = flatten_trains_list(trains_list)
-    # Reduce the feed, by eliminating stuff from other trains and wrong days.
-    # By reducing the stop_times table to be much smaller,
-    # this hopefully makes each subsequent search for a timepoint faster.
-    # This cuts a testcase runtime from 23 seconds to 20.
-    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
-    today_feed = reduced_feed
-    debug_print(1, "Feed filtered by trip_short_name.")
-
-    # Debugging for the reduced feed.  Seems to be fine.
-    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
-    #    print(today_feed.stop_times.to_csv(index=False), file=outfile)
-
     # Extract a list of column options, if provided in the spec
     # This must be in the second row (row 1) and first column (column 0)
     # It ends up as a list (indexed by column number) of lists of options.
@@ -788,6 +763,25 @@ def produce_timetable(
 
     aux = load_tt_aux(tt_aux_filename)
 
+    # Filter the feed to the relevant day.
+    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+    debug_print(1, "Feed filtered by dates.")
+
+    # Find the train numbers involved
+    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    flattened_trains_set = flatten_trains_list(trains_list)
+    # Reduce the feed, by eliminating stuff from other trains and wrong days.
+    # By reducing the stop_times table to be much smaller,
+    # this hopefully makes each subsequent search for a timepoint faster.
+    # This cuts a testcase runtime from 23 seconds to 20.
+    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
+    today_feed = reduced_feed
+    debug_print(1, "Feed filtered by trip_short_name.")
+
+    # Debugging for the reduced feed.  Seems to be fine.
+    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
+    #    print(today_feed.stop_times.to_csv(index=False), file=outfile)
+
     # Note that due to the inline images issue we may need to run
     # a completely separate HTML version for weasyprint.  We avoid this so far.
     # TODO
@@ -797,8 +791,7 @@ def produce_timetable(
     if do_csv:
         (timetable, styler_table, header_styling) = fill_tt_spec(
             tt_spec,
-            feed=master_feed,
-            date=reference_date,
+            today_feed=today_feed,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
         )
@@ -812,8 +805,7 @@ def produce_timetable(
         # Main timetable, same for HTML and PDF
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
             tt_spec,
-            feed=master_feed,
-            date=reference_date,
+            today_feed=today_feed,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
             doing_html=True,
