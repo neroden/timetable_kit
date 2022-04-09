@@ -114,7 +114,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
     """
     if pd.isna(raw_tt_spec.iloc[0, 0]):
         # No key code, nothing to do
-        return tt_spec
+        return raw_tt_spec
     key_code = str(raw_tt_spec.iloc[0, 0])
     debug_print(3, "Key code: " + key_code)
     if key_code.startswith("stations of "):
@@ -757,8 +757,8 @@ def produce_timetable(
     # Output to "tt_" + filename  + ".whatever"
     output_pathname_before_suffix = "tt_" + tt_filename_base
 
-    tt_spec = load_tt_spec(tt_spec_filename)
-    tt_spec = augment_tt_spec(tt_spec, feed=master_feed, date=reference_date)
+    tt_spec_raw = load_tt_spec(tt_spec_filename)
+    tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
     debug_print(1, "tt-spec loaded and augmented")
 
     aux = load_tt_aux(tt_aux_filename)
@@ -781,6 +781,28 @@ def produce_timetable(
     # Debugging for the reduced feed.  Seems to be fine.
     # with open( Path("./dump-stop-times.csv"),'w') as outfile:
     #    print(today_feed.stop_times.to_csv(index=False), file=outfile)
+
+    # Collect pairs of validity dates
+
+    service_ids_set = set()
+    for tsn in flattened_trains_set:
+        trip = trip_from_tsn(today_feed, tsn)  # Hopefully unique
+        service_ids_set.add(trip.service_id)
+
+    # Use PANDAS to filter the calendar... this is not redundant, since filter_by_trip_short_names
+    # does not do it yet FIXME
+    relevant_calendar = today_feed.calendar[
+        today_feed.calendar.service_id.isin(service_ids_set)
+    ]
+    debug_print(1, relevant_calendar)
+
+    start_dates = relevant_calendar["start_date"]
+    latest_start_date = start_dates.max()
+    end_dates = relevant_calendar["end_date"]
+    earliest_end_date = end_dates.min()
+
+    debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
+    # This will eventually get used, but for now just emit it as a debug message
 
     # Note that due to the inline images issue we may need to run
     # a completely separate HTML version for weasyprint.  We avoid this so far.
