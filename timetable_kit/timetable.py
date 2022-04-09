@@ -763,9 +763,17 @@ def produce_timetable(
     spec_filename,
 ):
     """
-    Produce a single timetable.  Assumes setup has been done.
+    Produce a single timetable HTML file.  Assumes setup has been done.
 
     Intended to allow multiple timetables to be processed at once.
+    do_csv: produce a CSV timetable
+    do_html: produce an HTML timetable
+    do_pdf: produce a PDF timetable
+    output_dirname: Put the output timetables here
+    master_feed: initialized master GTFS feed
+    author: author name
+    spec_filename: filename for the tt-spec and tt-aux files specifying the timetable
+    reference_date: reference date to work with
     """
     # Accept with or without .tt-spec
     tt_filename_base = spec_filename.removesuffix(".tt-spec").removesuffix(".tt-aux")
@@ -813,8 +821,6 @@ def produce_timetable(
         )
         timetable_styled_html = style_timetable_for_html(timetable, styler_table)
         debug_print(1, "HTML styled")
-        # We need a title for HTML and PDF pages
-        page_title = "Timetable for " + tt_filename_base.capitalize()  # FIXME
 
     if do_html or do_pdf:
         # Produce the final complete page...
