@@ -16,7 +16,7 @@ import argparse
 from pathlib import Path
 import os.path  # for os.path abilities
 import sys  # Solely for sys.path and solely for debugging
-import shutil # To copy files
+import shutil  # To copy files
 import json
 
 import pandas as pd
@@ -755,7 +755,7 @@ def produce_timetable(
     # Output to "tt_" + filename  + ".whatever"
     output_filename_before_suffix = "tt_" + tt_filename_base
 
-    if (output_dirname):
+    if output_dirname:
         output_dir = Path(output_dirname)
     else:
         output_dir = Path(".")
@@ -822,9 +822,7 @@ def produce_timetable(
         )
         # NOTE, need to add the header
         path_for_csv = output_dir / Path(output_filename_before_suffix + ".csv")
-        timetable.to_csv(
-            path_for_csv, index=False, header=True
-        )
+        timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV done")
 
     if do_html or do_pdf:
@@ -862,6 +860,7 @@ def produce_timetable(
         html_for_weasy.write_pdf(path_for_weasy)
         debug_print(1, "Weasy done")
 
+
 def copy_supporting_files_to_output_dir(output_dirname):
     """
     Copy supporting files (icons, fonts) to the output directory.
@@ -873,14 +872,14 @@ def copy_supporting_files_to_output_dir(output_dirname):
     output_dir = Path(output_dirname)
     source_dir = Path(__file__).parent
 
-    if (os.path.samefile(source_dir, output_dir)):
+    if os.path.samefile(source_dir, output_dir):
         debug_print(1, "Working in module directory, not copying fonts and icons")
         return
 
     icons_dir = output_dir / "icons"
     if not os.path.exists(icons_dir):
         os.makedirs(icons_dir)
-    icon_filenames = ["accessible.svg","inaccessible-ncn.svg","baggage-ncn.svg"]
+    icon_filenames = ["accessible.svg", "inaccessible-ncn.svg", "baggage-ncn.svg"]
     for icon_filename in icon_filenames:
         icon_file_source_path = source_dir / "icons" / icon_filename
         icon_file_dest_path = icons_dir / icon_filename
@@ -897,7 +896,7 @@ def copy_supporting_files_to_output_dir(output_dirname):
         if not os.path.exists(font_subdir):
             os.makedirs(font_subdir)
     # And font files within the directory
-    font_filenames = ["SpartanTT/SpartanTT-Bold.ttf","SpartanTT/SpartanTT-Medium.ttf"]
+    font_filenames = ["SpartanTT/SpartanTT-Bold.ttf", "SpartanTT/SpartanTT-Medium.ttf"]
     for font_filename in font_filenames:
         font_file_source_path = source_dir / "fonts" / font_filename
         font_file_dest_path = fonts_dir / font_filename
@@ -906,6 +905,7 @@ def copy_supporting_files_to_output_dir(output_dirname):
 
     debug_print(1, "Fonts and icons copied to output directory")
     return
+
 
 ##########################
 #### NEW MAIN PROGRAM ####
