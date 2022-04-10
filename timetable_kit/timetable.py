@@ -579,7 +579,9 @@ def fill_tt_spec(
                         route_name, doing_html=doing_html
                     )
                     tt.iloc[y, x] = styled_route_name
-                    cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
+                    cell_css_list.append(
+                        get_time_column_stylings(tsn, output_type="class")
+                    )
             elif station_code == "updown":
                 # Special line just to say "Read Up" or "Read Down"
                 cell_css_list.append("updown-cell")
@@ -679,10 +681,14 @@ def fill_tt_spec(
                         tt.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
                         # Confusing: we want to style some of these and not others.  Woof.
-                        cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
+                        cell_css_list.append(
+                            get_time_column_stylings(tsn, output_type="class")
+                        )
                     else:
                         cell_css_list.append("time-cell")
-                        cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
+                        cell_css_list.append(
+                            get_time_column_stylings(tsn, output_type="class")
+                        )
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
