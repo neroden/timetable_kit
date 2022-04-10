@@ -1,5 +1,4 @@
 Before release of timetables:
-1 -- Print service dates on timetable.  See service_dates_from_trip_id.
 2 -- Improve title and heading on the page.
 3 -- add "days of week" special row
 
