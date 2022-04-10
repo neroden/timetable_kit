@@ -11,7 +11,6 @@ Used to see how many services with different dates are actually the same service
 
 # Other people's packages
 import argparse
-import datetime
 
 import pandas as pd
 import gtfs_kit as gk
@@ -19,7 +18,7 @@ import gtfs_kit as gk
 # My packages: Local module imports
 from timetable_kit.debug import set_debug_level, debug_print
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+# This one monkey-patches gk.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
 
 # To intialize the feed -- does type changes
@@ -28,7 +27,6 @@ from timetable_kit.initialize import initialize_feed
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
-    add_date_argument,
     add_debug_argument,
 )
 
@@ -98,7 +96,6 @@ def compare_stop_lists(base_trip, trips, *, feed):
             )
             # And we're ready to print.
             print(enhanced_comparison)
-    return
 
 
 def compare_similar_services(route_id, *, feed):
@@ -127,6 +124,9 @@ def compare_similar_services(route_id, *, feed):
 
 
 def make_argparser():
+    """
+    Generate argument parser for the "compare.py" mini-program
+    """
     parser = argparse.ArgumentParser(
         description="""Compare timetables for all trips on a single route.
                        Used to spot schedule changes for making tt-specs.
