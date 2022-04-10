@@ -16,12 +16,16 @@ debug = 1
 
 
 def set_debug_level(level: int):
+    """
+    Set debug level for timetable_kit to a number (1 is default)
+    """
     global debug
     debug = level
-    return
 
 
 def debug_print(level: int, *args, **kwargs):
+    """
+    Print debugging output for timetable_kit
+    """
     if debug >= level:
         print(*args, **kwargs)
-    return
