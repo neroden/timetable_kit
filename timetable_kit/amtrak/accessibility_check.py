@@ -173,4 +173,4 @@ if __name__ == "__main__":
         station_stats_dir.mkdir(parents=True)
 
     make_station_stats()
-    quit()
+    sys.exit(0)

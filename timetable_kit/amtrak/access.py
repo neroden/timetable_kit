@@ -120,4 +120,4 @@ def make_accessibility_dicts() -> None:
 # TESTING
 if __name__ == "__main__":
     set_debug_level(2)
-    quit()
+    sys.exit(0)

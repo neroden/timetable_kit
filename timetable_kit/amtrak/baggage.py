@@ -101,4 +101,4 @@ if __name__ == "__main__":
     print(station_has_checked_baggage("CHI"))  # This should use cached data
     print(station_has_checked_baggage("SYR"))
     print(station_has_checked_baggage("BON"))
-    quit()
+    sys.exit(0)

@@ -74,4 +74,4 @@ if __name__ == "__main__":
     save_gtfs(download_gtfs())
     print("Amtrak GTFS saved at " + str(gtfs_zip_local_path))
     unzip_gtfs()
-    quit()
+    sys.exit(0)
