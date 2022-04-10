@@ -76,6 +76,16 @@ from timetable_kit.tsn import (
 
 ### tt-spec loading and parsing code
 
+### Constant set for the special column names.
+### These should not be interpreted as trip_short_names or train numbers.
+special_column_names = {
+    "",
+    "station",
+    "stations",
+    "services",
+    "timezone",
+}
+
 
 def load_tt_aux(filename):
     """Load a tt-aux file in JSON format"""
@@ -221,11 +231,7 @@ def flatten_trains_list(trains_list):
         tsns = split_trains_spec(ts)  # Separates at the "/"
         flattened_trains_list = [*flattened_trains_list, *tsns]
     flattened_trains_set = set(flattened_trains_list)
-    flattened_trains_set.discard("station")
-    flattened_trains_set.discard("stations")
-    flattened_trains_set.discard("services")
-    flattened_trains_set.discard("timezone")
-    flattened_trains_set.discard("")
+    flattened_trains_set = flattened_trains_set - special_column_names
     return flattened_trains_set
 
 
@@ -498,8 +504,6 @@ def fill_tt_spec(
 
     header_replacement_list = []  # list, will fill in as we go
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
-    this_column_gets_ardp = True  # First column should
-    next_column_gets_ardp = False  # Subsequent columns shouldn't... usually
     for x in range(1, column_count):  # First (0) column is the station code
         train_nums_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
 
@@ -522,10 +526,11 @@ def fill_tt_spec(
             header_replacement_list.append(timezone_column_header)
             header_styling_list.append("")  # could include background color;
         else:  # it's actually a train
-            # Check column options for reverse, days:
+            # Check column options for reverse, days, ardp:
             reverse = "reverse" in column_options[x]
             use_daystring = "days" in column_options[x]
             long_days_box = "long-days-box" in column_options[x]
+            this_column_gets_ardp = "ardp" in column_options[x]
 
             # Separate train numbers by "/"
             tsns = split_trains_spec(train_nums_str)
@@ -605,20 +610,10 @@ def fill_tt_spec(
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
-                    # FIXME: need to show time zone...
-                    next_column_gets_ardp = (
-                        True  # Put ardp in the column after the station names
-                    )
                 elif train_nums_str in [
                     "services"
                 ]:  # Column for station services codes
                     cell_css_list.append("services-cell")
-                    next_column_gets_ardp = (
-                        True  # Put ardp in the column after the station services
-                    )
-                    # Here is where we should call out to the Amtrak stations database and look up
-                    # the actual services.  FIXME.
-                    # FOR TESTING ONLY -- FIXME
                     services_str = ""
                     debug_print(
                         1,
@@ -702,9 +697,6 @@ def fill_tt_spec(
                         tt.iloc[y, x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.
             styler_t.iloc[y, x] = " ".join(cell_css_list)
-        # Set up for the next column:
-        this_column_gets_ardp = next_column_gets_ardp
-        next_column_gets_ardp = False
 
     # Now we have to delete the placeholder left column
     tt = tt.drop(labels=0, axis="columns")

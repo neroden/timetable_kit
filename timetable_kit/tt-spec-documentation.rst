@@ -72,10 +72,11 @@ the json files for the station data must be downloaded in advance,
 using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.
 This is to avoid beating too hard on Amtrak's website.
 
-The special code "services" can be used to generate cells containing icons for the station services.  *not yet
+The special code "services" can be used to generate cells containing icons for the station services
 
-The special code "ardp" generates cells containing "Ar" and "Dp", or blank. *not yet -- maybe?
-Remember to set it in reverse for the other side of the timetable.
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank; best for the lefthand column.
+Also for the first column to the right of the station name.
+Remember to set it in "reverse" for the other side of the timetable.
 
 If the column should be read bottom to top (earliest times at the bottom and latest at the top),
 include the special second row with the "reverse" keyword.  (See below.)  Layout will be confused if
