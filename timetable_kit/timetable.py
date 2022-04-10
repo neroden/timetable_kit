@@ -143,7 +143,6 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
         return newest_tt_spec
 
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
-    return
 
 
 def stations_list_from_tt_spec(tt_spec):
@@ -181,8 +180,7 @@ def get_column_options(tt_spec):
     def nan_to_blank(s):
         if pd.isna(s):
             return ""
-        else:
-            return s
+        return s
 
     if tt_spec.iloc[1, 0] not in ["column-options", "column_options"]:
         column_count = tt_spec.shape[1]
@@ -305,7 +303,7 @@ def get_timepoint_from_trip_id(feed, trip_id, station_code):
         # thus making the reverse lookup unique.
         # It will throw an error otherwise.
         trip_id_to_tsn_dict = make_trip_id_to_tsn_dict(feed)
-        tsn = trip_id_to_tsn_dict[my_trip_id]
+        tsn = trip_id_to_tsn_dict[trip_id]
         raise TwoStopsError(
             " ".join(
                 [
@@ -379,7 +377,7 @@ def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
     for s in stations_list:
         max_dwell_secs = 0
         for t in flattened_trains_set:
-            max_dwell_secs = max(max_dwell_secs, get_dwell_secs(today_feed, t, s))
+            max_dwell_secs = max(max_dwell_secs, get_dwell_secs(reduced_feed, t, s))
         if max_dwell_secs >= dwell_secs_cutoff:
             stations_dict[s] = True
         else:
@@ -453,7 +451,7 @@ def fill_tt_spec(
         )
 
     # Load variable functions for is_ardp_station and is_major_station
-    if is_major_station == False:
+    if is_major_station is False:
         is_major_station = lambda station_code: False
     elif is_major_station == "standard":
         is_major_station = amtrak.special_data.is_standard_major_station
@@ -462,9 +460,9 @@ def fill_tt_spec(
             "Received is_major_station which is not callable: ", is_major_station
         )
 
-    if is_ardp_station == False:
+    if is_ardp_station is False:
         is_ardp_station = lambda station_code: False
-    elif is_ardp_station == True:
+    elif is_ardp_station is True:
         is_ardp_station = lambda station_code: True
     elif is_ardp_station == "dwell":
         # Prep max dwell map
