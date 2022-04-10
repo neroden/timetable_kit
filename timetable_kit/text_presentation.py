@@ -24,6 +24,20 @@ from timetable_kit.debug import debug_print
 from timetable_kit.icons import get_baggage_icon_html
 
 
+def gtfs_date_to_isoformat(gtfs_date: str) -> str:
+    """
+    Given a GTFS date string, return an ISO format date string.
+
+    This is a triviality: it converts 20220310 to 2022-03-10.
+    """
+    # Make sure it's a str in case we've been fooling around with these as numbers
+    gtfs_date = str(gtfs_date)
+    if len(gtfs_date) != 8:
+        raise GTFSError("Datestr wrong length", gtfs_date)
+    iso_str = "-".join([gtfs_date[:4], gtfs_date[4:6], gtfs_date[6:8]])
+    return iso_str
+
+
 def get_zonediff(local_zone, base_zone):
     """
     Get the hour difference which must be applied to a time in base_zone to get a time in local_zone

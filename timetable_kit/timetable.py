@@ -805,6 +805,7 @@ def produce_timetable(
     earliest_end_date = end_dates.min()
 
     debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
+
     # This will eventually get used, but for now just emit it as a debug message
 
     # Note that due to the inline images issue we may need to run
@@ -846,6 +847,8 @@ def produce_timetable(
             author=author,
             aux=aux,
             box_time_characters=False,
+            start_date=str(latest_start_date),
+            end_date=str(earliest_end_date),
         )
         path_for_html = output_dir / Path(output_filename_before_suffix + ".html")
         with open(path_for_html, "w") as outfile:

@@ -22,6 +22,7 @@ from pandas.io.formats.style import Styler
 # This imports the subpackage by name so we can just call it "amtrak"
 from timetable_kit import amtrak
 from timetable_kit import icons
+from timetable_kit import text_presentation
 
 from timetable_kit.errors import InputError
 
@@ -131,7 +132,9 @@ def finish_html_timetable(
     author,
     aux=None,
     for_weasyprint=False,
-    box_time_characters=False
+    box_time_characters=False,
+    start_date,
+    end_date,
 ):
     """
     Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
@@ -210,6 +213,8 @@ def finish_html_timetable(
     }
 
     production_date_str = datetime.date.today().isoformat()
+    start_date_str = text_presentation.gtfs_date_to_isoformat(start_date)
+    end_date_str = text_presentation.gtfs_date_to_isoformat(end_date)
 
     html_params = {
         "lang": "en-US",
@@ -220,8 +225,12 @@ def finish_html_timetable(
         "timetable": styled_timetable_html,
         "timetable_kit_url": "https://github.com/neroden/timetable_kit",
         "production_date": production_date_str,
+        "start_date": start_date_str,
+        "end_date": end_date_str,
         "author": author,
         "for_rpa": for_rpa,
+        # FIXME hardcoded Amtrak URL here
+        "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
     }
 
     # Allows direct icon references in Jinja2
