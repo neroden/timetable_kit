@@ -7,6 +7,7 @@ Given an Amtrak three-letter station code, return the URL for that station's JSO
 
 Utility program for the user.  Not used by the timetable program.
 """
+import sys  # for sys.exit
 import argparse
 
 # These are mine
