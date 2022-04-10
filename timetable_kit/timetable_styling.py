@@ -58,7 +58,7 @@ def get_time_column_stylings(trains_spec, output_type="attributes"):
     else:
         color_css = "background-color: cornsilk;"
         color_css_class = "color-day-train"
-    if type == "class":
+    if output_type == "class":
         return color_css_class
     else:
         return color_css
