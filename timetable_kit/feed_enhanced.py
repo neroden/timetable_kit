@@ -347,5 +347,5 @@ if __name__ == "__main__":
     gtfs_path = Path(gtfs_filename)
     feed = gk.read_feed(gtfs_path, dist_units="mi")
     print(feed.calendar)
-    filtered_feed = feed.filter_by_dates("20220224", "20220224")
-    print(filtered_feed.calendar)
+    date_filtered_feed = feed.filter_by_dates("20220224", "20220224")
+    print(date_filtered_feed.calendar)
