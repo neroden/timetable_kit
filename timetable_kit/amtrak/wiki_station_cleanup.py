@@ -14,8 +14,6 @@ It is better to get station names from Amtrak's JSON data.
 import pandas as pd
 import gtfs_kit as gk
 
-# regular expressions
-import re
 
 # Cities with multiple stations in the same city, requiring disambiguation
 two_station_cities = [
@@ -25,7 +23,8 @@ two_station_cities = [
     "Kingston",  # Amtrak Station & two misnamed bus stops
     "Milwaukee",  # Two airport, one downtown
     "Monterey",  # FOUR bus stops
-    "Palm Springs" "Redding",  # station, downtown bus, airport bus  # Station, bus
+    "Palm Springs",  # station, downtown bus, airport bus
+    "Redding",  # Station, bus
     "Santa Fe",  # Station, bus... both are bus stops
     "Stockton",  # Amazingly, Amtrak doesn't distinguish!!!
     "Springfield",  # IL v. MA -- same name !!!!
@@ -34,7 +33,8 @@ two_station_cities = [
 # Most city names are a single word: these are the exceptions
 two_word_cities = [
     "Ann Arbor",
-    "Arcadia Valley" "Burke Centre",
+    "Arcadia Valley",
+    "Burke Centre",
     "South Beloit",
     "Bellows Falls",
     "Bingen-White Salmon",
@@ -95,14 +95,3 @@ if __name__ == "__main__":
     stops_not_in_wiki = long_stops_not_in_wiki.dropna()
     print("Stops in feed but not in Wikipedia list:")
     print(stops_not_in_wiki)
-
-
-if False:
-    path_out_name = "./wikipedia/wiki-stations-revised.csv"
-    path_out = Path(path_out_name)
-
-    new_stops = cleanup_station_names(feed.stops)
-    feed.stops = new_stops
-
-    feed.write(path_out)
-    print("Revised feed now in " + path_out_name)

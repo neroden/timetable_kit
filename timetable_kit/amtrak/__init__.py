@@ -8,6 +8,12 @@
 # and then use
 #   amtrak.special_data.whatever
 # later on.  This doesn't seem to work without these lines.
+
+"""
+timetable_kit.amtrak module
+
+Amtrak-specific functions for timetable_kit.
+"""
 from . import (
     agency_cleanup,
     special_data,

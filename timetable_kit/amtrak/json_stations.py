@@ -18,13 +18,16 @@ get_station_name is the primary one.
 # will download Amtrak's station files into the './stations/' directory
 # otherwise runs test case
 
-from pathlib import Path
 import sys
-import pandas as pd
+from pathlib import Path
+import argparse
+
 import requests
 import json  # better for the details import
 from time import sleep  # Avoid slamming Amtrak's server too fast -- not needed
-import argparse
+
+import pandas as pd
+
 
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
 
@@ -358,7 +361,7 @@ if __name__ == "__main__":
         # NOTE, we are not in a function so do not need global keyword
         station_details_dir = Path(args.stations_dir_name)
     # Create the directory if it does not exist
-    if not (station_details_dir.exists()):
+    if not station_details_dir.exists():
         station_details_dir.mkdir(parents=True)
 
     if args.command_name == "download":
@@ -368,3 +371,4 @@ if __name__ == "__main__":
             download_one_station(str.upper(args.station_code))
     if args.command_name == "process":
         do_station_processing()
+    sys.exit(0)

@@ -46,7 +46,6 @@ def download_gtfs():
             )
         )
         response.raise_for_status()  # Raise an error
-        return
     return response.content  # This is binary data
 
 
@@ -63,11 +62,10 @@ def unzip_gtfs():
     This isn't used directly by the program; this is just for human inspection.
     """
     with ZipFile(gtfs_zip_local_path, "r") as my_zip:
-        if not (gtfs_unzipped_local_path.exists()):
+        if not gtfs_unzipped_local_path.exists():
             gtfs_unzipped_local_path.mkdir(parents=True)
         my_zip.extractall(path=gtfs_unzipped_local_path)
         print("Extracted to " + str(gtfs_unzipped_local_path))
-    return
 
 
 # MAIN PROGRAM

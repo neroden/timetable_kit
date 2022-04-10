@@ -13,6 +13,12 @@ Amtrak's JSON station data does not distinguish between train stations and bus s
 """
 
 import argparse
+from pathlib import Path
+import re
+from math import nan
+
+import pandas as pd
+
 
 arg_parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -61,12 +67,6 @@ arg_parser.add_argument(
     dest="train_station_list_filename",
     default="./wikipedia/train-stations-only.txt",
 )
-
-import pandas as pd
-import re
-
-from pathlib import Path
-from math import nan
 
 # This is initialization code for split_bus_stop_name
 # split_bus_stop is a compiled re, global

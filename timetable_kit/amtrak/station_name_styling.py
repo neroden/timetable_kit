@@ -21,11 +21,11 @@ def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str
     if " - " in station_name:
         (city_state_name, second_part) = station_name.split(" - ", 1)
         (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, junk) = suffix.split(")", 1)
+        (station_code, _) = suffix.split(")", 1)
     else:
         facility_name = None
         (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, junk) = suffix.split(")", 1)
+        (station_code, _) = suffix.split(")", 1)
 
     if major:
         enhanced_city_state_name = city_state_name.upper()
@@ -52,9 +52,10 @@ def amtrak_station_name_to_single_line_text(station_name: str, major=False) -> s
     The easy version.  Station name to single line text.
     """
     if major:
-        return station_name.upper()
+        styled_station_name = station_name.upper()
     else:
-        return station_name
+        styled_station_name = station_name
+    return styled_station_name
 
 
 def amtrak_station_name_to_html(station_name: str, major=False) -> str:
@@ -71,11 +72,11 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
     if " - " in station_name:
         (city_state_name, second_part) = station_name.split(" - ", 1)
         (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, junk) = suffix.split(")", 1)
+        (station_code, _) = suffix.split(")", 1)
     else:
         facility_name = None
         (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, junk) = suffix.split(")", 1)
+        (station_code, _) = suffix.split(")", 1)
 
     if major:
         enhanced_city_state_name = "".join(
