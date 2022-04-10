@@ -82,6 +82,14 @@ td.route-name-cell {
     font-weight: bold;
 }
 
+/* Read Up / Read Down cell. */
+td.updown-cell {
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+}
+
 /* Text transforms for station text spans: */
 .major-station {
     text-transform: uppercase;

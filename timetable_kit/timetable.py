@@ -556,12 +556,21 @@ def fill_tt_spec(
 
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
-            if station_code == "route-name":
+            if pd.isna(station_code):
+                # Line which has no station code -- freeform line.
+                # No times or station names here!
+                # Prefilled text gets retained.  (Should we HTML-ize it?  FIXME)
+                pass
+                # This is probably special text like "to Chicago".
+                if pd.isna(tt.iloc[y, x]):
+                    # Make sure blanks become *string* blanks in this line.
+                    tt.iloc[y, x] = ""
+                # We have to set the styler.
+                cell_css_list.append("special-cell")
+            elif station_code == "route-name":
                 # Special line for route names.
                 cell_css_list.append("route-name-cell")
-                if train_nums_str in ["station", "stations"]:
-                    tt.iloc[y, x] = ""  # Consider putting "Route Names" here?
-                elif train_nums_str in ["services", "timezone"]:
+                if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
                     my_trip = trip_from_tsn(today_feed, tsn)
@@ -573,17 +582,15 @@ def fill_tt_spec(
                     )
                     tt.iloc[y, x] = styled_route_name
                     cell_css_list.append(get_time_column_stylings(tsn, "class"))
-            elif pd.isna(station_code):
-                # Line which has no station code -- freeform line.
-                # No times or station names here!
-                # Prefilled text gets retained.  (Should we HTML-ize it?  FIXME)
-                pass
-                # This is probably special text like "to Chicago".
-                if pd.isna(tt.iloc[y, x]):
-                    # Make sure blanks become *string* blanks in this line.
+            elif station_code == "updown":
+                # Special line just to say "Read Up" or "Read Down"
+                cell_css_list.append("updown-cell")
+                if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
-                # We have to set the styler.
-                cell_css_list.append("special-cell")
+                else:
+                    tt.iloc[y, x] = text_presentation.style_updown(
+                        reverse, doing_html=doing_html
+                    )
             elif not pd.isna(tt.iloc[y, x]):
                 # Line led by a station code, but cell already has a value.
                 # This is probably special text like "to Chicago".

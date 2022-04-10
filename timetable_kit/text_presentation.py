@@ -815,3 +815,19 @@ def style_route_name_for_column(route_name, doing_html=False):
     linebroken_str = "<br>".join(rnw)
     final_str = "".join(['<div class="box-route-name">', linebroken_str, "</div>"])
     return final_str
+
+
+def style_updown(reverse: bool, doing_html=False) -> str:
+    """
+    Style "Read Up" or "Read Down" column subheader
+    """
+    if reverse:
+        text = "Read Up"
+    else:
+        text = "Read Down"
+
+    if not doing_html:
+        return text
+
+    final_str = "".join(["<b>", text, "</b>"])
+    return final_str
