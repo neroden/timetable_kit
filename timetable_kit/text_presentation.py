@@ -78,7 +78,7 @@ def day_string(calendar, offset=0) -> str:
     # if there are zero or duplicate service records, we error out.
     if len(days_of_service_list) == 0:
         raise GTFSError("daystring() can't handle an empty calendar")
-    elif len(days_of_service_list) >= 2:
+    if len(days_of_service_list) >= 2:
         raise GTFSError(
             "daystring() can't handle two calendars for service_id: ",
             days_of_service_list,
@@ -721,7 +721,6 @@ def timepoint_str(
 
     # We should not reach here; we should have returned earlier.
     assert False
-    return
 
 
 def get_time_column_header(trains_spec, doing_html=False):

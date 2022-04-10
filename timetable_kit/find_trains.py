@@ -12,7 +12,6 @@ Definitely filter by reference date.
 """
 
 import argparse
-import datetime
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
@@ -20,7 +19,7 @@ from timetable_kit import feed_enhanced
 from timetable_kit.initialize import initialize_feed
 
 from timetable_kit.debug import debug_print, set_debug_level
-from timetable_kit.tsn import make_trip_id_to_tsn_dict, make_tsn_to_trip_id_dict
+from timetable_kit.tsn import make_trip_id_to_tsn_dict
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (

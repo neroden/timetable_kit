@@ -6,6 +6,8 @@
 Get all the stations for a particular train number (trip_short_name), in order.
 """
 
+import sys  # For sys.exit
+
 import argparse
 import datetime
 

@@ -101,7 +101,7 @@ def load_tt_aux(filename):
     else:
         # Make it blank, basically
         debug_print(1, "No tt-aux file.")
-        return dict()
+        return {}
 
 
 def load_tt_spec(filename):

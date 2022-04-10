@@ -120,7 +120,6 @@ def compare_similar_services(route_id, *, feed):
     print(upbound_trips)
     base_trip = upbound_trips.iloc[0, :]  # row 0, all columns
     compare_stop_lists(base_trip, upbound_trips, feed=route_feed)
-    return
 
 
 def make_argparser():
@@ -160,6 +159,6 @@ if __name__ == "__main__":
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)
     )
-    route_id = lookup_route_id[route_long_name]
+    my_route_id = lookup_route_id[route_long_name]
 
-    compare_similar_services(route_id, feed=master_feed)
+    compare_similar_services(my_route_id, feed=master_feed)
