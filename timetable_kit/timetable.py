@@ -15,7 +15,8 @@ import argparse
 
 from pathlib import Path
 import os.path  # for os.path abilities
-import sys  # Solely for sys.path and solely for debuggint
+import sys  # Solely for sys.path and solely for debugging
+import shutil # To copy files
 import json
 
 import pandas as pd
@@ -752,7 +753,12 @@ def produce_timetable(
     tt_spec_filename = tt_filename_base + ".tt-spec"
     tt_aux_filename = tt_filename_base + ".tt-aux"
     # Output to "tt_" + filename  + ".whatever"
-    output_pathname_before_suffix = "tt_" + tt_filename_base
+    output_filename_before_suffix = "tt_" + tt_filename_base
+
+    if (output_dirname):
+        output_dir = Path(output_dirname)
+    else:
+        output_dir = Path(".")
 
     tt_spec_raw = load_tt_spec(tt_spec_filename)
     tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
@@ -815,8 +821,9 @@ def produce_timetable(
             is_ardp_station="dwell",
         )
         # NOTE, need to add the header
+        path_for_csv = output_dir / Path(output_filename_before_suffix + ".csv")
         timetable.to_csv(
-            output_pathname_before_suffix + ".csv", index=False, header=True
+            path_for_csv, index=False, header=True
         )
         debug_print(1, "CSV done")
 
@@ -842,17 +849,63 @@ def produce_timetable(
             aux=aux,
             box_time_characters=False,
         )
-        with open(output_pathname_before_suffix + ".html", "w") as outfile:
+        path_for_html = output_dir / Path(output_filename_before_suffix + ".html")
+        with open(path_for_html, "w") as outfile:
             print(timetable_finished_html, file=outfile)
         debug_print(1, "Finished HTML done")
 
     if do_pdf:
         # Pick up already-created HTML, convert to PDF
-        weasy_html_pathname = output_pathname_before_suffix + ".html"
+        weasy_html_pathname = str(path_for_html)
         html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-        html_for_weasy.write_pdf(output_pathname_before_suffix + ".pdf")
+        path_for_weasy = output_dir / Path(output_filename_before_suffix + ".pdf")
+        html_for_weasy.write_pdf(path_for_weasy)
         debug_print(1, "Weasy done")
 
+def copy_supporting_files_to_output_dir(output_dirname):
+    """
+    Copy supporting files (icons, fonts) to the output directory.
+
+    Necessary for Weasyprint, and for the HTML to display right.
+    """
+    # Copy the image files to the destination directory.
+    # Necessary for weasyprint to work right!
+    output_dir = Path(output_dirname)
+    source_dir = Path(__file__).parent
+
+    if (os.path.samefile(source_dir, output_dir)):
+        debug_print(1, "Working in module directory, not copying fonts and icons")
+        return
+
+    icons_dir = output_dir / "icons"
+    if not os.path.exists(icons_dir):
+        os.makedirs(icons_dir)
+    icon_filenames = ["accessible.svg","inaccessible-ncn.svg","baggage-ncn.svg"]
+    for icon_filename in icon_filenames:
+        icon_file_source_path = source_dir / "icons" / icon_filename
+        icon_file_dest_path = icons_dir / icon_filename
+        # Note, this overwrites
+        shutil.copy2(icon_file_source_path, icon_file_dest_path)
+
+    fonts_dir = output_dir / "fonts"
+    if not os.path.exists(fonts_dir):
+        os.makedirs(fonts_dir)
+    # Each font has its own directory
+    font_subdir_names = ["SpartanTT"]
+    for font_subdir_name in font_subdir_names:
+        font_subdir = fonts_dir / font_subdir_name
+        if not os.path.exists(font_subdir):
+            os.makedirs(font_subdir)
+    # And font files within the directory
+    font_filenames = ["SpartanTT/SpartanTT-Bold.ttf","SpartanTT/SpartanTT-Medium.ttf"]
+    for font_filename in font_filenames:
+        font_file_source_path = source_dir / "fonts" / font_filename
+        font_file_dest_path = fonts_dir / font_filename
+        # Note, this overwrites
+        shutil.copy2(font_file_source_path, font_file_dest_path)
+
+    debug_print(1, "Fonts and icons copied to output directory")
+    return
 
 ##########################
 #### NEW MAIN PROGRAM ####
@@ -874,12 +927,14 @@ if __name__ == "__main__":
     author = args.author
     if not author:
         print("--author is mandatory!")
-        quit()
+        sys.exit(1)
 
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     spec_filename = args.tt_spec_filename
+
+    copy_supporting_files_to_output_dir(output_dirname)
 
     # Quick hack to speed up testing cycle:
     # implement this properly later TODO
@@ -897,4 +952,4 @@ if __name__ == "__main__":
         reference_date=reference_date,
         spec_filename=spec_filename,
     )
-    quit()
+    sys.exit(0)
