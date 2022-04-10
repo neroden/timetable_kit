@@ -12,9 +12,9 @@ I need to handle the local file munging better, but this is a start.
 
 import sys  # for sys.exit
 from pathlib import Path
-import requests
-
 from zipfile import ZipFile
+
+import requests
 
 # These are mine
 # from timetable_kit import amtrak
