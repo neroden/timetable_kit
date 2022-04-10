@@ -14,14 +14,16 @@ This uses Jinja2, via the load_resources module.
 """
 
 # Other people's packages
+import datetime  # for getting today's date for credit on the timetable
 import pandas as pd
 from pandas.io.formats.style import Styler
-import datetime  # for getting today's date for credit on the timetable
 
 # My packages
 # This imports the subpackage by name so we can just call it "amtrak"
 from timetable_kit import amtrak
 from timetable_kit import icons
+
+from timetable_kit.errors import InputError
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
@@ -30,7 +32,7 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_time_column_stylings(trains_spec, type="attributes"):
+def get_time_column_stylings(trains_spec, output_type="attributes"):
     """
     Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
 
@@ -43,7 +45,7 @@ def get_time_column_stylings(trains_spec, type="attributes"):
 
     Note that these two colors may be complementary rather than identical.  (But this is not the case right now.)
     """
-    if type not in ["class", "attributes"]:
+    if output_type not in ["class", "attributes"]:
         raise InputError("expected class or attributes")
 
     train_number = trains_spec  # Because we aren't parsing trains_spec yet -- FIXME
@@ -127,7 +129,7 @@ def finish_html_timetable(
     header_styling_list,
     *,
     author,
-    aux=dict(),
+    aux=None,
     for_weasyprint=False,
     box_time_characters=False
 ):
@@ -141,6 +143,9 @@ def finish_html_timetable(
     """
 
     header_styling_css = make_header_styling_css(header_styling_list)
+
+    if aux is None:
+        aux = {}  # Empty dict
 
     # We need to add the extras to make this a full HTML & CSS file now.
     if "title" in aux:
