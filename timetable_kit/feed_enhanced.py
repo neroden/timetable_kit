@@ -11,8 +11,8 @@ a bunch of data out to make a *smaller* feed which is quicker to do future proce
 There is also an extraction method to pull out a single trip record from a reduced feed,
 with error checking to make sure there's exactly one trip.
 """
-import gtfs_kit as gk
 from operator import not_  # Needed for bad_service_id filter
+import gtfs_kit as gk
 from timetable_kit.errors import (
     GTFSError,
     NoTripError,
@@ -84,6 +84,7 @@ def filter_by_day_of_week(
     """
     # NOTE this assumes bool type conversion.
     # consider doing with original GTFS 1/0 data.
+    # FIXME
     new_feed = self.copy()
     calendar = self.calendar
     if monday:
@@ -283,7 +284,7 @@ def get_single_trip(self):
         raise NoTripError(
             "Expected single trip: no trips in filtered trips table", self.trips
         )
-    elif num_rows > 1:
+    if num_rows > 1:
         # FIXME: important to print this now
         print(self.trips)
         raise TwoTripsError(
@@ -318,7 +319,7 @@ def get_trip_short_name(self, trip_id):
     my_trips = self.trips[self.trips["trip_id"] == trip_id]
     if my_trips.shape[0] == 0:
         raise NoTripError("No trip with trip_id ", trip_id)
-    elif my_trips.shape[0] > 1:
+    if my_trips.shape[0] > 1:
         raise TwoTripsError("Multiple trips with trip_id ", trip_id)
     my_trip = my_trips.iloc[0]
     return my_trip.trip_short_name
@@ -346,5 +347,5 @@ if __name__ == "__main__":
     gtfs_path = Path(gtfs_filename)
     feed = gk.read_feed(gtfs_path, dist_units="mi")
     print(feed.calendar)
-    new_feed = feed.filter_by_dates("20220224", "20220224")
-    print(new_feed.calendar)
+    filtered_feed = feed.filter_by_dates("20220224", "20220224")
+    print(filtered_feed.calendar)
