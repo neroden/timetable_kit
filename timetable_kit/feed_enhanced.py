@@ -239,10 +239,12 @@ def filter_by_trip_short_names(self, trip_short_names):
     Returns a new filtered feed (original feed unchanged)
     - filters trips (direct)
     - filters stop_times (by trip_ids in trips)
+    - filters calendar (by service_ids in trips)
     - FIXME: no other second-layer filtering
     Often used with one-element list to get a single trip
     - filtered trips is used for retrieving a single trip_id, or a trip record
     - filtered stop_times is used for getting single trip stop times, but requires unique trip_id
+    - filtered calendar is used for finding validity dates for a timetable
     Also used to speed up main timetable routine, by filtering irrelevancies out of stop_times.
     """
     new_feed = self.copy()
@@ -251,6 +253,8 @@ def filter_by_trip_short_names(self, trip_short_names):
     # Then filter the stop_times
     trip_ids = new_feed.trips["trip_id"].array
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+    service_ids = new_feed.trips["service_id"].array
+    new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
     return new_feed
 
 

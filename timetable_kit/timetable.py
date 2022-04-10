@@ -357,6 +357,7 @@ def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
     Return a dict from station_code to True/False, based on the trains in the tt_spec.
 
     Expects a feed already filtered to a single date.
+    The feed *may* be restricted to the relevant trains (but must contain all relevant trains).
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
@@ -370,15 +371,12 @@ def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
     trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
     flattened_trains_set = flatten_trains_list(trains_list)
 
-    # Now create a reduced GTFS database to look through
-    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
-
     # Prepare the dict to return
     stations_dict = {}
     for s in stations_list:
         max_dwell_secs = 0
         for t in flattened_trains_set:
-            max_dwell_secs = max(max_dwell_secs, get_dwell_secs(reduced_feed, t, s))
+            max_dwell_secs = max(max_dwell_secs, get_dwell_secs(today_feed, t, s))
         if max_dwell_secs >= dwell_secs_cutoff:
             stations_dict[s] = True
         else:
@@ -406,6 +404,7 @@ def fill_tt_spec(
     The tt-spec must be complete (run augment_tt_spec first)
     today_feed: GTFS feed to work with.  Mandatory.
         This should be filtered to a single representative date.  This is not checked.
+        This *may* be filtered to relevant trains only.  It must contain all relevant trains.
     date: Reference date to get timetable for.  Default passed at command line. FIXME
 
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
@@ -580,7 +579,7 @@ def fill_tt_spec(
                         route_name, doing_html=doing_html
                     )
                     tt.iloc[y, x] = styled_route_name
-                    cell_css_list.append(get_time_column_stylings(tsn, "class"))
+                    cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
             elif station_code == "updown":
                 # Special line just to say "Read Up" or "Read Down"
                 cell_css_list.append("updown-cell")
@@ -680,10 +679,10 @@ def fill_tt_spec(
                         tt.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
                         # Confusing: we want to style some of these and not others.  Woof.
-                        cell_css_list.append(get_time_column_stylings(tsn, "class"))
+                        cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
                     else:
                         cell_css_list.append("time-cell")
-                        cell_css_list.append(get_time_column_stylings(tsn, "class"))
+                        cell_css_list.append(get_time_column_stylings(tsn, output_type="class"))
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
@@ -766,42 +765,37 @@ def produce_timetable(
 
     aux = load_tt_aux(tt_aux_filename)
 
-    # Filter the feed to the relevant day.
+    # Filter the feed to the relevant day.  Required.
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
     debug_print(1, "Feed filtered by dates.")
 
-    # Find the train numbers involved
-    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
-    flattened_trains_set = flatten_trains_list(trains_list)
-    # Reduce the feed, by eliminating stuff from other trains and wrong days.
+    # Reduce the feed, by eliminating stuff from other trains.
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
+    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    flattened_trains_set = flatten_trains_list(trains_list)
     reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
-    today_feed = reduced_feed
     debug_print(1, "Feed filtered by trip_short_name.")
+
+    service_ids_set = set()
+    # This is strictly a uniqueness sanity check.
+    for tsn in flattened_trains_set:
+        _ = trip_from_tsn(reduced_feed, tsn)  # Hopefully unique.  Throws error if not.
+
+    # Print the calendar for debugging
+    debug_print(1, reduced_feed.calendar)
 
     # Debugging for the reduced feed.  Seems to be fine.
     # with open( Path("./dump-stop-times.csv"),'w') as outfile:
-    #    print(today_feed.stop_times.to_csv(index=False), file=outfile)
+    #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
 
-    # Collect pairs of validity dates
-
-    service_ids_set = set()
-    for tsn in flattened_trains_set:
-        trip = trip_from_tsn(today_feed, tsn)  # Hopefully unique
-        service_ids_set.add(trip.service_id)
-
-    # Use PANDAS to filter the calendar... this is not redundant, since filter_by_trip_short_names
-    # does not do it yet FIXME
-    relevant_calendar = today_feed.calendar[
-        today_feed.calendar.service_id.isin(service_ids_set)
-    ]
-    debug_print(1, relevant_calendar)
-
-    start_dates = relevant_calendar["start_date"]
+    # Collect pairs of validity dates.
+    # Note that the feed has been filtered by tsns,
+    # so will *only* include relevant tsns in the calendar!
+    start_dates = reduced_feed.calendar["start_date"]
     latest_start_date = start_dates.max()
-    end_dates = relevant_calendar["end_date"]
+    end_dates = reduced_feed.calendar["end_date"]
     earliest_end_date = end_dates.min()
 
     debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
@@ -816,7 +810,7 @@ def produce_timetable(
     if do_csv:
         (timetable, styler_table, header_styling) = fill_tt_spec(
             tt_spec,
-            today_feed=today_feed,
+            today_feed=reduced_feed,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
         )
@@ -829,7 +823,7 @@ def produce_timetable(
         # Main timetable, same for HTML and PDF
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
             tt_spec,
-            today_feed=today_feed,
+            today_feed=reduced_feed,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
             doing_html=True,
