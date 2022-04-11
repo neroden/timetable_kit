@@ -78,7 +78,7 @@ def get_zone_str(zone_name, doing_html=False):
         return letter
 
 
-def day_string(calendar, offset=0) -> str:
+def day_string(calendar, offset: int = 0) -> str:
     """
     Return "MoWeFr" style string for days of week.
 
@@ -99,8 +99,7 @@ def day_string(calendar, offset=0) -> str:
         )
     days_of_service = days_of_service_list[0]
 
-    # print(days_of_service)
-    # Fast exit: don't go through all the work if it's daily
+    # Important fast exit: don't go through all the work if it's daily
     if (
         days_of_service["monday"]
         and days_of_service["tuesday"]
@@ -112,51 +111,47 @@ def day_string(calendar, offset=0) -> str:
     ):
         return "Daily"
 
-    while offset > 0:
-        # Roll the days of service forward one: train started MoWeFr but it's now TuThSa
-        new_monday = days_of_service["sunday"]
-        days_of_service["sunday"] = days_of_service["saturday"]
-        days_of_service["saturday"] = days_of_service["friday"]
-        days_of_service["friday"] = days_of_service["thursday"]
-        days_of_service["thursday"] = days_of_service["wednesday"]
-        days_of_service["wednesday"] = days_of_service["tuesday"]
-        days_of_service["tuesday"] = days_of_service["monday"]
-        days_of_service["monday"] = new_monday
-        offset = offset - 1
+    # Use modulo to correct the offset to the range 0:6
+    # Note timezone differences can lead to -1 offset.
+    # Later stations on the route lead to positive offset.
+    offset = offset % 7
 
-    while offset < 0:  # Possible if time zone change gave a -1 offset
-        # Roll the days of service backwards one: train started MoWeFr but it's now SuTuTh
-        new_sunday = days_of_service["monday"]
-        days_of_service["monday"] = days_of_service["tuesday"]
-        days_of_service["tuesday"] = days_of_service["wednesday"]
-        days_of_service["wednesday"] = days_of_service["thursday"]
-        days_of_service["thursday"] = days_of_service["friday"]
-        days_of_service["friday"] = days_of_service["saturday"]
-        days_of_service["saturday"] = days_of_service["sunday"]
-        days_of_service["sunday"] = new_sunday
-        offset = offset + 1
-
+    # Now we get tricky.  We want the days of the week to line up as they cycle around the clock.
+    # This is kind of messy!  We always use the order of the original, zero-offset day.
+    # That's slightly wacky for the -1 offsets -- Su is first instead of Mo -- but that is OK.
     daystring = ""
     if days_of_service["monday"]:
-        daystring += "Mo"
+        daystring += ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"][offset]
     if days_of_service["tuesday"]:
-        daystring += "Tu"
+        daystring += ["Tu", "We", "Th", "Fr", "Sa", "Su", "Mo"][offset]
     if days_of_service["wednesday"]:
-        daystring += "We"
+        daystring += ["We", "Th", "Fr", "Sa", "Su", "Mo", "Tu"][offset]
     if days_of_service["thursday"]:
-        daystring += "Th"
+        daystring += ["Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"][offset]
     if days_of_service["friday"]:
-        daystring += "Fr"
+        daystring += ["Fr", "Sa", "Su", "Mo", "Tu", "We", "Th"][offset]
     if days_of_service["saturday"]:
-        daystring += "Sa"
+        daystring += ["Sa", "Su", "Mo", "Tu", "We", "Th", "Fr"][offset]
     if days_of_service["sunday"]:
-        daystring += "Su"
-    if daystring == "MoTuWeThFrSaSu":
-        daystring = "Daily"  # Bypassed by fast path
+        daystring += ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][offset]
+
+    if daystring == "":
+        raise GTFSError("No days of operation?!?")
+
+    # This is all very well for the three-a-week overnight trains, but looks ugly
+    # for M-F, or SaSu trains.  Patch it up.
+
+    # This accounts for both the 0 and -1 offset cases.
     if daystring == "MoTuWeThFr":
-        daystring = "Mo-Fr"
+        return "Mo-Fr"
+    # Known Empire Corridor issue with special-cased Fridays
     if daystring == "MoTuWeTh":
-        daystring = "Mo-Th"
+        return "Mo-Th"
+    # Needed for the -1 offset case.
+    if daystring == "SuSa":
+        return "SaSu"
+
+    # Generic case
     return daystring
 
 
