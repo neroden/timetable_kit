@@ -42,11 +42,16 @@ LEFT COLUMN
 The left column (except for the top left key cell) contains station codes (stop_id) in order,
 exactly the order the rows will appear in the timetable.
 
-A blank cell can be left in the left column to use a line for something other than station times. *not yet
-This can be used to provide a line which has a "header" for a "connecting train" section.
+SPECIAL ROWS
+------------
+A blank cell can be left in the left column to use a line for something other than station times, free-form.
+This might be used to provide a line which has a "header" for a "connecting train" section.
 
-The special code "route-name" can be used to generate cells containing the name of the train route (route_long_name).
-For Amtrak, if this is "Amtrak Thruway Connecting Service", instead the name of the agency (agency_name) will be inserted.
+The special code "route-name" in the left column can be used to generate cells containing the name of the train route (route_long_name).  For Amtrak, if this is "Amtrak Thruway Connecting Service", instead the name of the agency (agency_name) will be inserted.
+
+The special code "days" or "days-of-week" in the left column will generate a row with codes like "Daily", "MoWeFr", "SaSu", etc.  For each column where you want such a day to be specified, you must specify a station code in this row and that column.  (This is because the days depend on the station, for trains crossing midnight or in a different timezone than the agency timezone.)  The first station in the timetable is probably a good choice.  To leave out this notation for a particular column, simply omit the station code.
+
+The special code "updown" will generate "Read Up" and "Read Down" notices.  See the "reverse" option in column-options below.
 
 SHORTHAND SPEC
 --------------
@@ -66,25 +71,13 @@ TOP ROW
 The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
 in exactly the order the columns will appear in the timetable.
 
-The special code "station" can be used to generate cells containing the name and details of the station.
-This is retrieved from the Amtrak station data on the Web which is on the web in json format;
-the json files for the station data must be downloaded in advance, 
-using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.
-This is to avoid beating too hard on Amtrak's website.
+SPECIAL COLUMNS
+---------------
+The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
 
-The special code "services" can be used to generate cells containing icons for the station services
+The special code "services" in the top row can be used to generate cells containing icons for the station services.  So far only accessibility is implemented.
 
-The special code "ardp" generates cells containing "Ar" and "Dp", or blank; best for the lefthand column.
-Also for the first column to the right of the station name.
-Remember to set it in "reverse" for the other side of the timetable.
-
-If the column should be read bottom to top (earliest times at the bottom and latest at the top),
-include the special second row with the "reverse" keyword.  (See below.)  Layout will be confused if
-this is not specified correctly.
-
-The special code "days" or "days-of-week" will generate a row with codes like "Daily", "MoWeFr", "SaSu", etc.
-Since this can only put one day per train, you have to specify the *station code* to generate the day for in each
-column. *not yet
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank *not implemented
 
 Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
 This will allow them to share a single column.  Be careful about using this as it is fragile:
@@ -93,8 +86,8 @@ This will give a complex stacked cell for "train name".  You will want to do som
 
 Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).  *not yet
 
-SECOND ROW
-----------
+COLUMN-OPTIONS IN SECOND ROW
+----------------------------
 If the first column of the second row contains the text "column-options" (without the quotes),
 then the second row is treated as a list of specifications for how to render the columns.
 
@@ -109,16 +102,16 @@ Implemented options:
 reverse -- This column should read bottom to top (earlier times below later times).  (Default: top to bottom.)
 days -- include string for days of operation (MoWeFr) in the time cells for this column
 long-days-box -- make the box for the days long enough to hold SuMoTuWeTh (five days) rather than the default three.
+ardp -- include "Ar" and "Dp" in this column
 
 No other options have been defined yet.
 Options which I might implement, but have not implemented, include:
-ardp -- include "Ar" and "Dp"
 color -- background colors for this column.  If the train numbers are separated by slashes, so are the background colors?
 tz -- include timezone in this column
 
 The "days" option is suitable for less-than-daily trains which run across midnight.
 Less-than-daily trains which only run on one day might better have a day listed in
-a column header -- this will be implemented separately *notyet
+a column header (see above).
 
 
 REST OF SPEC
