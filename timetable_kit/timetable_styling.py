@@ -25,6 +25,7 @@ from timetable_kit import icons
 from timetable_kit import text_presentation
 
 from timetable_kit.errors import InputError
+from timetable_kit.debug import debug_print
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
@@ -166,6 +167,11 @@ def finish_html_timetable(
     else:
         for_rpa = False
 
+    landscape_str = ""
+    if "landscape" in aux:
+        debug_print(1, "Landscape orientation")
+        landscape_str = "landscape"
+
     ### FONTS
     font_name = "SpartanTT"
     font_size = "6pt"
@@ -231,6 +237,7 @@ def finish_html_timetable(
         "for_rpa": for_rpa,
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
+        "landscape": landscape_str, # This one's for weasy
     }
 
     # Allows direct icon references in Jinja2

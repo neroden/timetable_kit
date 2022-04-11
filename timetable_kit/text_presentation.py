@@ -397,6 +397,7 @@ def timepoint_str(
     use_24=False,
     use_daystring=False,
     long_days_box=False,
+    short_days_box=False,
     calendar=None,
     is_first_stop=False,
     is_last_stop=False,
@@ -435,6 +436,7 @@ def timepoint_str(
     -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
     -- long_days_box: Extra-long space for days, for SuMoTuWeTh five-day calendars.
+    -- short_days_box: Extra-short space for days, for "Mo" one-day across-midnight trains.
     -- calendar: a calendar with a single row containing the correct calendar for the service.
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
@@ -510,6 +512,8 @@ def timepoint_str(
     if use_daystring:
         if long_days_box:
             days_box_class = "box-days-long"
+        elif short_days_box:
+            days_box_class = "box-days-short"
         else:
             days_box_class = "box-days"
         # Note that daystring is VARIABLE LENGTH, and is the only variable-length field

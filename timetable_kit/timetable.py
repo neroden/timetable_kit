@@ -528,6 +528,7 @@ def fill_tt_spec(
             reverse = "reverse" in column_options[x]
             use_daystring = "days" in column_options[x]
             long_days_box = "long-days-box" in column_options[x]
+            short_days_box = "short-days-box" in column_options[x]
             this_column_gets_ardp = "ardp" in column_options[x]
 
             # Separate train numbers by "/"
@@ -745,6 +746,7 @@ def fill_tt_spec(
                             use_daystring=use_daystring,
                             calendar=calendar,
                             long_days_box=long_days_box,
+                            short_days_box=short_days_box,
                             use_baggage_str=train_has_checked_baggage,
                             has_baggage=has_baggage,
                         )

@@ -14,9 +14,14 @@ cardinal:
 # Avoid the 12th.  Also, something wrong starting 14th, until May
 cono:
 	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220530 --spec cono
+# 20220530 is the full-width timetable.
 
-empire:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220329 --spec empire # Arbitrary
+cono-short:
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220413 --spec cono-short
+# 20220530 is the full-width timetable.
+
+empire-w:
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220412 --spec empire-w
 
 cz:
 	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220329 --spec cz # Arbitrary

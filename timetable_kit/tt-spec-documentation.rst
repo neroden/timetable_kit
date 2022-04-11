@@ -105,6 +105,7 @@ Implemented options:
 reverse -- This column should read bottom to top (earlier times below later times).  (Default: top to bottom.)
 days -- include string for days of operation (MoWeFr) in the time cells for this column
 long-days-box -- make the box for the days long enough to hold SuMoTuWeTh (five days) rather than the default three.
+short-days-box -- make the box for days only long enough to hold Mo (one day) rather than the default three.
 ardp -- include "Ar" and "Dp" in this column
 
 No other options have been defined yet.
