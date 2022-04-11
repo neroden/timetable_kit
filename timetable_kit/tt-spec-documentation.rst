@@ -77,6 +77,9 @@ The special code "station" or "stations in the top row can be used to generate c
 
 The special code "services" in the top row can be used to generate cells containing icons for the station services.  So far only accessibility is implemented.
 
+The special code "timezone" in the top row will generate a column with codes for the timezones of the stations.  Strongly
+recommended for any train which crosses two timezones.
+
 The special code "ardp" generates cells containing "Ar" and "Dp", or blank *not implemented
 
 Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
