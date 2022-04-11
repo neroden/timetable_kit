@@ -1,6 +1,5 @@
 Before release of timetables:
 2 -- Improve title and heading on the page.
-3 -- add "days of week" special row
 
 Preferably before release of timetables:
 6 -- look up tt-aux and tt-spec files in a subdirectory, and develop
