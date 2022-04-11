@@ -13,6 +13,9 @@ Weasyprint also can't handle variable-weight fonts.  Oh Well.
 --- Okular needs to be set at 90% zoom to show it real size.
 --- Evince needs to be set at 50% zoom to show it real size.
 
+We can convert the PDF to a JPEG as follows (and it is readable!)
+pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
+
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data
 Amtrak station codes are in the "stop_id" field of GTFS static data.
 Amtrak trip_ids currently consist of the trip_short_name with the service_id concatenated after it.  This might change.
