@@ -591,6 +591,23 @@ def fill_tt_spec(
                     tt.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
+            elif station_code in ["days","days-of-week"]:
+                # Days of week -- best for a train which doesn't run across midnight
+                cell_css_list.append("days-of-week-cell")
+                if train_nums_str in special_column_names:
+                    tt.iloc[y, x] = ""
+                else:
+                    my_trip = trip_from_tsn(today_feed, tsn)
+                    calendar = today_feed.calendar[ today_feed.calendar.service_id == my_trip.service_id ]
+                    # FIXME: we actually need an offset if the first station in the column
+                    # is not on the same day as the first station in the GTFS database
+                    daystring = text_presentation.day_string(calendar)
+                    # TODO: add some HTML styling here
+                    tt.iloc[y, x] = daystring
+                    # Color this cell
+                    cell_css_list.append(
+                        get_time_column_stylings(tsn, output_type="class")
+                    )
             elif not pd.isna(tt.iloc[y, x]):
                 # Line led by a station code, but cell already has a value.
                 # This is probably special text like "to Chicago".

@@ -82,6 +82,10 @@ If the column should be read bottom to top (earliest times at the bottom and lat
 include the special second row with the "reverse" keyword.  (See below.)  Layout will be confused if
 this is not specified correctly.
 
+The special code "days" or "days-of-week" will generate a row with codes like "Daily", "MoWeFr", "SaSu", etc.
+Since this can only put one day per train, you have to specify the *station code* to generate the day for in each
+column. *not yet
+
 Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
 This will allow them to share a single column.  Be careful about using this as it is fragile:
 it is intended for "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.

@@ -82,6 +82,17 @@ td.route-name-cell {
     font-weight: bold;
 }
 
+/* Days of week header cell.  Should split font stuff out. */
+td.days-of-week-cell {
+    vertical-align: middle;
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+    font-weight: bold;
+    font-size: 120%;
+}
+
 /* Read Up / Read Down cell. */
 td.updown-cell {
     text-align: center;
