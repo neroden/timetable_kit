@@ -591,7 +591,7 @@ def fill_tt_spec(
                     tt.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
-            elif station_code in ["days","days-of-week"]:
+            elif station_code in ["days", "days-of-week"]:
                 # Days of week -- best for a train which doesn't run across midnight
                 cell_css_list.append("days-of-week-cell")
                 if train_nums_str in special_column_names:
@@ -600,26 +600,34 @@ def fill_tt_spec(
                     my_trip = trip_from_tsn(today_feed, tsn)
                     # We can only show the days for one station.
                     # So get the reference stop_id / station code to use; user-specified
-                    reference_stop_id = tt_spec.iloc[y,x]
+                    reference_stop_id = tt_spec.iloc[y, x]
                     if pd.isna(reference_stop_id) or reference_stop_id == "":
                         # No reference stop?  Maybe this should be blank.
                         # Useful if one train runs across midnight.
-                        tt.iloc[y,x] = ""
+                        tt.iloc[y, x] = ""
                     else:
                         timepoint = get_timepoint_from_trip_id(
                             today_feed, my_trip.trip_id, reference_stop_id
                         )
                         # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
-                        stop_df = today_feed.stops[today_feed.stops.stop_id == reference_stop_id]
+                        stop_df = today_feed.stops[
+                            today_feed.stops.stop_id == reference_stop_id
+                        ]
                         stop_tz = stop_df.iloc[0].stop_timezone
                         zonediff = text_presentation.get_zonediff(stop_tz, agency_tz)
                         # Get the day change for the reference stop (format is explained in text_presentation)
-                        departure = text_presentation.explode_timestr(timepoint.departure_time, zonediff)
-                        offset=departure.day
+                        departure = text_presentation.explode_timestr(
+                            timepoint.departure_time, zonediff
+                        )
+                        offset = departure.day
                         # Finally, get the calendar (must be unique)
-                        calendar = today_feed.calendar[ today_feed.calendar.service_id == my_trip.service_id ]
+                        calendar = today_feed.calendar[
+                            today_feed.calendar.service_id == my_trip.service_id
+                        ]
                         # And fill in the actual string
-                        daystring = text_presentation.day_string(calendar, offset=offset)
+                        daystring = text_presentation.day_string(
+                            calendar, offset=offset
+                        )
                         # TODO: add some HTML styling here
                         tt.iloc[y, x] = daystring
                     # Color this cell
