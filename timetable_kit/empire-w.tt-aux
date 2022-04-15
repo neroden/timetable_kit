@@ -1,6 +1,7 @@
 {
     "title": "Empire Service Westbound",
     "heading": "Amtrak's Empire Service: Westbound",
-    "for_rpa": "true",
-    "landscape": "true"
+    "landscape": "true",
+    "reference_date": "20220412",
+    "for_rpa": "true"
 }

@@ -13,17 +13,22 @@ Also includes routines for adding common arguments to parsers for other commands
 import argparse
 
 # Needed for defaulting the reference date to tomorrow:
-import datetime
+# import datetime
 
 # Needed for defaulting the GTFS file:
 from timetable_kit import amtrak
 
 # Determine defaults in initialization code here:
 default_gtfs_filename = amtrak.gtfs_unzipped_local_path
+
+# Default reference date removed.
+# Reference date now overrides the .tt-aux file,
+# so we want to be able to omit it and trust the .tt-aux file.
+#
 # Use tomorrow as the default reference date.
 # After all, you aren't catching a train today, right?
-tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-default_reference_date = int(tomorrow.strftime("%Y%m%d"))
+# tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+# default_reference_date = int(tomorrow.strftime("%Y%m%d"))
 
 
 def add_gtfs_argument(parser: argparse.ArgumentParser):
@@ -50,9 +55,10 @@ def add_date_argument(parser: argparse.ArgumentParser):
         help="""Reference date.
                 GTFS data contains timetables for multiple time periods;
                 this produces the timetable valid as of the reference date.
+                This overrides any reference date set in the .tt-aux file.
+                Should be in YYYYMMDD format.
              """,
         type=int,
-        default=default_reference_date,
     )
 
 
@@ -70,11 +76,19 @@ def add_debug_argument(parser: argparse.ArgumentParser):
 
 def add_output_dirname_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
-        "--output-directory",
+        "--output-directory","--output-dir",
         "-o",
         dest="output_dirname",
         help="Directory to put output HTML timetable files in.  Default is current directory.",
         default=".",
+    )
+
+def add_input_dirname_argument(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "--input-directory","--input-dir",
+        "-i",
+        dest="input_dirname",
+        help="Directory to find input .tt-spec / .tt-aux files in.  Default is not to prefix a directory (use system default for lookup of files)",
     )
 
 
@@ -88,19 +102,20 @@ def make_tt_arg_parser():
     add_date_argument(parser)
     add_debug_argument(parser)
     add_output_dirname_argument(parser)
+    add_input_dirname_argument(parser)
     parser.add_argument(
-        "--spec",
+        "--spec","--specs",
         "-l",
-        dest="tt_spec_filename",
-        help="""CSV file containing tt-spec template for timetable.
-                The tt-spec format is a work in progress.
-                For more information see the specifications.  Brief summary:
-                Top row should have a train number, "stations", or "services" in each column except the first.
-                Second row may have "column-options" in the first column and special codes in the other columns.
-                Left column should have a station code in every row except the first & second,
-                or be blank to pass through text on this row to the final timetable.
-                The center of the timetable will be filled in according to the train number and station code.
+        dest="tt_spec_files",
+        help="""Root of name of timetable spec file.
+                If you type "--spec cono", then "cono.tt-spec" and "cono.tt-aux" files should exist.
+                The tt-spec and tt-aux formats remain a work in progress.
+                For more information see the file tt-spec-documentation.rst.
+
+                You may specify several spec files at once to generate multiple timetables.
+                The spec files must all be in the same input directory.
              """,
+        nargs = "+", # 1 or more filenames
     )
     parser.add_argument(
         "--author",

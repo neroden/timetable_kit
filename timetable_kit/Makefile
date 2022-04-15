@@ -4,27 +4,23 @@
 default: all
 
 OUTPUT_DIR = "./output"
+INPUT_DIR = "./specs"
 
-all: cardinal empire cono cz pennsylvanian
+all: cardinal cono cz pennsylvanian empire-w
 
-# Last functional date
 cardinal:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220315 --spec cardinal
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --spec cardinal
 
-# Avoid the 12th.  Also, something wrong starting 14th, until May
 cono:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220530 --spec cono
-# 20220530 is the full-width timetable.
-
-cono-short:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220413 --spec cono-short
-# 20220530 is the full-width timetable.
-
-empire-w:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220412 --spec empire-w
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --spec cono cono-short
 
 cz:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220329 --spec cz # Arbitrary
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220329 --spec cz
+# Arbitrary date
 
 pennsylvanian:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220330 --spec pennsylvanian # Arbitrary
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" --date 20220330 -i "$(INPUT_DIR)" --spec pennsylvanian
+# Arbitrary date
+
+empire-w:
+	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)"  --spec empire-w

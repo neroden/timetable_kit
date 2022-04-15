@@ -159,6 +159,24 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "title": "This goes in the title bar of the HTML page",
     "heading": "This is the heading at the top of the page",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
+    "output_subdir": "after_20220528"
+    "output_filename": "special",
+    "reference_date": 
  }
+
+reference_date is critically important and is required unless passed at the command line.
+This filters the GTFS data to find the data valid for a particular reference date, which is necessary
+to get a representative timetable.  It is annoying to have to change this in the aux file whenever you want
+to make a new timetable, but it is what it is.
+
+reference_date can be overridden by the command line, and probably should be when experimenting.
+
+output_subdir is the name of a subdirectory of output_dir to put the output in; 
+this is useful if you are making one set of timetables for one time period,
+and one set for another time period, at the same time.
+
+output_filename is the base filename of the output files (so, "special.html", "special.pdf" will be produced).
+If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*
+output file name from the file name for the spec file.
 
 There will be a lot more but this is a start.

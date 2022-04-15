@@ -779,11 +779,12 @@ def produce_timetable(
     do_csv,
     do_html,
     do_pdf,
-    output_dirname,
     master_feed,
     author,
-    reference_date,
-    spec_filename,
+    command_line_reference_date,
+    input_dirname,
+    spec_file,
+    output_dirname,
 ):
     """
     Produce a single timetable HTML file.  Assumes setup has been done.
@@ -792,33 +793,68 @@ def produce_timetable(
     do_csv: produce a CSV timetable
     do_html: produce an HTML timetable
     do_pdf: produce a PDF timetable
-    output_dirname: Put the output timetables here
     master_feed: initialized master GTFS feed
     author: author name
-    spec_filename: filename for the tt-spec and tt-aux files specifying the timetable
-    reference_date: reference date to work with
+    command_line_reference_date: reference date passed at command line, might be None
+    input_dirname: find the spec_name.tt-spec and spec_name.tt-aux files here
+    spec_file: root of filename for the tt-spec and tt-aux files specifying the timetable
+    output_dirname: Put the output timetables here
     """
-    # Accept with or without .tt-spec
-    tt_filename_base = spec_filename.removesuffix(".tt-spec").removesuffix(".tt-aux")
-    tt_spec_filename = tt_filename_base + ".tt-spec"
-    tt_aux_filename = tt_filename_base + ".tt-aux"
-    # Output to "tt_" + filename  + ".whatever"
-    output_filename_before_suffix = "tt_" + tt_filename_base
+    # Accept the spec name with or without .tt-spec, for convenience
+    spec_filename_base = spec_file.removesuffix(".tt-spec").removesuffix(".tt-aux")
+    tt_spec_filename = spec_filename_base + ".tt-spec"
+    tt_aux_filename = spec_filename_base + ".tt-aux"
+
+    if input_dirname:
+        input_dir = Path(input_dirname)
+        tt_spec_path = input_dir / tt_spec_filename
+        tt_aux_path = input_dir / tt_aux_filename
+    else:
+        # Might be None, if it wasn't passed at the command line
+        tt_spec_path = tt_spec_filename
+        tt_aux_path = tt_aux_filename
+
+    # Load the .tt-aux file first, as it determines high-level stuff
+    aux = load_tt_aux(tt_aux_path)
 
     if output_dirname:
         output_dir = Path(output_dirname)
     else:
         output_dir = Path(".")
 
-    tt_spec_raw = load_tt_spec(tt_spec_filename)
-    tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
-    debug_print(1, "tt-spec loaded and augmented")
+    if "output_subdir" in aux:
+        output_subdir = aux["output_subdir"]
+        output_dir = output_dir / output_subdir
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+    if "output_filename" in aux:
+        # The aux file may specify the output filename
+        output_filename_base = aux["output_filename"]
+    else:
+        # Or, make it the same as the input filename
+        output_filename_base = spec_filename_base
 
-    aux = load_tt_aux(tt_aux_filename)
+    # Copy the icons and fonts to the output dir.
+    # This is memoized so it won't duplicate work if you do multiple tables.
+    copy_supporting_files_to_output_dir(output_dir)
+
+    if command_line_reference_date:
+        reference_date = int(command_line_reference_date)
+    elif "reference_date" in aux:
+        # We're currently converting GTFS dates to ints; FIXME
+        reference_date = int(aux["reference_date"])
+    else:
+        raise InputError("No reference date in .tt-aux or at command line!")
+    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+
+    # Now we're ready to load the .tt-spec file, finally
+    tt_spec_raw = load_tt_spec(tt_spec_path)
+    tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
+    debug_print(1, "tt-spec", spec_filename_base, "loaded and augmented")
 
     # Filter the feed to the relevant day.  Required.
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-    debug_print(1, "Feed filtered by dates.")
+    debug_print(1, "Feed filtered by reference date.")
 
     # Reduce the feed, by eliminating stuff from other trains.
     # By reducing the stop_times table to be much smaller,
@@ -867,7 +903,7 @@ def produce_timetable(
             is_ardp_station="dwell",
         )
         # NOTE, need to add the header
-        path_for_csv = output_dir / Path(output_filename_before_suffix + ".csv")
+        path_for_csv = output_dir / Path(output_filename_base + ".csv")
         timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV done")
 
@@ -895,7 +931,7 @@ def produce_timetable(
             start_date=str(latest_start_date),
             end_date=str(earliest_end_date),
         )
-        path_for_html = output_dir / Path(output_filename_before_suffix + ".html")
+        path_for_html = output_dir / Path(output_filename_base + ".html")
         with open(path_for_html, "w") as outfile:
             print(timetable_finished_html, file=outfile)
         debug_print(1, "Finished HTML done")
@@ -904,11 +940,13 @@ def produce_timetable(
         # Pick up already-created HTML, convert to PDF
         weasy_html_pathname = str(path_for_html)
         html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-        path_for_weasy = output_dir / Path(output_filename_before_suffix + ".pdf")
+        path_for_weasy = output_dir / Path(output_filename_base + ".pdf")
         html_for_weasy.write_pdf(path_for_weasy)
         debug_print(1, "Weasy done")
 
 
+# This is a module-level global
+prepared_output_dirs = []
 def copy_supporting_files_to_output_dir(output_dirname):
     """
     Copy supporting files (icons, fonts) to the output directory.
@@ -917,7 +955,15 @@ def copy_supporting_files_to_output_dir(output_dirname):
     """
     # Copy the image files to the destination directory.
     # Necessary for weasyprint to work right!
+
     output_dir = Path(output_dirname)
+
+    # Note!  If we do multiple timetables with output_subdir,
+    # we would like to save trouble by caching the fact that we've done it.
+    global prepared_output_dirs
+    if str(output_dir) in prepared_output_dirs:
+        return
+
     source_dir = Path(__file__).parent
 
     if os.path.samefile(source_dir, output_dir):
@@ -951,7 +997,8 @@ def copy_supporting_files_to_output_dir(output_dirname):
         # Note, this overwrites
         shutil.copy2(font_file_source_path, font_file_dest_path)
 
-    debug_print(1, "Fonts and icons copied to output directory")
+    debug_print(1, "Fonts and icons copied to", output_dir)
+    prepared_output_dirs.append(str(output_dir))
     return
 
 
@@ -967,7 +1014,8 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
 
-    output_dirname = args.output_dirname
+    output_dirname = args.output_dirname # Defaults to "."
+    input_dirname = args.input_dirname  # Does not default, may be None
 
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
@@ -977,12 +1025,9 @@ if __name__ == "__main__":
         print("--author is mandatory!")
         sys.exit(1)
 
-    reference_date = args.reference_date
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+    command_line_reference_date = args.reference_date # Does not default, may be None
 
-    spec_filename = args.tt_spec_filename
-
-    copy_supporting_files_to_output_dir(output_dirname)
+    spec_file_list = args.tt_spec_files
 
     # Quick hack to speed up testing cycle:
     # implement this properly later TODO
@@ -990,14 +1035,18 @@ if __name__ == "__main__":
     do_html = True
     do_pdf = True
 
-    produce_timetable(
-        do_csv=do_csv,
-        do_html=do_html,
-        do_pdf=do_pdf,
-        output_dirname=output_dirname,
-        master_feed=master_feed,
-        author=author,
-        reference_date=reference_date,
-        spec_filename=spec_filename,
-    )
+    for spec_file in spec_file_list:
+        debug_print(1, "Producing timetable for", spec_file)
+        produce_timetable(
+            do_csv=do_csv,
+            do_html=do_html,
+            do_pdf=do_pdf,
+            master_feed=master_feed,
+            author=author,
+            command_line_reference_date=command_line_reference_date,
+            input_dirname=input_dirname,
+            spec_file=spec_file,
+            output_dirname=output_dirname,
+        )
+        debug_print(1, "Done producing timetable for", spec_file)
     sys.exit(0)
