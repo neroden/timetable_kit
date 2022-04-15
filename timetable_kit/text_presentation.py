@@ -144,6 +144,13 @@ def day_string(calendar, offset: int = 0) -> str:
     # This accounts for both the 0 and -1 offset cases.
     if daystring == "MoTuWeThFr":
         return "Mo-Fr"
+    # By special request, for the CONO
+    if daystring == "TuWeThFrSa":
+        return "Tu-Sa"
+    # Aw hell, let's try it
+    if daystring == "WeThFrSaSu":
+        return "We-Su"
+
     # Known Empire Corridor issue with special-cased Fridays
     if daystring == "MoTuWeTh":
         return "Mo-Th"
