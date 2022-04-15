@@ -237,7 +237,7 @@ def finish_html_timetable(
         "for_rpa": for_rpa,
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
-        "landscape": landscape_str, # This one's for weasy
+        "landscape": landscape_str,  # This one's for weasy
     }
 
     # Allows direct icon references in Jinja2

@@ -33,3 +33,6 @@ Fine for after release of timetables:
 
     To make matters worse, there are calendar gaps in other timetables,
     like the Cardinal one.  We need a better presentation on this crap.
+
+15 -- Sanitize pathnames coming from command line and environment.
+    We're very sloppy right now.

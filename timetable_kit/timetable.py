@@ -14,6 +14,7 @@ timetable.py --help gives documentation
 import argparse
 
 from pathlib import Path
+import os  # for os.getenv
 import os.path  # for os.path abilities
 import sys  # Solely for sys.path and solely for debugging
 import shutil  # To copy files
@@ -813,6 +814,7 @@ def produce_timetable(
         # Might be None, if it wasn't passed at the command line
         tt_spec_path = tt_spec_filename
         tt_aux_path = tt_aux_filename
+    debug_print(1, "tt_spec_path", tt_spec_path, "/ tt_aux_path", tt_aux_path)
 
     # Load the .tt-aux file first, as it determines high-level stuff
     aux = load_tt_aux(tt_aux_path)
@@ -947,6 +949,8 @@ def produce_timetable(
 
 # This is a module-level global
 prepared_output_dirs = []
+
+
 def copy_supporting_files_to_output_dir(output_dirname):
     """
     Copy supporting files (icons, fonts) to the output directory.
@@ -965,6 +969,9 @@ def copy_supporting_files_to_output_dir(output_dirname):
         return
 
     source_dir = Path(__file__).parent
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     if os.path.samefile(source_dir, output_dir):
         debug_print(1, "Working in module directory, not copying fonts and icons")
@@ -1014,18 +1021,31 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
 
-    output_dirname = args.output_dirname # Defaults to "."
-    input_dirname = args.input_dirname  # Does not default, may be None
+    output_dirname = args.output_dirname
+    if not output_dirname:
+        output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
+    if not output_dirname:
+        output_dirname = "."
+    debug_print(1, "Using output_dir", output_dirname)
+
+    input_dirname = args.input_dirname
+    if not input_dirname:
+        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
+    debug_print(1, "Using input_dir", input_dirname)
 
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     author = args.author
     if not author:
+        author = os.getenv("TIMETABLE_KIT_AUTHOR")
+    if not author:
+        author = os.getenv("AUTHOR")
+    if not author:
         print("--author is mandatory!")
         sys.exit(1)
 
-    command_line_reference_date = args.reference_date # Does not default, may be None
+    command_line_reference_date = args.reference_date  # Does not default, may be None
 
     spec_file_list = args.tt_spec_files
 

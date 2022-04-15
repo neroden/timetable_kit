@@ -76,19 +76,27 @@ def add_debug_argument(parser: argparse.ArgumentParser):
 
 def add_output_dirname_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
-        "--output-directory","--output-dir",
+        "--output-directory",
+        "--output-dir",
         "-o",
         dest="output_dirname",
-        help="Directory to put output HTML timetable files in.  Default is current directory.",
-        default=".",
+        help="""Directory to put output HTML timetable files in.
+                Default is current directory.
+                You can also set it using the TIMETABLE_KIT_OUTPUT_DIR environment variable.
+             """,
     )
+
 
 def add_input_dirname_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
-        "--input-directory","--input-dir",
+        "--input-directory",
+        "--input-dir",
         "-i",
         dest="input_dirname",
-        help="Directory to find input .tt-spec / .tt-aux files in.  Default is not to prefix a directory (use system default for lookup of files)",
+        help="""Directory to find input .tt-spec / .tt-aux files in.
+                Default is not to prefix a directory (use system default for lookup of files).
+                You can also set it using the TIMETABLE_KIT_INPUT_DIR environment variable.
+             """,
     )
 
 
@@ -104,7 +112,8 @@ def make_tt_arg_parser():
     add_output_dirname_argument(parser)
     add_input_dirname_argument(parser)
     parser.add_argument(
-        "--spec","--specs",
+        "--spec",
+        "--specs",
         "-l",
         dest="tt_spec_files",
         help="""Root of name of timetable spec file.
@@ -115,14 +124,15 @@ def make_tt_arg_parser():
                 You may specify several spec files at once to generate multiple timetables.
                 The spec files must all be in the same input directory.
              """,
-        nargs = "+", # 1 or more filenames
+        nargs="+",  # 1 or more filenames
     )
     parser.add_argument(
         "--author",
         "-a",
         dest="author",
         help="""Name of the person generating the timetable.
-                This is mandatory!
+                This is mandatory!  You can also set it using the AUTHOR environment variable,
+                or the TIMETABLE_KIT_AUTHOR environment variable (which takes priority).
              """,
     )
     return parser

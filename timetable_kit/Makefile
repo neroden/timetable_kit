@@ -3,24 +3,24 @@
 
 default: all
 
-OUTPUT_DIR = "./output"
-INPUT_DIR = "./specs"
+export TIMETABLE_KIT_OUTPUT_DIR = ./output
+export TIMETABLE_KIT_INPUT_DIR = ./specs
 
 all: cardinal cono cz pennsylvanian empire-w
 
 cardinal:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" -i "$(INPUT_DIR)" --spec cardinal
+	./timetable.py --spec cardinal
 
 cono:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" -i "$(INPUT_DIR)" --spec cono cono-short
+	./timetable.py --spec cono cono-short
 
 cz:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" -i "$(INPUT_DIR)" --date 20220415 --spec cz
+	./timetable.py --date 20220415 --spec cz
 # Arbitrary date
 
 pennsylvanian:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" -i "$(INPUT_DIR)" --date 20220415 --spec pennsylvanian
+	./timetable.py --date 20220415 --spec pennsylvanian
 # Arbitrary date
 
 empire-w:
-	./timetable.py --author "$(AUTHOR)" -o "$(OUTPUT_DIR)" -i "$(INPUT_DIR)" --spec empire-w
+	./timetable.py --spec empire-w

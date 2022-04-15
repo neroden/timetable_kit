@@ -7,6 +7,7 @@ Get all the stations for a particular train number (trip_short_name), in order.
 """
 
 import sys  # For sys.exit
+import os  # For os.getenv
 
 import argparse
 import datetime
@@ -62,6 +63,10 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
     output_dirname = args.output_dirname
+    if not output_dirname:
+        output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
+    if not output_dirname:
+        output_dirname = "."
 
     if args.gtfs_filename:
         gtfs_filename = args.gtfs_filename
