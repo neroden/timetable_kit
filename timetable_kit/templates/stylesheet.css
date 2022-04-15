@@ -11,6 +11,7 @@
 {% include "font_size.css" %}
 {{ icons }}
 {% include "page_header.css" %}
+{% include "logo.css" %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
 {% include "timetable_headers.css" %}

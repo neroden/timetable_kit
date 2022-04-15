@@ -1,9 +1,6 @@
-Before release of timetables:
-2 -- Improve title and heading on the page.
-
 Preferably before release of timetables:
-6 -- look up tt-aux and tt-spec files in a subdirectory, and develop
-     code for running multiple timetables at once (save on setup costs)
+1 -- rename station services column to "access", separate from services
+
 7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
      get_timepoint in particular is running slow inside an inner loop.
      This is the lowest-hanging remaining fruit.

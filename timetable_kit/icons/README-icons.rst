@@ -59,3 +59,11 @@ https://commons.wikimedia.org/wiki/File:No_Accessibility_-_Original_Handicapped_
 (also public domain) to find the correct color to use for the slash.
 
 This color still looks right in greyscale, which is important.
+
+rpa-logo.svg and rpa-logo-orig.svg
+----------------------------------
+This is the Rail Passengers Association logo; it is copyrighted and trademarked to them,
+and should only be used for things authorized by them.  Don't use it without authorization.
+
+It's here because I had to do internal technical modifications to make it print.
+Specifically, I had to eliminate the masks, which Weasyprint can't process.

@@ -1,0 +1,18 @@
+{# 
+logo.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+CSS Jinja template file for displaying the RPA logo.
+This needs to be relative only to the page body.
+#}
+.logo-bottom-right {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+.logo-img {
+    /* Resize the logo. */
+    height: 0.8cm;
+    width: auto;
+}

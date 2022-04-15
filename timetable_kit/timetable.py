@@ -836,9 +836,14 @@ def produce_timetable(
         # Or, make it the same as the input filename
         output_filename_base = spec_filename_base
 
+    if "for_rpa" in aux:
+        for_rpa = aux["for_rpa"]
+    else:
+        for_rpa = False
+
     # Copy the icons and fonts to the output dir.
     # This is memoized so it won't duplicate work if you do multiple tables.
-    copy_supporting_files_to_output_dir(output_dir)
+    copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
     if command_line_reference_date:
         reference_date = int(command_line_reference_date)
@@ -949,9 +954,9 @@ def produce_timetable(
 
 # This is a module-level global
 prepared_output_dirs = []
+prepared_output_dirs_for_rpa = []
 
-
-def copy_supporting_files_to_output_dir(output_dirname):
+def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     """
     Copy supporting files (icons, fonts) to the output directory.
 
@@ -964,8 +969,12 @@ def copy_supporting_files_to_output_dir(output_dirname):
 
     # Note!  If we do multiple timetables with output_subdir,
     # we would like to save trouble by caching the fact that we've done it.
+    # for_rpa adds an extra file (a superset of the other version)
+    global prepared_output_dirs_for_rpa
     global prepared_output_dirs
-    if str(output_dir) in prepared_output_dirs:
+    if str(output_dir) in prepared_output_dirs_for_rpa:
+        return
+    if not for_rpa and str(output_dir) in prepared_output_dirs:
         return
 
     source_dir = Path(__file__).parent
@@ -981,6 +990,8 @@ def copy_supporting_files_to_output_dir(output_dirname):
     if not os.path.exists(icons_dir):
         os.makedirs(icons_dir)
     icon_filenames = ["accessible.svg", "inaccessible-ncn.svg", "baggage-ncn.svg"]
+    if for_rpa:
+        icon_filenames.append("rpa-logo.svg")
     for icon_filename in icon_filenames:
         icon_file_source_path = source_dir / "icons" / icon_filename
         icon_file_dest_path = icons_dir / icon_filename
@@ -1005,6 +1016,8 @@ def copy_supporting_files_to_output_dir(output_dirname):
         shutil.copy2(font_file_source_path, font_file_dest_path)
 
     debug_print(1, "Fonts and icons copied to", output_dir)
+    if for_rpa:
+        prepared_output_dirs_for_rpa.append(str(output_dir))
     prepared_output_dirs.append(str(output_dir))
     return
 
