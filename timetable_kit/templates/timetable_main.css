@@ -47,7 +47,8 @@ Colors have their own file.
     border-right-width: 2px;
     border-right-color: black;
 
-    vertical-align: top;
+    vertical-align: top; /* line up city names and times at the top of the cell */
+    padding-top: 2px; /* avoid words hitting the top of the cell */
     text-align: left;
 }
 
