@@ -7,7 +7,7 @@ CSS file for the symbol key table (except fonts).
 /* Rules for the whole symbol-key table: border-collapse with no borders eliminates margins */
 .symbol-key {
     border-collapse: collapse;
-    padding-top: 1px;
+    margin-top: 2px;
 }
 
 /* This selects table data cells (td) descended from something (such as the table) of class symbol-key */

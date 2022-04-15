@@ -41,7 +41,7 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     display: inline-block;
     text-align: left;
     padding-right: 0.5mm;
-    width: 4em;
+    width: 4.25em;
 }
 .box-days-long {
     /* Longer box for SaSuMoTuWe (five days), align left */
