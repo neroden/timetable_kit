@@ -161,7 +161,8 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "output_subdir": "after_20220528"
     "output_filename": "special",
-    "reference_date": 
+    "reference_date": "20220528",
+    "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains."
  }
 
 reference_date is critically important and is required unless passed at the command line.

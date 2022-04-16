@@ -167,6 +167,11 @@ def finish_html_timetable(
     else:
         for_rpa = False
 
+    if "top_text" in aux:
+        top_text = aux["top_text"]
+    else:
+        top_text = False
+
     landscape_str = ""
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
@@ -238,6 +243,7 @@ def finish_html_timetable(
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
         "landscape": landscape_str,  # This one's for weasy
+        "top_text": top_text,
     }
 
     # Allows direct icon references in Jinja2

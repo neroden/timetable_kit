@@ -22,6 +22,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 <h1>{{heading}}</h1>
 {% if for_rpa %}{% include "logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
+{% if top_text %}{% include "top_text.html" %}{% endif %}
 {{timetable}}
 {% include "symbol_key.html" %}
 {% include "unofficial_amtrak.html" %}
