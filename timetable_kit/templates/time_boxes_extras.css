@@ -48,7 +48,7 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     display: inline-block;
     text-align: left;
     padding-right: 0.5mm;
-    width: 6.75em;
+    width: 7.25em;
 }
 .box-days-short {
     /* Shorter box for Mo (one day), align left */
