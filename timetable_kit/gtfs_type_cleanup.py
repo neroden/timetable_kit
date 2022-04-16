@@ -93,15 +93,13 @@ def type_corrected_stop_times(stop_times):
 def type_corrected_trips(trips):
     """
     Return copy of trips with integer types in appropriate columns.  Do not sort.
-
-    Note that trip_id must be int64, as it tends to be enormous.
     """
     new_trips = trips.astype(
         {
             "route_id": "str",
             "service_id": "str",
             "trip_id": "str",
-            # 'trip_short_name': 'int32', # This is the Amtrak train number.  It is a number, but don't treat it as one.
+            "trip_short_name": "str",  # This is the Amtrak train number.  It is a number, but don't treat it as one.
             "direction_id": "int32",  # This is 0 for west, 1 for east on the LSL only
         }
     )  # Note that shape_id does not exist in Amtrak data
