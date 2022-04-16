@@ -592,10 +592,10 @@ def fill_tt_spec(
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
             if pd.isna(station_code):
-                cell_css_list.append("special-cell")
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
-                if pd.isna(tt.iloc[y, x]):
+                cell_css_list.append("special-cell")
+                if pd.isna(tt_spec.iloc[y, x]):
                     # Make sure blanks become *string* blanks in this line.
                     tt.iloc[y, x] = ""
                 else:
@@ -671,7 +671,7 @@ def fill_tt_spec(
                     cell_css_list.append(
                         get_time_column_stylings(tsn, output_type="class")
                     )
-            elif not pd.isna(tt.iloc[y, x]):
+            elif not pd.isna(tt_spec.iloc[y, x]):
                 # Line led by a station code, but cell already has a value.
                 cell_css_list.append("special-cell")
                 # This is probably special text like "to Chicago".
