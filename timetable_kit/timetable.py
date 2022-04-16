@@ -592,16 +592,16 @@ def fill_tt_spec(
             # Consider, here, whether to build parallel tables.
             # This allows for the addition of extra rows.
             if pd.isna(station_code):
+                cell_css_list.append("special-cell")
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
-                # Prefilled text gets retained.  (Should we HTML-ize it?  FIXME)
-                pass
-                # This is probably special text like "to Chicago".
                 if pd.isna(tt.iloc[y, x]):
                     # Make sure blanks become *string* blanks in this line.
                     tt.iloc[y, x] = ""
-                # We have to set the styler.
-                cell_css_list.append("special-cell")
+                else:
+                    # This is probably special text like "to Chicago".
+                    # Copy the handwritten text over.
+                    tt.iloc[y, x] = tt_spec.iloc[y,x]
             elif station_code.lower() == "route-name":
                 # Special line for route names.
                 cell_css_list.append("route-name-cell")
@@ -673,11 +673,10 @@ def fill_tt_spec(
                     )
             elif not pd.isna(tt.iloc[y, x]):
                 # Line led by a station code, but cell already has a value.
-                # This is probably special text like "to Chicago".
-                # We keep this.  (But note: should we HTML-ize it? FIXME )
-                pass
-                # We have to set the styler.
                 cell_css_list.append("special-cell")
+                # This is probably special text like "to Chicago".
+                # Copy the handwritten text over.
+                tt.iloc[y, x] = tt_spec.iloc[y,x]
             else:
                 # Normal line led by a station code.
                 # Blank cell to be filled in -- the usual case.
