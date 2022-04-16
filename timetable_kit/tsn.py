@@ -115,6 +115,8 @@ def trip_from_tsn(today_feed, trip_short_name):
 
     The naive (i.e. current) implementation of this takes nearly the entire program runtime.
     Avoid using this.  Do the work another way.  See trip_from_tsn_local in timetable.py
+
+    This is still used in stations_list_from_tsn, however.
     """
     single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
     try:
