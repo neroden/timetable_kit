@@ -197,7 +197,8 @@ def get_column_options(tt_spec):
     debug_print(1, column_options_nested_list)
     return column_options_nested_list
 
-def get_cell_codes(code_text:str, tsns: list[str]) ->dict[str,str]:
+
+def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
     """
     Given special code text in a cell, decipher it
 
@@ -223,7 +224,7 @@ def get_cell_codes(code_text:str, tsns: list[str]) ->dict[str,str]:
         return None
     if code_list[0] not in tsns:
         return None
-    output_dict = { "tsn": code_list[0], "first": False, "last": False}
+    output_dict = {"tsn": code_list[0], "first": False, "last": False}
 
     for code in code_list[1:]:
         if code not in ["first", "last"]:
@@ -843,7 +844,7 @@ def fill_tt_spec(
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
                             if is_first_stop or is_last_stop:
-                                two_row=False
+                                two_row = False
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,

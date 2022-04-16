@@ -83,56 +83,56 @@ def get_zone_str(zone_name, doing_html=False):
 # The special cases are ones which don't need the "rotation trick"
 # (or, in the case of SaSu, where we want to *avoid* it)
 daystring_special_cases = {
-    (1,1,1,1,1,1,1): "Daily",
-# Missing only one day
-    (1,1,1,1,1,1,0): "Mo-Sa",
-    (0,1,1,1,1,1,1): "Tu-Su",
-    (1,0,1,1,1,1,1): "We-Mo",
-    (1,1,0,1,1,1,1): "Th-Tu",
-    (1,1,1,0,1,1,1): "Fr-We",
-    (1,1,1,1,0,1,1): "Sa-Th",
-    (1,1,1,1,1,0,1): "Su-Fr",
-# Missing two consecutive days (including Mo-Fr)
-    (1,1,1,1,1,0,0): "Mo-Fr",
-    (0,1,1,1,1,1,0): "Tu-Sa",
-    (0,0,1,1,1,1,1): "We-Su",
-    (1,0,0,1,1,1,1): "Th-Mo",
-    (1,1,0,0,1,1,1): "Fr-Tu",
-    (1,1,1,0,0,1,1): "Sa-We",
-    (1,1,1,1,0,0,1): "Su-Th",
-# Missing three consecutive days
-    (1,1,1,1,0,0,0): "Mo-Th",
-    (0,1,1,1,1,0,0): "Tu-Fr",
-    (0,0,1,1,1,1,0): "We-Sa",
-    (0,0,0,1,1,1,1): "Th-Su",
-    (1,0,0,0,1,1,1): "Fr-Mo",
-    (1,1,0,0,0,1,1): "Sa-Tu",
-    (1,1,1,0,0,0,1): "Su-We",
-# Missing four consecutive days
-    (1,1,1,0,0,0,0): "Mo-We",
-    (0,1,1,1,0,0,0): "Tu-Th",
-    (0,0,1,1,1,0,0): "We-Fr",
-    (0,0,0,1,1,1,0): "Th-Sa",
-    (0,0,0,0,1,1,1): "Fr-Su",
-    (1,0,0,0,0,1,1): "Sa-Mo",
-    (1,1,0,0,0,0,1): "Su-Tu",
-# Only running two consecutive days
-# (including SaSu, which we need to avoid SuSa in -1 offset cases)
-    (1,1,0,0,0,0,0): "MoTu",
-    (0,1,1,0,0,0,0): "TuWe",
-    (0,0,1,1,0,0,0): "WeTh",
-    (0,0,0,1,1,0,0): "ThFr",
-    (0,0,0,0,1,1,0): "FrSa",
-    (0,0,0,0,0,1,1): "SaSu",
-    (1,0,0,0,0,0,1): "SuMo",
-# Only running on one day a week
-    (1,0,0,0,0,0,0): "Mo",
-    (0,1,0,0,0,0,0): "Tu",
-    (0,0,1,0,0,0,0): "We",
-    (0,0,0,1,0,0,0): "Th",
-    (0,0,0,0,1,0,0): "Fr",
-    (0,0,0,0,0,1,0): "Sa",
-    (0,0,0,0,0,0,1): "Su",
+    (1, 1, 1, 1, 1, 1, 1): "Daily",
+    # Missing only one day
+    (1, 1, 1, 1, 1, 1, 0): "Mo-Sa",
+    (0, 1, 1, 1, 1, 1, 1): "Tu-Su",
+    (1, 0, 1, 1, 1, 1, 1): "We-Mo",
+    (1, 1, 0, 1, 1, 1, 1): "Th-Tu",
+    (1, 1, 1, 0, 1, 1, 1): "Fr-We",
+    (1, 1, 1, 1, 0, 1, 1): "Sa-Th",
+    (1, 1, 1, 1, 1, 0, 1): "Su-Fr",
+    # Missing two consecutive days (including Mo-Fr)
+    (1, 1, 1, 1, 1, 0, 0): "Mo-Fr",
+    (0, 1, 1, 1, 1, 1, 0): "Tu-Sa",
+    (0, 0, 1, 1, 1, 1, 1): "We-Su",
+    (1, 0, 0, 1, 1, 1, 1): "Th-Mo",
+    (1, 1, 0, 0, 1, 1, 1): "Fr-Tu",
+    (1, 1, 1, 0, 0, 1, 1): "Sa-We",
+    (1, 1, 1, 1, 0, 0, 1): "Su-Th",
+    # Missing three consecutive days
+    (1, 1, 1, 1, 0, 0, 0): "Mo-Th",
+    (0, 1, 1, 1, 1, 0, 0): "Tu-Fr",
+    (0, 0, 1, 1, 1, 1, 0): "We-Sa",
+    (0, 0, 0, 1, 1, 1, 1): "Th-Su",
+    (1, 0, 0, 0, 1, 1, 1): "Fr-Mo",
+    (1, 1, 0, 0, 0, 1, 1): "Sa-Tu",
+    (1, 1, 1, 0, 0, 0, 1): "Su-We",
+    # Missing four consecutive days
+    (1, 1, 1, 0, 0, 0, 0): "Mo-We",
+    (0, 1, 1, 1, 0, 0, 0): "Tu-Th",
+    (0, 0, 1, 1, 1, 0, 0): "We-Fr",
+    (0, 0, 0, 1, 1, 1, 0): "Th-Sa",
+    (0, 0, 0, 0, 1, 1, 1): "Fr-Su",
+    (1, 0, 0, 0, 0, 1, 1): "Sa-Mo",
+    (1, 1, 0, 0, 0, 0, 1): "Su-Tu",
+    # Only running two consecutive days
+    # (including SaSu, which we need to avoid SuSa in -1 offset cases)
+    (1, 1, 0, 0, 0, 0, 0): "MoTu",
+    (0, 1, 1, 0, 0, 0, 0): "TuWe",
+    (0, 0, 1, 1, 0, 0, 0): "WeTh",
+    (0, 0, 0, 1, 1, 0, 0): "ThFr",
+    (0, 0, 0, 0, 1, 1, 0): "FrSa",
+    (0, 0, 0, 0, 0, 1, 1): "SaSu",
+    (1, 0, 0, 0, 0, 0, 1): "SuMo",
+    # Only running on one day a week
+    (1, 0, 0, 0, 0, 0, 0): "Mo",
+    (0, 1, 0, 0, 0, 0, 0): "Tu",
+    (0, 0, 1, 0, 0, 0, 0): "We",
+    (0, 0, 0, 1, 0, 0, 0): "Th",
+    (0, 0, 0, 0, 1, 0, 0): "Fr",
+    (0, 0, 0, 0, 0, 1, 0): "Sa",
+    (0, 0, 0, 0, 0, 0, 1): "Su",
 }
 
 
@@ -177,6 +177,7 @@ def day_string(calendar, offset: int = 0) -> str:
     # Do the offset rotation.
     def rotate_right(l, n):
         return l[-n:] + l[:-n]
+
     days_of_service_vector = rotate_right(days_of_service_vector, offset)
 
     # Try the lookup-table path.
