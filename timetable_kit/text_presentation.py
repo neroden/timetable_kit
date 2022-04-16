@@ -743,19 +743,18 @@ def timepoint_str(
     assert False
 
 
-def get_time_column_header(trains_spec, doing_html=False):
+def get_time_column_header(tsns: list[str], doing_html=False) -> str:
     """
     Return the header for a column of times.
 
-    Input should be. trains_spec, which is a list of train numbers separated by slashes.
-    Possibly with a minus sign in front.  It may have to be parsed.
-
-    Currently we don't parse it, and input is a single train number.
+    tsns: should be a list of trip_short_names aka train numbers (ordered).
     """
-    train_number = (
-        trains_spec  # Because we haven't implemented complex train specs FIXME
-    )
-    time_column_prefix = "Train #"
+    if not tsns:
+        raise InputError("No tsns?")
+    if len(tsns) > 1:
+        time_column_prefix = "Train #s"
+    else:
+        time_column_prefix = "Train #"
     if doing_html:
         # For HTML, let's get FANCY... May change this later.
         time_column_header = "".join(
@@ -765,13 +764,13 @@ def get_time_column_header(trains_spec, doing_html=False):
                 "</small>",
                 "<br>",
                 "<strong>",
-                str(train_number),
+                " / ".join(tsns),  # Note! Works cleanly for single-element case
                 "</strong>",
             ]
         )
     else:
         # For plaintext, keep it simple: just the train number
-        time_column_header = "".join([str(train_number)])
+        time_column_header = " / ".join(tsns)
     return time_column_header
 
 

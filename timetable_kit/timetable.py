@@ -559,7 +559,7 @@ def fill_tt_spec(
             )  # in a span
             header_replacement_list.append(timezone_column_header)
             header_styling_list.append("")  # could include background color;
-        else:  # it's actually a train
+        else:  # it's actually a train, or several trains
             # Check column options for reverse, days, ardp:
             reverse = "reverse" in column_options[x]
             use_daystring = "days" in column_options[x]
@@ -569,28 +569,22 @@ def fill_tt_spec(
 
             # Separate train numbers by "/"
             tsns = split_trains_spec(train_nums_str)
-            tsn = tsns[0]
-            if len(tsns) > 1:
-                raise InputError("Two trains in one column not implemented")
             time_column_header = text_presentation.get_time_column_header(
-                tsn, doing_html=doing_html
+                tsns, doing_html=doing_html
             )
             header_replacement_list.append(time_column_header)
             if doing_html:
-                time_column_stylings = get_time_column_stylings(tsn)
+                # FIXME: use column stylings for the first tsn only
+                time_column_stylings = get_time_column_stylings(tsns[0])
                 header_styling_list.append(time_column_stylings)
             else:  # plaintext
                 header_styling_list.append("")
-
-            train_has_checked_baggage = amtrak.train_has_checked_baggage(tsn)
 
         for y in range(1, row_count):  # First (0) row is the header
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
             # Reset the styler string:
             cell_css_list = [base_cell_css]
 
-            # Consider, here, whether to build parallel tables.
-            # This allows for the addition of extra rows.
             if pd.isna(station_code):
                 # Line which has no station code -- freeform line.
                 # No times or station names here!
@@ -601,21 +595,35 @@ def fill_tt_spec(
                 else:
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
-                    tt.iloc[y, x] = tt_spec.iloc[y,x]
+                    tt.iloc[y, x] = tt_spec.iloc[y, x]
             elif station_code.lower() == "route-name":
                 # Special line for route names.
                 cell_css_list.append("route-name-cell")
                 if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
-                    my_trip = trip_from_tsn_local(tsn)
-                    route_id = my_trip.route_id
-                    # Clean this interface up later.  For now highly Amtrak-specific FIXME
-                    route_name = amtrak.get_route_name(today_feed, route_id)
-                    styled_route_name = text_presentation.style_route_name_for_column(
-                        route_name, doing_html=doing_html
-                    )
-                    tt.iloc[y, x] = styled_route_name
+                    route_names = []
+                    styled_route_names = []
+                    for tsn in tsns:
+                        my_trip = trip_from_tsn_local(tsn)
+                        route_id = my_trip.route_id
+                        # Clean this interface up later.  For now highly Amtrak-specific FIXME
+                        route_name = amtrak.get_route_name(today_feed, route_id)
+                        styled_route_name = (
+                            text_presentation.style_route_name_for_column(
+                                route_name, doing_html=doing_html
+                            )
+                        )
+                        if not route_names or route_names[-1] != route_name:
+                            # Don't duplicate if same route as previous train in slashed list
+                            route_names.append(route_name)
+                            styled_route_names.append(styled_route_name)
+                    if doing_html:
+                        separator = "<hr>"
+                    else:
+                        separator = "\n"
+                    full_styled_route_names = separator.join(styled_route_names)
+                    tt.iloc[y, x] = full_styled_route_names
                     cell_css_list.append(
                         get_time_column_stylings(tsn, output_type="class")
                     )
@@ -634,7 +642,6 @@ def fill_tt_spec(
                 if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
-                    my_trip = trip_from_tsn_local(tsn)
                     # We can only show the days for one station.
                     # So get the reference stop_id / station code to use; user-specified
                     reference_stop_id = tt_spec.iloc[y, x]
@@ -643,6 +650,11 @@ def fill_tt_spec(
                         # Useful if one train runs across midnight.
                         tt.iloc[y, x] = ""
                     else:
+                        if len(tsns) > 1:
+                            raise InputError(
+                                "Can't have a days header for a column with two or more trains"
+                            )
+                        my_trip = trip_from_tsn_local(tsns[0])
                         timepoint = get_timepoint_from_trip_id(
                             today_feed, my_trip.trip_id, reference_stop_id
                         )
@@ -668,15 +680,16 @@ def fill_tt_spec(
                         # TODO: add some HTML styling here
                         tt.iloc[y, x] = daystring
                     # Color this cell
+                    # FIXME, currently using color from first tsn only
                     cell_css_list.append(
-                        get_time_column_stylings(tsn, output_type="class")
+                        get_time_column_stylings(tsns[0], output_type="class")
                     )
             elif not pd.isna(tt_spec.iloc[y, x]):
                 # Line led by a station code, but cell already has a value.
                 cell_css_list.append("special-cell")
                 # This is probably special text like "to Chicago".
                 # Copy the handwritten text over.
-                tt.iloc[y, x] = tt_spec.iloc[y,x]
+                tt.iloc[y, x] = tt_spec.iloc[y, x]
             else:
                 # Normal line led by a station code.
                 # Blank cell to be filled in -- the usual case.
@@ -727,47 +740,54 @@ def fill_tt_spec(
                         3, "".join(["Trains: ", str(tsns), "; Station:", station_code])
                     )
 
-                    # Extract calendar, timepoint
-                    my_trip = trip_from_tsn_local(tsn)
-                    debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
+                    # Extract my_trip, timepoint (and later calendar)
+                    # Note that in Python variables defined in a loop "hang around"
+                    for tsn in tsns:
+                        my_trip = trip_from_tsn_local(tsn)
+                        debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
 
-                    timepoint = get_timepoint_from_trip_id(
-                        today_feed, my_trip.trip_id, station_code
-                    )
+                        timepoint = get_timepoint_from_trip_id(
+                            today_feed, my_trip.trip_id, station_code
+                        )
+                        if timepoint is not None:
+                            # Use the FIRST one which returns a timepoint
+                            break
 
-                    calendar = None  # if not use_daystring, save time
-                    if use_daystring:
-                        calendar = today_feed.calendar[
-                            today_feed.calendar.service_id == my_trip.service_id
-                        ]
-
-                    if train_has_checked_baggage:
-                        has_baggage = amtrak.station_has_checked_baggage(station_code)
-                    else:
-                        has_baggage = False
-
-                    # Need to insert complicated for loop here for multiple trains
-                    # TODO FIXME
-
-                    # MUST figure first_stop and last_stop
-                    # ...which means we need to make earlier passes through the table FIXME
-
-                    # Only assign the stylings if the train hasn't ended.  Tricky!  Dunno how to do it!
-                    # Probably requires that earlier pass through the table.
                     if timepoint is None:
                         # This train does not stop at this station
                         # Blank cell -- need to be cleverer about this FIXME
+                        # Only assign the stylings if the train hasn't ended.  Tricky!  Dunno how to do it!
+                        # Probably requires that earlier pass through the table.
                         tt.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
-                        # Confusing: we want to style some of these and not others.  Woof.
-                        cell_css_list.append(
-                            get_time_column_stylings(tsn, output_type="class")
-                        )
+                        # Confusing: we want to style some of these and not others.  FIXME.
+                        # For now, we style if we have a single train.
+                        # Otherwise not, because it's hard to know what color to use.
+                        if len(tsns) == 1:
+                            cell_css_list.append(
+                                get_time_column_stylings(tsns[0], output_type="class")
+                            )
                     else:
+                        # MAIN ROUTINE FOR PUTTING A TIME IN A CELL
+                        # We have a station code, and a specific tsn
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
                             get_time_column_stylings(tsn, output_type="class")
                         )
+
+                        calendar = None  # if not use_daystring, save time
+                        if use_daystring:
+                            calendar = today_feed.calendar[
+                                today_feed.calendar.service_id == my_trip.service_id
+                            ]
+
+                        has_baggage = bool(
+                            amtrak.train_has_checked_baggage(tsn)
+                            and amtrak.station_has_checked_baggage(station_code)
+                        )
+
+                        # MUST figure first_stop and last_stop
+                        # ...which means we need to make earlier passes through the table FIXME
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
@@ -782,7 +802,7 @@ def fill_tt_spec(
                             calendar=calendar,
                             long_days_box=long_days_box,
                             short_days_box=short_days_box,
-                            use_baggage_str=train_has_checked_baggage,
+                            use_baggage_str=amtrak.train_has_checked_baggage(tsn),
                             has_baggage=has_baggage,
                         )
                         tt.iloc[y, x] = cell_text
