@@ -197,6 +197,40 @@ def get_column_options(tt_spec):
     debug_print(1, column_options_nested_list)
     return column_options_nested_list
 
+def get_cell_codes(code_text:str, tsns: list[str]) ->dict[str,str]:
+    """
+    Given special code text in a cell, decipher it
+
+    The code leads with a tsn, followed by a space,
+    followed by one or more of the following (space-separated):
+    "first" (first station for train, show departure only)
+    "last" (last station for train, show arrival only)
+
+    It really makes no sense to specify both.
+    Specifying neither may give strange results, though it is supported.
+
+    Returns None if there was no code in the cell (the usual case)
+
+    Otherwise returns a dict:
+    tsn: the tsn
+    first: True or False
+    last: True or False
+    """
+    if pd.isna(code_text):
+        return None
+    code_list = code_text.split()
+    if not code_list:
+        return None
+    if code_list[0] not in tsns:
+        return None
+    output_dict = { "tsn": code_list[0], "first": False, "last": False}
+
+    for code in s[1:]:
+        if code not in ["first", "last"]:
+            return None
+        output_dict[code] = True
+    return output_dict
+
 
 def split_trains_spec(trains_spec):
     """
@@ -584,6 +618,8 @@ def fill_tt_spec(
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
             # Reset the styler string:
             cell_css_list = [base_cell_css]
+            # Check for cell_codes like "28 last".  This *usually* returns None.
+            cell_codes = get_cell_codes(tt_spec.iloc[y, x], tsns)
 
             if pd.isna(station_code):
                 # Line which has no station code -- freeform line.
@@ -684,15 +720,15 @@ def fill_tt_spec(
                     cell_css_list.append(
                         get_time_column_stylings(tsns[0], output_type="class")
                     )
-            elif not pd.isna(tt_spec.iloc[y, x]) and tt_spec.iloc[y, x] not in :
+            elif not pd.isna(tt_spec.iloc[y, x]) and not cell_codes:
                 # Line led by a station code, but cell already has a value.
+                # and the value isn't one of the special codes we check later.
                 cell_css_list.append("special-cell")
                 # This is probably special text like "to Chicago".
                 # Copy the handwritten text over.
                 tt.iloc[y, x] = tt_spec.iloc[y, x]
             else:
-                # Normal line led by a station code.
-                # Blank cell to be filled in -- the usual case.
+                # Normal line led by a station code, where we need to fill in arrival/departure times.
 
                 # TODO, check station code validity here!
 
@@ -742,10 +778,17 @@ def fill_tt_spec(
 
                     # Extract my_trip, timepoint (and later calendar)
                     # Note that in Python variables defined in a loop "hang around"
-                    for tsn in tsns:
+
+                    if cell_codes:
+                        # Specific tsn was requested.
+                        debug_print(2, "cell codes found")
+                        tsns_to_check = [cell_codes["tsn"]]
+                    else:
+                        tsns_to_check = tsns
+
+                    for tsn in tsns_to_check:
                         my_trip = trip_from_tsn_local(tsn)
                         debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
-
                         timepoint = get_timepoint_from_trip_id(
                             today_feed, my_trip.trip_id, station_code
                         )
@@ -757,7 +800,7 @@ def fill_tt_spec(
                         # This train does not stop at this station
                         # Blank cell -- need to be cleverer about this FIXME
                         # Only assign the stylings if the train hasn't ended.  Tricky!  Dunno how to do it!
-                        # Probably requires that earlier pass through the table.
+                        # Probably requires that earlier pass through the table.  Or CELL CODES FIXME
                         tt.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
                         # Confusing: we want to style some of these and not others.  FIXME.
@@ -786,8 +829,21 @@ def fill_tt_spec(
                             and amtrak.station_has_checked_baggage(station_code)
                         )
 
+                        # Normally we are two_row if the station calls for it,
+                        # but (hackishly) we allow the cell_codes to override it.
+                        # This isn't quite right as it should be station specific.
+                        two_row = is_ardp_station(station_code)
+
                         # MUST figure first_stop and last_stop
                         # ...which means we need to make earlier passes through the table FIXME
+                        # But for now we can handle it with manual annotation in the spec
+                        is_first_stop = False
+                        is_last_stop = False
+                        if cell_codes:
+                            is_first_stop = cell_codes["first"]
+                            is_last_stop = cell_codes["last"]
+                            if is_first_stop or is_last_stop:
+                                two_row=False
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
@@ -796,12 +852,14 @@ def fill_tt_spec(
                             doing_html=doing_html,
                             box_time_characters=box_time_characters,
                             reverse=reverse,
-                            two_row=is_ardp_station(station_code),
+                            two_row=two_row,
                             use_ar_dp_str=this_column_gets_ardp,
                             use_daystring=use_daystring,
                             calendar=calendar,
                             long_days_box=long_days_box,
                             short_days_box=short_days_box,
+                            is_first_stop=is_first_stop,
+                            is_last_stop=is_last_stop,
                             use_baggage_str=amtrak.train_has_checked_baggage(tsn),
                             has_baggage=has_baggage,
                         )

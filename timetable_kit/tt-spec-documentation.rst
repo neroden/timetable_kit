@@ -80,7 +80,7 @@ The special code "services" in the top row can be used to generate cells contain
 The special code "timezone" in the top row will generate a column with codes for the timezones of the stations.  Strongly
 recommended for any train which crosses two timezones.
 
-The special code "ardp" generates cells containing "Ar" and "Dp", or blank *not implemented
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank ***not implemented
 
 Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
 This will allow them to share a single column.  The time for the first train will be used, unless it doesn't
@@ -91,7 +91,6 @@ Be careful about using this as it is fragile: it is intended for splitting train
 This will give a complex stacked cell for "train name".  *** needs testing
 You will want to do some manual cells (see below).
 
-Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).  *not yet
 
 COLUMN-OPTIONS IN SECOND ROW
 ----------------------------
@@ -127,11 +126,30 @@ REST OF SPEC
 The internal cells (not the top row or left column) of the table should be mostly left blank.
 The program fills these in from the GTFS and Amtrak station data.
 
-For a column with multiple trains in the same column, a cell may contain a code (tsn / train number) saying
-*which train's departure/arrival times to use.  This is the only way to override the default
-"first train listed wins" behavior.  ***not yet 
-You can also force a cell to omit arrival time, or to omit departure time.  These are largely intended for connection trains and trains which split.  ***not yet
 
+SPECIAL CODES IN CELLS
+----------------------
+A cell to be filled in with a time may contain a special code.
+
+This should be a (tsn / train number) saying which train's departure/arrival times to use, followed by the
+word "first" or "last".  So "8 first" or "28 last".  
+
+This is the only way to override the default "first train listed wins" behavior.
+This will also suppress the display of both arrival and departure time:
+"first" will only list departure time, and "last" will only list arrival time.
+They will also suppress the use of "R" and "D" notations, which are obvious on the first and last trains.
+
+These special codes are intended to be used only in four situations:
+-- first station on the timetable for a train
+-- last station on the timetable for a train
+-- station where a train splits (list the station on two lines, and specify which line gets which tsn)
+-- station where a train connects to another (list the station on two lines, and specify which line gets which tsn)
+
+For technical reasons, a simple "8" or "8 first last" will be accepted as a special code, but it may cause
+nonsensical behavior.
+
+CELLS WITH FREE WRITTEN TEXT
+----------------------------
 If you include any other text, it will be copied into the final table.
 Examples include putting "to Chicago" in the cell after the last listed station for a train which
 continues to Chicago after leaving the last station listed in the timetable.
@@ -147,7 +165,9 @@ The resulting timetable will have "col0", "col1", "row0", "row1", etc. classes (
 individual cell if you need to.  For these purposes, the indexes are 0-based and ignore the template's top row and left
 column (which will not be present in the final timetable.
 
-I may eventually devise special codes for these internal cells.  So don't count on the free-writing interface 100%.
+There may be additional special codes for these internal cells.
+So don't count on the free-writing interface 100%.
+For now, all the special codes start with a train number.
 
 TT-AUX FILE
 -----------
