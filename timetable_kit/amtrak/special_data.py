@@ -200,6 +200,12 @@ major_stations_list = (
     "DEN",  # CZ -- Amtrak didn't, I should
     "SLC",
     "EMY",  # CZ
+    "MSP",  # EB -- Amtrak emphasized nothing on EB, so I picked some
+    "MOT",
+    "HAV",
+    "SPK",
+    "PDX",
+    "SEA",
 )
 
 
