@@ -82,10 +82,14 @@ recommended for any train which crosses two timezones.
 
 The special code "ardp" generates cells containing "Ar" and "Dp", or blank *not implemented
 
-Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
-This will allow them to share a single column.  Be careful about using this as it is fragile:
-it is intended for "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
-This will give a complex stacked cell for "train name".  You will want to do some manual cells (see below).
+Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
+This will allow them to share a single column.  The time for the first train will be used, unless it doesn't
+stop at that station, in which case the second train will be checked, etc.
+
+Be careful about using this as it is fragile: it is intended for splitting trains like the Lake Shore Limited, or
+"designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
+This will give a complex stacked cell for "train name".  *** needs testing
+You will want to do some manual cells (see below).
 
 Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).  *not yet
 
@@ -123,8 +127,12 @@ REST OF SPEC
 The internal cells (not the top row or left column) of the table should be mostly left blank.
 The program fills these in from the GTFS and Amtrak station data.
 
-However, if you want to include special text, you can free-write it in a cell,
-and it will be copied into the final table. *not yet
+For a column with multiple trains in the same column, a cell may contain a code (tsn / train number) saying
+*which train's departure/arrival times to use.  This is the only way to override the default
+"first train listed wins" behavior.  ***not yet 
+You can also force a cell to omit arrival time, or to omit departure time.  These are largely intended for connection trains and trains which split.  ***not yet
+
+If you include any other text, it will be copied into the final table.
 Examples include putting "to Chicago" in the cell after the last listed station for a train which
 continues to Chicago after leaving the last station listed in the timetable.
 
@@ -140,13 +148,6 @@ individual cell if you need to.  For these purposes, the indexes are 0-based and
 column (which will not be present in the final timetable.
 
 I may eventually devise special codes for these internal cells.  So don't count on the free-writing interface 100%.
-
-FUTURE PLANS
-------------
-I am hoping to add more bells and whistles.  When I do, my plan is to put auxilliary information for a template,
-showing how to generate a final timetable from it, in a JSON file which should end with .tt-json. *not yet
-
-In addition, there will be tools to generate lists of trains to help you design your spec.
 
 TT-AUX FILE
 -----------
@@ -183,4 +184,11 @@ output file name from the file name for the spec file.
 
 In addition, every key in the tt-aux file is passed through to the Jinja2 templates, allowing for flexibility.
 
-There will be a lot more but this is a start.
+
+ADDITIONAL TOOLS
+================
+These commands may be helpful in preparing spec files:
+
+find_trains.py -- get the trains running from station A to station B
+get_station_list.py -- get the list of stations which a particular train stops at
+compare.py -- find timing differences on a route between similar services listed in GTFS

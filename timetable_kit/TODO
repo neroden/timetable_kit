@@ -1,10 +1,11 @@
-1 -- "Two trains in one column" -- badly needed for EB
-
-2 -- "Key On Side" design -- needed for EB
-
-3 -- Remove "Amtrak Station" suffix on stations, as it is stupid
+Needed for timetable release:
+1 -- Duplicated stations with "pick a train" methodology.  Needed for EB
 
 Fine for after release of timetables:
+-1 -- Better day of week shorthands (sigh!)
+
+0 -- Remove "Amtrak Station" suffix on stations, as it is stupid
+
 1 -- improve icon situation
 
 2 -- Detect first_station / last_station. ***
