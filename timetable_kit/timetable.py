@@ -225,7 +225,7 @@ def get_cell_codes(code_text:str, tsns: list[str]) ->dict[str,str]:
         return None
     output_dict = { "tsn": code_list[0], "first": False, "last": False}
 
-    for code in s[1:]:
+    for code in code_list[1:]:
         if code not in ["first", "last"]:
             return None
         output_dict[code] = True
