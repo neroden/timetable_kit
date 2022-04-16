@@ -477,8 +477,13 @@ def fill_tt_spec(
             "Received is_ardp_station which is not callable: ", is_ardp_station
         )
 
-    tt = tt_spec.copy()  # "deep" copy
-    styler_t = tt_spec.copy()  # another "deep" copy, parallel
+
+    # We used to do deep copies here.  Really we just want to copy the STRUCTURE.
+    # tt = tt_spec.copy()  # "deep" copy
+    [row_index, column_index] = tt_spec.axes
+    tt = pd.DataFrame( index=row_index.copy(deep=True), columns=column_index.copy(deep=True) )
+    # styler_t = tt_spec.copy()  # another "deep" copy, parallel
+    styler_t = pd.DataFrame( index=row_index.copy(deep=True), columns=column_index.copy(deep=True) )
     debug_print(1, "Copied tt-spec.")
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
