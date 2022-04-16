@@ -11,3 +11,26 @@ The @page directives are respected by Weasyprint.
     size: Letter {{landscape}}; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
+{# With key_on_right, line these up side by side, somehow! #}
+{% if key_on_right %}
+{# This is the overall layout #}
+.bigbox-layout {
+    display: block;
+}
+.bigbox-timetable {
+    float: left;
+}
+.bigbox-keys {
+    float: right;
+}
+{% else %}{# Normal, key below table -- this is all defaults #}{#
+.bigbox-layout {
+    display: block;
+}
+.bigbox-timetable {
+    display: block;
+}
+.bigbox-keys {
+    display: block;
+}
+#}{% endif %}

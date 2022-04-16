@@ -23,9 +23,15 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% if for_rpa %}{% include "logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
 {% if top_text %}{% include "top_text.html" %}{% endif %}
+<div class="bigbox-layout">
+<div class="bigbox-timetable">
 {{timetable}}
+</div><!-- bigbox-timetable -->
+<div class="bigbox-keys">
 {% include "symbol_key.html" %}
 {% include "unofficial_amtrak.html" %}
 {% include "credit.html" %}
+</div><!-- bigbox-keys -->
+</div><!-- bigbox-layout -->
 </body>
 </html>
