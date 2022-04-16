@@ -21,7 +21,7 @@ The @page directives are respected by Weasyprint.
     float: left;
 }
 .bigbox-keys {
-    float: right;
+    float: right; {# Tried doing it with display: inline-block, but it floats to the bottom #}
 }
 {% else %}{# Normal, key below table -- this is all defaults #}{#
 .bigbox-layout {
