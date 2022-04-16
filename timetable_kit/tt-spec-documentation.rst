@@ -180,4 +180,6 @@ output_filename is the base filename of the output files (so, "special.html", "s
 If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*
 output file name from the file name for the spec file.
 
+In addition, every key in the tt-aux file is passed through to the Jinja2 templates, allowing for flexibility.
+
 There will be a lot more but this is a start.

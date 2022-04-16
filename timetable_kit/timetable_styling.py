@@ -152,30 +152,28 @@ def finish_html_timetable(
         aux = {}  # Empty dict
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    if "title" in aux:
-        title = aux["title"]
-    else:
-        title = "Timetable"
+    # We're going to feed the entire aux file through, but we need some defaults
+    if "title" not in aux:
+        aux["title"] = "Timetable"
 
-    if "heading" in aux:
-        heading = aux["heading"]
-    else:
-        heading = "Timetable"
+    if "heading" not in aux:
+        aux["heading"] = "Timetable"
 
-    if "for_rpa" in aux:
-        for_rpa = aux["for_rpa"]
-    else:
-        for_rpa = False
+    if "for_rpa" not in aux:
+        aux["for_rpa"] = False
 
-    if "top_text" in aux:
-        top_text = aux["top_text"]
-    else:
-        top_text = False
+    if "top_text" not in aux:
+        aux["top_text"] = False
 
-    landscape_str = ""
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
-        landscape_str = "landscape"
+    if "landscape" not in aux:
+        aux["landscape"] = ""
+
+    if "key_on_right" in aux:
+        debug_print(1, "Key on right")
+    if "key_on_right" not in aux:
+        aux["key_on_right"] = False
 
     ### FONTS
     font_name = "SpartanTT"
@@ -230,20 +228,15 @@ def finish_html_timetable(
     html_params = {
         "lang": "en-US",
         "encoding": "utf-8",
-        "title": title,
         "internal_stylesheet": True,
-        "heading": heading,
         "timetable": styled_timetable_html,
         "timetable_kit_url": "https://github.com/neroden/timetable_kit",
         "production_date": production_date_str,
         "start_date": start_date_str,
         "end_date": end_date_str,
         "author": author,
-        "for_rpa": for_rpa,
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
-        "landscape": landscape_str,  # This one's for weasy
-        "top_text": top_text,
     }
 
     # Allows direct icon references in Jinja2
@@ -255,7 +248,8 @@ def finish_html_timetable(
 
     # Dictionary merge, html_params take priority, Python 3.9
     # Not sure about associativity, but we don't plan to have duplicates anyway
-    full_page_params = stylesheet_params | icon_params | html_params
+    # Throw the entire aux file in
+    full_page_params = aux | stylesheet_params | icon_params | html_params
 
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...
