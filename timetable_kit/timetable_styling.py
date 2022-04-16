@@ -245,6 +245,7 @@ def finish_html_timetable(
         "baggage_icon": icons.get_baggage_icon_html(),
         "accessible_icon": icons.get_accessible_icon_html(),
         "inaccessible_icon": icons.get_inaccessible_icon_html(),
+        "sleeper_icon": icons.get_sleeper_icon_html(),
     }
 
     # Dictionary merge, html_params take priority, Python 3.9

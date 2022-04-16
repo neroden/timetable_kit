@@ -27,6 +27,7 @@ def get_css_for_all_icons() -> str:
             get_baggage_icon_css(),
             get_accessible_icon_css(),
             get_inaccessible_icon_css(),
+            get_sleeper_icon_css(),
         ]
     )
     return full_css
@@ -61,13 +62,6 @@ def get_baggage_icon_html(embedded_svg=False) -> str:
     Return suitable HTML for displaying the baggage icon.
     """
     return baggage_span_str
-    # TODO: provide the alternate versions.
-    if not embedded_svg:
-        return baggage_span_str
-    if embedded_svg:  # not tested
-        str = get_icon_svg("baggage-ncn.svg")
-        return str
-    return ""
 
 
 def get_baggage_icon_css():
@@ -145,3 +139,36 @@ def get_inaccessible_icon_css():
     Return suitable CSS for the no-wheelchair icon (loaded from a file)
     """
     return get_icon_css("inaccessible-ncn.css")
+
+
+sleeper_img_str = " ".join(
+    [
+        "<img",
+        'class="sleeper-icon-img"',
+        'src="icons/bed-solid.svg"',
+        'alt="Sleeper"',
+        'title="Sleeping Car Service">',
+    ]
+)
+
+sleeper_span_str = "".join(
+    [
+        '<span class="sleeper-symbol">',
+        sleeper_img_str,
+        "</span>",
+    ]
+)
+
+
+def get_sleeper_icon_html(embedded_svg=False) -> str:
+    """
+    Return suitable HTML for displaying the sleeper icon.
+    """
+    return sleeper_span_str
+
+
+def get_sleeper_icon_css():
+    """
+    Return suitable CSS for the sleeper icon (loaded from a file)
+    """
+    return get_icon_css("bed-solid.css")

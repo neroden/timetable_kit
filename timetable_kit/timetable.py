@@ -989,7 +989,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     icons_dir = output_dir / "icons"
     if not os.path.exists(icons_dir):
         os.makedirs(icons_dir)
-    icon_filenames = ["accessible.svg", "inaccessible-ncn.svg", "baggage-ncn.svg"]
+    icon_filenames = ["accessible.svg", "inaccessible-ncn.svg", "baggage-ncn.svg","bed-solid.svg"]
     if for_rpa:
         icon_filenames.append("rpa-logo.svg")
     for icon_filename in icon_filenames:

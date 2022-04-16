@@ -60,6 +60,14 @@ https://commons.wikimedia.org/wiki/File:No_Accessibility_-_Original_Handicapped_
 
 This color still looks right in greyscale, which is important.
 
+Bed Icon
+========
+
+bed-solid.svg
+-------------
+The "bed-solid" SVG image is from Font Awesome Free.
+In SVG form, it is subject to the CC BY 4.0 license, which requires only attribution.
+
 rpa-logo.svg and rpa-logo-orig.svg
 ==================================
 This is the Rail Passengers Association logo; it is copyrighted and trademarked to them,
