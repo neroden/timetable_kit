@@ -29,13 +29,13 @@ def type_corrected_calendar(calendar):
     new_calendar = calendar.astype(
         {
             "service_id": "str",
-            "monday": "bool",
-            "tuesday": "bool",
-            "wednesday": "bool",
-            "thursday": "bool",
-            "friday": "bool",
-            "saturday": "bool",
-            "sunday": "bool",
+            "monday": "int32",
+            "tuesday": "int32",
+            "wednesday": "int32",
+            "thursday": "int32",
+            "friday": "int32",
+            "saturday": "int32",
+            "sunday": "int32",
             "start_date": "int32",
             "end_date": "int32",
         }

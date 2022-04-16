@@ -82,25 +82,25 @@ def filter_by_day_of_week(
     8010, 8011, 8012, 8013, 8014, 8015, 8033,
     8042, 7203, )
     """
-    # NOTE this assumes bool type conversion.
+    # NOTE this assumes int type conversion.
     # consider doing with original GTFS 1/0 data.
     # FIXME
     new_feed = self.copy()
     calendar = self.calendar
     if monday:
-        calendar = calendar[calendar.monday == True]
+        calendar = calendar[calendar.monday == 1]
     if tuesday:
-        calendar = calendar[calendar.tuesday == True]
+        calendar = calendar[calendar.tuesday == 1]
     if wednesday:
-        calendar = calendar[calendar.wednesday == True]
+        calendar = calendar[calendar.wednesday == 1]
     if thursday:
-        calendar = calendar[calendar.thursday == True]
+        calendar = calendar[calendar.thursday == 1]
     if friday:
-        calendar = calendar[calendar.friday == True]
+        calendar = calendar[calendar.friday == 1]
     if saturday:
-        calendar = calendar[calendar.saturday == True]
+        calendar = calendar[calendar.saturday == 1]
     if sunday:
-        calendar = calendar[calendar.sunday == True]
+        calendar = calendar[calendar.sunday == 1]
     new_feed.calendar = calendar
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array

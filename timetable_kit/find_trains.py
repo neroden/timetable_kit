@@ -156,7 +156,7 @@ if __name__ == "__main__":
     print("Finding trains from", stop_one, "to", stop_two)
 
     # TODO: figure out how to filter by day of week
-    # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
+    # today_monday_feed = today_feed.filter_by_day_of_week(monday==1)
     set_debug_level(2)
 
     # Make the two interconverting dicts
