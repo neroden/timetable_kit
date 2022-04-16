@@ -1,26 +1,20 @@
-Preferably before release of timetables:
-7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
-     get_timepoint in particular is running slow inside an inner loop.
-     This is the lowest-hanging remaining fruit.
-
 Fine for after release of timetables:
-1 -- rename station services column to "access", separate from services
+1 -- improve icon situation
 
-2 -- make silent links that don't turn blue and underline themselves.
+2 -- Detect first_station / last_station. ***
 
-8 -- Detect first_station / last_station. ***
+3 -- make silent links that don't turn blue and underline themselves.
 
-9 -- Routine to print out calendar for a single route,
+4 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
 
-10 -- Make inline icon variants
+5 -- Test install and resolve other problematic directory references
 
-11 -- Resolve other problematic directory references
-12 -- Resolve command-line functions in amtrak/ into a __main__.py
+6 -- Resolve command-line functions in amtrak/ into a __main__.py
 
-13 -- Handle two trains in one column (oooglay)
+7 -- Handle two trains in one column (oooglay)
 
-14 -- Improve calendar filtering for days of week
+8 -- Improve calendar filtering for days of week
     Still not clear what the best approach for this is.
 
     Failing to filter for the days of the week can give two calendars
@@ -33,5 +27,5 @@ Fine for after release of timetables:
     To make matters worse, there are calendar gaps in other timetables,
     like the Cardinal one.  We need a better presentation on this crap.
 
-15 -- Sanitize pathnames coming from command line and environment.
+9 -- Sanitize pathnames coming from command line and environment.
     We're very sloppy right now.
