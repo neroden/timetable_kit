@@ -1,11 +1,11 @@
 Preferably before release of timetables:
-1 -- rename station services column to "access", separate from services
-
 7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
      get_timepoint in particular is running slow inside an inner loop.
      This is the lowest-hanging remaining fruit.
 
 Fine for after release of timetables:
+1 -- rename station services column to "access", separate from services
+
 2 -- make silent links that don't turn blue and underline themselves.
 
 8 -- Detect first_station / last_station. ***

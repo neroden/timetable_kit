@@ -246,6 +246,8 @@ def filter_by_trip_short_names(self, trip_short_names):
     - filtered stop_times is used for getting single trip stop times, but requires unique trip_id
     - filtered calendar is used for finding validity dates for a timetable
     Also used to speed up main timetable routine, by filtering irrelevancies out of stop_times.
+
+    This is a pretty slow process.  Don't call it too often!
     """
     new_feed = self.copy()
     # First filter the trips
