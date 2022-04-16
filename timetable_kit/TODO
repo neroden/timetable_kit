@@ -1,6 +1,7 @@
 Needed for timetable release:
 1 -- Duplicated stations with "pick a train" methodology.  Needed for EB
      This is partly done but must be tested with new tt-specs which actually use it.
+2 -- Test column with two trains with different route names (connecting train)
 
 Fine for after release of timetables:
 -1 -- Better day of week shorthands (sigh!)
