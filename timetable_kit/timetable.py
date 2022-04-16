@@ -539,21 +539,21 @@ def fill_tt_spec(
     header_replacement_list = []  # list, will fill in as we go
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
-        train_nums_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
+        column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
 
-        if train_nums_str.lower() in ["station", "stations"]:
+        if column_key_str.lower() in ["station", "stations"]:
             station_column_header = text_presentation.get_station_column_header(
                 doing_html=doing_html
             )
             header_replacement_list.append(station_column_header)
             header_styling_list.append("")  # could include background color
-        elif train_nums_str.lower() in ["services"]:
+        elif column_key_str.lower() in ["services"]:
             services_column_header = text_presentation.get_services_column_header(
                 doing_html=doing_html
             )  # in a span
             header_replacement_list.append(services_column_header)
             header_styling_list.append("")  # could include background color;
-        elif train_nums_str.lower() in ["timezone"]:
+        elif column_key_str.lower() in ["timezone"]:
             timezone_column_header = text_presentation.get_timezone_column_header(
                 doing_html=doing_html
             )  # in a span
@@ -568,7 +568,7 @@ def fill_tt_spec(
             this_column_gets_ardp = "ardp" in column_options[x]
 
             # Separate train numbers by "/"
-            tsns = split_trains_spec(train_nums_str)
+            tsns = split_trains_spec(column_key_str)
             time_column_header = text_presentation.get_time_column_header(
                 tsns, doing_html=doing_html
             )
@@ -599,7 +599,7 @@ def fill_tt_spec(
             elif station_code.lower() == "route-name":
                 # Special line for route names.
                 cell_css_list.append("route-name-cell")
-                if train_nums_str in special_column_names:
+                if column_key_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
                     route_names = []
@@ -630,7 +630,7 @@ def fill_tt_spec(
             elif station_code.lower() == "updown":
                 # Special line just to say "Read Up" or "Read Down"
                 cell_css_list.append("updown-cell")
-                if train_nums_str in special_column_names:
+                if column_key_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
                     tt.iloc[y, x] = text_presentation.style_updown(
@@ -639,7 +639,7 @@ def fill_tt_spec(
             elif station_code.lower() in ["days", "days-of-week"]:
                 # Days of week -- best for a train which doesn't run across midnight
                 cell_css_list.append("days-of-week-cell")
-                if train_nums_str in special_column_names:
+                if column_key_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
                     # We can only show the days for one station.
@@ -684,7 +684,7 @@ def fill_tt_spec(
                     cell_css_list.append(
                         get_time_column_stylings(tsns[0], output_type="class")
                     )
-            elif not pd.isna(tt_spec.iloc[y, x]):
+            elif not pd.isna(tt_spec.iloc[y, x]) and tt_spec.iloc[y, x] not in :
                 # Line led by a station code, but cell already has a value.
                 cell_css_list.append("special-cell")
                 # This is probably special text like "to Chicago".
@@ -700,7 +700,7 @@ def fill_tt_spec(
                 stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
                 stop_tz = stop_df.iloc[0].stop_timezone
 
-                if train_nums_str.lower() in [
+                if column_key_str.lower() in [
                     "station",
                     "stations",
                 ]:  # Column for station names
@@ -709,7 +709,7 @@ def fill_tt_spec(
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
-                elif train_nums_str.lower() in [
+                elif column_key_str.lower() in [
                     "services"
                 ]:  # Column for station services codes
                     cell_css_list.append("services-cell")
@@ -724,7 +724,7 @@ def fill_tt_spec(
                     elif amtrak.station_has_inaccessible_platform(station_code):
                         services_str += icons.get_inaccessible_icon_html()
                     tt.iloc[y, x] = services_str
-                elif train_nums_str in ["timezone"]:  # Column for time zone codes
+                elif column_key_str in ["timezone"]:  # Column for time zone codes
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y, x] = text_presentation.get_zone_str(
                         stop_tz, doing_html=doing_html
