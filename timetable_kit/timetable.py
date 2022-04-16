@@ -184,7 +184,7 @@ def get_column_options(tt_spec):
             return ""
         return s
 
-    if tt_spec.iloc[1, 0] not in ["column-options", "column_options"]:
+    if str(tt_spec.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
         column_count = tt_spec.shape[1]
         # What, there weren't any?  Make a list containing blank lists:
         column_options = [[]] * column_count
@@ -456,7 +456,7 @@ def fill_tt_spec(
     # This must be in the second row (row 1) and first column (column 0)
     # It ends up as a list (indexed by column number) of lists of options.
     column_options = get_column_options(tt_spec)
-    if tt_spec.iloc[1, 0] in ["column-options", "column_options"]:
+    if str(tt_spec.iloc[1, 0]).lower() in ["column-options", "column_options"]:
         # Delete the problem line before further work.
         # This drops by index and not by actual row number, irritatingly
         # Thankfully they're currently the same
@@ -541,19 +541,19 @@ def fill_tt_spec(
     for x in range(1, column_count):  # First (0) column is the station code
         train_nums_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
 
-        if train_nums_str in ["station", "stations"]:
+        if train_nums_str.lower() in ["station", "stations"]:
             station_column_header = text_presentation.get_station_column_header(
                 doing_html=doing_html
             )
             header_replacement_list.append(station_column_header)
             header_styling_list.append("")  # could include background color
-        elif train_nums_str in ["services"]:
+        elif train_nums_str.lower() in ["services"]:
             services_column_header = text_presentation.get_services_column_header(
                 doing_html=doing_html
             )  # in a span
             header_replacement_list.append(services_column_header)
             header_styling_list.append("")  # could include background color;
-        elif train_nums_str in ["timezone"]:
+        elif train_nums_str.lower() in ["timezone"]:
             timezone_column_header = text_presentation.get_timezone_column_header(
                 doing_html=doing_html
             )  # in a span
@@ -602,7 +602,7 @@ def fill_tt_spec(
                     tt.iloc[y, x] = ""
                 # We have to set the styler.
                 cell_css_list.append("special-cell")
-            elif station_code == "route-name":
+            elif station_code.lower() == "route-name":
                 # Special line for route names.
                 cell_css_list.append("route-name-cell")
                 if train_nums_str in special_column_names:
@@ -619,7 +619,7 @@ def fill_tt_spec(
                     cell_css_list.append(
                         get_time_column_stylings(tsn, output_type="class")
                     )
-            elif station_code == "updown":
+            elif station_code.lower() == "updown":
                 # Special line just to say "Read Up" or "Read Down"
                 cell_css_list.append("updown-cell")
                 if train_nums_str in special_column_names:
@@ -628,7 +628,7 @@ def fill_tt_spec(
                     tt.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
-            elif station_code in ["days", "days-of-week"]:
+            elif station_code.lower() in ["days", "days-of-week"]:
                 # Days of week -- best for a train which doesn't run across midnight
                 cell_css_list.append("days-of-week-cell")
                 if train_nums_str in special_column_names:
@@ -688,7 +688,7 @@ def fill_tt_spec(
                 stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
                 stop_tz = stop_df.iloc[0].stop_timezone
 
-                if train_nums_str in [
+                if train_nums_str.lower() in [
                     "station",
                     "stations",
                 ]:  # Column for station names
@@ -697,7 +697,7 @@ def fill_tt_spec(
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
-                elif train_nums_str in [
+                elif train_nums_str.lower() in [
                     "services"
                 ]:  # Column for station services codes
                     cell_css_list.append("services-cell")
