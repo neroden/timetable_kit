@@ -91,7 +91,11 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
         ["<span class=station-footnotes>(", station_code, ")</span>"]
     )
 
-    if facility_name:
+    # It looks stupid to see "- Amtrak Station."
+    # I know it's there to distinguish from bus stops, but come on.
+    # Let's assume it's the Amtrak station unless otherwise specified.
+    # Also saves critical vertical space on Empire Builder timetable.
+    if facility_name and facility_name != "Amtrak Station":
         enhanced_facility_name = "".join(
             ["<br><span class=station-footnotes>", " - ", facility_name, "</span>"]
         )
