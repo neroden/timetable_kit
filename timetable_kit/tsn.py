@@ -18,7 +18,7 @@ from timetable_kit.debug import debug_print
 from timetable_kit import feed_enhanced
 
 
-def make_trip_id_to_tsn_dict(feed):
+def make_trip_id_to_tsn_dict(feed) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_id to trip_short_name.
     """
@@ -34,7 +34,7 @@ def make_trip_id_to_tsn_dict(feed):
     return trip_id_to_tsn
 
 
-def make_tsn_to_trip_id_dict(feed):
+def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_short_name to trip_id.
 
@@ -66,9 +66,9 @@ def make_tsn_to_trip_id_dict(feed):
     return tsn_to_trip_id
 
 
-def find_tsn_dupes(feed):
+def find_tsn_dupes(feed) -> set[str]:
     """
-    Find trip_short_names which have multiple trip_ids.
+    Find trip_short_names which have multiple trip_ids.  Returns the set of duplicate tsns.
 
     The calendar means that on a master feed this will happen with almost everything.
     Once you filter to a single day, there's a lot fewer.
@@ -92,14 +92,14 @@ def find_tsn_dupes(feed):
 
     # Here, duplicates are likely so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
-    debug_print(1, "Finding duplicates, if any:")
+    debug_print(1, "Finding duplicate tsns, if any:")
     tsn_set = set()
     for x in tsns:
         if x in tsn_set:
             debug_print(1, "Duplicate tsn found for", x)
         else:
             tsn_set.add(x)
-    return
+    return tsn_set
 
 
 ### These two are used routinely in the main timetable generator
@@ -112,6 +112,9 @@ def trip_from_tsn(today_feed, trip_short_name):
 
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
+
+    The naive (i.e. current) implementation of this takes nearly the entire program runtime.
+    Avoid using this.  Do the work another way.  See trip_from_tsn_local in timetable.py
     """
     single_trip_feed = today_feed.filter_by_trip_short_names([trip_short_name])
     try:

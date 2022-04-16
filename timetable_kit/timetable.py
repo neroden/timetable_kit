@@ -71,8 +71,8 @@ from timetable_kit.amtrak.station_name_styling import (
 )
 from timetable_kit.tsn import (
     make_trip_id_to_tsn_dict,
+    find_tsn_dupes,
     make_tsn_to_trip_id_dict,
-    trip_from_tsn,
     stations_list_from_tsn,
 )
 
@@ -256,28 +256,6 @@ def service_dates_from_trip_id(feed, trip_id):
     return [start_date, end_date]
 
 
-def get_timepoint_from_tsn(today_feed, trip_short_name, station_code):
-    """
-    Given a single train number (trip_short_name),  station_code, and a feed containing only one day, extract a single timepoint.
-
-    This wraps get_timepoint_from_trip_id.
-
-    Converting from trip_short_name to trip_id is slow, so we don't want to do it every time.
-    If you can do it first and call get_timepoint_from_trip_id, that is better.
-
-    One trip_short_name will typically correspond to different trip_ids on different days.
-
-    This should raise an error, but does not, if the trip_short_name generates two different trips.
-    The reason it doesn't is errors in Amtrak's GTFS with identical-duplicate trips varying only
-    by trip_id (same calendar, same days of week, same service, etc.)
-    See trip_from_tsn for more.
-    """
-    my_trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
-    debug_print(2, "debug in get_timepoint_from_tsn:", trip_short_name, my_trip_id)
-
-    return get_timepoint_from_trip_id(today_feed, my_trip_id, station_code)
-
-
 def get_timepoint_from_trip_id(feed, trip_id, station_code):
     """
     Given a single trip_id, station_code, and a feed, extract a single timepoint.
@@ -323,19 +301,19 @@ def get_timepoint_from_trip_id(feed, trip_id, station_code):
     return timepoint
 
 
-def get_dwell_secs(today_feed, trip_short_name, station_code):
+def get_dwell_secs(today_feed, trip_id, station_code):
     """
-    Gets dwell time in seconds for a specific train at a specific station
+    Gets dwell time in seconds for a specific trip_id at a specific station
 
-    Should be passed a feed containing only one day.
-    Raises an error if trip_short_name generates more than one trip
-    (probably because the feed has multiple dates in it)
+    today_feed: a feed
+    trip_id: relevant trip_id
+    station_code: station code
 
     Used primarily to determine whether to put both arrival and departure times
     in the timetable for this station.
     """
-    debug_print(2, "debug:", trip_short_name, station_code)
-    timepoint = get_timepoint_from_tsn(today_feed, trip_short_name, station_code)
+    timepoint = get_timepoint_from_trip_id(today_feed, trip_id, station_code)
+
     if timepoint is None:
         # If the train doesn't stop there, the dwell time is zero;
         # and we need thie behavior for make_stations_max_dwell_map
@@ -353,14 +331,21 @@ def get_dwell_secs(today_feed, trip_short_name, station_code):
     return dwell_secs
 
 
-def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
+def make_stations_max_dwell_map(
+    today_feed, tt_spec, dwell_secs_cutoff, trip_from_tsn_fn
+):
     """
     Return a dict from station_code to True/False, based on the trains in the tt_spec.
 
+    This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
+
+    today_feed: a feed filtered to a single date (so tsns are unique)
+    tt_spec: the tt_spec
+    dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
+    trip_from_tsn_fn: a function which maps tsn to trip_id and provides error raising
+
     Expects a feed already filtered to a single date.
     The feed *may* be restricted to the relevant trains (but must contain all relevant trains).
-
-    This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
     First we extract the list of stations and the list of train names from the tt_spec.
 
@@ -374,18 +359,42 @@ def make_stations_max_dwell_map(today_feed, tt_spec, dwell_secs_cutoff):
 
     # Prepare the dict to return
     stations_dict = {}
-    for s in stations_list:
+    for station_code in stations_list:
         max_dwell_secs = 0
-        for t in flattened_trains_set:
-            max_dwell_secs = max(max_dwell_secs, get_dwell_secs(today_feed, t, s))
+        for tsn in flattened_trains_set:
+            debug_print(3, "debug dwell map:", tsn, station_code)
+            trip_id = trip_from_tsn_fn(tsn).trip_id
+            max_dwell_secs = max(
+                max_dwell_secs, get_dwell_secs(today_feed, trip_id, station_code)
+            )
         if max_dwell_secs >= dwell_secs_cutoff:
-            stations_dict[s] = True
+            stations_dict[station_code] = True
         else:
-            stations_dict[s] = False
+            stations_dict[station_code] = False
     return stations_dict
 
 
-### Work for main multi-train timetable factory:
+def raise_error_if_not_one_row(trips):
+    """
+    Given a PANDAS DataFrame, raise an error if it has either 0 or more than 1 rows.
+
+    The error text is based on the assumption that this is a GTFS trips frame.
+    This returns nothing if successful; it is solely sanity-check code.
+
+    For speed we have to work with trips directly rather than modifying the feed,
+    which is why this is needed for fill_tt_spec, rather than merely in feed_enhanced.
+    """
+    num_rows = trips.shape[0]
+    if num_rows == 0:
+        raise NoTripError(
+            "Expected single trip: no trips in filtered trips table", trips
+        )
+    if num_rows > 1:
+        print(trips)
+        raise TwoTripsError(
+            "Expected single trip: too many trips in filtered trips table", trips
+        )
+    return
 
 
 def fill_tt_spec(
@@ -427,6 +436,22 @@ def fill_tt_spec(
         Defaults to 300, meaning 5 minutes.
         Probably don't want to ever make it less than 1 minute.
     """
+    # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
+    # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
+    # So we generate a dict for it.
+    tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
+    # Create an inner function to get the trip from the tsn, using the dict we just made
+    # Also depends on the today_feed
+    def trip_from_tsn_local(tsn: str) -> str:
+        try:
+            my_trip_id = tsn_to_trip_id[tsn]
+        except KeyError as e:
+            raise InputError("No trip_id for ", tsn) from e
+        my_trips = today_feed.trips[today_feed.trips.trip_id == my_trip_id]
+        raise_error_if_not_one_row(my_trips)
+        my_trip = my_trips.iloc[0]
+        return my_trip
+
     # Extract a list of column options, if provided in the spec
     # This must be in the second row (row 1) and first column (column 0)
     # It ends up as a list (indexed by column number) of lists of options.
@@ -466,9 +491,12 @@ def fill_tt_spec(
     elif is_ardp_station is True:
         is_ardp_station = lambda station_code: True
     elif is_ardp_station == "dwell":
-        # Prep max dwell map
+        # Prep max dwell map.  This is the second-slowest part of the program.
         stations_max_dwell_map = make_stations_max_dwell_map(
-            today_feed, tt_spec, dwell_secs_cutoff
+            today_feed=today_feed,
+            tt_spec=tt_spec,
+            dwell_secs_cutoff=dwell_secs_cutoff,
+            trip_from_tsn_fn=trip_from_tsn_local,
         )
         is_ardp_station = lambda station_code: stations_max_dwell_map[station_code]
         debug_print(1, "Dwell map prepared.")
@@ -477,13 +505,16 @@ def fill_tt_spec(
             "Received is_ardp_station which is not callable: ", is_ardp_station
         )
 
-
     # We used to do deep copies here.  Really we just want to copy the STRUCTURE.
     # tt = tt_spec.copy()  # "deep" copy
     [row_index, column_index] = tt_spec.axes
-    tt = pd.DataFrame( index=row_index.copy(deep=True), columns=column_index.copy(deep=True) )
+    tt = pd.DataFrame(
+        index=row_index.copy(deep=True), columns=column_index.copy(deep=True)
+    )
     # styler_t = tt_spec.copy()  # another "deep" copy, parallel
-    styler_t = pd.DataFrame( index=row_index.copy(deep=True), columns=column_index.copy(deep=True) )
+    styler_t = pd.DataFrame(
+        index=row_index.copy(deep=True), columns=column_index.copy(deep=True)
+    )
     debug_print(1, "Copied tt-spec.")
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
@@ -502,8 +533,7 @@ def fill_tt_spec(
     # dataset is not allowed by GTFS to have multiple agency timezones!
     agency_tz = "America/New_York"
 
-    # NOTE that this routine is NOT FAST.  It's the bulk of the time usage in the program.
-    # It is much slower than the single-timetable program.
+    # Now for the main routine, which is a giant double loop, and therefore quite slow.
     [row_count, column_count] = tt_spec.shape
 
     header_replacement_list = []  # list, will fill in as we go
@@ -578,9 +608,9 @@ def fill_tt_spec(
                 if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
-                    my_trip = trip_from_tsn(today_feed, tsn)
+                    my_trip = trip_from_tsn_local(tsn)
                     route_id = my_trip.route_id
-                    # Clean this interface up later.  For now highly Amtrak-specific
+                    # Clean this interface up later.  For now highly Amtrak-specific FIXME
                     route_name = amtrak.get_route_name(today_feed, route_id)
                     styled_route_name = text_presentation.style_route_name_for_column(
                         route_name, doing_html=doing_html
@@ -604,7 +634,7 @@ def fill_tt_spec(
                 if train_nums_str in special_column_names:
                     tt.iloc[y, x] = ""
                 else:
-                    my_trip = trip_from_tsn(today_feed, tsn)
+                    my_trip = trip_from_tsn_local(tsn)
                     # We can only show the days for one station.
                     # So get the reference stop_id / station code to use; user-specified
                     reference_stop_id = tt_spec.iloc[y, x]
@@ -699,7 +729,7 @@ def fill_tt_spec(
                     )
 
                     # Extract calendar, timepoint
-                    my_trip = trip_from_tsn(today_feed, tsn)
+                    my_trip = trip_from_tsn_local(tsn)
                     debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
 
                     timepoint = get_timepoint_from_trip_id(
@@ -877,10 +907,15 @@ def produce_timetable(
     reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
     debug_print(1, "Feed filtered by trip_short_name.")
 
-    service_ids_set = set()
-    # This is strictly a uniqueness sanity check.
-    for tsn in flattened_trains_set:
-        _ = trip_from_tsn(reduced_feed, tsn)  # Hopefully unique.  Throws error if not.
+    # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
+    # This will make it impossible to map from tsn to trip_id.
+    # HOWEVER, Amtrak has some weird duplicates with duplicate trip_ids and identical timings,
+    # so this might not be a fatal error.
+    if find_tsn_dupes(reduced_feed):
+        debug_print(
+            1,
+            "Warning, tsn duplicates!  Random trip will be picked!  Usually a bad idea!",
+        )
 
     # Print the calendar for debugging
     debug_print(1, reduced_feed.calendar)
@@ -960,6 +995,7 @@ def produce_timetable(
 # This is a module-level global
 prepared_output_dirs = []
 prepared_output_dirs_for_rpa = []
+
 
 def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     """
