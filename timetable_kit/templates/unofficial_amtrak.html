@@ -2,9 +2,11 @@
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 #}{% from "macros.html" import br_or_space %}{#
-#}<div class="unofficial-amtrak"><p>This timetable is not an official Amtrak product.<br>{#
+#}<div class="unofficial-amtrak"><p>This timetable is not an official Amtrak product.{#
+#}<br>{#
 #}It was produced as a public service by {{ author }}{#
-#}{% if for_rpa %}{{ br_or_space(key_on_right) }}{#
+#}{% if for_rpa %}{#
+#}{{ br_or_space(key_on_right) }}{#
 #}for <a href="https://www.railpassengers.org/resources/amtrak-timetables/">Rail Passengers Association</a>{#
 #}{% endif %}{#
 #},<br>{#
