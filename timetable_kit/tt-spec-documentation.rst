@@ -184,6 +184,7 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "output_filename": "special",
     "reference_date": "20220528",
     "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains."
+    "bottom_text": "This will be printed less prominently underneath the symbol key.  Useful for noting seasonal stations, ticketing restrictions (no Homewood to Chicago tickets except for connecting passengers), or other oddities."
     "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)"
  }
 

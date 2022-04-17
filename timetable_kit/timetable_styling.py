@@ -154,16 +154,10 @@ def finish_html_timetable(
     # We need to add the extras to make this a full HTML & CSS file now.
     # We're going to feed the entire aux file through, but we need some defaults
     if "title" not in aux:
-        aux["title"] = "Timetable"
+        aux["title"] = "A Timetable"
 
     if "heading" not in aux:
-        aux["heading"] = "Timetable"
-
-    if "for_rpa" not in aux:
-        aux["for_rpa"] = False
-
-    if "top_text" not in aux:
-        aux["top_text"] = False
+        aux["heading"] = "A Timetable"
 
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
@@ -172,8 +166,6 @@ def finish_html_timetable(
 
     if "key_on_right" in aux:
         debug_print(1, "Key on right")
-    if "key_on_right" not in aux:
-        aux["key_on_right"] = False
 
     ### FONTS
     font_name = "SpartanTT"
