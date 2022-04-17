@@ -1,8 +1,8 @@
-,391, 393, 59, services, station, 58, 390, 392
+,391, 393, 59, access, station, 58, 390, 392
 column-options,ardp,,, , ,reverse ardp,reverse,reverse
 route-name,,,,,,,,
 updown,,,,,,,,
-CHI
+CHI,391 first, 393 first, 59 first, , , 58 last, 390 last, 392 last
 HMW
 KKI
 GLM
@@ -12,7 +12,7 @@ MAT
 EFG
 CEN
 DQN
-CDL
+CDL,391 last,393 last,, , ,,390 first, 392 first
 FTN
 NBN
 MEM
@@ -24,4 +24,4 @@ HAZ
 BRH
 MCB
 HMD
-NOL
+NOL,,,59 last, , ,58 first,,

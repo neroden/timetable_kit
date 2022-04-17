@@ -1,9 +1,9 @@
-,393, 59, services, station, 58, 390
-column-options,ardp,days long-days-box, , ,reverse ardp days long-days-box,reverse
+,393, 59, access, station, 58, 390
+column-options,ardp,days, , ,reverse ardp days,reverse
 route-name
 days,CHI,,,,,CHI
 updown
-CHI
+CHI,393 first,59 first,,,58 last,390 last
 HMW
 KKI
 GLM
@@ -13,7 +13,7 @@ MAT
 EFG
 CEN
 DQN
-CDL
+CDL,393 last,, , ,,390 first
 FTN
 NBN
 MEM
@@ -25,4 +25,4 @@ HAZ
 BRH
 MCB
 HMD
-NOL
+NOL,,59 last, , ,58 first,
