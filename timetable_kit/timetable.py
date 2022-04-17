@@ -85,6 +85,7 @@ special_column_names = {
     "station",
     "stations",
     "services",
+    "access",
     "timezone",
 }
 
@@ -575,6 +576,7 @@ def fill_tt_spec(
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
         column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
+        tsns = [] # Blank so we can call get_cell_codes on a special column without crashing
 
         if column_key_str.lower() in ["station", "stations"]:
             station_column_header = text_presentation.get_station_column_header(
@@ -587,6 +589,12 @@ def fill_tt_spec(
                 doing_html=doing_html
             )  # in a span
             header_replacement_list.append(services_column_header)
+            header_styling_list.append("")  # could include background color;
+        elif column_key_str.lower() in ["access"]:
+            access_column_header = text_presentation.get_access_column_header(
+                doing_html=doing_html
+            )  # in a span
+            header_replacement_list.append(access_column_header)
             header_styling_list.append("")  # could include background color;
         elif column_key_str.lower() in ["timezone"]:
             timezone_column_header = text_presentation.get_timezone_column_header(
@@ -602,7 +610,7 @@ def fill_tt_spec(
             short_days_box = "short-days-box" in column_options[x]
             this_column_gets_ardp = "ardp" in column_options[x]
 
-            # Separate train numbers by "/"
+            # Separate train numbers by "/", and create the tsns list
             tsns = split_trains_spec(column_key_str)
             time_column_header = text_presentation.get_time_column_header(
                 tsns, doing_html=doing_html
@@ -748,19 +756,23 @@ def fill_tt_spec(
                     tt.iloc[y, x] = station_name_str
                 elif column_key_str.lower() in [
                     "services"
-                ]:  # Column for station services codes
+                ]:  # Column for station services codes.  Currently completely vacant.
                     cell_css_list.append("services-cell")
                     services_str = ""
+                    tt.iloc[y, x] = services_str
+                elif column_key_str.lower() in ["access"]:
+                    cell_css_list.append("access-cell")
+                    access_str = ""
                     debug_print(
                         1,
                         station_code,
                         amtrak.station_has_accessible_platform(station_code),
                     )
                     if amtrak.station_has_accessible_platform(station_code):
-                        services_str += icons.get_accessible_icon_html()
+                        access_str += icons.get_accessible_icon_html()
                     elif amtrak.station_has_inaccessible_platform(station_code):
-                        services_str += icons.get_inaccessible_icon_html()
-                    tt.iloc[y, x] = services_str
+                        access_str += icons.get_inaccessible_icon_html()
+                    tt.iloc[y, x] = access_str
                 elif column_key_str in ["timezone"]:  # Column for time zone codes
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y, x] = text_presentation.get_zone_str(

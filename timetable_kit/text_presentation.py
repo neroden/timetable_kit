@@ -22,6 +22,7 @@ from zoneinfo import ZoneInfo  # still for time zones
 from timetable_kit.errors import GTFSError, FutureCodeError
 from timetable_kit.debug import debug_print
 from timetable_kit.icons import get_baggage_icon_html
+from timetable_kit.icons import get_accessible_icon_html
 
 
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
@@ -62,15 +63,15 @@ def get_zonediff(local_zone, base_zone):
 
 # This is exceedingly US-centric, FIXME
 tz_letter_dict = {
-    "America/New_York": "E",
-    "America/Chicago": "C",
-    "America/Denver": "M",
-    "America/Los_Angeles": "P",
+    "America/New_York": "ET",
+    "America/Chicago": "CT",
+    "America/Denver": "MT",
+    "America/Los_Angeles": "PT",
 }
 
 
 def get_zone_str(zone_name, doing_html=False):
-    """Return a one-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
+    """Return a two-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
     letter = tz_letter_dict[zone_name]
     if doing_html:
         return "".join(['<span class="box-tz">', letter, "</span>"])
@@ -851,6 +852,24 @@ def get_services_column_header(doing_html=False):
         return "Services"
 
 
+def get_access_column_header(doing_html=False):
+    """
+    Return the header for a column of accessibility icons.
+
+    Tricky because the column should be very narrow.
+
+    Use the wheelchair icon.
+    Wraps with a special CSS div, so it can be rotated.
+    """
+    if doing_html:
+        accessible_icon_html = get_accessible_icon_html()
+        return "".join(
+            ['<div class="access-header-text">'," ", accessible_icon_html, "</div>"]
+        )
+    else:
+        return "Access"
+
+
 def get_timezone_column_header(doing_html=False):
     """
     Return the header for a column of station time zones.
@@ -859,7 +878,9 @@ def get_timezone_column_header(doing_html=False):
     Wraps with a special CSS div, so it can be rotated.
     """
     if doing_html:
-        return '<div class="timezone-header-text">Time<br>Zone</div>'
+        # return '<div class="timezone-header-text">Time<br>Zone</div>'
+        # Keep it one line, space is at a premium
+        return '<div class="timezone-header-text">TZ</div>'
     else:
         return "Time Zone"
 
