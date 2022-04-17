@@ -5,17 +5,15 @@
 
 {% include "licensing.txt" %}
 */{% endif %}{# external_stylesheet #}
-{% include "page.css" %}
 {{ font_faces }}
 {% include "font_choice.css" %}
 {% include "font_size.css" %}
 {{ icons }}
-{% include "page_header.css" %}
+{% include "page_standard.css" %}
 {% include "logo.css" %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
 {% include "timetable_headers.css" %}
-{% if top_text %}{% include "top_text.css" %}{% endif %}
 {{ header_styling }}{# This has to be produced by the main program due to PANDAS limitations #}
 {% if box_time_characters %}
 {% include "time_boxes_characters.css" %}

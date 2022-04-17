@@ -22,13 +22,14 @@ Standard page layout (as opposed to landscape page layout, etc.)
 <h1>{{heading}}</h1>
 {% if for_rpa %}{% include "logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
-{% if top_text %}{% include "top_text.html" %}{% endif %}
+{% if top_text %}<p class="top-text">{{top_text}}</p>{% endif %}
 <div class="bigbox-layout">
 <div class="bigbox-timetable">
 {{timetable}}
 </div><!-- bigbox-timetable -->
 <div class="bigbox-keys">
 {% include "symbol_key.html" %}
+{% if bottom_text %}<p class="bottom-text">{{bottom_text}}</p>{% endif %}
 {% include "unofficial_amtrak.html" %}
 {% include "credit.html" %}
 </div><!-- bigbox-keys -->
