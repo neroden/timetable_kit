@@ -161,8 +161,6 @@ def finish_html_timetable(
 
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
-    if "landscape" not in aux:
-        aux["landscape"] = ""
 
     if "key_on_right" in aux:
         debug_print(1, "Key on right")

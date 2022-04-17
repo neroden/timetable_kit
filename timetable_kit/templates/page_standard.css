@@ -9,7 +9,7 @@ The @page directives are respected by Weasyprint.
 #}
 @page {
     /* For printing */
-    size: Letter {{landscape}}; /* change from default A4, for US timetables */
+    size: Letter {% if landscape %}landscape{% endif %}; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
 {# Primary heading on the page.  Copy old Amtrak style more or less. #}
