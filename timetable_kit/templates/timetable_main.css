@@ -64,7 +64,12 @@ td.time-cell {
 td.services-cell {
     text-align: center;
 }
-/* Time zone cells... */
+/* Extra padding on the access cell, and align access icon centrally: */
+td.access-cell {
+    padding-left: 2px;
+    text-align: center;
+}
+/* Time zone cells align center */
 td.timezone-cell {
     text-align: center;
 }
@@ -102,6 +107,7 @@ td.updown-cell {
     border-bottom-color: black;
 }
 
+
 /* Text transforms for station text spans: */
 .major-station {
     text-transform: uppercase;
@@ -122,8 +128,12 @@ td.updown-cell {
     transform: rotate(-45deg);
 }
 
+
+{#
+We don't do this since we say "TZ" instead of "Time Zone"
 /* Text transform for timezone header span: */
 .timezone-header-text {
     transform: rotate(-90deg);
     font-weight: normal;
 }
+#}
