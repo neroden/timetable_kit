@@ -75,7 +75,7 @@ if __name__ == "__main__":
         gtfs_filename = amtrak.gtfs_unzipped_local_path
 
     if args.reference_date:
-        reference_date = int(args.reference_date.strip())
+        reference_date = args.reference_date
     else:
         # Use tomorrow as the reference date.
         # After all, you aren't catching a train today, right?

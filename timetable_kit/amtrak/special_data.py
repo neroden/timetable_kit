@@ -21,9 +21,9 @@ global_bad_service_ids = [
 ]  # Cardinal one-day service when it doesn't run on that day
 
 
-def is_bus(train_number):
-    """Is this a bus?"""
-    if int(train_number) >= 3000:
+def is_connecting_service(tsn):
+    """Is this a connecting, non-Amtrak service?"""
+    if int(tsn) >= 3000:
         return True
     return False
 

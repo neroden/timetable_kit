@@ -478,7 +478,7 @@ def fill_tt_spec(
     tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
-    def trip_from_tsn_local(tsn: str) -> str:
+    def trip_from_tsn_local(tsn: str):
         try:
             my_trip_id = tsn_to_trip_id[tsn]
         except KeyError as e:
@@ -487,6 +487,19 @@ def fill_tt_spec(
         raise_error_if_not_one_row(my_trips)
         my_trip = my_trips.iloc[0]
         return my_trip
+
+    # Now, we need to determine whether the tsn is a bus.  This is actually in GTFS.
+    # However, it has to be looked up by trip_id, so this needs to use the local version
+    # of trip_from_tsn_local, *and* should use the local reduced feed, so it has to be
+    # subordinate to this particular run of the timetable generator!
+    # So create another inner function to pull the line from the route table.
+    def route_from_tsn_local(tsn: str):
+        my_trip = trip_from_tsn_local(tsn)
+        my_routes = today_feed.routes[today_feed.routes.route_id == my_trip.route_id]
+        if my_routes.shape[0] == 0:
+            raise GTFSError("Missing route_id for tsn", tsn)
+        my_route = my_routes.iloc[0]
+        return my_route
 
     # Extract a list of column options, if provided in the spec
     # This must be in the second row (row 1) and first column (column 0)
@@ -576,7 +589,8 @@ def fill_tt_spec(
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
         column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
-        tsns = [] # Blank so we can call get_cell_codes on a special column without crashing
+        # Create blank tsns list so we can call get_cell_codes on a special column without crashing
+        tsns = []
 
         if column_key_str.lower() in ["station", "stations"]:
             station_column_header = text_presentation.get_station_column_header(
@@ -613,12 +627,15 @@ def fill_tt_spec(
             # Separate train numbers by "/", and create the tsns list
             tsns = split_trains_spec(column_key_str)
             time_column_header = text_presentation.get_time_column_header(
-                tsns, doing_html=doing_html
+                tsns, route_from_tsn_local, doing_html=doing_html
             )
             header_replacement_list.append(time_column_header)
             if doing_html:
-                # FIXME: use column stylings for the first tsn only
-                time_column_stylings = get_time_column_stylings(tsns[0])
+                # Style the header with the color & stylings for the first tsn.
+                # ...because I don't know how to do multiples! FIXME
+                time_column_stylings = get_time_column_stylings(
+                    tsns[0], route_from_tsn_local, output_type="attributes"
+                )
                 header_styling_list.append(time_column_stylings)
             else:  # plaintext
                 header_styling_list.append("")
@@ -670,7 +687,9 @@ def fill_tt_spec(
                     full_styled_route_names = separator.join(styled_route_names)
                     tt.iloc[y, x] = full_styled_route_names
                     cell_css_list.append(
-                        get_time_column_stylings(tsn, output_type="class")
+                        get_time_column_stylings(
+                            tsn, route_from_tsn_local, output_type="class"
+                        )
                     )
             elif station_code.lower() == "updown":
                 # Special line just to say "Read Up" or "Read Down"
@@ -727,7 +746,9 @@ def fill_tt_spec(
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
-                        get_time_column_stylings(tsns[0], output_type="class")
+                        get_time_column_stylings(
+                            tsns[0], route_from_tsn_local, output_type="class"
+                        )
                     )
             elif not pd.isna(tt_spec.iloc[y, x]) and not cell_codes:
                 # Line led by a station code, but cell already has a value.
@@ -821,14 +842,20 @@ def fill_tt_spec(
                         # Otherwise not, because it's hard to know what color to use.
                         if len(tsns) == 1:
                             cell_css_list.append(
-                                get_time_column_stylings(tsns[0], output_type="class")
+                                get_time_column_stylings(
+                                    tsns[0],
+                                    route_from_tsn_local,
+                                    output_type="class",
+                                )
                             )
                     else:
                         # MAIN ROUTINE FOR PUTTING A TIME IN A CELL
                         # We have a station code, and a specific tsn
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
-                            get_time_column_stylings(tsn, output_type="class")
+                            get_time_column_stylings(
+                                tsn, route_from_tsn_local, output_type="class"
+                            )
                         )
 
                         calendar = None  # if not use_daystring, save time

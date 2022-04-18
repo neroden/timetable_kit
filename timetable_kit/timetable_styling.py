@@ -34,29 +34,41 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_time_column_stylings(trains_spec, output_type="attributes"):
+def get_time_column_stylings(tsn, route_from_tsn, output_type="attributes"):
     """
     Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
 
-    In practice, trains_spec is currently a train number (trip_short_name).
+    tsn: trip_short_name / train number
+    route_from_tsn: route which takes a tsn and gives the row from the GTFS routes table corresponding to the tsn
+    (This is needed because tsn to route mapping is expensive and must be done in the calling function)
 
     This mostly picks a color.
 
-    If type is "attribute", prints the attributes -- used for the header cells.  This is the default.
-    If type is "class", prints a class instead of an attribute -- used for cells.
+    If out_type is "attribute", prints the attributes -- used for the header cells.  This is the default.
+    If out_type is "class", prints a class instead of an attribute -- used for cells.
 
     Note that these two colors may be complementary rather than identical.  (But this is not the case right now.)
     """
     if output_type not in ["class", "attributes"]:
         raise InputError("expected class or attributes")
 
-    train_number = trains_spec  # Because we aren't parsing trains_spec yet -- FIXME
-    if amtrak.special_data.is_sleeper_train(train_number):
-        color_css = "background-color: lavender;"
-        color_css_class = "color-sleeper"  # same
-    elif amtrak.special_data.is_bus(train_number):
-        color_css = "background-color: darkseagreen;"
+    # Note that Amtrak GTFS data only has route_types:
+    # 2 (is a train)
+    # 3 (is a bus)
+    # TODO: look up the color_css from the color_css_class by reading the template?
+    # Currently these have to match up with the colors in templates/
+    route_type = route_from_tsn(tsn).route_type
+    if route_type == 3:
+        # it's a bus!
+        color_css = "background-color: honeydew;"
         color_css_class = "color-bus"
+    elif amtrak.special_data.is_connecting_service(tsn):
+        # it's not a bus, it's a connecting train!
+        color_css = "background-color: blanchedalmond;"
+        color_css_class = "color-connecting-train"
+    elif amtrak.special_data.is_sleeper_train(tsn):
+        color_css = "background-color: lavender;"
+        color_css_class = "color-sleeper"
     else:
         color_css = "background-color: cornsilk;"
         color_css_class = "color-day-train"

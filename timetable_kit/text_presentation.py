@@ -799,34 +799,52 @@ def timepoint_str(
     assert False
 
 
-def get_time_column_header(tsns: list[str], doing_html=False) -> str:
+def get_time_column_header(tsns: list[str], route_to_tsn, doing_html=False) -> str:
     """
     Return the header for a column of times.
 
     tsns: should be a list of trip_short_names aka train numbers (ordered).
+    route_from_tsn: function taking tsn and giving a route row from the GTFS routes table.
     """
     if not tsns:
         raise InputError("No tsns?")
-    if len(tsns) > 1:
-        time_column_prefix = "Train #s"
-    else:
-        time_column_prefix = "Train #"
-    if doing_html:
-        # For HTML, let's get FANCY... May change this later.
-        time_column_header = "".join(
-            [
-                "<small>",
-                time_column_prefix,
-                "</small>",
-                "<br>",
-                "<strong>",
-                " / ".join(tsns),  # Note! Works cleanly for single-element case
-                "</strong>",
-            ]
-        )
-    else:
+    if not doing_html:
         # For plaintext, keep it simple: just the train number
-        time_column_header = " / ".join(tsns)
+        return " / ".join(tsns)
+
+    # For HTML, let's get FANCY... May change this later.
+    # Route types: 2 is a train, 3 is a bus
+    route_types = [int(route_to_tsn(tsn).route_type) for tsn in tsns]
+    if route_types == [2]:
+        time_column_prefix = "Train #"
+    elif route_types == [3]:
+        time_column_prefix = "Bus #"
+    elif set(route_types) == {2}:
+        time_column_prefix = "Train #s"
+    elif set(route_types) == {3}:
+        time_column_prefix = "Bus #s"
+    elif route_types == [3, 2]:
+        time_column_prefix = "Bus/Train #s"
+    elif route_types == [2, 3]:
+        time_column_prefix = "Train/Bus #s"
+    elif set(route_types) == {2, 3}:
+        # This is three or more routes in the same column, yeechburgers
+        time_column_prefix = "Train/Bus #s"
+    else:
+        # Does not occur on Amtrak, but...
+        time_column_prefix = "Trip #s"
+
+    time_column_header = "".join(
+        [
+            "<small>",
+            time_column_prefix,
+            "</small>",
+            "<br>",
+            "<strong>",
+            " / ".join(tsns),  # Note! Works cleanly for single-element case
+            "</strong>",
+        ]
+    )
     return time_column_header
 
 
@@ -864,7 +882,7 @@ def get_access_column_header(doing_html=False):
     if doing_html:
         accessible_icon_html = get_accessible_icon_html()
         return "".join(
-            ['<div class="access-header-text">'," ", accessible_icon_html, "</div>"]
+            ['<div class="access-header-text">', " ", accessible_icon_html, "</div>"]
         )
     else:
         return "Access"
