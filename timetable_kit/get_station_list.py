@@ -94,7 +94,8 @@ if __name__ == "__main__":
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
     print(station_list_df)
-    output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
-    station_list_df.to_csv(output_filename, index=False)
+    # Consider dumping to CSV... but don't right now
+    # output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
+    # station_list_df.to_csv(output_filename, index=False)
     # Note: this will put "stop_id" in top row, which is OK
     sys.exit(0)
