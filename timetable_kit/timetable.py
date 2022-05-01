@@ -1187,6 +1187,13 @@ if __name__ == "__main__":
 
     debug_print(3, "Dumping sys.path for clarity:", sys.path)
 
+    # Make sure user has provided at least one argument when running program
+    # Otherwise, provide command to get help
+    if len(sys.argv) == 1:
+        print("Insufficient number of arguments provided.")
+        print("Use this command for help: timetable.py --help")
+        sys.exit(1)
+
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
 
