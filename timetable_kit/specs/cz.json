@@ -1,0 +1,7 @@
+{
+    "title": "California Zephyr Timetable",
+    "heading": "Amtrak's California Zephyr",
+    "reference_date": "20220417",
+    "output_subdir": "starting_now",
+    "for_rpa": "true"
+}

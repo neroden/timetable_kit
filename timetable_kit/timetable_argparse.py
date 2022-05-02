@@ -22,8 +22,8 @@ from timetable_kit import amtrak
 default_gtfs_filename = amtrak.gtfs_unzipped_local_path
 
 # Default reference date removed.
-# Reference date now overrides the .tt-aux file,
-# so we want to be able to omit it and trust the .tt-aux file.
+# Reference date now overrides the .json file,
+# so we want to be able to omit it and trust the .json file.
 #
 # Use tomorrow as the default reference date.
 # After all, you aren't catching a train today, right?
@@ -55,7 +55,7 @@ def add_date_argument(parser: argparse.ArgumentParser):
         help="""Reference date.
                 GTFS data contains timetables for multiple time periods;
                 this produces the timetable valid as of the reference date.
-                This overrides any reference date set in the .tt-aux file.
+                This overrides any reference date set in the .json file in the tt-spec.
                 Should be in YYYYMMDD format.
              """,
         type=int,
@@ -93,7 +93,7 @@ def add_input_dirname_argument(parser: argparse.ArgumentParser):
         "--input-dir",
         "-i",
         dest="input_dirname",
-        help="""Directory to find input .tt-spec / .tt-aux files in.
+        help="""Directory to find input .csv / .json files (tt-spec files) in.
                 Default is not to prefix a directory (use system default for lookup of files).
                 You can also set it using the TIMETABLE_KIT_INPUT_DIR environment variable.
              """,
@@ -104,7 +104,7 @@ def make_tt_arg_parser():
     """Make argument parser for timetable.py"""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="""Produce printable HTML timetable from a .tt-spec file.""",
+        description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.json files).""",
     )
     add_gtfs_argument(parser)
     add_date_argument(parser)
@@ -117,8 +117,8 @@ def make_tt_arg_parser():
         "-l",
         dest="tt_spec_files",
         help="""Root of name of timetable spec file.
-                If you type "--spec cono", then "cono.tt-spec" and "cono.tt-aux" files should exist.
-                The tt-spec and tt-aux formats remain a work in progress.
+                If you type "--spec cono", then "cono.csv" and "cono.json" files should exist.
+                The tt-spec format remains a work in progress.
                 For more information see the file tt-spec-documentation.rst.
 
                 You may specify several spec files at once to generate multiple timetables.

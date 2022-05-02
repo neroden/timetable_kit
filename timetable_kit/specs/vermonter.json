@@ -2,5 +2,6 @@
     "title": "Vermonter Timetable",
     "heading": "Amtrak's Vermonter",
     "reference_date": "20220601",
+    "output_subdir": "starting_2022_05_23",
     "for_rpa": "true"
 }

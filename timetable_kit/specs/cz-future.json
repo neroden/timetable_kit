@@ -1,6 +1,7 @@
 {
     "title": "California Zephyr Timetable",
     "heading": "Amtrak's California Zephyr",
-    "reference_date": "20220417",
+    "reference_date": "20220602",
+    "output_subdir": "starting_2022_05_23",
     "for_rpa": "true"
 }

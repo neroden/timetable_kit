@@ -90,26 +90,26 @@ special_column_names = {
 }
 
 
-def load_tt_aux(filename):
-    """Load a tt-aux file in JSON format"""
+def load_ttspec_json(filename):
+    """Load the JSON file for the tt-spec"""
     path = Path(filename)
     if path.is_file():
         with open(path, "r") as f:
             auxfile_str = f.read()
             aux = json.loads(auxfile_str)
-            debug_print(1, "tt-aux file loaded")
+            debug_print(1, "tt-spec JSON file loaded")
             return aux
         print("Shouldn't get here, file load failed.")
     else:
         # Make it blank, basically
-        debug_print(1, "No tt-aux file.")
+        debug_print(1, "No tt-spec JSON file.")
         return {}
 
 
-def load_tt_spec(filename):
-    """Load a tt-spec from a CSV file"""
-    tt_spec = pd.read_csv(filename, index_col=False, header=None, dtype=str)
-    return tt_spec
+def load_ttspec_csv(filename):
+    """Load a tt-spec CSV file"""
+    ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
+    return ttspec_csv
 
 
 def augment_tt_spec(raw_tt_spec, *, feed, date):
@@ -949,27 +949,27 @@ def produce_timetable(
     master_feed: initialized master GTFS feed
     author: author name
     command_line_reference_date: reference date passed at command line, might be None
-    input_dirname: find the spec_name.tt-spec and spec_name.tt-aux files here
-    spec_file: root of filename for the tt-spec and tt-aux files specifying the timetable
+    input_dirname: find the spec_name.csv and spec_name.json files here
+    spec_file: root of filename for the .csv and .json files specifying the timetable
     output_dirname: Put the output timetables here
     """
-    # Accept the spec name with or without .tt-spec, for convenience
-    spec_filename_base = spec_file.removesuffix(".tt-spec").removesuffix(".tt-aux")
-    tt_spec_filename = spec_filename_base + ".tt-spec"
-    tt_aux_filename = spec_filename_base + ".tt-aux"
+    # Accept the spec name with or without a suffix, for convenience
+    spec_filename_base = spec_file.removesuffix(".csv").removesuffix(".json")
+    ttspec_csv_filename = spec_filename_base + ".csv"
+    ttspec_json_filename = spec_filename_base + ".json"
 
     if input_dirname:
         input_dir = Path(input_dirname)
-        tt_spec_path = input_dir / tt_spec_filename
-        tt_aux_path = input_dir / tt_aux_filename
+        ttspec_csv_path = input_dir / ttspec_csv_filename
+        ttspec_json_path = input_dir / ttspec_json_filename
     else:
         # Might be None, if it wasn't passed at the command line
-        tt_spec_path = tt_spec_filename
-        tt_aux_path = tt_aux_filename
-    debug_print(1, "tt_spec_path", tt_spec_path, "/ tt_aux_path", tt_aux_path)
+        ttspec_csv_path = ttspec_csv_filename
+        ttspec_json_path = ttspec_json_filename
+    debug_print(1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path)
 
     # Load the .tt-aux file first, as it determines high-level stuff
-    aux = load_tt_aux(tt_aux_path)
+    aux = load_ttspec_json(ttspec_json_path)
 
     if output_dirname:
         output_dir = Path(output_dirname)
@@ -1007,7 +1007,7 @@ def produce_timetable(
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     # Now we're ready to load the .tt-spec file, finally
-    tt_spec_raw = load_tt_spec(tt_spec_path)
+    tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
     tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
     debug_print(1, "tt-spec", spec_filename_base, "loaded and augmented")
 
@@ -1060,6 +1060,8 @@ def produce_timetable(
     # quasi-legit for screen readers by using correct Unicode code points.
 
     if do_csv:
+        # Note that there is a real danger of overwriting the source file.
+        # Avoid this by adding an extra suffix to the timetable name.
         (timetable, styler_table, header_styling) = fill_tt_spec(
             tt_spec,
             today_feed=reduced_feed,
@@ -1067,9 +1069,9 @@ def produce_timetable(
             is_ardp_station="dwell",
         )
         # NOTE, need to add the header
-        path_for_csv = output_dir / Path(output_filename_base + ".csv")
+        path_for_csv = output_dir / Path(output_filename_base + "-out.csv")
         timetable.to_csv(path_for_csv, index=False, header=True)
-        debug_print(1, "CSV done")
+        debug_print(1, "CSV output done")
 
     if do_html or do_pdf:
         # Main timetable, same for HTML and PDF

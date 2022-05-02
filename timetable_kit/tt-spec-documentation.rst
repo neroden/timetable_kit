@@ -1,9 +1,9 @@
 =======
 TT-SPEC
 =======
-The ".tt-spec" file format is a template used to generate the timetable
-This document describes the "tt-spec" file format as currently implemented,
-and the associated "tt-aux" file format.
+The "tt-spec" file format is a template used to generate the timetable
+This document describes format as currently implemented.
+It consists of a CSV file (foo.csv) and a JSON file (foo.json).
 
 The tt-spec format remains a work in progress and may change at any time.
 
@@ -29,9 +29,11 @@ Amtrak station codes are in the "stop_id" field of GTFS static data.
 I will use "trip_short_name" and "train number" interchangeably.
 I will used "station code" and "stop_id" interchangeably.
 
-FORMAT
-------
-The tt-spec format is a CSV file.  It can (and should) be edited in a spreadsheet program.
+CSV FILE FORMAT
+---------------
+The main part of the tt-spec format is a CSV file.  It can (and should) be edited in a spreadsheet program.
+For convenience, it should have a ".csv" suffix.
+
 There are two varieties: a complete spec and a shorthand spect.
 
 The top left cell is a "key" cell: it is blank for a complete spec.
@@ -169,10 +171,10 @@ There may be additional special codes for these internal cells.
 So don't count on the free-writing interface 100%.
 For now, all the special codes start with a train number.
 
-TT-AUX FILE
+JSON FILE
 -----------
-Associated with the .tt-spec file is a .tt-aux file with the same primary name.
-(so, for cz.tt-spec, use cz.tt-aux)
+Associated with the .csv file is a .json file with the same primary name.
+(so, for cz.csv, use cz.json)
 
 This is a JSON file with a list of key-value pairs.  So far the defined keys are:
 ::
@@ -203,7 +205,7 @@ output_filename is the base filename of the output files (so, "special.html", "s
 If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*
 output file name from the file name for the spec file.
 
-In addition, every key in the tt-aux file is passed through to the Jinja2 templates, allowing for flexibility.
+In addition, every key in the .json file is passed through to the Jinja2 templates, allowing for flexibility.
 
 
 ADDITIONAL TOOLS
