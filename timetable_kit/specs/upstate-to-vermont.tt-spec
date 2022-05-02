@@ -1,0 +1,38 @@
+,280,284,448/291,448/56,access,stations,283/290,449/55
+column-options,ardp,,ardp,ardp,,,reverse,ardp reverse
+route-name,,,, ,,,,
+updown,,,, ,,,,
+NFL,280 first,284 first, , ,,,283 last, 
+BFX,,,"<div style=""text-align: center; font-weight: bold;"">from Chicago</div>", ,,,,"<div style=""text-align: center; font-weight: bold;"">to Chicago</div>"
+BUF,,,448 first, ,,,,448 last
+ROC,,,, ,,,,
+SYR,,,, ,,,,
+ROM,,,, ,,,,
+UCA,,,, ,,,,
+AMS,,,, ,,,,
+SDY,,,, ,,,,
+ALB,280 last,284 last,448 last,448 first,,,283 first,
+PIT, , ,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",,,,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>",
+SPG, , ,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",448 last,,,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>",449 first
+,"<div style=""text-align: right; font-size: 120%; font-weight: bold;"">&#x2937;</div>","<div style=""text-align: right; font-size: 120%; font-weight: bold;"">&#x2937;</div>","<div style=""text-align: center; font-weight: bold;"">#291</div>","<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",,,"<div style=""text-align: center; font-weight: bold;"">#290</div>","<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>"
+ALB, , ,291 first,Overnight stay,,,290 last, 
+SDY, , ,291 first,in Springfield,,,290 last, 
+SAR, , ,,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",,,, 
+FED, , ,, ,,,, 
+CNV, , ,, ,,,, 
+RUD, , ,291 first,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",,,290 first,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>"
+, , , ,<b>#56</b> Mo-Fr<br><b>#54</b> SaSu,,,,<b>#55</b> Mo-Fr<br><b>#57</b> SaSu
+SPG, , , ,56 first,,, ,55 last
+HLK, , ,,,,, ,
+NHT, , ,,,,, ,
+GFD, , ,,,,, ,
+BRA, , ,,,,, ,
+BLF, , ,,,,, ,
+CLA, , ,,,,, ,
+WNM, , ,,,,, ,
+WRJ, , ,,,,, ,
+RPH, , ,,,,, ,
+MPR, , ,,,,, ,
+WAB, , ,,,,, ,
+ESX, , ,,,,, ,
+SAB, , ,,56 last,,, ,55 first
