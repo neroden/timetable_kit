@@ -1,0 +1,28 @@
+,393, 59, access, station, 58, 390
+column-options,ardp,days,,,reverse ardp days,reverse
+route-name
+days,CHI,,,,,CHI
+updown
+CHI,393 first,59 first,,,58 last,390 last
+HMW
+KKI
+GLM
+RTL
+CHM
+MAT
+EFG
+CEN
+DQN
+CDL,393 last,,,,,390 first
+FTN
+NBN
+MEM
+MKS
+GWD
+YAZ
+JAN
+HAZ
+BRH
+MCB
+HMD
+NOL,,59 last,,,58 first,
