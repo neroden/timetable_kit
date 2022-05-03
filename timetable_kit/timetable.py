@@ -1204,15 +1204,20 @@ if __name__ == "__main__":
 
     debug_print(3, "Dumping sys.path for clarity:", sys.path)
 
-    # Make sure user has provided at least one argument when running program
-    # Otherwise, provide command to get help
-    if len(sys.argv) == 1:
-        print("Insufficient number of arguments provided.")
-        print("Use this command for help: timetable.py --help")
-        sys.exit(1)
-
     my_arg_parser = make_tt_arg_parser()
     args = my_arg_parser.parse_args()
+
+    # Make sure user has provided at least one argument when running program
+    # Otherwise, provide help
+    if len(sys.argv) <= 1:
+        my_arg_parser.print_help()
+        sys.exit(1)
+
+    spec_file_list = args.tt_spec_files
+    if spec_file_list is None:
+        print("You need to specify at least one spec file.  Use the --help option for help.")
+        my_arg_parser.print_usage()
+        sys.exit(1)
 
     set_debug_level(args.debug)
 
@@ -1241,8 +1246,6 @@ if __name__ == "__main__":
         sys.exit(1)
 
     command_line_reference_date = args.reference_date  # Does not default, may be None
-
-    spec_file_list = args.tt_spec_files
 
     for spec_file in spec_file_list:
         debug_print(1, "Producing timetable for", spec_file)
