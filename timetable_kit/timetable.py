@@ -932,6 +932,7 @@ def produce_timetable(
     do_csv,
     do_html,
     do_pdf,
+    do_jpg,
     master_feed,
     author,
     command_line_reference_date,
@@ -966,7 +967,9 @@ def produce_timetable(
         # Might be None, if it wasn't passed at the command line
         ttspec_csv_path = ttspec_csv_filename
         ttspec_json_path = ttspec_json_filename
-    debug_print(1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path)
+    debug_print(
+        1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
+    )
 
     # Load the .tt-aux file first, as it determines high-level stuff
     aux = load_ttspec_json(ttspec_json_path)
@@ -1073,7 +1076,12 @@ def produce_timetable(
         timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV output done")
 
-    if do_html or do_pdf:
+    if do_jpg:
+        do_pdf = True
+    if do_pdf:
+        do_html = True
+
+    if do_html:
         # Main timetable, same for HTML and PDF
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
             tt_spec,
@@ -1086,7 +1094,6 @@ def produce_timetable(
         timetable_styled_html = style_timetable_for_html(timetable, styler_table)
         debug_print(1, "HTML styled")
 
-    if do_html or do_pdf:
         # Produce the final complete page...
         timetable_finished_html = finish_html_timetable(
             timetable_styled_html,
@@ -1109,6 +1116,14 @@ def produce_timetable(
         path_for_weasy = output_dir / Path(output_filename_base + ".pdf")
         html_for_weasy.write_pdf(path_for_weasy)
         debug_print(1, "Weasy done")
+
+    if do_jpg:
+        # Convert PDF to JPG
+        path_for_jpg = output_dir / Path(output_filename_base + ".jpg")
+        vips_command = "".join(
+            ["vips copy ", str(path_for_weasy), "[dpi=300] ", str(path_for_jpg)]
+        )
+        os.system(vips_command)
 
 
 # This is a module-level global
@@ -1229,18 +1244,13 @@ if __name__ == "__main__":
 
     spec_file_list = args.tt_spec_files
 
-    # Quick hack to speed up testing cycle:
-    # implement this properly later TODO
-    do_csv = False
-    do_html = True
-    do_pdf = True
-
     for spec_file in spec_file_list:
         debug_print(1, "Producing timetable for", spec_file)
         produce_timetable(
-            do_csv=do_csv,
-            do_html=do_html,
-            do_pdf=do_pdf,
+            do_csv=args.do_csv,
+            do_html=args.do_html,
+            do_pdf=args.do_pdf,
+            do_jpg=args.do_jpg,
             master_feed=master_feed,
             author=author,
             command_line_reference_date=command_line_reference_date,

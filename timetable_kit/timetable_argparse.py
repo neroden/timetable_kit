@@ -135,6 +135,32 @@ def make_tt_arg_parser():
                 or the TIMETABLE_KIT_AUTHOR environment variable (which takes priority).
              """,
     )
+    parser.add_argument(
+        "--csv",
+        dest="do_csv",
+        help="""Produce a CSV output file (default is not to).""",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--html",
+        dest="do_html",
+        help="""Produce HTML output file. (Default is not to produce HTML unless needed for PDF; HTML is needed to produce PDF.)""",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--no-pdf",
+        dest="do_pdf",
+        help="""Do not produce PDF output file unless needed for JPG.  (Default is to produce PDF.  Note PDF is needed to produce JPG.)""",
+        action="store_false",
+    )
+    parser.add_argument(
+        "--jpeg",
+        "--jpg",
+        "-j",
+        dest="do_jpg",
+        help="""Produce a JPG output file (default is not to).""",
+        action="store_true",
+    )
     return parser
 
 
