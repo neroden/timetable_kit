@@ -15,7 +15,7 @@ Weasyprint also can't handle variable-weight fonts.  Oh Well.
 
 We can convert the PDF to a JPEG as follows (and it is readable!):
 pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
-Another (untested, likely faster) option is vips:
+A tested and MUCH faster option is VIPS (this is implemented in the current program):
 vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
 
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data

@@ -158,7 +158,7 @@ def make_tt_arg_parser():
         "--jpg",
         "-j",
         dest="do_jpg",
-        help="""Produce a JPG output file (default is not to).""",
+        help="""Produce a JPG output file (default is not to).  Requires that VIPS be installed.  Might only work on Linux.""",
         action="store_true",
     )
     return parser
