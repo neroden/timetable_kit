@@ -1,0 +1,33 @@
+,48 / 448,access,station,timezone,49 / 449
+column-options,ardp days,,,,ardp reverse days
+updown,,,,,
+CHI,48 first,,,,49 last
+SOB,,,,,
+EKH,,,,,
+WTI,,,,,
+BYN,,,,,
+TOL,,,,,
+SKY,,,,,
+ELY,,,,,
+CLE,,,,,
+ERI,,,,,
+BUF,,,,,
+ROC,,,,,
+SYR,,,,,
+UCA,,,,,
+SDY,,,,,
+ALB,48 last,,,,49 first
+,"<div style=""text-align: center""><hr>Train <b>#48</b> to New York City</div>",,,,"<div style=""text-align: center""><hr>Train <b>#49</b> from New York City</div>"
+ALB,48 first,,,,49 last
+RHI,,,,,
+POU,,,,,
+CRT,,,,,
+NYP,48 last,,,,49 first
+,"<div style=""text-align: center""><hr>Train <b>#448</b> to Boston</div>",,,,"<div style=""text-align: center""><hr>Train <b>#449</b> from Boston</div>"
+ALB,448 first,,,,449 last
+PIT,,,,,
+SPG,,,,,
+WOR,,,,,
+FRA,,,,,
+BBY,,,,,
+BOS,448 last,,,,449 first
