@@ -1,0 +1,20 @@
+,stations,access,232,250,234,260,236,280,238,284,256,290,48,244,64
+column-options,,,,,,,,ardp,,,,,ardp,,
+route-name,,,,,,,,,,,,,,,
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+NFL,,,,,,,,280 first,,284 first,,,,244 first,64 first
+BFX,,,,,,,,,,,,,"<span>From<br>Chicago, IL</span>",,
+BUF,,,,,,,,,,,,,,,
+ROC,,,,,,,,,,,,,,,
+SYR,,,,,,,,,,,,,,,
+ROM,,,,,,,,,,,,,,,
+UCA,,,,,,,,,,,,,,,
+AMS,,,,,,,,,,,,"<span>From<br>Rutland, VT</span>",,,
+SDY,,,,,,,,,,,,,,,
+ALB,,,232 first,250 first,234 first,260 first,236 first,,238 first,,256 first,,,,
+HUD,,,,,,,,,,,,,,,
+RHI,,,,,,,,,,,,,,,
+POU,,,,,,,,,,,,,,,
+CRT,,,,,,,,,,,,,,,
+YNY,,,,,,,,,,,,,,,
+NYP,,,232 last,250 last,234 last,260 last,236 last,280 last,238 last,284 last,256 last,290 last,48 last,244 last,64 last
