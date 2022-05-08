@@ -442,9 +442,11 @@ def fill_tt_spec(
     tt_spec,
     *,
     today_feed,
+    reference_date,
     doing_html=False,
     box_time_characters=False,
     doing_multiline_text=True,
+    train_numbers_side_by_side=False,
     is_major_station="standard",
     is_ardp_station="dwell",
     dwell_secs_cutoff=300,
@@ -456,7 +458,7 @@ def fill_tt_spec(
     today_feed: GTFS feed to work with.  Mandatory.
         This should be filtered to a single representative date.  This is not checked.
         This *may* be filtered to relevant trains only.  It must contain all relevant trains.
-    date: Reference date to get timetable for.  Default passed at command line. FIXME
+    reference_date: Reference date to get timetable for.  Also used for Arizona timezone conversion.
 
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
     box_time_characters: Box every character in the time in an HTML box to make them line up.
@@ -465,6 +467,8 @@ def fill_tt_spec(
     doing_multiline_text: Produce multiline text in cells.  Ignored if doing_html.
         Default is True.
         If False, stick with single-line text (and never print arrival times FIXME)
+    train_numbers_side_by_side: For column headers for a column with multiple trains, put train numbers side by side.
+        Default is to stack them top to bottom.
     is_major_station: pass a function which says whether a station should be "major";
         "False" means false for all
         "standard" means a standard list of Amtrak major stations
@@ -582,10 +586,12 @@ def fill_tt_spec(
     # borders_initial_css="border-top-heavy"
     # Have to add "initial" and "final" with heavy borders
 
-    # Pick out the agency timezone (which is based on the train number, the route, etc.)
-    # TODO FIXME, brutal hack, assume it's Eastern since Amtrak is eastern and one
-    # dataset is not allowed by GTFS to have multiple agency timezones!
-    agency_tz = "America/New_York"
+    # Pick out the agency timezone.  Although theoretically each agency has its own timezone,
+    # The dataset is not allowed by GTFS to have multiple agency timezones,
+    # so the feed is sufficient to specity the agency timezone
+    any_agency_row = today_feed.agency.iloc[0]
+    agency_tz = any_agency_row.agency_timezone
+    debug_print(1, "Agency time zone", agency_tz)
 
     # Now for the main routine, which is a giant double loop, and therefore quite slow.
     [row_count, column_count] = tt_spec.shape
@@ -632,7 +638,10 @@ def fill_tt_spec(
             # Separate train numbers by "/", and create the tsns list
             tsns = split_trains_spec(column_key_str)
             time_column_header = text_presentation.get_time_column_header(
-                tsns, route_from_tsn_local, doing_html=doing_html
+                tsns,
+                route_from_tsn_local,
+                doing_html=doing_html,
+                train_numbers_side_by_side=train_numbers_side_by_side,
             )
             header_replacement_list.append(time_column_header)
             if doing_html:
@@ -737,7 +746,7 @@ def fill_tt_spec(
                             today_feed.stops.stop_id == reference_stop_id
                         ]
                         stop_tz = stop_df.iloc[0].stop_timezone
-                        zonediff = text_presentation.get_zonediff(stop_tz, agency_tz)
+                        zonediff = text_presentation.get_zonediff(stop_tz, agency_tz, reference_date)
                         # Get the day change for the reference stop (format is explained in text_presentation)
                         departure = text_presentation.explode_timestr(
                             timepoint.departure_time, zonediff
@@ -795,7 +804,8 @@ def fill_tt_spec(
                     cell_css_list.append("access-cell")
                     access_str = ""
                     debug_print(
-                        1,
+                        3,
+                        "Accessibility:",
                         station_code,
                         amtrak.station_has_accessible_platform(station_code),
                     )
@@ -899,6 +909,7 @@ def fill_tt_spec(
                             timepoint,
                             stop_tz=stop_tz,
                             agency_tz=agency_tz,
+                            reference_date=reference_date,
                             doing_html=doing_html,
                             box_time_characters=box_time_characters,
                             reverse=reverse,
@@ -1006,15 +1017,20 @@ def produce_timetable(
     else:
         for_rpa = False
 
+    if "train_numbers_side_by_side" in aux:
+        train_numbers_side_by_side = aux["train_numbers_side_by_side"]
+    else:
+        train_numbers_side_by_side = False
+
     # Copy the icons and fonts to the output dir.
     # This is memoized so it won't duplicate work if you do multiple tables.
     copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
     if command_line_reference_date:
-        reference_date = int(command_line_reference_date)
+        reference_date = str(command_line_reference_date)
     elif "reference_date" in aux:
         # We're currently converting GTFS dates to ints; FIXME
-        reference_date = int(aux["reference_date"])
+        reference_date = str(aux["reference_date"])
     else:
         raise InputError("No reference date in .tt-aux or at command line!")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
@@ -1078,6 +1094,7 @@ def produce_timetable(
         (timetable, styler_table, header_styling) = fill_tt_spec(
             tt_spec,
             today_feed=reduced_feed,
+            reference_date=reference_date,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
         )
@@ -1096,10 +1113,12 @@ def produce_timetable(
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
             tt_spec,
             today_feed=reduced_feed,
+            reference_date=reference_date,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
             doing_html=True,
             box_time_characters=False,
+            train_numbers_side_by_side=train_numbers_side_by_side,
         )
         timetable_styled_html = style_timetable_for_html(timetable, styler_table)
         debug_print(1, "HTML styled")
@@ -1225,7 +1244,9 @@ if __name__ == "__main__":
 
     spec_file_list = args.tt_spec_files
     if spec_file_list is None:
-        print("You need to specify at least one spec file.  Use the --help option for help.")
+        print(
+            "You need to specify at least one spec file.  Use the --help option for help."
+        )
         my_arg_parser.print_usage()
         sys.exit(1)
 

@@ -189,9 +189,16 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "output_subdir": "after_20220528"
     "output_filename": "special",
     "reference_date": "20220528",
-    "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains."
-    "bottom_text": "This will be printed less prominently underneath the symbol key.  Useful for noting seasonal stations, ticketing restrictions (no Homewood to Chicago tickets except for connecting passengers), or other oddities."
-    "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)"
+    "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains.",
+    "bottom_text": "This will be printed less prominently underneath the symbol key.  Useful for noting seasonal stations, ticketing restrictions (no Homewood to Chicago tickets except for connecting passengers), or other oddities.",
+    "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)",
+    "key_baggage": "If present, include the key for checked baggage",
+    "key_d": "If present, include the key for 'discharge passengers only' (D) ",
+    "key_r": "If present, include the key for 'receive passengers only' (R) ",
+    "key_l": "If present, include the key for 'may leave before time shown' (L) ",
+    "key_f": "If present, include the key for flag stops",
+    "key_tz": "If present, include the key for time zones",
+    "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains."
  }
 
 reference_date is critically important and is required unless passed at the command line.

@@ -39,17 +39,23 @@ def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     return iso_str
 
 
-def get_zonediff(local_zone, base_zone):
+def get_zonediff(local_zone, base_zone, reference_date):
     """
     Get the hour difference which must be applied to a time in base_zone to get a time in local_zone
 
     While I hate to reimplement time calculations, GTFS time data is really wacky.
     It may be easiest to hard code this, but this is the "clean" implementation...
+
+    The messiest part is Arizona.  Because of Arizona, which does not observe DST,
+    we have to use the right base date, which should be the reference date.
     """
     base = ZoneInfo(base_zone)
     local = ZoneInfo(local_zone)
 
-    dt = datetime.today()  # This is utterly fucking arbitrary
+    # GTFS dates are in YYYYMMDD format, as a string.
+    # This can be decrypted in python with the "%Y%m%d" format string.
+    dt = datetime.strptime(reference_date, "%Y%m%d")
+
     diff_timedelta = local.utcoffset(dt) - base.utcoffset(dt)
     one_hour = timedelta(hours=1)
     no_time = timedelta(hours=0)
@@ -66,6 +72,7 @@ tz_letter_dict = {
     "America/New_York": "ET",
     "America/Chicago": "CT",
     "America/Denver": "MT",
+    "America/Phoenix": "MST",
     "America/Los_Angeles": "PT",
 }
 
@@ -450,11 +457,11 @@ def timepoint_str(
     timepoint,
     stop_tz,
     agency_tz,
+    reference_date,
     doing_html=False,
     box_time_characters=False,
     reverse=False,
     two_row=False,
-    second_timepoint=None,
     use_ar_dp_str=False,
     bold_pm=True,
     use_24=False,
@@ -485,10 +492,9 @@ def timepoint_str(
     -- timepoint: a single row from stop_times.
     -- stop_tz: timezone for the stop
     -- agency_tz: timezone for the agency
+    -- reference_date: reference date for time zone conversion (strictly speaking, needed only for Arizona)
     Options are many:
     -- two_row: This timepoint gets both arrival and departure rows (default is just one row)
-    -- second_timepoint: Used for a very tricky thing with connecting trains to show them in the
-        same column at the same station; normally None, specified at that particular station
     -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
     -- reverse: This piece of the timetable is running upward (departure time above arrival time)
     -- doing_html: output HTML (default is plaintext)
@@ -509,9 +515,6 @@ def timepoint_str(
         Ignored if use_baggage_str is False.
     """
 
-    if second_timepoint:
-        raise FutureCodeError("Second_timepoint is not implemented.")
-
     if doing_html:
         linebreak = "<br>"
     else:
@@ -526,7 +529,7 @@ def timepoint_str(
     else:
         time_str = time_short_str_12
 
-    zonediff = get_zonediff(stop_tz, agency_tz)
+    zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time, zonediff)
@@ -754,40 +757,6 @@ def timepoint_str(
                 ]
             )
 
-        if discharge_only and (not reverse) and second_timepoint:
-            # Fill the second line from a different train service.
-            # Shamefully untested.  FIXME
-            departure_line_str = timepoint_str(
-                second_timepoint,
-                two_row=False,
-                second_timepoint=None,
-                use_ar_dp_str=use_ar_dp_str,
-                doing_html=doing_html,
-                bold_pm=bold_pm,
-                use_24=use_24,
-                use_daystring=use_daystring,
-                calendar=None,  # would need to be calendar for second timepoint; FIXME
-                is_first_stop=True,  # Suppress "R"; effectively first stop of connecting train
-                is_last_stop=False,
-            )
-
-        if receive_only and (reverse) and second_timepoint:
-            # Fill the second line from a different train service.
-            # Shamefully untested.  FIXME
-            arrival_line_str = timepoint_str(
-                second_timepoint,
-                two_row=False,
-                second_timepoint=None,
-                use_ar_dp_str=use_ar_dp_str,
-                doing_html=doing_html,
-                bold_pm=bold_pm,
-                use_24=use_24,
-                use_daystring=use_daystring,
-                calendar=None,  # would need to be calendar for second timepoint; FIXME
-                is_first_stop=True,
-                is_last_stop=True,  # Suppress "D"; effectively last stop of connecting-from train
-            )
-
         # Patch the two rows together.
         if not reverse:
             complete_line_str = linebreak.join([arrival_line_str, departure_line_str])
@@ -799,12 +768,34 @@ def timepoint_str(
     assert False
 
 
-def get_time_column_header(tsns: list[str], route_to_tsn, doing_html=False) -> str:
+# Used for get_time_column_header
+# This is the *complete* list of valid GTFS codes
+# Amtrak only uses 2 and 3, but why not?
+route_number_prefix_map = {
+    1: "Tram #",
+    2: "Train #",
+    3: "Bus #",
+    4: "Ferry #",
+    5: "Cable Car #",
+    6: "Gondola #",
+    7: "Funicular #",
+    11: "Trolleybus #",
+    12: "Monorail Train #",
+}
+
+
+def get_time_column_header(
+    tsns: list[str],
+    route_to_tsn,
+    doing_html=False,
+    train_numbers_side_by_side=False,
+) -> str:
     """
     Return the header for a column of times.
 
     tsns: should be a list of trip_short_names aka train numbers (ordered).
     route_from_tsn: function taking tsn and giving a route row from the GTFS routes table.
+    train_numbers_side_by_side: List train numbers with a slash instead of on top of each other.
     """
     if not tsns:
         raise InputError("No tsns?")
@@ -812,39 +803,64 @@ def get_time_column_header(tsns: list[str], route_to_tsn, doing_html=False) -> s
         # For plaintext, keep it simple: just the train number
         return " / ".join(tsns)
 
-    # For HTML, let's get FANCY... May change this later.
-    # Route types: 2 is a train, 3 is a bus
-    route_types = [int(route_to_tsn(tsn).route_type) for tsn in tsns]
-    if route_types == [2]:
-        time_column_prefix = "Train #"
-    elif route_types == [3]:
-        time_column_prefix = "Bus #"
-    elif set(route_types) == {2}:
-        time_column_prefix = "Train #s"
-    elif set(route_types) == {3}:
-        time_column_prefix = "Bus #s"
-    elif route_types == [3, 2]:
-        time_column_prefix = "Bus/Train #s"
-    elif route_types == [2, 3]:
-        time_column_prefix = "Train/Bus #s"
-    elif set(route_types) == {2, 3}:
-        # This is three or more routes in the same column, yeechburgers
-        time_column_prefix = "Train/Bus #s"
-    else:
-        # Does not occur on Amtrak, but...
-        time_column_prefix = "Trip #s"
+    if train_numbers_side_by_side:
+        # Old algorithm.  For Empire Builder, Lake Shore Limited.
 
-    time_column_header = "".join(
-        [
-            "<small>",
-            time_column_prefix,
-            "</small>",
-            "<br>",
-            "<strong>",
-            " / ".join(tsns),  # Note! Works cleanly for single-element case
-            "</strong>",
-        ]
-    )
+        # For HTML, let's get FANCY... May change this later.
+        # Route types: 2 is a train, 3 is a bus
+        route_types = [int(route_to_tsn(tsn).route_type) for tsn in tsns]
+        if route_types == [2]:
+            time_column_prefix = "Train #"
+        elif route_types == [3]:
+            time_column_prefix = "Bus #"
+        elif set(route_types) == {2}:
+            time_column_prefix = "Train #s"
+        elif set(route_types) == {3}:
+            time_column_prefix = "Bus #s"
+        elif route_types == [3, 2]:
+            time_column_prefix = "Bus/Train #s"
+        elif route_types == [2, 3]:
+            time_column_prefix = "Train/Bus #s"
+        elif set(route_types) == {2, 3}:
+            # This is three or more routes in the same column, yeechburgers
+            time_column_prefix = "Train/Bus #s"
+        else:
+            # Does not occur on Amtrak, but...
+            time_column_prefix = "Trip #s"
+
+        time_column_header = "".join(
+            [
+                "<small>",
+                time_column_prefix,
+                "</small>",
+                "<br>",
+                "<strong>",
+                " / ".join(tsns),  # Note! Works cleanly for single-element case
+                "</strong>",
+            ]
+        )
+        return time_column_header
+
+    # New algorithm.
+    # Numbers are stacked.
+    # Putting slashes between the train and bus number has proven to make
+    # overly-wide columns.  Aaargh!
+
+    prefixed_route_numbers = [
+        "".join(
+            [
+                "<small>",
+                route_number_prefix_map[int(route_to_tsn(tsn).route_type)],
+                "</small>",
+                "<br>",
+                "<strong>",
+                tsn,
+                "</strong>",
+            ]
+        )
+        for tsn in tsns
+    ]
+    time_column_header = "<hr>".join(prefixed_route_numbers)
     return time_column_header
 
 
