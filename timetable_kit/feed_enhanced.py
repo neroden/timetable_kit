@@ -33,7 +33,7 @@ def filter_by_dates(self, first_date, last_date):
     Used for nearly all functions to get timetables effective for a single date
     """
     # N.B. Python's default string lexical compare is fine for GTFS date strings
-    # But note I'm currently using integer compare instead
+    # And they MUST be strings
     new_feed = self.copy()
     # Calendar must stop on or after the first date of the period...
     filtered_calendar = self.calendar[self.calendar.end_date >= first_date]

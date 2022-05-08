@@ -36,8 +36,8 @@ def type_corrected_calendar(calendar):
             "friday": "int32",
             "saturday": "int32",
             "sunday": "int32",
-            "start_date": "int32",
-            "end_date": "int32",
+            "start_date": "str",
+            "end_date": "str",
         }
     )
     # new_calendar_2 = new_calendar.sort_values(by=['service_id'])
@@ -56,8 +56,8 @@ def type_uncorrected_calendar(calendar):
             "friday": "int32",
             "saturday": "int32",
             "sunday": "int32",
-            "start_date": "int32",
-            "end_date": "int32",
+            "start_date": "str",
+            "end_date": "str",
         }
     )
     return new_calendar
