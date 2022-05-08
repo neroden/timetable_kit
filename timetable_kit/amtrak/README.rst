@@ -13,6 +13,11 @@ Right now the timetable_kit package is really only designed to make
 Amtrak timetables, but the hope is that the rest of the package can 
 be made indepenent of Amtrak, with the Amtrak-specific stuff here.
 
+Amtrak's GTFS file download location is currently hard-coded in the get_gtfs.py file.
+If it changes, the new location will probably be published at Transitland (http://www.transit.land/)
+and at OpenMobilityData ( https://github.com/MobilityData/mobility-database-catalogs , 
+with the actual download location being in the CSV file -- see "download the CSV").
+
 This has several scripts:
 
 * get_gtfs.py -- download Amtrak's GTFS
