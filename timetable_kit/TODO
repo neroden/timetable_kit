@@ -1,11 +1,9 @@
-Needed for timetable release:
-0 -- Fix the duplicate TSN problem on the Empire Builder!!!
+Recently discovered issues:
+1 -- Find a way to sanitize the GTFS to remove totally-duplicated trips
+2 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
-2 -- Test column with two trains with different route names (connecting train)
 
 Fine for after release of timetables:
-0 -- make timetable.py produce "--help" if called with no spec files
-
 1 -- improve icon situation
 
 3 -- make silent links that don't turn blue and underline themselves.
