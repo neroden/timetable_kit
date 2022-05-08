@@ -58,7 +58,7 @@ def add_date_argument(parser: argparse.ArgumentParser):
                 This overrides any reference date set in the .json file in the tt-spec.
                 Should be in YYYYMMDD format.
              """,
-        type=int,
+        type=str,
     )
 
 
