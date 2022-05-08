@@ -746,7 +746,9 @@ def fill_tt_spec(
                             today_feed.stops.stop_id == reference_stop_id
                         ]
                         stop_tz = stop_df.iloc[0].stop_timezone
-                        zonediff = text_presentation.get_zonediff(stop_tz, agency_tz, reference_date)
+                        zonediff = text_presentation.get_zonediff(
+                            stop_tz, agency_tz, reference_date
+                        )
                         # Get the day change for the reference stop (format is explained in text_presentation)
                         departure = text_presentation.explode_timestr(
                             timepoint.departure_time, zonediff
