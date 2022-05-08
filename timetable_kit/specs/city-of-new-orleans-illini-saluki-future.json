@@ -3,5 +3,9 @@
     "heading": "Amtrak's City of New Orleans, Illini, Saluki",
     "reference_date": "20220530",
     "output_subdir": "starting_2022_05_23",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "bottom_text": "<b>Note:</b><br>Amtrak only carries passengers between Homewood, IL and Chicago if they are connecting to another Amtrak train at Chicago.<br><a href=\"https://metra.com\">Metra</a> provides regular service between Homewood, IL and Chicago on the Metra Electric line.",
     "for_rpa": "true"
 }

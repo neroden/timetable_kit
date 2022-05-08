@@ -1,6 +1,10 @@
 {
     "title": "Cardinal Timetable",
     "heading": "Amtrak's Cardinal",
-    "reference_date": "20220315",
+    "reference_date": "20220510",
+    "key_baggage": true,
+    "key_d": true,
+    "key_r": true,
+    "key_tz": true,
     "for_rpa": "true"
 }

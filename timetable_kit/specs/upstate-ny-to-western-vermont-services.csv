@@ -1,0 +1,41 @@
+,280,284/6281,448/291,56,64/6337,access,stations,63/6280,283/290,449/6064,449/55
+column-options,,,ardp,,,,,reverse,reverse,reverse,ardp reverse
+route-name,,,, ,,,,,,,
+updown,,,, ,,,,,,,
+NFL,280 first,284 first, ,blank,64 first,,,63 last,283 last,, 
+BFX,,,"<div style=""text-align: center; font-weight: bold;"">from Chicago</div>",blank,,,,,,"<div style=""text-align: center; font-weight: bold;"">to Chicago</div>","<div style=""text-align: center; font-weight: bold;"">to Chicago</div>"
+BUF,,,448,blank,,,,,,449,449 first
+ROC,,,,blank,,,,,,,
+SYR,,,,blank,,,,,,,
+ROM,,,,blank,,,,,,,
+UCA,,,,blank,,,,,,,
+AMS,,,,blank,,,,,,,
+SDY,,,,blank,,,,,,,
+ALB,280 last,284 last,448 last,blank,64 last,,,63 first,283 first,449 first,
+,,"<div style=""text-align: center; font-weight: bold;"">#6281</div>","<div style=""text-align: center; font-weight: bold;"">#291</div>",blank,"<div style=""text-align: center; font-weight: bold;"">#6337</div>",,,"<div style=""text-align: center; font-weight: bold;"">#6280</div>","<div style=""text-align: center; font-weight: bold;"">#290</div>","<div style=""text-align: center; font-weight: bold;"">#6064</div>","<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>"
+ALB,blank,6281 first,291 first,blank,6337 first,,,6280 last,290 last,6064 last, 
+SDY,blank,blank,291 first,blank,blank,,,blank,290 last,blank, 
+SAR,blank,blank,,blank,blank,,,blank,,blank, 
+FED,blank,blank,,blank,blank,,,blank,,blank, 
+CNV,blank,blank,,blank,blank,,,blank,,blank, 
+BNI,blank,,,blank,,,,,,,
+MCV,blank,,,blank,,,,,,,
+WAG,blank,,,blank,,,,,,,
+RUD,blank,blank,291 last,blank,blank,,,blank,290 first,blank,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>"
+RTC,blank,,,blank,,,,,,,
+BDN,blank,,,blank,,,,,,,
+MIY,blank,,Future service,blank,,,,,Future service,,
+VGN,blank,,Future service,blank,,,,,Future service,,
+BTV,blank,,,blank,,,,,,,
+,blank,,Future service,blank,,,Burlington (new station),,Future service,,
+CVT,blank,6281 last,"<div style=""text-align: center; font-weight: bold;"">#448</div>",blank,6337 last,,,6280 first,,6064 first,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2191;</div>"
+ALB,blank,blank,448 first,Overnight stay<br>in Springfield,blank,,,blank,blank,blank,449 last
+PIT,blank,blank,,"<div style=""text-align: center; font-size: 120%; font-weight: bold;"">&#x2193;</div>",,,,,blank,blank,
+SPG,blank,blank,448 last,<b>#56</b> Mo-Fr<br><b>#54</b> SaSu,,,,,blank,blank,449 first
+SPG,blank, ,"<div style=""text-align: right; font-size: 120%; font-weight: bold;"">&#x2937;</div>",56 first,,,,, ,blank,55 last
+,blank,,,via eastern VT,,,,,,blank,via eastern VT
+RPH,blank, ,,,,,,, ,,
+MPR,blank, ,,,,,,, ,,
+WAB,blank, ,,,,,,, ,,
+ESX,blank, ,,,,,,, ,,
+SAB,blank, ,,56 last,,,,, ,,55 first

@@ -14,7 +14,8 @@ SDY,blank,,blank,blank,blank,,,blank,,blank
 SAR,,,blank,blank,blank,,,,,
 FED,,,blank,blank,blank,,,,,
 CNV,,,blank,blank,blank,,,,,
-ALB,6281 first,blank,blank,blank,6337 first,,,6280 last,blank,6064 last
+ABA,6281 first,blank,blank,blank,6337 first,,,6280 last,blank,6064 last
+ALB,6281 first,blank,blank,blank,6337 first,,,6280 last,blank,
 BNI,,blank,blank,blank,,,,,blank,
 MCV,,blank,blank,blank,,,,,blank,
 WAG,,blank,blank,blank,,,,,blank,
@@ -23,6 +24,6 @@ RTC,,blank,blank,blank,,,,,blank,
 BDN,,blank,blank,blank,,,,,blank,
 MIY,,Future service,blank,blank,,,,,Future service,
 VGN,,Future service,blank,blank,,,,,Future service,
-,,Future service,,,,,"Burlington, VT (new station)",,Future service,
 BTV,,blank,blank,blank,,,,,blank,
+,,Future service,,,,,"Burlington, VT (new station)",,Future service,
 CVT,6281 last,blank,blank,blank,6337 last,,,6280 first,blank,6064 first
