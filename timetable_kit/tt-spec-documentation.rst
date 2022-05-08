@@ -147,8 +147,12 @@ These special codes are intended to be used only in four situations:
 -- station where a train splits (list the station on two lines, and specify which line gets which tsn)
 -- station where a train connects to another (list the station on two lines, and specify which line gets which tsn)
 
-For technical reasons, a simple "8" or "8 first last" will be accepted as a special code, but it may cause
-nonsensical behavior.
+A single train number such as "8" will simply say which train to use out of several.
+
+For technical reasons, "8 first last" will be accepted as a special code, but it may cause nonsensical behavior.
+
+A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
+space character in the cell.
 
 CELLS WITH FREE WRITTEN TEXT
 ----------------------------

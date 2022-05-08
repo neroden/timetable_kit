@@ -211,12 +211,15 @@ def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
     It really makes no sense to specify both.
     Specifying neither may give strange results, though it is supported.
 
+    OR, if the code is "blank", return that information.
+
     Returns None if there was no code in the cell (the usual case)
 
     Otherwise returns a dict:
     tsn: the tsn
     first: True or False
     last: True or False
+    blank: True or False
     """
     if pd.isna(code_text):
         return None
@@ -224,8 +227,10 @@ def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
     if not code_list:
         return None
     if code_list[0] not in tsns:
+        if code_list[0] == "blank":
+            return {"blank": True}
         return None
-    output_dict = {"tsn": code_list[0], "first": False, "last": False}
+    output_dict = {"blank": False, "tsn": code_list[0], "first": False, "last": False}
 
     for code in code_list[1:]:
         if code not in ["first", "last"]:
@@ -646,6 +651,11 @@ def fill_tt_spec(
             cell_css_list = [base_cell_css]
             # Check for cell_codes like "28 last".  This *usually* returns None.
             cell_codes = get_cell_codes(tt_spec.iloc[y, x], tsns)
+            if cell_codes and cell_codes["blank"]:
+                # This is a longhand for passing through a blank space.
+                # Makes it easier to read the source file.
+                tt_spec.iloc[y, x] = " "
+                cell_codes = None
 
             if pd.isna(station_code):
                 # Line which has no station code -- freeform line.
