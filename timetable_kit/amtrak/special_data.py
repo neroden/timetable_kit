@@ -207,6 +207,12 @@ major_stations_list = (
     "SPK",
     "PDX",
     "SEA",
+    "DAL",  # TE -- Amtrak emphasized nothing, so I picked some
+    "FTW",
+    "SAS",  # TE/SL
+    "HOS",  # SL -- Amtrak emphasized nothing, so I picked some
+    "ELP",
+    "TUS",
 )
 
 
