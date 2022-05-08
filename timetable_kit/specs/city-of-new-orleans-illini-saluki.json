@@ -1,8 +1,6 @@
 {
     "title": "City of New Orleans / Illini / Saluki Timetable",
     "heading": "Amtrak's City of New Orleans, Illini, Saluki",
-    "reference_date": "20220413",
-    "output_subdir": "starting_now",
-    "output_filename": "cono",
+    "reference_date": "20220510",
     "for_rpa": "true"
 }
