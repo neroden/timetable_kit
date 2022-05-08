@@ -120,6 +120,7 @@ other_checked_baggage_day_trains = (
 )
 
 # Assemble these trains as a set.  Ugly!
+# Stupid technical issue with #448/449 not having a baggage car!
 checked_baggage_trains = set(
     [
         *sleeper_trains,
@@ -129,7 +130,7 @@ checked_baggage_trains = set(
         *hiawatha_trains,
         *other_checked_baggage_day_trains,
     ]
-)
+) - set(["448", "449"])
 
 
 def train_has_checked_baggage(trip_short_name: str) -> bool:
