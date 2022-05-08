@@ -5,8 +5,9 @@ Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable 
 
 Development status
 ==================
-This is currently a work in progress and not fully functional.
-Initial development is focused on Amtrak timetables.
+This is currently a work in progress but is quite usable to create Amtrak timetables.
+It has not yet been generalized to create non-Amtrak timetables.
+Interfaces remain in a state of flux as needs are discovered while creating particular timetables.
 
 Directory Structure
 ===================
