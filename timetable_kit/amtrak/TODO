@@ -1,1 +1,3 @@
+Add an override for duplicate trips (needed for Coast Starlight with current GTFS)
+
 convert parse_wnn.py into an html_stations routine.
