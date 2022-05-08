@@ -1,6 +1,9 @@
 {
     "title": "Pennsylvanian Timetable",
     "heading": "Amtrak's Pennsylvanian",
-    "reference_date": "20220417",
+    "reference_date": "20220510",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
     "for_rpa": "true"
 }

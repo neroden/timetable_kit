@@ -3,5 +3,6 @@
     "heading": "Amtrak's Empire Service: Eastbound",
     "landscape": "true",
     "reference_date": "20220412",
+    "key_baggage": "true",
     "for_rpa": "true"
 }
