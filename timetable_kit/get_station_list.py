@@ -74,13 +74,9 @@ if __name__ == "__main__":
         # Default to Amtrak
         gtfs_filename = amtrak.gtfs_unzipped_local_path
 
-    if args.reference_date:
-        reference_date = args.reference_date
-    else:
-        # Use tomorrow as the reference date.
-        # After all, you aren't catching a train today, right?
-        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int(tomorrow.strftime("%Y%m%d"))
+    reference_date = args.reference_date
+    if reference_date is None:
+        reference_date = datetime.date.today().strftime("%Y%m%d")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     tsn = args.trip_short_name

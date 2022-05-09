@@ -12,6 +12,7 @@ Definitely filter by reference date.
 """
 
 import argparse
+import datetime
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
@@ -148,6 +149,9 @@ if __name__ == "__main__":
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     reference_date = args.reference_date
+    if reference_date is None:
+        reference_date = datetime.date.today().strftime("%Y%m%d")
+
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 

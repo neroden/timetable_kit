@@ -21,15 +21,6 @@ from timetable_kit import amtrak
 # Determine defaults in initialization code here:
 default_gtfs_filename = amtrak.gtfs_unzipped_local_path
 
-# Default reference date removed.
-# Reference date now overrides the .json file,
-# so we want to be able to omit it and trust the .json file.
-#
-# Use tomorrow as the default reference date.
-# After all, you aren't catching a train today, right?
-# tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-# default_reference_date = int(tomorrow.strftime("%Y%m%d"))
-
 
 def add_gtfs_argument(parser: argparse.ArgumentParser):
     """Add the common --gtfs argument to a parser"""
