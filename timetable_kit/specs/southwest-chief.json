@@ -1,6 +1,11 @@
 {
     "title": "Southwest Chief Timetable",
     "heading": "Amtrak's Southwest Chief",
-    "reference_date": "20220426",
+    "reference_date": "20220510",
+    "bottom_text": "<p><b>MST</b> Mountain Standard Time<br>Arizona does not observe Daylight Savings Time. Please double-check all Arizona calling times when spring and fall clock changes occur in other states.</p>",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "key_tz": "true",
     "for_rpa": "true"
 }

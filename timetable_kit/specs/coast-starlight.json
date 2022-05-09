@@ -1,6 +1,9 @@
 {
     "title": "Coast Starlight Timetable",
     "heading": "Amtrak's Coast Starlight",
-    "reference_date": "20220427",
+    "reference_date": "20220510",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
     "for_rpa": "true"
 }
