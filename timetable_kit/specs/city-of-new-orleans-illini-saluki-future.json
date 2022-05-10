@@ -1,8 +1,8 @@
 {
     "title": "City of New Orleans / Illini / Saluki Timetable",
     "heading": "Amtrak's City of New Orleans, Illini, Saluki",
-    "reference_date": "20220530",
-    "output_subdir": "starting_2022_05_23",
+    "reference_date": "20221001",
+    "output_subdir": "starting_2022_10_01",
     "key_baggage": "true",
     "key_d": "true",
     "key_r": "true",
