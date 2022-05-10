@@ -94,12 +94,14 @@ def find_tsn_dupes(feed) -> set[str]:
     # This is slow-ish, but tells us which train gave us the dupe.
     debug_print(1, "Finding duplicate tsns, if any:")
     tsn_set = set()
+    tsn_dupes_set = set()
     for x in tsns:
         if x in tsn_set:
             debug_print(1, "Duplicate tsn found for", x)
+            tsn_dupes_set.add(x)
         else:
             tsn_set.add(x)
-    return tsn_set
+    return tsn_dupes_set
 
 
 ### These two are used routinely in the main timetable generator
