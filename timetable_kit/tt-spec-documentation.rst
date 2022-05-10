@@ -73,6 +73,11 @@ TOP ROW
 The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
 in exactly the order the columns will appear in the timetable.
 
+Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
+
+*Not yet implemented*:
+A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
+
 SPECIAL COLUMNS
 ---------------
 The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.

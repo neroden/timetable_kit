@@ -1,21 +1,17 @@
-1 -- Coast Starlight has different timetables in GTFS on Saturday only -- BUT THEY ARE IDENTICAL
+1 -- Day filter.  Crescent #20 has different weekend timetables despite the same train number.
+    Design notes are in the tt-spec-documentation.rst file.  This is a blocker.
+
+2 -- Coast Starlight has different timetables in GTFS on Saturday only -- BUT THEY ARE IDENTICAL
     Which is absolutely ridiculous.  Find a workaround.  Merge identical timetables?
 
-Yeah, merge identical timetables.  Or hand-edit the calendar table?
-
-2 -- Day filter.  Coast Starlight has different timetables on Saturday only (!?!?!?!)
-    Despite the same train number.  This is futzing up Coast Starlight timetable attempts
-
-Recently discovered issues:
-2 -- Find a way to sanitize the GTFS to remove totally-duplicated trips
-3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
+3 -- Find a way to sanitize the GTFS to remove totally-duplicated trips
 
 
 Fine for after release of timetables:
 1 -- combine find_trains.py and find_connecting_buses.py, which share excessive amounts of logic.
 2 -- improve icon situation
 
-3 -- make silent links that don't turn blue and underline themselves.
+3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
 4 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
