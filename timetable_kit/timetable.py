@@ -1066,6 +1066,7 @@ def produce_timetable(
         )
 
     # Print the calendar for debugging
+    debug_print(1, "Calendar:")
     debug_print(1, reduced_feed.calendar)
 
     # Debugging for the reduced feed.  Seems to be fine.
