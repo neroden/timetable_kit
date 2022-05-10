@@ -58,9 +58,12 @@ def compare_stop_lists(base_trip, trips, *, feed):
         stop_times = feed.get_single_trip_stop_times(trip.trip_id)
         stop_times = stop_times.drop(["trip_id"], axis="columns")
         # Use powerful features of DataTable
-        comparison = base_stop_times.compare(
-            stop_times, align_axis="columns", keep_shape=True
-        )
+        try:
+            comparison = base_stop_times.compare(
+                stop_times, align_axis="columns", keep_shape=True
+            )
+        except:
+            print ("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
             print(
                 " ".join(
