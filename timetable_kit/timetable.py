@@ -551,29 +551,31 @@ def fill_tt_spec(
         )
 
     # Load variable functions for is_ardp_station and is_major_station
-    if is_major_station is False:
-        is_major_station = lambda station_code: False
-    elif is_major_station == "standard":
-        is_major_station = amtrak.special_data.is_standard_major_station
+    match is_major_station:
+        case False:
+            is_major_station = lambda station_code: False
+        case "standard":
+            is_major_station = amtrak.special_data.is_standard_major_station
     if not callable(is_major_station):
         raise TypeError(
             "Received is_major_station which is not callable: ", is_major_station
         )
 
-    if is_ardp_station is False:
-        is_ardp_station = lambda station_code: False
-    elif is_ardp_station is True:
-        is_ardp_station = lambda station_code: True
-    elif is_ardp_station == "dwell":
-        # Prep max dwell map.  This is the second-slowest part of the program.
-        stations_max_dwell_map = make_stations_max_dwell_map(
-            today_feed=today_feed,
-            tt_spec=tt_spec,
-            dwell_secs_cutoff=dwell_secs_cutoff,
-            trip_from_train_spec_fn=trip_from_train_spec_local,
-        )
-        is_ardp_station = lambda station_code: stations_max_dwell_map[station_code]
-        debug_print(1, "Dwell map prepared.")
+    match is_ardp_station:
+        case False:
+            is_ardp_station = lambda station_code: False
+        case True:
+            is_ardp_station = lambda station_code: True
+        case "dwell":
+            # Prep max dwell map.  This is the second-slowest part of the program.
+            stations_max_dwell_map = make_stations_max_dwell_map(
+                today_feed=today_feed,
+                tt_spec=tt_spec,
+                dwell_secs_cutoff=dwell_secs_cutoff,
+                trip_from_train_spec_fn=trip_from_train_spec_local,
+            )
+            is_ardp_station = lambda station_code: stations_max_dwell_map[station_code]
+            debug_print(1, "Dwell map prepared.")
     if not callable(is_ardp_station):
         raise TypeError(
             "Received is_ardp_station which is not callable: ", is_ardp_station
