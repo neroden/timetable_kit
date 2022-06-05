@@ -25,6 +25,7 @@ from timetable_kit.icons import get_baggage_icon_html
 from timetable_kit.icons import get_accessible_icon_html
 from timetable_kit.tsn import train_spec_to_tsn
 
+
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     """
     Given a GTFS date string, return an ISO format date string.
@@ -377,30 +378,31 @@ def get_rd_str(
     # which means the train or bus is allowed to depart ahead of time
     rd_str = " "  # NOTE the default is one blank space, for plaintext output.
 
-    if timepoint.drop_off_type == 1 and timepoint.pickup_type == 0:
-        if not is_first_stop:  # This is obvious at the first station
-            if not is_arrival_line:  # put on departure line
-                rd_str = "R"  # Receive passengers only
-    elif timepoint.pickup_type == 1 and timepoint.drop_off_type == 0:
-        if not is_last_stop:  # This is obvious at the last station
-            if not is_departure_line:  # put on arrival line
-                rd_str = "D"  # Discharge passengers only
-    elif timepoint.pickup_type == 1 and timepoint.drop_off_type == 1:
-        if not is_second_line:  # it'll be on the first line
-            rd_str = "*"  # Not for ordinary passengers (staff only, perhaps)
-    elif timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2:
-        if not is_second_line:  # it'll be on the first line
-            rd_str = "F"  # Flag stop of some type
-    elif "timepoint" in timepoint:
-        # If the "timepoint" column has been supplied
-        # IMPORTANT NOTE: Amtrak has not implemented this yet.
-        # FIXME: request that Alan Burnstine implement this if possible
-        # This seems to be the only way to identify the infamous "L",
-        # which means that the train or bus is allowed to depart ahead of time
-        print("timepoint column found")  # Should not happen with existing data
-        if timepoint.timepoint == 0:  # and it says times aren't exact
-            if not is_arrival_line:  # This goes on departure line, always
-                rd_str = "L"
+    match [timepoint.drop_off_type, timepoint.pickup_type, "timepoint" in timepoint]:
+        case [1, 0, _]:
+            if not is_first_stop:  # This is obvious at the first station
+                if not is_arrival_line:  # put on departure line
+                    rd_str = "R"  # Receive passengers only
+        case [0, 1, _]:
+            if not is_last_stop:  # This is obvious at the last station
+                if not is_departure_line:  # put on arrival line
+                    rd_str = "D"  # Discharge passengers only
+        case [1, 1, _]:
+            if not is_second_line:  # it'll be on the first line
+                rd_str = "*"  # Not for ordinary passengers (staff only, perhaps)
+        case [2 | 3, _, _] | [_, 2 | 3, _]:
+            if not is_second_line:  # it'll be on the first line
+                rd_str = "F"  # Flag stop of some type
+        case [_, _, True]:
+            # If the "timepoint" column has been supplied
+            # IMPORTANT NOTE: Amtrak has not implemented this yet.
+            # FIXME: request that Alan Burnstine implement this if possible
+            # This seems to be the only way to identify the infamous "L",
+            # which means that the train or bus is allowed to depart ahead of time
+            print("timepoint column found")  # Should not happen with existing data
+            if timepoint.timepoint == 0:  # and it says times aren't exact
+                if not is_arrival_line:  # This goes on departure line, always
+                    rd_str = "L"
 
     # Now: this is an utterly stupid hack used for HTML width testing:
     # Not for production code.  Enable if you need to recheck CSS span widths.
