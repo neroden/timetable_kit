@@ -680,23 +680,26 @@ def fill_tt_spec(
                 tt_spec.iloc[y, x] = " "
                 cell_codes = None
 
+            # NaNs are notoriously hard to match, so convert them.
             if pd.isna(station_code):
-                # Line which has no station code -- freeform line.
-                # No times or station names here!
-                cell_css_list.append("special-cell")
-                if pd.isna(tt_spec.iloc[y, x]):
+                station_code = ""
+
+            # This is effectively matching row, column, cell contents in spec
+            match [station_code.lower(), column_key_str.lower(), tt_spec.iloc[y, x]]:
+                case ["", _, raw_text] if pd.isna(raw_text):
+                    cell_css_list.append("special-cell")
                     # Make sure blanks become *string* blanks in this line.
                     tt.iloc[y, x] = ""
-                else:
+                case ["", _, raw_text]:
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
-                    tt.iloc[y, x] = tt_spec.iloc[y, x]
-            elif station_code.lower() == "route-name":
-                # Special line for route names.
-                cell_css_list.append("route-name-cell")
-                if column_key_str in special_column_names:
+                    tt.iloc[y, x] = raw_text
+                case ["route-name", ck, _] if ck in special_column_names:
+                    cell_css_list.append("route-name-cell")
                     tt.iloc[y, x] = ""
-                else:
+                case ["route-name", _, _]:
+                    # Line for route names.
+                    cell_css_list.append("route-name-cell")
                     route_names = []
                     styled_route_names = []
                     for train_spec in train_specs:
@@ -726,60 +729,25 @@ def fill_tt_spec(
                             output_type="class",
                         )
                     )
-            elif station_code.lower() == "updown":
-                # Special line just to say "Read Up" or "Read Down"
-                cell_css_list.append("updown-cell")
-                if column_key_str in special_column_names:
+                case ["updown", ck, _] if ck in special_column_names:
+                    cell_css_list.append("updown-cell")
                     tt.iloc[y, x] = ""
-                else:
+                case ["updown", _, _]:
+                    # Special line just to say "Read Up" or "Read Down"
+                    cell_css_list.append("updown-cell")
                     tt.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
-            elif station_code.lower() in ["days", "days-of-week"]:
-                # Days of week -- best for a train which doesn't run across midnight
-                cell_css_list.append("days-of-week-cell")
-                if column_key_str in special_column_names:
+                case ["days" | "days-of-week", ck, _] if ck in special_column_names:
+                    cell_css_list.append("days-of-week-cell")
                     tt.iloc[y, x] = ""
-                else:
-                    # We can only show the days for one station.
-                    # So get the reference stop_id / station code to use; user-specified
-                    reference_stop_id = tt_spec.iloc[y, x]
-                    if pd.isna(reference_stop_id) or reference_stop_id == "":
-                        # No reference stop?  Maybe this should be blank.
-                        # Useful if one train runs across midnight.
-                        tt.iloc[y, x] = ""
-                    else:
-                        if len(train_specs) > 1:
-                            raise InputError(
-                                "Can't have a days header for a column with two or more trains"
-                            )
-                        my_trip = trip_from_train_spec_local(train_specs[0])
-                        timepoint = get_timepoint_from_trip_id(
-                            today_feed, my_trip.trip_id, reference_stop_id
-                        )
-                        # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
-                        stop_df = today_feed.stops[
-                            today_feed.stops.stop_id == reference_stop_id
-                        ]
-                        stop_tz = stop_df.iloc[0].stop_timezone
-                        zonediff = text_presentation.get_zonediff(
-                            stop_tz, agency_tz, reference_date
-                        )
-                        # Get the day change for the reference stop (format is explained in text_presentation)
-                        departure = text_presentation.explode_timestr(
-                            timepoint.departure_time, zonediff
-                        )
-                        offset = departure.day
-                        # Finally, get the calendar (must be unique)
-                        calendar = today_feed.calendar[
-                            today_feed.calendar.service_id == my_trip.service_id
-                        ]
-                        # And fill in the actual string
-                        daystring = text_presentation.day_string(
-                            calendar, offset=offset
-                        )
-                        # TODO: add some HTML styling here
-                        tt.iloc[y, x] = daystring
+                case ["days" | "days-of-week", _, reference_stop_id] if pd.isna(
+                    reference_stop_id
+                ) or reference_stop_id == "":
+                    cell_css_list.append("days-of-week-cell")
+                    # No reference stop?  Maybe this should be blank.
+                    # Useful if one train runs across midnight.
+                    tt.iloc[y, x] = ""
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
@@ -789,73 +757,101 @@ def fill_tt_spec(
                             output_type="class",
                         )
                     )
-            elif not pd.isna(tt_spec.iloc[y, x]) and not cell_codes:
-                # Line led by a station code, but cell already has a value.
-                # and the value isn't one of the special codes we check later.
-                cell_css_list.append("special-cell")
-                # This is probably special text like "to Chicago".
-                # Copy the handwritten text over.
-                tt.iloc[y, x] = tt_spec.iloc[y, x]
-            else:
-                # Normal line led by a station code, where we need to fill in arrival/departure times.
-
-                # TODO, check station code validity here!
-
-                # Pick out the stop timezone -- TODO, precache this as a dict
-                stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
-                stop_tz = stop_df.iloc[0].stop_timezone
-
-                if column_key_str.lower() in [
-                    "station",
-                    "stations",
-                ]:  # Column for station names
+                case ["days" | "days-of-week", _, reference_stop_id]:
+                    # Days of week -- best for a train which doesn't run across midnight
+                    cell_css_list.append("days-of-week-cell")
+                    # We can only show the days for one station.
+                    # So get the reference stop_id / station code to use; user-specified
+                    if len(train_specs) > 1:
+                        raise InputError(
+                            "Can't have a days header for a column with two or more trains"
+                        )
+                    my_trip = trip_from_train_spec_local(train_specs[0])
+                    timepoint = get_timepoint_from_trip_id(
+                        today_feed, my_trip.trip_id, reference_stop_id
+                    )
+                    # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
+                    stop_df = today_feed.stops[
+                        today_feed.stops.stop_id == reference_stop_id
+                    ]
+                    stop_tz = stop_df.iloc[0].stop_timezone
+                    zonediff = text_presentation.get_zonediff(
+                        stop_tz, agency_tz, reference_date
+                    )
+                    # Get the day change for the reference stop (format is explained in text_presentation)
+                    departure = text_presentation.explode_timestr(
+                        timepoint.departure_time, zonediff
+                    )
+                    offset = departure.day
+                    # Finally, get the calendar (must be unique)
+                    calendar = today_feed.calendar[
+                        today_feed.calendar.service_id == my_trip.service_id
+                    ]
+                    # And fill in the actual string
+                    daystring = text_presentation.day_string(calendar, offset=offset)
+                    # TODO: add some HTML styling here
+                    tt.iloc[y, x] = daystring
+                    # Color this cell
+                    # FIXME, currently using color from first tsn only
+                    cell_css_list.append(
+                        get_time_column_stylings(
+                            train_specs[0],
+                            route_from_train_spec_local,
+                            output_type="class",
+                        )
+                    )
+                case [_, _, raw_text] if not pd.isna(raw_text) and not cell_codes:
+                    # Line led by a station code, but cell already has a value.
+                    # and the value isn't one of the special codes we check later.
+                    cell_css_list.append("special-cell")
+                    # This is probably special text like "to Chicago".
+                    # Copy the handwritten text over.
+                    tt.iloc[y, x] = raw_text
+                case [_, "station" | "stations", _]:
+                    # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
                     station_name_raw = amtrak.get_station_name(station_code)
                     major = amtrak.special_data.is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
-                elif column_key_str.lower() in [
-                    "services"
-                ]:  # Column for station services codes.  Currently completely vacant.
+                case [_, "services", _]:
+                    # Column for station services codes.  Currently completely vacant.
                     cell_css_list.append("services-cell")
                     services_str = ""
                     tt.iloc[y, x] = services_str
-                elif column_key_str.lower() in ["access"]:
+                case [_, "access", _]:
                     cell_css_list.append("access-cell")
                     access_str = ""
-                    debug_print(
-                        3,
-                        "Accessibility:",
-                        station_code,
-                        amtrak.station_has_accessible_platform(station_code),
-                    )
+                    # Currently Amtrak-specific.
                     if amtrak.station_has_accessible_platform(station_code):
                         access_str += icons.get_accessible_icon_html()
                     elif amtrak.station_has_inaccessible_platform(station_code):
                         access_str += icons.get_inaccessible_icon_html()
                     tt.iloc[y, x] = access_str
-                elif column_key_str in ["timezone"]:  # Column for time zone codes
+                case [_, "timezone", _]:
+                    # Pick out the stop timezone -- TODO, precache this as a dict
+                    stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
+                    stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y, x] = text_presentation.get_zone_str(
                         stop_tz, doing_html=doing_html
                     )
-                else:
-                    # It's a train number.
+                case [_, _, _]:
+                    # Line led by station code, column led by train numbers,
+                    # cell empty or has a "cell code": the normal case -- we need to fill in a time.
+
                     # For a slashed train spec ( 549 / 768 ) pull the *first* train's times,
                     # then the second train's times *if the first train doesn't stop there*
-                    # If the first train terminates and the second train starts, we need to
-                    # somehow make it an ArDp station with double lines... tricky, not done yet
-                    #
+
+                    # For connecting trains, use two different rows and use cell codes.
+
+                    # Pick out the stop timezone -- TODO, precache this as a dict
+                    stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
+                    stop_tz = stop_df.iloc[0].stop_timezone
+
                     debug_print(
                         3,
-                        "".join(
-                            [
-                                "Trainspecs: ",
-                                str(train_specs),
-                                "; Station:",
-                                station_code,
-                            ]
-                        ),
+                        "Trainspecs: " + str(train_specs) + "; Station:" + station_code,
                     )
 
                     # Extract my_trip, timepoint (and later calendar)
