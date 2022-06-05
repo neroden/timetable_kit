@@ -26,6 +26,7 @@ from timetable_kit import text_presentation
 
 from timetable_kit.errors import InputError
 from timetable_kit.debug import debug_print
+from timetable_kit.tsn import train_spec_to_tsn
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
@@ -34,12 +35,12 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_time_column_stylings(tsn, route_from_tsn, output_type="attributes"):
+def get_time_column_stylings(train_spec, route_from_train_spec, output_type="attributes"):
     """
     Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
 
-    tsn: trip_short_name / train number
-    route_from_tsn: route which takes a tsn and gives the row from the GTFS routes table corresponding to the tsn
+    train_spec: trip_short_name / train number, maybe with day suffix
+    route_from_train_spec: route which takes a tsn and gives the row from the GTFS routes table corresponding to the tsn
     (This is needed because tsn to route mapping is expensive and must be done in the calling function)
 
     This mostly picks a color.
@@ -57,7 +58,8 @@ def get_time_column_stylings(tsn, route_from_tsn, output_type="attributes"):
     # 3 (is a bus)
     # TODO: look up the color_css from the color_css_class by reading the template?
     # Currently these have to match up with the colors in templates/
-    route_type = route_from_tsn(tsn).route_type
+    route_type = route_from_train_spec(train_spec).route_type
+    tsn = train_spec_to_tsn(train_spec)
     if route_type == 3:
         # it's a bus!
         color_css = "background-color: honeydew;"

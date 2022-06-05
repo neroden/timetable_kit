@@ -70,9 +70,11 @@ from timetable_kit.amtrak.station_name_styling import (
     amtrak_station_name_to_single_line_text,
 )
 from timetable_kit.tsn import (
+    train_spec_to_tsn,
     make_trip_id_to_tsn_dict,
     find_tsn_dupes,
     make_tsn_to_trip_id_dict,
+    make_tsn_and_day_to_trip_id_dict,
     stations_list_from_tsn,
 )
 
@@ -157,13 +159,12 @@ def stations_list_from_tt_spec(tt_spec):
     return stations_list
 
 
-def trains_list_from_tt_spec(tt_spec):
+def train_specs_list_from_tt_spec(tt_spec):
     """Given a tt_spec dataframe, return the trains list as a list of strings"""
-    trains_df = tt_spec.iloc[0, 1:]
-    trains_list_raw = trains_df.to_list()
-    trains_list_strings = [str(i) for i in trains_list_raw]
-    trains_list = [i.strip() for i in trains_list_strings]
-    return trains_list
+    train_specs_df = tt_spec.iloc[0, 1:]
+    train_specs_list_raw = train_specs_df.to_list()
+    train_specs_list = [str(i).strip() for i in train_specs_list_raw]
+    return train_specs_list
 
 
 def get_column_options(tt_spec):
@@ -199,7 +200,7 @@ def get_column_options(tt_spec):
     return column_options_nested_list
 
 
-def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
+def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     """
     Given special code text in a cell, decipher it
 
@@ -216,7 +217,7 @@ def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
     Returns None if there was no code in the cell (the usual case)
 
     Otherwise returns a dict:
-    tsn: the tsn
+    train_spec: the train_spec
     first: True or False
     last: True or False
     blank: True or False
@@ -226,11 +227,11 @@ def get_cell_codes(code_text: str, tsns: list[str]) -> dict[str, str]:
     code_list = code_text.split()
     if not code_list:
         return None
-    if code_list[0] not in tsns:
+    if code_list[0] not in train_specs:
         if code_list[0] == "blank":
             return {"blank": True}
         return None
-    output_dict = {"blank": False, "tsn": code_list[0], "first": False, "last": False}
+    output_dict = {"blank": False, "train_spec": code_list[0], "first": False, "last": False}
 
     for code in code_list[1:]:
         if code not in ["first", "last"]:
@@ -259,21 +260,23 @@ def split_trains_spec(trains_spec):
     return clean_list
 
 
-def flatten_trains_list(trains_list):
+def flatten_train_specs_list(train_specs_list):
     """
-    Take a nested list of trains and make a flast list of trains.
+    Take a nested list of trains and make a flat list of trains.
 
-    Take a list of trains as specified in a tt_spec such as [NaN,'174','178/21','stations','23/1482']
-    and make a flat list of all trains involved ['174','178','21','23','1482']
+    Take a list of trains as specified in a tt_spec such as [NaN,'174 monday','178/21','stations','23/1482']
+    and make a flat list of all trains involved ['174 monday','178','21','23','1482']
     without the special keywords like "station".
+
+    Leaves the '91 monday' type entries.
     """
-    flattened_trains_list = []
-    for ts in trains_list:
-        tsns = split_trains_spec(ts)  # Separates at the "/"
-        flattened_trains_list = [*flattened_trains_list, *tsns]
-    flattened_trains_set = set(flattened_trains_list)
-    flattened_trains_set = flattened_trains_set - special_column_names
-    return flattened_trains_set
+    flattened_ts_list = []
+    for ts in train_specs_list:
+        train_specs = split_trains_spec(ts)  # Separates at the "/"
+        flattened_ts_list = [*flattened_ts_list, *train_specs]
+    flattened_ts_set = set(flattened_ts_list)
+    flattened_ts_set = flattened_ts_set - special_column_names
+    return flattened_ts_set
 
 
 #### Subroutines for fill_tt_spec
@@ -373,7 +376,7 @@ def get_dwell_secs(today_feed, trip_id, station_code):
 
 
 def make_stations_max_dwell_map(
-    today_feed, tt_spec, dwell_secs_cutoff, trip_from_tsn_fn
+    today_feed, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
 ):
     """
     Return a dict from station_code to True/False, based on the trains in the tt_spec.
@@ -383,7 +386,7 @@ def make_stations_max_dwell_map(
     today_feed: a feed filtered to a single date (so tsns are unique)
     tt_spec: the tt_spec
     dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
-    trip_from_tsn_fn: a function which maps tsn to trip_id and provides error raising
+    trip_from_train_spec_fn: a function which maps train_spec to trip_id and provides error raising
 
     Expects a feed already filtered to a single date.
     The feed *may* be restricted to the relevant trains (but must contain all relevant trains).
@@ -395,16 +398,17 @@ def make_stations_max_dwell_map(
     """
     # First get stations and trains list from tt_spec.
     stations_list = stations_list_from_tt_spec(tt_spec)
-    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
-    flattened_trains_set = flatten_trains_list(trains_list)
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    flattened_train_spec_set = flatten_train_specs_list(train_specs_list)
+    # Note that "91 monday" is a perfectly valid spec here
 
     # Prepare the dict to return
     stations_dict = {}
     for station_code in stations_list:
         max_dwell_secs = 0
-        for tsn in flattened_trains_set:
-            debug_print(3, "debug dwell map:", tsn, station_code)
-            trip_id = trip_from_tsn_fn(tsn).trip_id
+        for train_spec in flattened_train_spec_set:
+            debug_print(3, "debug dwell map:", train_spec, station_code)
+            trip_id = trip_from_train_spec_fn(train_spec).trip_id
             max_dwell_secs = max(
                 max_dwell_secs, get_dwell_secs(today_feed, trip_id, station_code)
             )
@@ -485,13 +489,18 @@ def fill_tt_spec(
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
     # So we generate a dict for it.
     tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
+    # Because of the problem of "same tsn, different day", we have to add the "91 monday" indices.
+    tsn_and_day_to_trip_id = make_tsn_and_day_to_trip_id_dict(today_feed)
+    # Merger of both dictionaries:
+    train_spec_to_trip_id = tsn_and_day_to_trip_id | tsn_to_trip_id
+
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
-    def trip_from_tsn_local(tsn: str):
+    def trip_from_train_spec_local(train_spec: str):
         try:
-            my_trip_id = tsn_to_trip_id[tsn]
+            my_trip_id = train_spec_to_trip_id[train_spec]
         except KeyError as e:
-            raise InputError("No trip_id for ", tsn) from e
+            raise InputError("No trip_id for ", train_spec) from e
         my_trips = today_feed.trips[today_feed.trips.trip_id == my_trip_id]
         raise_error_if_not_one_row(my_trips)
         my_trip = my_trips.iloc[0]
@@ -499,14 +508,14 @@ def fill_tt_spec(
 
     # Now, we need to determine whether the tsn is a bus.  This is actually in GTFS.
     # However, it has to be looked up by trip_id, so this needs to use the local version
-    # of trip_from_tsn_local, *and* should use the local reduced feed, so it has to be
+    # of trip_from_train_spec_local, *and* should use the local reduced feed, so it has to be
     # subordinate to this particular run of the timetable generator!
     # So create another inner function to pull the line from the route table.
-    def route_from_tsn_local(tsn: str):
-        my_trip = trip_from_tsn_local(tsn)
+    def route_from_train_spec_local(train_spec: str):
+        my_trip = trip_from_train_spec_local(train_spec)
         my_routes = today_feed.routes[today_feed.routes.route_id == my_trip.route_id]
         if my_routes.shape[0] == 0:
-            raise GTFSError("Missing route_id for tsn", tsn)
+            raise GTFSError("Missing route_id for train_spec", train_spec)
         my_route = my_routes.iloc[0]
         return my_route
 
@@ -554,7 +563,7 @@ def fill_tt_spec(
             today_feed=today_feed,
             tt_spec=tt_spec,
             dwell_secs_cutoff=dwell_secs_cutoff,
-            trip_from_tsn_fn=trip_from_tsn_local,
+            trip_from_train_spec_fn=trip_from_train_spec_local,
         )
         is_ardp_station = lambda station_code: stations_max_dwell_map[station_code]
         debug_print(1, "Dwell map prepared.")
@@ -600,8 +609,8 @@ def fill_tt_spec(
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
         column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
-        # Create blank tsns list so we can call get_cell_codes on a special column without crashing
-        tsns = []
+        # Create blank train_specs list so we can call get_cell_codes on a special column without crashing
+        train_specs = []
 
         if column_key_str.lower() in ["station", "stations"]:
             station_column_header = text_presentation.get_station_column_header(
@@ -635,11 +644,11 @@ def fill_tt_spec(
             short_days_box = "short-days-box" in column_options[x]
             this_column_gets_ardp = "ardp" in column_options[x]
 
-            # Separate train numbers by "/", and create the tsns list
-            tsns = split_trains_spec(column_key_str)
+            # Separate train numbers by "/", and create the train_spec list
+            train_specs = split_trains_spec(column_key_str)
             time_column_header = text_presentation.get_time_column_header(
-                tsns,
-                route_from_tsn_local,
+                train_specs,
+                route_from_train_spec_local,
                 doing_html=doing_html,
                 train_numbers_side_by_side=train_numbers_side_by_side,
             )
@@ -648,7 +657,7 @@ def fill_tt_spec(
                 # Style the header with the color & stylings for the first tsn.
                 # ...because I don't know how to do multiples! FIXME
                 time_column_stylings = get_time_column_stylings(
-                    tsns[0], route_from_tsn_local, output_type="attributes"
+                    train_specs[0], route_from_train_spec_local, output_type="attributes"
                 )
                 header_styling_list.append(time_column_stylings)
             else:  # plaintext
@@ -659,7 +668,7 @@ def fill_tt_spec(
             # Reset the styler string:
             cell_css_list = [base_cell_css]
             # Check for cell_codes like "28 last".  This *usually* returns None.
-            cell_codes = get_cell_codes(tt_spec.iloc[y, x], tsns)
+            cell_codes = get_cell_codes(tt_spec.iloc[y, x], train_specs)
             if cell_codes and cell_codes["blank"]:
                 # This is a longhand for passing through a blank space.
                 # Makes it easier to read the source file.
@@ -685,8 +694,8 @@ def fill_tt_spec(
                 else:
                     route_names = []
                     styled_route_names = []
-                    for tsn in tsns:
-                        my_trip = trip_from_tsn_local(tsn)
+                    for train_spec in train_specs:
+                        my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
                         # Clean this interface up later.  For now highly Amtrak-specific FIXME
                         route_name = amtrak.get_route_name(today_feed, route_id)
@@ -707,7 +716,7 @@ def fill_tt_spec(
                     tt.iloc[y, x] = full_styled_route_names
                     cell_css_list.append(
                         get_time_column_stylings(
-                            tsn, route_from_tsn_local, output_type="class"
+                            train_specs[0], route_from_train_spec_local, output_type="class"
                         )
                     )
             elif station_code.lower() == "updown":
@@ -733,11 +742,11 @@ def fill_tt_spec(
                         # Useful if one train runs across midnight.
                         tt.iloc[y, x] = ""
                     else:
-                        if len(tsns) > 1:
+                        if len(train_specs) > 1:
                             raise InputError(
                                 "Can't have a days header for a column with two or more trains"
                             )
-                        my_trip = trip_from_tsn_local(tsns[0])
+                        my_trip = trip_from_train_spec_local(train_specs[0])
                         timepoint = get_timepoint_from_trip_id(
                             today_feed, my_trip.trip_id, reference_stop_id
                         )
@@ -768,7 +777,7 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            tsns[0], route_from_tsn_local, output_type="class"
+                            train_specs[0], route_from_train_spec_local, output_type="class"
                         )
                     )
             elif not pd.isna(tt_spec.iloc[y, x]) and not cell_codes:
@@ -829,22 +838,22 @@ def fill_tt_spec(
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
                     debug_print(
-                        3, "".join(["Trains: ", str(tsns), "; Station:", station_code])
+                        3, "".join(["Trainspecs: ", str(train_specs), "; Station:", station_code])
                     )
 
                     # Extract my_trip, timepoint (and later calendar)
                     # Note that in Python variables defined in a loop "hang around"
 
                     if cell_codes:
-                        # Specific tsn was requested.
+                        # Specific train_spec was requested.
                         debug_print(2, "cell codes found")
-                        tsns_to_check = [cell_codes["tsn"]]
+                        train_specs_to_check = [cell_codes["train_spec"]]
                     else:
-                        tsns_to_check = tsns
+                        train_specs_to_check = train_specs
 
-                    for tsn in tsns_to_check:
-                        my_trip = trip_from_tsn_local(tsn)
-                        debug_print(2, "debug trip_id:", tsn, my_trip.trip_id)
+                    for train_spec in train_specs_to_check:
+                        my_trip = trip_from_train_spec_local(train_spec)
+                        debug_print(2, "debug trip_id:", train_spec, my_trip.trip_id)
                         timepoint = get_timepoint_from_trip_id(
                             today_feed, my_trip.trip_id, station_code
                         )
@@ -862,11 +871,11 @@ def fill_tt_spec(
                         # Confusing: we want to style some of these and not others.  FIXME.
                         # For now, we style if we have a single train.
                         # Otherwise not, because it's hard to know what color to use.
-                        if len(tsns) == 1:
+                        if len(train_specs) == 1:
                             cell_css_list.append(
                                 get_time_column_stylings(
-                                    tsns[0],
-                                    route_from_tsn_local,
+                                    train_specs[0],
+                                    route_from_train_spec_local,
                                     output_type="class",
                                 )
                             )
@@ -876,7 +885,7 @@ def fill_tt_spec(
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
                             get_time_column_stylings(
-                                tsn, route_from_tsn_local, output_type="class"
+                                train_spec, route_from_train_spec_local, output_type="class"
                             )
                         )
 
@@ -887,7 +896,7 @@ def fill_tt_spec(
                             ]
 
                         has_baggage = bool(
-                            amtrak.train_has_checked_baggage(tsn)
+                            amtrak.train_has_checked_baggage(train_spec_to_tsn(train_spec))
                             and amtrak.station_has_checked_baggage(station_code)
                         )
 
@@ -923,7 +932,7 @@ def fill_tt_spec(
                             short_days_box=short_days_box,
                             is_first_stop=is_first_stop,
                             is_last_stop=is_last_stop,
-                            use_baggage_str=amtrak.train_has_checked_baggage(tsn),
+                            use_baggage_str=amtrak.train_has_checked_baggage(train_spec_to_tsn(train_spec)),
                             has_baggage=has_baggage,
                         )
                         tt.iloc[y, x] = cell_text
@@ -1050,9 +1059,13 @@ def produce_timetable(
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
-    trains_list = trains_list_from_tt_spec(tt_spec)  # Note still contains "/" items
-    flattened_trains_set = flatten_trains_list(trains_list)
-    reduced_feed = today_feed.filter_by_trip_short_names(flattened_trains_set)
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
+
+    # Note still contains "91 monday" and similar specs: remove the day suffixes here
+    flattened_tsn_list = [train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set]
+
+    reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
     debug_print(1, "Feed filtered by trip_short_name.")
 
     # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
@@ -1074,8 +1087,8 @@ def produce_timetable(
     #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
 
     # Collect pairs of validity dates.
-    # Note that the feed has been filtered by tsns,
-    # so will *only* include relevant tsns in the calendar!
+    # Note that the feed has been filtered by train_specs,
+    # so will *only* include relevant train_specs in the calendar!
     start_dates = reduced_feed.calendar["start_date"]
     latest_start_date = start_dates.max()
     end_dates = reduced_feed.calendar["end_date"]
