@@ -75,8 +75,8 @@ in exactly the order the columns will appear in the timetable.
 
 Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
 
-*Not yet implemented*:
 A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
+This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".
 
 SPECIAL COLUMNS
 ---------------
