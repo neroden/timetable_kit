@@ -824,24 +824,27 @@ def get_time_column_header(
             int(route_from_train_spec(train_spec).route_type)
             for train_spec in train_specs
         ]
-        if route_types == [2]:
-            time_column_prefix = "Train #"
-        elif route_types == [3]:
-            time_column_prefix = "Bus #"
-        elif set(route_types) == {2}:
-            time_column_prefix = "Train #s"
-        elif set(route_types) == {3}:
-            time_column_prefix = "Bus #s"
-        elif route_types == [3, 2]:
-            time_column_prefix = "Bus/Train #s"
-        elif route_types == [2, 3]:
-            time_column_prefix = "Train/Bus #s"
-        elif set(route_types) == {2, 3}:
-            # This is three or more routes in the same column, yeechburgers
-            time_column_prefix = "Train/Bus #s"
-        else:
-            # Does not occur on Amtrak, but...
-            time_column_prefix = "Trip #s"
+        match route_types:
+            case [2]:
+                time_column_prefix = "Train #"
+            case [3]:
+                time_column_prefix = "Bus #"
+            case [3, 2]:
+                time_column_prefix = "Bus/Train #s"
+            case [2, 3]:
+                time_column_prefix = "Train/Bus #s"
+            case _:
+                route_set = set(route_types)
+                if route_set == {2}:
+                    time_column_prefix = "Train #s"
+                elif route_set == {3}:
+                    time_column_prefix = "Bus #s"
+                elif route_set == {2, 3}:
+                    # This is three or more routes in the same column, yeechburgers
+                    time_column_prefix = "Train/Bus #s"
+                else:
+                    # Not train or bus.  Does not occur on Amtrak.
+                    time_column_prefix = "Trip #s"
 
         time_column_header = "".join(
             [
