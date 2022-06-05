@@ -619,58 +619,52 @@ def fill_tt_spec(
         # Create blank train_specs list so we can call get_cell_codes on a special column without crashing
         train_specs = []
 
-        if column_key_str.lower() in ["station", "stations"]:
-            station_column_header = text_presentation.get_station_column_header(
-                doing_html=doing_html
-            )
-            header_replacement_list.append(station_column_header)
-            header_styling_list.append("")  # could include background color
-        elif column_key_str.lower() in ["services"]:
-            services_column_header = text_presentation.get_services_column_header(
-                doing_html=doing_html
-            )  # in a span
-            header_replacement_list.append(services_column_header)
-            header_styling_list.append("")  # could include background color;
-        elif column_key_str.lower() in ["access"]:
-            access_column_header = text_presentation.get_access_column_header(
-                doing_html=doing_html
-            )  # in a span
-            header_replacement_list.append(access_column_header)
-            header_styling_list.append("")  # could include background color;
-        elif column_key_str.lower() in ["timezone"]:
-            timezone_column_header = text_presentation.get_timezone_column_header(
-                doing_html=doing_html
-            )  # in a span
-            header_replacement_list.append(timezone_column_header)
-            header_styling_list.append("")  # could include background color;
-        else:  # it's actually a train, or several trains
-            # Check column options for reverse, days, ardp:
-            reverse = "reverse" in column_options[x]
-            use_daystring = "days" in column_options[x]
-            long_days_box = "long-days-box" in column_options[x]
-            short_days_box = "short-days-box" in column_options[x]
-            this_column_gets_ardp = "ardp" in column_options[x]
-
-            # Separate train numbers by "/", and create the train_spec list
-            train_specs = split_trains_spec(column_key_str)
-            time_column_header = text_presentation.get_time_column_header(
-                train_specs,
-                route_from_train_spec_local,
-                doing_html=doing_html,
-                train_numbers_side_by_side=train_numbers_side_by_side,
-            )
-            header_replacement_list.append(time_column_header)
-            if doing_html:
-                # Style the header with the color & stylings for the first tsn.
-                # ...because I don't know how to do multiples! FIXME
-                time_column_stylings = get_time_column_stylings(
-                    train_specs[0],
-                    route_from_train_spec_local,
-                    output_type="attributes",
+        column_header_styling = ""  # default
+        match column_key_str.lower():
+            case "station" | "stations":
+                column_header = text_presentation.get_station_column_header(
+                    doing_html=doing_html
                 )
-                header_styling_list.append(time_column_stylings)
-            else:  # plaintext
-                header_styling_list.append("")
+            case "services":
+                column_header = text_presentation.get_services_column_header(
+                    doing_html=doing_html
+                )  # in a span
+            case "access":
+                column_header = text_presentation.get_access_column_header(
+                    doing_html=doing_html
+                )  # in a span
+            case "timezone":
+                column_header = text_presentation.get_timezone_column_header(
+                    doing_html=doing_html
+                )  # in a span
+            case _:
+                # it's actually a train, or several trains
+                # Check column options for reverse, days, ardp:
+                reverse = "reverse" in column_options[x]
+                use_daystring = "days" in column_options[x]
+                long_days_box = "long-days-box" in column_options[x]
+                short_days_box = "short-days-box" in column_options[x]
+                this_column_gets_ardp = "ardp" in column_options[x]
+
+                # Separate train numbers by "/", and create the train_spec list
+                train_specs = split_trains_spec(column_key_str)
+                column_header = text_presentation.get_time_column_header(
+                    train_specs,
+                    route_from_train_spec_local,
+                    doing_html=doing_html,
+                    train_numbers_side_by_side=train_numbers_side_by_side,
+                )
+                if doing_html:
+                    # Style the header with the color & stylings for the first tsn.
+                    # ...because I don't know how to do multiples! FIXME
+                    column_header_styling = get_time_column_stylings(
+                        train_specs[0],
+                        route_from_train_spec_local,
+                        output_type="attributes",
+                    )
+        # Now fill in the column header, as chosen earlier
+        header_replacement_list.append(column_header)
+        header_styling_list.append(column_header_styling)
 
         for y in range(1, row_count):  # First (0) row is the header
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
