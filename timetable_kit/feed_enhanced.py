@@ -50,21 +50,14 @@ def filter_by_dates(self, first_date, last_date):
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
+gtfs_days = ("monday","tuesday","wednesday","thursday","friday","saturday","sunday")
 
 def filter_by_day_of_week(
     self,
-    *,
-    monday=False,
-    tuesday=False,
-    wednesday=False,
-    thursday=False,
-    friday=False,
-    saturday=False,
-    sunday=False,
+    day,
 ):
     """
-    Filters the feed to trips which are running on all of the selected days.
-    (TODO: I'd rather do "at least one" but it's harder to write)
+    Filters the feed to trips which are running on the selected day.
     - Filters calendar (direct)
     - Filters trips (by service_ids in calendar)
     - Filters stop_times (by trip_ids in trips)
@@ -82,26 +75,13 @@ def filter_by_day_of_week(
     8010, 8011, 8012, 8013, 8014, 8015, 8033,
     8042, 7203, )
     """
-    # NOTE this assumes int type conversion.
-    # consider doing with original GTFS 1/0 data.
-    # FIXME
+    # This assumes integer types for the day column in the calendar.
+    if day not in gtfs_days:
+        raise InputError("Expected GTFS day name");
+
     new_feed = self.copy()
-    calendar = self.calendar
-    if monday:
-        calendar = calendar[calendar.monday == 1]
-    if tuesday:
-        calendar = calendar[calendar.tuesday == 1]
-    if wednesday:
-        calendar = calendar[calendar.wednesday == 1]
-    if thursday:
-        calendar = calendar[calendar.thursday == 1]
-    if friday:
-        calendar = calendar[calendar.friday == 1]
-    if saturday:
-        calendar = calendar[calendar.saturday == 1]
-    if sunday:
-        calendar = calendar[calendar.sunday == 1]
-    new_feed.calendar = calendar
+    # This is where we filter the calendar by the value in the day column:
+    new_feed.calendar = self.calendar[self.calendar[day] == 1]
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
