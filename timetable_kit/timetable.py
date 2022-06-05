@@ -222,7 +222,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     last: True or False
     blank: True or False
     """
-    if pd.isna(code_text):
+    if code_text == "" or pd.isna(code_text):
         return None
     code_list = code_text.split()
     if not code_list:
@@ -670,6 +670,14 @@ def fill_tt_spec(
 
         for y in range(1, row_count):  # First (0) row is the header
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
+            # NaNs are notoriously hard to match, so convert them.
+            if pd.isna(station_code):
+                station_code = ""
+
+            # Also convert NaNs to empty string in individual cells.
+            if pd.isna(tt_spec.iloc[y, x]):
+                tt_spec.iloc[y, x] = ""
+
             # Reset the styler string:
             cell_css_list = [base_cell_css]
             # Check for cell_codes like "28 last".  This *usually* returns None.
@@ -680,18 +688,14 @@ def fill_tt_spec(
                 tt_spec.iloc[y, x] = " "
                 cell_codes = None
 
-            # NaNs are notoriously hard to match, so convert them.
-            if pd.isna(station_code):
-                station_code = ""
-
             # This is effectively matching row, column, cell contents in spec
             match [station_code.lower(), column_key_str.lower(), tt_spec.iloc[y, x]]:
-                case ["", _, raw_text] if pd.isna(raw_text):
-                    cell_css_list.append("special-cell")
+                case ["", _, ""]:
                     # Make sure blanks become *string* blanks in this line.
                     tt.iloc[y, x] = ""
                 case ["", _, raw_text]:
                     # This is probably special text like "to Chicago".
+                    cell_css_list.append("special-cell")
                     # Copy the handwritten text over.
                     tt.iloc[y, x] = raw_text
                 case ["route-name", ck, _] if ck in special_column_names:
@@ -741,9 +745,7 @@ def fill_tt_spec(
                 case ["days" | "days-of-week", ck, _] if ck in special_column_names:
                     cell_css_list.append("days-of-week-cell")
                     tt.iloc[y, x] = ""
-                case ["days" | "days-of-week", _, reference_stop_id] if pd.isna(
-                    reference_stop_id
-                ) or reference_stop_id == "":
+                case ["days" | "days-of-week", _, ""]:
                     cell_css_list.append("days-of-week-cell")
                     # No reference stop?  Maybe this should be blank.
                     # Useful if one train runs across midnight.
@@ -800,7 +802,7 @@ def fill_tt_spec(
                             output_type="class",
                         )
                     )
-                case [_, _, raw_text] if not pd.isna(raw_text) and not cell_codes:
+                case [_, _, raw_text] if raw_text != "" and not cell_codes:
                     # Line led by a station code, but cell already has a value.
                     # and the value isn't one of the special codes we check later.
                     cell_css_list.append("special-cell")
