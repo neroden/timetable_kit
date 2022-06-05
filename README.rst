@@ -21,7 +21,7 @@ this time.  This may change.
 
 Dependencies
 ============
-Timetable Kit will require Python 3.10: I intend to use the switch-case statement.
+Timetable Kit requires Python 3.10, because it uses the match/case statement.
 
 It relies on `GTFS Kit <https://github.com/mrcagney/gtfs_kit>` to parse GTFS.
 
