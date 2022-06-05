@@ -231,7 +231,12 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
         if code_list[0] == "blank":
             return {"blank": True}
         return None
-    output_dict = {"blank": False, "train_spec": code_list[0], "first": False, "last": False}
+    output_dict = {
+        "blank": False,
+        "train_spec": code_list[0],
+        "first": False,
+        "last": False,
+    }
 
     for code in code_list[1:]:
         if code not in ["first", "last"]:
@@ -249,8 +254,9 @@ def split_trains_spec(trains_spec):
     Used to separate specs for multiple trains in the same timetable column.
     A single "59" will simply give {"59"}.
 
-    A leading minus sign (-) means the column is reversed (read bottom to top);
-    this is stripped by this method.
+    This also processes specs like "59 monday".
+    These require exact spacing; this routine should probably clean up the spacing, but does not.
+
     """
     # Remove leading whitespace and possible leading minus sign
     clean_trains_spec = trains_spec.lstrip()
@@ -398,7 +404,8 @@ def make_stations_max_dwell_map(
     """
     # First get stations and trains list from tt_spec.
     stations_list = stations_list_from_tt_spec(tt_spec)
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
+    # Note train_specs_list still contains "/" items
     flattened_train_spec_set = flatten_train_specs_list(train_specs_list)
     # Note that "91 monday" is a perfectly valid spec here
 
@@ -657,7 +664,9 @@ def fill_tt_spec(
                 # Style the header with the color & stylings for the first tsn.
                 # ...because I don't know how to do multiples! FIXME
                 time_column_stylings = get_time_column_stylings(
-                    train_specs[0], route_from_train_spec_local, output_type="attributes"
+                    train_specs[0],
+                    route_from_train_spec_local,
+                    output_type="attributes",
                 )
                 header_styling_list.append(time_column_stylings)
             else:  # plaintext
@@ -716,7 +725,9 @@ def fill_tt_spec(
                     tt.iloc[y, x] = full_styled_route_names
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0], route_from_train_spec_local, output_type="class"
+                            train_specs[0],
+                            route_from_train_spec_local,
+                            output_type="class",
                         )
                     )
             elif station_code.lower() == "updown":
@@ -777,7 +788,9 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0], route_from_train_spec_local, output_type="class"
+                            train_specs[0],
+                            route_from_train_spec_local,
+                            output_type="class",
                         )
                     )
             elif not pd.isna(tt_spec.iloc[y, x]) and not cell_codes:
@@ -838,7 +851,15 @@ def fill_tt_spec(
                     # somehow make it an ArDp station with double lines... tricky, not done yet
                     #
                     debug_print(
-                        3, "".join(["Trainspecs: ", str(train_specs), "; Station:", station_code])
+                        3,
+                        "".join(
+                            [
+                                "Trainspecs: ",
+                                str(train_specs),
+                                "; Station:",
+                                station_code,
+                            ]
+                        ),
                     )
 
                     # Extract my_trip, timepoint (and later calendar)
@@ -885,7 +906,9 @@ def fill_tt_spec(
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
                             get_time_column_stylings(
-                                train_spec, route_from_train_spec_local, output_type="class"
+                                train_spec,
+                                route_from_train_spec_local,
+                                output_type="class",
                             )
                         )
 
@@ -896,7 +919,9 @@ def fill_tt_spec(
                             ]
 
                         has_baggage = bool(
-                            amtrak.train_has_checked_baggage(train_spec_to_tsn(train_spec))
+                            amtrak.train_has_checked_baggage(
+                                train_spec_to_tsn(train_spec)
+                            )
                             and amtrak.station_has_checked_baggage(station_code)
                         )
 
@@ -932,7 +957,9 @@ def fill_tt_spec(
                             short_days_box=short_days_box,
                             is_first_stop=is_first_stop,
                             is_last_stop=is_last_stop,
-                            use_baggage_str=amtrak.train_has_checked_baggage(train_spec_to_tsn(train_spec)),
+                            use_baggage_str=amtrak.train_has_checked_baggage(
+                                train_spec_to_tsn(train_spec)
+                            ),
                             has_baggage=has_baggage,
                         )
                         tt.iloc[y, x] = cell_text
@@ -1059,11 +1086,15 @@ def produce_timetable(
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec)  # Note still contains "/" items
+    train_specs_list = train_specs_list_from_tt_spec(
+        tt_spec
+    )  # Note still contains "/" items
     flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
 
     # Note still contains "91 monday" and similar specs: remove the day suffixes here
-    flattened_tsn_list = [train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set]
+    flattened_tsn_list = [
+        train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
+    ]
 
     reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
     debug_print(1, "Feed filtered by trip_short_name.")

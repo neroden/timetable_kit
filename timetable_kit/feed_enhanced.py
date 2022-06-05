@@ -19,6 +19,20 @@ from timetable_kit.errors import (
     TwoTripsError,
 )
 
+"""
+gtfs_days is the list of all the days (Monday through Sunday) which form gtfs column headers,
+appropriately lowercased for the column headers.
+"""
+gtfs_days = (
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+)
+
 
 def filter_by_dates(self, first_date, last_date):
     """
@@ -50,7 +64,6 @@ def filter_by_dates(self, first_date, last_date):
     new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
     return new_feed
 
-gtfs_days = ("monday","tuesday","wednesday","thursday","friday","saturday","sunday")
 
 def filter_by_day_of_week(
     self,
@@ -77,7 +90,7 @@ def filter_by_day_of_week(
     """
     # This assumes integer types for the day column in the calendar.
     if day not in gtfs_days:
-        raise InputError("Expected GTFS day name");
+        raise InputError("Expected GTFS day name")
 
     new_feed = self.copy()
     # This is where we filter the calendar by the value in the day column:

@@ -6,8 +6,11 @@
 Routines to convert between trip_id and trip_short_name.
 
 In GTFS, trip_id is unique.  So a trip_id to trip_short_name map should be, too.
-However, trip_short_name isn't unique.  But it is unique on a given calendar day,
+However, trip_short_name isn't unique.  But it is usually unique on a given calendar day,
 so it should be possible to make a map from a restricted feed.
+
+Unfortunately, the same trip_short_name can have different schedules on different days of
+the week.  So we may need to map for days of the week as well.
 
 Also contains other routines which look up trips by tsn.
 """
@@ -17,20 +20,29 @@ from timetable_kit.debug import debug_print
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
-gtfs_days = ("monday","tuesday","wednesday","thursday","friday","saturday","sunday")
+# List of days which are GTFS column headers
+from timetable_kit.feed_enhanced import gtfs_days
 
-def train_spec_to_tsn(train_spec: str) -> str:
+
+def train_spec_to_tsn(train_spec: str, doing_html=False) -> str:
     """
     Takes a train_spec, which is either a tsn or a tsn followed by a space and a day of the week,
     and returns the tsn alone.
+
+    The "doing_html" version is designed for a special case: it adds invisible HTML comments
+    to distinguish the different days from one another.  This is necessary to keep PANDAS headers
+    unique.
     """
     for day in gtfs_days:
         tentative_tsn = train_spec.removesuffix(" " + day)
-        if (tentative_tsn != train_spec):
+        if tentative_tsn != train_spec:
             # Only remove one suffix!
-            return tentative_tsn;
+            if doing_html:
+                # Keep column headers unique
+                tentative_tsn = "".join([tentative_tsn, "<!-- ", day, " -->"])
+            return tentative_tsn
     # No suffixes found
-    return train_spec;
+    return train_spec
 
 
 def make_trip_id_to_tsn_dict(feed) -> dict[str, str]:
@@ -79,6 +91,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
     return tsn_to_trip_id
 
+
 def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_short_name + " " + day_of_week to trip_id.
@@ -117,6 +130,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
         # Then add to the larger dict:
         total_dict.update(tsn_to_trip_id)
     return total_dict
+
 
 def find_tsn_dupes(feed) -> set[str]:
     """

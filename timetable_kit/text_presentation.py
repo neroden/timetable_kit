@@ -23,7 +23,7 @@ from timetable_kit.errors import GTFSError, FutureCodeError
 from timetable_kit.debug import debug_print
 from timetable_kit.icons import get_baggage_icon_html
 from timetable_kit.icons import get_accessible_icon_html
-
+from timetable_kit.tsn import train_spec_to_tsn
 
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     """
@@ -785,30 +785,43 @@ route_number_prefix_map = {
 
 
 def get_time_column_header(
-    tsns: list[str],
-    route_to_tsn,
+    train_specs: list[str],
+    route_from_train_spec,
     doing_html=False,
     train_numbers_side_by_side=False,
 ) -> str:
     """
     Return the header for a column of times.
 
-    tsns: should be a list of trip_short_names aka train numbers (ordered).
-    route_from_tsn: function taking tsn and giving a route row from the GTFS routes table.
+    train_specs: should be a list of train_specs (ordered).
+
+    Each train_spec is a trip_short_name, possibly followed by a space and a lowercase day of the week.
+
+    route_from_train_spec: function taking train_spec and giving a route row from the GTFS routes table.
     train_numbers_side_by_side: List train numbers with a slash instead of on top of each other.
     """
-    if not tsns:
-        raise InputError("No tsns?")
+    if not train_specs:
+        raise InputError("No train_specs?")
+
     if not doing_html:
-        # For plaintext, keep it simple: just the train number
-        return " / ".join(tsns)
+        # For plaintext, keep it simple: just the train specs
+        return " / ".join(train_specs)
 
     if train_numbers_side_by_side:
         # Old algorithm.  For Empire Builder, Lake Shore Limited.
 
+        # Strip the " monday" type suffixes, but add a comment to keep them unique:
+        # PANDAS requires every column header to be unique
+        tsns = [
+            train_spec_to_tsn(train_spec, doing_html=True) for train_spec in train_specs
+        ]
+
         # For HTML, let's get FANCY... May change this later.
         # Route types: 2 is a train, 3 is a bus
-        route_types = [int(route_to_tsn(tsn).route_type) for tsn in tsns]
+        route_types = [
+            int(route_from_train_spec(train_spec).route_type)
+            for train_spec in train_specs
+        ]
         if route_types == [2]:
             time_column_prefix = "Train #"
         elif route_types == [3]:
@@ -850,15 +863,19 @@ def get_time_column_header(
         "".join(
             [
                 "<small>",
-                route_number_prefix_map[int(route_to_tsn(tsn).route_type)],
+                route_number_prefix_map[
+                    int(route_from_train_spec(train_spec).route_type)
+                ],
                 "</small>",
                 "<br>",
                 "<strong>",
-                tsn,
+                # Strip the " monday" type suffix, but add a comment to keep them unique:
+                # PANDAS requires every column header to be unique
+                train_spec_to_tsn(train_spec, doing_html=True),
                 "</strong>",
             ]
         )
-        for tsn in tsns
+        for train_spec in train_specs
     ]
     time_column_header = "<hr>".join(prefixed_route_numbers)
     return time_column_header

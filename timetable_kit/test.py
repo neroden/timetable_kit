@@ -56,14 +56,14 @@ if __name__ == "__main__":
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    oneday_feed = master_feed.filter_by_dates(reference_date, reference_date);
+    oneday_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     tsn.make_tsn_and_day_to_trip_id_dict(oneday_feed)
 
     quit()
 
     monday_feed = oneday_feed.filter_by_day_of_week("monday")
-    print(monday_feed.calendar);
+    print(monday_feed.calendar)
 
     quit()
 

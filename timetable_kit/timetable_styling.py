@@ -35,7 +35,9 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_time_column_stylings(train_spec, route_from_train_spec, output_type="attributes"):
+def get_time_column_stylings(
+    train_spec, route_from_train_spec, output_type="attributes"
+):
     """
     Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
 

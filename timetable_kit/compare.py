@@ -63,7 +63,7 @@ def compare_stop_lists(base_trip, trips, *, feed):
                 stop_times, align_axis="columns", keep_shape=True
             )
         except:
-            print ("Something wrong with trip ", trip)
+            print("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
             print(
                 " ".join(
