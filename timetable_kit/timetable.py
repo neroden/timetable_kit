@@ -241,7 +241,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
             return None
         return {"train_spec": train_spec, "first": True, "last": False, "blank": False}
 
-    train_spec = code_text;
+    train_spec = code_text
     if train_spec not in train_specs:
         return None
     return {"train_spec": train_spec, "first": False, "last": False, "blank": False}
