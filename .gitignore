@@ -1,16 +1,16 @@
 # Data directories for timetable_kit
 wikipedia/
-amtrak_stations/
-amtrak_station_stats/
+stations/
+station_stats/
+gtfs/
 
-# Typical downloaded GTFS files
-gtfs-amtrak.zip
-gtfs-amtrak/
+# Typical downloaded GTFS files for timetable_kit
+GTFS.zip
 
-# Generated output files
-tt_*.pdf
-tt_*.html
-tt_*.csv
+# Generated output files for timetable_kit
+bad_stations.csv
+stations.csv
+output/
 
 # Working files for Nano editor
 .*.swp
