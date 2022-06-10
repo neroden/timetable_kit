@@ -42,6 +42,8 @@ from timetable_kit.timetable_argparse import make_tt_arg_parser
 # This one monkey-patches gk.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
+from timetable_kit.feed_enhanced import gtfs_days
+
 # To intialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
@@ -133,9 +135,17 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
     key_code = str(raw_tt_spec.iloc[0, 0])
     debug_print(3, "Key code: " + key_code)
     if key_code.startswith("stations of "):
-        key_train_name = key_code[len("stations of ") :]
         # Filter the feed down to a single date...
         today_feed = feed.filter_by_dates(date, date)
+
+        # Find the train name and possibly filter by day...
+        key_train_name = key_code.removeprefix("stations of ")
+        for day in gtfs_days:
+            if key_train_name.endswith(day):
+                key_train_name = key_train_name.removesuffix(day).strip()
+                today_feed = today_feed.filter_by_day_of_week(day)
+                break
+
         # And pull the stations list
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.copy()  # Copy entire original spec
