@@ -76,7 +76,7 @@ in exactly the order the columns will appear in the timetable.
 Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
 
 A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
-This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".
+This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".  It uses the days as recorded in the GTFS file (so, it's the day at the first station, but with the timezone for the overall GTFS file, not for the first station); this can be confusing.  This is best used only if you absolutely have to.
 
 SPECIAL COLUMNS
 ---------------
@@ -204,6 +204,7 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "key_f": "If present, include the key for flag stops",
     "key_tz": "If present, include the key for time zones",
     "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains."
+    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar."
  }
 
 reference_date is critically important and is required unless passed at the command line.

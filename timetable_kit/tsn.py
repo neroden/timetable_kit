@@ -126,7 +126,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
         # And prep the trip_ids:
         trip_ids = day_feed.trips["trip_id"].array
         # And zip it up:
-        tsn_to_trip_id = dict(zip(tsns, trip_ids))
+        tsn_to_trip_id = dict(zip(suffixed_tsns, trip_ids))
         # Then add to the larger dict:
         total_dict.update(tsn_to_trip_id)
     return total_dict

@@ -1,8 +1,7 @@
 {
-    "programmers_warning": "This is currently producing a timetable with incorrect days.  Debug!",
     "title": "Crescent Timetable",
     "heading": "Amtrak's Crescent",
-    "reference_date": "20220625",
+    "reference_date": "20220613",
     "key_baggage": "true",
     "key_d": "true",
     "key_r": "true",

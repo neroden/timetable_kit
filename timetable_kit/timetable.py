@@ -204,7 +204,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     """
     Given special code text in a cell, decipher it
 
-    The code leads with a tsn, followed by a space,
+    The code leads with a train_spec (train number or train number + day of week), followed by a space,
     followed by one or more of the following (space-separated):
     "first" (first station for train, show departure only)
     "last" (last station for train, show arrival only)
@@ -224,25 +224,27 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     """
     if code_text == "" or pd.isna(code_text):
         return None
-    code_list = code_text.split()
-    if not code_list:
-        return None
-    if code_list[0] not in train_specs:
-        if code_list[0] == "blank":
-            return {"blank": True}
-        return None
-    output_dict = {
-        "blank": False,
-        "train_spec": code_list[0],
-        "first": False,
-        "last": False,
-    }
 
-    for code in code_list[1:]:
-        if code not in ["first", "last"]:
+    code_text = code_text.strip()
+    if code_text == "blank":
+        return {"blank": True}
+
+    if code_text.endswith("last"):
+        train_spec = code_text.removesuffix("last").strip()
+        if train_spec not in train_specs:
             return None
-        output_dict[code] = True
-    return output_dict
+        return {"train_spec": train_spec, "last": True, "first": False, "blank": False}
+
+    if code_text.endswith("first"):
+        train_spec = code_text.removesuffix("first").strip()
+        if train_spec not in train_specs:
+            return None
+        return {"train_spec": train_spec, "first": True, "last": False, "blank": False}
+
+    train_spec = code_text;
+    if train_spec not in train_specs:
+        return None
+    return {"train_spec": train_spec, "first": False, "last": False, "blank": False}
 
 
 def split_trains_spec(trains_spec):
@@ -1066,6 +1068,9 @@ def produce_timetable(
     else:
         raise InputError("No reference date in .tt-aux or at command line!")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+
+    if "programmers_warning" in aux:
+        print("WARNING: ", aux["programmers_warning"])
 
     # Now we're ready to load the .tt-spec file, finally
     tt_spec_raw = load_ttspec_csv(ttspec_csv_path)

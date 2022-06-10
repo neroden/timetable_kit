@@ -1,7 +1,8 @@
 {
+    "programmers_warning": "Currently requires editing Amtrak GTFS to fix a problem with days of week.";
     "title": "Coast Starlight Timetable",
     "heading": "Amtrak's Coast Starlight",
-    "reference_date": "20220510",
+    "reference_date": "20220613",
     "key_baggage": "true",
     "key_d": "true",
     "key_r": "true",
