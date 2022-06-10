@@ -1,3 +1,34 @@
-stations of 11, 11, access, station,timezone, 14
-column-options,days ardp,,,,days ardp reverse
+,11, access, station,timezone,14
+column-options,ardp,,,,ardp reverse
+days,SEA,,,,SEA
 updown,,,,,
+SEA,11 first,,,,14 last
+TAC,,,,,
+OLW,,,,,
+CTL,,,,,
+KEL,,,,,
+VAN,,,,,
+PDX,,,,,
+SLM,,,,,
+ALY,,,,,
+EUG,,,,,
+CMO,,,,,
+KFS,,,,,
+DUN,,,,,
+RDD,,,,,
+CIC,,,,,
+SAC,,,,,
+DAV,,,,,
+MTZ,,,,,
+EMY,,,,,
+OKJ,,,,,
+SJC,,,,,
+SNS,,,,,
+PRB,,,,,
+SLO,,,,,
+SBA,,,,,
+OXN,,,,,
+SIM,,,,,
+VNC,,,,,
+BUR,,,,,
+LAX,11 last,,,,14 first

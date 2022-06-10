@@ -34,3 +34,5 @@ from .access import (
     station_has_accessible_platform,
     station_has_inaccessible_platform,
 )
+# Special routine to patch Amtrak's defective GTFS feed
+from .gtfs_cleanup import patch_feed

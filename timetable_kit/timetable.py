@@ -1323,6 +1323,10 @@ if __name__ == "__main__":
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
+    # Amtrak-specific patches.  Bleah!  FIXME
+    master_feed = amtrak.patch_feed(master_feed)
+    debug_print(1, "Feed patched, hopefully")
+
     author = args.author
     if not author:
         author = os.getenv("TIMETABLE_KIT_AUTHOR")
