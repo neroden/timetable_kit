@@ -1,11 +1,4 @@
-1 -- Day filter.  Crescent #20 has different weekend timetables despite the same train number.
-    Design notes are in the tt-spec-documentation.rst file.  This is a blocker.
-
-2 -- Coast Starlight has different timetables in GTFS on Saturday only -- BUT THEY ARE IDENTICAL
-    Which is absolutely ridiculous.  Find a workaround.  Merge identical timetables?
-
-3 -- Find a way to sanitize the GTFS to remove totally-duplicated trips
-
+0 -- Add connecting service notes for remaining long-distance routes.
 
 Fine for after release of timetables:
 1 -- combine find_trains.py and find_connecting_buses.py, which share excessive amounts of logic.
