@@ -213,6 +213,12 @@ major_stations_list = (
     "HOS",  # SL -- Amtrak emphasized nothing, so I picked some
     "ELP",
     "TUS",
+    "CHS",  # Palmetto -- Amtrak emphasized nothing, so I picked Charleston
+    "SAV", # Silver Service -- Amtrak emphasized nothing, so I picked some
+    "JAX",
+    "ORL",
+    "TPA",
+    "MIA",
 )
 
 

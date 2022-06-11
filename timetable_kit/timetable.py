@@ -1082,6 +1082,11 @@ def produce_timetable(
     if "programmers_warning" in aux:
         print("WARNING: ", aux["programmers_warning"])
 
+    if "dwell_secs_cutoff" in aux:
+        dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
+    else:
+        dwell_secs_cutoff = 300
+
     # Now we're ready to load the .tt-spec file, finally
     tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
     tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
@@ -1091,7 +1096,7 @@ def produce_timetable(
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
     debug_print(1, "Feed filtered by reference date.")
 
-    # Reduce the feed, by eliminating stuff from other trains.
+    # Reduce the feed, by elimiqnating stuff from other trains.
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
@@ -1153,6 +1158,7 @@ def produce_timetable(
             reference_date=reference_date,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
+            dwell_secs_cutoff=dwell_secs_cutoff,
         )
         # NOTE, need to add the header
         path_for_csv = output_dir / Path(output_filename_base + "-out.csv")
@@ -1172,6 +1178,7 @@ def produce_timetable(
             reference_date=reference_date,
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
+            dwell_secs_cutoff=dwell_secs_cutoff,
             doing_html=True,
             box_time_characters=False,
             train_numbers_side_by_side=train_numbers_side_by_side,
