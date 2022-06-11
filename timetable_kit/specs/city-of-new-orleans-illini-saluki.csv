@@ -1,5 +1,5 @@
 ,393, 59, access, station, 58, 390
-column-options,ardp,days,,,reverse ardp days,reverse
+column-options,ardp,ardp days,,,reverse ardp days,reverse ardp
 route-name
 days,CHI,,,,,CHI
 updown
