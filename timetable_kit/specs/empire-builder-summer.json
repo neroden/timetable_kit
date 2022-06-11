@@ -4,7 +4,7 @@
     "reference_date": "20220613",
     "output_filename": "empire-builder",
     "top_text": "Trains 7 and 27 are the <b>same train</b> from Chicago to Spokane; cars separate to go to Seattle and Portland.<br>Trains 8 and 28 join at Spokane to become the <b>same train</b> from Spokane to Chicago.",
-    "bottom_text": "<b>Note:</b><br>Browning, MT (BRO) is served only in winter.<br>East Glacier Park, MT (GPK) is served only in summer.",
+    "bottom_text": "<p><b>Note:</b><br>Browning, MT (BRO) is served only in winter.<br>East Glacier Park, MT (GPK) is served only in summer.</p><p><b>Local connecting trains</b> are provided: <br>at Chicago by <a href=\"https://metra.com\">Metra</a>, <br>at St. Paul by <a href=\"https://www.metrotransit.org/\">Metro Transit</a>, <br>at Seattle by <a href=\"https://www.soundtransit.org\">Sound Transit</a>, <br>and at Portland by <a href=\"https://trimet.org\">TriMet</a> MAX and <a href=\"https://portlandstreetcar.org/\">Portland Streetcar</a>.</p>",
     "train_numbers_side_by_side": "true",
     "key_on_right": "true",
     "key_baggage": "true",
