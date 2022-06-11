@@ -2,6 +2,7 @@
     "title": "Cardinal Timetable",
     "heading": "Amtrak's Cardinal",
     "reference_date": "20220613",
+    "bottom_text": "<b>Local connecting trains</b> are provided: <br>at New York by <a href=\"https://new.mta.info\">the MTA</a>, <br>at New York and all stations in New Jersey by <a href=\"https://www.njtransit.com\">NJ Transit</a>, <br>at Trenton, Philadelphia and Wilmington by <a href=\"http://www.septa.org\">SEPTA</a>, <br>at Baltimore, BWI, and DC by the <a href=\"https://www.mta.maryland.gov\">Maryland Transit Administration</a>, <br>at DC and Alexandria by <a href=\"https://www.wmata.com/\">WMATA</a>, <br>at DC and Alexandria by <a href=\"http://www.vre.org/\">VRE</a>, <br>and at Chicago by <a href=\"https://metra.com\">Metra</a>.",
     "key_baggage": true,
     "key_d": true,
     "key_r": true,
