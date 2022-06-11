@@ -3,7 +3,7 @@
     "heading": "Amtrak's Texas Eagle",
     "reference_date": "20220613",
     "top_text": "Trains 21 and 421 are the <b>same train</b> from Chicago to San Antonio; cars separate three days a week to become train 421 to Los Angeles.  Three days a week, train 422 joins with train 22 at San Antonio to become the <b>same train</b> from San Antonio to Chicago.",
-    "bottom_text": "<b>MST</b> Mountain Standard Time<br>Arizona does not observe Daylight Savings Time.<br>Please double-check all Arizona calling times<br>when spring and fall clock changes</br>occur in other states.",
+    "bottom_text": "<p><b>MST</b> Mountain Standard Time<br>Arizona does not observe Daylight Savings Time.<br>Please double-check all Arizona calling times<br>when spring and fall clock changes</br>occur in other states.</p><p><b>Local connecting trains</b> are provided: <br>at Chicago and Joliet by <a href=\"https://metra.com\">Metra</a>, <br>at St. Louis by <a href=\"https://www.metrostlouis.org/metrolink/\">Metrolink</a>, <br>at Dallas by <a href=\"https://www.dart.org\">DART</a>, <br>at Dallas and Fort Worth by <a href=\"https://trinityrailwayexpress.org\">Trinity Railway Express<a>, <br>at Fort Worth by <a href=\"https://ridetrinitymetro.org/about-texrail/\">TEXRail</a>, <br>at Tucson by <a href=\"https://www.suntran.com/routes-services/sunlink/\">Sun Link Streetcar</a>, <br>at Ontario, Pomona, and Los Angeles by <a href=\"https://metrolinktrains.com\">Metrolink</a>, <br>and at Los Angeles by <a href=\"https://www.metro.net\">LA Metro</a>.</p>",
     "train_numbers_side_by_side": "true",
     "key_on_right": "true",
     "key_baggage": "true",
