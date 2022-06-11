@@ -157,7 +157,7 @@ major_stations_list = (
     "RVR",
     "NFK",
     "HAR",  # Keystone timetable
-    "PIT",
+    "PGH",
     "ALB",  # Empire timetable
     "BFX",
     "TWO",
@@ -198,15 +198,17 @@ major_stations_list = (
     "SAC",
     "SKN",  # San Joaquins
     "BFD",
-    "DEN",  # CZ -- Amtrak didn't, I should
-    "SLC",
-    "EMY",  # CZ
     "MSP",  # EB -- Amtrak emphasized nothing on EB, so I picked some
     "MOT",
     "HAV",
     "SPK",
     "PDX",
     "SEA",
+    "DEN",  # CZ -- Amtrak didn't, I should
+    "SLC",
+    "EMY",  # CZ
+    "ABQ",  # SWC -- Amtrak didn't
+    "FLG",
     "DAL",  # TE -- Amtrak emphasized nothing, so I picked some
     "FTW",
     "SAS",  # TE/SL
