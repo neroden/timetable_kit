@@ -6,8 +6,8 @@ This contains python modules which are entirely specific to Amtrak.
 Before making an Amtrak timetable, you currently need to run the following scripts
 within this directory to download the Amtrak station database and the Amtrak GTFS files:
 
-python3 ./json_stations.py download
-python3 ./get_gtfs.py
+* python3 ./json_stations.py download
+* python3 ./get_gtfs.py
 
 Right now the timetable_kit package is really only designed to make
 Amtrak timetables, but the hope is that the rest of the package can 
