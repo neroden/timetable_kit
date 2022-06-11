@@ -82,7 +82,7 @@ def get_time_column_stylings(
         return color_css
 
 
-def style_timetable_for_html(timetable, styler_df, table_classes=""):
+def style_timetable_for_html(timetable, styler_df, table_classes="", table_uuid="main_timetable"):
     """
     Take a timetable DataFrame, with parallel styler DataFrame, and separate header styler map, and style it for output.
 
@@ -116,7 +116,8 @@ def style_timetable_for_html(timetable, styler_df, table_classes=""):
     # Produce HTML.
     # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
     table_attrs = 'class="tt-table" role="main" aria-label="Timetable" '  # FIXME: the aria label should be more specific
-    styled_timetable_html = s2.to_html(table_attributes=table_attrs)
+    # Specify the ID to avoid it being randomly generated on each run
+    styled_timetable_html = s2.to_html(table_attributes=table_attrs, table_uuid=table_uuid)
 
     # NOTE That this generates an unwanted blank style sheet...
     unwanted_prefix = """<style type="text/css">
