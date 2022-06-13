@@ -156,7 +156,7 @@ These special codes are intended to be used only in four situations:
 
 A single train number such as "8" will simply say which train to use out of several.
 
-For technical reasons, "8 first last" will be accepted as a special code, but it may cause nonsensical behavior.
+To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.
 
 A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
 space character in the cell.

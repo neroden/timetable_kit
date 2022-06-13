@@ -215,12 +215,13 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     Given special code text in a cell, decipher it
 
     The code leads with a train_spec (train number or train number + day of week), followed by a space,
-    followed by one or more of the following (space-separated):
+    followed by zero or more of the following (space-separated):
     "first" (first station for train, show departure only)
     "last" (last station for train, show arrival only)
+    "first two_row" -- use two-row format
+    "last two_row" -- use two-row format
 
-    It really makes no sense to specify both.
-    Specifying neither may give strange results, though it is supported.
+    Specifying just a train spec is supported.
 
     OR, if the code is "blank", return that information.
 
@@ -244,22 +245,50 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
         train_spec.removesuffix("noheader").strip() for train_spec in train_specs
     ]
 
+    # The cell code may end with two_row or two-row.  Remove it.
+    two_row = False
+    if code_text.endswith("two_row"):
+        two_row = True
+        code_text = code_text.removesuffix("two_row").strip()
+    elif code_text.endswith("two-row"):
+        two_row = True
+        code_text = code_text.removesuffix("two-row").strip()
+
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
         if train_spec not in train_specs:
             return None
-        return {"train_spec": train_spec, "last": True, "first": False, "blank": False}
+        return {
+            "train_spec": train_spec,
+            "last": True,
+            "first": False,
+            "blank": False,
+            "two_row": two_row,
+        }
 
     if code_text.endswith("first"):
         train_spec = code_text.removesuffix("first").strip()
         if train_spec not in train_specs:
             return None
-        return {"train_spec": train_spec, "first": True, "last": False, "blank": False}
+        return {
+            "train_spec": train_spec,
+            "first": True,
+            "last": False,
+            "blank": False,
+            "two_row": two_row,
+        }
 
     train_spec = code_text
     if train_spec not in train_specs:
         return None
-    return {"train_spec": train_spec, "first": False, "last": False, "blank": False}
+
+    return {
+        "train_spec": train_spec,
+        "first": False,
+        "last": False,
+        "blank": False,
+        "two_row": two_row,
+    }
 
 
 def split_trains_spec(trains_spec):
@@ -445,8 +474,6 @@ def make_stations_max_dwell_map(
             stations_dict[station_code] = True
         else:
             stations_dict[station_code] = False
-        # Should do a special pass for stations where all trains are "first" or "last".
-        # this is a lot of work, though
     return stations_dict
 
 
@@ -887,7 +914,7 @@ def fill_tt_spec(
 
                     if cell_codes:
                         # Specific train_spec was requested.
-                        debug_print(2, "cell codes found")
+                        debug_print(2, "cell codes found: ", cell_codes)
                         train_specs_to_check = [cell_codes["train_spec"]]
                     else:
                         train_specs_to_check = [
@@ -961,11 +988,11 @@ def fill_tt_spec(
                         if cell_codes:
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
-                            # WHOOPS -- we used to do this, but it's wrong!
-                            # Only if *every train* has this as first_stop / last_stop
-                            # would this be correct; so should do it in dwell times.
-                            # if is_first_stop or is_last_stop:
-                            #    two_row = False
+                            if is_first_stop or is_last_stop:
+                                # We used to do this always, but it's sometimes wrong!
+                                # Allow spec creator to override when they want two rows.
+                                if not cell_codes["two_row"]:
+                                    two_row = False
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
