@@ -1,12 +1,13 @@
-,stations,access,521,523,525,11,527,531,541,543,545,547,549,551
+,stations,access,521,523 / 3623 noheader,525 / 3625 noheader,11,527,531,541 / 3541 noheader,543,545,547,549,551
 column-options,,,ardp,,,,,,,,,,,
 route-name,,,,,,,,,,,,,,
-days,,,SJC,SJC,OKJ,SJC,SJC,SJC,SJC,OKJ,OKJ,SJC,OKJ,OKJ
-COX,,,,,,,,,,,,,,
-ARN,,,,,,,,,,,,,,
-RLN,,,,,,,,,,,,,,
-RSV,,,,,,,,,,,,,,
-SAC,,,521 first,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+COX,,,blank,blank,blank,blank,blank,blank,3541 first,blank,blank,blank,blank,blank
+ARN,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank
+RLN,,,blank,blank,blank,"from Chico, CA",blank,blank,,blank,blank,blank,blank,blank
+RSV,,,blank,3623 first,3625 first,& Oregon,blank,blank,,blank,blank,blank,blank,blank
+SAC,,,blank,3623 last,3625 last,11 last,blank,blank,3541 last,blank,blank,blank,blank,blank
+SAC,,,521 first,523 first,525 first,11 first,527 first,531 first,541 first,,,,,
 DAV,,,,,,,,,,,,,,
 FFV,,,,,,,,,,,,,,
 SUI,,,,,,,,,,,,,,
@@ -14,10 +15,10 @@ MTZ,,,,,,,,,,,,,,
 RIC,,,,,,,,,,,,,,
 BKY,,,,,,,,,,,,,,
 EMY,,,,,,,,,,,,,,
-OKJ,,,,,,,,,,,545 last,,549 last,551 last
-OAC,,,,,,,,,,,,,,
-HAY,,,,,,,,,,,,,,
-FMT,,,,,,,,,,,,,,
-GAC,,,,,,,,,,,,,,
-SCC,,,,,,,,,,,,,,
-SJC,,,521 last,523 last,,,527 last,531 last,541 last,,,547 last,,
+OKJ,,,,,525 last,,,,,543 last,545 last,,549 last,551 last
+OAC,,,,,blank,,,,,blank,blank,,blank,blank
+HAY,,,,,blank,,,,,blank,blank,,blank,blank
+FMT,,,,,blank,,,,,blank,blank,,blank,blank
+GAC,,,,,blank,,,,,blank,blank,,blank,blank
+SCC,,,,,blank,,,,,blank,blank,,blank,blank
+SJC,,,521 last,523 last,blank,,527 last,531 last,541 last,blank,blank,547 last,blank,blank
