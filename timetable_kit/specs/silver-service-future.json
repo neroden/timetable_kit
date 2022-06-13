@@ -2,7 +2,7 @@
     "title": "Silver Service Timetable",
     "heading": "Amtrak's Silver Service",
     "reference_date": "20220620",
-    "output_filename": "silver",
+    "output_filename": "silver-service",
     "output_subdir": "starting_2022_06_20",
     "bottom_text": "<b>Local connecting trains</b> are provided: <br>at New York by <a href=\"https://new.mta.info\">the MTA</a>, <br>at New York and all stations in New Jersey by <a href=\"https://www.njtransit.com\">NJ Transit</a>, <br>at Trenton, Philadelphia and Wilmington by <a href=\"http://www.septa.org\">SEPTA</a>, <br>at Baltimore, BWI, and DC by the <a href=\"https://www.mta.maryland.gov\">Maryland Transit Administration</a>, <br>at DC and Alexandria by <a href=\"https://www.wmata.com/\">WMATA</a>, <br>at DC and Alexandria by <a href=\"http://www.vre.org/\">VRE</a>, <br>at Winter Park, Orlando, and Kissimmee by <a href=\"https://sunrail.com\">SunRail</a>, <br>at all stations from West Palm Beach to Hollywood by <a href=\"https://www.tri-rail.com/\">Tri-Rail</a>, <br>and at Miami by <a href=\"https://www.miamidade.gov/global/transportation/metrorail.page\">Miami Metrorail</a>.",
     "comment_regarding_dwell": "Suppressing dwell under 8 min. to fit everything on one page",
