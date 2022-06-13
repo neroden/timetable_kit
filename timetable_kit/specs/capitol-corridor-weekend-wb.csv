@@ -1,12 +1,12 @@
 ,stations,access,723,11,727,729,737,741,743,745,747,751
 column-options,,,ardp,,,,,,,,,
 route-name,,,,,,,,,,,,
-days,,,SJC,SJC,SJC,SJC,SJC,SJC,SJC,OKJ,SJC,OKJ
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
 COX,,,,,,,,,,,,
 ARN,,,,,,,,,,,,
-RLN,,,,,,,,,,,,
-RSV,,,,,,,,,,,,
-SAC,,,723 first,,,,,,,,,
+RLN,,,,from Chico,,,,,,,,
+RSV,,,,& Oregon,,,,,,,,
+SAC,,,723 first,,,,,,743 first,,,
 DAV,,,,,,,,,,,,
 FFV,,,,,,,,,,,,
 SUI,,,,,,,,,,,,
@@ -14,7 +14,7 @@ MTZ,,,,,,,,,,,,
 RIC,,,,,,,,,,,,
 BKY,,,,,,,,,,,,
 EMY,,,,,,,,,,,,
-OKJ,,,,,,,,,,,,
+OKJ,,,,,,,,,,745 last,,751 last
 OAC,,,,,,,,,,,,
 HAY,,,,,,,,,,,,
 FMT,,,,,,,,,,,,
