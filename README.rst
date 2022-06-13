@@ -77,4 +77,4 @@ It is also under the Open Font License.  See README.Spartan for more information
 Sample
 ======
 
-.. image:: https://github.com/neroden/timetable_kit/tree/main/samples/upstate-ny-to-western-vermont-services.pdf
+.. image:: https://github.com/neroden/timetable_kit/tree/main/samples/upstate-ny-to-western-vermont-services.jpg
