@@ -34,6 +34,20 @@ optimized for very small font sizes.
 This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
 This one WORKS at very small print sizes.
 
+
+Bus Icons
+=========
+
+bus-solid.svg, bus-simple-solid.svg, and van-shuttle-solid.svg are from Font Awesome Free, under the CC BY 4.0 license.
+
+BSicon_BUS.svg: public domain, from https://commons.wikimedia.org/wiki/File:BSicon_BUS.svg by Jake the Editor Man in 2008
+
+
+Bed Icon
+========
+
+bed-solid.svg: From Font Awesome Free
+
 Accessibility Icons
 ===================
 
