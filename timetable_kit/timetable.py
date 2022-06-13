@@ -253,6 +253,9 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     elif code_text.endswith("two-row"):
         two_row = True
         code_text = code_text.removesuffix("two-row").strip()
+    elif code_text.endswith("tworow"):
+        two_row = True
+        code_text = code_text.removesuffix("tworow").strip()
 
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
