@@ -73,3 +73,8 @@ for more information.
 The SpartanTT font is a derivative of the Spartan font specifically for timetables.
 It has extremely small, entirely functional changes which are probably uncopyrightable.
 It is also under the Open Font License.  See README.Spartan for more information on the changes.
+
+Sample
+======
+
+.. image:: https://github.com/neroden/timetable_kit/tree/main/samples/upstate-ny-to-western-vermont-services.pdf
