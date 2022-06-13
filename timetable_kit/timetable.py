@@ -435,6 +435,8 @@ def make_stations_max_dwell_map(
             stations_dict[station_code] = True
         else:
             stations_dict[station_code] = False
+        # Should do a special pass for stations where all trains are "first" or "last".
+        # this is a lot of work, though
     return stations_dict
 
 
@@ -944,8 +946,11 @@ def fill_tt_spec(
                         if cell_codes:
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
-                            if is_first_stop or is_last_stop:
-                                two_row = False
+                            # WHOOPS -- we used to do this, but it's wrong!
+                            # Only if *every train* has this as first_stop / last_stop
+                            # would this be correct; so should do it in dwell times.
+                            # if is_first_stop or is_last_stop:
+                            #    two_row = False
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
