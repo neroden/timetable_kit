@@ -78,6 +78,8 @@ Several train numbers separated by slashes can be used to put several trains in 
 A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
 This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".  It uses the days as recorded in the GTFS file (so, it's the day at the first station, but with the timezone for the overall GTFS file, not for the first station); this can be confusing.  This is best used only if you absolutely have to.
 
+A train number may also be followed by a space and "noheader".  This must come after the optional weekday.  If this is the case, this train number will not be listed in the header, and its route name will not be listed, but it may have times in the column; this is used for short connecting buses.
+
 SPECIAL COLUMNS
 ---------------
 The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.

@@ -239,6 +239,9 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     if code_text == "blank":
         return {"blank": True}
 
+    # Train specs may have a "noheader" suffix.  Remove it.
+    train_specs = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
+
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
         if train_spec not in train_specs:
@@ -266,7 +269,7 @@ def split_trains_spec(trains_spec):
     Used to separate specs for multiple trains in the same timetable column.
     A single "59" will simply give {"59"}.
 
-    This also processes specs like "59 monday".
+    This also processes specs like "59 monday".  And "59 noheader".  And "59 monday noheader".
     These require exact spacing; this routine should probably clean up the spacing, but does not.
 
     """
@@ -287,11 +290,14 @@ def flatten_train_specs_list(train_specs_list):
     without the special keywords like "station".
 
     Leaves the '91 monday' type entries.
+
+    Removes "noheader" suffixes (we never want them in flattened form).
     """
     flattened_ts_list = []
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
-        flattened_ts_list = [*flattened_ts_list, *train_specs]
+        cleaned_train_specs = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
+        flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
     flattened_ts_set = set(flattened_ts_list)
     flattened_ts_set = flattened_ts_set - special_column_names
     return flattened_ts_set
@@ -721,6 +727,8 @@ def fill_tt_spec(
                     route_names = []
                     styled_route_names = []
                     for train_spec in train_specs:
+                        if train_spec.endswith("noheader"):
+                            continue
                         my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
                         # Clean this interface up later.  For now highly Amtrak-specific FIXME
@@ -779,9 +787,7 @@ def fill_tt_spec(
                     # We can only show the days for one station.
                     # So get the reference stop_id / station code to use; user-specified
                     if len(train_specs) > 1:
-                        raise InputError(
-                            "Can't have a days header for a column with two or more trains"
-                        )
+                        print("Warning: using only ", train_specs[0], " for days header")
                     my_trip = trip_from_train_spec_local(train_specs[0])
                     timepoint = get_timepoint_from_trip_id(
                         today_feed, my_trip.trip_id, reference_stop_id
@@ -878,7 +884,7 @@ def fill_tt_spec(
                         debug_print(2, "cell codes found")
                         train_specs_to_check = [cell_codes["train_spec"]]
                     else:
-                        train_specs_to_check = train_specs
+                        train_specs_to_check = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
 
                     for train_spec in train_specs_to_check:
                         my_trip = trip_from_train_spec_local(train_spec)
@@ -1107,7 +1113,8 @@ def produce_timetable(
     # This cuts a testcase runtime from 23 seconds to 20.
     train_specs_list = train_specs_list_from_tt_spec(
         tt_spec
-    )  # Note still contains "/" items
+    )  
+    # Note still contains "/" items
     flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
 
     # Note still contains "91 monday" and similar specs: remove the day suffixes here

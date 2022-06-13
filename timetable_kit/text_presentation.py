@@ -797,13 +797,26 @@ def get_time_column_header(
 
     train_specs: should be a list of train_specs (ordered).
 
-    Each train_spec is a trip_short_name, possibly followed by a space and a lowercase day of the week.
+    Each train_spec is a trip_short_name, possibly followed by a space and a lowercase day of the week.  Possibly followed by " noheader".
 
     route_from_train_spec: function taking train_spec and giving a route row from the GTFS routes table.
     train_numbers_side_by_side: List train numbers with a slash instead of on top of each other.
     """
     if not train_specs:
         raise InputError("No train_specs?")
+
+    # Strip the "noheader" train specs; we don't mention them.
+    fewer_train_specs = []
+    for train_spec in train_specs:
+        if train_spec.endswith("noheader"):
+            continue
+        fewer_train_specs.append(train_spec)
+    train_specs = fewer_train_specs
+
+    # It's OK if stripping noheader train specs leads to no header.
+    # In this case return blank.
+    if not train_specs:
+        return ""
 
     if not doing_html:
         # For plaintext, keep it simple: just the train specs
