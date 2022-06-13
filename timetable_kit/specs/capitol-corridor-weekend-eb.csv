@@ -1,7 +1,7 @@
 ,stations,access,720,724,728,732,736,742,744,746,748,14
 column-options,,,ardp,,,,,,,,,
 route-name,,,,,,,,,,,,
-days,,,SAC,SAC,SAC,SAC,ARN,SAC,SAC,SAC,SAC,SAC
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
 SJC,,,,,,,,,,,,
 SCC,,,,,,,,,,,,
 GAC,,,,,,,,,,,,
@@ -17,7 +17,7 @@ SUI,,,,,,,,,,,,
 FFV,,,,,,,,,,,,
 DAV,,,,,,,,,,,,
 SAC,,,720 last,724 last,728 last,,,,744 last,746 last,748 last,
-RSV,,,,,,,,,,,,
-RLN,,,,,,,,,,,,
+RSV,,,,,,,,,,,,to Chico
+RLN,,,,,,,,,,,,& Oregon
 ARN,,,,,,,736 last,,,,,
 COX,,,,,,,,,,,,
