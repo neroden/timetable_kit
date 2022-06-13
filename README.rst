@@ -3,8 +3,6 @@ Timetable Kit
 
 Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable timetables from `General Transit Feed Specification (GTFS) <https://en.wikipedia.org/wiki/GTFS>` data.
 
-For a sample of the sort of timetable you can make with it, see the files in https://github.com/neroden/timetable_kit/tree/main/samples/
-
 Development status
 ==================
 This is currently a work in progress but is quite usable to create Amtrak timetables.
@@ -74,8 +72,10 @@ The SpartanTT font is a derivative of the Spartan font specifically for timetabl
 It has extremely small, entirely functional changes which are probably uncopyrightable.
 It is also under the Open Font License.  See README.Spartan for more information on the changes.
 
-Sample
-======
+Example
+=======
+
+This is a (probably out of date) timetable made using timetable_kit.
 
 .. image:: https://github.com/neroden/timetable_kit/raw/main/samples/upstate-ny-to-western-vermont-services.jpg
 
