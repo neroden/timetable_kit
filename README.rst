@@ -3,6 +3,8 @@ Timetable Kit
 
 Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable timetables from `General Transit Feed Specification (GTFS) <https://en.wikipedia.org/wiki/GTFS>` data.
 
+For a sample of the sort of timetable you can make with it, see the files in https://github.com/neroden/timetable_kit/tree/main/samples/
+
 Development status
 ==================
 This is currently a work in progress but is quite usable to create Amtrak timetables.
