@@ -240,7 +240,9 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
         return {"blank": True}
 
     # Train specs may have a "noheader" suffix.  Remove it.
-    train_specs = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
+    train_specs = [
+        train_spec.removesuffix("noheader").strip() for train_spec in train_specs
+    ]
 
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
@@ -296,7 +298,9 @@ def flatten_train_specs_list(train_specs_list):
     flattened_ts_list = []
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
-        cleaned_train_specs = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
+        cleaned_train_specs = [
+            train_spec.removesuffix("noheader").strip() for train_spec in train_specs
+        ]
         flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
     flattened_ts_set = set(flattened_ts_list)
     flattened_ts_set = flattened_ts_set - special_column_names
@@ -787,7 +791,9 @@ def fill_tt_spec(
                     # We can only show the days for one station.
                     # So get the reference stop_id / station code to use; user-specified
                     if len(train_specs) > 1:
-                        print("Warning: using only ", train_specs[0], " for days header")
+                        print(
+                            "Warning: using only ", train_specs[0], " for days header"
+                        )
                     my_trip = trip_from_train_spec_local(train_specs[0])
                     timepoint = get_timepoint_from_trip_id(
                         today_feed, my_trip.trip_id, reference_stop_id
@@ -884,7 +890,10 @@ def fill_tt_spec(
                         debug_print(2, "cell codes found")
                         train_specs_to_check = [cell_codes["train_spec"]]
                     else:
-                        train_specs_to_check = [train_spec.removesuffix("noheader").strip() for train_spec in train_specs]
+                        train_specs_to_check = [
+                            train_spec.removesuffix("noheader").strip()
+                            for train_spec in train_specs
+                        ]
 
                     for train_spec in train_specs_to_check:
                         my_trip = trip_from_train_spec_local(train_spec)
@@ -1111,9 +1120,7 @@ def produce_timetable(
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
-    train_specs_list = train_specs_list_from_tt_spec(
-        tt_spec
-    )  
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
     # Note still contains "/" items
     flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
 
