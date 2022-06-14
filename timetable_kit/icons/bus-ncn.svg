@@ -3,47 +3,18 @@
    viewBox="0 0 512 256"
    version="1.1"
    id="svg4"
-   sodipodi:docname="bus-ncn.svg"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    width="512"
    height="256"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs8" />
-  <sodipodi:namedview
-     id="namedview6"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="363"
-     inkscape:cy="135.5"
-     inkscape:window-width="1528"
-     inkscape:window-height="1035"
-     inkscape:window-x="62"
-     inkscape:window-y="9"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="layer1"
-     height="256px" />
   <!-- Copyright 2022 Nathanael Nerode.  Part of timetable_kit, licensed under Affero GPL v3. -->
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Layer 1">
-    <path
-       style="color:#000000;fill:#000000;-inkscape-stroke:none"
-       d="M 361.62695,766.31641 H 151.05273 c 32.51645,13.30086 68.04921,20.69335 105.28711,20.69336 37.23791,0 72.77066,-7.3925 105.28711,-20.69336 z"
-       id="path2086" />
+     id="layer1">
     <path
        id="rect1006"
        style="fill:#000000;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 258.46875 -0.099609375 C 194.62536 -0.10794925 130.7829 -0.083138 66.939453 0 C 34.817554 0.04275 -0.359071 15.495132 0 45.701172 L 0 208 L 96 208 A 48 48 0 0 0 144 256 A 48 48 0 0 0 192 208 L 368 208 A 48 48 0 0 0 416 256 A 48 48 0 0 0 464 208 L 512 208 L 512 50.609375 C 511.12236 22.044107 488.17465 -4.7369516e-15 450 0 C 386.15648 -0.0497785 322.31214 -0.0912695 258.46875 -0.099609375 z M 48 48 L 96 48 L 96 160 L 48 160 L 48 48 z M 144 48 L 224 48 L 224 112 L 144 112 L 144 48 z M 272 48 L 352 48 L 352 112 L 272 112 L 272 48 z M 400 48 L 464 48 L 464 112 L 400 112 L 400 48 z " />
+       d="M 48,0 C 15.878273,0.04273312 -0.35906908,17.805889 0,48 v 160 h 96 c 2e-6,26.4992 21.49047,48 48,48 26.50953,0 48,-21.5008 48,-48 h 176 c 0,26.4992 21.49048,48 48,48 26.50953,0 48.00026,-21.5008 48.00026,-48 H 512 V 48 C 511.12237,19.446013 502.17445,0 464,0 326.27586,-0.01949806 181.60248,-0.16009318 48,0 Z m 0,48 H 96 V 160 H 48 Z m 96,0 h 80 v 64 h -80 z m 128,0 h 80 v 64 h -80 z m 128,0 h 64.00026 v 64 H 400 Z" />
   </g>
 </svg>

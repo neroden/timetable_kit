@@ -3,7 +3,7 @@
    viewBox="0 0 512 256"
    version="1.1"
    id="svg4"
-   sodipodi:docname="bus-ncn.svg"
+   sodipodi:docname="bus-ncn-shapes.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    width="512"
    height="256"
@@ -23,8 +23,8 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="2"
-     inkscape:cx="178.5"
-     inkscape:cy="135.5"
+     inkscape:cx="229.5"
+     inkscape:cy="95.5"
      inkscape:window-width="1528"
      inkscape:window-height="1035"
      inkscape:window-x="62"
@@ -38,13 +38,9 @@
      id="layer1"
      inkscape:label="Layer 1">
     <path
-       style="color:#000000;fill:#000000;-inkscape-stroke:none"
-       d="M 361.62695,766.31641 H 151.05273 c 32.51645,13.30086 68.04921,20.69335 105.28711,20.69336 37.23791,0 72.77066,-7.3925 105.28711,-20.69336 z"
-       id="path2086" />
-    <path
        id="rect1006"
        style="fill:#000000;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 0,45.700272 V 208 H 512 V 50.609 C 511.12236,22.043732 488.17465,0 450,0 322.31295,-0.099557 194.62619,-0.166276 66.939306,0 34.817407,0.04275 -0.359071,15.494232 0,45.700272 Z"
+       d="M 0,48 V 208 H 512 V 48 C 511.54332,20.564996 502.17465,0 464,0 336.31295,-0.099557 175.68688,-0.166276 48,0 15.878101,0.04275 -0.359071,17.79396 0,48 Z"
        sodipodi:nodetypes="ccccccc" />
     <rect
        style="fill:#ffffff;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
