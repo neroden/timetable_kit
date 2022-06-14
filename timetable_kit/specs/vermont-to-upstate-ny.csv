@@ -15,8 +15,8 @@ BRA,,,,,,,blank,,,,
 GFD,,,,,,,blank,,,,
 NHT,,,,,,,blank,,,,
 HLK,,,,,,,blank,,,,
-SPG,,55 last, ,blank,,,blank, ,56 first,,
-CVT,6280 first,downarrow,,6064 first,,,blank,6281 last,uparrow,291 blank,6337 last
+SPG,,55 last, ,blank,,,blank, ,56 first,blank,
+CVT,6280 first,downarrow,blank,6064 first,,,blank,6281 last,uparrow,291 blank,6337 last
 ,6280 blank,,Future service,6064 blank,,Burlington (new station),blank,6281 blank,,Future service,6337 blank
 BTV,,<b>#55</b> Mo-Fr <br><b>#57</b> SaSu,290 blank,,,,blank,,<b>#56</b> Mo-Fr <br><b>#54</b> SaSu,291 blank,
 VGN,,,Future service,,,,blank,,Overnight stay,Future service,
@@ -34,7 +34,7 @@ SDY,6280 blank,downarrow,290 last,6064 blank,,,blank,6281 blank,uparrow,291 firs
 SPG,6280 blank,449 first,Change at,6064 blank,,,blank,6281 blank,448 last,Change at,6337 blank
 PIT,6280 blank,,SDY <b>or</b> ALB,6064 blank,,,blank,6281 blank,,SDY <b>or</b> ALB,6337 blank
 ALB,6280 last,449 last,290 last,6064 last,,,uprightarrow,6281 first,448 first,291 first,6337 first
-,"<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#63</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#449</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#283</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#449</div>",,,"<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#280</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#284</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#448</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#448</div>","<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#64</div>"
+,"<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#63</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#449</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#283</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#49/#449</div>",,,"<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#280</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#284</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#448</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#48/#448</div>","<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#64</div>"
 ALB,63 first,449 first,283 first,449 first,,,280 last,284 last,448 last,448 last,64 last
 SDY,,,283 first two-row,,,,280,284,448,448 last two-row,64
 AMS,,449 blank,,449 blank,,,,,448 blank,448 blank,
