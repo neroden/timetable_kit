@@ -927,9 +927,9 @@ def fill_tt_spec(
                     access_str = ""
                     # Currently Amtrak-specific.
                     if amtrak.station_has_accessible_platform(station_code):
-                        access_str += icons.get_accessible_icon_html()
+                        access_str += icons.get_accessible_icon_html(doing_html=doing_html)
                     elif amtrak.station_has_inaccessible_platform(station_code):
-                        access_str += icons.get_inaccessible_icon_html()
+                        access_str += icons.get_inaccessible_icon_html(doing_html=doing_html)
                     tt.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
@@ -1348,7 +1348,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     icons_dir = output_dir / "icons"
     if not os.path.exists(icons_dir):
         os.makedirs(icons_dir)
-    icon_filenames = ["accessible.svg", "inaccessible-ncn.svg", "baggage-ncn.svg"]
+    icon_filenames = icons.get_filenames_for_all_icons()
     if for_rpa:
         icon_filenames.append("rpa-logo.svg")
     for icon_filename in icon_filenames:

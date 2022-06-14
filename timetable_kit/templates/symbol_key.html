@@ -47,6 +47,11 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <td><b>F</b></td>
       <td>Flag stop (only stops if passengers are ticketed in advance)</td>
     </tr>{#
+#}{% endif %}{% if key_bus %}{#
+#}    <tr>
+      <td><b>{{bus_icon}}</b></td>
+      <td>Connecting Bus Service (can be booked through Amtrak)</td>
+    </tr>{#
 #}{% endif %}{% if key_tz %}{#
 #}    <tr>
       <td><b>TZ</b></td>

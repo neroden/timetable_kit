@@ -478,12 +478,12 @@ def get_baggage_str(doing_html=False):
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
     if not doing_html:
-        return "B"
+        return get_baggage_icon_html(doing_html=False)
     return "".join(
         [
             baggage_box_prefix,
             '<span class="baggage-symbol">',
-            get_baggage_icon_html(),
+            get_baggage_icon_html(doing_html=True),
             "</span>",
             baggage_box_postfix,
         ]
@@ -990,11 +990,12 @@ def get_access_column_header(doing_html=False):
     Wraps with a special CSS div, so it can be rotated.
     """
     if doing_html:
-        accessible_icon_html = get_accessible_icon_html()
+        accessible_icon_html = get_accessible_icon_html(doing_html=doing_html)
         return "".join(
             ['<div class="access-header-text">', " ", accessible_icon_html, "</div>"]
         )
     else:
+        # Spell this one out for CSV production.
         return "Access"
 
 

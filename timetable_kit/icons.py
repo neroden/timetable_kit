@@ -18,6 +18,19 @@ For now, we do strictly icons referenced as img.
 from timetable_kit.load_resources import get_icon_svg, get_icon_css
 
 
+def get_filenames_for_all_icons() -> list[str]:
+    """
+    Determine the list of icon filenames which must be copied
+    """
+    icon_filenames = [
+        "accessible.svg",
+        "inaccessible-ncn.svg",
+        "baggage-ncn.svg",
+        "bus-ncn.svg",
+    ]
+    return icon_filenames
+
+
 def get_css_for_all_icons() -> str:
     """
     Get the CSS code to style all the icons we're using.
@@ -27,6 +40,7 @@ def get_css_for_all_icons() -> str:
             get_baggage_icon_css(),
             get_accessible_icon_css(),
             get_inaccessible_icon_css(),
+            get_bus_icon_css(),
         ]
     )
     return full_css
@@ -37,12 +51,15 @@ def get_css_for_all_icons() -> str:
 # the fonts in Weasyprint.  :-(
 # U+1F6C4
 
+# Use if icon is not available
+baggage_letter = "G"
+
 baggage_img_str = " ".join(
     [
         "<img",
         'class="baggage-icon-img"',
         'src="icons/baggage-ncn.svg"',
-        'alt="Baggage"',
+        'alt="' + baggage_letter + '"',
         'title="Checked Baggage">',
     ]
 )
@@ -56,18 +73,16 @@ baggage_span_str = "".join(
 )
 
 
-def get_baggage_icon_html(embedded_svg=False) -> str:
+def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
     """
     Return suitable HTML for displaying the baggage icon.
+
+    If doing_html=False, return a suitable capital letter
     """
-    return baggage_span_str
-    # TODO: provide the alternate versions.
-    if not embedded_svg:
+    if doing_html:
         return baggage_span_str
-    if embedded_svg:  # not tested
-        str = get_icon_svg("baggage-ncn.svg")
-        return str
-    return ""
+    else:
+        return baggage_letter
 
 
 def get_baggage_icon_css():
@@ -76,13 +91,15 @@ def get_baggage_icon_css():
     """
     return get_icon_css("baggage-ncn.css")
 
+# Use if icon is not available
+accessible_letter = "W"
 
 accessible_img_str = " ".join(
     [
         "<img",
         'class="accessible-icon-img"',
         'src="icons/accessible.svg"',
-        'alt="Wheelchair accessible"',
+        'alt="' + accessible_letter + '"',
         'title="Wheelchair accessible">',
     ]
 )
@@ -97,14 +114,17 @@ accessible_span_str = "".join(
 )
 
 
-def get_accessible_icon_html(embedded_svg=False) -> str:
+def get_accessible_icon_html(doing_html=True) -> str:
     """
     Return suitable HTML for displaying the "wheelchair access" icon.
 
     Amtrak data does not show full accessibility.  This is being used for basic
     platform accessibility at this time.
     """
-    return accessible_span_str
+    if doing_html:
+        return accessible_span_str
+    else:
+        return accessible_letter
 
 
 def get_accessible_icon_css():
@@ -113,13 +133,15 @@ def get_accessible_icon_css():
     """
     return get_icon_css("accessible.css")
 
+# Use if icon is not available
+inaccessible_letter = "N"
 
 inaccessible_img_str = " ".join(
     [
         "<img",
         'class="inaccessible-icon-img"',
         'src="icons/inaccessible-ncn.svg"',
-        'alt="Inaccessible for wheelchairs"',
+        'alt="' + inaccessible_letter + '"',
         'title="Not wheelchair accessible">',
     ]
 )
@@ -133,15 +155,54 @@ inaccessible_span_str = "".join(
 )
 
 
-def get_inaccessible_icon_html(embedded_svg=False) -> str:
+def get_inaccessible_icon_html(doing_html=True) -> str:
     """
     Return suitable HTML for displaying the "no wheelchair access" icon.
     """
-    return inaccessible_span_str
-
+    if doing_html:
+        return inaccessible_span_str
+    else:
+        return inaccessible_letter
 
 def get_inaccessible_icon_css():
     """
     Return suitable CSS for the no-wheelchair icon (loaded from a file)
     """
     return get_icon_css("inaccessible-ncn.css")
+
+# Use if icon is not available
+bus_letter = "B"
+
+bus_img_str = " ".join(
+    [
+        "<img",
+        'class="bus-icon-img"',
+        'src="icons/bus-ncn.svg"',
+        'alt="' + bus_letter + '"',
+        'title="Bus">',
+    ]
+)
+
+bus_span_str = "".join(
+    [
+        '<span class="bus-symbol">',
+        bus_img_str,
+        "</span>",
+    ]
+)
+
+
+def get_bus_icon_html(doing_html=True) -> str:
+    """
+    Return suitable HTML for displaying the bus icon.
+    """
+    if doing_html:
+        return bus_span_str
+    else:
+        return bus_letter
+
+def get_bus_icon_css():
+    """
+    Return suitable CSS for the no-wheelchair icon (loaded from a file)
+    """
+    return get_icon_css("bus-ncn.css")
