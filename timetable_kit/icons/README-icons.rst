@@ -25,13 +25,13 @@ this is done by adding a "title" field as the first child of the SVG.
 
 This is retained as a sample for future conversion to inline SVGs.
 
-baggage_ncn.svg
+baggage-ncn.svg
 ---------------
 I wasn't happy with either of these, so I went to a lot of effort to make a "hollow briefcase" of my own.
 This is on a 512x512 grid like the FontAwesome briefcase, but is a different shape and size,
 optimized for very small font sizes.
 
-This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
+This version, which is also simplified and cleaned up, is in baggage-ncn.svg.
 This one WORKS at very small print sizes.
 
 
@@ -42,6 +42,16 @@ bus-solid.svg, bus-simple-solid.svg, and van-shuttle-solid.svg are from Font Awe
 
 BSicon_BUS.svg: public domain, from https://commons.wikimedia.org/wiki/File:BSicon_BUS.svg by Jake the Editor Man in 2008
 
+
+bus-ncn.svg
+-----------
+Again, I made my own.  The reasonably-editable version is bus-ncn-shapes.svg.
+The version reduced to a single path is bus-ncn.svg.
+
+This has a different ratio: 2 ems wide to 1 em high.  Because of the shape of buses.
+
+This looks OK at small print sizes.  Oddly the shapes version renders differently from
+the all-one-path version.
 
 Bed Icon
 ========
