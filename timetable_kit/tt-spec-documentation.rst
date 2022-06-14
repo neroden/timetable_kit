@@ -217,9 +217,10 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "key_l": "If present, include the key for 'may leave before time shown' (L) ",
     "key_f": "If present, include the key for flag stops",
     "key_tz": "If present, include the key for time zones",
+    "compress_credits": "Save a little bit of space by removing line breaks in the credits",
     "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
-    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar."
-    "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable.",
+    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
+    "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable."
  }
 
 reference_date is critically important and is required unless passed at the command line.

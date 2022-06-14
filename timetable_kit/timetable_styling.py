@@ -262,6 +262,9 @@ def finish_html_timetable(
     # Throw the entire aux file in
     full_page_params = aux | stylesheet_params | icon_params | html_params
 
+    # debug_params = {i: full_page_params[i] for i in full_page_params if i != "timetable"}
+    # debug_print(3, debug_params )
+
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...
     page_tpl = template_environment.get_template("page_standard.html")

@@ -1,0 +1,47 @@
+,6280/63 noheader,55/57/449 noheader,290/283 noheader,6064/449 noheader,access,stations,280 noheader,6281/284 noheader,56/54/448 noheader,291/448 noheader,6337/64 noheader
+column-options,,ardp,ardp,,,,reverse,reverse,ardp reverse,ardp reverse,reverse
+route-name,,,,,,,,, ,,
+updown,,,,,,,,, ,,
+SAB,,55 first, ,,,,blank, ,56 last,,
+ESX,,, ,,,,blank, ,,,
+WAB,,, ,,,,blank, ,,,
+MPR,,, ,,,,blank, ,,,
+RPH,,,,,,,blank,,,,
+WRJ,,,,,,,blank,,,,
+WNM,,,,,,,blank,,,,
+CLA,,,,,,,blank,,,,
+BLF,,,,,,,blank,,,,
+BRA,,,,,,,blank,,,,
+GFD,,,,,,,blank,,,,
+NHT,,,,,,,blank,,,,
+HLK,,,,,,,blank,,,,
+SPG,,55 last, ,blank,,,blank, ,56 first,,
+CVT,6280 first,downarrow,,6064 first,,,blank,6281 last,uparrow,291 blank,6337 last
+,6280 blank,,Future service,6064 blank,,Burlington (new station),blank,6281 blank,,Future service,6337 blank
+BTV,,<b>#55</b> Mo-Fr <br><b>#57</b> SaSu,290 blank,,,,blank,,<b>#56</b> Mo-Fr <br><b>#54</b> SaSu,291 blank,
+VGN,,,Future service,,,,blank,,Overnight stay,Future service,
+MIY,,,Future service,,,,blank,,required in<br>Springfield,Future service,
+BDN,,,290 blank,,,,blank,,,291 blank,
+RTC,,,290 blank,,,,blank,,,291 blank,
+RUD,6280 blank,downarrow,290 first,6064 blank,,,blank,6281 blank,uparrow,291 last,6337 blank
+WAG,,,290 blank,,,,blank,,,291 blank,
+MCV,,,290 blank,,,,blank,,,291 blank,
+BNI,,,290 blank,,,,blank,,,291 blank,
+CNV,6280 blank, ,,6064 blank,,,blank,6281 blank,,,6337 blank
+FED,6280 blank, ,,6064 blank,,,blank,6281 blank,,,6337 blank
+SAR,6280 blank, ,,6064 blank,,,blank,6281 blank,,,6337 blank
+SDY,6280 blank,downarrow,290 last,6064 blank,,,blank,6281 blank,uparrow,291 first,6337 blank
+SPG,6280 blank,449 first,Change at,6064 blank,,,blank,6281 blank,448 last,Change at,6337 blank
+PIT,6280 blank,,SDY <b>or</b> ALB,6064 blank,,,blank,6281 blank,,SDY <b>or</b> ALB,6337 blank
+ALB,6280 last,449 last,290 last,6064 last,,,uprightarrow,6281 first,448 first,291 first,6337 first
+,"<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#63</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#449</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#283</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#449</div>",,,"<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#280</div>","<div style=""text-align: center; font-weight: bold;"">Empire<br>Service<br>#284</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#448</div>","<div style=""text-align: center; font-weight: bold;"">Lake Shore<br>Limited<br>#448</div>","<div style=""text-align: center; font-weight: bold;"">Maple<br>Leaf<br>#64</div>"
+ALB,63 first,449 first,283 first,449 first,,,280 last,284 last,448 last,448 last,64 last
+SDY,,,283 first two-row,,,,280,284,448,448 last two-row,64
+AMS,,449 blank,,449 blank,,,,,448 blank,448 blank,
+UCA,,,283 first two-row,,,,,,,,
+ROM,,449 blank,,449 blank,,,,,448 blank,448 blank,
+SYR,,,283 first two-row,,,,,,,,
+ROC,,,283 first two-row,,,,,,,,
+BUF,,,283 first two-row,,,,,,,,
+BFX,,"<div style=""text-align: center; font-weight: bold;"">to Chicago</div>",,"<div style=""text-align: center; font-weight: bold;"">to Chicago</div>",,,,,"<div style=""text-align: center; font-weight: bold;"">from Chicago</div>","<div style=""text-align: center; font-weight: bold;"">from Chicago</div>",
+NFL,63 last,,283 last,,,,280 first,284 first,blank,,64 first
