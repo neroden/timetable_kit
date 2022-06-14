@@ -25,6 +25,12 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: center;
     width: 1em;
 }
+.box-bus {
+    /* Bus icon (or blank space) */
+    display: inline-block;
+    text-align: center;
+    width: 1.5em;
+}
 .box-rd {
     /* Single bold letter like R or D: fixed width */
     display: inline-block;
