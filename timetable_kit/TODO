@@ -1,7 +1,8 @@
-1 -- Add Roanoke service to Crescent timetable?
-2 -- Add Bus icon for Connecting Bus services.  Big Pain.
+1 -- Add Bus icon for Connecting Bus services.  Big Pain.
+     This is what I'm waiting for on the Vermont timetables.
 
 Fine for after release of timetables:
+1 -- Add Roanoke service to Crescent timetable?
 1 -- combine find_trains.py and find_connecting_buses.py, which share excessive amounts of logic.
 2 -- improve icon situation
 
