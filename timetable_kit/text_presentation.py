@@ -21,9 +21,13 @@ from zoneinfo import ZoneInfo  # still for time zones
 # These are mine
 from timetable_kit.errors import GTFSError, FutureCodeError
 from timetable_kit.debug import debug_print
-from timetable_kit.icons import get_baggage_icon_html
-from timetable_kit.icons import get_accessible_icon_html
 from timetable_kit.tsn import train_spec_to_tsn
+from timetable_kit.icons import (
+    get_baggage_icon_html,
+    get_bus_icon_html,
+    get_accessible_icon_html,
+)
+
 
 # These look thin and there isn't an "up and right" arrow.
 long_cell_substitution_map = {
@@ -501,6 +505,41 @@ def get_blank_baggage_str(doing_html=False):
     return "".join([baggage_box_prefix, baggage_box_postfix])
 
 
+bus_box_prefix = '<span class="box-bus">'
+bus_box_postfix = "</span>"
+
+
+def get_bus_str(doing_html=False):
+    """
+    Return a suitable string to indicate that this is a bus.
+
+    Currently the HTML implementation references an external bus icon.
+    There are inline alternatives to this but Weasyprint isn't nice about them.
+    """
+    if not doing_html:
+        return get_bus_icon_html(doing_html=False)
+    return "".join(
+        [
+            bus_box_prefix,
+            '<span class="bus-symbol">',
+            get_bus_icon_html(doing_html=True),
+            "</span>",
+            bus_box_postfix,
+        ]
+    )
+
+
+def get_blank_bus_str(doing_html=False):
+    """
+    Return a suitable string to indicate that this is not a bus.
+
+    The HTML implementation boxes it to line things up properly.
+    """
+    if not doing_html:
+        return " "
+    return "".join([bus_box_prefix, bus_box_postfix])
+
+
 def timepoint_str(
     timepoint,
     stop_tz,
@@ -519,8 +558,10 @@ def timepoint_str(
     calendar=None,
     is_first_stop=False,
     is_last_stop=False,
-    use_baggage_str=False,
+    use_baggage_icon=False,
     has_baggage=False,
+    use_bus_icon=False,
+    is_bus=False,
 ):
     """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
@@ -558,9 +599,11 @@ def timepoint_str(
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
     -- is_last_stop: suppress "discharge only" notation
-    -- use_baggage_str: True/False: leave space for baggage symbol
+    -- use_baggage_icon: True/False: leave space for baggage symbol
     -- has_baggage: True/False: does this stop have checked baggage?
-        Ignored if use_baggage_str is False.
+        Ignored if use_baggage_icon is False.
+    -- use_bus_icon: True/False: leave space for bus symbol
+    -- is_bus: True/False: is this a bus?  Ignored if use_bus_icon is False.
     """
 
     if doing_html:
@@ -693,12 +736,20 @@ def timepoint_str(
         elif is_last_stop:
             ar_dp_str = ar_str  # Mark arrival on last stop
 
-        if not use_baggage_str:
+        if not use_baggage_icon:
             baggage_str = ""
         elif has_baggage:
             baggage_str = get_baggage_str(doing_html=doing_html)
         else:
             baggage_str = get_blank_baggage_str(doing_html=doing_html)
+
+        # The bus string is dependent only on the train number.
+        if not use_bus_icon:
+            bus_str = ""
+        elif is_bus:
+            bus_str = get_bus_str(doing_html=doing_html)
+        else:
+            bus_str = get_blank_bus_str(doing_html=doing_html)
 
         # Each element joined herein includes HTML annotations, and is completely blank if unused
         complete_line_str = "".join(
@@ -708,6 +759,7 @@ def timepoint_str(
                 arrival_time_str if discharge_only else departure_time_str,
                 arrival_daystring if discharge_only else departure_daystring,
                 baggage_str,
+                bus_str,
             ]
         )
         return complete_line_str
@@ -720,8 +772,7 @@ def timepoint_str(
             no_dwell = True
 
         # Put baggage_str on line one, leave line two blank
-        # Note, this won't work with a second timepoint (which isn't implemented anyway)
-        if not use_baggage_str:
+        if not use_baggage_icon:
             arrival_baggage_str = ""
             departure_baggage_str = ""
             blank_baggage_str = ""
@@ -743,6 +794,29 @@ def timepoint_str(
                     # On the first of two printed lines
                     arrival_baggage_str = get_baggage_str(doing_html=doing_html)
 
+        # Put bus_str on line one, leave line two blank
+        if not use_bus_icon:
+            arrival_bus_str = ""
+            departure_bus_str = ""
+            blank_bus_str = ""
+        else:
+            blank_bus_str = get_blank_bus_str(doing_html=doing_html)
+            departure_bus_str = blank_bus_str
+            arrival_bus_str = blank_bus_str
+            if is_bus:
+                if receive_only or (no_dwell and not discharge_only):
+                    # On the only printed line
+                    departure_bus_str = get_bus_str(doing_html=doing_html)
+                elif discharge_only:
+                    # On the only printed line
+                    arrival_bus_str = get_bus_str(doing_html=doing_html)
+                elif reverse:
+                    # On the first of two printed lines
+                    departure_bus_str = get_bus_str(doing_html=doing_html)
+                else:
+                    # On the first of two printed lines
+                    arrival_bus_str = get_bus_str(doing_html=doing_html)
+
         # Start assembling the two lines.
         if is_first_stop:
             # Don't include the "Ar" on a specified is_first_stop two_row.
@@ -758,6 +832,7 @@ def timepoint_str(
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
+                    blank_bus_str,
                 ]
             )
         else:
@@ -777,6 +852,7 @@ def timepoint_str(
                     arrival_time_str,
                     arrival_daystring,
                     arrival_baggage_str,
+                    arrival_bus_str,
                 ]
             )
         if is_last_stop:
@@ -793,6 +869,7 @@ def timepoint_str(
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
+                    blank_bus_str,
                 ]
             )
         else:
@@ -812,6 +889,7 @@ def timepoint_str(
                     departure_time_str,
                     departure_daystring,
                     departure_baggage_str,
+                    departure_bus_str,
                 ]
             )
 
@@ -887,7 +965,8 @@ def get_time_column_header(
         # Strip the " monday" type suffixes, but add a comment to keep them unique:
         # PANDAS requires every column header to be unique
         tsns = [
-            train_spec_to_tsn(train_spec, doing_html=True) for train_spec in fewer_train_specs
+            train_spec_to_tsn(train_spec, doing_html=True)
+            for train_spec in fewer_train_specs
         ]
 
         # For HTML, let's get FANCY... May change this later.

@@ -529,6 +529,7 @@ def fill_tt_spec(
     is_major_station="standard",
     is_ardp_station="dwell",
     dwell_secs_cutoff=300,
+    use_bus_icon_in_cells=False,
 ):
     """
     Fill a timetable from a tt-spec template using GTFS data
@@ -559,6 +560,7 @@ def fill_tt_spec(
         or higher for some train in the tt_spec
         Defaults to 300, meaning 5 minutes.
         Probably don't want to ever make it less than 1 minute.
+    use_bus_icon_in_cells: Put a bus icon next to timetable cells which are a bus.
     """
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
@@ -741,6 +743,18 @@ def fill_tt_spec(
                             route_from_train_spec_local,
                             output_type="attributes",
                         )
+                # And now... check whether this column has any buses
+                use_bus_icon_this_column = False
+                if use_bus_icon_in_cells:
+                    for train_spec in train_specs:
+                        if train_spec.endswith("noheader"):
+                            train_spec = train_spec.removesuffix("noheader").strip()
+                        route = route_from_train_spec_local(train_spec)
+                        if route.route_type == 3:
+                            # We have found a bus
+                            use_bus_icon_this_column = True
+                            break
+
         # Now fill in the column header, as chosen earlier
         header_replacement_list.append(column_header)
         header_styling_list.append(column_header_styling)
@@ -927,9 +941,13 @@ def fill_tt_spec(
                     access_str = ""
                     # Currently Amtrak-specific.
                     if amtrak.station_has_accessible_platform(station_code):
-                        access_str += icons.get_accessible_icon_html(doing_html=doing_html)
+                        access_str += icons.get_accessible_icon_html(
+                            doing_html=doing_html
+                        )
                     elif amtrak.station_has_inaccessible_platform(station_code):
-                        access_str += icons.get_inaccessible_icon_html(doing_html=doing_html)
+                        access_str += icons.get_inaccessible_icon_html(
+                            doing_html=doing_html
+                        )
                     tt.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
@@ -980,7 +998,7 @@ def fill_tt_spec(
                             # Use the FIRST one which returns a timepoint
                             break
 
-                    if ( timepoint is None ) or (cell_codes and cell_codes["blank"]) :
+                    if (timepoint is None) or (cell_codes and cell_codes["blank"]):
                         # This train does not stop at this station
                         # *** Or we've been told to make a colored blank cell ***
                         tt.iloc[y, x] = ""
@@ -997,7 +1015,7 @@ def fill_tt_spec(
                                 )
                             )
                     else:
-                        # MAIN ROUTINE FOR PUTTING A TIME IN A CELL
+                        # *** MAIN ROUTINE FOR PUTTING A TIME IN A CELL ***
                         # We have a station code, and a specific tsn
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
@@ -1020,6 +1038,16 @@ def fill_tt_spec(
                             )
                             and amtrak.station_has_checked_baggage(station_code)
                         )
+
+                        # Should we put the bus symbol on this cell?
+                        # Only if the timetable wants to use them,
+                        # And only if it is actually a bus.
+                        is_bus = False
+                        if use_bus_icon_this_column:
+                            route = route_from_train_spec_local(train_spec)
+                            if route.route_type == 3:
+                                # It is a bus!
+                                is_bus = True
 
                         # Normally we are two_row if the station calls for it,
                         # but (hackishly) we allow the cell_codes to override it.
@@ -1056,10 +1084,12 @@ def fill_tt_spec(
                             short_days_box=short_days_box,
                             is_first_stop=is_first_stop,
                             is_last_stop=is_last_stop,
-                            use_baggage_str=amtrak.train_has_checked_baggage(
+                            use_baggage_icon=amtrak.train_has_checked_baggage(
                                 train_spec_to_tsn(train_spec)
                             ),
                             has_baggage=has_baggage,
+                            use_bus_icon=use_bus_icon_this_column,
+                            is_bus=is_bus,
                         )
                         tt.iloc[y, x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.
@@ -1180,6 +1210,10 @@ def produce_timetable(
     else:
         dwell_secs_cutoff = 300
 
+    use_bus_icon_in_cells = False
+    if "use_bus_icon_in_cells" in aux:
+        use_bus_icon_in_cells = True
+
     # Now we're ready to load the .tt-spec file, finally
     tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
     tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
@@ -1251,6 +1285,7 @@ def produce_timetable(
             is_major_station=amtrak.special_data.is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
+            use_bus_icon_in_cells=use_bus_icon_in_cells,
         )
         # NOTE, need to add the header
         path_for_csv = output_dir / Path(output_filename_base + "-out.csv")
@@ -1274,6 +1309,7 @@ def produce_timetable(
             doing_html=True,
             box_time_characters=False,
             train_numbers_side_by_side=train_numbers_side_by_side,
+            use_bus_icon_in_cells=use_bus_icon_in_cells,
         )
         timetable_styled_html = style_timetable_for_html(timetable, styler_table)
         debug_print(1, "HTML styled")
