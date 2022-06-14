@@ -91,6 +91,7 @@ def get_baggage_icon_css():
     """
     return get_icon_css("baggage-ncn.css")
 
+
 # Use if icon is not available
 accessible_letter = "W"
 
@@ -133,6 +134,7 @@ def get_accessible_icon_css():
     """
     return get_icon_css("accessible.css")
 
+
 # Use if icon is not available
 inaccessible_letter = "N"
 
@@ -164,11 +166,13 @@ def get_inaccessible_icon_html(doing_html=True) -> str:
     else:
         return inaccessible_letter
 
+
 def get_inaccessible_icon_css():
     """
     Return suitable CSS for the no-wheelchair icon (loaded from a file)
     """
     return get_icon_css("inaccessible-ncn.css")
+
 
 # Use if icon is not available
 bus_letter = "B"
@@ -200,6 +204,7 @@ def get_bus_icon_html(doing_html=True) -> str:
         return bus_span_str
     else:
         return bus_letter
+
 
 def get_bus_icon_css():
     """
