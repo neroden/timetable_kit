@@ -1,3 +1,21 @@
-stations of 68, 68, access, station,timezone, 69
+,68, access, station,timezone,69
 column-options,days ardp,,,,days ardp reverse
 updown,,,,,
+MTR,68 first,,,,69 last
+SLQ,,,,,
+RSP,,,,,
+PLB,,,,,
+WSP,,,,,
+POH,,,,,
+FTC,,,,,
+WHL,,,,,
+FED,,,,,
+SAR,,,,,
+SDY,,,,,
+ALB,,,,,
+HUD,,,,,
+RHI,,,,,
+POU,,,,,
+CRT,,,,,
+YNY,,,,,
+NYP,68 last,,,,69 first
