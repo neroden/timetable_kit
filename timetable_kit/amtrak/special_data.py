@@ -221,6 +221,7 @@ major_stations_list = (
     "ORL",
     "TPA",
     "MIA",
+    "BTV", # Burlington Airport -- for Vermont buses.
 )
 
 
