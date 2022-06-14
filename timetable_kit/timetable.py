@@ -220,10 +220,12 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     "last" (last station for train, show arrival only)
     "first two_row" -- use two-row format
     "last two_row" -- use two-row format
+    "blank" -- if this train does not stop at this station, make a blank cell with this train's color
 
     Specifying just a train spec is supported.
 
-    OR, if the code is "blank", return that information.
+    For special codes which aren't dependent on a train number, see
+    text_presentation.get_cell_substitution.  Those include simple (white cell) "blank".
 
     Returns None if there was no code in the cell (the usual case)
 
@@ -237,8 +239,6 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
         return None
 
     code_text = code_text.strip()
-    if code_text == "blank":
-        return {"blank": True}
 
     # Train specs may have a "noheader" suffix.  Remove it.
     train_specs = [
@@ -281,10 +281,24 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
             "two_row": two_row,
         }
 
-    train_spec = code_text
+    # We handle simple "blank" in text_presentation.get_cell_substitution.
+    # This is "blank" with a train number -- colored blank.
+    if code_text.endswith("blank"):
+        train_spec = code_text.removesuffix("blank").strip()
+        if train_spec not in train_specs:
+            return None
+        return {
+            "train_spec": train_spec,
+            "first": False,
+            "last": False,
+            "blank": True,
+            "two_row": two_row,  # ignored in this case, but OK
+        }
+
+    # Simple train number.
+    train_spec = code_text.strip()
     if train_spec not in train_specs:
         return None
-
     return {
         "train_spec": train_spec,
         "first": False,
@@ -711,13 +725,22 @@ def fill_tt_spec(
                     train_numbers_side_by_side=train_numbers_side_by_side,
                 )
                 if doing_html:
-                    # Style the header with the color & stylings for the first tsn.
+                    # Style the header with the color & stylings for the first tsn
+                    # ...which isn't "noheader"...
                     # ...because I don't know how to do multiples! FIXME
-                    column_header_styling = get_time_column_stylings(
-                        train_specs[0],
-                        route_from_train_spec_local,
-                        output_type="attributes",
-                    )
+                    header_styling_train_spec = None
+                    for potential_train_spec in train_specs:
+                        if potential_train_spec.endswith("noheader"):
+                            continue
+                        else:
+                            header_styling_train_spec = potential_train_spec
+                            break
+                    if header_styling_train_spec:
+                        column_header_styling = get_time_column_stylings(
+                            header_styling_train_spec,
+                            route_from_train_spec_local,
+                            output_type="attributes",
+                        )
         # Now fill in the column header, as chosen earlier
         header_replacement_list.append(column_header)
         header_styling_list.append(column_header_styling)
@@ -736,11 +759,14 @@ def fill_tt_spec(
             cell_css_list = [base_cell_css]
             # Check for cell_codes like "28 last".  This *usually* returns None.
             cell_codes = get_cell_codes(tt_spec.iloc[y, x], train_specs)
-            if cell_codes and cell_codes["blank"]:
-                # This is a longhand for passing through a blank space.
-                # Makes it easier to read the source file.
-                tt_spec.iloc[y, x] = " "
-                cell_codes = None
+
+            # Check for simple cell substitutions like "blank" and "downarrow".
+            # Returns None or a string.
+            cell_substitution = text_presentation.get_cell_substitution(
+                tt_spec.iloc[y, x]
+            )
+            if cell_substitution:
+                tt_spec.iloc[y, x] = cell_substitution
 
             # This is effectively matching row, column, cell contents in spec
             match [station_code.lower(), column_key_str.lower(), tt_spec.iloc[y, x]]:
@@ -748,10 +774,25 @@ def fill_tt_spec(
                     # Make sure blanks become *string* blanks in this line.
                     tt.iloc[y, x] = ""
                 case ["", _, raw_text]:
-                    # This is probably special text like "to Chicago".
-                    cell_css_list.append("special-cell")
-                    # Copy the handwritten text over.
-                    tt.iloc[y, x] = raw_text
+                    # This is probably raw text like "To Chicago".
+                    # But it might be a cell code.  We only accept "91 blank".
+                    # Note that the simple substitutions were processed earlier.
+                    if cell_codes and cell_codes["blank"]:
+                        tt.iloc[y, x] = ""
+                        cell_css_list.append("blank-cell")
+                        blank_train_spec = cell_codes["train_spec"]
+                        cell_css_list.append(
+                            get_time_column_stylings(
+                                blank_train_spec,
+                                route_from_train_spec_local,
+                                output_type="class",
+                            )
+                        )
+                    else:
+                        # This is probably special text like "to Chicago".
+                        cell_css_list.append("special-cell")
+                        # Copy the handwritten text over.
+                        tt.iloc[y, x] = raw_text
                 case ["route-name", ck, _] if ck in special_column_names:
                     cell_css_list.append("route-name-cell")
                     tt.iloc[y, x] = ""
@@ -760,6 +801,7 @@ def fill_tt_spec(
                     cell_css_list.append("route-name-cell")
                     route_names = []
                     styled_route_names = []
+                    styled_already = False
                     for train_spec in train_specs:
                         if train_spec.endswith("noheader"):
                             continue
@@ -776,19 +818,22 @@ def fill_tt_spec(
                             # Don't duplicate if same route as previous train in slashed list
                             route_names.append(route_name)
                             styled_route_names.append(styled_route_name)
+                        if not styled_already:
+                            # Color based on the first one which isn't noheader.
+                            cell_css_list.append(
+                                get_time_column_stylings(
+                                    train_spec,
+                                    route_from_train_spec_local,
+                                    output_type="class",
+                                )
+                            )
+                            styled_already = True
                     if doing_html:
                         separator = "<hr>"
                     else:
                         separator = "\n"
                     full_styled_route_names = separator.join(styled_route_names)
                     tt.iloc[y, x] = full_styled_route_names
-                    cell_css_list.append(
-                        get_time_column_stylings(
-                            train_specs[0],
-                            route_from_train_spec_local,
-                            output_type="class",
-                        )
-                    )
                 case ["updown", ck, _] if ck in special_column_names:
                     cell_css_list.append("updown-cell")
                     tt.iloc[y, x] = ""
@@ -935,20 +980,18 @@ def fill_tt_spec(
                             # Use the FIRST one which returns a timepoint
                             break
 
-                    if timepoint is None:
+                    if ( timepoint is None ) or (cell_codes and cell_codes["blank"]) :
                         # This train does not stop at this station
-                        # Blank cell -- need to be cleverer about this FIXME
-                        # Only assign the stylings if the train hasn't ended.  Tricky!  Dunno how to do it!
-                        # Probably requires that earlier pass through the table.  Or CELL CODES FIXME
+                        # *** Or we've been told to make a colored blank cell ***
                         tt.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
-                        # Confusing: we want to style some of these and not others.  FIXME.
                         # For now, we style if we have a single train.
-                        # Otherwise not, because it's hard to know what color to use.
-                        if len(train_specs) == 1:
+                        # Including if it's specified with a cell code like "94 blank".
+                        # Otherwise leave it white, because it's hard to know what color to use.
+                        if len(train_specs_to_check) == 1:
                             cell_css_list.append(
                                 get_time_column_stylings(
-                                    train_specs[0],
+                                    train_specs_to_check[0],
                                     route_from_train_spec_local,
                                     output_type="class",
                                 )

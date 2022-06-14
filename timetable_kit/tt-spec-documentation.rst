@@ -97,7 +97,7 @@ stop at that station, in which case the second train will be checked, etc.
 
 Be careful about using this as it is fragile: it is intended for splitting trains like the Lake Shore Limited, or
 "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
-This will give a complex stacked cell for "train name".  *** needs testing
+This will give a complex stacked cell for "train name".
 You will want to do some manual cells (see below).
 
 
@@ -159,7 +159,19 @@ A single train number such as "8" will simply say which train to use out of seve
 To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.
 
 A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
-space character in the cell.
+space character in the cell; it will show as a white cell.
+
+A cell may also contain a train number followed by the word "blank".  This will color the cell with the appropriate color for the train number (which must be one of the trains in the column).  This will blank out the cell but with a color.
+
+There are also some shorthands for common arrows:
+downarrow will give suitable HTML for a down arrow, centered in the cell
+uparrow will give suitable HTML for an up arrow, centered in the cell
+downrightarrow will give suitable HTML for a "down and to the right" arrow, at the right edge of the cell
+uprightarrow will give suitable HTML for an "up and to the right" arrow, at the right edge of the cell
+
+These will all be on white cell backgrounds.
+
+I am not encouraging leftward arrows, since timetables should have later times to the right.
 
 CELLS WITH FREE WRITTEN TEXT
 ----------------------------

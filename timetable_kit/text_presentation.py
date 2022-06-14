@@ -25,6 +25,52 @@ from timetable_kit.icons import get_baggage_icon_html
 from timetable_kit.icons import get_accessible_icon_html
 from timetable_kit.tsn import train_spec_to_tsn
 
+# These look thin and there isn't an "up and right" arrow.
+long_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2193;</div>',
+    "uparrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2191;</div>',
+    "downrightarrow": '<div style="text-align: right; font-size: 120%; font-weight: bold;">&#x2937;</div>',
+}
+
+# The arrowheads on these are too hard to see.
+directional_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center;">&#x2b07;</div>',
+    "uparrow": '<div style="text-align: center;">&#x2b06;</div>',
+    "downrightarrow": '<div style="text-align: right">&#x2b0a;</div>',
+}
+
+# These work, but only at 120%.
+thick_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87b;</div>',
+    "uparrow": '<div style="text-align: center; font-size: 120%;">&#x1f879;</div>',
+    "downrightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87e;</div>',
+    "uprightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87d;</div>',
+}
+
+
+cell_substitution_map = thick_cell_substitution_map
+
+
+def get_cell_substitution(cell_text: str) -> str:
+    """
+    Given special simple-substitution cell texts, provide the substitution.
+
+    "blank" -> becomes a single space, for a white blank cell
+    "downarrow" -> suitable downwards pointing arrow in HTML/Unicode
+    "uparrow" -> suitable upwards pointing arrow in HTML/Unicode
+    "downrightarrow" -> suitable downwards-then-right pointing arrow in HTML/Unicode
+    "uprightarrow" -> suitable upwards-then-right pointing arrow in HTML/Unicode
+
+    Otherwise, return None.
+    """
+    cell_text = cell_text.strip()
+    if cell_text not in cell_substitution_map:
+        return None
+    return cell_substitution_map[cell_text]
+
 
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     """
@@ -806,21 +852,24 @@ def get_time_column_header(
         raise InputError("No train_specs?")
 
     # Strip the "noheader" train specs; we don't mention them.
+    # Note that if they become the same, we have a uniqueness problem.
+    # Don't allow that except in the blank header case.
     fewer_train_specs = []
     for train_spec in train_specs:
         if train_spec.endswith("noheader"):
             continue
         fewer_train_specs.append(train_spec)
-    train_specs = fewer_train_specs
+    fewer_train_specs
 
     # It's OK if stripping noheader train specs leads to no header.
     # In this case return blank.
-    if not train_specs:
-        return ""
+    # ... but it has to be a unique blank.  So add an HTML comment.
+    if not fewer_train_specs:
+        return " ".join(["<!-- blank header for", *train_specs, "-->"])
 
     if not doing_html:
         # For plaintext, keep it simple: just the train specs
-        return " / ".join(train_specs)
+        return " / ".join(fewer_train_specs)
 
     if train_numbers_side_by_side:
         # Old algorithm.  For Empire Builder, Lake Shore Limited.
@@ -828,14 +877,14 @@ def get_time_column_header(
         # Strip the " monday" type suffixes, but add a comment to keep them unique:
         # PANDAS requires every column header to be unique
         tsns = [
-            train_spec_to_tsn(train_spec, doing_html=True) for train_spec in train_specs
+            train_spec_to_tsn(train_spec, doing_html=True) for train_spec in fewer_train_specs
         ]
 
         # For HTML, let's get FANCY... May change this later.
         # Route types: 2 is a train, 3 is a bus
         route_types = [
             int(route_from_train_spec(train_spec).route_type)
-            for train_spec in train_specs
+            for train_spec in fewer_train_specs
         ]
         match route_types:
             case [2]:
@@ -893,7 +942,7 @@ def get_time_column_header(
                 "</strong>",
             ]
         )
-        for train_spec in train_specs
+        for train_spec in fewer_train_specs
     ]
     time_column_header = "<hr>".join(prefixed_route_numbers)
     return time_column_header
