@@ -744,7 +744,12 @@ def timepoint_str(
                     arrival_baggage_str = get_baggage_str(doing_html=doing_html)
 
         # Start assembling the two lines.
-        if receive_only or (no_dwell and not discharge_only):
+        if is_first_stop:
+            # Don't include the "Ar" on a specified is_first_stop two_row.
+            # On these, the full ArDp is probably present somewhere else;
+            # just do the Dp.
+            arrival_line_str = ""
+        elif receive_only or (no_dwell and not discharge_only):
             # This just prints the "Ar" but does the alignment (hopefully)
             arrival_line_str = "".join(
                 [
@@ -774,7 +779,12 @@ def timepoint_str(
                     arrival_baggage_str,
                 ]
             )
-        if discharge_only:
+        if is_last_stop:
+            # Don't include the "Dp" on a specified is_first_stop two_row.
+            # On these, the full ArDp is probably present somewhere else;
+            # just do the Ar.
+            departure_line_str = ""
+        elif discharge_only:
             # This just prints the "Dp" but does the alignment (hopefully)
             departure_line_str = "".join(
                 [
