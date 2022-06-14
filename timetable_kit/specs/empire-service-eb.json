@@ -4,5 +4,6 @@
     "landscape": "true",
     "reference_date": "20220613",
     "key_baggage": "true",
+    "key_d": "true",
     "for_rpa": "true"
 }
