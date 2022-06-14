@@ -1,29 +1,30 @@
-,281/6281,291,237,253,6337, access, station,280/6280,290,64/6064
-column-options,ardp,ardp,ardp,ardp,ardp,,,reverse ardp,reverse ardp,reverse ardp
+,6280/280,290,6064/64, access, station,6281/281,291,237,253,6337
+column-options,ardp,ardp,ardp,,,reverse ardp,reverse ardp,reverse ardp,reverse ardp,reverse ardp
 route-name,,,,,,,,,,
-days,,,NYP,NYP,,,,,,
+days,,,,,,,,NYP,NYP,
 updown,,,,,,,,,,
-NYP,281 first,291 first,237 first,253 first,blank,,,280 last,290 last,64 last
-YNY,,,,,blank,,,,,
-CRT,,,,,blank,,,,,
-POU,,,,,blank,,,,,
-RHI,,,,,blank,,,,,
-HUD,,,,,blank,,,,,
-ALB,281 last,,237 last,253 last,blank,,,280 first,,64 first
-SDY,blank,,blank,blank,blank,,,blank,,blank
-SAR,,,blank,blank,blank,,,,,
-FED,,,blank,blank,blank,,,,,
-CNV,,,blank,blank,blank,,,,,
-ABA,6281 first,blank,blank,blank,6337 first,,,6280 last,blank,6064 last
-ALB,6281 first,blank,blank,blank,6337 first,,,6280 last,blank,6064 last
-BNI,,blank,blank,blank,,,,,blank,
-MCV,,blank,blank,blank,,,,,blank,
-WAG,,blank,blank,blank,,,,,blank,
-RUD,,291 last,blank,blank,,,,,290 first,
-RTC,,blank,blank,blank,,,,,blank,
-BDN,,blank,blank,blank,,,,,blank,
-MIY,,Future service,blank,blank,,,,,Future service,
-VGN,,Future service,blank,blank,,,,,Future service,
-BTV,,blank,blank,blank,,,,,blank,
-,,Future service,,,,,"Burlington, VT (new station)",,Future service,
-CVT,6281 last,blank,blank,blank,6337 last,,,6280 first,blank,6064 first
+CVT,6280 first,290 blank,6064 first,,,6281 last,291 blank,blank,blank,6337 last
+,6280 blank,Future service,6064 blank,,"Burlington, VT (future station)",6281 blank,Future service,blank,blank,6337 blank
+BTV,,290 blank,,,,,291 blank,blank,blank,
+VGN,,Future service,,,,,Future service,blank,blank,
+MIY,,Future service,,,,,Future service,blank,blank,
+BDN,,290 blank,,,,,291 blank,blank,blank,
+RTC,,290 blank,,,,,291 blank,blank,blank,
+RUD,6280 blank,290 first,6064 blank,,,6281 blank,291 last,blank,blank,
+CNV,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+FED,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+SAR,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+SDY,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+WAG,,290 blank,,,,,291 blank,blank,blank,6337 blank
+MCV,,290 blank,,,,,291 blank,blank,blank,6337 blank
+BNI,,290 blank,,,,,291 blank,blank,blank,6337 blank
+ALB,6280 last,290 last,6064 last,,,6281 first,291 first,uprightarrow,uprightarrow,6337 first
+ALB,280 first,290 first,64 first,,,281 last,291 last,237 last,253 last,uparrow
+HUD,,,,,,,,,,blank
+RHI,,,,,,,,,,blank
+POU,,,,,,,,,,blank
+CRT,,,,,,,,,,blank
+YNY,280 blank,,,,,281 blank,,,,blank
+NYP,280 last,290 last,64 last,,,281 first,291 first,237 first,253 first,blank
+,Buses continue,after Albany,downarrow,,,Buses start from,Albany airport,,,uparrow
+ABA,6280 last,blank,6064 last,,,6281 first,blank,blank,blank,6337 first
