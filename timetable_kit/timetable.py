@@ -717,6 +717,7 @@ def fill_tt_spec(
                 long_days_box = "long-days-box" in column_options[x]
                 short_days_box = "short-days-box" in column_options[x]
                 this_column_gets_ardp = "ardp" in column_options[x]
+                no_rd = "no-rd" in column_options[x]
 
                 # Separate train numbers by "/", and create the train_spec list
                 train_specs = split_trains_spec(column_key_str)
@@ -1090,6 +1091,7 @@ def fill_tt_spec(
                             has_baggage=has_baggage,
                             use_bus_icon=use_bus_icon_this_column,
                             is_bus=is_bus,
+                            no_rd=no_rd,
                         )
                         tt.iloc[y, x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.

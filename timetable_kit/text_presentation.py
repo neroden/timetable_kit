@@ -562,6 +562,7 @@ def timepoint_str(
     has_baggage=False,
     use_bus_icon=False,
     is_bus=False,
+    no_rd=False,
 ):
     """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
@@ -604,6 +605,7 @@ def timepoint_str(
         Ignored if use_baggage_icon is False.
     -- use_bus_icon: True/False: leave space for bus symbol
     -- is_bus: True/False: is this a bus?  Ignored if use_bus_icon is False.
+    -- no_rd: Leave out the usual space for "R" or "D" notations. Used to save space.
     """
 
     if doing_html:
@@ -755,7 +757,7 @@ def timepoint_str(
         complete_line_str = "".join(
             [
                 ar_dp_str,
-                rd_str,
+                "" if no_rd else rd_str,
                 arrival_time_str if discharge_only else departure_time_str,
                 arrival_daystring if discharge_only else departure_daystring,
                 baggage_str,
@@ -828,7 +830,7 @@ def timepoint_str(
             arrival_line_str = "".join(
                 [
                     ar_str,
-                    blank_rd_str,
+                    "" if no_rd else blank_rd_str,
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
@@ -848,7 +850,7 @@ def timepoint_str(
             arrival_line_str = "".join(
                 [
                     ar_str,
-                    arrival_rd_str,
+                    "" if no_rd else arrival_rd_str,
                     arrival_time_str,
                     arrival_daystring,
                     arrival_baggage_str,
@@ -865,7 +867,7 @@ def timepoint_str(
             departure_line_str = "".join(
                 [
                     dp_str,
-                    blank_rd_str,
+                    "" if no_rd else blank_rd_str,
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
@@ -885,7 +887,7 @@ def timepoint_str(
             departure_line_str = "".join(
                 [
                     dp_str,
-                    departure_rd_str,
+                    "" if no_rd else departure_rd_str,
                     departure_time_str,
                     departure_daystring,
                     departure_baggage_str,

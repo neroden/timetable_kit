@@ -119,6 +119,7 @@ days -- include string for days of operation (MoWeFr) in the time cells for this
 long-days-box -- make the box for the days long enough to hold SuMoTuWeTh (five days) rather than the default three.
 short-days-box -- make the box for days only long enough to hold Mo (one day) rather than the default three.
 ardp -- include "Ar" and "Dp" in this column
+no-rd -- don't leave space for the "R/D/L" notations.  Use with care, only after you've verified these don't show up in the timetable; this is to squeeze out a little extra horizontal space from the timetable.
 
 No other options have been defined yet.
 Options which I might implement, but have not implemented, include:
