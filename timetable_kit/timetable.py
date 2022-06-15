@@ -1106,11 +1106,19 @@ def fill_tt_spec(
     # And now we have to rename the headers.  This is kind of ugly!
     # This is quite fragile and should be checked regularly.
     # It depends on having removed the placeholder column already.
+
+    # The header replacement list has a potential duplicates problem.
+    # Eliminate this by prefixing the column number in an HTML comment.
+    unique_header_replacement_list = [
+        "".join(["<!-- ", str(i), " -->", header])
+        for (i, header) in enumerate(header_replacement_list)
+    ]
+
     #
     # We have to do the styler and the tt at the same time,
     # or the styler will fail.
-    tt.columns = header_replacement_list
-    styler_t.columns = header_replacement_list
+    tt.columns = unique_header_replacement_list
+    styler_t.columns = unique_header_replacement_list
 
     return (tt, styler_t, header_styling_list)
 

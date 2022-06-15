@@ -24,22 +24,15 @@ from timetable_kit import feed_enhanced
 from timetable_kit.feed_enhanced import gtfs_days
 
 
-def train_spec_to_tsn(train_spec: str, doing_html=False) -> str:
+def train_spec_to_tsn(train_spec: str) -> str:
     """
     Takes a train_spec, which is either a tsn or a tsn followed by a space and a day of the week,
     and returns the tsn alone.
-
-    The "doing_html" version is designed for a special case: it adds invisible HTML comments
-    to distinguish the different days from one another.  This is necessary to keep PANDAS headers
-    unique.
     """
     for day in gtfs_days:
         tentative_tsn = train_spec.removesuffix(" " + day)
         if tentative_tsn != train_spec:
             # Only remove one suffix!
-            if doing_html:
-                # Keep column headers unique
-                tentative_tsn = "".join([tentative_tsn, "<!-- ", day, " -->"])
             return tentative_tsn
     # No suffixes found
     return train_spec

@@ -940,8 +940,6 @@ def get_time_column_header(
         raise InputError("No train_specs?")
 
     # Strip the "noheader" train specs; we don't mention them.
-    # Note that if they become the same, we have a uniqueness problem.
-    # Don't allow that except in the blank header case.
     fewer_train_specs = []
     for train_spec in train_specs:
         if train_spec.endswith("noheader"):
@@ -950,10 +948,9 @@ def get_time_column_header(
     fewer_train_specs
 
     # It's OK if stripping noheader train specs leads to no header.
-    # In this case return blank.
-    # ... but it has to be a unique blank.  So add an HTML comment.
+    # In this case return blank.  Uniqueness of headers is handled later.
     if not fewer_train_specs:
-        return " ".join(["<!-- blank header for", *train_specs, "-->"])
+        return ""
 
     if not doing_html:
         # For plaintext, keep it simple: just the train specs
@@ -962,12 +959,8 @@ def get_time_column_header(
     if train_numbers_side_by_side:
         # Old algorithm.  For Empire Builder, Lake Shore Limited.
 
-        # Strip the " monday" type suffixes, but add a comment to keep them unique:
-        # PANDAS requires every column header to be unique
-        tsns = [
-            train_spec_to_tsn(train_spec, doing_html=True)
-            for train_spec in fewer_train_specs
-        ]
+        # Strip the " monday" type suffixes
+        tsns = [train_spec_to_tsn(train_spec) for train_spec in fewer_train_specs]
 
         # For HTML, let's get FANCY... May change this later.
         # Route types: 2 is a train, 3 is a bus
@@ -1025,9 +1018,8 @@ def get_time_column_header(
                 "</small>",
                 "<br>",
                 "<strong>",
-                # Strip the " monday" type suffix, but add a comment to keep them unique:
-                # PANDAS requires every column header to be unique
-                train_spec_to_tsn(train_spec, doing_html=True),
+                # Strip the " monday" type suffix
+                train_spec_to_tsn(train_spec),
                 "</strong>",
             ]
         )
