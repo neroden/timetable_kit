@@ -1117,6 +1117,7 @@ def fill_tt_spec(
 
 def produce_timetable(
     *,
+    spec_file,
     do_csv,
     do_html,
     do_pdf,
@@ -1125,7 +1126,6 @@ def produce_timetable(
     author,
     command_line_reference_date,
     input_dirname,
-    spec_file,
     output_dirname,
 ):
     """
@@ -1417,10 +1417,74 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     return
 
 
-##########################
-#### NEW MAIN PROGRAM ####
-##########################
-if __name__ == "__main__":
+def produce_several_timetables(
+    spec_file_list,
+    *,
+    gtfs_filename=None,
+    do_csv=False,
+    do_html=True,
+    do_pdf=True,
+    do_jpg=False,
+    author=None,
+    command_line_reference_date=None,
+    input_dirname=None,
+    output_dirname=None,
+):
+    """
+    Main program to run from other Python programs.
+
+    Doesn't mess around with args or environment variables.
+    Does not take a default gtfs filename.
+    DOES take filenames and directory names.
+    """
+
+    if not author:
+        print("produce_several_timetables: author is mandatory!")
+        sys.exit(1)
+
+    if not output_dirname:
+        print("produce_several_timetables: output_dirname is mandatory!")
+        sys.exit(1)
+    debug_print(1, "Using output_dir", output_dirname)
+
+    if not output_dirname:
+        print("produce_several_timetables: input_dirname is mandatory!")
+        sys.exit(1)
+    debug_print(1, "Using input_dir", input_dirname)
+
+    if not gtfs_filename:
+        print("produce_several_timetables: gtfs_filename is mandatory!")
+        sys_exit(1)
+    master_feed = initialize_feed(gtfs=gtfs_filename)
+
+    # Amtrak-specific patches.  Bleah!  FIXME
+    master_feed = amtrak.patch_feed(master_feed)
+    debug_print(1, "Feed patched, hopefully")
+
+    for spec_file in spec_file_list:
+        debug_print(1, "Producing timetable for", spec_file)
+        produce_timetable(
+            spec_file=spec_file,
+            do_csv=do_csv,
+            do_html=do_html,
+            do_pdf=do_pdf,
+            do_jpg=do_jpg,
+            master_feed=master_feed,
+            author=author,
+            command_line_reference_date=command_line_reference_date,
+            input_dirname=input_dirname,
+            output_dirname=output_dirname,
+        )
+        debug_print(1, "Done producing timetable for", spec_file)
+
+
+def main():
+    """
+    Main program to run from the command line.
+
+    Contains everything involving processing command line arguments,
+    environment variables, etc.
+    """
 
     debug_print(3, "Dumping sys.path for clarity:", sys.path)
 
@@ -1448,19 +1512,15 @@ if __name__ == "__main__":
         output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
     if not output_dirname:
         output_dirname = "."
-    debug_print(1, "Using output_dir", output_dirname)
 
     input_dirname = args.input_dirname
     if not input_dirname:
         input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
-    debug_print(1, "Using input_dir", input_dirname)
+    if not input_dirname:
+        input_dirname = "."
 
+    # The arg parser will default this to Amtrak
     gtfs_filename = args.gtfs_filename
-    master_feed = initialize_feed(gtfs=gtfs_filename)
-
-    # Amtrak-specific patches.  Bleah!  FIXME
-    master_feed = amtrak.patch_feed(master_feed)
-    debug_print(1, "Feed patched, hopefully")
 
     author = args.author
     if not author:
@@ -1473,19 +1533,23 @@ if __name__ == "__main__":
 
     command_line_reference_date = args.reference_date  # Does not default, may be None
 
-    for spec_file in spec_file_list:
-        debug_print(1, "Producing timetable for", spec_file)
-        produce_timetable(
-            do_csv=args.do_csv,
-            do_html=args.do_html,
-            do_pdf=args.do_pdf,
-            do_jpg=args.do_jpg,
-            master_feed=master_feed,
-            author=author,
-            command_line_reference_date=command_line_reference_date,
-            input_dirname=input_dirname,
-            spec_file=spec_file,
-            output_dirname=output_dirname,
-        )
-        debug_print(1, "Done producing timetable for", spec_file)
+    produce_several_timetables(
+        spec_file_list=spec_file_list,
+        gtfs_filename=gtfs_filename,
+        do_csv=args.do_csv,
+        do_html=args.do_html,
+        do_pdf=args.do_pdf,
+        do_jpg=args.do_jpg,
+        author=author,
+        command_line_reference_date=command_line_reference_date,
+        input_dirname=input_dirname,
+        output_dirname=output_dirname,
+    )
+
+
+##########################
+#### NEW MAIN PROGRAM ####
+##########################
+if __name__ == "__main__":
+    main()
     sys.exit(0)
