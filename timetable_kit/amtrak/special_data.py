@@ -216,12 +216,15 @@ major_stations_list = (
     "ELP",
     "TUS",
     "CHS",  # Palmetto -- Amtrak emphasized nothing, so I picked Charleston
-    "SAV", # Silver Service -- Amtrak emphasized nothing, so I picked some
+    "SAV",  # Silver Service -- Amtrak emphasized nothing, so I picked some
     "JAX",
     "ORL",
     "TPA",
     "MIA",
-    "BTV", # Burlington Airport -- for Vermont buses.
+    "BTV",  # Burlington Airport -- for Vermont buses.
+    "WMA",  # Grand Canyon Railway -- Williams is major
+    "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
+            # ...but we patch the station name in code, elsewhere.
 )
 
 
