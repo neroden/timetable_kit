@@ -122,9 +122,9 @@ def make_station_type_dicts() -> None:
     train_or_bus_dict = {}
     shelter_dict = {}
 
-    for code in station_list:
+    for station_code in station_list:
         station_details_html = None
-        station_details_html = load_station_details_html(code)
+        station_details_html = load_station_details_html(station_code)
 
         # This is the part where we use the lxml library.
         html_tree = html.fromstring(station_details_html)
@@ -135,18 +135,19 @@ def make_station_type_dicts() -> None:
         # This is usually a one-item list, but occasionally it comes out
         # as a multiple item list with duplicates.
         if not description_list:
-            debug_print(1, "no description for", code)
+            debug_print(1, "no description for", station_code)
             continue
         if len(description_list) > 1:
-            debug_print(1, "excess description for", code, ":", description_list)
+            debug_print(1, "excess description for", station_code, ":", description_list)
             # Only happens at VBC, and the two descriptions are identical
         description = description_list[0]
         if description not in station_types_decoding_map:
-            debug_print(1, "unexpected description for", code, ":", description)
+            debug_print(1, "unexpected description for", station_code, ":", description)
         else:
             [train_or_bus, shelter] = station_types_decoding_map[description]
             train_or_bus_dict[station_code] = bool(train_or_bus)
             shelter_dict[station_code] = bool(shelter_dict)
+    print ("Station type dicts made.")
     return
 
 
