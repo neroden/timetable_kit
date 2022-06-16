@@ -1,5 +1,15 @@
-1 -- Add Bus icon for Connecting Bus services.  Big Pain.
-     This is what I'm waiting for on the Vermont timetables.
+For generalizing to non-Amtrak feeds:
+1 -- Switch wheelchair access detection to be based on GTFS.
+     Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
+     from the Amtrak stations database.
+2 -- Find a way to grab station names from Amtrak if available (Advanced Information),
+     but from GTFS if not available.
+3 -- Design a program to merge two GTFS databases.  Deal with the Hartford Line's use of
+     a different stop_id (ST) for New Haven State Street than Amtrak's stop_id (STS).
+     This is really entirely for Hartford Line.
+4 -- Give the Amtrak module interface a defined (duck) type, so that we can
+     swap in a different module.  This is easier to do than it appears!
+     We can literally just use a variable to hold which module to call.
 
 Fine for after release of timetables:
 1 -- Add Roanoke service to Crescent timetable?
