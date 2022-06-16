@@ -5,9 +5,15 @@ Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable 
 
 Development status
 ==================
-This is currently a work in progress but is quite usable to create Amtrak timetables.
+Timetable_kit remains under active development.
+It is quite usable to create Amtrak timetables.
+
 It has not yet been generalized to create non-Amtrak timetables.
-Interfaces remain in a state of flux as needs are discovered while creating particular timetables.
+
+Interfaces are moderately stable: old spec files should continue to work, mostly.
+New options continue to be added in spec files.
+Command line options remain in a state of flux.
+The interface will change as needs are discovered while creating particular timetables.
 
 Directory Structure
 ===================
@@ -34,6 +40,8 @@ timetable_kit uses the Jinja2 template system directly.
 It uses Weasyprint to convert HTML timetables to PDF timetables.
 
 It's packaged as a package with Poetry, so presumably requires Poetry to install.
+
+One of the tools uses the LXML module to parse Amtrak's station web pages.
 
 Further Documentation
 =====================

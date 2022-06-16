@@ -11,6 +11,7 @@ gtfs-kit = ">=5.2.0"
 pandas = ">=1.4.1"
 Jinja2 = ">=3.0.3"
 weasyprint = ">=54.2"
+lxml = ">=4.9.0"
 
 [tool.poetry.dev-dependencies]
 
