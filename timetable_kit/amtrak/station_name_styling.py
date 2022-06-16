@@ -90,7 +90,6 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
         # but there's plenty of horizontal space in the EB timetable
         # and no vertical space
 
-
     if major:
         enhanced_city_state_name = "".join(
             ["<span class=major-station >", city_state_name, "</span>"]

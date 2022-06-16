@@ -11,6 +11,7 @@ This should be reviewed every time Amtrak releases a new GTFS.
 
 from timetable_kit import feed_enhanced
 
+
 def patch_feed(feed):
     """
     Take an Amtrak feed and patch it for known errors.

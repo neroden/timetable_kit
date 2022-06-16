@@ -224,7 +224,7 @@ major_stations_list = (
     "BTV",  # Burlington Airport -- for Vermont buses.
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
-            # ...but we patch the station name in code, elsewhere.
+    # ...but we patch the station name in code, elsewhere.
 )
 
 

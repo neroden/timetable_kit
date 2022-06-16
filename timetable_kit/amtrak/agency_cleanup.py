@@ -13,7 +13,7 @@ The code is dead.  They are not called.
 """
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 
 # This one is mine
 from timetable_kit import gtfs_type_cleanup  # import the module name
