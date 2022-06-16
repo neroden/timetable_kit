@@ -36,3 +36,9 @@ from .access import (
 )
 # Special routine to patch Amtrak's defective GTFS feed
 from .gtfs_cleanup import patch_feed
+
+# Attempt to import under a simplified name
+from .station_name_styling import amtrak_station_name_to_html
+from .station_name_styling import amtrak_station_name_to_multiline_text
+from .station_name_styling import amtrak_station_name_to_single_line_text
+
