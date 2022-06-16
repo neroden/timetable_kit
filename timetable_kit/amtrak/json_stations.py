@@ -144,8 +144,6 @@ def station_details_local_path(station_code: str) -> str:
     return path
 
 
-
-
 def download_station_details(station_code: str) -> str:
     """Download station details for one station as json text; return it."""
     response = requests.get(station_details_url(station_code))
@@ -265,7 +263,7 @@ def save_station_details_html(station_code: str, station_details: str):
         print(station_details, file=station_details_html_local_file)
 
 
-def load_station_details_html (station_code: str) -> str:
+def load_station_details_html(station_code: str) -> str:
     """Load station HTML for one station as json text from a suitable file; return it."""
     with open(
         station_details_html_local_path(station_code), "r"
@@ -291,7 +289,7 @@ def download_one_station(station_code: str):
     save_station_details_html(station_code, station_details_html)
 
 
-def download_all_stations(sleep_secs: float = 1.0):
+def download_all_stations(sleep_secs: float = 2.0):
     """
     Download all of Amtrak's station details files.
 
@@ -444,10 +442,10 @@ def make_arg_parser():
     download_parser.add_argument(
         "--sleep",
         "-s",
-        help="Number of seconds to wait between downloads.  Used to avoid hammering Amtrak's servers.  Default 0.",
+        help="Number of seconds to wait between downloads.  Used to avoid hammering Amtrak's servers.  Default 2.0.",
         dest="sleep_secs",
         type=float,
-        default=float(0),
+        default=float(2.0),
     )
     process_parser = subparsers.add_parser(
         "process",
