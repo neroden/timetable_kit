@@ -9,6 +9,8 @@ Routines for extracting Amtrak's JSON station data and working with it.
 Amtrak's entire station database is exposed as JSON, which is very useful.
 In order to download it, this must be run as a program.
 
+A couple of key pieces of data are only exposed as HTML, so the HTML is downloaded too.
+
 The other routines here are for accessing it.
 
 get_station_name is the primary one.
@@ -33,13 +35,18 @@ import pandas as pd
 
 # INITIALIZATION CODE
 # GLOBAL VARIABLES
+
+# This is the entire station list as json -- names and all.
+stations_json_url = "https://www.amtrak.com/services/data.stations.json"
+
 # This is the station detail list for one station.
 station_details_url_prefix = "https://www.amtrak.com/content/amtrak/en-us/stations/"
 station_details_url_infix = ".stationTabContainer."
 station_details_url_postfix = ".json"
 
-# This is the entire station list as json -- names and all.
-stations_json_url = "https://www.amtrak.com/services/data.stations.json"
+# This is the station HTML page for one station.
+station_details_html_url_prefix = "https://www.amtrak.com/stations/"
+station_details_html_file_postfix = ".html"
 
 # Now, where to put the local cached copy?
 module_location = Path(__file__).parent
@@ -52,9 +59,37 @@ stations_under_wd = working_directory / "amtrak_stations"
 station_details_dir = stations_under_module
 
 
+#########
+# First: the list of all stations, the data.stations.json file
+
+
 def stations_json_local_path():
     """Return local path for the data.stations.json file as a Path"""
     return station_details_dir / "data.stations.json"
+
+
+def download_stations_json() -> str:
+    """Download Amtrak's basic stations database as json text; return it."""
+    # This uses the 'requests' package to download it
+    response = requests.get(stations_json_url)
+    return response.text
+
+
+def save_stations_json(stations_json: str):
+    """Save Amtrak's basic stations database (json text) to a suitable file."""
+    with open(stations_json_local_path(), "w") as stations_json_local_file:
+        print(stations_json, file=stations_json_local_file)
+
+
+def load_stations_json():
+    """Load Amtrak's basic stations database (json text) from a suitable file.  Return it."""
+    with open(stations_json_local_path(), "r") as stations_json_local_file:
+        stations_json = stations_json_local_file.read()
+    return stations_json
+
+
+#########
+# Second: the individual JSON files for each station
 
 
 def station_details_filename(station_code: str) -> str:
@@ -109,25 +144,181 @@ def station_details_local_path(station_code: str) -> str:
     return path
 
 
-def download_stations_json() -> str:
-    """Download Amtrak's basic stations database as json text; return it."""
-    # This uses the 'requests' package to download it
-    response = requests.get(stations_json_url)
-    return response.text
 
 
-def save_stations_json(stations_json: str):
-    """Save Amtrak's basic stations databse (json text) to a suitable file."""
-    with open(stations_json_local_path(), "w") as stations_json_local_file:
-        print(stations_json, file=stations_json_local_file)
+def download_station_details(station_code: str) -> str:
+    """Download station details for one station as json text; return it."""
+    response = requests.get(station_details_url(station_code))
+    # This suffers from the possibility of failure.
+    my_text = response.text
+    if response.status_code != requests.codes.ok:
+        print(
+            "".join(
+                [
+                    "Download JSON for ",
+                    station_code,
+                    " returned error ",
+                    str(response.status_code),
+                    "; blanking file.",
+                ]
+            )
+        )
+        my_text = "{}"  # Don't fill with whatever garbage we got; this is valid JSON
+    return my_text
 
 
-def load_stations_json():
-    """Load Amtrak's basic stations databse (json text) from a suitable file.  Return it."""
-    with open(stations_json_local_path(), "r") as stations_json_local_file:
-        stations_json = stations_json_local_file.read()
-    return stations_json
+def save_station_details(station_code: str, station_details: str):
+    """Save station details for one station to a suitable file."""
+    with open(
+        station_details_local_path(station_code), "w"
+    ) as station_details_local_file:
+        print(station_details, file=station_details_local_file)
 
+
+def load_station_details(station_code: str) -> str:
+    """Load station details for one station as json text from a suitable file; return it."""
+    with open(
+        station_details_local_path(station_code), "r"
+    ) as station_details_local_file:
+        station_details = station_details_local_file.read()
+    return station_details
+
+
+#########
+# Third: the individual HTML files for each station
+
+
+def station_details_html_filename(station_code: str) -> str:
+    """
+    Return filename for a Amtrak station details HTML file
+
+    This does uppercase/lowercase correction.
+    """
+    # Step one: validate the station code
+    if len(station_code) != 3:
+        raise ValueError("Station code not of length 3")
+    # This is likely to be case sensitive
+    filename = "".join(
+        [
+            str.lower(station_code),
+            station_details_html_file_postfix,
+        ]
+    )
+    return filename
+
+
+def station_details_html_url(station_code: str) -> str:
+    """
+    Given an Amtrak station code, return the URL for the station HTML page.
+
+    Watch out for "403 forbidden" issues...
+    """
+    # Step one: validate the station code
+    if len(station_code) != 3:
+        raise ValueError("Station code not of length 3")
+    # This might be case sensitive
+    url = "".join(
+        [
+            station_details_html_url_prefix,
+            str.lower(station_code),
+        ]
+    )
+    return url
+
+
+def station_details_html_local_path(station_code: str) -> str:
+    """Return local pathname for an Amtrak station details HTML file"""
+    # Step one: validate the station code
+    if len(station_code) != 3:
+        raise ValueError("Station code not of length 3")
+    filename = station_details_html_filename(station_code)
+    path = station_details_dir / filename
+    return path
+
+
+def download_station_details_html(station_code: str) -> str:
+    """Download station HTML file for one station; return it."""
+    response = requests.get(station_details_html_url(station_code))
+    # This suffers from the possibility of failure.
+    my_text = response.text
+    if response.status_code != requests.codes.ok:
+        print(
+            "".join(
+                [
+                    "Download HTML for ",
+                    station_code,
+                    " returned error ",
+                    str(response.status_code),
+                    "; blanking file.",
+                ]
+            )
+        )
+        my_text = ""  # Don't fill with whatever garbage we got; this is valid HTML
+    return my_text
+
+
+def save_station_details_html(station_code: str, station_details: str):
+    """Save station HTML for one station to a suitable file."""
+    with open(
+        station_details_html_local_path(station_code), "w"
+    ) as station_details_html_local_file:
+        print(station_details, file=station_details_html_local_file)
+
+
+def load_station_details_html (station_code: str) -> str:
+    """Load station HTML for one station as json text from a suitable file; return it."""
+    with open(
+        station_details_html_local_path(station_code), "r"
+    ) as station_details_html_local_file:
+        station_details = station_details_html_local_file.read()
+    return station_details
+
+
+#####
+# Fourth: Big download routines
+
+
+def download_one_station(station_code: str):
+    """
+    Download one of Amtrak's station details files.
+
+    Usually used directly when a hiccup has screwed up one of the downloads.
+    """
+    print(station_code)
+    station_details = download_station_details(station_code)
+    save_station_details(station_code, station_details)
+    station_details_html = download_station_details_html(station_code)
+    save_station_details_html(station_code, station_details_html)
+
+
+def download_all_stations(sleep_secs: float = 1.0):
+    """
+    Download all of Amtrak's station details files.
+
+    By pre-downloading, avoids hammering Amtrak's website
+
+    sleep_secs: Sleep between downloads for this many secs (a float)
+    to avoid hammering Amtrak's website.
+    """
+    # First, get the main station database
+    stations_json = download_stations_json()
+    save_stations_json(stations_json)
+
+    if sleep_secs != 0.0:
+        sleep(sleep_secs)
+
+    # Then, cycle through the station codes
+    stations = pd.io.json.read_json(stations_json, orient="records")
+    for code in stations["code"].array:
+        download_one_station(code)
+        if sleep_secs != 0.0:
+            sleep(sleep_secs)
+        # When debugging, don't loop...
+        # break
+
+
+#####
+# Fifth: preparing the station name dictionary
 
 # For getting station names from station codes.
 
@@ -160,80 +351,8 @@ def make_station_name_dict():
     return dict(zip(stations.code, stations.autoFillName))
 
 
-def download_station_details(station_code: str) -> str:
-    """Download station details for one station as json text; return it."""
-    response = requests.get(station_details_url(station_code))
-    # This suffers from the possibility of failure.
-    my_text = response.text
-    if response.status_code != requests.codes.ok:
-        print(
-            "".join(
-                [
-                    "Download for ",
-                    station_code,
-                    " returned error ",
-                    str(response.status_code),
-                    "; blanking file.",
-                ]
-            )
-        )
-        my_text = "{}"  # Don't fill with whatever garbage we got; this is valid JSON
-    return my_text
-
-
-def save_station_details(station_code: str, station_details: str):
-    """Save station details for one station to a suitable file."""
-    with open(
-        station_details_local_path(station_code), "w"
-    ) as station_details_local_file:
-        print(station_details, file=station_details_local_file)
-
-
-def load_station_details(station_code: str) -> str:
-    """Load station details for one station as json text from a suitable file; return it."""
-    with open(
-        station_details_local_path(station_code), "r"
-    ) as station_details_local_file:
-        station_details = station_details_local_file.read()
-    return station_details
-
-
-def download_one_station(station_code: str):
-    """
-    Download one of Amtrak's station details files.
-
-    Usually used directly when a hiccup has screwed up one of the downloads.
-    """
-    print(station_code)
-    station_details = download_station_details(station_code)
-    save_station_details(station_code, station_details)
-
-
-def download_all_stations(sleep_secs: float = 1.0):
-    """
-    Download all of Amtrak's station details files.
-
-    By pre-downloading, avoids hammering Amtrak's website
-
-    sleep_secs: Sleep between downloads for this many secs (a float)
-    to avoid hammering Amtrak's website.
-    """
-    # First, get the main station database
-    stations_json = download_stations_json()
-    save_stations_json(stations_json)
-
-    if sleep_secs != 0.0:
-        sleep(sleep_secs)
-
-    # Then, cycle through the station codes
-    stations = pd.io.json.read_json(stations_json, orient="records")
-    for code in stations["code"].array:
-        download_one_station(code)
-        if sleep_secs != 0.0:
-            sleep(sleep_secs)
-        # When debugging, don't loop...
-        # break
-
+######
+# Sixth: Processing the station data
 
 # Notes on station details:
 # stationAlias is alternate search terms to find the station (often absent)
