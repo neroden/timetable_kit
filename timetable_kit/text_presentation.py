@@ -52,6 +52,7 @@ thick_cell_substitution_map = {
     "uparrow": '<div style="text-align: center; font-size: 120%;">&#x1f879;</div>',
     "downrightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87e;</div>',
     "uprightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87d;</div>',
+    "rightarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87a;</div>',
 }
 
 
