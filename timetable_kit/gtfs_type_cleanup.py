@@ -10,7 +10,7 @@ this is not always useful for later work.  These subroutines convert certain col
 
 # Other people's packages
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 
 
 def type_corrected_agency(agency):

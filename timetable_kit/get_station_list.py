@@ -13,7 +13,9 @@ import argparse
 import datetime
 
 # import pandas as pd # we call pandas routines but only on dataframes
-# import gtfs_kit as gk
+
+# We may not actually need these directly?
+import gtfs_kit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced

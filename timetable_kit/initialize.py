@@ -10,11 +10,11 @@ Used by multiple command-line programs
 
 # Other people's packages
 from pathlib import Path
-import gtfs_kit as gk
+import gtfs_kit
 
 # My packages: Local module imports
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
 from timetable_kit import gtfs_type_cleanup
@@ -32,7 +32,7 @@ def initialize_feed(gtfs):
     gtfs_path = Path(gtfs)
     # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
     # Also affects display miles so default to mi.
-    master_feed = gk.read_feed(gtfs_path, dist_units="mi")
+    master_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 
     # Need to clean up times to zero-pad them for sorting.

@@ -21,7 +21,7 @@ import shutil  # To copy files
 import json
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 from weasyprint import HTML as weasyHTML
 from weasyprint import CSS as weasyCSS
 
@@ -39,7 +39,7 @@ from timetable_kit.errors import (
 from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
 from timetable_kit.feed_enhanced import gtfs_days
@@ -438,8 +438,8 @@ def get_dwell_secs(today_feed, trip_id, station_code):
         return 0
 
     # Normal case:
-    departure_secs = gk.timestr_to_seconds(timepoint.departure_time)
-    arrival_secs = gk.timestr_to_seconds(timepoint.arrival_time)
+    departure_secs = gtfs_kit.timestr_to_seconds(timepoint.departure_time)
+    arrival_secs = gtfs_kit.timestr_to_seconds(timepoint.arrival_time)
     dwell_secs = departure_secs - arrival_secs
     return dwell_secs
 

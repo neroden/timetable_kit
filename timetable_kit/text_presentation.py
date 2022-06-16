@@ -12,7 +12,7 @@ All the "character twiddling" operations are in here.
 """
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 from collections import namedtuple
 
 from datetime import datetime, timedelta  # for time zones

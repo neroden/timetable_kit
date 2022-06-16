@@ -12,7 +12,7 @@ There is also an extraction method to pull out a single trip record from a reduc
 with error checking to make sure there's exactly one trip.
 """
 from operator import not_  # Needed for bad_service_id filter
-import gtfs_kit as gk
+import gtfs_kit
 from timetable_kit.errors import (
     GTFSError,
     NoTripError,
@@ -325,26 +325,26 @@ def get_trip_short_name(self, trip_id):
 
 
 # Monkey patch starts here
-gk.Feed.filter_by_dates = filter_by_dates
-gk.Feed.filter_by_day_of_week = filter_by_day_of_week
-gk.Feed.filter_by_route_ids = filter_by_route_ids
-gk.Feed.filter_by_service_ids = filter_by_service_ids
-gk.Feed.filter_bad_service_ids = filter_bad_service_ids
-gk.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
-gk.Feed.filter_find_one_day_calendars = filter_find_one_day_calendars
-gk.Feed.filter_by_trip_short_names = filter_by_trip_short_names
-gk.Feed.filter_by_trip_ids = filter_by_trip_ids
-gk.Feed.get_single_trip = get_single_trip
-gk.Feed.get_single_trip_stop_times = get_single_trip_stop_times
-gk.Feed.get_trip_short_name = get_trip_short_name
+gtfs_kit.Feed.filter_by_dates = filter_by_dates
+gtfs_kit.Feed.filter_by_day_of_week = filter_by_day_of_week
+gtfs_kit.Feed.filter_by_route_ids = filter_by_route_ids
+gtfs_kit.Feed.filter_by_service_ids = filter_by_service_ids
+gtfs_kit.Feed.filter_bad_service_ids = filter_bad_service_ids
+gtfs_kit.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
+gtfs_kit.Feed.filter_find_one_day_calendars = filter_find_one_day_calendars
+gtfs_kit.Feed.filter_by_trip_short_names = filter_by_trip_short_names
+gtfs_kit.Feed.filter_by_trip_ids = filter_by_trip_ids
+gtfs_kit.Feed.get_single_trip = get_single_trip
+gtfs_kit.Feed.get_single_trip_stop_times = get_single_trip_stop_times
+gtfs_kit.Feed.get_trip_short_name = get_trip_short_name
 
 # TESTING CODE
 if __name__ == "__main__":
     from pathlib import Path
 
-    gtfs_filename = "./gtfs-amtrak.zip"
+    gtfs_filename = "./amtrak/GTFS.zip"
     gtfs_path = Path(gtfs_filename)
-    feed = gk.read_feed(gtfs_path, dist_units="mi")
+    feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     print(feed.calendar)
     date_filtered_feed = feed.filter_by_dates("20220224", "20220224")
     print(date_filtered_feed.calendar)

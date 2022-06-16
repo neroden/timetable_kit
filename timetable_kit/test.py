@@ -11,7 +11,7 @@ Not intended for production use.
 # Other people's packages
 import argparse
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 import json
 
 # My packages
@@ -26,7 +26,7 @@ from timetable_kit.errors import (
 from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
 # To intialize the feed -- does type changes

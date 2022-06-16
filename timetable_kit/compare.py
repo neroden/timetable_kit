@@ -13,12 +13,12 @@ Used to see how many services with different dates are actually the same service
 import argparse
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 
 # My packages: Local module imports
 from timetable_kit.debug import set_debug_level, debug_print
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early.  This IS used.
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
 
 # To intialize the feed -- does type changes

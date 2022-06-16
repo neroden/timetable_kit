@@ -17,7 +17,9 @@ Also contains other routines which look up trips by tsn.
 from timetable_kit.errors import GTFSError, NoTripError
 from timetable_kit.debug import debug_print
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+import gtfs_kit
+
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
 # List of days which are GTFS column headers
