@@ -26,9 +26,12 @@ from timetable_kit.feed_enhanced import gtfs_days
 
 def train_spec_to_tsn(train_spec: str) -> str:
     """
-    Takes a train_spec, which is either a tsn or a tsn followed by a space and a day of the week,
-    and returns the tsn alone.
+    Takes a train_spec, and returns the tsn alone.
+
+    A train_spec is either a tsn or a tsn followed by a space and a day of the week,
+    possibly followed by "noheader".
     """
+    train_spec = train_spec.removesuffix("noheader").strip()
     for day in gtfs_days:
         tentative_tsn = train_spec.removesuffix(" " + day)
         if tentative_tsn != train_spec:

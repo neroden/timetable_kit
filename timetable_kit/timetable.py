@@ -744,17 +744,24 @@ def fill_tt_spec(
                             route_from_train_spec_local,
                             output_type="attributes",
                         )
-                # And now... check whether this column has any buses
+                # Check whether this column has any buses which should be marked
                 use_bus_icon_this_column = False
                 if use_bus_icon_in_cells:
                     for train_spec in train_specs:
-                        if train_spec.endswith("noheader"):
-                            train_spec = train_spec.removesuffix("noheader").strip()
+                        train_spec = train_spec.removesuffix("noheader").strip()
                         route = route_from_train_spec_local(train_spec)
                         if route.route_type == 3:
                             # We have found a bus
                             use_bus_icon_this_column = True
                             break
+
+                # Check whether this column has any checked baggage
+                use_baggage_icon_this_column = False
+                for train_spec in train_specs:
+                    potential_baggage_tsn = train_spec_to_tsn(train_spec)
+                    if amtrak.train_has_checked_baggage(potential_baggage_tsn):
+                        use_baggage_icon_this_column = True
+                        break
 
         # Now fill in the column header, as chosen earlier
         header_replacement_list.append(column_header)
@@ -1085,9 +1092,7 @@ def fill_tt_spec(
                             short_days_box=short_days_box,
                             is_first_stop=is_first_stop,
                             is_last_stop=is_last_stop,
-                            use_baggage_icon=amtrak.train_has_checked_baggage(
-                                train_spec_to_tsn(train_spec)
-                            ),
+                            use_baggage_icon=use_baggage_icon_this_column,
                             has_baggage=has_baggage,
                             use_bus_icon=use_bus_icon_this_column,
                             is_bus=is_bus,
