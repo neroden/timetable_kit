@@ -11,12 +11,14 @@ For generalizing to non-Amtrak feeds:
      swap in a different module.  This is easier to do than it appears!
      We can literally just use a variable to hold which module to call.
 
+For internal code cleanup:
+0 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
+1 -- combine find_trains.py and find_connecting_buses.py, which share excessive amounts of logic.
+2 -- improve icon situation (put characters in font?)
+3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
+
 Fine for after release of timetables:
 1 -- Add Roanoke service to Crescent timetable?
-1 -- combine find_trains.py and find_connecting_buses.py, which share excessive amounts of logic.
-2 -- improve icon situation
-
-3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
 4 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
