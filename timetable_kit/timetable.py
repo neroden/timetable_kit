@@ -604,11 +604,11 @@ def fill_tt_spec(
     # Load variable function for station name printing
     prettyprint_station_name = None
     if doing_html:
-        prettyprint_station_name = amtrak.amtrak_station_name_to_html
+        prettyprint_station_name = amtrak.station_name_to_html
     elif doing_multiline_text:
-        prettyprint_station_name = amtrak.amtrak_station_name_to_multiline_text
+        prettyprint_station_name = amtrak.station_name_to_multiline_text
     else:
-        prettyprint_station_name = amtrak.amtrak_station_name_to_single_line_text
+        prettyprint_station_name = amtrak.station_name_to_single_line_text
     if not callable(prettyprint_station_name):
         raise TypeError(
             "Received prettyprint_station_name which is not callable: ",
