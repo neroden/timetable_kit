@@ -55,8 +55,10 @@ def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
     return feed
 
 
-# This is the set of all table names in the feed
-table_names = set(gtfs_kit.constants.FEED_ATTRS) - set(["dist_units"])
+# This is the set of all genuine table names in the feed
+# Not including the internal ones.
+# FIXME -- this is fragile.  Make more robust.
+table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - set(["dist_units"])
 
 
 def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:
@@ -77,14 +79,13 @@ def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:
     # FIXME: This uses the dist_units from A with no conversion attempt for B
 
     for table_name in table_names:
+        print("Doing", table_name)
         source_tables = [getattr(a, table_name), getattr(b, table_name)]
         match source_tables:
             case [None, None]:
                 table_value = None
-            case [value, None]:
-                table_value = value
-            case [None, value]:
-                table_value = value
+            case [None, value] | [value, None] :
+                table_value = value.reset_index()
             case _:
                 table_value = pd.concat(source_tables).reset_index()
         setattr(feed_out, table_name, table_value)
