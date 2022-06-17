@@ -4,18 +4,26 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Find all the trains from station A to station B (by all routes).
+Two modes of invocation
+./find_trains STATION:
+Find all the trains (& buses, etc.) which stop at STATION.
+
+./find_trains STATION_A STATION_B:
+Find all the trains (& buses, etc.) from station A to station B (by all routes).
 
 Sort by departure time.
+Filter by reference date.
 Optionally filter by day of week.
-Definitely filter by reference date.
 """
 
+import sys # for exit
 import argparse
 import datetime
 
+import gtfs_kit
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
+from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
 
@@ -30,9 +38,33 @@ from timetable_kit.timetable_argparse import (
 )
 
 
-def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
+def find_connecting_buses_from_stop(stop: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict) -> list[str]:
     """
-    Returns a list of trip_short_names (train numbers) which stop at both stops.
+    Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
+
+    Preferably, use a feed restricted to a single day (today_feed).  Not required though.
+
+    Requires a trip_id_to_tsn map (dict).
+
+    Consider returning trip_ids instead. FIXME
+    Must be passed a feed, and one stop_id.
+    """
+    # Start by filtering the stop_times for stop one.
+    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop]
+    sorted_filtered_stop_times = filtered_stop_times.sort_values(
+        by=["departure_time"]
+    )
+    trip_ids = sorted_filtered_stop_times["trip_id"].array
+    tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
+
+    # Should still be in the correct order
+    print("Found trips at", stop, " : ", tsns)
+    return tsns
+
+
+def find_trains(stop_one: str, stop_two: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict) -> list[str]:
+    """
+    Returns a list of trip_short_names (train numbers) which stop at both stops, in that order.
 
     Preferably, use a feed restricted to a single day (today_feed).  Not required though.
 
@@ -118,10 +150,16 @@ def make_spec(route_ids, feed):
 
 def make_argparser():
     parser = argparse.ArgumentParser(
-        description="""Produce list of trains (trip_short_name) from stop one to stop two.
-                        Useful for making sure you found all the trains from NYP to PHL.
-                        Should be reviewed manually before generating tt-spec, especially for
-                        days-of-week issues.
+        description="""
+                    With ONE argument, produce list of trains/buses (trip_short_name) which stop at that stop.
+                    Useful for finding all the connecting buses at FLG.
+
+                    With TWO arguments, produce list of trains/buses (trip_short_name) which stop at the first stop, and later at the last stop.
+                    Useful for making sure you found all the trains from NYP to PHL.
+
+                    In either case, results are sorted by departure time at the first stop.
+
+                    The output should always be reviewed manually before generating tt-spec, especially for days-of-week issues.
                     """,
     )
     add_gtfs_argument(parser)
@@ -134,14 +172,19 @@ def make_argparser():
     parser.add_argument(
         "stop_two",
         help="""Last stop""",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--day",
+        help="""Restrict to trains/buses operating on a particular day of the week""",
     )
     return parser
 
 
 # MAIN PROGRAM
 if __name__ == "__main__":
-    parser = make_argparser()
-    args = parser.parse_args()
+    argparser = make_argparser()
+    args = argparser.parse_args()
 
     set_debug_level(args.debug)
 
@@ -151,20 +194,31 @@ if __name__ == "__main__":
     reference_date = args.reference_date
     if reference_date is None:
         reference_date = datetime.date.today().strftime("%Y%m%d")
-
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
-    stop_one = args.stop_one
-    stop_two = args.stop_two
-    print("Finding trains from", stop_one, "to", stop_two)
+    # Restrict by day of week if specified.
+    day_of_week = args.day
+    if day_of_week is not None:
+       day_of_week = day_of_week.lower()
+       if day_of_week not in gtfs_days:
+           print("Specifed day of week not understood.")
+           exit(1)
+       today_feed = today_feed.filter_by_day_of_week(day_of_week)
 
-    # TODO: figure out how to filter by day of week -- need command line argument
-    # today_monday_feed = today_feed.filter_by_day_of_week("monday")
-    set_debug_level(2)
-
-    # Make the two interconverting dicts
+    # Make the two interconverting dicts -- actually we only need one of them
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
     # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
 
-    find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+    stop_one = args.stop_one
+    stop_two = args.stop_two
+
+    if stop_one is None:
+        argparser.print_usage()
+        sys.exit(1)
+    if stop_two is None:
+        print("Finding buses at", stop_one)
+        find_connecting_buses_from_stop(stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+    else:
+        print("Finding trains from", stop_one, "to", stop_two)
+        find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
