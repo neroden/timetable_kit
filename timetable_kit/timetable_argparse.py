@@ -91,17 +91,7 @@ def add_input_dirname_argument(parser: argparse.ArgumentParser):
     )
 
 
-def make_tt_arg_parser():
-    """Make argument parser for timetable.py"""
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.json files).""",
-    )
-    add_gtfs_argument(parser)
-    add_date_argument(parser)
-    add_debug_argument(parser)
-    add_output_dirname_argument(parser)
-    add_input_dirname_argument(parser)
+def add_spec_files_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
         "--spec",
         "--specs",
@@ -116,7 +106,34 @@ def make_tt_arg_parser():
                 The spec files must all be in the same input directory.
              """,
         nargs="+",  # 1 or more filenames
+        default=[], # empty list
     )
+
+def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "positional_spec_files",
+        help="""
+             Spec files may be specified wiwhout the --spec prefix for convenience.
+             """,
+        nargs="*",  # 1 or more filenames
+        default=[], # empty list
+    )
+
+
+def make_tt_arg_parser():
+    """Make argument parser for timetable.py"""
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.json files).""",
+    )
+    add_spec_files_argument(parser)
+    add_positional_spec_files_argument(parser)
+
+    add_gtfs_argument(parser)
+    add_date_argument(parser)
+    add_debug_argument(parser)
+    add_output_dirname_argument(parser)
+    add_input_dirname_argument(parser)
     parser.add_argument(
         "--author",
         "-a",

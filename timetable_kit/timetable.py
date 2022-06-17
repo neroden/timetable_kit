@@ -1507,8 +1507,9 @@ def main():
         my_arg_parser.print_help()
         sys.exit(1)
 
-    spec_file_list = args.tt_spec_files
-    if spec_file_list is None:
+    spec_file_list = [*(args.tt_spec_files),*(args.positional_spec_files)]
+
+    if spec_file_list == []:
         print(
             "You need to specify at least one spec file.  Use the --help option for help."
         )
