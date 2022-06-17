@@ -66,10 +66,21 @@ def run():
 
     print("Merging feeds")
     merged_feed = merge_feed(amtrak_feed, hl_feed)
+
+    # print("Exporting feed to files")
+    # if not merged_gtfs_unzipped_local_path.exists():
+    #     merged_gtfs_unzipped_local_path.mkdir(parents=True)
+    # merged_feed.write(Path(merged_gtfs_unzipped_local_path))
+
+    # Experimentally, writing the feed out is slow.  Unzipping it is fast.
+    # Writing it out unzipped is just as slow.
+    # I didn't want to learn how to zip it.
+    print("Writing zipped feed")
     merged_feed.write(Path(merged_gtfs_zip_local_path))
     print ("Merged Hartford Line feed into Amtrak feed at", merged_gtfs_zip_local_path)
 
     # Leave it open for inspection
+    print ("Unzipping feed")
     with ZipFile(merged_gtfs_zip_local_path, "r") as my_zip:
         if not merged_gtfs_unzipped_local_path.exists():
             merged_gtfs_unzipped_local_path.mkdir(parents=True)
