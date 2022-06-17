@@ -16,11 +16,12 @@ Filter by reference date.
 Optionally filter by day of week.
 """
 
-import sys # for exit
+import sys  # for exit
 import argparse
 import datetime
 
 import gtfs_kit
+
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
 from feed_enhanced import gtfs_days
@@ -38,7 +39,9 @@ from timetable_kit.timetable_argparse import (
 )
 
 
-def find_connecting_buses_from_stop(stop: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict) -> list[str]:
+def find_connecting_buses_from_stop(
+    stop: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+) -> list[str]:
     """
     Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
 
@@ -51,9 +54,7 @@ def find_connecting_buses_from_stop(stop: str, *, feed: gtfs_kit.Feed, trip_id_t
     """
     # Start by filtering the stop_times for stop one.
     filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop]
-    sorted_filtered_stop_times = filtered_stop_times.sort_values(
-        by=["departure_time"]
-    )
+    sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
     trip_ids = sorted_filtered_stop_times["trip_id"].array
     tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
 
@@ -62,7 +63,9 @@ def find_connecting_buses_from_stop(stop: str, *, feed: gtfs_kit.Feed, trip_id_t
     return tsns
 
 
-def find_trains(stop_one: str, stop_two: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict) -> list[str]:
+def find_trains(
+    stop_one: str, stop_two: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+) -> list[str]:
     """
     Returns a list of trip_short_names (train numbers) which stop at both stops, in that order.
 
@@ -200,11 +203,11 @@ if __name__ == "__main__":
     # Restrict by day of week if specified.
     day_of_week = args.day
     if day_of_week is not None:
-       day_of_week = day_of_week.lower()
-       if day_of_week not in gtfs_days:
-           print("Specifed day of week not understood.")
-           exit(1)
-       today_feed = today_feed.filter_by_day_of_week(day_of_week)
+        day_of_week = day_of_week.lower()
+        if day_of_week not in gtfs_days:
+            print("Specifed day of week not understood.")
+            exit(1)
+        today_feed = today_feed.filter_by_day_of_week(day_of_week)
 
     # Make the two interconverting dicts -- actually we only need one of them
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
@@ -218,7 +221,9 @@ if __name__ == "__main__":
         sys.exit(1)
     if stop_two is None:
         print("Finding buses at", stop_one)
-        find_connecting_buses_from_stop(stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+        find_connecting_buses_from_stop(
+            stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+        )
     else:
         print("Finding trains from", stop_one, "to", stop_two)
         find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)

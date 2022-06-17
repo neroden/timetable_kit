@@ -49,7 +49,6 @@ station_types_decoding_map = {
     # Ferry Terminals are inevitably used as bus stops by Amtrak
     # This is only found at BRI (Bristol, RI)
     "Ferry Terminal - Platform only (no shelter)": [0, 0],
-
     # There are several of these.  What even IS this?
     # It's used at Green Bay, but also at Metrolink stations in California
     # and Morgan Hill Caltrain station in California
@@ -63,7 +62,6 @@ station_types_decoding_map = {
     "Bus Station - Station Building (with waiting room)": [0, 2],
     # Ferry Terminals are inevitably used as bus stops by Amtrak
     "Ferry Terminal - Station Building (with waiting room)": [0, 2],
-
     # This is only found at Livermore, CA (LIV).
     # It's a train station for someone else, not for Amtrak.
     "Train Station - Curbside Bus Stop only (no shelter)": [0, 0],
@@ -138,7 +136,9 @@ def make_station_type_dicts() -> None:
             debug_print(1, "no description for", station_code)
             continue
         if len(description_list) > 1:
-            debug_print(1, "excess description for", station_code, ":", description_list)
+            debug_print(
+                1, "excess description for", station_code, ":", description_list
+            )
             # Only happens at VBC, and the two descriptions are identical
         description = description_list[0]
         if description not in station_types_decoding_map:
@@ -147,7 +147,7 @@ def make_station_type_dicts() -> None:
             [train_or_bus, shelter] = station_types_decoding_map[description]
             train_or_bus_dict[station_code] = bool(train_or_bus)
             shelter_dict[station_code] = bool(shelter_dict)
-    print ("Station type dicts made.")
+    print("Station type dicts made.")
     return
 
 

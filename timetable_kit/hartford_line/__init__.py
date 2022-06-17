@@ -10,4 +10,3 @@ Hartford Line specific functions for timetable_kit
 
 from .get_gtfs import gtfs_zip_local_path
 from .merge_gtfs import merged_gtfs_zip_local_path
-

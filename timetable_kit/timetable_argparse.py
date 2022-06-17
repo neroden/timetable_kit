@@ -106,8 +106,9 @@ def add_spec_files_argument(parser: argparse.ArgumentParser):
                 The spec files must all be in the same input directory.
              """,
         nargs="+",  # 1 or more filenames
-        default=[], # empty list
+        default=[],  # empty list
     )
+
 
 def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
@@ -116,7 +117,7 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
              Spec files may be specified wiwhout the --spec prefix for convenience.
              """,
         nargs="*",  # 1 or more filenames
-        default=[], # empty list
+        default=[],  # empty list
     )
 
 

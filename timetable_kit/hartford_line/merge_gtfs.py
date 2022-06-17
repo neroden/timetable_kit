@@ -27,6 +27,7 @@ merged_gtfs_unzipped_local_path = module_location / "merged-gtfs"
 # hartford_line.get_gtfs.gtfs_zip_local_path has the raw Hartford Line GTFS
 # amtrak.get_gtfs.gtfs_zip_local_path has the raw Amtrak GTFS
 
+
 def run():
     """
     timetable_kit.hartford_line.merge_gtfs.run
@@ -77,16 +78,16 @@ def run():
     # I didn't want to learn how to zip it.
     print("Writing zipped feed")
     merged_feed.write(Path(merged_gtfs_zip_local_path))
-    print ("Merged Hartford Line feed into Amtrak feed at", merged_gtfs_zip_local_path)
+    print("Merged Hartford Line feed into Amtrak feed at", merged_gtfs_zip_local_path)
 
     # Leave it open for inspection
-    print ("Unzipping feed")
+    print("Unzipping feed")
     with ZipFile(merged_gtfs_zip_local_path, "r") as my_zip:
         if not merged_gtfs_unzipped_local_path.exists():
             merged_gtfs_unzipped_local_path.mkdir(parents=True)
         my_zip.extractall(path=merged_gtfs_unzipped_local_path)
         print("Extracted to " + str(merged_gtfs_unzipped_local_path))
 
+
 if __name__ == "__main__":
     run()
-

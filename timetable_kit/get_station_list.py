@@ -97,7 +97,9 @@ if __name__ == "__main__":
         case (None, tsn) | (tsn, None):
             pass
         case (_, _):
-            raise ValueError("Specified trip_short_name two different ways.  Use only one.")
+            raise ValueError(
+                "Specified trip_short_name two different ways.  Use only one."
+            )
     tsn = tsn.strip()  # Avoid whitespace problems
 
     master_feed = initialize_feed(gtfs=gtfs_filename)

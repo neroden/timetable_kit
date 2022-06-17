@@ -84,7 +84,7 @@ def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:
         match source_tables:
             case [None, None]:
                 table_value = None
-            case [None, value] | [value, None] :
+            case [None, value] | [value, None]:
                 table_value = value.reset_index()
             case _:
                 table_value = pd.concat(source_tables).reset_index()
