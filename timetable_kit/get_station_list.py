@@ -56,6 +56,14 @@ def make_argparser():
                 and the output will be tt_51_stations.csv.
              """,
     )
+    parser.add_argument(
+        "trip",
+        help="""This specifies which trip_short_name to use to generate the list of stations.
+                For instance, if it's "51", train 51 will be used,
+                and the output will be tt_51_stations.csv.
+             """,
+        nargs="?",
+    )
     return parser
 
 
@@ -81,9 +89,15 @@ if __name__ == "__main__":
         reference_date = datetime.date.today().strftime("%Y%m%d")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    tsn = args.trip_short_name
-    if not tsn:
-        raise ValueError("Can't generate a station list without a specific trip.")
+    optional_tsn = args.trip_short_name
+    positional_tsn = args.trip
+    match (optional_tsn, positional_tsn):
+        case (None, None):
+            raise ValueError("Can't generate a station list without a specific trip.")
+        case (None, tsn) | (tsn, None):
+            pass
+        case (_, _):
+            raise ValueError("Specified trip_short_name two different ways.  Use only one.")
     tsn = tsn.strip()  # Avoid whitespace problems
 
     master_feed = initialize_feed(gtfs=gtfs_filename)
