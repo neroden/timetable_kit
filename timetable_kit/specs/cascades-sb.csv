@@ -1,0 +1,27 @@
+,stations,access,503,7,5605,505,5677,507
+column-options,,,ardp,,,,,
+route-name,,,,,,,,
+days,,,EUG,SEA,SEA,EUG,SEA,PDX
+VAC,,,blank,blank,blank,blank,blank,blank
+BEL,,,blank,blank,5605 first,blank,5677 first,blank
+MVW,,,blank,blank,,blank,,blank
+STW,,,blank,From Chicago,5605 blank,blank,5677 blank,blank
+EVR,,,blank,7 first,,blank,,blank
+EDM,,,blank,,5605 blank,blank,5677 blank,blank
+SEA,,,blank,7 last,5605 last,blank,5677 last,blank
+SEA,,,503 first two_row,blank,downrightarrow,505 first two_row,downrightarrow,507 first two_row
+TUK,,,,blank,blank,,blank,
+TAC,,,,blank,blank,,blank,
+OLW,,,,blank,blank,,blank,
+CTL,,,,blank,blank,,blank,
+KEL,,,,blank,blank,,blank,
+VAN,,,,blank,blank,,blank,
+PDX,,,,blank,blank,,blank,507 last
+PDX,,,,blank,blank,,blank,blank
+ORC,,,,blank,blank,,blank,blank
+SLM,,,,blank,blank,,blank,blank
+ALY,,,,blank,blank,,blank,blank
+EUG,,,503 last,blank,blank,505 last,blank,blank
+CMO,,,blank,blank,blank,blank,blank,blank
+KFS,,,blank,blank,blank,blank,blank,blank
+DUN,,,blank,blank,blank,blank,blank,blank
