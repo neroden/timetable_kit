@@ -7,6 +7,9 @@ root directory (I don't know why, but I'll follow the style.)
 
 timetable.py contains the main program.  It should be executed at the command line.
 
+Note that the system holds and manipulates the entire GTFS database in memory, with substantial overhead, as well as loading many heavyweight python packages.
+A quick test found it maxing out at 1.66 gigabytes of virtual memory and 685 megabytes resident on Amtrak's database.  This should be manageable on modern computers.  A GTFS dataset significantly larger than Amtrak's 35MB dataset, however, may cause problems.
+
 Before running it to generate an Amtrak timetable, you will have to download the
 Amtrak GTFS file and the Amtrak stations database.  This is done in the amtrak/
 folder (see the file amtrak/README.rst in that folder).
