@@ -141,8 +141,10 @@ SPECIAL CODES IN CELLS
 ----------------------
 A cell to be filled in with a time may contain a special code.
 
-This should be a (tsn / train number) saying which train's departure/arrival times to use, followed by the
-word "first" or "last".  So "8 first" or "28 last".  
+The most useful special code is a train number (trip_short_name) saying which train's departure/arrival times to use, followed by the
+word "first" or "last".  So "8 first" or "28 last".  This must be one of the ones listed in the top of the column.  If the one listed in the top of the column has a day suffix like "monday", the day suffix is necessary ("8 monday last").
+
+A single train number such as "8" will simply say which train to use out of several.
 
 This is the only way to override the default "first train listed wins" behavior.
 This will also suppress the display of both arrival and departure time:
@@ -155,14 +157,14 @@ These special codes are intended to be used only in four situations:
 -- station where a train splits (list the station on two lines, and specify which line gets which tsn)
 -- station where a train connects to another (list the station on two lines, and specify which line gets which tsn)
 
-A single train number such as "8" will simply say which train to use out of several.
-
 To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.
+
+Just "last" or "first" by itself, or "last two-row" or "first two-row", can also be used if there is only one train in the column; this is mainly needed to clean up display in some situations.
 
 A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
 space character in the cell; it will show as a white cell.
 
-A cell may also contain a train number followed by the word "blank".  This will color the cell with the appropriate color for the train number (which must be one of the trains in the column).  This will blank out the cell but with a color.
+A cell may also contain a train number followed by the word "blank" ("8 blank").  This will color the cell with the appropriate color for the train number (which must be one of the trains in the column).  This will blank out the cell but with a color.
 
 There are also some shorthands for common arrows:
 downarrow will give suitable HTML for a down arrow, centered in the cell

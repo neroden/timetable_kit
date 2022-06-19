@@ -254,6 +254,14 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
 
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
+        if train_spec == "":
+            return {
+                "train_spec": None,
+                "last": True,
+                "first": False,
+                "blank": False,
+                "two_row": two_row,
+            }
         if train_spec not in train_specs:
             return None
         return {
@@ -266,6 +274,14 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
 
     if code_text.endswith("first"):
         train_spec = code_text.removesuffix("first").strip()
+        if train_spec == "":
+            return {
+                "train_spec": None,
+                "last": False,
+                "first": True,
+                "blank": False,
+                "two_row": two_row,
+            }
         if train_spec not in train_specs:
             return None
         return {
@@ -994,7 +1010,7 @@ def fill_tt_spec(
                     # Extract my_trip, timepoint (and later calendar)
                     # Note that in Python variables defined in a loop "hang around"
 
-                    if cell_codes:
+                    if cell_codes and cell_codes["train_spec"]:
                         # Specific train_spec was requested.
                         debug_print(2, "cell codes found: ", cell_codes)
                         train_specs_to_check = [cell_codes["train_spec"]]
