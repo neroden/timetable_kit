@@ -10,12 +10,19 @@ For generalizing to non-Amtrak feeds:
      We can literally just use a variable to hold which module to call.
 
 For internal code cleanup:
+-1 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
+      Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
+
 0 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
 2 -- improve icon situation (put characters in font?)
 3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
 Fine for after release of timetables:
 0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
+
+0.5 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
+0.75 -- Add "trains on left, stations on top" schema, for AWESOMENESS
+
 1 -- Add Roanoke service to Crescent timetable?
 
 4 -- Routine to print out calendar for a single route,
