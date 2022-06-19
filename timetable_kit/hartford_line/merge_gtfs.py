@@ -53,7 +53,7 @@ def run():
     # There is a BUG in the Hartford line trip_short_names.
     # The Sunday version of train 6459 has an extra space after it.
     # This is just confusing, so change it.
-    new_trips  = hl_feed.trips.replace("CTrail 6459 ","CTrail 6459")
+    new_trips = hl_feed.trips.replace("CTrail 6459 ", "CTrail 6459")
     hl_feed.trips = new_trips
 
     # Delete all Hartford Line stops rows.  This makes an invalid feed,
