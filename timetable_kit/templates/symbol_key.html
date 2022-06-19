@@ -12,8 +12,14 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <th>Meaning</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
+  <tbody>{#
+#}{% if all_stations_accessible %}{#
+#}    <tr>
+      <td>{{accessible_icon}}</td>
+      <td><b>All stations on this timetable</b> have platforms and trains accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
+#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
+{% else %}{# not all stations accessible, the norm #}{#
+#}    <tr>
       <td>{{accessible_icon}}</td>
       <td>Platform and train are accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
 #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
@@ -22,6 +28,7 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <td>{{inaccessible_icon}}</td>
       <td>Platform and train are <b>not accessible</b>{{ br_or_space(key_on_right) }}to people in wheelchairs</td>
     </tr>{#
+#}{% endif %}{# station accessibility icons #}{#
 #}{% if key_baggage %}{#
 #}    <tr>
       <td>{{baggage_icon}}</td>

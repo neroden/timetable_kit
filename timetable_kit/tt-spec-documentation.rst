@@ -222,6 +222,7 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "key_tz": "If present, include the key for time zones",
     "key_bus": "If present, include the key for the bus icon",
     "use_bus_icon_in_cells": "If present, use the bus icon in time cells for buses.  Otherwise, don't.",
+    "all_stations_accessible": "The key should say that all stations are accessible, rather than putting the icons for accessible and inaccessible.  Used to save the space of the access column; please don't do this unless you need the space."
     "compress_credits": "Save a little bit of space by removing line breaks in the credits",
     "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
     "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
