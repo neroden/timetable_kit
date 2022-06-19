@@ -43,12 +43,18 @@ def run():
     hl_feed = gtfs_kit.read_feed(hl_feed_path, dist_units="mi")
 
     print("Cleaning Hartford Line feed")
-    # One of the station codes is different from Amtrak: the others are the same.
 
+    # One of the station codes is different from Amtrak: the others are the same.
     # This risks replacing "ST" in columns other than stop_id,
     # but that doesn't happen in practice...
     new_stop_times = hl_feed.stop_times.replace("ST", "STS")
     hl_feed.stop_times = new_stop_times
+
+    # There is a BUG in the Hartford line trip_short_names.
+    # The Sunday version of train 6459 has an extra space after it.
+    # This is just confusing, so change it.
+    new_trips  = hl_feed.trips.replace("CTrail 6459 ","CTrail 6459")
+    hl_feed.trips = new_trips
 
     # Delete all Hartford Line stops rows.  This makes an invalid feed,
     # but all the stops are listed in Amtrak's feed, so it'll be fine after merging.
