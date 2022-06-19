@@ -890,6 +890,15 @@ def fill_tt_spec(
                     timepoint = get_timepoint_from_trip_id(
                         today_feed, my_trip.trip_id, reference_stop_id
                     )
+                    if timepoint is None:
+                        raise (
+                            InputError(
+                                "Bad reference stop for",
+                                train_specs[0],
+                                ":",
+                                reference_stop_id,
+                            )
+                        )
                     # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
                     stop_df = today_feed.stops[
                         today_feed.stops.stop_id == reference_stop_id
