@@ -1285,7 +1285,7 @@ def produce_timetable(
     if find_tsn_dupes(reduced_feed):
         debug_print(
             1,
-            "Warning, tsn duplicates!  Random trip will be picked!  Usually a bad idea!",
+            "Warning, tsn duplicates!  If you use one of these without a day disambiguator, a random trip will be picked!  Usually a bad idea!",
         )
 
     # Print the calendar for debugging
