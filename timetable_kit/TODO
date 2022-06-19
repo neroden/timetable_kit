@@ -47,3 +47,7 @@ Fine for after release of timetables:
 
 9 -- Sanitize pathnames coming from command line and environment.
     We're very sloppy right now.
+
+Fine for never:
+1 -- implement prototype spec generator using toposort to merge station lists.
+     This is really a many-step process.
