@@ -1,4 +1,5 @@
 For generalizing to non-Amtrak feeds:
+0 -- fix the get_time_column_stylings code to check the "agency" data
 1 -- Switch wheelchair access detection to be based on GTFS.
      Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
      from the Amtrak stations database.
@@ -14,6 +15,7 @@ For internal code cleanup:
 3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
 Fine for after release of timetables:
+0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
 1 -- Add Roanoke service to Crescent timetable?
 
 4 -- Routine to print out calendar for a single route,

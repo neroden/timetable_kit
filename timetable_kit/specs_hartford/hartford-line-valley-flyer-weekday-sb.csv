@@ -1,0 +1,19 @@
+,station,access,451,141,CTrail 4451,495,CTrail 4453,471,CTrail 4403,CTrail 4405,473,CTrail 4407,55,475,CTrail 4461,CTrail 4463,417,479,CTrail 4467,CTrail 4415
+column-options,,,no-rd,ardp no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,ardp,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd
+route-name,,,,,,,,,,,,,,,,,,,,
+days,,,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD
+,,,,,<b>CTrail</b>,,<b>CTrail</b>,,<b>CTrail</b>,<b>CTrail</b>,,,from Vermont,,<b>CTrail</b>,<b>CTrail</b>,,,<b>CTrail</b>,<b>CTrail</b>
+GFD,,,blank,blank,blank,495 first,blank,471 first,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+NHT,,,blank,blank,blank,,blank,,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+HLK,,,blank,blank,blank,,blank,,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+SPG,,,451 first two-row,141 first two-row,blank,,blank,,,,473 first two-row,,,475 first two-row,blank,blank,417 first two-row,479 first two-row,blank,
+WNL,,,,,blank,,blank,,,,,,,,blank,blank,,,blank,
+WND,,,,,blank,,blank,,,,,,,,blank,blank,,,blank,
+HFD,,,,,,,,,,,,,,,,,,,,
+BER,,,,,,,,,,,,,,,,,,,,
+MDN,,,,,,,,,,,,,,,,,,,,
+WFD,,,,,,,,,,,,,,,,,,,,
+STS,,,,,,,,,,,,,,,,,,,,
+NHV,,,451 last,,CTrail 4451 last,495 last,CTrail 4453 last,471 last,CTrail 4403 last,CTrail 4405 last,473 last,CTrail 4407 last,,475 last,CTrail 4461 last,CTrail 4463 last,417 last,479 last,CTrail 4467 last,CTrail 4415 last
+,(other stations),,,141 blank,,,,,,,,,55 blank,,,,,,,
+NYP,,,blank,141 last,blank,blank,blank,blank,blank,blank,blank,blank,55 last,blank,blank,blank,blank,blank,blank,blank

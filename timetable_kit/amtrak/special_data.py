@@ -23,7 +23,20 @@ global_bad_service_ids = [
 
 def is_connecting_service(tsn):
     """Is this a connecting, non-Amtrak service?"""
+
+    # TODO: converet to use agency data, and push "uphill"
+    # Currently this only runs on non-buses (generally trains)
+
+    # Amtrak's train numbers are all numbers.
+    # For merged datasets such as the Hartford Line, the train numbers aren't numbers.
+    # Sooo....
+    if not tsn.isdigit():
+        # There's stuff other than digits in this TSN.
+        # So it isn't Amtrak.
+        return True
     if int(tsn) >= 3000:
+        # Amtrak's high-numbered services are non-Amtrak.
+        # We COULD check the agency data, and we probably should
         return True
     return False
 

@@ -1022,7 +1022,9 @@ def get_time_column_header(
                 "<br>",
                 "<strong>",
                 # Strip the " monday" type suffix
-                train_spec_to_tsn(train_spec),
+                # Special for CTrail: clean off the "CTrail" prefix
+                # This is hacky; FIXME
+                train_spec_to_tsn(train_spec).removeprefix("CTrail "),
                 "</strong>",
             ]
         )

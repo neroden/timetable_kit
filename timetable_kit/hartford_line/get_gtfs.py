@@ -16,6 +16,10 @@ from zipfile import ZipFile
 import requests
 
 # Found at transit.land.  New on 6-14-2022.
+#
+# Transitland URL:
+# https://www.transit.land/feeds/f-cttransit~hartford~line
+#
 canonical_gtfs_url = "http://www.hartfordline.com/files/gtfs/gtfs.zip"
 
 module_location = Path(__file__).parent
