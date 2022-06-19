@@ -8,5 +8,6 @@
     "landscape": "true",
     "key_d": "true",
     "key_r": "true",
+    "all_stations_accessible": "true",
     "for_rpa": "true"
 }
