@@ -7,5 +7,6 @@
     "bottom_text": "This timetable is not an official CTrail, CTtransit, or State of Connecticut product.  It is derived from <a href=\"https://www.transit.land/feeds/f-cttransit~hartford~line\">CTRail Hartford Line's GTFS data</a> released to the public.",
     "landscape": "true",
     "key_d": "true",
+    "key_r": "true",
     "for_rpa": "true"
 }

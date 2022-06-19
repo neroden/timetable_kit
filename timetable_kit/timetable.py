@@ -810,9 +810,13 @@ def fill_tt_spec(
                         cell_css_list.append("special-cell")
                         # Copy the handwritten text over.
                         tt.iloc[y, x] = raw_text
-                case ["route-name", ck, _] if ck in special_column_names:
+                case ["route-name", ck, raw_text] if ck in special_column_names:
+                    # Usually blank for special columns, but could be free-written text
                     cell_css_list.append("route-name-cell")
-                    tt.iloc[y, x] = ""
+                    if raw_text:
+                        tt.iloc[y, x] = raw_text
+                    else:
+                        tt.iloc[y, x] = ""
                 case ["route-name", _, _]:
                     # Line for route names.
                     cell_css_list.append("route-name-cell")
