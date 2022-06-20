@@ -1198,7 +1198,7 @@ def produce_timetable(
         1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
     )
 
-    # Load the .tt-aux file first, as it determines high-level stuff
+    # Load the .json file first, as it determines high-level stuff
     aux = load_ttspec_json(ttspec_json_path)
 
     if output_dirname:
@@ -1238,7 +1238,7 @@ def produce_timetable(
         # We're currently converting GTFS dates to ints; FIXME
         reference_date = str(aux["reference_date"])
     else:
-        raise InputError("No reference date in .tt-aux or at command line!")
+        raise InputError("No reference date in .json or at command line!")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
     if "programmers_warning" in aux:
