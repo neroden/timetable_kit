@@ -1,3 +1,6 @@
+For Amtrak feeds:
+1 -- generic local connections template (feed off of station list?)
+
 For generalizing to non-Amtrak feeds:
 0 -- fix the get_time_column_stylings code to check the "agency" data
 1 -- Switch wheelchair access detection to be based on GTFS.
