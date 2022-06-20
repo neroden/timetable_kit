@@ -238,6 +238,7 @@ major_stations_list = (
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
     # ...but we patch the station name in code, elsewhere.
+    "RNK",  # Roanoke service looks better if boldfaced, because it's a terminus
 )
 
 
