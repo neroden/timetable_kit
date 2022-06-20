@@ -1,0 +1,12 @@
+{
+    "title": "Keystone Weekend Eastbound Timetable",
+    "heading": "Amtrak's Keystone Service & Pennsylvanian: Weekend Eastbound",
+    "bottom_text": "<a href=\"http://www.septa.org\">SEPTA</a> provides <b>local connecting trains</b> at all stations from Downington through Trenton, including Philadelphia.",
+    "reference_date": "20220620",
+    "landscape": "true",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "compress_credits": "true",
+    "for_rpa": "true"
+}

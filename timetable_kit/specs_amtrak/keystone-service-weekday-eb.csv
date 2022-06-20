@@ -1,0 +1,32 @@
+,station,access,640,642,600,644,648,650,42,652,654,656,618,658,620,622
+column-options,,,ardp,,,,,,ardp,,,,,,,
+route-name,,,,,,,,,,,,,,,,
+days,,,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL,PHL
+PGH,,,blank,blank,blank,blank,blank,blank,first,blank,blank,blank,blank,blank,blank,blank
+GNB,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+LAB,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+JST,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+ALT,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+TYR,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+HGD,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+LEW,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+HAR,,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row
+MID,,,,,,,,,,,,,,,,
+ELT,,,,,,,,,,,,,,,,
+MJY,,,,,,,,,,,,,,,,
+LNC,,,,,,,,,,,,,,,,
+PAR,,,,,,,,,,,,,,,,
+COT,,,,,,,,,,,,,,,,
+DOW,,,,,,,,,,,,,,,,
+EXT,,,,,,,,,,,,,,,,
+PAO,,,,,,,,,,,,,,,,
+ARD,,,,,,,,,,,,,,,,
+PHL,,,,,,,,,,,,,last two-row,,last two-row,last two-row
+PHN,,,,,,,,,,,,,blank,,blank,blank
+CWH,,,,,,,,,,,,,blank,,blank,blank
+TRE,,,,,,,,,,,,,blank,,blank,blank
+PJC,,,,,,,,,,,,,blank,,blank,blank
+MET,,,,,,,,,,,,,blank,,blank,blank
+EWR,,,,,,,,,,,,,blank,,blank,blank
+NWK,,,,,,,,,,,,,blank,,blank,blank
+NYP,,,last,last,last,last,last,last,last,last,last,last,blank,last,blank,blank
