@@ -4,7 +4,7 @@
 #}{% from "macros.html" import br_or_space %}{#
 #}<div class="unofficial-amtrak"><p class="credit-paragraph">{#
 #}This timetable is not an official Amtrak product.{#
-#}<br>{#
+#}{{ br_or_space(key_on_right or not landscape) }}{#
 #}It was produced as a public service by {{ author }}{#
 #}{% if for_rpa %}{#
 #}{{ br_or_space(key_on_right) }}{#
