@@ -2,7 +2,7 @@
     "title": "Pennsylvanian Timetable",
     "heading": "Amtrak's Pennsylvanian",
     "reference_date": "20220613",
-    "bottom_text": "<b>Local connecting trains</b> are provided:<br>at New York by <a href=\"https://new.mta.info\">the MTA</a>, <br>at New York, Newark, and Trenton by <a href=\"https://www.njtransit.com\">NJ Transit</a>, <br>and at Trenton, Philadelphia, and Paoli by <a href=\"http://www.septa.org\">SEPTA</a>.<br><br><b>The eastbound Capitol Limited connection is unreliable</b> due to delays caused by Norfolk Southern between Chicago and Pittsburgh.",
+    "bottom_text": "<b>Local connecting trains</b> are provided:<br>at New York by <a href=\"https://new.mta.info\">the MTA</a>, <br>at New York, Newark, Trenton, and Philadelphia by <a href=\"https://www.njtransit.com\">NJ Transit</a>, <br>and at Trenton, Philadelphia, and Paoli by <a href=\"http://www.septa.org\">SEPTA</a>.<br><br><b>The eastbound Capitol Limited connection is unreliable</b> due to delays caused by Norfolk Southern between Chicago and Pittsburgh.",
     "key_baggage": "true",
     "key_d": "true",
     "key_r": "true",
