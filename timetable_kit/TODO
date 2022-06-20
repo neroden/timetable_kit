@@ -5,6 +5,7 @@ When new GTFS drops:
 4 -- then recheck everything else
 
 For Amtrak feeds:
+0 -- find a way to do "& intermediate stations" COLORED for complex timetables
 1 -- generic local connections template (feed off of station list?)
 
 For generalizing to non-Amtrak feeds:
