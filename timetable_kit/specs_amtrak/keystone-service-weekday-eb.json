@@ -1,7 +1,7 @@
 {
     "title": "Keystone Weekday Eastbound Timetable",
     "heading": "Amtrak's Keystone Service & Pennsylvanian: Weekday Eastbound",
-    "bottom_text": "<a href=\"http://www.septa.org\">SEPTA</a> provides <b>local connecting trains</b> at all stations from Downingtown through Trenton, including Philadelphia.",
+    "bottom_text": "<b>Local connecting trains</b> are provided by <a href=\"http://www.septa.org\">SEPTA</a> at all stations from Downingtown through Trenton, including Philadelphia, and by <a href=\"https://www.njtransit.com\">NJ Transit</a> at Philadelphia, all stations in New Jersey, and New York.",
     "reference_date": "20220620",
     "landscape": "true",
     "key_baggage": "true",
