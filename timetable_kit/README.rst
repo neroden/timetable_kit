@@ -8,7 +8,9 @@ root directory (I don't know why, but I'll follow the style.)
 timetable.py contains the main program.  It should be executed at the command line.
 
 Note that the system holds and manipulates the entire GTFS database in memory, with substantial overhead, as well as loading many heavyweight python packages.
-A quick test found it maxing out at 1.66 gigabytes of virtual memory and 685 megabytes resident on Amtrak's database.  This should be manageable on modern computers.  A GTFS dataset significantly larger than Amtrak's 35MB dataset, however, may cause problems.
+A quick test found it maxing out at 1.21 gigabytes of virtual memory and 247 megabytes resident on Amtrak's database.  This should be manageable on modern computers.  However, a GTFS dataset significantly larger than Amtrak's dataset may cause problems.  Amtrak's dataset is 110MB uncompressed, but most of that is the shapes.txt file which we ignore.  Amtrak's stop_times.txt file is only 1.2M.  It may be quite slow on a much larger dataset.
+
+However, timetable_kit's fundamental strategy is to filter the dataset to only the relevant data first, then make the timetable.  So it should be amenable to swapping once the filtering stage is done.  The filtering stage may be a heavy memory user on a large dataset, however.  If you have a huge dataset, it may be advisable to filter it for the relevant routes and feed a smaller dataset into this program.
 
 Before running it to generate an Amtrak timetable, you will have to download the
 Amtrak GTFS file and the Amtrak stations database.  This is done in the amtrak/

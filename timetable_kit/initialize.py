@@ -25,18 +25,24 @@ def initialize_feed(gtfs):
     """
     Initialize the master_feed and related variables.
 
+    Does some cleaning, and removal of the large shapes table which we don't use.
+
     gtfs: may be a filename or a Path.
     """
 
     debug_print(1, "Using GTFS file " + str(gtfs))
     gtfs_path = Path(gtfs)
-    # Amtrak has no shapes file, so no distance units.  Check this if a shapes files appears.
+    # The unit is only relevant if we read the shapes file; we currently don't.
     # Also affects display miles so default to mi.
     master_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 
+    # We don't use the shapes file.  It takes up a LOT of memory.  Destroy it.
+    master_feed.shapes = None
+
     # Need to clean up times to zero-pad them for sorting.
     master_feed = master_feed.clean_times()
+
     # Don't waste time.
     # master_feed.validate()
 
