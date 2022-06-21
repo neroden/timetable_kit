@@ -1,4 +1,11 @@
+When new GTFS drops:
+1 -- Maple Leaf back to Canada / Empire Service
+2 -- Ethan Allen Express to Burlington
+3 -- Roanoke 2nd train per day
+4 -- then recheck everything else
+
 For Amtrak feeds:
+0 -- find a way to do "& intermediate stations" COLORED for complex timetables
 1 -- generic local connections template (feed off of station list?)
 
 For generalizing to non-Amtrak feeds:

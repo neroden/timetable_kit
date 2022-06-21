@@ -75,6 +75,9 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
+# For calling out to the system to sew individual PDF pages together to one PDF
+from timetable_kit import sew_pages
+
 ### tt-spec loading and parsing code
 
 ### Constant set for the special column names.
@@ -911,35 +914,34 @@ def fill_tt_spec(
                         today_feed, my_trip.trip_id, reference_stop_id
                     )
                     if timepoint is None:
-                        raise (
-                            InputError(
-                                "Bad reference stop for",
-                                train_specs[0],
-                                ":",
-                                reference_stop_id,
-                            )
+                        # Manual override?  Pass the raw text through.
+                        raw_text = reference_stop_id
+                        tt.iloc[y, x] = raw_text
+                    else:
+                        # Automatically calculated day string.
+                        # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
+                        stop_df = today_feed.stops[
+                            today_feed.stops.stop_id == reference_stop_id
+                        ]
+                        stop_tz = stop_df.iloc[0].stop_timezone
+                        zonediff = text_presentation.get_zonediff(
+                            stop_tz, agency_tz, reference_date
                         )
-                    # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
-                    stop_df = today_feed.stops[
-                        today_feed.stops.stop_id == reference_stop_id
-                    ]
-                    stop_tz = stop_df.iloc[0].stop_timezone
-                    zonediff = text_presentation.get_zonediff(
-                        stop_tz, agency_tz, reference_date
-                    )
-                    # Get the day change for the reference stop (format is explained in text_presentation)
-                    departure = text_presentation.explode_timestr(
-                        timepoint.departure_time, zonediff
-                    )
-                    offset = departure.day
-                    # Finally, get the calendar (must be unique)
-                    calendar = today_feed.calendar[
-                        today_feed.calendar.service_id == my_trip.service_id
-                    ]
-                    # And fill in the actual string
-                    daystring = text_presentation.day_string(calendar, offset=offset)
-                    # TODO: add some HTML styling here
-                    tt.iloc[y, x] = daystring
+                        # Get the day change for the reference stop (format is explained in text_presentation)
+                        departure = text_presentation.explode_timestr(
+                            timepoint.departure_time, zonediff
+                        )
+                        offset = departure.day
+                        # Finally, get the calendar (must be unique)
+                        calendar = today_feed.calendar[
+                            today_feed.calendar.service_id == my_trip.service_id
+                        ]
+                        # And fill in the actual string
+                        daystring = text_presentation.day_string(
+                            calendar, offset=offset
+                        )
+                        # TODO: add some HTML styling here
+                        tt.iloc[y, x] = daystring
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
@@ -1262,7 +1264,7 @@ def produce_timetable(
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
     debug_print(1, "Feed filtered by reference date.")
 
-    # Reduce the feed, by elimiqnating stuff from other trains.
+    # Reduce the feed, by eliminating stuff from other trains.
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
@@ -1500,7 +1502,17 @@ def produce_several_timetables(
     master_feed = amtrak.patch_feed(master_feed)
     debug_print(1, "Feed patched, hopefully")
 
-    for spec_file in spec_file_list:
+    # Deal with ".list" files.
+    list_file_list = sew_pages.get_only_list_files(spec_file_list)
+    if list_file_list:
+        # This only makes sense when producing PDF.
+        do_html = True
+        do_pdf = True
+    expanded_spec_file_list = sew_pages.expand_list_files(
+        spec_file_list, input_dir=input_dirname
+    )
+
+    for spec_file in expanded_spec_file_list:
         debug_print(1, "Producing timetable for", spec_file)
         produce_timetable(
             spec_file=spec_file,
@@ -1515,6 +1527,12 @@ def produce_several_timetables(
             output_dirname=output_dirname,
         )
         debug_print(1, "Done producing timetable for", spec_file)
+
+    for list_file in list_file_list:
+        sew_pages.assemble_pdf_from_list(
+            list_file, input_dir=input_dirname, output_dir=output_dirname
+        )
+        debug_print(1, "Produced combined PDF for", list_file)
 
 
 def main():

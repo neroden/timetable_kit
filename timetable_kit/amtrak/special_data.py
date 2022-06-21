@@ -223,7 +223,8 @@ major_stations_list = (
     "ABQ",  # SWC -- Amtrak didn't
     "FLG",
     "DAL",  # TE -- Amtrak emphasized nothing, so I picked some
-    "FTW",
+    "FTW",  # TE / Heartland Flyer
+    "OKC",  # Heartland Flyer -- Amtrak emphasized nothing
     "SAS",  # TE/SL
     "HOS",  # SL -- Amtrak emphasized nothing, so I picked some
     "ELP",
@@ -238,6 +239,7 @@ major_stations_list = (
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
     # ...but we patch the station name in code, elsewhere.
+    "RNK",  # Roanoke service looks better if boldfaced, because it's a terminus
 )
 
 

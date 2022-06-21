@@ -27,6 +27,9 @@ Other notes on file naming:
 
 Notes on particularly difficult timetables:
 
-* coast-starlight: requires a patch to Amtrak GTFS (see amtrak/gtfs_cleanup.py)
+* coast-starlight: requires a patch to Amtrak GTFS (see amtrak/gtfs_cleanup.py, invoked by timetable.py)
 * crescent: the same train number has different schedules on different days
 * sunset-limited: thinks it's running to Orlando (timetable accounts for this)
+
+Files to assemble individual pages into a multi-page timetable end with ".list".
+Each one is a list of individual page output filenames (no suffix), in the correct order.

@@ -7,6 +7,7 @@
 Merge two GTFS feeds.
 
 Currently does no validation.
+Deletes the shapes table, since we don't use it.
 """
 
 import sys  # for argv
@@ -38,8 +39,10 @@ def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
         feed.fare_attributes.set_index("fare_id", inplace=True)
     if feed.fare_rules is not None:
         feed.fare_rules.set_index("fare_id", inplace=True)
-    if feed.shapes is not None:
-        feed.shapes.set_index("shape_id", inplace=True)
+    # if feed.shapes is not None:
+    #    feed.shapes.set_index("shape_id", inplace=True)
+    # We don't use shapes.  Speed this up by deleting it entirely.
+    feed.shapes = None
     if feed.frequencies is not None:
         feed.frequencies.set_index("trip_id", inplace=True)
     # Transfers is more complicated.  FIXME
