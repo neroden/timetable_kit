@@ -75,6 +75,9 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
+# For calling out to the system to sew individual PDF pages together to one PDF
+from timetable_kit import sew_pages
+
 ### tt-spec loading and parsing code
 
 ### Constant set for the special column names.
@@ -1500,7 +1503,17 @@ def produce_several_timetables(
     master_feed = amtrak.patch_feed(master_feed)
     debug_print(1, "Feed patched, hopefully")
 
-    for spec_file in spec_file_list:
+    # Deal with ".list" files.
+    list_file_list = sew_pages.get_only_list_files(spec_file_list)
+    if list_file_list:
+        # This only makes sense when producing PDF.
+        do_html = True
+        do_pdf = True
+    expanded_spec_file_list = sew_pages.expand_list_files(
+        spec_file_list, input_dir=input_dirname
+    )
+
+    for spec_file in expanded_spec_file_list:
         debug_print(1, "Producing timetable for", spec_file)
         produce_timetable(
             spec_file=spec_file,
@@ -1515,6 +1528,12 @@ def produce_several_timetables(
             output_dirname=output_dirname,
         )
         debug_print(1, "Done producing timetable for", spec_file)
+
+    for list_file in list_file_list:
+        sew_pages.assemble_pdf_from_list(
+            list_file, input_dir=input_dirname, output_dir=output_dirname
+        )
+        debug_print(1, "Produced combined PDF for", list_file)
 
 
 def main():
