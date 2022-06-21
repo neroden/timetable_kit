@@ -14,6 +14,7 @@ import os  # for os.system
 
 from timetable_kit.debug import set_debug_level, debug_print
 
+
 def read_list_file(filename: str, *, input_dir) -> list[str]:
     """
     Given a filename ending in .list, return a list of the names inside that file,
