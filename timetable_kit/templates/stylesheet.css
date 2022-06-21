@@ -10,7 +10,7 @@
 {% include "font_size.css" %}
 {{ icons }}
 {% include "page_standard.css" %}
-{% include "logo.css" %}
+{% if for_rpa %}{% include "rpa_logo.css" %}{% endif %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
 {% include "timetable_headers.css" %}
