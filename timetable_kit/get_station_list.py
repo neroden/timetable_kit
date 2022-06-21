@@ -19,6 +19,7 @@ import gtfs_kit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
+from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
 from timetable_kit import amtrak  # For the path of the default GTFS feed
@@ -64,6 +65,10 @@ def make_argparser():
              """,
         nargs="?",
     )
+    parser.add_argument(
+        "--day",
+        help="""Restrict to trains/buses operating on a particular day of the week""",
+    )
     return parser
 
 
@@ -88,6 +93,17 @@ if __name__ == "__main__":
     if reference_date is None:
         reference_date = datetime.date.today().strftime("%Y%m%d")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+    master_feed = initialize_feed(gtfs=gtfs_filename)
+    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+    # Restrict by day of week if specified.
+    day_of_week = args.day
+    if day_of_week is not None:
+        day_of_week = day_of_week.lower()
+        if day_of_week not in gtfs_days:
+            print("Specifed day of week not understood.")
+            exit(1)
+        today_feed = today_feed.filter_by_day_of_week(day_of_week)
 
     optional_tsn = args.trip_short_name
     positional_tsn = args.trip
@@ -101,9 +117,6 @@ if __name__ == "__main__":
                 "Specified trip_short_name two different ways.  Use only one."
             )
     tsn = tsn.strip()  # Avoid whitespace problems
-
-    master_feed = initialize_feed(gtfs=gtfs_filename)
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
