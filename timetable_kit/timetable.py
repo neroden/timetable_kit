@@ -914,35 +914,34 @@ def fill_tt_spec(
                         today_feed, my_trip.trip_id, reference_stop_id
                     )
                     if timepoint is None:
-                        raise (
-                            InputError(
-                                "Bad reference stop for",
-                                train_specs[0],
-                                ":",
-                                reference_stop_id,
-                            )
+                        # Manual override?  Pass the raw text through.
+                        raw_text = reference_stop_id
+                        tt.iloc[y, x] = raw_text
+                    else:
+                        # Automatically calculated day string.
+                        # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
+                        stop_df = today_feed.stops[
+                            today_feed.stops.stop_id == reference_stop_id
+                        ]
+                        stop_tz = stop_df.iloc[0].stop_timezone
+                        zonediff = text_presentation.get_zonediff(
+                            stop_tz, agency_tz, reference_date
                         )
-                    # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
-                    stop_df = today_feed.stops[
-                        today_feed.stops.stop_id == reference_stop_id
-                    ]
-                    stop_tz = stop_df.iloc[0].stop_timezone
-                    zonediff = text_presentation.get_zonediff(
-                        stop_tz, agency_tz, reference_date
-                    )
-                    # Get the day change for the reference stop (format is explained in text_presentation)
-                    departure = text_presentation.explode_timestr(
-                        timepoint.departure_time, zonediff
-                    )
-                    offset = departure.day
-                    # Finally, get the calendar (must be unique)
-                    calendar = today_feed.calendar[
-                        today_feed.calendar.service_id == my_trip.service_id
-                    ]
-                    # And fill in the actual string
-                    daystring = text_presentation.day_string(calendar, offset=offset)
-                    # TODO: add some HTML styling here
-                    tt.iloc[y, x] = daystring
+                        # Get the day change for the reference stop (format is explained in text_presentation)
+                        departure = text_presentation.explode_timestr(
+                            timepoint.departure_time, zonediff
+                        )
+                        offset = departure.day
+                        # Finally, get the calendar (must be unique)
+                        calendar = today_feed.calendar[
+                            today_feed.calendar.service_id == my_trip.service_id
+                        ]
+                        # And fill in the actual string
+                        daystring = text_presentation.day_string(
+                            calendar, offset=offset
+                        )
+                        # TODO: add some HTML styling here
+                        tt.iloc[y, x] = daystring
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
