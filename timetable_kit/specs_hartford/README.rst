@@ -11,6 +11,6 @@ These require merging the GTFS, by running
 
 Then they require invoking the timetable generator in a way similar to this:
 
-* ../timetable.py -i . --gtfs ../hartford_line/merged-gtfs.zip --specs *.json
+* ../timetable.py -i . --gtfs ../hartford_line/merged-gtfs.zip --specs hartford-line-valley-flyer.list
 
 Sorry about the complexity.
