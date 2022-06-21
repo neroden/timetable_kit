@@ -1265,7 +1265,7 @@ def produce_timetable(
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
     debug_print(1, "Feed filtered by reference date.")
 
-    # Reduce the feed, by elimiqnating stuff from other trains.
+    # Reduce the feed, by eliminating stuff from other trains.
     # By reducing the stop_times table to be much smaller,
     # this hopefully makes each subsequent search for a timepoint faster.
     # This cuts a testcase runtime from 23 seconds to 20.
