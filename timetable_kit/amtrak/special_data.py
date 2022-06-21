@@ -223,7 +223,8 @@ major_stations_list = (
     "ABQ",  # SWC -- Amtrak didn't
     "FLG",
     "DAL",  # TE -- Amtrak emphasized nothing, so I picked some
-    "FTW",
+    "FTW",  # TE / Heartland Flyer
+    "OKC",  # Heartland Flyer -- Amtrak emphasized nothing
     "SAS",  # TE/SL
     "HOS",  # SL -- Amtrak emphasized nothing, so I picked some
     "ELP",
