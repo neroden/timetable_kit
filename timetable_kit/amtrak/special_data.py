@@ -194,6 +194,7 @@ major_stations_list = (
     "PTH",
     "DET",
     "PNT",
+    "BTL",  # Amtrak didn't mark Battle Creek, but we should
     "CHM",  # CONO/Illini/Saluki
     "CDL",
     "MEM",
