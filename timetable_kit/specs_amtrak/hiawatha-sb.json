@@ -1,7 +1,9 @@
 {
     "title": "Hiawatha Southbound",
     "heading": "Amtrak's Hiawatha: Southbound",
-    "reference_date": "20220614",
+    "reference_date": "20220710",
+    "top_text": "Check <a href=\"https://amtrakhiawatha.com\">AmtrakHiawatha.com</a> for additional and connecting bus service and updated schedules.",
+    "bottom_text": "<b>Local connecting trains</b> are provided: <br>at Chicago and Glenview by <a href=\"https://metra.com\">Metra</a> (Milwaukee District North Line at Glenview), <br>and at Milwaukee by <a href=\"https://thehopmke.com/\">The Hop</a> streetcar.",
     "key_baggage": "true",
     "for_rpa": "true"
 }
