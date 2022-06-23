@@ -1002,7 +1002,11 @@ def fill_tt_spec(
 
                     # Pick out the stop timezone -- TODO, precache this as a dict
                     stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
-                    stop_tz = stop_df.iloc[0].stop_timezone
+                    try:
+                        stop_tz = stop_df.iloc[0].stop_timezone
+                    except BaseException as err:
+                        print ("While finding time zone at", station_code)
+                        raise
 
                     debug_print(
                         3,

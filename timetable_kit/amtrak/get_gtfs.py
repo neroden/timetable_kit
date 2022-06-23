@@ -19,7 +19,8 @@ import requests
 # These are mine
 # from timetable_kit import amtrak
 
-# Found at transit.land.  Not up on transitfeeds yet.
+# Found at transit.land.
+# Also at The Mobility Database on Github.  MobilityData/mobility-database
 canonical_gtfs_url = "https://content.amtrak.com/content/gtfs/GTFS.zip"
 
 module_location = Path(__file__).parent
