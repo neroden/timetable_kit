@@ -1005,7 +1005,7 @@ def fill_tt_spec(
                     try:
                         stop_tz = stop_df.iloc[0].stop_timezone
                     except BaseException as err:
-                        print ("While finding time zone at", station_code)
+                        print("While finding time zone at", station_code)
                         raise
 
                     debug_print(
