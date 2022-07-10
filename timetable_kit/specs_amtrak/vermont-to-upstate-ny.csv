@@ -17,13 +17,16 @@ NHT,,,,,,,blank,,,,
 HLK,,,,,,,blank,,,,
 SPG,,55 last,blank,blank,,,blank, ,56 first,blank,
 CVT,6280 first,downarrow,blank,6064 first,,,blank,6281 last,uparrow,blank,6337 last
-,6280 blank,,Future service,6064 blank,,"<b style=""text-transform: uppercase;"">Burlington, VT</b> (new station)",blank,6281 blank,,Future service,6337 blank
+BTN,6280 blank,,290 first,6064 blank,,"<b style=""text-transform: uppercase;"">Burlington, VT</b> (new station)",blank,6281 blank,,291 last,6337 blank
+BLT,,,290 blank,,,,blank,,,291 blank,
 BTV,,<b>#55</b> Mo-Fr <br><b>#57</b> SaSu,290 blank,,,,blank,,<b>#56</b> Mo-Fr <br><b>#54</b> SaSu,291 blank,
-VGN,,,Future service,,,,blank,,Overnight stay,Future service,
-MIY,,downarrow,Future service,,,,blank,,required in<br>Springfield,Future service,
+VRN,6280 blank,,,6064 blank,,,,6281 blank,,,6337 blank
+VGN,,,290 blank,,,,blank,,Overnight stay,291 blank,
+MBY,6280 blank,,,6064 blank,,,,6281 blank,,,6337 blank
+MIY,,downarrow,290 blank,,,,blank,,required in<br>Springfield,,
 BDN,,,290 blank,,,,blank,,uparrow,291 blank,
 RTC,,,290 blank,,,,blank,,,291 blank,
-RUD,6280 blank,downarrow,290 first,6064 blank,,,blank,6281 blank,uparrow,291 last,6337 blank
+RUD,6280 blank,downarrow,290,6064 blank,,,blank,6281 blank,uparrow,291,6337 blank
 WAG,,,290 blank,,,,blank,,,291 blank,
 MCV,,,290 blank,,,,blank,,,291 blank,
 BNI,,downarrow,290 blank,,,,blank,,uparrow,291 blank,
