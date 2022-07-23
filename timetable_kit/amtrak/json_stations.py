@@ -260,7 +260,8 @@ def save_station_details_html(station_code: str, station_details: str):
     with open(
         station_details_html_local_path(station_code), "w"
     ) as station_details_html_local_file:
-        print(station_details, file=station_details_html_local_file)
+        # Use utf-8 to prevent UnicodeEncodeError
+        print(station_details.encode("utf-8"), file=station_details_html_local_file)
 
 
 def load_station_details_html(station_code: str) -> str:
