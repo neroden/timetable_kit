@@ -260,9 +260,11 @@ def save_station_details_html(station_code: str, station_details: str):
     with open(
         station_details_html_local_path(station_code), "w"
     ) as station_details_html_local_file:
-        # Use utf-8 to prevent UnicodeEncodeError
-        print(station_details.encode("utf-8"), file=station_details_html_local_file)
-
+        # If necessary, use utf-8 to prevent UnicodeEncodeError
+        try:
+            print(station_details, file=station_details_html_local_file)
+        except:
+            print(station_details.encode("utf-8"), file=station_details_html_local_file)
 
 def load_station_details_html(station_code: str) -> str:
     """Load station HTML for one station as json text from a suitable file; return it."""
