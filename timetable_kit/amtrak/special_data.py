@@ -16,9 +16,8 @@ known problems with Amtrak's GTFS data, and similar.
 # GLOBAL VARIABLES
 #
 # Known problems in Amtrak data
-global_bad_service_ids = [
-    2819372,
-]  # Cardinal one-day service when it doesn't run on that day
+global_bad_service_ids = []
+#    2819372, # Cardinal one-day service when it doesn't run on that day
 
 
 def is_connecting_service(tsn):
@@ -236,7 +235,7 @@ major_stations_list = (
     "ORL",
     "TPA",
     "MIA",
-    "BTV",  # Burlington Airport -- for Vermont buses.
+    "BTN",  # Burlington -- for Ethan Allen Express
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
     # ...but we patch the station name in code, elsewhere.
