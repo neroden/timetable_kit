@@ -1,0 +1,10 @@
+{
+    "title": "Maple Leaf",
+    "heading": "Amtrak & VIA Rail's Maple Leaf",
+    "reference_date": "20220815",
+    "top_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>.<br>Local tickets within Canada can be bought from VIA Rail.<br><br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "for_rpa": "true"
+}
