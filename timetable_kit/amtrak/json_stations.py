@@ -266,6 +266,7 @@ def save_station_details_html(station_code: str, station_details: str):
         except:
             print(station_details.encode("utf-8"), file=station_details_html_local_file)
 
+
 def load_station_details_html(station_code: str) -> str:
     """Load station HTML for one station as json text from a suitable file; return it."""
     with open(

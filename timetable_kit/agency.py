@@ -25,7 +25,9 @@ class Agency:
 
     def __init__(self, feed: gtfs_kit.Feed):
         self.stop_name_dict = dict(zip(feed.stops["stop_id"], feed.stops["stop_name"]))
-        self.route_name_dict = dict(zip(feed.routes["route_id"], feed.routes["route_long_name"]))
+        self.route_name_dict = dict(
+            zip(feed.routes["route_id"], feed.routes["route_long_name"])
+        )
 
     def get_stop_name(
         self, stop_id: str, doing_multiline_text=False, doing_html=False
