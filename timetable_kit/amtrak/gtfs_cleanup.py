@@ -57,4 +57,19 @@ def patch_feed(feed):
 
     # And update with the new calendar, just in case it hadn't
     new_feed.calendar = new_calendar
+
+    # Toronto: incorrectly listed as "no pickups" in stop one.
+    new_stop_times = new_feed.stop_times
+    for index in new_stop_times.index:
+        if new_stop_times.loc[index, "stop_id"] == "TWO":
+            if new_stop_times.loc[index, "stop_sequence"] == 1:
+                new_stop_times.loc[index, "pickup_type"] = 0
+                debug_print(1, "Found Toronto in position 1: patched pickup_type")
+            if new_stop_times.loc[index, "stop_sequence"] in [19, 20]:
+                new_stop_times.loc[index, "drop_off_type"] = 0
+                debug_print(1, "Found Toronto in position 19 or 20: patched drop_off_type")
+
+    # Update with new stop times
+    new_feed.stop_times = new_stop_times
+
     return new_feed

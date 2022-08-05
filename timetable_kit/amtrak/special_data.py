@@ -172,7 +172,7 @@ major_stations_list = (
     "PGH",
     "ALB",  # Empire timetable
     "BFX",
-    "TWO",
+    "TWO",  # Maple Leaf
     "MTR",  # Adirondack
     "ESX",  # Vermonter
     "SPG",
