@@ -4,13 +4,15 @@ route-name,,,,,,,,,,
 days,,,,,,,,NYP,NYP,
 updown,,,,,,,,,,
 CVT,6280 first,290 blank,6064 first,,,6281 last,291 blank,blank,blank,6337 last
-,6280 blank,Future service,6064 blank,,"<b style=""text-transform: uppercase;"">Burlington, VT</b> (new station)",6281 blank,Future service,blank,blank,6337 blank
+BTN,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+BLT,,290 blank,,,,,291 blank,blank,blank,
 BTV,,290 blank,,,,,291 blank,blank,blank,
-VGN,,Future service,,,,,Future service,blank,blank,
-MIY,,Future service,,,,,Future service,blank,blank,
+VRN,,,,,,,,blank,blank,
+MBY,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
+MIY,,290 blank,,,,,291 blank,blank,blank,
 BDN,,290 blank,,,,,291 blank,blank,blank,
 RTC,,290 blank,,,,,291 blank,blank,blank,
-RUD,6280 blank,290 first,6064 blank,,,6281 blank,291 last,blank,blank,
+RUD,6280 blank,,6064 blank,,,6281 blank,,blank,blank,
 CNV,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
 FED,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
 SAR,6280 blank,,6064 blank,,,6281 blank,,blank,blank,6337 blank
