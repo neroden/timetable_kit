@@ -1,7 +1,8 @@
 {
     "title": "Maple Leaf",
     "heading": "Amtrak & VIA Rail's Maple Leaf",
-    "reference_date": "20220815",
+    "programmers_warning": "Maple Leaf Canadian station data is missing from Amtrak GTFS as of 29 Nov 2022.  This won't work."
+    "reference_date": "20221101",
     "top_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>.<br>Local tickets within Canada can be bought from VIA Rail.<br><br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
     "key_baggage": "true",
     "key_r": "true",
