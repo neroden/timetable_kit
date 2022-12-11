@@ -1,0 +1,22 @@
+, access, station,88,140,2254,194,96,20 saturday,156,2256,2218
+column-options,,,ardp,,,,,,,,ardp
+route-name,,,,,,,,,,,
+days,,,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS
+updown,,,,,,,,,,,
+,,,From<br>Norfolk,,,From<br>Newport News,From<br>Newport News,From<br>New Orleans,From<br>Roanoke,,
+WAS,,,first,first,first,first,first,first,first,first,first
+NCR,,,,,,,,,,,
+BWI,,,,,,,,,,,
+BAL,,,,,,,,,,,
+ABE,,,,,,,,,,,
+NRK,,,,,,,,,,,
+WIL,,,,,,,,,,,
+PHL,,,,,,,,,,,
+TRE,,,,,,,,,,,
+PJC,,,,,,,,,,,
+NBK,,,,,,,,,,,
+MET,,,,,,,,,,,
+EWR,,,,,,,,,,,
+NWK,,,,,,,,,,,
+NYP,,,last,last,last,last,last,last,last,last,last
+,,,To<br>Boston,To<br>Springfield,To<br>Boston,To<br>Boston,To<br>Boston,,,To<br>Boston,

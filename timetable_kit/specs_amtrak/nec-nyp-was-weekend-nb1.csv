@@ -1,0 +1,22 @@
+, access, station,162,98,54,2248,152,2250,164,82,154,2252
+column-options,,,ardp,,,,,,,,,ardp
+route-name,,,,,,,,,,,,
+days,,,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS
+updown,,,,,,,,,,,,
+,,,,From<br>Miami,,,,,From<br>Richmond,From<br>Norfolk,,
+WAS,,,first,first,first,first,first,first,first,first,first,first
+NCR,,,,,,,,,,,,
+BWI,,,,,,,,,,,,
+BAL,,,,,,,,,,,,
+ABE,,,,,,,,,,,,
+NRK,,,,,,,,,,,,
+WIL,,,,,,,,,,,,
+PHL,,,,,,,,,,,,
+TRE,,,,,,,,,,,,
+PJC,,,,,,,,,,,,
+NBK,,,,,,,,,,,,
+MET,,,,,,,,,,,,
+EWR,,,,,,,,,,,,
+NWK,,,,,,,,,,,,
+NYP,,,last,last,last,last,last,last,last,last,last,last
+,,,To<br>Boston,,To<br>St. Albans,To<br>Boston,To<br>Boston,To<br>Boston,To<br>Boston,To<br>Boston,To<br>Boston,To<br>Boston

@@ -1,0 +1,22 @@
+, access, station,67,151,2103,89,51,183,79,185,2151,141
+column-options,,,ardp,,,,,,,,,ardp
+route-name,,,,,,,,,,,,
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+updown,,,,,,,,,,,,
+,,,,,,,,,,,From<br>Boston,From<br>Springfield
+NYP,,,first,first,first,first,first,first,first,first,first,first
+NWK,,,,,,,,,,,,
+EWR,,,,,,,,,,,,
+MET,,,,,,,,,,,,
+NBK,,,,,,,,,,,,
+PJC,,,,,,,,,,,,
+TRE,,,,,,,,,,,,
+PHL,,,,,,,,,,,,
+WIL,,,,,,,,,,,,
+NRK,,,,,,,,,,,,
+ABE,,,,,,,,,,,,
+BAL,,,,,,,,,,,,
+BWI,,,,,,,,,,,,
+NCR,,,,,,,,,,,,
+WAS,,,last,last,last,last,last,last,last,last,last,last
+,,,To<br>Newport News,To<br>Roanoke,,To<br>Savannah,To<br>Chicago,,To<br>Charlotte,To<br>Norfolk,,
