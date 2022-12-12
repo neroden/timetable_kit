@@ -1,0 +1,70 @@
+,89,91,97, access, station,98,92,90
+column-options,ardp,ardp,ardp,,,ardp reverse,ardp reverse,ardp reverse
+route-name,,,,,,,,
+days,NYP,NYP,NYP,,,MIA,MIA,SAV
+updown,,,,,,,,
+NYP,89 first,91 first,97 first,,,98 last,92 last,90 last
+NWK,,,,,,,,
+MET,,,,,,,,
+NBK,,,,,,,,
+PJC,,,,,,,,
+TRE,,,,,,,,
+PHL,,,,,,,,
+WIL,,,,,,,,
+BAL,,,,,,,,
+BWI,,,,,,,,
+WAS,,,,,,,,
+ALX,,,,,,,,
+RVR,,,,,,,,
+PTB,,,,,,,,
+RMT,,,,,,,,
+WLN,,,,,,,,
+SSM,,,,,,,,
+FAY,,,,,,,,
+DIL,,,,,,,,
+FLO,,,,,,,,
+KTR,,,,,,,,
+CHS,,,,,,,,
+YEM,,,,,,,,
+RGH,,,,,,,,
+CYN,,,,,,,,
+SOP,,,,,,,,
+HAM,,,,,,,,
+CAM,,,,,,,,
+CLB,,,,,,,,
+DNK,,,,,,,,
+SAV,89 last,,,,,,,90 first
+JSP,blank,,,,,,,blank
+JAX,blank,,,,,,,blank
+PAK,blank,,,,,,,blank
+DLD,blank,,,,,,,blank
+WPK,blank,,,,,,,blank
+ORL,blank,,,,,,,blank
+KIS,blank,,,,,,,blank
+LAK,blank,,,,,,,blank
+TPA,blank,,,,,,,blank
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,<b>Continues on page 2 below</b>,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+route-name,,,,,,,,
+days,NYP,NYP,NYP,,,MIA,MIA,SAV
+updown,,,,,,,,
+,,downarrow,downarrow,,,uparrow,uparrow,
+,,downarrow,downarrow,,<b>Continued from page 1 above</b>,uparrow,uparrow,
+,,downarrow,downarrow,,,uparrow,uparrow,
+TPA,blank,,,,,,,blank
+LKL,blank,,,,,,,blank
+WTH,blank,,,,,,,blank
+SBG,blank,,,,,,,blank
+OKE,blank,,,,,,,blank
+WPB,blank,,,,,,,blank
+DLB,blank,,,,,,,blank
+DFB,blank,,,,,,,blank
+FTL,blank,,,,,,,blank
+HOL,blank,,,,,,,blank
+MIA,blank,91 last,97 last,,,98 first,92 first,blank

@@ -1,28 +1,28 @@
-,393, 59, access, station, 58, 390
-column-options,ardp,ardp days,,,reverse ardp days,reverse ardp
-route-name
-days,CHI,,,,,CHI
-updown
-CHI,393 first,59 first,,,58 last,390 last
-HMW
-KKI
-GLM
-RTL
-CHM
-MAT
-EFG
-CEN
-DQN
-CDL,393 last,,,,,390 first
-FTN
-NBN
-MEM
-MKS
-GWD
-YAZ
-JAN
-HAZ
-BRH
-MCB
-HMD
-NOL,,59 last,,,58 first,
+,391,393,59, access, station,58,390,392
+column-options,ardp,ardp,ardp,,,reverse ardp,reverse ardp,reverse ardp
+route-name,,,,,,,,
+days,CHI,CHI,CHI,,,NOL,CDL,CDL
+updown,,,,,,,,
+CHI,391 first,393 first,59 first,,,58 last,390 last,392 last
+HMW,,,,,,,,
+KKI,,,,,,,,
+GLM,,,,,,,,
+RTL,,,,,,,,
+CHM,,,,,,,,
+MAT,,,,,,,,
+EFG,,,,,,,,
+CEN,,,,,,,,
+DQN,,,,,,,,
+CDL,391 last,393 last,,,,,390 first,392 first
+FTN,,,,,,,,
+NBN,,,,,,,,
+MEM,,,,,,,,
+MKS,,,,,,,,
+GWD,,,,,,,,
+YAZ,,,,,,,,
+JAN,,,,,,,,
+HAZ,,,,,,,,
+BRH,,,,,,,,
+MCB,,,,,,,,
+HMD,,,,,,,,
+NOL,,,59 last,,,58 first,,
