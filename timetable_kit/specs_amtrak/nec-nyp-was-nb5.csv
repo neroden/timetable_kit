@@ -1,0 +1,22 @@
+, access, station,122,2172,178,126,146,2122,2222,196,80,166
+column-options,,,ardp,,,,,,,,,ardp
+route-name,,,,,,,,,,,,
+days,,,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS,Daily,WAS
+updown,,,,,,,,,,,,
+,,,,,,,,,,,From<br>Charlotte,
+WAS,,,first,first,first,first,first,first,first,first,first,first
+NCR,,,,,,,,,,,,
+BWI,,,,,,,,,,,,
+BAL,,,,,,,,,,,,
+ABE,,,,,,,,,,,,
+NRK,,,,,,,,,,,,
+WIL,,,,,,,,,,,,
+PHL,,,,,,,,,,,,
+TRE,,,,,,,,,,,,
+PJC,,,,,,,,,,,,
+NBK,,,,,,,,,,,,
+MET,,,,,,,,,,,,
+EWR,,,,,,,,,,,,
+NWK,,,,,,,,,,,,
+NYP,,,last,last,last,last,last,last,last,last,last,last
+,,,,To<br>Boston,To<br>Boston,,,,,,,To<br>Boston
