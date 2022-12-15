@@ -31,6 +31,7 @@ from timetable_kit.initialize import filter_feed_for_utilities
 
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.tsn import make_trip_id_to_tsn_dict
+from timetable_kit.tsn import stations_list_from_tsn
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -218,11 +219,13 @@ if __name__ == "__main__":
             stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
     else:
-        tsns = print("Finding trips from", stop_one, "to", stop_two)
-        find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+        print("Finding trips from", stop_one, "to", stop_two)
+        tsns = find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
 
     if args.extent:
         # We want to print first and last stops for each.
         for tsn in tsns:
-            # Stub
-            pass
+            station_list_df = stations_list_from_tsn(today_feed, tsn)
+            first_station = station_list_df.head(1).item()
+            last_station = station_list_df.tail(1).item()
+            print(tsn, first_station, last_station, sep="\t")
