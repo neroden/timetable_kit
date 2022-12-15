@@ -61,3 +61,6 @@ Fine for after release of timetables:
 Fine for never:
 1 -- implement prototype spec generator using toposort to merge station lists.
      This is really a many-step process.
+
+Wishlist:
+1 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
