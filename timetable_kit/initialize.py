@@ -10,6 +10,8 @@ Used by multiple command-line programs
 
 # Other people's packages
 from pathlib import Path
+import datetime
+
 import gtfs_kit
 
 # My packages: Local module imports
@@ -73,3 +75,26 @@ def fix_known_errors(feed):
     # Error fixed.  Put back into the feed.
     feed.trips = my_trips
     return
+
+def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
+    """
+    Filter the feed down based on command line arguments, for the auxiliary utility programs
+    such as find_trains.py and get_station_list.py
+
+    Returns a new, filtered feed.
+    """
+    if reference_date is None:
+        reference_date = datetime.date.today().strftime("%Y%m%d")
+    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+    today_feed = feed.filter_by_dates(reference_date, reference_date)
+
+    # Restrict by day of week if specified.
+    if day_of_week is not None:
+        day_of_week = day_of_week.lower()
+        if day_of_week not in feed_enhanced.gtfs_days:
+            print("Specifed day of week not understood.")
+            exit(1)
+        debug_print(1, "Restricting to ", day_of_week, ".", sep="")
+        today_feed = today_feed.filter_by_day_of_week(day_of_week)
+
+    return today_feed

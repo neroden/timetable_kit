@@ -27,6 +27,7 @@ from timetable_kit import feed_enhanced
 from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.initialize import filter_feed_for_utilities
 
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.tsn import make_trip_id_to_tsn_dict
@@ -181,6 +182,11 @@ def make_argparser():
         "--day",
         help="""Restrict to trains/buses operating on a particular day of the week""",
     )
+    parser.add_argument(
+        "--extent",
+        help="""Display first and last stations for each trip""",
+        action="store_true",
+    )
     return parser
 
 
@@ -194,20 +200,7 @@ if __name__ == "__main__":
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    reference_date = args.reference_date
-    if reference_date is None:
-        reference_date = datetime.date.today().strftime("%Y%m%d")
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-
-    # Restrict by day of week if specified.
-    day_of_week = args.day
-    if day_of_week is not None:
-        day_of_week = day_of_week.lower()
-        if day_of_week not in gtfs_days:
-            print("Specifed day of week not understood.")
-            exit(1)
-        today_feed = today_feed.filter_by_day_of_week(day_of_week)
+    today_feed = filter_feed_for_utilities(master_feed, reference_date = args.reference_date, day_of_week = args.day)
 
     # Make the two interconverting dicts -- actually we only need one of them
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
@@ -220,10 +213,16 @@ if __name__ == "__main__":
         argparser.print_usage()
         sys.exit(1)
     if stop_two is None:
-        print("Finding buses at", stop_one)
-        find_connecting_buses_from_stop(
+        print("Finding trips which stop at", stop_one)
+        tsns = find_connecting_buses_from_stop(
             stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
     else:
-        print("Finding trains from", stop_one, "to", stop_two)
+        tsns = print("Finding trips from", stop_one, "to", stop_two)
         find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+
+    if args.extent:
+        # We want to print first and last stops for each.
+        for tsn in tsns:
+            # Stub
+            pass

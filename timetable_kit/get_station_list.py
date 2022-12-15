@@ -22,6 +22,8 @@ from timetable_kit import feed_enhanced
 from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.initialize import filter_feed_for_utilities
+
 from timetable_kit import amtrak  # For the path of the default GTFS feed
 from timetable_kit.debug import debug_print, set_debug_level
 
@@ -89,21 +91,9 @@ if __name__ == "__main__":
         # Default to Amtrak
         gtfs_filename = amtrak.gtfs_unzipped_local_path
 
-    reference_date = args.reference_date
-    if reference_date is None:
-        reference_date = datetime.date.today().strftime("%Y%m%d")
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
     master_feed = initialize_feed(gtfs=gtfs_filename)
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
 
-    # Restrict by day of week if specified.
-    day_of_week = args.day
-    if day_of_week is not None:
-        day_of_week = day_of_week.lower()
-        if day_of_week not in gtfs_days:
-            print("Specifed day of week not understood.")
-            exit(1)
-        today_feed = today_feed.filter_by_day_of_week(day_of_week)
+    today_feed = filter_feed_for_utilities(master_feed, reference_date = args.reference_date, day_of_week = args.day)
 
     optional_tsn = args.trip_short_name
     positional_tsn = args.trip
