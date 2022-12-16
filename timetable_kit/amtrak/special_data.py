@@ -127,6 +127,8 @@ other_checked_baggage_day_trains = (
     "74",
     "75",
     "76",  # Piedmont
+    "77",
+    "78",
     "89",
     "90",  # Palmetto
 )
