@@ -73,9 +73,6 @@ sleeper_trains = set(
         "53",  # Auto Train
         "58",
         "59",  # CONO
-        "65",
-        "66",
-        "67",  # Night Owl
         "91",
         "92",  # Silver Star
         "97",
@@ -159,7 +156,7 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
 # (Empire doesn't call out NEC stations on connecting trains)
-# (Vermonter only callse out NY and DC on NEC)
+# (Vermonter only calls out NY and DC on NEC)
 major_stations_list = (
     "BOS",  # NEC timetable stations first
     "NHV",
