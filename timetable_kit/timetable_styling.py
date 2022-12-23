@@ -19,8 +19,15 @@ import pandas as pd
 from pandas.io.formats.style import Styler
 
 # My packages
-# This imports the subpackage by name so we can just call it "amtrak"
-from timetable_kit import amtrak
+# This is tricky.
+# We need runtime data such as the subpackage for the agency (amtrak, via, etc.)
+import timetable_kit.runtime_config
+
+# And we need a shorthand way to refer to it
+from timetable_kit.runtime_config import agency as agency
+
+# If we don't use the "as", calls to agency() will "None" out
+
 from timetable_kit import icons
 from timetable_kit import text_presentation
 
@@ -55,6 +62,11 @@ def get_time_column_stylings(
     if output_type not in ["class", "attributes"]:
         raise InputError("expected class or attributes")
 
+    if agency() is None:
+        raise RuntimeError(
+            "Internal error, agency not set before calling get_time_column_stylings"
+        )
+
     # Note that Amtrak GTFS data only has route_types:
     # 2 (is a train)
     # 3 (is a bus)
@@ -66,11 +78,11 @@ def get_time_column_stylings(
         # it's a bus!
         color_css = "background-color: honeydew;"
         color_css_class = "color-bus"
-    elif amtrak.special_data.is_connecting_service(tsn):
+    elif agency().special_data.is_connecting_service(tsn):
         # it's not a bus, it's a connecting train!
         color_css = "background-color: blanchedalmond;"
         color_css_class = "color-connecting-train"
-    elif amtrak.special_data.is_sleeper_train(tsn):
+    elif agency().special_data.is_sleeper_train(tsn):
         color_css = "background-color: lavender;"
         color_css_class = "color-sleeper"
     else:

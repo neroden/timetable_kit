@@ -50,7 +50,15 @@ from timetable_kit.initialize import initialize_feed
 # For reversing the type changes to output GTFS again
 from timetable_kit import gtfs_type_cleanup
 
-from timetable_kit import amtrak  # so we don't have to say "timetable_kit.amtrak"
+# This stores critical data supplied at runtime such as the agency subpackage to use.
+from timetable_kit import runtime_config
+
+# We call this repeatedly, so give it a shorthand name
+from timetable_kit.runtime_config import agency as agency
+
+# If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
+# The actual value of agency will be set up later, after reading the arguments
+# It is unsafe to do it here!
 
 # To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
 # amtrak.special_data
@@ -623,11 +631,11 @@ def fill_tt_spec(
     # Load variable function for station name printing
     prettyprint_station_name = None
     if doing_html:
-        prettyprint_station_name = amtrak.station_name_to_html
+        prettyprint_station_name = agency().station_name_to_html
     elif doing_multiline_text:
-        prettyprint_station_name = amtrak.station_name_to_multiline_text
+        prettyprint_station_name = agency().station_name_to_multiline_text
     else:
-        prettyprint_station_name = amtrak.station_name_to_single_line_text
+        prettyprint_station_name = agency().station_name_to_single_line_text
     if not callable(prettyprint_station_name):
         raise TypeError(
             "Received prettyprint_station_name which is not callable: ",
@@ -639,7 +647,7 @@ def fill_tt_spec(
         case False:
             is_major_station = lambda station_code: False
         case "standard":
-            is_major_station = amtrak.special_data.is_standard_major_station
+            is_major_station = agency().special_data.is_standard_major_station
     if not callable(is_major_station):
         raise TypeError(
             "Received is_major_station which is not callable: ", is_major_station
@@ -773,7 +781,7 @@ def fill_tt_spec(
                 use_baggage_icon_this_column = False
                 for train_spec in train_specs:
                     potential_baggage_tsn = train_spec_to_tsn(train_spec)
-                    if amtrak.train_has_checked_baggage(potential_baggage_tsn):
+                    if agency().train_has_checked_baggage(potential_baggage_tsn):
                         use_baggage_icon_this_column = True
                         break
 
@@ -848,7 +856,7 @@ def fill_tt_spec(
                         my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
                         # Clean this interface up later.  For now highly Amtrak-specific FIXME
-                        route_name = amtrak.get_route_name(today_feed, route_id)
+                        route_name = agency().get_route_name(today_feed, route_id)
                         styled_route_name = (
                             text_presentation.style_route_name_for_column(
                                 route_name, doing_html=doing_html
@@ -961,8 +969,10 @@ def fill_tt_spec(
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
-                    station_name_raw = amtrak.get_station_name(station_code)
-                    major = amtrak.special_data.is_standard_major_station(station_code)
+                    station_name_raw = agency().get_station_name(station_code)
+                    major = agency().special_data.is_standard_major_station(
+                        station_code
+                    )
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
                 case [_, "services", _]:
@@ -974,11 +984,11 @@ def fill_tt_spec(
                     cell_css_list.append("access-cell")
                     access_str = ""
                     # Currently Amtrak-specific.
-                    if amtrak.station_has_accessible_platform(station_code):
+                    if agency().station_has_accessible_platform(station_code):
                         access_str += icons.get_accessible_icon_html(
                             doing_html=doing_html
                         )
-                    elif amtrak.station_has_inaccessible_platform(station_code):
+                    elif agency().station_has_inaccessible_platform(station_code):
                         access_str += icons.get_inaccessible_icon_html(
                             doing_html=doing_html
                         )
@@ -1071,10 +1081,10 @@ def fill_tt_spec(
                             ]
 
                         has_baggage = bool(
-                            amtrak.train_has_checked_baggage(
+                            agency().train_has_checked_baggage(
                                 train_spec_to_tsn(train_spec)
                             )
-                            and amtrak.station_has_checked_baggage(station_code)
+                            and agency().station_has_checked_baggage(station_code)
                         )
 
                         # Should we put the bus symbol on this cell?
@@ -1327,7 +1337,7 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=amtrak.special_data.is_standard_major_station,
+            is_major_station=agency().special_data.is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             use_bus_icon_in_cells=use_bus_icon_in_cells,
@@ -1348,7 +1358,7 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=amtrak.special_data.is_standard_major_station,
+            is_major_station=agency().special_data.is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             doing_html=True,
@@ -1503,7 +1513,7 @@ def produce_several_timetables(
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     # Amtrak-specific patches.  Bleah!  FIXME
-    master_feed = amtrak.patch_feed(master_feed)
+    master_feed = agency().patch_feed(master_feed)
     debug_print(1, "Feed patched, hopefully")
 
     # Deal with ".list" files.
@@ -1568,6 +1578,7 @@ def main():
         sys.exit(1)
 
     set_debug_level(args.debug)
+    debug_print(2, "Successfully set debug level to 2.")
 
     output_dirname = args.output_dirname
     if not output_dirname:
@@ -1580,6 +1591,10 @@ def main():
         input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
     if not input_dirname:
         input_dirname = "."
+
+    # Eventually this will be set from the command line -- FIXME
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
 
     # The arg parser will default this to Amtrak
     gtfs_filename = args.gtfs_filename

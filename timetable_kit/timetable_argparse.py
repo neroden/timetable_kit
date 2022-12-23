@@ -15,6 +15,10 @@ import argparse
 # Needed for defaulting the reference date to tomorrow:
 # import datetime
 
+# Needed to store data including the agency subpackage (e.g. amtrak, via)
+# from timetable_kit import runtime_config
+# Is this actually done here?  No, it's done in the caller.
+
 # Needed for defaulting the GTFS file:
 from timetable_kit import amtrak
 
@@ -121,6 +125,18 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
     )
 
 
+def add_agency_argument(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "--agency",
+        help="""
+            Custom programming is used for timetables for certain agencies.
+            Unimplemented stub.
+            """,
+        choices=["generic", "amtrak", "via", "hartford"],
+        default="amtrak",
+    )
+
+
 def make_tt_arg_parser():
     """Make argument parser for timetable.py"""
     parser = argparse.ArgumentParser(
@@ -130,6 +146,7 @@ def make_tt_arg_parser():
     add_spec_files_argument(parser)
     add_positional_spec_files_argument(parser)
 
+    add_agency_argument(parser)
     add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
