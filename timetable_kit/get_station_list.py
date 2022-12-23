@@ -93,7 +93,9 @@ if __name__ == "__main__":
 
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    today_feed = filter_feed_for_utilities(master_feed, reference_date = args.reference_date, day_of_week = args.day)
+    today_feed = filter_feed_for_utilities(
+        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    )
 
     optional_tsn = args.trip_short_name
     positional_tsn = args.trip

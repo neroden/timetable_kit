@@ -76,6 +76,7 @@ def fix_known_errors(feed):
     feed.trips = my_trips
     return
 
+
 def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
     """
     Filter the feed down based on command line arguments, for the auxiliary utility programs

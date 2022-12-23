@@ -201,7 +201,9 @@ if __name__ == "__main__":
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    today_feed = filter_feed_for_utilities(master_feed, reference_date = args.reference_date, day_of_week = args.day)
+    today_feed = filter_feed_for_utilities(
+        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    )
 
     # Make the two interconverting dicts -- actually we only need one of them
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
@@ -220,7 +222,9 @@ if __name__ == "__main__":
         )
     else:
         print("Finding trips from", stop_one, "to", stop_two)
-        tsns = find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+        tsns = find_trains(
+            stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+        )
 
     if args.extent:
         # We want to print first and last stops for each.
