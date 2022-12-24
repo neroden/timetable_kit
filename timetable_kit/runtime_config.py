@@ -1,6 +1,6 @@
 # runtime_config.py
 # Part of timetable_kit
-# Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 This file exists to hold data which is set at runtime, but is the same across a single run of
 timetable.py.  This data needs to be shared by multiple modules so it needs to be "low-level".
