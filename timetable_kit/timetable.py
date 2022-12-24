@@ -647,7 +647,7 @@ def fill_tt_spec(
         case False:
             is_major_station = lambda station_code: False
         case "standard":
-            is_major_station = agency().special_data.is_standard_major_station
+            is_major_station = agency().is_standard_major_station
     if not callable(is_major_station):
         raise TypeError(
             "Received is_major_station which is not callable: ", is_major_station
@@ -970,9 +970,7 @@ def fill_tt_spec(
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
                     station_name_raw = agency().get_station_name(station_code)
-                    major = agency().special_data.is_standard_major_station(
-                        station_code
-                    )
+                    major = agency().is_standard_major_station(station_code)
                     station_name_str = prettyprint_station_name(station_name_raw, major)
                     tt.iloc[y, x] = station_name_str
                 case [_, "services", _]:
@@ -1337,7 +1335,7 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=agency().special_data.is_standard_major_station,
+            is_major_station=agency().is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             use_bus_icon_in_cells=use_bus_icon_in_cells,
@@ -1358,7 +1356,7 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=agency().special_data.is_standard_major_station,
+            is_major_station=agency().is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             doing_html=True,

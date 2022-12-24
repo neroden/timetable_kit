@@ -78,11 +78,11 @@ def get_time_column_stylings(
         # it's a bus!
         color_css = "background-color: honeydew;"
         color_css_class = "color-bus"
-    elif agency().special_data.is_connecting_service(tsn):
+    elif agency().is_connecting_service(tsn):
         # it's not a bus, it's a connecting train!
         color_css = "background-color: blanchedalmond;"
         color_css_class = "color-connecting-train"
-    elif agency().special_data.is_sleeper_train(tsn):
+    elif agency().is_sleeper_train(tsn):
         color_css = "background-color: lavender;"
         color_css_class = "color-sleeper"
     else:
