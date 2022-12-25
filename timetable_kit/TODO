@@ -6,8 +6,15 @@ When new GTFS drops:
 
 For Amtrak feeds:
 1 -- generic local connections template (feed off of station list?)
+2 -- boilerplate pattern data (db) for local connections
+3 -- db for which stations have which local connections
+4 -- generator for local connection link HTML
+5 -- patch to add local connection link to station name cell
 
 For generalizing to non-Amtrak feeds:
+A -- abstract the station name styling routines into one (easier to override / underride)
+B -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
+
 0 -- fix the get_time_column_stylings code to check the "agency" data
 1 -- Switch wheelchair access detection to be based on GTFS.
      Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
