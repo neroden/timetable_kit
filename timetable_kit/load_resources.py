@@ -21,16 +21,20 @@ Several loaders are provided:
 template_loader -- looks in "templates" folder
 font_loader -- looks in "fonts" folder
 icon_loader -- looks in "icons" folder
+logo_loader -- looks in "icons" folder, or in connecting_services/icons
 
-Two matching jinja2 environments are available:
+Matching jinja2 environments are available:
 template_environment
 font_environment
 icon_environment
+logo_environment
 
 These functions are provided:
 get_font_css(fontname: str) -> str
 get_icon_css(filename: str) -> str
 get_icon_svg(filename: str) -> str
+get_logo_css(filename: str) -> str
+get_logo_svg(filename: str) -> str
 """
 
 import jinja2
@@ -42,6 +46,9 @@ from jinja2 import (
 )
 
 # Here are the loaders and environments
+# Note that the PackageLoader is grabbing the parent package
+# of load_resources, which is undocumented behavior (FIXME)
+# but works
 template_loader = ChoiceLoader(
     [
         FileSystemLoader([".", "templates"]),
@@ -72,6 +79,17 @@ icon_loader = ChoiceLoader(
 )
 icon_environment = Environment(
     loader=icon_loader,
+    autoescape=lambda x: False,
+)
+
+logo_loader = ChoiceLoader(
+    [
+        FileSystemLoader([".", "icons"]),
+        PackageLoader("load_resources", package_path="connecting_services/icons"),
+    ]
+)
+logo_environment = Environment(
+    loader=logo_loader,
     autoescape=lambda x: False,
 )
 
@@ -111,6 +129,31 @@ def get_icon_svg(filename: str) -> str:
         icon_environment, filename
     )
     return icon_svg_str
+
+
+def get_logo_css(filename: str) -> str:
+    """
+    Load an logo CSS file (specify full filename including .css) and return it as a string.
+
+    This uses Jinja2, logo_loader, and logo_environment.
+    """
+    (logo_css_str, returned_filename, uptodate) = logo_loader.get_source(
+        logo_environment, filename
+    )
+    return logo_css_str
+
+
+def get_logo_svg(filename: str) -> str:
+    """
+    Load an logo SVG file (specify full filename including .svg) and return it as a string.
+
+    This uses Jinja2, logo_loader, and logo_environment.
+    Technically this is the same code as get_logo_css right now.
+    """
+    (logo_svg_str, returned_filename, uptodate) = logo_loader.get_source(
+        logo_environment, filename
+    )
+    return logo_svg_str
 
 
 # TESTING

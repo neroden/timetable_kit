@@ -66,6 +66,7 @@ from timetable_kit.runtime_config import agency as agency
 
 from timetable_kit import text_presentation
 from timetable_kit import icons
+from timetable_kit import connecting_services
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
@@ -1445,6 +1446,14 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
         icon_file_dest_path = icons_dir / icon_filename
         # Note, this overwrites
         shutil.copy2(icon_file_source_path, icon_file_dest_path)
+
+    # Connecting service logos: drop into icons folder in destination
+    logo_filenames = connecting_services.get_filenames_for_all_logos()
+    for logo_filename in logo_filenames:
+        logo_file_source_path = source_dir / "connecting_services" / "icons" / logo_filename
+        logo_file_dest_path = icons_dir / logo_filename
+        # Note, this overwrites
+        shutil.copy2(logo_file_source_path, logo_file_dest_path)
 
     fonts_dir = output_dir / "fonts"
     if not os.path.exists(fonts_dir):
