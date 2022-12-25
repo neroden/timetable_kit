@@ -1,0 +1,43 @@
+,station,access,65,89,79 saturday,153,195,91,99,87,97
+column-options,,,ardp,,,,ardp,,,,
+route-name,,,,,,,,,,,
+days,,,BOS,,,,BOS,,BOS,BOS,
+BOS,,,first,blank,blank,blank,first,blank,first,first,blank
+BBY,,,,blank,blank,blank,,blank,,,blank
+RTE,,,,blank,blank,blank,,blank,,,blank
+PVD,,,,blank,blank,blank,,blank,,,blank
+KIN,,,,blank,blank,blank,,blank,,,blank
+WLY,,,,blank,blank,blank,,blank,,,blank
+MYS,,,,blank,blank,blank,,blank,,,blank
+NLC,,,,blank,blank,blank,,blank,,,blank
+OSB,,,,blank,blank,blank,,blank,,,blank
+days,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
+NHV,,,,blank,blank,blank,,blank,,,blank
+BRP,,,,blank,blank,blank,,blank,,,blank
+STM,,,,blank,blank,blank,,blank,,,blank
+NRO,,,,blank,blank,blank,,blank,,,blank
+NYP,,,,first two-row,first two-row,first two-row,,first two-row,,,first two-row
+NWK,,,,,,,,,,,
+EWR,,,,,,,,,,,
+MET,,,,,,,,,,,
+TRE,,,,,,,,,,,
+PHL,,,,,,,,,,,
+WIL,,,,,,,,,,,
+NRK,,,,,,,,,,,
+ABE,,,,,,,,,,,
+BAL,,,,,,,,,,,
+BWI,,,,,,,,,,,
+NCR,,,,,,,,,,,
+WAS,,,,,,,,,,,
+ALX,,,,,,,,,,,
+WDB,,,,,,,,,,,
+QAN,,,,,,,,,,,
+FBG,,,,,,,,,,,
+ASD,,,,,,,,,,,
+RVR,,,,,,,,,,,
+RVM,,,,To Savannah,To Charlotte,,last,To Miami,,,To Miami
+WBG,,,,blank,blank,,blank,blank,,,blank
+NPN,,,last,blank,blank,,blank,blank,last,,blank
+,,,,,,,,,,,
+PTB,,,blank,blank,blank,,blank,blank,blank,,blank
+NFK,,,blank,blank,blank,last,blank,blank,blank,last,blank

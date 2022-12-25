@@ -1,0 +1,13 @@
+{
+    "title": "Hartford Line & Valley Flyer: Saturday Southbound Timetable",
+    "heading": "Hartford Line & Valley Flyer: Saturday Southbound",
+    "reference_date": "20230105",
+    "programmers_notes": "Weasyprint won't make an italic version of the SpartanTT font, so don't bother to try to style CTrail the way Connecticut does",
+    "top_text": "CTrail Hartford Line trains (<b>#64XX</b>) are <b>not ticketed or operated by Amtrak</b>; CTrail tickets must be bought at the station.<br>CTrail tickets are valid on Amtrak Hartford Line (#4XX) and Valley Flyer routes in this timetable.<br>On the Valley Flyer (#461), CTrail tickets are only valid for stations from Spingfield to New Haven.<br>CTrail tickets are valid on Northeast Regional (#147) for stations from Springfield to New Haven except during holiday blackout periods.<br>CTrail tickets are never valid on the Vermonter (#57).<br>The <a href=\"https://www.hartfordline.com/\">CTrail Hartford Line website</a> has full schedules for services where CTrail tickets are valid, including additional Hartford-New Haven buses.<br><br><b>Connecting trains</b> are provided at New Haven by Amtrak, <a href=\"https://new.mta.info/agency/metro-north-railroad/schedules\">Metro-North</a>, and <a href=\"https://shorelineeast.com/\">Shore Line East</a>, and at Springfield by Amtrak's Lake Shore Limited.",
+    "bottom_text": "This timetable is not an official CTrail, CTtransit, or State of Connecticut product.  It is derived from <a href=\"https://www.transit.land/feeds/f-cttransit~hartford~line\">CTRail Hartford Line's GTFS data</a> released to the public.",
+    "landscape": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "all_stations_accessible": "true",
+    "for_rpa": "true"
+}

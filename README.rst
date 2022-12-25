@@ -5,8 +5,15 @@ Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable 
 
 Development status
 ==================
-This is currently a work in progress and not fully functional.
-Initial development is focused on Amtrak timetables.
+Timetable_kit remains under active development.
+It is quite usable to create Amtrak timetables.
+
+It has not yet been generalized to create non-Amtrak timetables.
+
+Interfaces are moderately stable: old spec files should continue to work, mostly.
+New options continue to be added in spec files.
+Command line options remain in a state of flux.
+The interface will change as needs are discovered while creating particular timetables.
 
 Directory Structure
 ===================
@@ -20,7 +27,7 @@ this time.  This may change.
 
 Dependencies
 ============
-Timetable Kit was developed with Python 3.9.9, and may not work with earlier versions.
+Timetable Kit requires Python 3.10, because it uses the match/case statement.
 
 It relies on `GTFS Kit <https://github.com/mrcagney/gtfs_kit>` to parse GTFS.
 
@@ -33,6 +40,17 @@ timetable_kit uses the Jinja2 template system directly.
 It uses Weasyprint to convert HTML timetables to PDF timetables.
 
 It's packaged as a package with Poetry, so presumably requires Poetry to install.
+
+One of the tools uses the LXML module to parse Amtrak's station web pages.
+
+It uses pdftk-java (command-line tool must be installed and in path) to sew single-page PDF timetables together into multi-page timetables.
+You don't need pdftk-java unless you want to make multi-page PDFs.  You can also sew the pages together yourself
+using your preferred tool.
+
+It uses VIPS (libvips) (command-line tool must be installed and in path) so convert single-page PDF timetables to JPG.
+You don't need vips unless you want to make JPG output.  You can also do this conversion yourself using your
+preferred tool.
+
 
 Further Documentation
 =====================
@@ -70,3 +88,11 @@ for more information.
 The SpartanTT font is a derivative of the Spartan font specifically for timetables.
 It has extremely small, entirely functional changes which are probably uncopyrightable.
 It is also under the Open Font License.  See README.Spartan for more information on the changes.
+
+Example
+=======
+
+This is a (probably out of date) timetable made using timetable_kit.
+
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/upstate-ny-to-western-vermont-services.jpg
+

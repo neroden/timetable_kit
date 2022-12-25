@@ -1,0 +1,9 @@
+{
+    "title": "Capitol Limited Timetable",
+    "heading": "Amtrak's Capitol Limited",
+    "bottom_text": "<b>Local connecting trains</b> are provided at Chicago by <a href=\"https://metra.com\">Metra</a>, <br>at Martinsburg, Harpers Ferry, Rockville, and DC by the <a href=\"https://www.mta.maryland.gov\">Maryland Transit Administration</a>, <br>and at DC by <a href=\"https://www.wmata.com/\">WMATA</a> and also by <a href=\"http://www.vre.org/\">VRE</a>.",
+    "reference_date": "20220613",
+    "key_baggage": "true",
+    "key_tz": true,
+    "for_rpa": "true"
+}

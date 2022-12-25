@@ -11,7 +11,7 @@ Not intended for production use.
 # Other people's packages
 import argparse
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 import json
 
 # My packages
@@ -26,7 +26,7 @@ from timetable_kit.errors import (
 from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
 
 # To intialize the feed -- does type changes
@@ -39,6 +39,7 @@ from timetable_kit.timetable import *
 
 # For testing!
 from timetable_kit import text_presentation
+from timetable_kit import tsn
 
 if __name__ == "__main__":
     debug_print(3, "Dumping sys.path for clarity:", sys.path)
@@ -55,7 +56,18 @@ if __name__ == "__main__":
     reference_date = args.reference_date
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
 
-    auxfile_filename = "cz.tt-aux"
+    oneday_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+    tsn.make_tsn_and_day_to_trip_id_dict(oneday_feed)
+
+    quit()
+
+    monday_feed = oneday_feed.filter_by_day_of_week("monday")
+    print(monday_feed.calendar)
+
+    quit()
+
+    auxfile_filename = "cz.json"
     with open(auxfile_filename, "r") as f:
         auxfile_str = f.read()
     print(auxfile_str)

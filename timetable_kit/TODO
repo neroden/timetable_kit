@@ -1,26 +1,54 @@
-Preferably before release of timetables:
-1 -- rename station services column to "access", separate from services
+When new GTFS drops:
+1 -- Maple Leaf back to Canada / Empire Service
+2 -- Ethan Allen Express to Burlington
+3 -- Roanoke 2nd train per day
+4 -- then recheck everything else
 
-7 -- Restructure to eliminate a slow lookup from trip_short_name to trip_id.
-     get_timepoint in particular is running slow inside an inner loop.
-     This is the lowest-hanging remaining fruit.
+For Amtrak feeds:
+1 -- generic local connections template (feed off of station list?)
+2 -- boilerplate pattern data (db) for local connections
+3 -- db for which stations have which local connections
+4 -- generator for local connection link HTML
+5 -- patch to add local connection link to station name cell
+
+For generalizing to non-Amtrak feeds:
+A -- abstract the station name styling routines into one (easier to override / underride)
+B -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
+
+0 -- fix the get_time_column_stylings code to check the "agency" data
+1 -- Switch wheelchair access detection to be based on GTFS.
+     Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
+     from the Amtrak stations database.
+2 -- Find a way to grab station names from Amtrak if available (Advanced Information),
+     but from GTFS if not available.
+4 -- Give the Amtrak module interface a defined (duck) type, so that we can
+     swap in a different module.  This is easier to do than it appears!
+     We can literally just use a variable to hold which module to call.
+
+For internal code cleanup:
+-1 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
+      Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
+
+0 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
+2 -- improve icon situation (put characters in font?)
+3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
 
 Fine for after release of timetables:
-2 -- make silent links that don't turn blue and underline themselves.
+0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
 
-8 -- Detect first_station / last_station. ***
+0.5 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
+0.75 -- Add "trains on left, stations on top" schema, for AWESOMENESS
 
-9 -- Routine to print out calendar for a single route,
+1 -- Add Roanoke service to Crescent timetable?
+
+4 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
 
-10 -- Make inline icon variants
+5 -- Test install and resolve other problematic directory references
 
-11 -- Resolve other problematic directory references
-12 -- Resolve command-line functions in amtrak/ into a __main__.py
+6 -- Resolve command-line functions in amtrak/ into a __main__.py
 
-13 -- Handle two trains in one column (oooglay)
-
-14 -- Improve calendar filtering for days of week
+8 -- Improve calendar filtering for days of week
     Still not clear what the best approach for this is.
 
     Failing to filter for the days of the week can give two calendars
@@ -33,5 +61,12 @@ Fine for after release of timetables:
     To make matters worse, there are calendar gaps in other timetables,
     like the Cardinal one.  We need a better presentation on this crap.
 
-15 -- Sanitize pathnames coming from command line and environment.
+9 -- Sanitize pathnames coming from command line and environment.
     We're very sloppy right now.
+
+Fine for never:
+1 -- implement prototype spec generator using toposort to merge station lists.
+     This is really a many-step process.
+
+Wishlist:
+1 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.

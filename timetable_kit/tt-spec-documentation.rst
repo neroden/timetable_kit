@@ -1,9 +1,9 @@
 =======
 TT-SPEC
 =======
-The ".tt-spec" file format is a template used to generate the timetable
-This document describes the "tt-spec" file format as currently implemented,
-and the associated "tt-aux" file format.
+The "tt-spec" file format is a template used to generate the timetable
+This document describes format as currently implemented.
+It consists of a CSV file (foo.csv) and a JSON file (foo.json).
 
 The tt-spec format remains a work in progress and may change at any time.
 
@@ -29,9 +29,11 @@ Amtrak station codes are in the "stop_id" field of GTFS static data.
 I will use "trip_short_name" and "train number" interchangeably.
 I will used "station code" and "stop_id" interchangeably.
 
-FORMAT
-------
-The tt-spec format is a CSV file.  It can (and should) be edited in a spreadsheet program.
+CSV FILE FORMAT
+---------------
+The main part of the tt-spec format is a CSV file.  It can (and should) be edited in a spreadsheet program.
+For convenience, it should have a ".csv" suffix.
+
 There are two varieties: a complete spec and a shorthand spect.
 
 The top left cell is a "key" cell: it is blank for a complete spec.
@@ -71,6 +73,13 @@ TOP ROW
 The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
 in exactly the order the columns will appear in the timetable.
 
+Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
+
+A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
+This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".  It uses the days as recorded in the GTFS file (so, it's the day at the first station, but with the timezone for the overall GTFS file, not for the first station); this can be confusing.  This is best used only if you absolutely have to.
+
+A train number may also be followed by a space and "noheader".  This must come after the optional weekday.  If this is the case, this train number will not be listed in the header, and its route name will not be listed, but it may have times in the column; this is used for short connecting buses.
+
 SPECIAL COLUMNS
 ---------------
 The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
@@ -80,14 +89,17 @@ The special code "services" in the top row can be used to generate cells contain
 The special code "timezone" in the top row will generate a column with codes for the timezones of the stations.  Strongly
 recommended for any train which crosses two timezones.
 
-The special code "ardp" generates cells containing "Ar" and "Dp", or blank *not implemented
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank ***not implemented
 
-Multiple trains can be listed in a single cell, separated by slashes, such as 314/304. *not yet
-This will allow them to share a single column.  Be careful about using this as it is fragile:
-it is intended for "designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
-This will give a complex stacked cell for "train name".  You will want to do some manual cells (see below).
+Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
+This will allow them to share a single column.  The time for the first train will be used, unless it doesn't
+stop at that station, in which case the second train will be checked, etc.
 
-Trains which split can be listed in a single cell, separated by the ampersand.  You will want to do some manual cells (see below).  *not yet
+Be careful about using this as it is fragile: it is intended for splitting trains like the Lake Shore Limited, or
+"designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
+This will give a complex stacked cell for "train name".
+You will want to do some manual cells (see below).
+
 
 COLUMN-OPTIONS IN SECOND ROW
 ----------------------------
@@ -107,6 +119,7 @@ days -- include string for days of operation (MoWeFr) in the time cells for this
 long-days-box -- make the box for the days long enough to hold SuMoTuWeTh (five days) rather than the default three.
 short-days-box -- make the box for days only long enough to hold Mo (one day) rather than the default three.
 ardp -- include "Ar" and "Dp" in this column
+no-rd -- don't leave space for the "R/D/L" notations.  Use with care, only after you've verified these don't show up in the timetable; this is to squeeze out a little extra horizontal space from the timetable.
 
 No other options have been defined yet.
 Options which I might implement, but have not implemented, include:
@@ -123,8 +136,49 @@ REST OF SPEC
 The internal cells (not the top row or left column) of the table should be mostly left blank.
 The program fills these in from the GTFS and Amtrak station data.
 
-However, if you want to include special text, you can free-write it in a cell,
-and it will be copied into the final table. *not yet
+
+SPECIAL CODES IN CELLS
+----------------------
+A cell to be filled in with a time may contain a special code.
+
+The most useful special code is a train number (trip_short_name) saying which train's departure/arrival times to use, followed by the
+word "first" or "last".  So "8 first" or "28 last".  This must be one of the ones listed in the top of the column.  If the one listed in the top of the column has a day suffix like "monday", the day suffix is necessary ("8 monday last").
+
+A single train number such as "8" will simply say which train to use out of several.
+
+This is the only way to override the default "first train listed wins" behavior.
+This will also suppress the display of both arrival and departure time:
+"first" will only list departure time, and "last" will only list arrival time.
+They will also suppress the use of "R" and "D" notations, which are obvious on the first and last trains.
+
+These special codes are intended to be used only in four situations:
+-- first station on the timetable for a train
+-- last station on the timetable for a train
+-- station where a train splits (list the station on two lines, and specify which line gets which tsn)
+-- station where a train connects to another (list the station on two lines, and specify which line gets which tsn)
+
+To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.
+
+Just "last" or "first" by itself, or "last two-row" or "first two-row", can also be used if there is only one train in the column; this is mainly needed to clean up display in some situations.
+
+A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
+space character in the cell; it will show as a white cell.
+
+A cell may also contain a train number followed by the word "blank" ("8 blank").  This will color the cell with the appropriate color for the train number (which must be one of the trains in the column).  This will blank out the cell but with a color.
+
+There are also some shorthands for common arrows:
+downarrow will give suitable HTML for a down arrow, centered in the cell
+uparrow will give suitable HTML for an up arrow, centered in the cell
+downrightarrow will give suitable HTML for a "down and to the right" arrow, at the right edge of the cell
+uprightarrow will give suitable HTML for an "up and to the right" arrow, at the right edge of the cell
+
+These will all be on white cell backgrounds.
+
+I am not encouraging leftward arrows, since timetables should have later times to the right.
+
+CELLS WITH FREE WRITTEN TEXT
+----------------------------
+If you include any other text, it will be copied into the final table.
 Examples include putting "to Chicago" in the cell after the last listed station for a train which
 continues to Chicago after leaving the last station listed in the timetable.
 
@@ -139,19 +193,14 @@ The resulting timetable will have "col0", "col1", "row0", "row1", etc. classes (
 individual cell if you need to.  For these purposes, the indexes are 0-based and ignore the template's top row and left
 column (which will not be present in the final timetable.
 
-I may eventually devise special codes for these internal cells.  So don't count on the free-writing interface 100%.
+There may be additional special codes for these internal cells.
+So don't count on the free-writing interface 100%.
+For now, all the special codes start with a train number.
 
-FUTURE PLANS
-------------
-I am hoping to add more bells and whistles.  When I do, my plan is to put auxilliary information for a template,
-showing how to generate a final timetable from it, in a JSON file which should end with .tt-json. *not yet
-
-In addition, there will be tools to generate lists of trains to help you design your spec.
-
-TT-AUX FILE
+JSON FILE
 -----------
-Associated with the .tt-spec file is a .tt-aux file with the same primary name.
-(so, for cz.tt-spec, use cz.tt-aux)
+Associated with the .csv file is a .json file with the same primary name.
+(so, for cz.csv, use cz.json)
 
 This is a JSON file with a list of key-value pairs.  So far the defined keys are:
 ::
@@ -161,7 +210,23 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "output_subdir": "after_20220528"
     "output_filename": "special",
-    "reference_date": 
+    "reference_date": "20220528",
+    "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains.",
+    "bottom_text": "This will be printed less prominently underneath the symbol key.  Useful for noting seasonal stations, ticketing restrictions (no Homewood to Chicago tickets except for connecting passengers), or other oddities.",
+    "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)",
+    "key_baggage": "If present, include the key for checked baggage",
+    "key_d": "If present, include the key for 'discharge passengers only' (D) ",
+    "key_r": "If present, include the key for 'receive passengers only' (R) ",
+    "key_l": "If present, include the key for 'may leave before time shown' (L) ",
+    "key_f": "If present, include the key for flag stops",
+    "key_tz": "If present, include the key for time zones",
+    "key_bus": "If present, include the key for the bus icon",
+    "use_bus_icon_in_cells": "If present, use the bus icon in time cells for buses.  Otherwise, don't.",
+    "all_stations_accessible": "The key should say that all stations are accessible, rather than putting the icons for accessible and inaccessible.  Used to save the space of the access column; please don't do this unless you need the space."
+    "compress_credits": "Save a little bit of space by removing line breaks in the credits",
+    "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
+    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
+    "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable."
  }
 
 reference_date is critically important and is required unless passed at the command line.
@@ -179,4 +244,25 @@ output_filename is the base filename of the output files (so, "special.html", "s
 If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*
 output file name from the file name for the spec file.
 
-There will be a lot more but this is a start.
+In addition, every key in the .json file is passed through to the Jinja2 templates, allowing for flexibility.
+
+
+MULTI-PAGE TIMETABLES
+=====================
+
+At the moment, the only way to make multi-page timetables is to make a bunch of single page timetables and then sew them together.
+
+The program can, however, do this automatically, if you install pdftk-java, by invoking pdftk.
+
+If timetable.py is given a spec file with a name ending in ".list", it interprets this as a list of specs.
+The list file should have one spec file name per line, with no suffixes.  timetable.py will then produce the individual timetable for each spec,
+and then patch them together with pdftk to a single PDF with the same base name as the original ".list" file.
+
+
+ADDITIONAL TOOLS
+================
+These commands may be helpful in preparing spec files:
+
+find_trains.py -- get the trains running from station A to station B
+get_station_list.py -- get the list of stations which a particular train stops at
+compare.py -- find timing differences on a route between similar services listed in GTFS

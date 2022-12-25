@@ -1,0 +1,16 @@
+{# credits.css
+   Part of timetable_kit
+   Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+CSS file for the credits, and the unofficial_amtrak disclaimer (except fonts).
+
+Often blank, but affected by the "compress_credits" option.
+#}
+{% if compress_credits %}
+/* Compress the credits paragraphs to save space */
+
+.credit-paragraph {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+{% endif %}

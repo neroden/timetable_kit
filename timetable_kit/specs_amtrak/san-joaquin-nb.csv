@@ -1,0 +1,21 @@
+,stations,access,711,713,715,717,719 monday,719 sunday,703
+column-options,,,ardp,,,,,,
+days,,,BFD,BFD,BFD,BFD,BFD,BFD,BFD
+BFD,,,,,,,,,703 first
+WAC,,,,,,,,,
+COC,,,,,,,,,
+HNF,,,,,,,,,
+FNO,,,,,,,,,
+MDR,,,,,,,,,
+MCD,,,,,,,,,
+TRK,,,,,,,,,
+MOD,,,,,,,,,
+SKN,,,,,,,,,
+ACA,,,,,,,,,
+MTZ,,,,,,,,,
+RIC,,,,,,,,,
+EMY,,,,,,,,,
+OKJ,,,711 last,713 last,715 last,717 last,719 monday last,719 sunday last,
+SKT,,,,,,,,,
+LOD,,,,,,,,,
+SAC,,,,,,,,,703 last

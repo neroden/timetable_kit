@@ -3,6 +3,8 @@ symbol_key.html: HTML for symbol key for timetable
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 -->
+{%- from "macros.html" import br_or_space -%}
+{%- from "macros.html" import br_or_dash -%}
 <table role="complementary" aria-label="Key for Symbols" class="symbol-key">
   <thead>
     <tr style="display: none;">
@@ -10,40 +12,64 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <th>Meaning</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
+  <tbody>{#
+#}{% if all_stations_accessible %}{#
+#}    <tr>
       <td>{{accessible_icon}}</td>
-      <td>Platform and train are accessible to people in wheelchairs<br>Some station services may not be accessible</td>
+      <td><b>All stations on this timetable</b> have platforms and trains accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
+#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
+{% else %}{# not all stations accessible, the norm #}{#
+#}    <tr>
+      <td>{{accessible_icon}}</td>
+      <td>Platform and train are accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
+#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
     </tr>
     <tr>
       <td>{{inaccessible_icon}}</td>
-      <td>Platform and train are <b>not accessible</b> to people in wheelchairs</td>
-    </tr>
-    <tr>
+      <td>Platform and train are <b>not accessible</b>{{ br_or_space(key_on_right) }}to people in wheelchairs</td>
+    </tr>{#
+#}{% endif %}{# station accessibility icons #}{#
+#}{% if key_baggage %}{#
+#}    <tr>
       <td>{{baggage_icon}}</td>
       <td>Checked baggage service available</td>
-    </tr>
-    <tr>
+    </tr>{#
+#}{% endif %}{% if key_sleeper %}{#
+#}    <tr>
       <td>{{sleeper_icon}}</td>
-      <td>Sleeping car service</td>
-    </tr>
-    <tr>
+      <td>Sleeping car service available</td>
+    </tr>{#
+#}{% endif %}{% if key_d %}{#
+#}    <tr>
       <td><b>D</b></td>
-      <td>Stops only to discharge passengers (may leave before time shown)</td>
-    </tr>
-    <tr>
+      <td>Stops only to discharge passengers{{ br_or_space(key_on_right) }}(may leave before time shown)</td>
+    </tr>{#
+#}{% endif %}{% if key_r %}{#
+#}    <tr>
       <td><b>R</b></td>
       <td>Stops only to receive passengers</td>
-    </tr>
-{#
-    <tr>
+    </tr>{#
+#}{% endif %}{% if key_l %}{#
+#}    <tr>
       <td><b>L</b></td>
       <td>May leave before time shown</td>
-    </tr>
-    <tr>
+    </tr>{#
+#}{% endif %}{% if key_f %}{#
+#}    <tr>
       <td><b>F</b></td>
       <td>Flag stop (only stops if passengers are ticketed in advance)</td>
-    </tr>
-#}
-  </tbody>
+    </tr>{#
+#}{% endif %}{% if key_bus %}{#
+#}    <tr>
+      <td><b>{{bus_icon}}</b></td>
+      <td>Connecting Bus Service (can be booked through Amtrak)</td>
+    </tr>{#
+#}{% endif %}{% if key_tz %}{#
+#}    <tr>
+      <td><b>TZ</b></td>
+      <td>Time zone: ET (Eastern Time), CT (Central Time),{{ br_or_space(key_on_right) }}{#
+#}MT (Mountain Time), or PT (Pacific Time)</td>
+    </tr>{#
+#}{% endif %}{#
+#}  </tbody>
 </table>

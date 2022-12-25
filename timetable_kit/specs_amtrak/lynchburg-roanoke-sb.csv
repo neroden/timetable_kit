@@ -1,0 +1,38 @@
+, access, station,151,51,147,171,145,19
+column-options,,,ardp,,,,,ardp
+route-name,,,,,,,,
+days,,,CVS,CVS,CVS,CVS,CVS,CVS
+updown,,,,,,,,
+BOS,,,blank,blank,blank,first,blank,blank
+BBY,,,blank,blank,blank,,blank,blank
+RTE,,,blank,blank,See,,blank,blank
+PVD,,,blank,blank,Hartford<br>Line,,blank,blank
+KIN,,,blank,blank,timetable,,blank,blank
+WLY,,,blank,blank,blank,,blank,blank
+NLC,,,blank,blank,from<br>Hartford &,,blank,blank
+OSB,,,blank,blank,Springfield,,blank,blank
+NHV,,,blank,blank,,,blank,blank
+BRP,,,blank,blank,,,blank,blank
+STM,,,blank,blank,,,blank,blank
+NRO,,,blank,blank,,,blank,blank
+NYP,,,first two-row,first two-row,,,first two-row,first two-row
+NWK,,,,,,,,
+EWR,,,,,,,,
+MET,,,,,,,,
+NBK,,,,,,,,
+PJC,,,,,,,,
+TRE,,,,,,,,
+PHL,,,,,,,,
+WIL,,,,,,,,
+ABE,,,,,,,,
+BAL,,,,,,,,
+BWI,,,,,,,,
+NCR,,,,,,,,
+WAS,,,,,,,,
+ALX,,,,,,,,
+BCV,,,,,,,,
+MSS,,,,,,,,
+CLP,,,,,,,,
+CVS,,,,,,,,
+LYH,,,,to<br>Chicago,,,,
+RNK,,,last,blank,last,last,last,to<br>New Orleans

@@ -1,0 +1,12 @@
+{
+    "title": "California Zephyr Timetable",
+    "heading": "Amtrak's California Zephyr",
+    "reference_date": "20220613",
+    "bottom_text": "<b>Local connecting trains</b> are provided: <br>at Chicago and Naperville by <a href=\"https://metra.com\">Metra</a>, <br>at Denver by <a href=\"https://www.rtd-denver.com\">RTD</a>, <br>at Provo and Salt Lake City by <a href=\"https://www.rideuta.com/\">Utah Transit Authority</a> Frontrunner and TRAX services, <br>at Sacramento by <a href=\"http://www.sacrt.com/\">Sacramento RT</a> Light Rail, <br>and at Richmond by <a href=\"https://www.bart.gov\">BART</a> with connections to San Francisco.",
+    "key_on_right": "true",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "key_tz": "true",
+    "for_rpa": "true"
+}

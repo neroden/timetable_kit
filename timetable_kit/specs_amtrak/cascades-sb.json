@@ -1,0 +1,9 @@
+{
+    "title": "Cascades Southbound",
+    "heading": "Amtrak's Cascades: Southbound",
+    "reference_date": "20220614",
+    "key_baggage": "true",
+    "for_rpa": "true",
+    "key_bus": "true",
+    "use_bus_icon_in_cells": "true"
+}

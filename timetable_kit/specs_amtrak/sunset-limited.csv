@@ -1,0 +1,25 @@
+,1,access,stations,timezone,2
+column-options,ardp days long-days-box,,,,reverse ardp days
+updown,,,,,
+NOL,1 first,,,,2 last
+SCH,,,,,
+NIB,,,,,
+LFT,,,,,
+LCH,,,,,
+BMT,,,,,
+HOS,,,,,
+SAS,,,,,
+DRT,,,,,
+SND,,,,,
+ALP,,,,,
+ELP,,,,,
+DEM,,,,,
+LDB,,,,,
+BEN,,,,,
+TUS,,,,,
+MRC,,,,,
+YUM,,,,,
+PSN,,,,,
+ONA,,,,,
+POS,,,,,
+LAX,1 last,,,,2 first

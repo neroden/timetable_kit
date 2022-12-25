@@ -25,14 +25,38 @@ this is done by adding a "title" field as the first child of the SVG.
 
 This is retained as a sample for future conversion to inline SVGs.
 
-baggage_ncn.svg
+baggage-ncn.svg
 ---------------
 I wasn't happy with either of these, so I went to a lot of effort to make a "hollow briefcase" of my own.
 This is on a 512x512 grid like the FontAwesome briefcase, but is a different shape and size,
 optimized for very small font sizes.
 
-This version, which is also simplified and cleaned up, is in baggage_ncn.svg.
+This version, which is also simplified and cleaned up, is in baggage-ncn.svg.
 This one WORKS at very small print sizes.
+
+
+Bus Icons
+=========
+
+bus-solid.svg, bus-simple-solid.svg, and van-shuttle-solid.svg are from Font Awesome Free, under the CC BY 4.0 license.
+
+BSicon_BUS.svg: public domain, from https://commons.wikimedia.org/wiki/File:BSicon_BUS.svg by Jake the Editor Man in 2008
+
+
+bus-ncn.svg
+-----------
+Again, I made my own.  The reasonably-editable version is bus-ncn-shapes.svg.
+The version reduced to a single path is bus-ncn.svg.
+
+This has a different ratio: 2 ems wide to 1 em high.  Because of the shape of buses.
+
+This looks OK at small print sizes.  Oddly the shapes version renders differently from
+the all-one-path version.
+
+Bed Icon
+========
+
+bed-solid.svg: From Font Awesome Free
 
 Accessibility Icons
 ===================
@@ -60,6 +84,7 @@ https://commons.wikimedia.org/wiki/File:No_Accessibility_-_Original_Handicapped_
 
 This color still looks right in greyscale, which is important.
 
+
 Bed Icon
 ========
 
@@ -67,6 +92,15 @@ bed-solid.svg
 -------------
 The "bed-solid" SVG image is from Font Awesome Free.
 In SVG form, it is subject to the CC BY 4.0 license, which requires only attribution.
+
+
+Person Icons
+============
+
+person-ncn.svg
+--------------
+I made this from scratch on a 512x512 grid.  Easy.
+
 
 rpa-logo.svg and rpa-logo-orig.svg
 ==================================

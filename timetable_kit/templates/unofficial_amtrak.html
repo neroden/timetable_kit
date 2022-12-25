@@ -1,12 +1,16 @@
 {# unofficial_amtrak.html
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-#}<div class="unofficial-amtrak"><p>This timetable is not an official Amtrak product.<br>{#
+#}{% from "macros.html" import br_or_space %}{#
+#}<div class="unofficial-amtrak"><p class="credit-paragraph">{#
+#}This timetable is not an official Amtrak product.{#
+#}{{ br_or_space(key_on_right or not landscape) }}{#
 #}It was produced as a public service by {{ author }}{#
 #}{% if for_rpa %}{#
-#} for <a href="https://www.railpassengers.org/resources/amtrak-timetables/">Rail Passengers Association</a>{#
+#}{{ br_or_space(key_on_right) }}{#
+#}for <a href="https://www.railpassengers.org/resources/amtrak-timetables/">Rail Passengers Association</a>{#
 #}{% endif %}{#
-#},<br>{#
-#}based on <a href="{{gtfs_url}}">GTFS data</a>{#
-#} released to the public by Amtrak, and on other data sources.</br>{#
-#}<b>This timetable is provided AS IS.  No warranties are provided and all warranties are disclaimed.</b></p></div>
+#},{{ br_or_space(key_on_right) }}based on <a href="{{gtfs_url}}">GTFS data</a>{#
+#} released to the public by Amtrak,{{ br_or_space(key_on_right) }}and on other data sources.</br>{#
+#}<b>This timetable is provided AS IS.{{ br_or_space(key_on_right) }}{#
+#}No warranties are provided{{ br_or_space(key_on_right) }}and all warranties are disclaimed.</b></p></div>

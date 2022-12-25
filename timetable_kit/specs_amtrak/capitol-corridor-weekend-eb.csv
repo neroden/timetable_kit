@@ -1,0 +1,23 @@
+,stations,access,720,724,728,732,736,742,744,746,748,14
+column-options,,,ardp,,,,,,,,,
+route-name,,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+SJC,,,,,,,,,,,,
+SCC,,,,,,,,,,,,
+GAC,,,,,,,,,,,,
+FMT,,,,,,,,,,,,
+HAY,,,,,,,,,,,,
+OAC,,,,,,,,,,,,
+OKJ,,,720 first,,,,,,,,,
+EMY,,,,,,,,,,,,
+BKY,,,,,,,,,,,,
+RIC,,,,,,,,,,,,
+MTZ,,,,,,,,,,,,
+SUI,,,,,,,,,,,,
+FFV,,,,,,,,,,,,
+DAV,,,,,,,,,,,,
+SAC,,,720 last,724 last,728 last,,,,744 last,746 last,748 last,
+RSV,,,,,,,,,,,,to Chico
+RLN,,,,,,,,,,,,& Oregon
+ARN,,,,,,,736 last,,,,,
+COX,,,,,,,,,,,,

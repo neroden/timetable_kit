@@ -78,6 +78,18 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
         (city_state_name, suffix) = station_name.split(" (", 1)
         (station_code, _) = suffix.split(")", 1)
 
+    # Special cases for exceptionally long city/state names.
+    # Insert line breaks.
+    raw_city_state_name = city_state_name
+    match raw_city_state_name:
+        case "Grand Canyon Village, AZ":
+            city_state_name = "Grand Canyon<br>Village, AZ"
+        case "Essex Junction-Burlington, VT":
+            city_state_name = "Essex Junction<br>-Burlington, VT"
+        # You would think you'd want to do St. Paul-Minneapolis,...
+        # but there's plenty of horizontal space in the EB timetable
+        # and no vertical space
+
     if major:
         enhanced_city_state_name = "".join(
             ["<span class=major-station >", city_state_name, "</span>"]
@@ -91,7 +103,11 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
         ["<span class=station-footnotes>(", station_code, ")</span>"]
     )
 
-    if facility_name:
+    # It looks stupid to see "- Amtrak Station."
+    # I know it's there to distinguish from bus stops, but come on.
+    # Let's assume it's the Amtrak station unless otherwise specified.
+    # Also saves critical vertical space on Empire Builder timetable.
+    if facility_name and facility_name != "Amtrak Station":
         enhanced_facility_name = "".join(
             ["<br><span class=station-footnotes>", " - ", facility_name, "</span>"]
         )

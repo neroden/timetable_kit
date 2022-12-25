@@ -13,12 +13,17 @@ import argparse
 import datetime
 
 # import pandas as pd # we call pandas routines but only on dataframes
-# import gtfs_kit as gk
+
+# We may not actually need these directly?
+import gtfs_kit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
+from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.initialize import filter_feed_for_utilities
+
 from timetable_kit import amtrak  # For the path of the default GTFS feed
 from timetable_kit.debug import debug_print, set_debug_level
 
@@ -54,6 +59,18 @@ def make_argparser():
                 and the output will be tt_51_stations.csv.
              """,
     )
+    parser.add_argument(
+        "trip",
+        help="""This specifies which trip_short_name to use to generate the list of stations.
+                For instance, if it's "51", train 51 will be used,
+                and the output will be tt_51_stations.csv.
+             """,
+        nargs="?",
+    )
+    parser.add_argument(
+        "--day",
+        help="""Restrict to trains/buses operating on a particular day of the week""",
+    )
     return parser
 
 
@@ -74,26 +91,30 @@ if __name__ == "__main__":
         # Default to Amtrak
         gtfs_filename = amtrak.gtfs_unzipped_local_path
 
-    if args.reference_date:
-        reference_date = int(args.reference_date.strip())
-    else:
-        # Use tomorrow as the reference date.
-        # After all, you aren't catching a train today, right?
-        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-        reference_date = int(tomorrow.strftime("%Y%m%d"))
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-
-    tsn = args.trip_short_name
-    if not tsn:
-        raise ValueError("Can't generate a station list without a specific trip.")
-    tsn = tsn.strip()  # Avoid whitespace problems
-
     master_feed = initialize_feed(gtfs=gtfs_filename)
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+
+    today_feed = filter_feed_for_utilities(
+        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    )
+
+    optional_tsn = args.trip_short_name
+    positional_tsn = args.trip
+    match (optional_tsn, positional_tsn):
+        case (None, None):
+            raise ValueError("Can't generate a station list without a specific trip.")
+        case (None, tsn) | (tsn, None):
+            pass
+        case (_, _):
+            raise ValueError(
+                "Specified trip_short_name two different ways.  Use only one."
+            )
+    tsn = tsn.strip()  # Avoid whitespace problems
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
-    output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
-    station_list_df.to_csv(output_filename, index=False)
+    print(station_list_df)
+    # Consider dumping to CSV... but don't right now
+    # output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
+    # station_list_df.to_csv(output_filename, index=False)
     # Note: this will put "stop_id" in top row, which is OK
     sys.exit(0)

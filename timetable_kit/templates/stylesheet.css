@@ -5,13 +5,12 @@
 
 {% include "licensing.txt" %}
 */{% endif %}{# external_stylesheet #}
-{% include "page.css" %}
 {{ font_faces }}
 {% include "font_choice.css" %}
 {% include "font_size.css" %}
 {{ icons }}
-{% include "page_header.css" %}
-{% include "logo.css" %}
+{% include "page_standard.css" %}
+{% if for_rpa %}{% include "rpa_logo.css" %}{% endif %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
 {% include "timetable_headers.css" %}
@@ -24,3 +23,4 @@
 {% include "time_boxes_extras.css" %}
 {% include "symbol_key.css" %}
 {% include "check_amtrak.css" %}
+{% include "credit.css" %}

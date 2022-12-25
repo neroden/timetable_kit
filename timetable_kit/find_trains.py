@@ -4,22 +4,34 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Find all the trains from station A to station B (by all routes).
+Two modes of invocation
+./find_trains STATION:
+Find all the trains (& buses, etc.) which stop at STATION.
+
+./find_trains STATION_A STATION_B:
+Find all the trains (& buses, etc.) from station A to station B (by all routes).
 
 Sort by departure time.
+Filter by reference date.
 Optionally filter by day of week.
-Definitely filter by reference date.
 """
 
+import sys  # for exit
 import argparse
+import datetime
+
+import gtfs_kit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
+from feed_enhanced import gtfs_days
 
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.initialize import filter_feed_for_utilities
 
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.tsn import make_trip_id_to_tsn_dict
+from timetable_kit.tsn import stations_list_from_tsn
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -29,9 +41,35 @@ from timetable_kit.timetable_argparse import (
 )
 
 
-def find_trains(stop_one, stop_two, *, feed, trip_id_to_tsn):
+def find_connecting_buses_from_stop(
+    stop: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+) -> list[str]:
     """
-    Returns a list of trip_short_names (train numbers) which stop at both stops.
+    Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
+
+    Preferably, use a feed restricted to a single day (today_feed).  Not required though.
+
+    Requires a trip_id_to_tsn map (dict).
+
+    Consider returning trip_ids instead. FIXME
+    Must be passed a feed, and one stop_id.
+    """
+    # Start by filtering the stop_times for stop one.
+    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop]
+    sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
+    trip_ids = sorted_filtered_stop_times["trip_id"].array
+    tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
+
+    # Should still be in the correct order
+    print("Found trips at", stop, " : ", tsns)
+    return tsns
+
+
+def find_trains(
+    stop_one: str, stop_two: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+) -> list[str]:
+    """
+    Returns a list of trip_short_names (train numbers) which stop at both stops, in that order.
 
     Preferably, use a feed restricted to a single day (today_feed).  Not required though.
 
@@ -117,10 +155,16 @@ def make_spec(route_ids, feed):
 
 def make_argparser():
     parser = argparse.ArgumentParser(
-        description="""Produce list of trains (trip_short_name) from stop one to stop two.
-                        Useful for making sure you found all the trains from NYP to PHL.
-                        Should be reviewed manually before generating tt-spec, especially for
-                        days-of-week issues.
+        description="""
+                    With ONE argument, produce list of trains/buses (trip_short_name) which stop at that stop.
+                    Useful for finding all the connecting buses at FLG.
+
+                    With TWO arguments, produce list of trains/buses (trip_short_name) which stop at the first stop, and later at the last stop.
+                    Useful for making sure you found all the trains from NYP to PHL.
+
+                    In either case, results are sorted by departure time at the first stop.
+
+                    The output should always be reviewed manually before generating tt-spec, especially for days-of-week issues.
                     """,
     )
     add_gtfs_argument(parser)
@@ -133,34 +177,59 @@ def make_argparser():
     parser.add_argument(
         "stop_two",
         help="""Last stop""",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--day",
+        help="""Restrict to trains/buses operating on a particular day of the week""",
+    )
+    parser.add_argument(
+        "--extent",
+        help="""Display first and last stations for each trip""",
+        action="store_true",
     )
     return parser
 
 
 # MAIN PROGRAM
 if __name__ == "__main__":
-    parser = make_argparser()
-    args = parser.parse_args()
+    argparser = make_argparser()
+    args = argparser.parse_args()
 
     set_debug_level(args.debug)
 
     gtfs_filename = args.gtfs_filename
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    reference_date = args.reference_date
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+    today_feed = filter_feed_for_utilities(
+        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    )
 
-    stop_one = args.stop_one
-    stop_two = args.stop_two
-    print("Finding trains from", stop_one, "to", stop_two)
-
-    # TODO: figure out how to filter by day of week
-    # today_monday_feed = today_feed.filter_by_day_of_week(monday=True)
-    set_debug_level(2)
-
-    # Make the two interconverting dicts
+    # Make the two interconverting dicts -- actually we only need one of them
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
     # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
 
-    find_trains(stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+    stop_one = args.stop_one
+    stop_two = args.stop_two
+
+    if stop_one is None:
+        argparser.print_usage()
+        sys.exit(1)
+    if stop_two is None:
+        print("Finding trips which stop at", stop_one)
+        tsns = find_connecting_buses_from_stop(
+            stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+        )
+    else:
+        print("Finding trips from", stop_one, "to", stop_two)
+        tsns = find_trains(
+            stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+        )
+
+    if args.extent:
+        # We want to print first and last stops for each.
+        for tsn in tsns:
+            station_list_df = stations_list_from_tsn(today_feed, tsn)
+            first_station = station_list_df.head(1).item()
+            last_station = station_list_df.tail(1).item()
+            print(tsn, first_station, last_station, sep="\t")

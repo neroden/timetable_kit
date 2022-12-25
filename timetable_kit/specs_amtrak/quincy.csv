@@ -1,0 +1,15 @@
+,381,5,3,383,access,station,380,4,382
+column-options,,,,,,,reverse,reverse,reverse
+route-name,,,,,,,,,
+days,CHI,CHI,CHI,CHI,,,CHI,CHI,CHI
+updown,,,,,,,,,
+CHI,first,first,first,first,,,last,last,last
+LAG,,,,,,,,,
+NPV,,,,,,,,,
+PLO,,,,,,,,,
+MDT,,,,,,,,,
+PCT,,,,,,,,,
+KEE,,,,,,,,,
+GBB,,,,,,,,,
+MAC,,to Denver,to Kansas City,,,,,from Kansas City,
+QCY,last,& California,& California,last,,,first,& California,first

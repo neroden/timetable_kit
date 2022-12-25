@@ -1,0 +1,53 @@
+,7 / 27,access,station,timezone,8 / 28
+column-options,ardp days,,,,ardp reverse days
+updown,,,,,
+CHI,7 first,,,,8 last
+GLN,,,,,
+MKE,,,,,
+CBS,,,,,
+POG,,,,,
+WDL,,,,,
+TOH,,,,,
+LSE,,,,,
+WIN,,,,,
+RDW,,,,,
+MSP,,,,,
+SCD,,,,,
+SPL,,,,,
+DLK,,,,,
+FAR,,,,,
+GFK,,,,,
+DVL,,,,,
+RUG,,,,,
+MOT,,,,,
+STN,,,,,
+WTN,,,,,
+WPT,,,,,
+GGW,,,,,
+MAL,,,,,
+HAV,,,,,
+SBY,,,,,
+CUT,,,,,
+BRO,,,,,
+GPK,,,,,
+ESM,,,,,
+WGL,,,,,
+WFH,,,,,
+LIB,,,,,
+SPT,,,,,
+SPK,7 last,,,,8 first
+,<div style="text-align: center"><hr>Train <b>#7</b> to Seattle</div>,,,,<div style="text-align: center"><hr>Train <b>#8</b> from Seattle</div>
+SPK,7 first,,,,8 last
+EPH,,,,,
+WEN,,,,,
+LWA,,,,,
+EVR,,,,,
+EDM,,,,,
+SEA,7 last,,,,8 first
+,<div style="text-align: center"><hr>Train <b>#27</b> to Portland</div>,,,,<div style="text-align: center"><hr>Train <b>#28</b> from Portland</div>
+SPK,27 first,,,,28 last
+PSC,,,,,
+WIH,,,,,
+BNG,,,,,
+VAN,,,,,
+PDX,27 last,,,,28 first

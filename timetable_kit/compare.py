@@ -13,12 +13,12 @@ Used to see how many services with different dates are actually the same service
 import argparse
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 
 # My packages: Local module imports
 from timetable_kit.debug import set_debug_level, debug_print
 
-# This one monkey-patches gk.Feed (sneaky) so must be imported early.  This IS used.
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
 
 # To intialize the feed -- does type changes
@@ -58,9 +58,12 @@ def compare_stop_lists(base_trip, trips, *, feed):
         stop_times = feed.get_single_trip_stop_times(trip.trip_id)
         stop_times = stop_times.drop(["trip_id"], axis="columns")
         # Use powerful features of DataTable
-        comparison = base_stop_times.compare(
-            stop_times, align_axis="columns", keep_shape=True
-        )
+        try:
+            comparison = base_stop_times.compare(
+                stop_times, align_axis="columns", keep_shape=True
+            )
+        except:
+            print("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
             print(
                 " ".join(

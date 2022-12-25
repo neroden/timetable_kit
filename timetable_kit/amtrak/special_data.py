@@ -16,14 +16,26 @@ known problems with Amtrak's GTFS data, and similar.
 # GLOBAL VARIABLES
 #
 # Known problems in Amtrak data
-global_bad_service_ids = [
-    2819372,
-]  # Cardinal one-day service when it doesn't run on that day
+global_bad_service_ids = []
+#    2819372, # Cardinal one-day service when it doesn't run on that day
 
 
-def is_bus(train_number):
-    """Is this a bus?"""
-    if int(train_number) >= 3000:
+def is_connecting_service(tsn):
+    """Is this a connecting, non-Amtrak service?"""
+
+    # TODO: converet to use agency data, and push "uphill"
+    # Currently this only runs on non-buses (generally trains)
+
+    # Amtrak's train numbers are all numbers.
+    # For merged datasets such as the Hartford Line, the train numbers aren't numbers.
+    # Sooo....
+    if not tsn.isdigit():
+        # There's stuff other than digits in this TSN.
+        # So it isn't Amtrak.
+        return True
+    if int(tsn) >= 3000:
+        # Amtrak's high-numbered services are non-Amtrak.
+        # We COULD check the agency data, and we probably should
         return True
     return False
 
@@ -61,9 +73,6 @@ sleeper_trains = set(
         "53",  # Auto Train
         "58",
         "59",  # CONO
-        "65",
-        "66",
-        "67",  # Night Owl
         "91",
         "92",  # Silver Star
         "97",
@@ -115,11 +124,14 @@ other_checked_baggage_day_trains = (
     "74",
     "75",
     "76",  # Piedmont
+    "77",
+    "78",
     "89",
     "90",  # Palmetto
 )
 
 # Assemble these trains as a set.  Ugly!
+# Stupid technical issue with #448/449 not having a baggage car!
 checked_baggage_trains = set(
     [
         *sleeper_trains,
@@ -129,7 +141,7 @@ checked_baggage_trains = set(
         *hiawatha_trains,
         *other_checked_baggage_day_trains,
     ]
-)
+) - set(["448", "449"])
 
 
 def train_has_checked_baggage(trip_short_name: str) -> bool:
@@ -144,7 +156,7 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
 # (Empire doesn't call out NEC stations on connecting trains)
-# (Vermonter only callse out NY and DC on NEC)
+# (Vermonter only calls out NY and DC on NEC)
 major_stations_list = (
     "BOS",  # NEC timetable stations first
     "NHV",
@@ -155,11 +167,13 @@ major_stations_list = (
     "LYH",  # Virginia service timetable
     "RVR",
     "NFK",
+    "RNK",  # Roanoke service looks better if boldfaced, because it's a terminus
+    "NPN",  # Likewise Newport News
     "HAR",  # Keystone timetable
-    "PIT",
+    "PGH",
     "ALB",  # Empire timetable
     "BFX",
-    "TWO",
+    "TWO",  # Maple Leaf
     "MTR",  # Adirondack
     "ESX",  # Vermonter
     "SPG",
@@ -180,6 +194,7 @@ major_stations_list = (
     "PTH",
     "DET",
     "PNT",
+    "BTL",  # Amtrak didn't mark Battle Creek, but we should
     "CHM",  # CONO/Illini/Saluki
     "CDL",
     "MEM",
@@ -197,9 +212,34 @@ major_stations_list = (
     "SAC",
     "SKN",  # San Joaquins
     "BFD",
+    "MSP",  # EB -- Amtrak emphasized nothing on EB, so I picked some
+    "MOT",
+    "HAV",
+    "SPK",
+    "PDX",
+    "SEA",
     "DEN",  # CZ -- Amtrak didn't, I should
     "SLC",
     "EMY",  # CZ
+    "ABQ",  # SWC -- Amtrak didn't
+    "FLG",
+    "DAL",  # TE -- Amtrak emphasized nothing, so I picked some
+    "FTW",  # TE / Heartland Flyer
+    "OKC",  # Heartland Flyer -- Amtrak emphasized nothing
+    "SAS",  # TE/SL
+    "HOS",  # SL -- Amtrak emphasized nothing, so I picked some
+    "ELP",
+    "TUS",
+    "CHS",  # Palmetto -- Amtrak emphasized nothing, so I picked Charleston
+    "SAV",  # Silver Service -- Amtrak emphasized nothing, so I picked some
+    "JAX",
+    "ORL",
+    "TPA",
+    "MIA",
+    "BTN",  # Burlington -- for Ethan Allen Express
+    "WMA",  # Grand Canyon Railway -- Williams is major
+    "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
+    # ...but we patch the station name in code, elsewhere.
 )
 
 

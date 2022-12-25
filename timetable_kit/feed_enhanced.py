@@ -12,11 +12,25 @@ There is also an extraction method to pull out a single trip record from a reduc
 with error checking to make sure there's exactly one trip.
 """
 from operator import not_  # Needed for bad_service_id filter
-import gtfs_kit as gk
+import gtfs_kit
 from timetable_kit.errors import (
     GTFSError,
     NoTripError,
     TwoTripsError,
+)
+
+"""
+gtfs_days is the list of all the days (Monday through Sunday) which form gtfs column headers,
+appropriately lowercased for the column headers.
+"""
+gtfs_days = (
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
 )
 
 
@@ -33,7 +47,7 @@ def filter_by_dates(self, first_date, last_date):
     Used for nearly all functions to get timetables effective for a single date
     """
     # N.B. Python's default string lexical compare is fine for GTFS date strings
-    # But note I'm currently using integer compare instead
+    # And they MUST be strings
     new_feed = self.copy()
     # Calendar must stop on or after the first date of the period...
     filtered_calendar = self.calendar[self.calendar.end_date >= first_date]
@@ -53,18 +67,10 @@ def filter_by_dates(self, first_date, last_date):
 
 def filter_by_day_of_week(
     self,
-    *,
-    monday=False,
-    tuesday=False,
-    wednesday=False,
-    thursday=False,
-    friday=False,
-    saturday=False,
-    sunday=False,
+    day,
 ):
     """
-    Filters the feed to trips which are running on all of the selected days.
-    (TODO: I'd rather do "at least one" but it's harder to write)
+    Filters the feed to trips which are running on the selected day.
     - Filters calendar (direct)
     - Filters trips (by service_ids in calendar)
     - Filters stop_times (by trip_ids in trips)
@@ -82,26 +88,13 @@ def filter_by_day_of_week(
     8010, 8011, 8012, 8013, 8014, 8015, 8033,
     8042, 7203, )
     """
-    # NOTE this assumes bool type conversion.
-    # consider doing with original GTFS 1/0 data.
-    # FIXME
+    # This assumes integer types for the day column in the calendar.
+    if day not in gtfs_days:
+        raise InputError("Expected GTFS day name")
+
     new_feed = self.copy()
-    calendar = self.calendar
-    if monday:
-        calendar = calendar[calendar.monday == True]
-    if tuesday:
-        calendar = calendar[calendar.tuesday == True]
-    if wednesday:
-        calendar = calendar[calendar.wednesday == True]
-    if thursday:
-        calendar = calendar[calendar.thursday == True]
-    if friday:
-        calendar = calendar[calendar.friday == True]
-    if saturday:
-        calendar = calendar[calendar.saturday == True]
-    if sunday:
-        calendar = calendar[calendar.sunday == True]
-    new_feed.calendar = calendar
+    # This is where we filter the calendar by the value in the day column:
+    new_feed.calendar = self.calendar[self.calendar[day] == 1]
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
@@ -246,6 +239,8 @@ def filter_by_trip_short_names(self, trip_short_names):
     - filtered stop_times is used for getting single trip stop times, but requires unique trip_id
     - filtered calendar is used for finding validity dates for a timetable
     Also used to speed up main timetable routine, by filtering irrelevancies out of stop_times.
+
+    This is a pretty slow process.  Don't call it too often!
     """
     new_feed = self.copy()
     # First filter the trips
@@ -330,26 +325,26 @@ def get_trip_short_name(self, trip_id):
 
 
 # Monkey patch starts here
-gk.Feed.filter_by_dates = filter_by_dates
-gk.Feed.filter_by_day_of_week = filter_by_day_of_week
-gk.Feed.filter_by_route_ids = filter_by_route_ids
-gk.Feed.filter_by_service_ids = filter_by_service_ids
-gk.Feed.filter_bad_service_ids = filter_bad_service_ids
-gk.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
-gk.Feed.filter_find_one_day_calendars = filter_find_one_day_calendars
-gk.Feed.filter_by_trip_short_names = filter_by_trip_short_names
-gk.Feed.filter_by_trip_ids = filter_by_trip_ids
-gk.Feed.get_single_trip = get_single_trip
-gk.Feed.get_single_trip_stop_times = get_single_trip_stop_times
-gk.Feed.get_trip_short_name = get_trip_short_name
+gtfs_kit.Feed.filter_by_dates = filter_by_dates
+gtfs_kit.Feed.filter_by_day_of_week = filter_by_day_of_week
+gtfs_kit.Feed.filter_by_route_ids = filter_by_route_ids
+gtfs_kit.Feed.filter_by_service_ids = filter_by_service_ids
+gtfs_kit.Feed.filter_bad_service_ids = filter_bad_service_ids
+gtfs_kit.Feed.filter_remove_one_day_calendars = filter_remove_one_day_calendars
+gtfs_kit.Feed.filter_find_one_day_calendars = filter_find_one_day_calendars
+gtfs_kit.Feed.filter_by_trip_short_names = filter_by_trip_short_names
+gtfs_kit.Feed.filter_by_trip_ids = filter_by_trip_ids
+gtfs_kit.Feed.get_single_trip = get_single_trip
+gtfs_kit.Feed.get_single_trip_stop_times = get_single_trip_stop_times
+gtfs_kit.Feed.get_trip_short_name = get_trip_short_name
 
 # TESTING CODE
 if __name__ == "__main__":
     from pathlib import Path
 
-    gtfs_filename = "./gtfs-amtrak.zip"
+    gtfs_filename = "./amtrak/GTFS.zip"
     gtfs_path = Path(gtfs_filename)
-    feed = gk.read_feed(gtfs_path, dist_units="mi")
+    feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     print(feed.calendar)
     date_filtered_feed = feed.filter_by_dates("20220224", "20220224")
     print(date_filtered_feed.calendar)

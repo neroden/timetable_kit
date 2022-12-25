@@ -1,0 +1,27 @@
+,301,303 / 313,21,3,305,307,access,station,300,302,22,4,304 / 314,306
+column-options,ardp,ardp,ardp,,,,,,ardp reverse,reverse,ardp reverse,reverse,ardp reverse,reverse
+route-name,,,,,,,,,,,,,,
+days,STL,STL,STL,KCY,STL,STL,,,STL,STL,STL,KCY,STL,STL
+updown,,,,,,,,,,,,,,
+CHI,first,303 first,first,first,first,first,,,last,last,last,last,304 last,last
+SMT,,,,,,,,,,,,,,
+JOL,,,,,,,,,,,,,,
+DWT,,,,,,,,,,,,,,
+PON,,,,,,,,,,,,,,
+BNL,,,,,,,,,,,,,,
+LCN,,,,,,,,,,,,,,
+SPI,,,,,,,,,,,,,,
+CRV,,,,,,,,,,,,,,
+ALN,,,,,,,,,,,,,,
+STL,last,303 last,,,last,last,,,first two-row,first two-row,,,304 first,first two-row
+,,"<div style=""text-align:center;""><b>#313</b></div>","<div style=""text-align:center;"">to Texas</div>",3 blank,,,,,,,"<div style=""text-align:center;"">from Texas</div>",4 blank,"<div style=""text-align:center;""><b>#314</b></div>",
+STL,blank,313 first,blank,,blank,blank,,,blank,blank,blank,,314 last,blank
+KWD,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank
+WAH,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank
+HEM,blank,,blank,"<div style=""text-align:center;"">via</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">via</div>",,blank
+JEF,blank,,blank,"<div style=""text-align:center;"">Galesburg</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">Galesburg</div>",,blank
+SED,blank,,blank,"<div style=""text-align:center;"">& La Plata</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">& La Plata</div>",,blank
+WAR,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank
+LEE,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank
+IDP,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank
+KCY,blank,313 last,blank,last,blank,blank,,,blank,blank,blank,first,314 first,blank

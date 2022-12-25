@@ -20,7 +20,7 @@ Before setting the entire timetable, we did the following:
 .tt-table, .symbol-key, .timetable_kit_credit, .services-header-text {
 
 #}
-body, .services-header-text, .timezone-header-text {
+body, .services-header-text, .access-header-text, .timezone-header-text {
     font-size: {{font_size}};{% if font_is_tiny %}
     font-variant-ligatures: no-common-ligatures;{% endif %}
 }

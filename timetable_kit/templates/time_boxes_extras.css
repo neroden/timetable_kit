@@ -25,6 +25,12 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: center;
     width: 1em;
 }
+.box-bus {
+    /* Bus icon (or blank space) */
+    display: inline-block;
+    text-align: center;
+    width: 1.5em;
+}
 .box-rd {
     /* Single bold letter like R or D: fixed width */
     display: inline-block;
@@ -48,7 +54,7 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     display: inline-block;
     text-align: left;
     padding-right: 0.5mm;
-    width: 6.75em;
+    width: 7.25em;
 }
 .box-days-short {
     /* Shorter box for Mo (one day), align left */
@@ -56,12 +62,4 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: left;
     padding-right: 0.5mm;
     width: 2em;
-}
-
-.box-tz {
-    /* Time zone letter */
-    display: inline-block;
-    text-align: left;
-    text-weight: normal;
-    width: 0.8em;
 }

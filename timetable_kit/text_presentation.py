@@ -12,7 +12,7 @@ All the "character twiddling" operations are in here.
 """
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 from collections import namedtuple
 
 from datetime import datetime, timedelta  # for time zones
@@ -21,7 +21,60 @@ from zoneinfo import ZoneInfo  # still for time zones
 # These are mine
 from timetable_kit.errors import GTFSError, FutureCodeError
 from timetable_kit.debug import debug_print
-from timetable_kit.icons import get_baggage_icon_html
+from timetable_kit.tsn import train_spec_to_tsn
+from timetable_kit.icons import (
+    get_baggage_icon_html,
+    get_bus_icon_html,
+    get_accessible_icon_html,
+)
+
+
+# These look thin and there isn't an "up and right" arrow.
+long_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2193;</div>',
+    "uparrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2191;</div>',
+    "downrightarrow": '<div style="text-align: right; font-size: 120%; font-weight: bold;">&#x2937;</div>',
+}
+
+# The arrowheads on these are too hard to see.
+directional_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center;">&#x2b07;</div>',
+    "uparrow": '<div style="text-align: center;">&#x2b06;</div>',
+    "downrightarrow": '<div style="text-align: right">&#x2b0a;</div>',
+}
+
+# These work, but only at 120%.
+thick_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87b;</div>',
+    "uparrow": '<div style="text-align: center; font-size: 120%;">&#x1f879;</div>',
+    "downrightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87e;</div>',
+    "uprightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87d;</div>',
+    "rightarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87a;</div>',
+}
+
+
+cell_substitution_map = thick_cell_substitution_map
+
+
+def get_cell_substitution(cell_text: str) -> str:
+    """
+    Given special simple-substitution cell texts, provide the substitution.
+
+    "blank" -> becomes a single space, for a white blank cell
+    "downarrow" -> suitable downwards pointing arrow in HTML/Unicode
+    "uparrow" -> suitable upwards pointing arrow in HTML/Unicode
+    "downrightarrow" -> suitable downwards-then-right pointing arrow in HTML/Unicode
+    "uprightarrow" -> suitable upwards-then-right pointing arrow in HTML/Unicode
+
+    Otherwise, return None.
+    """
+    cell_text = cell_text.strip()
+    if cell_text not in cell_substitution_map:
+        return None
+    return cell_substitution_map[cell_text]
 
 
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
@@ -38,17 +91,23 @@ def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     return iso_str
 
 
-def get_zonediff(local_zone, base_zone):
+def get_zonediff(local_zone, base_zone, reference_date):
     """
     Get the hour difference which must be applied to a time in base_zone to get a time in local_zone
 
     While I hate to reimplement time calculations, GTFS time data is really wacky.
     It may be easiest to hard code this, but this is the "clean" implementation...
+
+    The messiest part is Arizona.  Because of Arizona, which does not observe DST,
+    we have to use the right base date, which should be the reference date.
     """
     base = ZoneInfo(base_zone)
     local = ZoneInfo(local_zone)
 
-    dt = datetime.today()  # This is utterly fucking arbitrary
+    # GTFS dates are in YYYYMMDD format, as a string.
+    # This can be decrypted in python with the "%Y%m%d" format string.
+    dt = datetime.strptime(reference_date, "%Y%m%d")
+
     diff_timedelta = local.utcoffset(dt) - base.utcoffset(dt)
     one_hour = timedelta(hours=1)
     no_time = timedelta(hours=0)
@@ -62,20 +121,79 @@ def get_zonediff(local_zone, base_zone):
 
 # This is exceedingly US-centric, FIXME
 tz_letter_dict = {
-    "America/New_York": "E",
-    "America/Chicago": "C",
-    "America/Denver": "M",
-    "America/Los_Angeles": "P",
+    "America/New_York": "ET",
+    "America/Chicago": "CT",
+    "America/Denver": "MT",
+    "America/Phoenix": "MST",
+    "America/Los_Angeles": "PT",
 }
 
 
 def get_zone_str(zone_name, doing_html=False):
-    """Return a one-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
+    """Return a two-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
     letter = tz_letter_dict[zone_name]
     if doing_html:
         return "".join(['<span class="box-tz">', letter, "</span>"])
     else:
         return letter
+
+
+# This dictionary of special cases for daystring is easier to read
+# than hand-writing all the if-thens.
+# The special cases are ones which don't need the "rotation trick"
+# (or, in the case of SaSu, where we want to *avoid* it)
+daystring_special_cases = {
+    (1, 1, 1, 1, 1, 1, 1): "Daily",
+    # Missing only one day
+    (1, 1, 1, 1, 1, 1, 0): "Mo-Sa",
+    (0, 1, 1, 1, 1, 1, 1): "Tu-Su",
+    (1, 0, 1, 1, 1, 1, 1): "We-Mo",
+    (1, 1, 0, 1, 1, 1, 1): "Th-Tu",
+    (1, 1, 1, 0, 1, 1, 1): "Fr-We",
+    (1, 1, 1, 1, 0, 1, 1): "Sa-Th",
+    (1, 1, 1, 1, 1, 0, 1): "Su-Fr",
+    # Missing two consecutive days (including Mo-Fr)
+    (1, 1, 1, 1, 1, 0, 0): "Mo-Fr",
+    (0, 1, 1, 1, 1, 1, 0): "Tu-Sa",
+    (0, 0, 1, 1, 1, 1, 1): "We-Su",
+    (1, 0, 0, 1, 1, 1, 1): "Th-Mo",
+    (1, 1, 0, 0, 1, 1, 1): "Fr-Tu",
+    (1, 1, 1, 0, 0, 1, 1): "Sa-We",
+    (1, 1, 1, 1, 0, 0, 1): "Su-Th",
+    # Missing three consecutive days
+    (1, 1, 1, 1, 0, 0, 0): "Mo-Th",
+    (0, 1, 1, 1, 1, 0, 0): "Tu-Fr",
+    (0, 0, 1, 1, 1, 1, 0): "We-Sa",
+    (0, 0, 0, 1, 1, 1, 1): "Th-Su",
+    (1, 0, 0, 0, 1, 1, 1): "Fr-Mo",
+    (1, 1, 0, 0, 0, 1, 1): "Sa-Tu",
+    (1, 1, 1, 0, 0, 0, 1): "Su-We",
+    # Missing four consecutive days
+    (1, 1, 1, 0, 0, 0, 0): "Mo-We",
+    (0, 1, 1, 1, 0, 0, 0): "Tu-Th",
+    (0, 0, 1, 1, 1, 0, 0): "We-Fr",
+    (0, 0, 0, 1, 1, 1, 0): "Th-Sa",
+    (0, 0, 0, 0, 1, 1, 1): "Fr-Su",
+    (1, 0, 0, 0, 0, 1, 1): "Sa-Mo",
+    (1, 1, 0, 0, 0, 0, 1): "Su-Tu",
+    # Only running two consecutive days
+    # (including SaSu, which we need to avoid SuSa in -1 offset cases)
+    (1, 1, 0, 0, 0, 0, 0): "MoTu",
+    (0, 1, 1, 0, 0, 0, 0): "TuWe",
+    (0, 0, 1, 1, 0, 0, 0): "WeTh",
+    (0, 0, 0, 1, 1, 0, 0): "ThFr",
+    (0, 0, 0, 0, 1, 1, 0): "FrSa",
+    (0, 0, 0, 0, 0, 1, 1): "SaSu",
+    (1, 0, 0, 0, 0, 0, 1): "SuMo",
+    # Only running on one day a week
+    (1, 0, 0, 0, 0, 0, 0): "Mo",
+    (0, 1, 0, 0, 0, 0, 0): "Tu",
+    (0, 0, 1, 0, 0, 0, 0): "We",
+    (0, 0, 0, 1, 0, 0, 0): "Th",
+    (0, 0, 0, 0, 1, 0, 0): "Fr",
+    (0, 0, 0, 0, 0, 1, 0): "Sa",
+    (0, 0, 0, 0, 0, 0, 1): "Su",
+}
 
 
 def day_string(calendar, offset: int = 0) -> str:
@@ -87,6 +205,8 @@ def day_string(calendar, offset: int = 0) -> str:
 
     Use offset to get the string for stops which are more than 24 hours after initial depature.
     Beware of time zone changes!
+
+    I have had more requests for tweaks to this format than anything else!
     """
     days_of_service_list = calendar.to_dict("records")
     # if there are zero or duplicate service records, we error out.
@@ -99,22 +219,37 @@ def day_string(calendar, offset: int = 0) -> str:
         )
     days_of_service = days_of_service_list[0]
 
-    # Important fast exit: don't go through all the work if it's daily
-    if (
-        days_of_service["monday"]
-        and days_of_service["tuesday"]
-        and days_of_service["wednesday"]
-        and days_of_service["thursday"]
-        and days_of_service["friday"]
-        and days_of_service["saturday"]
-        and days_of_service["sunday"]
-    ):
-        return "Daily"
-
     # Use modulo to correct the offset to the range 0:6
     # Note timezone differences can lead to -1 offset.
     # Later stations on the route lead to positive offset.
     offset = offset % 7
+
+    # OK.  Fast encoding version here as a list of 1s and 0s.
+    days_of_service_vector = [
+        days_of_service["monday"],
+        days_of_service["tuesday"],
+        days_of_service["wednesday"],
+        days_of_service["thursday"],
+        days_of_service["friday"],
+        days_of_service["saturday"],
+        days_of_service["sunday"],
+    ]
+    # Do the offset rotation.
+    def rotate_right(l, n):
+        return l[-n:] + l[:-n]
+
+    days_of_service_vector = rotate_right(days_of_service_vector, offset)
+
+    # Try the lookup-table path.
+    try:
+        daystring = daystring_special_cases[tuple(days_of_service_vector)]
+        return daystring
+    except KeyError:
+        pass
+
+    # Lookup-table path failed.
+    # Now we have to do it the hard way, by just patching days of the week together.
+    # This probably means the days of non-operation are non-consecutive (MWF or whatever).
 
     # Now we get tricky.  We want the days of the week to line up as they cycle around the clock.
     # This is kind of messy!  We always use the order of the original, zero-offset day.
@@ -137,26 +272,6 @@ def day_string(calendar, offset: int = 0) -> str:
 
     if daystring == "":
         raise GTFSError("No days of operation?!?")
-
-    # This is all very well for the three-a-week overnight trains, but looks ugly
-    # for M-F, or SaSu trains.  Patch it up.
-
-    # This accounts for both the 0 and -1 offset cases.
-    if daystring == "MoTuWeThFr":
-        return "Mo-Fr"
-    # By special request, for the CONO
-    if daystring == "TuWeThFrSa":
-        return "Tu-Sa"
-    # Aw hell, let's try it
-    if daystring == "WeThFrSaSu":
-        return "We-Su"
-
-    # Known Empire Corridor issue with special-cased Fridays
-    if daystring == "MoTuWeTh":
-        return "Mo-Th"
-    # Needed for the -1 offset case.
-    if daystring == "SuSa":
-        return "SaSu"
 
     # Generic case
     return daystring
@@ -314,30 +429,31 @@ def get_rd_str(
     # which means the train or bus is allowed to depart ahead of time
     rd_str = " "  # NOTE the default is one blank space, for plaintext output.
 
-    if timepoint.drop_off_type == 1 and timepoint.pickup_type == 0:
-        if not is_first_stop:  # This is obvious at the first station
-            if not is_arrival_line:  # put on departure line
-                rd_str = "R"  # Receive passengers only
-    elif timepoint.pickup_type == 1 and timepoint.drop_off_type == 0:
-        if not is_last_stop:  # This is obvious at the last station
-            if not is_departure_line:  # put on arrival line
-                rd_str = "D"  # Discharge passengers only
-    elif timepoint.pickup_type == 1 and timepoint.drop_off_type == 1:
-        if not is_second_line:  # it'll be on the first line
-            rd_str = "*"  # Not for ordinary passengers (staff only, perhaps)
-    elif timepoint.pickup_type >= 2 or timepoint.drop_off_type >= 2:
-        if not is_second_line:  # it'll be on the first line
-            rd_str = "F"  # Flag stop of some type
-    elif "timepoint" in timepoint:
-        # If the "timepoint" column has been supplied
-        # IMPORTANT NOTE: Amtrak has not implemented this yet.
-        # FIXME: request that Alan Burnstine implement this if possible
-        # This seems to be the only way to identify the infamous "L",
-        # which means that the train or bus is allowed to depart ahead of time
-        print("timepoint column found")  # Should not happen with existing data
-        if timepoint.timepoint == 0:  # and it says times aren't exact
-            if not is_arrival_line:  # This goes on departure line, always
-                rd_str = "L"
+    match [timepoint.drop_off_type, timepoint.pickup_type, "timepoint" in timepoint]:
+        case [1, 0, _]:
+            if not is_first_stop:  # This is obvious at the first station
+                if not is_arrival_line:  # put on departure line
+                    rd_str = "R"  # Receive passengers only
+        case [0, 1, _]:
+            if not is_last_stop:  # This is obvious at the last station
+                if not is_departure_line:  # put on arrival line
+                    rd_str = "D"  # Discharge passengers only
+        case [1, 1, _]:
+            if not is_second_line:  # it'll be on the first line
+                rd_str = "*"  # Not for ordinary passengers (staff only, perhaps)
+        case [2 | 3, _, _] | [_, 2 | 3, _]:
+            if not is_second_line:  # it'll be on the first line
+                rd_str = "F"  # Flag stop of some type
+        case [_, _, True]:
+            # If the "timepoint" column has been supplied
+            # IMPORTANT NOTE: Amtrak has not implemented this yet.
+            # FIXME: request that Alan Burnstine implement this if possible
+            # This seems to be the only way to identify the infamous "L",
+            # which means that the train or bus is allowed to depart ahead of time
+            print("timepoint column found")  # Should not happen with existing data
+            if timepoint.timepoint == 0:  # and it says times aren't exact
+                if not is_arrival_line:  # This goes on departure line, always
+                    rd_str = "L"
 
     # Now: this is an utterly stupid hack used for HTML width testing:
     # Not for production code.  Enable if you need to recheck CSS span widths.
@@ -367,12 +483,12 @@ def get_baggage_str(doing_html=False):
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
     if not doing_html:
-        return "B"
+        return get_baggage_icon_html(doing_html=False)
     return "".join(
         [
             baggage_box_prefix,
             '<span class="baggage-symbol">',
-            get_baggage_icon_html(),
+            get_baggage_icon_html(doing_html=True),
             "</span>",
             baggage_box_postfix,
         ]
@@ -390,15 +506,50 @@ def get_blank_baggage_str(doing_html=False):
     return "".join([baggage_box_prefix, baggage_box_postfix])
 
 
+bus_box_prefix = '<span class="box-bus">'
+bus_box_postfix = "</span>"
+
+
+def get_bus_str(doing_html=False):
+    """
+    Return a suitable string to indicate that this is a bus.
+
+    Currently the HTML implementation references an external bus icon.
+    There are inline alternatives to this but Weasyprint isn't nice about them.
+    """
+    if not doing_html:
+        return get_bus_icon_html(doing_html=False)
+    return "".join(
+        [
+            bus_box_prefix,
+            '<span class="bus-symbol">',
+            get_bus_icon_html(doing_html=True),
+            "</span>",
+            bus_box_postfix,
+        ]
+    )
+
+
+def get_blank_bus_str(doing_html=False):
+    """
+    Return a suitable string to indicate that this is not a bus.
+
+    The HTML implementation boxes it to line things up properly.
+    """
+    if not doing_html:
+        return " "
+    return "".join([bus_box_prefix, bus_box_postfix])
+
+
 def timepoint_str(
     timepoint,
     stop_tz,
     agency_tz,
+    reference_date,
     doing_html=False,
     box_time_characters=False,
     reverse=False,
     two_row=False,
-    second_timepoint=None,
     use_ar_dp_str=False,
     bold_pm=True,
     use_24=False,
@@ -408,8 +559,11 @@ def timepoint_str(
     calendar=None,
     is_first_stop=False,
     is_last_stop=False,
-    use_baggage_str=False,
+    use_baggage_icon=False,
     has_baggage=False,
+    use_bus_icon=False,
+    is_bus=False,
+    no_rd=False,
 ):
     """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
@@ -429,10 +583,9 @@ def timepoint_str(
     -- timepoint: a single row from stop_times.
     -- stop_tz: timezone for the stop
     -- agency_tz: timezone for the agency
+    -- reference_date: reference date for time zone conversion (strictly speaking, needed only for Arizona)
     Options are many:
     -- two_row: This timepoint gets both arrival and departure rows (default is just one row)
-    -- second_timepoint: Used for a very tricky thing with connecting trains to show them in the
-        same column at the same station; normally None, specified at that particular station
     -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
     -- reverse: This piece of the timetable is running upward (departure time above arrival time)
     -- doing_html: output HTML (default is plaintext)
@@ -448,13 +601,13 @@ def timepoint_str(
            Required if use_daystring is True; pointless otherwise.
     -- is_first_stop: suppress "receive only" notation
     -- is_last_stop: suppress "discharge only" notation
-    -- use_baggage_str: True/False: leave space for baggage symbol
+    -- use_baggage_icon: True/False: leave space for baggage symbol
     -- has_baggage: True/False: does this stop have checked baggage?
-        Ignored if use_baggage_str is False.
+        Ignored if use_baggage_icon is False.
+    -- use_bus_icon: True/False: leave space for bus symbol
+    -- is_bus: True/False: is this a bus?  Ignored if use_bus_icon is False.
+    -- no_rd: Leave out the usual space for "R" or "D" notations. Used to save space.
     """
-
-    if second_timepoint:
-        raise FutureCodeError("Second_timepoint is not implemented.")
 
     if doing_html:
         linebreak = "<br>"
@@ -470,7 +623,7 @@ def timepoint_str(
     else:
         time_str = time_short_str_12
 
-    zonediff = get_zonediff(stop_tz, agency_tz)
+    zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
     # Fill the TimeTuple and prep string for actual departure time
     departure = explode_timestr(timepoint.departure_time, zonediff)
@@ -586,21 +739,30 @@ def timepoint_str(
         elif is_last_stop:
             ar_dp_str = ar_str  # Mark arrival on last stop
 
-        if not use_baggage_str:
+        if not use_baggage_icon:
             baggage_str = ""
         elif has_baggage:
             baggage_str = get_baggage_str(doing_html=doing_html)
         else:
             baggage_str = get_blank_baggage_str(doing_html=doing_html)
 
+        # The bus string is dependent only on the train number.
+        if not use_bus_icon:
+            bus_str = ""
+        elif is_bus:
+            bus_str = get_bus_str(doing_html=doing_html)
+        else:
+            bus_str = get_blank_bus_str(doing_html=doing_html)
+
         # Each element joined herein includes HTML annotations, and is completely blank if unused
         complete_line_str = "".join(
             [
                 ar_dp_str,
-                rd_str,
+                "" if no_rd else rd_str,
                 arrival_time_str if discharge_only else departure_time_str,
                 arrival_daystring if discharge_only else departure_daystring,
                 baggage_str,
+                bus_str,
             ]
         )
         return complete_line_str
@@ -613,8 +775,7 @@ def timepoint_str(
             no_dwell = True
 
         # Put baggage_str on line one, leave line two blank
-        # Note, this won't work with a second timepoint (which isn't implemented anyway)
-        if not use_baggage_str:
+        if not use_baggage_icon:
             arrival_baggage_str = ""
             departure_baggage_str = ""
             blank_baggage_str = ""
@@ -636,16 +797,45 @@ def timepoint_str(
                     # On the first of two printed lines
                     arrival_baggage_str = get_baggage_str(doing_html=doing_html)
 
+        # Put bus_str on line one, leave line two blank
+        if not use_bus_icon:
+            arrival_bus_str = ""
+            departure_bus_str = ""
+            blank_bus_str = ""
+        else:
+            blank_bus_str = get_blank_bus_str(doing_html=doing_html)
+            departure_bus_str = blank_bus_str
+            arrival_bus_str = blank_bus_str
+            if is_bus:
+                if receive_only or (no_dwell and not discharge_only):
+                    # On the only printed line
+                    departure_bus_str = get_bus_str(doing_html=doing_html)
+                elif discharge_only:
+                    # On the only printed line
+                    arrival_bus_str = get_bus_str(doing_html=doing_html)
+                elif reverse:
+                    # On the first of two printed lines
+                    departure_bus_str = get_bus_str(doing_html=doing_html)
+                else:
+                    # On the first of two printed lines
+                    arrival_bus_str = get_bus_str(doing_html=doing_html)
+
         # Start assembling the two lines.
-        if receive_only or (no_dwell and not discharge_only):
+        if is_first_stop:
+            # Don't include the "Ar" on a specified is_first_stop two_row.
+            # On these, the full ArDp is probably present somewhere else;
+            # just do the Dp.
+            arrival_line_str = ""
+        elif receive_only or (no_dwell and not discharge_only):
             # This just prints the "Ar" but does the alignment (hopefully)
             arrival_line_str = "".join(
                 [
                     ar_str,
-                    blank_rd_str,
+                    "" if no_rd else blank_rd_str,
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
+                    blank_bus_str,
                 ]
             )
         else:
@@ -661,21 +851,28 @@ def timepoint_str(
             arrival_line_str = "".join(
                 [
                     ar_str,
-                    arrival_rd_str,
+                    "" if no_rd else arrival_rd_str,
                     arrival_time_str,
                     arrival_daystring,
                     arrival_baggage_str,
+                    arrival_bus_str,
                 ]
             )
-        if discharge_only:
+        if is_last_stop:
+            # Don't include the "Dp" on a specified is_first_stop two_row.
+            # On these, the full ArDp is probably present somewhere else;
+            # just do the Ar.
+            departure_line_str = ""
+        elif discharge_only:
             # This just prints the "Dp" but does the alignment (hopefully)
             departure_line_str = "".join(
                 [
                     dp_str,
-                    blank_rd_str,
+                    "" if no_rd else blank_rd_str,
                     blank_time_str,
                     blank_daystring,
                     blank_baggage_str,
+                    blank_bus_str,
                 ]
             )
         else:
@@ -691,45 +888,12 @@ def timepoint_str(
             departure_line_str = "".join(
                 [
                     dp_str,
-                    departure_rd_str,
+                    "" if no_rd else departure_rd_str,
                     departure_time_str,
                     departure_daystring,
                     departure_baggage_str,
+                    departure_bus_str,
                 ]
-            )
-
-        if discharge_only and (not reverse) and second_timepoint:
-            # Fill the second line from a different train service.
-            # Shamefully untested.  FIXME
-            departure_line_str = timepoint_str(
-                second_timepoint,
-                two_row=False,
-                second_timepoint=None,
-                use_ar_dp_str=use_ar_dp_str,
-                doing_html=doing_html,
-                bold_pm=bold_pm,
-                use_24=use_24,
-                use_daystring=use_daystring,
-                calendar=None,  # would need to be calendar for second timepoint; FIXME
-                is_first_stop=True,  # Suppress "R"; effectively first stop of connecting train
-                is_last_stop=False,
-            )
-
-        if receive_only and (reverse) and second_timepoint:
-            # Fill the second line from a different train service.
-            # Shamefully untested.  FIXME
-            arrival_line_str = timepoint_str(
-                second_timepoint,
-                two_row=False,
-                second_timepoint=None,
-                use_ar_dp_str=use_ar_dp_str,
-                doing_html=doing_html,
-                bold_pm=bold_pm,
-                use_24=use_24,
-                use_daystring=use_daystring,
-                calendar=None,  # would need to be calendar for second timepoint; FIXME
-                is_first_stop=True,
-                is_last_stop=True,  # Suppress "D"; effectively last stop of connecting-from train
             )
 
         # Patch the two rows together.
@@ -743,21 +907,92 @@ def timepoint_str(
     assert False
 
 
-def get_time_column_header(trains_spec, doing_html=False):
+# Used for get_time_column_header
+# This is the *complete* list of valid GTFS codes
+# Amtrak only uses 2 and 3, but why not?
+route_number_prefix_map = {
+    1: "Tram #",
+    2: "Train #",
+    3: "Bus #",
+    4: "Ferry #",
+    5: "Cable Car #",
+    6: "Gondola #",
+    7: "Funicular #",
+    11: "Trolleybus #",
+    12: "Monorail Train #",
+}
+
+
+def get_time_column_header(
+    train_specs: list[str],
+    route_from_train_spec,
+    doing_html=False,
+    train_numbers_side_by_side=False,
+) -> str:
     """
     Return the header for a column of times.
 
-    Input should be. trains_spec, which is a list of train numbers separated by slashes.
-    Possibly with a minus sign in front.  It may have to be parsed.
+    train_specs: should be a list of train_specs (ordered).
 
-    Currently we don't parse it, and input is a single train number.
+    Each train_spec is a trip_short_name, possibly followed by a space and a lowercase day of the week.  Possibly followed by " noheader".
+
+    route_from_train_spec: function taking train_spec and giving a route row from the GTFS routes table.
+    train_numbers_side_by_side: List train numbers with a slash instead of on top of each other.
     """
-    train_number = (
-        trains_spec  # Because we haven't implemented complex train specs FIXME
-    )
-    time_column_prefix = "Train #"
-    if doing_html:
+    if not train_specs:
+        raise InputError("No train_specs?")
+
+    # Strip the "noheader" train specs; we don't mention them.
+    fewer_train_specs = []
+    for train_spec in train_specs:
+        if train_spec.endswith("noheader"):
+            continue
+        fewer_train_specs.append(train_spec)
+    fewer_train_specs
+
+    # It's OK if stripping noheader train specs leads to no header.
+    # In this case return blank.  Uniqueness of headers is handled later.
+    if not fewer_train_specs:
+        return ""
+
+    if not doing_html:
+        # For plaintext, keep it simple: just the train specs
+        return " / ".join(fewer_train_specs)
+
+    if train_numbers_side_by_side:
+        # Old algorithm.  For Empire Builder, Lake Shore Limited.
+
+        # Strip the " monday" type suffixes
+        tsns = [train_spec_to_tsn(train_spec) for train_spec in fewer_train_specs]
+
         # For HTML, let's get FANCY... May change this later.
+        # Route types: 2 is a train, 3 is a bus
+        route_types = [
+            int(route_from_train_spec(train_spec).route_type)
+            for train_spec in fewer_train_specs
+        ]
+        match route_types:
+            case [2]:
+                time_column_prefix = "Train #"
+            case [3]:
+                time_column_prefix = "Bus #"
+            case [3, 2]:
+                time_column_prefix = "Bus/Train #s"
+            case [2, 3]:
+                time_column_prefix = "Train/Bus #s"
+            case _:
+                route_set = set(route_types)
+                if route_set == {2}:
+                    time_column_prefix = "Train #s"
+                elif route_set == {3}:
+                    time_column_prefix = "Bus #s"
+                elif route_set == {2, 3}:
+                    # This is three or more routes in the same column, yeechburgers
+                    time_column_prefix = "Train/Bus #s"
+                else:
+                    # Not train or bus.  Does not occur on Amtrak.
+                    time_column_prefix = "Trip #s"
+
         time_column_header = "".join(
             [
                 "<small>",
@@ -765,13 +1000,37 @@ def get_time_column_header(trains_spec, doing_html=False):
                 "</small>",
                 "<br>",
                 "<strong>",
-                str(train_number),
+                " / ".join(tsns),  # Note! Works cleanly for single-element case
                 "</strong>",
             ]
         )
-    else:
-        # For plaintext, keep it simple: just the train number
-        time_column_header = "".join([str(train_number)])
+        return time_column_header
+
+    # New algorithm.
+    # Numbers are stacked.
+    # Putting slashes between the train and bus number has proven to make
+    # overly-wide columns.  Aaargh!
+
+    prefixed_route_numbers = [
+        "".join(
+            [
+                "<small>",
+                route_number_prefix_map[
+                    int(route_from_train_spec(train_spec).route_type)
+                ],
+                "</small>",
+                "<br>",
+                "<strong>",
+                # Strip the " monday" type suffix
+                # Special for CTrail: clean off the "CTrail" prefix
+                # This is hacky; FIXME
+                train_spec_to_tsn(train_spec).removeprefix("CTrail "),
+                "</strong>",
+            ]
+        )
+        for train_spec in fewer_train_specs
+    ]
+    time_column_header = "<hr>".join(prefixed_route_numbers)
     return time_column_header
 
 
@@ -797,6 +1056,25 @@ def get_services_column_header(doing_html=False):
         return "Services"
 
 
+def get_access_column_header(doing_html=False):
+    """
+    Return the header for a column of accessibility icons.
+
+    Tricky because the column should be very narrow.
+
+    Use the wheelchair icon.
+    Wraps with a special CSS div, so it can be rotated.
+    """
+    if doing_html:
+        accessible_icon_html = get_accessible_icon_html(doing_html=doing_html)
+        return "".join(
+            ['<div class="access-header-text">', " ", accessible_icon_html, "</div>"]
+        )
+    else:
+        # Spell this one out for CSV production.
+        return "Access"
+
+
 def get_timezone_column_header(doing_html=False):
     """
     Return the header for a column of station time zones.
@@ -805,7 +1083,9 @@ def get_timezone_column_header(doing_html=False):
     Wraps with a special CSS div, so it can be rotated.
     """
     if doing_html:
-        return '<div class="timezone-header-text">Time<br>Zone</div>'
+        # return '<div class="timezone-header-text">Time<br>Zone</div>'
+        # Keep it one line, space is at a premium
+        return '<div class="timezone-header-text">TZ</div>'
     else:
         return "Time Zone"
 

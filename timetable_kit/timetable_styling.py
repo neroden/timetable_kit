@@ -19,13 +19,21 @@ import pandas as pd
 from pandas.io.formats.style import Styler
 
 # My packages
-# This imports the subpackage by name so we can just call it "amtrak"
-from timetable_kit import amtrak
+# This is tricky.
+# We need runtime data such as the subpackage for the agency (amtrak, via, etc.)
+import timetable_kit.runtime_config
+
+# And we need a shorthand way to refer to it
+from timetable_kit.runtime_config import agency as agency
+
+# If we don't use the "as", calls to agency() will "None" out
+
 from timetable_kit import icons
 from timetable_kit import text_presentation
 
 from timetable_kit.errors import InputError
 from timetable_kit.debug import debug_print
+from timetable_kit.tsn import train_spec_to_tsn
 
 # These are for finish_html_timetable
 from timetable_kit.load_resources import (
@@ -34,29 +42,49 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_time_column_stylings(trains_spec, output_type="attributes"):
+def get_time_column_stylings(
+    train_spec, route_from_train_spec, output_type="attributes"
+):
     """
     Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
 
-    In practice, trains_spec is currently a train number (trip_short_name).
+    train_spec: trip_short_name / train number, maybe with day suffix
+    route_from_train_spec: route which takes a tsn and gives the row from the GTFS routes table corresponding to the tsn
+    (This is needed because tsn to route mapping is expensive and must be done in the calling function)
 
     This mostly picks a color.
 
-    If type is "attribute", prints the attributes -- used for the header cells.  This is the default.
-    If type is "class", prints a class instead of an attribute -- used for cells.
+    If out_type is "attribute", prints the attributes -- used for the header cells.  This is the default.
+    If out_type is "class", prints a class instead of an attribute -- used for cells.
 
     Note that these two colors may be complementary rather than identical.  (But this is not the case right now.)
     """
     if output_type not in ["class", "attributes"]:
         raise InputError("expected class or attributes")
 
-    train_number = trains_spec  # Because we aren't parsing trains_spec yet -- FIXME
-    if amtrak.special_data.is_sleeper_train(train_number):
-        color_css = "background-color: lavender;"
-        color_css_class = "color-sleeper"  # same
-    elif amtrak.special_data.is_bus(train_number):
-        color_css = "background-color: darkseagreen;"
+    if agency() is None:
+        raise RuntimeError(
+            "Internal error, agency not set before calling get_time_column_stylings"
+        )
+
+    # Note that Amtrak GTFS data only has route_types:
+    # 2 (is a train)
+    # 3 (is a bus)
+    # TODO: look up the color_css from the color_css_class by reading the template?
+    # Currently these have to match up with the colors in templates/
+    route_type = route_from_train_spec(train_spec).route_type
+    tsn = train_spec_to_tsn(train_spec)
+    if route_type == 3:
+        # it's a bus!
+        color_css = "background-color: honeydew;"
         color_css_class = "color-bus"
+    elif agency().is_connecting_service(tsn):
+        # it's not a bus, it's a connecting train!
+        color_css = "background-color: blanchedalmond;"
+        color_css_class = "color-connecting-train"
+    elif agency().is_sleeper_train(tsn):
+        color_css = "background-color: lavender;"
+        color_css_class = "color-sleeper"
     else:
         color_css = "background-color: cornsilk;"
         color_css_class = "color-day-train"
@@ -66,7 +94,9 @@ def get_time_column_stylings(trains_spec, output_type="attributes"):
         return color_css
 
 
-def style_timetable_for_html(timetable, styler_df, table_classes=""):
+def style_timetable_for_html(
+    timetable, styler_df, table_classes="", table_uuid="main_timetable"
+):
     """
     Take a timetable DataFrame, with parallel styler DataFrame, and separate header styler map, and style it for output.
 
@@ -100,7 +130,10 @@ def style_timetable_for_html(timetable, styler_df, table_classes=""):
     # Produce HTML.
     # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
     table_attrs = 'class="tt-table" role="main" aria-label="Timetable" '  # FIXME: the aria label should be more specific
-    styled_timetable_html = s2.to_html(table_attributes=table_attrs)
+    # Specify the ID to avoid it being randomly generated on each run
+    styled_timetable_html = s2.to_html(
+        table_attributes=table_attrs, table_uuid=table_uuid
+    )
 
     # NOTE That this generates an unwanted blank style sheet...
     unwanted_prefix = """<style type="text/css">
@@ -152,25 +185,18 @@ def finish_html_timetable(
         aux = {}  # Empty dict
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    if "title" in aux:
-        title = aux["title"]
-    else:
-        title = "Timetable"
+    # We're going to feed the entire aux file through, but we need some defaults
+    if "title" not in aux:
+        aux["title"] = "A Timetable"
 
-    if "heading" in aux:
-        heading = aux["heading"]
-    else:
-        heading = "Timetable"
+    if "heading" not in aux:
+        aux["heading"] = "A Timetable"
 
-    if "for_rpa" in aux:
-        for_rpa = aux["for_rpa"]
-    else:
-        for_rpa = False
-
-    landscape_str = ""
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
-        landscape_str = "landscape"
+
+    if "key_on_right" in aux:
+        debug_print(1, "Key on right")
 
     ### FONTS
     font_name = "SpartanTT"
@@ -225,19 +251,15 @@ def finish_html_timetable(
     html_params = {
         "lang": "en-US",
         "encoding": "utf-8",
-        "title": title,
         "internal_stylesheet": True,
-        "heading": heading,
         "timetable": styled_timetable_html,
         "timetable_kit_url": "https://github.com/neroden/timetable_kit",
         "production_date": production_date_str,
         "start_date": start_date_str,
         "end_date": end_date_str,
         "author": author,
-        "for_rpa": for_rpa,
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
-        "landscape": landscape_str,  # This one's for weasy
     }
 
     # Allows direct icon references in Jinja2
@@ -246,11 +268,16 @@ def finish_html_timetable(
         "accessible_icon": icons.get_accessible_icon_html(),
         "inaccessible_icon": icons.get_inaccessible_icon_html(),
         "sleeper_icon": icons.get_sleeper_icon_html(),
+        "bus_icon": icons.get_bus_icon_html(),
     }
 
     # Dictionary merge, html_params take priority, Python 3.9
     # Not sure about associativity, but we don't plan to have duplicates anyway
-    full_page_params = stylesheet_params | icon_params | html_params
+    # Throw the entire aux file in
+    full_page_params = aux | stylesheet_params | icon_params | html_params
+
+    # debug_params = {i: full_page_params[i] for i in full_page_params if i != "timetable"}
+    # debug_print(3, debug_params )
 
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...

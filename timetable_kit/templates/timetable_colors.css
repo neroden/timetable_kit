@@ -10,12 +10,15 @@ It depends heavily on Pandas adding custom classes to the cells.
 The headers have to be set elsewhere, in timetable_styling.py.
 We should fix this.  ***sigh***
 #}
-.color-sleeper {
-    background-color: lavender;
-}
 .color-bus {
-    background-color: darkseagreen;
+    background-color: honeydew;
+}
+.color-connecting-train {
+    background-color: blanchedalmond;
 }
 .color-day-train {
     background-color: cornsilk;
+}
+.color-sleeper {
+    background-color: lavender;
 }

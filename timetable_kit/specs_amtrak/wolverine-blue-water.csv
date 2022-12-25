@@ -1,0 +1,25 @@
+,351 monday,365 monday,353 monday,355 monday,access,station,timezone,350 monday,352 monday,364 monday,354 monday
+column-options,ardp,ardp,,,,,,ardp reverse,reverse,ardp reverse,reverse
+route-name,,,,,,,,,,,
+days,Daily,Daily,Daily,Daily,,,,Daily,Daily,Daily,Daily
+updown,,,,,,,,,,,
+PTH,blank,first,blank,blank,,,,blank,blank,last,blank
+LPE,blank,,blank,blank,,,,blank,blank,,blank
+FLN,blank,,blank,blank,,,,blank,blank,,blank
+DRD,blank,,blank,blank,,,,blank,blank,,blank
+LNS,blank,,blank,blank,,,,blank,blank,,blank
+PNT,first,,first,first,,,,last,last,,last
+TRM,,,,,,,,,,,
+ROY,,,,,,,,,,,
+DET,,,,,,,,,,,
+DER,,,,,,,,,,,
+ARB,,,,,,,,,,,
+JXN,,,,,,,,,,,
+ALI,,,,,,,,,,,
+BTL,,,,,,,,,,,
+KAL,,,,,,,,,,,
+DOA,,,,,,,,,,,
+NLS,,,,,,,,,,,
+NBU,,,,,,,,,,,
+HMI,,,,,,,,,,,
+CHI,last,last,last,last,,,,first,first,first,first

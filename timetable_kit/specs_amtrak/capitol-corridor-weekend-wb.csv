@@ -1,0 +1,23 @@
+,stations,access,723,11,727,729,737,741,743,745,747,751
+column-options,,,ardp,,,,,,,,,
+route-name,,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+COX,,,,,,,,,,,,
+ARN,,,,,,,,,,,,
+RLN,,,,from Chico,,,,,,,,
+RSV,,,,& Oregon,,,,,,,,
+SAC,,,723 first,,,,,,743 first,,,
+DAV,,,,,,,,,,,,
+FFV,,,,,,,,,,,,
+SUI,,,,,,,,,,,,
+MTZ,,,,,,,,,,,,
+RIC,,,,,,,,,,,,
+BKY,,,,,,,,,,,,
+EMY,,,,,,,,,,,,
+OKJ,,,,,,,,,,745 last,,751 last
+OAC,,,,,,,,,,,,
+HAY,,,,,,,,,,,,
+FMT,,,,,,,,,,,,
+GAC,,,,,,,,,,,,
+SCC,,,,,,,,,,,,
+SJC,,,723 last,,727 last,729 last,737 last,741 last,743 last,,747 last,

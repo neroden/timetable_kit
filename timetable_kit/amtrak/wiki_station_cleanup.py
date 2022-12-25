@@ -12,7 +12,7 @@ It is better to get station names from Amtrak's JSON data.
 """
 
 import pandas as pd
-import gtfs_kit as gk
+import gtfs_kit
 
 
 # Cities with multiple stations in the same city, requiring disambiguation
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     from pathlib import Path
 
     path_in = Path("./gtfs-amtrak.zip")
-    feed = gk.read_feed(path_in, dist_units="mi")
+    feed = gtfs_kit.read_feed(path_in, dist_units="mi")
 
     # Consider pulling direct from webpage
     # But in the long run we want to put from Amtrak DB

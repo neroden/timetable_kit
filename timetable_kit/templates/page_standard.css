@@ -1,0 +1,61 @@
+{# 
+page_standard.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+CSS Jinja template file related to the full page layout, rather than to individual tables.
+
+The @page directives are respected by Weasyprint.
+#}
+@page {
+    /* For printing */
+    size: Letter {% if landscape %}landscape{% endif %}; /* change from default A4, for US timetables */
+    margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
+}
+{# Primary heading on the page.  Copy old Amtrak style more or less. #}
+h1 {
+    background-color: darkblue;
+    color: white;
+    text-transform: uppercase;
+    padding-top: 4px;
+    vertical-align: middle;
+    text-align: center;
+}
+{#
+top_text specified in the aux file (special notes for the timetable).
+These are important so should be quite large!
+Unimportant notes are specified in bottom_text instead.
+#}
+.top-text {
+    font-size: 150%;
+}
+{#
+Layout of the main timetable and the symbol key / footnotes.
+Timetable is in ".bigbox-timetable";
+Symbol key and footnotes are in ".bigbox-keys";
+both are contained within ".bigbox-layout".
+
+Normally the symbol key / footnotes are at the bottom.
+With key_on_right, line these up side by side, somehow!
+#}
+{% if key_on_right %}
+.bigbox-layout {
+    display: block;
+}
+.bigbox-timetable {
+    float: left;
+}
+.bigbox-keys {
+    float: right; {# Tried doing it with display: inline-block, but it floats to the bottom #}
+}
+{% else %}{# Normal, key below table -- this is all defaults #}{#
+.bigbox-layout {
+    display: block;
+}
+.bigbox-timetable {
+    display: block;
+}
+.bigbox-keys {
+    display: block;
+}
+#}{% endif %}

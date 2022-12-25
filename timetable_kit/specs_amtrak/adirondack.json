@@ -1,0 +1,9 @@
+{
+    "title": "Adirondack Timetable",
+    "heading": "Amtrak's Adirondack",
+    "reference_date": "20220801",
+    "output_subdir": "starting_2022_08_01",
+    "key_d": "true",
+    "key_r": "true",
+    "for_rpa": "true"
+}

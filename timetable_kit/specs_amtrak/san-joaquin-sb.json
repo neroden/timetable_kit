@@ -1,0 +1,11 @@
+{
+    "title": "San Joaquin Southbound",
+    "heading": "Amtrak's San Joaquin: Southbound",
+    "landscape": "true",
+    "reference_date": "20230107",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "key_l": "true",
+    "for_rpa": "true"
+}

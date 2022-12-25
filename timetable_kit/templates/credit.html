@@ -1,8 +1,24 @@
 {# credit.html
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-#}<div class="timetable_kit_credit"><p>Timetable generated on {{ production_date }} by timetable_kit {#
-#}( <a href="{{timetable_kit_url}}">{{timetable_kit_url}}</a> ).<br>{#
-#}Material from timetable_kit in this timetable is subject to the Creative Commons {#
-#}<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license. {#
-#}Timetable_kit was written by Nathanael Nerode.</p></div>
+#}{% from "macros.html" import br_or_space %}{#
+#}<div class="timetable_kit_credit"><p class="credit-paragraph">{#
+#}Timetable generated on <b>{{ production_date }}</b> by timetable_kit{#
+#}{{ br_or_space(key_on_right) }}{#
+#}( <a href="{{timetable_kit_url}}">{{timetable_kit_url}}</a> ).{#
+#}{{ br_or_space(key_on_right or not landscape) }}{#
+#}Material from timetable_kit in this timetable is subject to{#
+#}{{ br_or_space(key_on_right) }}{#
+#}the Creative Commons {#
+#}<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.{#
+#}</p><p class="credit-paragraph" style="font-size: 120%; font-weight: bold">{#
+#}Timetable_kit was written by Nathanael Nerode.{#
+#}<br>{#
+#}If you appreciate this timetable,{#
+#}{{ br_or_space(key_on_right) }}{#
+#}please wear an N95 or P100 mask on the train.{#
+#}<br>{#
+#}Nathanael's family is immunocompromised and{#
+#}{{ br_or_space(key_on_right) }}{#
+#}can't take the train unless you wear masks.{#
+#}</b></p></div>
