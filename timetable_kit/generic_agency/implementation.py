@@ -11,36 +11,43 @@ gtfs_zip_local_path = None
 gtfs_unzipped_local_path = None
 
 
-def get_route_name():
-    return
+def get_route_name(today_feed, route_id) -> str:
+    """
+    Given today_feed and a route_id, produce a suitable name for a column subheading.
+    """
+    # Unacceptable stub implementation
+    return str(route_id)
 
 
-def get_station_name():
-    return
+def get_station_name(station_code: str) -> str:
+    # Unacceptable stub implementation
+    return station_code
 
 
-def is_standard_major_station():
-    return
+def is_standard_major_station(station_code: str) -> bool:
+    # Trivial implementation
+    return False
+
+# Baggage -- trivial implementations
+def station_has_checked_baggage(station_code: str) -> bool:
+    return False
 
 
-# Baggage
-def station_has_checked_baggage():
-    return
-
-
-def train_has_checked_baggage():
-    return
+def train_has_checked_baggage(trip_short_name: str) -> bool:
+    return False
 
 
 # Access
 
 
-def station_has_accessible_platform():
-    return
+def station_has_accessible_platform(station_code: str) -> bool:
+    # Unacceptable stub implementation
+    return False
 
 
-def station_has_inaccessible_platform():
-    return
+def station_has_inaccessible_platform(station_code: str) -> bool:
+    # Unacceptable stub implementation
+    return False
 
 
 # Station name munging
@@ -66,7 +73,7 @@ def patch_feed():
 
 
 # Type of service on train
-def is_connecting_service():
+def is_connectinqg_service():
     return
 
 
