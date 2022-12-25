@@ -1,7 +1,7 @@
 {
     "title": "Southwest Chief Timetable",
     "heading": "Amtrak's Southwest Chief",
-    "reference_date": "20220613",
+    "reference_date": "20230107",
     "bottom_text": "<p><b>MST</b> Mountain Standard Time<br>Arizona does not observe Daylight Savings Time.<br>Please double-check all Arizona calling times<br>when spring and fall clock changes</br>occur in other states.</p><p><b>Local connecting trains</b> are provided: <br>at Chicago and Naperville by <a href=\"https://metra.com\">Metra</a>, <br>at Kansas City by <a href=\"https://kcstreetcar.org\">KC Streetcar</a>, <br>at Albuquerque by <a href=\"https://www.riometro.org/101/Stations-Connections\">New Mexico RailRunner Express</a>, <br>at San Bernardino, Riverside, Fullerton, and Los Angeles by <a href=\"https://metrolinktrains.com\">Metrolink</a>, <br>and at Los Angeles by <a href=\"https://www.metro.net\">LA Metro</a>.</p>",
     "key_on_right": "true",
     "key_baggage": "true",
