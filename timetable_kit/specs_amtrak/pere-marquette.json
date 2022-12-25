@@ -1,7 +1,8 @@
 {
     "title": "Pere Marquette Timetable",
     "heading": "Amtrak's Pere Marquette",
-    "reference_date": "20220701",
+    "reference_date": "20230107",
     "bottom_text": "<b>Local connecting trains</b> are provided at Chicago by <a href=\"https://metra.com\">Metra</a>.",
+    "key_tz": "true",
     "for_rpa": "true"
 }

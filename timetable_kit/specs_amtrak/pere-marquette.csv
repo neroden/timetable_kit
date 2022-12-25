@@ -1,10 +1,10 @@
-,371,access,station,370
-column-options,ardp,,,reverse ardp
-route-name,,,,
-days,CHI,,,CHI
-updown,,,,
-GRR,first,,,last
-HOM,,,,
-BAM,,,,
-SJM,,,,
-CHI,last,,,first
+,371,access,station,timezone,370
+column-options,ardp,,,,reverse ardp
+route-name,,,,,
+days,CHI,,,,CHI
+updown,,,,,
+GRR,first,,,,last
+HOM,,,,,
+BAM,,,,,
+SJM,,,,,
+CHI,last,,,,first
