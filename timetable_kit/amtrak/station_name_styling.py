@@ -6,6 +6,10 @@
 Utility routines to style Amtrak station names as HTML or text.
 """
 
+# These are used to select how to do the prettyprinting
+from timetable_kit.amtrak.json_stations import get_station_name
+from timetable_kit.amtrak.special_data import is_standard_major_station
+
 
 def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str:
     """
@@ -118,3 +122,20 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
         [enhanced_city_state_name, enhanced_station_code, enhanced_facility_name]
     )
     return fancy_name
+
+
+def get_station_name_pretty(
+    station_code: str, doing_multiline_text=False, doing_html=False
+) -> str:
+    if doing_html:
+        prettyprint_station_name = station_name_to_html
+    elif doing_multiline_text:
+        prettyprint_station_name = station_name_to_multiline_text
+    else:
+        prettyprint_station_name = station_name_to_single_line_text
+
+    raw_station_name = get_station_name(station_code)
+    major = is_standard_major_station(station_code)
+    cooked_station_name = prettyprint_station_name(raw_station_name, major)
+
+    return cooked_station_name
