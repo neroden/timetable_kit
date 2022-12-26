@@ -32,7 +32,7 @@ connecting_services_dict = {
     "STM": ["metro_north"],
     "NRO": ["metro_north"],
     "NYP": ["lirr", "njt", "nyc_subway"],
-    "NWK": ["njt"],
+    "NWK": ["njt", "path"],
     "EWR": ["njt"],
     "MET": ["njt"],
     "NBK": ["njt"],
@@ -217,3 +217,9 @@ connecting_services_dict = {
 
 if __name__ == "__main__":
     print("File parsed.")
+    services = []
+    for list_of_services in connecting_services_dict.values():
+        for service in list_of_services:
+            if service not in services:
+                services.append(service)
+    print("Services", services)
