@@ -1,5 +1,5 @@
 README-logos.rst
-================
+******************
 Part of timetable_kit
 
 This directory contains logos for various transit agencies.
@@ -16,6 +16,8 @@ logo with a logo of our own design referring to them.
 In fact, we may have to do that in any case for agencies with logos
 which are unreadable in small print.
 
+What we need
+=============
 
 This is the list of services we want logos for:
 'mbta' - DONE
@@ -61,9 +63,11 @@ This is the list of services we want logos for:
 'vta'
 'caltrain' - DONE
 'la_metro' - DONE
-'coaster'
-'san_diego_trolley'
+'coaster' - DONE
+'san_diego_trolley' - DONE
 
+From the Wikimedia category
+===========================
 
 The most useful source here is Wikipedia where they are used for the same purpose
 for which we are using them.
@@ -106,20 +110,40 @@ Others
 * Dallas_Area_Rapid_Transit_logo.svg
 * Portland_Streetcar_symbol.svg
 
-Sound Transit Logos
--------------------
-From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
-There are several alternatives.
+Added to the Rapid Transit icons category by me, after finding them:
+====================================================================
 
 NJT_NJ_Symbol.svg
 -----------------
 This is the "NJ" rather than the three stripes.
 From here: https://commons.wikimedia.org/wiki/File:NJT_NJ_Symbol.svg
 
+
 MARC_train.svg
 --------------
+From https://commons.wikimedia.org/wiki/File:MARC_train.svg
 Also from Wikipedia, but this is the full version used in the header of the webpage.
 Public domain because it's in the Maryland State Manual of Traffic Control devices!
+
+
+Sacramento_Regional_transit.svg
+-------------------------------
+From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg
+
+
+MTS_Trolley_icon.svg
+--------------------
+San Diego Trolley
+https://commons.wikimedia.org/wiki/File:MTS_Trolley_icon.svg
+
+
+Additional logos
+================
+
+Sound Transit Logos
+-------------------
+From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
+There are several alternatives.
 
 
 NFTA-Metro.ai
@@ -127,6 +151,3 @@ NFTA-Metro.ai
 Found on brandsoftheworld.com/logo/nfta-metro.
 Will need simplification and work to be usable in this context.
 
-Sacramento_Regional_transit.svg
--------------------------------
-From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg
