@@ -209,7 +209,7 @@ connecting_services_dict = {
     "IRV": ["metrolink"],
     "SNC": ["metrolink"],
     # San Clemente Pier?  Listed in schedule
-    "OSD": ["metrolink", "coaster"],
+    "OSD": ["metrolink", "coaster", "sprinter"],
     "SOL": ["coaster"],
     "OLT": ["coaster", "san_diego_trolley"],
     "SAN": ["coaster", "san_diego_trolley"],

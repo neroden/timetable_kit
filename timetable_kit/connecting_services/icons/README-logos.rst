@@ -64,6 +64,7 @@ This is the list of services we want logos for:
 'caltrain' - DONE
 'la_metro' - DONE
 'coaster' - DONE
+'sprinter' - DONE
 'san_diego_trolley' - DONE
 
 From the Wikimedia category
@@ -130,6 +131,14 @@ Sacramento_Regional_transit.svg
 -------------------------------
 From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg
 
+
+SPRINTER_logo.svg
+-----------------
+This is the word logo.
+https://commons.wikimedia.org/wiki/File:SPRINTER_logo.svg
+
+There's also this icon, but it's a PNG -- eeewww.
+https://commons.wikimedia.org/wiki/File:Sprinter_San_Diego.png
 
 MTS_Trolley_icon.svg
 --------------------
