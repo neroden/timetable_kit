@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  width="500" height="500" viewBox="0 -125 500 500">
+<path d="M 0,0 H 125 L 250,250 H 125 Z" fill="#f5853e" />
+<path d="M 125,0 H 250 L 375,250 H 250 Z" fill="#B61d8e" />
+<path d="M 250,0 H 375 L 500,250 H 375 Z" fill="#004f99" />
+</svg>
+

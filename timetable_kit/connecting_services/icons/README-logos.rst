@@ -16,25 +16,117 @@ logo with a logo of our own design referring to them.
 In fact, we may have to do that in any case for agencies with logos
 which are unreadable in small print.
 
-NFTA_Metro.ai
+
+This is the list of services we want logos for:
+'mbta' - DONE
+'shore_line_east' - ***CTRail instead?
+'metro_north' - MTA only
+'hartford_line' - ***CTRail instead?
+'lirr' - ***MTA only
+'njt' - DONE
+'nyc_subway' - ***MTA only
+'path' - DONE
+'septa' - DONE
+'marc' - DONE
+'baltimore_lrt' - DONE
+'wmata' - DONE
+'vre' -
+'dc_streetcar' -
+'sunrail' -
+'tri_rail' -
+'norta' -
+'nfta_metro' - ***partial
+'metra' -
+'qline' -
+'stl_metrolink' -
+'tre' -
+'dart' - DONE
+'texrail' -
+'tucson_sunlink_streetcar' -
+'metrolink' - DONE
+'denver_rtd'
+'frontrunner'
+'uta_trax', 
+'kc_streetcar'
+'nm_railrunner'
+'the_hop'
+'twin_cities_metro_transit'
+'sounder'
+'seattle_link'
+'trimet'
+'portland_streetcar' - DONE
+'sacramento_rt' - DONE
+'bart' - DONE
+'ace'
+'vta'
+'caltrain' - DONE
+'la_metro' - DONE
+'coaster'
+'san_diego_trolley'
+
+
+The most useful source here is Wikipedia where they are used for the same purpose
+for which we are using them.
+
+The list of these is at: https://en.wikipedia.org/wiki/Template:Rail-interchange/doc/US
+
+The following are from https://commons.wikimedia.org/wiki/Category:Rapid_transit_icons_of_the_United_States_of_America
+
+NEC
+---
+
+* MBTA_svg (the "T" logo)
+* Icon-mode-commuter-rail-default.svg (MBTA purple commuter rail logo)
+* MTA_logo.svg (circular icon)
+* PATH_logo.svg (icon)
+* PATH.svg (icon and word)
+* NJT_logo.svg (three stripes only)
+* PATCO_Line.svg (icon and word)
+* SETPA_text.svg (icon and word)
+* SEPTA.svg (icon only)
+* Baltimore_Light_RailLink_logo.svg (icon only)
+* WMATA_Metro_Logo.svg (icon containing words)
+
+California
+----------
+
+* Bart-logo.svg
+* Caltrain_logo.svg
+* Newmetrolinklogo.svg (word)
+* Metrolink_logo.svg (word & icon)
+* Metrolink_icon.svg (icon)
+* "Los Angeles Metro M logo.svg" (icon only)
+* COASTER_logo.svg (word)
+* Coaster_icon.svg (icon)
+
+Others
+------
+* BSicon_LOGO_Amtrak2.svg (without the word, light blue)
+* Amtrak_logo_2.svg (word with icon)
+* Dallas_Area_Rapid_Transit_logo.svg
+* Portland_Streetcar_symbol.svg
+
+Sound Transit Logos
+-------------------
+From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
+There are several alternatives.
+
+NJT_NJ_Symbol.svg
+-----------------
+This is the "NJ" rather than the three stripes.
+From here: https://commons.wikimedia.org/wiki/File:NJT_NJ_Symbol.svg
+
+MARC_train.svg
+--------------
+Also from Wikipedia, but this is the full version used in the header of the webpage.
+Public domain because it's in the Maryland State Manual of Traffic Control devices!
+
+
+NFTA-Metro.ai
 -------------
 Found on brandsoftheworld.com/logo/nfta-metro.
 Will need simplification and work to be usable in this context.
 
-NJT
----
-NJT's policy stated on their website is that they don't allow people
-to use their logo.
-
-Their logo sucks anyway and is painful to work with.
-We'll make our own, I guess.
-
-MARC_train.svg
---------------
-From Wikipedia, stated to be public domain.
-
-Baltimore_Light_RailLink_logo.svg
----------------------------------
-From Wikipedia, public domain because in Maryland Manual on Uniform Traffic Control Devices
-
-
+Sacramento_Regional_transit.svg
+-------------------------------
+From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg

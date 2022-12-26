@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="41.221001"
+   height="41.221001"
+   viewBox="0 0 41.221 41.221"
+   id="svg1930"
+   xml:space="preserve"><defs
+   id="defs1950" />
+	
+	<path
+   d="M -17.889562 14.309546 A 10.255654 10.255654 0 1 1  -38.40087,14.309546 A 10.255654 10.255654 0 1 1  -17.889562 14.309546 z"
+   transform="matrix(2.009623,0,0,2.009623,77.17127,-8.145793)"
+   style="fill:#171b64;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+   id="path1960" /><g
+   id="switch1934">
+		<foreignObject
+   id="foreignObject1936"
+   height="1"
+   width="1"
+   y="0"
+   x="0"
+   requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/">
+			<i:pgfRef
+   xlink:href="#adobe_illustrator_pgf">
+			</i:pgfRef>
+		</foreignObject>
+		<g
+   id="g1938">
+			<g
+   id="Layer_1">
+				
+				<path
+   d="M 21.559,22.665 L 21.559,39.279 C 31.417,38.772 39.28,30.541 39.28,20.606 C 39.224,20.622 35.935,20.606 35.903,20.588 C 35.903,27.211 31.927,32.918 25.681,35.011 L 25.681,22.847 C 25.681,20.368 27.785,18.236 30.274,18.236 L 39.091,18.236 C 38.642,15.35 37.438,12.568 35.825,10.272 L 34.05,10.272 C 27.191,10.272 21.559,15.838 21.559,22.665 z "
+   style="fill:#ffd100;fill-rule:evenodd"
+   id="path1943" />
+				<path
+   d="M 34.521,8.178 L 30.214,8.178 C 27.581,6.126 24.275,4.887 20.662,4.887 C 16.887,4.887 13.661,6.025 10.968,8.199 L 6.682,8.199 C 10.111,4.38 15.111,1.942 20.622,1.942 C 25.948,1.942 30.948,4.156 34.521,8.178 z "
+   style="fill:#ffd100;fill-rule:evenodd"
+   id="path1945" />
+				<path
+   d="M 19.662,22.665 L 19.662,39.279 C 9.804,38.772 1.941,30.541 1.941,20.606 C 1.997,20.622 5.285,20.606 5.317,20.588 C 5.317,27.211 9.293,32.918 15.539,35.011 L 15.539,22.847 C 15.539,20.368 13.436,18.236 10.946,18.236 L 2.13,18.236 C 2.579,15.35 3.783,12.568 5.395,10.272 L 7.171,10.272 C 14.029,10.272 19.662,15.838 19.662,22.665 z "
+   style="fill:#ffd100;fill-rule:evenodd"
+   id="path1947" />
+			</g>
+		</g>
+	</g>
+
+</svg>
