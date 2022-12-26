@@ -164,11 +164,11 @@ major_stations_list = (
     "NYG",  # Just in case there's a reroute
     "PHL",
     "WAS",
-    "LYH",  # Virginia service timetable
-    "RVR",
+    "RVR",  # Virginia services.  Richmond Staples Mill + 3 terminuses
+    # "LYH", Amtrak emphasized, I won't since Roanoake extension
+    "NPN",
     "NFK",
-    "RNK",  # Roanoke service looks better if boldfaced, because it's a terminus
-    "NPN",  # Likewise Newport News
+    "RNK",
     "HAR",  # Keystone timetable
     "PGH",
     "ALB",  # Empire timetable
@@ -177,7 +177,8 @@ major_stations_list = (
     "MTR",  # Adirondack
     "ESX",  # Vermonter
     "SPG",
-    "RUD",  # Ethan Allen -- will change to Burlington
+    "BTN",  # Ethan Allen Express: Burlington
+    "RUD",  # Ethan Allen Express: Rutland
     "RGH",  # Carolinian/Piedmont
     "CLT",
     "ATL",  # Crescent
@@ -236,7 +237,6 @@ major_stations_list = (
     "ORL",
     "TPA",
     "MIA",
-    "BTN",  # Burlington -- for Ethan Allen Express
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
     # ...but we patch the station name in code, elsewhere.
