@@ -16,3 +16,9 @@ which are unreadable in small print.
 MARC_train.svg
 --------------
 From Wikipedia, stated to be public domain.
+
+
+
+Baltimore_Light_RailLink_logo.svg
+---------------------------------
+From Wikipedia, public domain because in Maryland Manual on Uniform Traffic Control Devices
