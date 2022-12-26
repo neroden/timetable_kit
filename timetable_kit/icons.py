@@ -237,7 +237,7 @@ sleeper_span_str = "".join(
 )
 
 
-def get_sleeper_icon_html(doing_html=False) -> str:
+def get_sleeper_icon_html(doing_html=True) -> str:
     """
     Return suitable HTML for displaying the sleeper icon.
     """
