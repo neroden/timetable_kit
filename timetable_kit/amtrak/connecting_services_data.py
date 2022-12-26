@@ -14,9 +14,9 @@ Sadly, it must be maintained by hand.
 # Order matters: it's the order the logos will be printed in
 connecting_services_dict = {
     # Downeaster
-    "HHL": ["mbta"], # Haverhill
-    "WOB": ["mbta"], # Woburn on Lowell Line
-    "BON": ["mbta"], # Boston North
+    "HHL": ["mbta"],  # Haverhill
+    "WOB": ["mbta"],  # Woburn on Lowell Line
+    "BON": ["mbta"],  # Boston North
     # NEC, from north to south
     "BOS": ["mbta"],
     "BBY": ["mbta"],
@@ -27,30 +27,30 @@ connecting_services_dict = {
     "MYS": [],
     "NLC": ["shore_line_east"],
     "OSB": ["shore_line_east"],
-    "NHV": ["metro_north","shore_line_east","hartford_line"],
+    "NHV": ["metro_north", "shore_line_east", "hartford_line"],
     "BRP": ["metro_north"],
     "STM": ["metro_north"],
     "NRO": ["metro_north"],
-    "NYP": ["lirr","njt","nyc_subway"],
+    "NYP": ["lirr", "njt", "nyc_subway"],
     "NWK": ["njt"],
     "EWR": ["njt"],
     "MET": ["njt"],
     "NBK": ["njt"],
     "PJC": ["njt"],
-    "TRE": ["njt","septa"],
-    "PHL": ["septa","njt"],
+    "TRE": ["njt", "septa"],
+    "PHL": ["septa", "njt"],
     "WIL": ["septa"],
     "NRK": ["septa"],
     # Note: Perryville MARC would go here
     "ABE": ["marc"],
-    "BAL": ["marc","baltimore_lrt"],
+    "BAL": ["marc", "baltimore_lrt"],
     "BWI": ["marc"],
     "NCR": ["marc", "wmata"],
-    "WAS": ["marc","vre","wmata","dc_streetcar"],
-
+    "WAS": ["marc", "vre", "wmata", "dc_streetcar"],
+    #
     # Following Silver Service:
     # VRE Fredericksburg branch
-    "ALX": ["vre","wmata"],
+    "ALX": ["vre", "wmata"],
     "WDB": ["vre"],
     "QAN": ["vre"],
     "FBG": ["vre"],
@@ -66,7 +66,7 @@ connecting_services_dict = {
     "FTL": ["tri_rail"],
     "HOL": ["tri_rail"],
     "MIA": ["tri_rail"],
-
+    #
     # Following Crescent:
     # VRE Manassas branch
     "BCV": ["vre"],
@@ -74,13 +74,13 @@ connecting_services_dict = {
     # Charlotte connections will go here eventually... FIXME
     # New Orleans
     "NOL": ["norta"],
-
+    #
     # Adirondack route to Canada
     # FIXME add Montreal etc.
     # Maple Leaf route to Canada
     "BFX": ["nfta_metro"],
     # FIXME add Toronto & Canadian stations
-
+    #
     # East Coast to Chicago, from north to south:
     # Chicago
     "CHI": ["metra"],
@@ -96,21 +96,21 @@ connecting_services_dict = {
     "PAO": ["septa"],
     "EXT": ["septa"],
     "DOW": ["septa"],
-    "COT": [], # Future SEPTA service
+    "COT": [],  # Future SEPTA service
     # Capitol Limited
     "RKV": ["marc"],
     "HFY": ["marc"],
     "MRB": ["marc"],
-
+    #
     # Services out of Chicago, going clockwise:
     # Detroit
     "DET": ["qline"],
     # Cardinal:
     # Dyer station misconnects with new South Shore Line station :-(
-
+    #
     # Metra Electric (CONO/Illini/Saluki)
     "HMW": ["metra"],
-
+    #
     # Metra Heritage Corridor (Lincoln Service / Texas Eagle)
     "SMT": ["metra"],
     "JOL": ["metra"],
@@ -124,7 +124,7 @@ connecting_services_dict = {
     "ONA": ["metrolink"],
     "POS": ["metrolink"],
     # Remainder are in West Coast list below
-
+    #
     # Metra BNSF Line (Quincy / CZ / SWC)
     "LAG": ["metra"],
     "NPV": ["metra"],
@@ -132,7 +132,7 @@ connecting_services_dict = {
     "DEN": ["denver_rtd"],
     # CZ: Salt Lake area (UTA)
     "PRO": ["frontrunner"],
-    "SLC": ["frontrunner","uta_trax"],
+    "SLC": ["frontrunner", "uta_trax"],
     # SWC & Missouri River Runner
     "KCY": ["kc_streetcar"],
     # SWC
@@ -140,19 +140,19 @@ connecting_services_dict = {
     "SNB": ["metrolink"],
     "RIV": ["metrolink"],
     # Remainder are in West Coast list below
-
+    #
     # Hiawatha / Empire Builder
     "GLN": ["metra"],
     "MKE": ["the_hop"],
     "MSP": ["twin_cities_metro_transit"],
     # Remainder are in West Coast list below
-
+    #
     # West Coast, north to south
     # Vancouver, BC FIXME
     # Seattle Area
     "EVR": ["sounder"],
     "EDM": ["sounder"],
-    "SEA": ["sounder","seattle_link"],
+    "SEA": ["sounder", "seattle_link"],
     "TUK": ["sounder"],
     "TAC": ["sounder"],
     # Portland
@@ -174,15 +174,15 @@ connecting_services_dict = {
     "OAC": ["bart"],
     "HAY": [],
     "FMT": ["ace"],  # ACE at Fremont
-    "GAC": ["ace","vta"],
-    "SCC": ["caltrain","ace"],
-    "SJC": ["caltrain","ace","vta"],
+    "GAC": ["ace", "vta"],
+    "SCC": ["caltrain", "ace"],
+    "SJC": ["caltrain", "ace", "vta"],
     # San Joaquins
     # Cabral Station for ACE
     "SKT": ["ace"],
     # Los Angeles area
     # Pacific Surfliner:
-    "VEC": [], # Metrolink Ventura is not Amtrak Ventura
+    "VEC": [],  # Metrolink Ventura is not Amtrak Ventura
     "OXN": ["metrolink"],
     "CML": ["metrolink"],
     "MPK": ["metrolink"],
@@ -198,10 +198,10 @@ connecting_services_dict = {
     "IRV": ["metrolink"],
     "SNC": ["metrolink"],
     # San Clemente Pier?  Listed in schedule
-    "OSD": ["metrolink","coaster"],
+    "OSD": ["metrolink", "coaster"],
     "SOL": ["coaster"],
-    "OLT": ["coaster","san_diego_trolley"],
-    "SAN": ["coaster","san_diego_trolley"],
+    "OLT": ["coaster", "san_diego_trolley"],
+    "SAN": ["coaster", "san_diego_trolley"],
 }
 
 if __name__ == "__main__":
