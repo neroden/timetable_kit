@@ -81,13 +81,24 @@ connecting_services_dict = {
     "BFX": ["nfta_metro"],
     # FIXME add Toronto & Canadian stations
     #
+    # Hartford Line
+    "SPG": ["hartford_line"],
+    "WNL": ["hartford_line"],
+    "WND": ["hartford_line"],
+    "HFD": ["hartford_line"],
+    "BER": ["hartford_line"],
+    "MDN": ["hartford_line"],
+    "WFD": ["hartford_line"],
+    "STS": ["shore_line_east", "hartford_line"],
+    # NHV done under NEC, above
+    #
     # East Coast to Chicago, from north to south:
     # Chicago
     "CHI": ["metra"],
     # Lake Shore Limited heading out of Boston
     "FRA": ["mbta"],
     "WOR": ["mbta"],
-    "SPG": ["hartford_line"],
+    # SPG done under Hartford Line
     # Empire Service / LSL heading out of NYC
     "CRT": ["metro_north"],
     "POU": ["metro_north"],
