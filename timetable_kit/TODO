@@ -8,6 +8,10 @@ For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 For Amtrak feeds:
+0 -- write generic local connections as CSV files:
+  a -- agency, columns for agency data
+  b -- agency, list of relevant amtrak stations
+  c -- read these using the usual PANDAS methods
 1 -- generic local connections template (feed off of station list?)
 2 -- boilerplate pattern data (db) for local connections
 3 -- db for which stations have which local connections
