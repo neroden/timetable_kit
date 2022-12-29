@@ -7,10 +7,5 @@ timetable_kit.connecting_services subpackage
 Functions for adding connecting service icons and links to the station line in a timetable.
 """
 
-# FIXME: This is a hardcoded stub for testing
-def get_filenames_for_all_logos():
-    """
-    Return a list of logo filenames for connecting services
-    (without directories)
-    """
-    return ["MARC_train.svg"]
+# Used to copy image files to output
+from timetable_kit.connecting_services.catalog import get_filenames_for_all_logos

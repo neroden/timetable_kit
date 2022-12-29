@@ -21,13 +21,15 @@ Several loaders are provided:
 template_loader -- looks in "templates" folder
 font_loader -- looks in "fonts" folder
 icon_loader -- looks in "icons" folder
-logo_loader -- looks in "icons" folder, or in connecting_services/icons
+logo_loader -- looks in "logos" folder, or in connecting_services/logos
+connecting_agencies_csv_loader -- looks in "connecting_services"
 
 Matching jinja2 environments are available:
 template_environment
 font_environment
 icon_environment
 logo_environment
+connecting_agencies_csv_environment
 
 These functions are provided:
 get_font_css(fontname: str) -> str
@@ -35,6 +37,7 @@ get_icon_css(filename: str) -> str
 get_icon_svg(filename: str) -> str
 get_logo_css(filename: str) -> str
 get_logo_svg(filename: str) -> str
+get_connecting_agencies_csv(filename: str) -> str
 """
 
 import jinja2
@@ -52,7 +55,7 @@ from jinja2 import (
 template_loader = ChoiceLoader(
     [
         FileSystemLoader([".", "templates"]),
-        PackageLoader("load_resources", package_path="templates"),
+        PackageLoader("timetable_kit.load_resources", package_path="templates"),
     ]
 )
 template_environment = Environment(
@@ -63,7 +66,7 @@ template_environment = Environment(
 font_loader = ChoiceLoader(
     [
         FileSystemLoader([".", "fonts"]),
-        PackageLoader("load_resources", package_path="fonts"),
+        PackageLoader("timetable_kit.load_resources", package_path="fonts"),
     ]
 )
 font_environment = Environment(
@@ -74,7 +77,7 @@ font_environment = Environment(
 icon_loader = ChoiceLoader(
     [
         FileSystemLoader([".", "icons"]),
-        PackageLoader("load_resources", package_path="icons"),
+        PackageLoader("timetable_kit.load_resources", package_path="icons"),
     ]
 )
 icon_environment = Environment(
@@ -84,12 +87,23 @@ icon_environment = Environment(
 
 logo_loader = ChoiceLoader(
     [
-        FileSystemLoader([".", "icons"]),
-        PackageLoader("load_resources", package_path="connecting_services/icons"),
+#        FileSystemLoader([".", "logos"]),
+        PackageLoader("timetable_kit.load_resources", package_path="connecting_services/logos"),
     ]
 )
 logo_environment = Environment(
     loader=logo_loader,
+    autoescape=lambda x: False,
+)
+
+connecting_agencies_csv_loader = ChoiceLoader(
+    [
+#        FileSystemLoader(["."]),
+        PackageLoader("timetable_kit.load_resources", package_path="connecting_services"),
+    ]
+)
+connecting_agencies_csv_environment = Environment(
+    loader=connecting_agencies_csv_loader,
     autoescape=lambda x: False,
 )
 
@@ -154,6 +168,17 @@ def get_logo_svg(filename: str) -> str:
         logo_environment, filename
     )
     return logo_svg_str
+
+
+def get_connecting_agencies_csv(filename: str) -> str:
+    """
+    Load a file (specify full filename) from the connecting_agencies subpackage and return it as a string.
+    This uses Jinja2, logo_loader, and logo_environment.
+    """
+    (connecting_agencies_csv_str, returned_filename, uptodate) = connecting_agencies_csv_loader.get_source(
+        connecting_agencies_csv_environment, filename
+    )
+    return connecting_agencies_csv_str
 
 
 # TESTING

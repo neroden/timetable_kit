@@ -4,83 +4,85 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-This module contains the list of known connecting services, with
+This module holds the list of known connecting services, with
 their icon files, CSS files, CSS class names, etc.
 
-The exported data is connecting_services_data.
+It is automatically extracted from a CSV file in this package,
+specified in connecting_agencies_csv_filename
 
-To do: consider converting this to a .csv file and reading it dynamically.
+The exported data is connecting_agencies_df (as a DataFrame)
+and connecting_agencies_dict (as a dict)
 """
 
-# This isn't real, it's a template for making new ones
-# Note that "title" is the mouseover
-# "alt" is for when we can't display images at all
-# "full_name" is for use in the key at the bottom
-_generic_dict = {
-    "src": "generic.svg",
-    "css_file": "generic.css",
-    "class": "generic-img",
-    "alt": "Generic",
-    "title": "Generic",
-    "url": "https://www.generic.org/",
-    "full_name": "Generic Agency",
-}
 
-# NEC connecting agencies: North to south.
+# For reading a string as a CSV
+from io import StringIO
 
-_njt_dict = {
-    "src": "NJT_logo.svg",
-    "css_file": "NJT_logo.css",
-    "class": "njt-logo-img",
-    "alt": "NJT",
-    "title": "NJ Transit",
-    "url": "https://www.njtransit.com/",
-    "full_name": "NJ Transit",
-}
+# We need PANDAS for this
+import pandas as pd
 
-_septa_dict =
-    "src": "SEPTA.svg",
-    "css_file": "SEPTA.css",
-    "class": "septa-img",
-    "alt": "SEPTA",
-    "title": "SEPTA",
-    "url": "https://septa.org/",
-    "full_name": "SEPTA",
-}
+# Mine
+from timetable_kit.debug import debug_print
+# For actually retrieving the desired CSV file from the package, as a string
+import timetable_kit.load_resources
+from timetable_kit.load_resources import get_connecting_agencies_csv
 
-_marc_dict = {
-    "src": "MARC_train.svg",
-    "css_file": "MARC_train.css",
-    "class": "marc-train-img",
-    "alt": "MARC",
-    "title": "MARC Train",
-    "url": "https://www.mta.maryland.gov/schedule?type=marc-train",
-    "full_name": "MARC Train",
-}
+# This is the source filename
+connecting_agencies_csv_filename = "connecting_agencies.csv"
 
-_baltimore_lrt_dict = {
-    "src": "Baltimore_Light_RailLink_logo.svg",
-    "css_file": "Baltimore_Light_RailLink_logo.css",
-    "class": "baltimore-lrt-img",
-    "alt": "LRT",
-    "title": "Baltimore LRT",
-    "url": "https://www.mta.maryland.gov/schedule/lightrail",
-    "full_name": "Baltimore Light Rail Link",
-}
+# This is the global -- it's a public interface.
+connecting_agencies_dict = None
+# This is also a global -- useful sometimes.
+connecting_agencies_df = None
 
-_wmata_dict = {
-    "src": "WMATA_Metro_Logo.svg",
-    "css_file": "WMATA_Metro_Logo.css",
-    "class": "wmata-metro-img",
-    "alt": "WMATA",
-    "title": "WMATA",
-    "url": "https://www.wmata.com/",
-    "full_name": "WMATA",
-}
 
-# And now the "dictionary of dictionaries":
-connecting_services_data = {
-    "marc": _marc_dict,
-    "baltimore_lrt": _baltimore_lrt_dict,
-    
-}
+def initialize_connecting_agencies_dict():
+    """
+    Initialize the connecting agencies DataFrame and dictionary from a suitable file in the package.
+    """
+    print("Initializing connecting agencies dict")
+
+    # First acquire the CSV file as a string
+    # This is a read-only global:
+    # global connecting_agencies_database_filename
+    connecting_agencies_csv_str = get_connecting_agencies_csv(connecting_agencies_csv_filename)
+
+    # Treat the string as a file
+    pseudo_file = StringIO(connecting_agencies_csv_str)
+
+    # Now turn it into a dataframe (and hang onto it, this is a global)
+    global connecting_agencies_df
+    connecting_agencies_df = pd.read_csv(pseudo_file, index_col=False, header=0, dtype=str)
+
+    # Enhance it with derived columns
+    connecting_agencies_df["svg_filename"] = connecting_agencies_df["logo_filename"] + ".svg"
+    connecting_agencies_df["css_filename"] = connecting_agencies_df["logo_filename"] + ".css"
+    connecting_agencies_df["class"] = connecting_agencies_df["agency_code"] + "_logo"
+
+    # Reset the index, in place
+    connecting_agencies_df.set_index("agency_code",inplace=True)
+
+    # Now create the dict.
+    global connecting_agencies_dict
+    connecting_agencies_dict = connecting_agencies_df.to_dict(orient="index")
+
+    print("Connecting agencies dict initialized")
+
+
+def get_filenames_for_all_logos():
+    """
+    Get the list of filenames for logos (without directories), for installing with the HTML files
+    """
+    # Pull the appropriate column, convert to a list
+    logo_svg_filenames = connecting_agencies_df["svg_filename"].tolist()
+    debug_print(1, logo_svg_filenames)
+    return logo_svg_filenames
+
+
+###### INITIALIZATION CODE ######
+# Initialize the global when this file is loaded.
+initialize_connecting_agencies_dict()
+
+##### TESTING CODE ######
+if __name__ == "__main__":
+    print(connecting_agencies_dict)

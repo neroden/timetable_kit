@@ -1447,13 +1447,16 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
         # Note, this overwrites
         shutil.copy2(icon_file_source_path, icon_file_dest_path)
 
-    # Connecting service logos: drop into icons folder in destination
+    # Connecting service logos: logos folder in destination
+    logos_dir = output_dir / "logos"
+    if not os.path.exists(logos_dir):
+        os.makedirs(logos_dir)
     logo_filenames = connecting_services.get_filenames_for_all_logos()
     for logo_filename in logo_filenames:
         logo_file_source_path = (
-            source_dir / "connecting_services" / "icons" / logo_filename
+            source_dir / "connecting_services" / "logos" / logo_filename
         )
-        logo_file_dest_path = icons_dir / logo_filename
+        logo_file_dest_path = logos_dir / logo_filename
         # Note, this overwrites
         shutil.copy2(logo_file_source_path, logo_file_dest_path)
 
