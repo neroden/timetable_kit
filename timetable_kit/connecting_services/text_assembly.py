@@ -11,6 +11,9 @@ This module assembles suitable HTML or text strings for connecting agencies.
 # This contains the actual data
 from timetable_kit.connecting_services.catalog import connecting_agencies_dict
 
+# This snags the CSS
+from timetable_kit.connecting_services.catalog import get_css_for_all_logos
+
 # This is a string for str.format()
 # This references elements of the dict for the service.
 # This one is for the actual image:
@@ -87,3 +90,5 @@ if __name__ == "__main__":
     print("Testing key:")
     print(get_connecting_agency_key_html("marc"))
     print(get_connecting_agency_key_html("baltimore_lrt"))
+    print("Testing CSS:")
+    print(get_css_for_all_logos())
