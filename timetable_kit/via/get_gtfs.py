@@ -27,6 +27,7 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 # This cannot possibly be the right way to do this.
 # wget is probably cleanest, but adds yet another dependency
 
+
 def download_gtfs():
     """Download VIA rail's GTFS from its canonical location and return it"""
     response = requests.get(canonical_gtfs_url)

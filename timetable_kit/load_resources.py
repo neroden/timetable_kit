@@ -87,8 +87,10 @@ icon_environment = Environment(
 
 logo_loader = ChoiceLoader(
     [
-#        FileSystemLoader([".", "logos"]),
-        PackageLoader("timetable_kit.load_resources", package_path="connecting_services/logos"),
+        #        FileSystemLoader([".", "logos"]),
+        PackageLoader(
+            "timetable_kit.load_resources", package_path="connecting_services/logos"
+        ),
     ]
 )
 logo_environment = Environment(
@@ -98,8 +100,10 @@ logo_environment = Environment(
 
 connecting_agencies_csv_loader = ChoiceLoader(
     [
-#        FileSystemLoader(["."]),
-        PackageLoader("timetable_kit.load_resources", package_path="connecting_services"),
+        #        FileSystemLoader(["."]),
+        PackageLoader(
+            "timetable_kit.load_resources", package_path="connecting_services"
+        ),
     ]
 )
 connecting_agencies_csv_environment = Environment(
@@ -175,7 +179,11 @@ def get_connecting_agencies_csv(filename: str) -> str:
     Load a file (specify full filename) from the connecting_agencies subpackage and return it as a string.
     This uses Jinja2, logo_loader, and logo_environment.
     """
-    (connecting_agencies_csv_str, returned_filename, uptodate) = connecting_agencies_csv_loader.get_source(
+    (
+        connecting_agencies_csv_str,
+        returned_filename,
+        uptodate,
+    ) = connecting_agencies_csv_loader.get_source(
         connecting_agencies_csv_environment, filename
     )
     return connecting_agencies_csv_str
