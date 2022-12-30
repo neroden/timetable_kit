@@ -7,9 +7,12 @@ This is the HTML fragment to refer to the logo of a specific connecting service,
 for use in the station name boxes in a timetable.  It's actually quite complicated.
 
 This is referenced from connecting_services/
+
+Note that title does not show on an img inside an <a> link,
+and also doesn't show on the <a> link.
 #}{#
 #}<span class="connecting-service-span">{#
-#}<a href="{{ url }}" class="connecting-service-link" title="{{ title }}">{# Title doesn't show on img in link
+#}<a href="{{ url }}" class="connecting-service-link">{# Suppress blue/underlined anchor; boldface instead
 #}{% if logo_filename %}{#
 #}<img class="{{ class }}" src="logos/{{ svg_filename }}" alt="{{ alt }}" title="{{ title }}">{#
 #}{% else %}{# No logo_filename available; use alt text

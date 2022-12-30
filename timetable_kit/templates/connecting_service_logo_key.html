@@ -7,18 +7,26 @@ This is the HTML fragment to explain the logo of a specific connecting service,
 for use in the key in a timetable.  It's actually quite complicated.
 
 This is referenced from connecting_services/
+
+Note that title does not show on an img inside an <a> link,
+and also doesn't show on the <a> link.
+
+Therefore we don't make the logo into a link here, so the title will show
 #}{#
-#}{#<span class="connecting-service-key-span">{#
-#}<a href="{{ url }}" class="connecting-service-link" title="{{ title }}">{# Title doesn't show on img in link
+#}<span class="connecting-service-logo-key">{#
+#}<span class="connecting-service-link">{# Print this exactly the same way as in the link (boldface)
 #}{% if logo_filename %}{#
 #}<img class="{{ class }}" src="logos/{{ svg_filename }}" alt="{{ alt }}" title="{{ title }}">{#
-#}{% else %}{# No logo_filename available; use alt text
-#}{{ alt }}{#
+#}{% else %}{# No logo_filename available; use alt text; format same way as in link above
+#}<span class="connecting-service-link">{{ alt }}{#
 #}{% endif %}{#
 #}{% if suffix %}{# Perhaps this is a logo *plus* a text suffix
 #}{{ suffix }}{#
 #}{% endif %}{#
-#}: {{full_name}}{# Here the logo is defined: the difference from connecting_service_key.html
+#}</span>{# Close the connecting-service-link span
+#}: {# Colon and space, separating logo and definition
+#}<a href="{{ url }}">{# Normal URL, blue color and underline is OK
+#}{{full_name}}{#
 #}</a>{#
 #}</span>{# Jinja is supposed to be smart enough to remove the last trailing newline in the file
 #}
