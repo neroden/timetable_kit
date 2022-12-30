@@ -46,11 +46,11 @@ connecting_services_dict = {
     "BAL": ["marc", "baltimore_lrt"],
     "BWI": ["marc"],
     "NCR": ["marc", "wmata"],
-    "WAS": ["marc", "vre", "wmata", "dc_streetcar"],
+    "WAS": ["marc", "wmata", "dc_streetcar", "vre"],
     #
     # Following Silver Service:
     # VRE Fredericksburg branch
-    "ALX": ["vre", "wmata"],
+    "ALX": ["wmata","vre"],
     "WDB": ["vre"],
     "QAN": ["vre"],
     "FBG": ["vre"],
