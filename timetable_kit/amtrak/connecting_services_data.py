@@ -37,7 +37,7 @@ connecting_services_dict = {
     "MET": ["njt"],
     "NBK": ["njt"],
     "PJC": ["njt"],
-    "TRE": ["njt", "septa"],
+    "TRE": ["septa", "njt"],
     "PHL": ["septa", "njt"],
     "WIL": ["septa"],
     "NRK": ["septa"],
