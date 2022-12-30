@@ -8,10 +8,10 @@ This module holds the list of known connecting services, with
 their icon files, CSS files, CSS class names, etc.
 
 It is automatically extracted from a CSV file in this package,
-specified in connecting_agencies_csv_filename
+specified in connecting_services_csv_filename
 
-The exported data is connecting_agencies_df (as a DataFrame)
-and connecting_agencies_dict (as a dict)
+The exported data is connecting_services_df (as a DataFrame)
+and connecting_services_dict (as a dict)
 """
 
 
@@ -26,7 +26,7 @@ from timetable_kit.debug import debug_print
 
 from timetable_kit.load_resources import (
     # For actually retrieving the desired CSV file from the package, as a string
-    get_connecting_agencies_csv,
+    get_connecting_services_csv,
     # For retrieving the CSS files which go with the SVGs
     get_logo_css,
     # For templates for producing the HTML fragments to be used in the final timetable
@@ -35,12 +35,12 @@ from timetable_kit.load_resources import (
 
 ### GLOBALS ####
 # This is the source filename
-connecting_agencies_csv_filename = "connecting_agencies.csv"
+connecting_services_csv_filename = "connecting_services.csv"
 
 # This is the global -- it's a public interface.
-connecting_agencies_dict = None
+connecting_services_dict = None
 # This is also a global -- useful sometimes.
-connecting_agencies_df = None
+connecting_services_df = None
 
 # Internal use: Jinja templates after loading them
 _connecting_service_logo_tpl = None
@@ -72,43 +72,43 @@ def _generate_logo_key_html(df_row):
 ### FUNCTIONS ###
 def _initialize():
     """
-    Initialize the connecting agencies DataFrame and dict from a suitable file in the package.
+    Initialize the connecting services DataFrame and dict from a suitable file in the package.
     """
-    debug_print(1, "Initializing connecting_agencies_df")
+    debug_print(1, "Initializing connecting_services_df")
 
     # First acquire the CSV file as a string
     # This is a read-only global:
-    # global connecting_agencies_database_filename
-    connecting_agencies_csv_str = get_connecting_agencies_csv(
-        connecting_agencies_csv_filename
+    # global connecting_services_database_filename
+    connecting_services_csv_str = get_connecting_services_csv(
+        connecting_services_csv_filename
     )
 
     # Treat the string as a file
-    pseudo_file = StringIO(connecting_agencies_csv_str)
+    pseudo_file = StringIO(connecting_services_csv_str)
 
     # Now turn it into a dataframe (and hang onto it, this is a global)
-    global connecting_agencies_df
-    connecting_agencies_df = pd.read_csv(
+    global connecting_services_df
+    connecting_services_df = pd.read_csv(
         pseudo_file, index_col=False, header=0, dtype=str
     )
 
-    debug_print(1, "Adding computed columns to connecting_agencies_df")
+    debug_print(1, "Adding computed columns to connecting_services_df")
 
     # This one is used to install the logo files:
-    connecting_agencies_df["svg_filename"] = (
-        connecting_agencies_df["logo_filename"] + ".svg"
+    connecting_services_df["svg_filename"] = (
+        connecting_services_df["logo_filename"] + ".svg"
     )
     # This to accumulate CSS fragments:
-    connecting_agencies_df["css_filename"] = (
-        connecting_agencies_df["logo_filename"] + ".css"
+    connecting_services_df["css_filename"] = (
+        connecting_services_df["logo_filename"] + ".css"
     )
     # This is the CSS class names:
     # Must come before the Jinja template usage!
-    connecting_agencies_df["class"] = connecting_agencies_df["agency_code"] + "_logo"
+    connecting_services_df["class"] = connecting_services_df["service_code"] + "_logo"
 
     # Before applying Jinja, we have to replace NaNs in the logo_filename and suffix column with
     # "" or something falsy.  Do this in place.
-    connecting_agencies_df.fillna("", inplace=True)
+    connecting_services_df.fillna("", inplace=True)
 
     # Load the Jinja template environments to generate HTML
     global _connecting_service_logo_tpl
@@ -120,25 +120,25 @@ def _initialize():
         "connecting_service_logo_key.html"
     )
     # Apply Jinja templates to the dataframe -- axis = 1 applies to each row
-    connecting_agencies_df["logo_html"] = connecting_agencies_df.apply(
+    connecting_services_df["logo_html"] = connecting_services_df.apply(
         _generate_logo_html, axis=1
     )
-    connecting_agencies_df["logo_key_html"] = connecting_agencies_df.apply(
+    connecting_services_df["logo_key_html"] = connecting_services_df.apply(
         _generate_logo_key_html, axis=1
     )
 
-    debug_print(1, "Initializing connecting agencies dict")
-    # Reset the DataFrame index, in place, to be agency_code
+    debug_print(1, "Initializing connecting services dict")
+    # Reset the DataFrame index, in place, to be service_code
     # Must be done after generating "class" column
-    # Must be done before most things which use connecting_agencies_df are called
+    # Must be done before most things which use connecting_services_df are called
     # (including get_filenames_for_all_logos and get_css_for_all_logos)
-    connecting_agencies_df.set_index("agency_code", inplace=True)
+    connecting_services_df.set_index("service_code", inplace=True)
 
-    # Now create the dict. agency_code->{column->entry}
-    global connecting_agencies_dict
-    connecting_agencies_dict = connecting_agencies_df.to_dict(orient="index")
+    # Now create the dict. service_code->{column->entry}
+    global connecting_services_dict
+    connecting_services_dict = connecting_services_df.to_dict(orient="index")
 
-    debug_print(1, "Connecting agencies dict initialized")
+    debug_print(1, "Connecting services dict initialized")
 
 
 def get_filenames_for_all_logos() -> list[str]:
@@ -146,7 +146,7 @@ def get_filenames_for_all_logos() -> list[str]:
     Get the list of filenames for logos (without directories), for installing with the HTML files
     """
     # Pull the appropriate column, convert to a list
-    logo_svg_filenames = connecting_agencies_df["svg_filename"].tolist()
+    logo_svg_filenames = connecting_services_df["svg_filename"].tolist()
     debug_print(1, logo_svg_filenames)
     filtered_logo_svg_filenames = [
         filename
@@ -160,7 +160,7 @@ def get_css_for_all_logos() -> str:
     """
     Get the CSS code to style all the icons we're using.
     """
-    logo_css_filenames = connecting_agencies_df["css_filename"].tolist()
+    logo_css_filenames = connecting_services_df["css_filename"].tolist()
     logo_css_list = [
         get_logo_css(filename)
         for filename in logo_css_filenames
@@ -177,4 +177,4 @@ _initialize()
 
 ##### TESTING CODE ######
 if __name__ == "__main__":
-    print(connecting_agencies_dict)
+    print(connecting_services_dict)

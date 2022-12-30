@@ -10,7 +10,7 @@ Utility routines to style Amtrak station names as HTML or text.
 from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
 
 # Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_agency_logo_html
+from timetable_kit.connecting_services import get_connecting_service_logo_html
 
 
 def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str:
@@ -139,7 +139,7 @@ def amtrak_station_name_to_html(
         for connecting_service in connecting_services:
             # Note, this is "" if the agency is not found (but a debug error will print)
             # Otherwise it's a complete HTML code for the agency & its icon
-            this_logo_html = get_connecting_agency_logo_html(connecting_service)
+            this_logo_html = get_connecting_service_logo_html(connecting_service)
             if this_logo_html:
                 # Add a space before the logo... if it exists at all
                 connection_logos_html += " "

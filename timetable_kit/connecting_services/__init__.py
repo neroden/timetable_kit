@@ -7,13 +7,18 @@ timetable_kit.connecting_services subpackage
 Functions for adding connecting service icons and links to the station line in a timetable.
 """
 
-# Used to copy image files to output
-from timetable_kit.connecting_services.catalog import get_filenames_for_all_logos
+from timetable_kit.connecting_services.catalog import (
+    # Used to copy image files to output
+    get_filenames_for_all_logos,
 
-# Used to copy CSS for sizing image files to output
-from timetable_kit.connecting_services.catalog import get_css_for_all_logos
+    # Used to copy CSS for sizing image files to output
+    get_css_for_all_logos,
+)
 
-# Grab the HTML for a single  connecting service
 from timetable_kit.connecting_services.text_assembly import (
-    get_connecting_agency_logo_html,
+    # Get the HTML for a single connecting service for a station name box
+    get_connecting_service_logo_html,
+
+    # Get the HTML for the entire connecting services key
+    get_full_key_html,
 )

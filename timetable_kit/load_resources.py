@@ -22,14 +22,14 @@ template_loader -- looks in "templates" folder
 font_loader -- looks in "fonts" folder
 icon_loader -- looks in "icons" folder
 logo_loader -- looks in "logos" folder, or in connecting_services/logos
-connecting_agencies_csv_loader -- looks in "connecting_services"
+connecting_services_csv_loader -- looks in "connecting_services"
 
 Matching jinja2 environments are available:
 template_environment
 font_environment
 icon_environment
 logo_environment
-connecting_agencies_csv_environment
+connecting_services_csv_environment
 
 These functions are provided:
 get_font_css(fontname: str) -> str
@@ -37,7 +37,7 @@ get_icon_css(filename: str) -> str
 get_icon_svg(filename: str) -> str
 get_logo_css(filename: str) -> str
 get_logo_svg(filename: str) -> str
-get_connecting_agencies_csv(filename: str) -> str
+get_connecting_services_csv(filename: str) -> str
 """
 
 import jinja2
@@ -98,7 +98,7 @@ logo_environment = Environment(
     autoescape=lambda x: False,
 )
 
-connecting_agencies_csv_loader = ChoiceLoader(
+connecting_services_csv_loader = ChoiceLoader(
     [
         #        FileSystemLoader(["."]),
         PackageLoader(
@@ -106,8 +106,8 @@ connecting_agencies_csv_loader = ChoiceLoader(
         ),
     ]
 )
-connecting_agencies_csv_environment = Environment(
-    loader=connecting_agencies_csv_loader,
+connecting_services_csv_environment = Environment(
+    loader=connecting_services_csv_loader,
     autoescape=lambda x: False,
 )
 
@@ -174,19 +174,19 @@ def get_logo_svg(filename: str) -> str:
     return logo_svg_str
 
 
-def get_connecting_agencies_csv(filename: str) -> str:
+def get_connecting_services_csv(filename: str) -> str:
     """
-    Load a file (specify full filename) from the connecting_agencies subpackage and return it as a string.
+    Load a file (specify full filename) from the connecting_services subpackage and return it as a string.
     This uses Jinja2, logo_loader, and logo_environment.
     """
     (
-        connecting_agencies_csv_str,
+        connecting_services_csv_str,
         returned_filename,
         uptodate,
-    ) = connecting_agencies_csv_loader.get_source(
-        connecting_agencies_csv_environment, filename
+    ) = connecting_services_csv_loader.get_source(
+        connecting_services_csv_environment, filename
     )
-    return connecting_agencies_csv_str
+    return connecting_services_csv_str
 
 
 # TESTING
