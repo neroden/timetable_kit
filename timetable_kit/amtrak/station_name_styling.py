@@ -121,8 +121,14 @@ def amtrak_station_name_to_html(
     # saves critical space on NEC timetables, and we're indicating the MBTA connection
     # in another way anyway.
     if facility_name and facility_name not in ["Amtrak Station","Amtrak/MBTA Station"] :
+        # By default, put the facility name on its own line
+        br_for_facility_name = "<br>"
+        if station_code in ["BOS", "BBY", "RVM"]:
+            # Save lines on some timetables by putting the facility code on the same line as the station
+            # This is needed at Boston for the Richmond timetable
+            br_for_facility_name = ""
         enhanced_facility_name = "".join(
-            ["<br><span class=station-footnotes>", " - ", facility_name, "</span>"]
+            [br_for_facility_name,"<span class=station-footnotes>", " - ", facility_name, "</span>"]
         )
     else:
         enhanced_facility_name = ""
@@ -135,6 +141,7 @@ def amtrak_station_name_to_html(
             # PHL has a very long facility_name;
             # WAS has a very long list of connecting services.
             # So snarf an extra line.
+            # ...w don't need it.
             connection_logos_html += "<br>"
         # station_code had better be correct, since we're going to look it up
         # stations with no entry in the dict are treated the same as
