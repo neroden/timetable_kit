@@ -149,6 +149,10 @@ MDTMetro.svg
 Miami Metrorail, as used on Wikipedia.
 https://commons.wikimedia.org/wiki/File:MDTMetro.svg
 
+Metra_Logo.svg
+--------------
+https://commons.wikimedia.org/wiki/File:Metra_Logo.svg
+
 
 Sacramento_Regional_transit.svg
 -------------------------------
@@ -196,10 +200,9 @@ NORTA.svg
 ---------
 Downloaded from https://www.norta.com/Content/images/logo-map-interaction.svg
 
-NFTA-Metro.ai
--------------
-Found on brandsoftheworld.com/logo/nfta-metro.
-Not usable, crashes when I attempt to import it.
+Metra_Logo_no_slogan.svg
+------------------------
+Metra_Logo.svg with the slogan removed (since it's unreadable at this print size)
 
 
 Sound Transit Logos
