@@ -4,5 +4,6 @@ Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 */
 .marc_logo {
-    height: 1.2em;
+    height: 1em;
+    vertical-align: -0.125em;
 }
