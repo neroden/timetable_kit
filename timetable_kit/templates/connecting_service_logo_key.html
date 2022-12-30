@@ -1,0 +1,24 @@
+{#
+connecting_service_logo_key.html
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is the HTML fragment to explain the logo of a specific connecting service,
+for use in the key in a timetable.  It's actually quite complicated.
+
+This is referenced from connecting_services/
+#}{#
+#}{#<span class="connecting-service-key-span">{#
+#}<a href="{{ url }}" class="connecting-service-link" title="{{ title }}">{# Title doesn't show on img in link
+#}{% if logo_filename %}{#
+#}<img class="{{ class }}" src="logos/{{ svg_filename }}" alt="{{ alt }}" title="{{ title }}">{#
+#}{% else %}{# No logo_filename available; use alt text
+#}{{ alt }}{#
+#}{% endif %}{#
+#}{% if suffix %}{# Perhaps this is a logo *plus* a text suffix
+#}{{ suffix }}{#
+#}{% endif %}{#
+#}: {{full_name}}{# Here the logo is defined: the difference from connecting_service_key.html
+#}</a>{#
+#}</span>{# Jinja is supposed to be smart enough to remove the last trailing newline in the file
+#}

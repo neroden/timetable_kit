@@ -8,9 +8,6 @@
 This module assembles suitable HTML or text strings for connecting agencies.
 """
 
-# TODO: clean this up.  This should probably be JINJA2.
-# There's too much duplication going on here.
-
 from timetable_kit.debug import debug_print
 
 # This contains the actual data
@@ -18,66 +15,6 @@ from timetable_kit.connecting_services.catalog import connecting_agencies_dict
 
 # This snags the CSS
 from timetable_kit.connecting_services.catalog import get_css_for_all_logos
-
-# This is a string for str.format()
-# This references elements of the dict for the service.
-# This one is for the actual image:
-_template_img_str = " ".join(
-    [
-        "<img",
-        'class="{class}"',
-        'src="logos/{svg_filename}"',
-        'alt="{alt}"',
-        'title="{title}">',
-    ]
-)
-
-# Wrap the logo in a link:
-_template_anchor_str = "".join(
-    [
-        '<a href="{url}" class="connecting-service-link">',
-        _template_img_str,
-        "</a>",
-    ]
-)
-
-
-# This is the span for the image used in a cell:
-_template_span_str = "".join(
-    [
-        '<span class="connecting-service-span">',
-        _template_anchor_str,
-        "</span>",
-    ]
-)
-
-# For agencies with no image:
-_template_anchor_str_no_img = "".join(
-    [
-        '<a href="{url}" class="connecting-service-link">',
-        "{alt}",
-        "</a>",
-    ]
-)
-
-_template_span_str_no_img = "".join(
-    [
-        '<span class="connecting-service-span">',
-        _template_anchor_str,
-        "</span>",
-    ]
-)
-
-# This is the key:
-_template_key_str = "".join([_template_anchor_str, ': <a href="{url}">{full_name}</a>'])
-_template_key_str_no_img = "".join(
-    [_template_anchor_str_no_img, ': <a href="{url}">{full_name}</a>']
-)
-
-# For text-only timetables
-_template_text_str = "{alt}"
-# For text-only timetables
-_template_key_text_str = "{alt}: {full_name}"
 
 
 def get_connecting_agency_logo_html(connecting_agency, doing_html=True):
@@ -94,14 +31,12 @@ def get_connecting_agency_logo_html(connecting_agency, doing_html=True):
         debug_print(1, "Couldn't find connecting agency info for", connecting_agency)
         # Return blank in this case
         return ""
-    # Found the agency, fill in the template
+    # Found the agency, get the HTML
+    # (prebuilt in catalog.py during initialization)
     if doing_html:
-        if agency_dict["logo_filename"]:
-            return _template_span_str.format(**agency_dict)
-        else:
-            return _template_span_str_no_img.format(**agency_dict)
+        return agency_dict["logo_html"]
     else:
-        return _template_text_str.format(**agency_dict)
+        return agency_dict["alt"]
 
 
 def get_connecting_agency_key_html(connecting_agency, doing_html=True):
@@ -116,14 +51,12 @@ def get_connecting_agency_key_html(connecting_agency, doing_html=True):
         debug_print(1, "Couldn't find connecting agency info for", connecting_agency)
         # Return blank in this case
         return ""
-    # Found the agency, fill in the template
+    # Found the agency, get the HTML
+    # (prebuilt in catalog.py during initialization)
     if doing_html:
-        if agency_dict[logo_filename]:
-            return _template_key_str.format(**agency_dict)
-        else:
-            return _template_key_str_no_img.format(**agency_dict)
+        return agency_dict["logo_key_html"]
     else:
-        return _template_key_text_str.format(**agency_dict)
+        return " : ".join([agency_dict["alt"], agency_dict["full_name"]])
 
 
 ### TESTING CODE ###
