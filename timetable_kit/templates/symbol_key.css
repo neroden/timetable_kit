@@ -14,3 +14,8 @@ CSS file for the symbol key table (except fonts).
 .symbol-key td {
     vertical-align: top;
 }
+
+/* Don't put a blank line between symbol key and connecting services key. */
+.connecting-services-key {
+    margin-top: 0;
+}

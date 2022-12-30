@@ -1,0 +1,23 @@
+{#
+connecting_services_key.html
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is the HTML fragment for the full key for connecting services in a timetable.
+It does the fixed text; the full list of connecting services explanations is
+developed elsewhere, in Python code.
+
+This is referenced from connecting_services/
+
+#}{% from "macros.html" import br_or_space %}{#
+#}{% if connecting_services_keys_html %}{#
+#}
+
+<p class="connecting-services-key">{#
+#}<b>Connecting trains</b> provided by:{{ br_or_space(key_on_right) }}{#
+#}{{ connecting_services_keys_html }}{#
+#}</p>
+
+{#
+#}{% endif %}{#
+#}

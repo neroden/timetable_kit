@@ -128,10 +128,10 @@ def amtrak_station_name_to_html(
     if show_connections:
         # Special-casing for certain stations with LOTS of connections
         if station_code in []:
-                # PHL has a very long facility_name;
-                # WAS has a very long list of connecting services.
-                # So snarf an extra line.
-                connection_logos_html += "<br>"
+            # PHL has a very long facility_name;
+            # WAS has a very long list of connecting services.
+            # So snarf an extra line.
+            connection_logos_html += "<br>"
         # station_code had better be correct, since we're going to look it up
         # stations with no entry in the dict are treated the same as
         # stations which have an empty list of connecting services

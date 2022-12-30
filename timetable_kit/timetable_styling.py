@@ -170,6 +170,7 @@ def finish_html_timetable(
     box_time_characters=False,
     start_date,
     end_date,
+    station_codes_list,  # For connecting services key
 ):
     """
     Take the output of style_timetable_for_html and make it a full HTML file with embedded CSS.
@@ -196,8 +197,10 @@ def finish_html_timetable(
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
 
+    connecting_services_one_line = True
     if "key_on_right" in aux:
         debug_print(1, "Key on right")
+        connecting_services_one_line = False
 
     ### FONTS
     font_name = "SpartanTT"
@@ -227,13 +230,16 @@ def finish_html_timetable(
     # For connecting service logos as imgs:
     logos_css = connecting_services.get_css_for_all_logos()
 
-    # TODO FIXME: add the alternative embedded SVG version.
-    # Weasy can't handle SVG references within HTML.
-    # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
-    # 'baggage' is the only one so far
-    # svg_symbols_html = ""
-    # with open(icons_dirname + "suitcase-solid.svg", "r") as baggage_svg_file:
-    #     svg_symbols_html += baggage_svg_file.read()
+    # Key for connecting services:
+    # First use the station codes list to get a list of all *relevant* services
+    services_list = agency().get_all_connecting_services(station_codes_list)
+    # Then feed that through to get the full key html:
+    connecting_services_keys_html = connecting_services.get_keys_html(
+        services_list=services_list, one_line=connecting_services_one_line
+    )
+
+    # NOTE: We would like to try the alternative embedded SVG version.
+    # But Weasy can't handle SVG references within HTML.
 
     ### Prepare Jinja template substitution:
 
@@ -263,6 +269,7 @@ def finish_html_timetable(
         "start_date": start_date_str,
         "end_date": end_date_str,
         "author": author,
+        "connecting_services_keys_html": connecting_services_keys_html,
         # FIXME hardcoded Amtrak URL here
         "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
     }

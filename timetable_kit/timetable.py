@@ -1377,6 +1377,9 @@ def produce_timetable(
             box_time_characters=False,
             start_date=str(latest_start_date),
             end_date=str(earliest_end_date),
+            station_codes_list=stations_list_from_tt_spec(
+                tt_spec
+            ),  # For connecting services key
         )
         path_for_html = output_dir / Path(output_filename_base + ".html")
         with open(path_for_html, "w") as outfile:

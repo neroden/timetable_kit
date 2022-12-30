@@ -215,6 +215,7 @@ connecting_services_dict = {
     "SAN": ["coaster", "san_diego_trolley"],
 }
 
+
 def get_all_connecting_services(station_list: list[str]) -> list:
     """
     Given a list of station codes, return a list of services which connect
@@ -228,8 +229,9 @@ def get_all_connecting_services(station_list: list[str]) -> list:
                 all_services.append(service)
     return all_services
 
+
 if __name__ == "__main__":
     print("File parsed.")
     # This both lists all the services, and tests get_all_connecting_services at the same time
-    services = get_all_connecting_services( connecting_services_dict.keys() )
+    services = get_all_connecting_services(connecting_services_dict.keys())
     print("All known connecting services:", services)
