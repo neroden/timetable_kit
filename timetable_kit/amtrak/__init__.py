@@ -59,6 +59,6 @@ from .gtfs_cleanup import patch_feed
 from .special_data import is_connecting_service  # Highlight in different color
 from .special_data import is_sleeper_train  # Different color, ideally icon
 
-# For making the key for connecting agencies (including only those in this timetable)
+# For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
-from .connecting_services_data import get_all_connecting_agencies
+from .connecting_services_data import get_all_connecting_services

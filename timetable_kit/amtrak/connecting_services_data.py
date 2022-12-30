@@ -4,13 +4,13 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-This module is a database of which Amtrak stations connect to which other transit agencies.
+This module is a database of which Amtrak stations connect to which other transit services.
 
 Sadly, it must be maintained by hand.
 """
 
 # key: amtrak station code
-# value: list of agencies (strings matching the definitions in timetable_kit/connecting_services/*.py
+# value: list of services (strings matching the definitions in timetable_kit/connecting_services/*.py
 # Order matters: it's the order the logos will be printed in
 connecting_services_dict = {
     # Downeaster
@@ -215,21 +215,21 @@ connecting_services_dict = {
     "SAN": ["coaster", "san_diego_trolley"],
 }
 
-def get_all_connecting_agencies(station_list: list[str]) -> list:
+def get_all_connecting_services(station_list: list[str]) -> list:
     """
-    Given a list of station codes, return a list of agencies which connect
+    Given a list of station codes, return a list of services which connect
     (with no duplicates)
     """
-    all_agencies = []
+    all_services = []
     for station in station_list:
-        new_agencies = connecting_services_dict.get(station, [])
-        for new_agency in new_agencies:
-            if new_agency not in all_agencies:
-                all_agencies.append(new_agency)
-    return all_agencies
+        new_services = connecting_services_dict.get(station, [])
+        for service in new_services:
+            if service not in all_services:
+                all_services.append(service)
+    return all_services
 
 if __name__ == "__main__":
     print("File parsed.")
-    # This both lists all the agencies, and tests get_all_connecting_agencies at the same time
-    services = get_all_connecting_agencies( connecting_services_dict.keys() )
-    print("All known connecting agencies:", services)
+    # This both lists all the services, and tests get_all_connecting_services at the same time
+    services = get_all_connecting_services( connecting_services_dict.keys() )
+    print("All known connecting services:", services)
