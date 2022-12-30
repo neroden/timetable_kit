@@ -21,9 +21,9 @@ What we need
 
 This is the list of services we want logos for:
 'mbta' - DONE
-'shore_line_east' - ***CTRail instead?
+'shore_line_east' - DONE with CT Rail logo + suffix
 'metro_north' - MTA only
-'hartford_line' - ***CTRail instead?
+'hartford_line' - DONE with CT Rail logo + suffix
 'lirr' - ***MTA only
 'njt' - DONE
 'nyc_subway' - ***MTA only
@@ -115,6 +115,10 @@ Others
 Added to the Rapid Transit icons category by me, after finding them:
 ====================================================================
 
+CT_Rail_logo_black.svg
+----------------------
+We use a modified version with just the icon, for compactness.
+https://commons.wikimedia.org/wiki/File:CT_Rail_logo_black.svg
 
 NJT_NJ_Symbol.svg
 -----------------
@@ -155,6 +159,10 @@ https://commons.wikimedia.org/wiki/File:MTS_Trolley_icon.svg
 
 Additional logos
 ================
+
+CT_Rail_icon_only.svg
+---------------------
+Derived from CT_Rail_logo_black.svg, but with just the icon and with extra whitespace removed.
 
 NJT_logo_cleaned.svg
 --------------------
