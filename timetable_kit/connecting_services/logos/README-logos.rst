@@ -36,7 +36,8 @@ This is the list of services we want logos for:
 'dc_streetcar' - No viable logo (bitmap only).  Use text.
 'sunrail' - No viable logo.  Use text.
 'tri_rail' - DONE
-'norta' -
+'miami_metrorail' - DONE
+'norta' - DONE
 'nfta_metro' - ***partial
 'metra' -
 'qline' -
@@ -185,6 +186,10 @@ Again, whitespace removed.
 Tri-Rail_icon.svg
 -----------------
 This is just the icon, extracted from the full logo by me
+
+NORTA.svg
+---------
+Downloaded from https://www.norta.com/Content/images/logo-map-interaction.svg
 
 
 Sound Transit Logos
