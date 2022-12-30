@@ -1,4 +1,5 @@
 service_code,logo_filename,suffix,alt,title,full_name,url
+mbta,MBTA,,,MBTA,MBTA,https://www.mbta.com/
 hartford_line,CT_Rail_icon_only,HL,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
 shore_line_east,CT_Rail_icon_only,SLE,SLE,CT rail Shore Line East,CT rail Shore Line East,https://shorelineeast.com/
 metro_north,MTA logo,MN,MN,Metro-North,Metro-North Railroad,https://new.mta.info/agency/metro-north-railroad
