@@ -43,6 +43,7 @@ from .access import (
 # Station name munging routines:
 # Attempt to import under a simplified name
 # These will always become prettyprint_station_name in the main routine
+# Note that these include the addition of connecting agency logos!
 from .station_name_styling import amtrak_station_name_to_html as station_name_to_html
 from .station_name_styling import (
     amtrak_station_name_to_multiline_text as station_name_to_multiline_text,
@@ -57,3 +58,7 @@ from .gtfs_cleanup import patch_feed
 # For colorizing columns
 from .special_data import is_connecting_service  # Highlight in different color
 from .special_data import is_sleeper_train  # Different color, ideally icon
+
+# For making the key for connecting agencies (including only those in this timetable)
+# This takes a list of stations as an argument
+from .connecting_services_data import get_all_connecting_agencies
