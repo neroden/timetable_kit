@@ -33,7 +33,7 @@ This is the list of services we want logos for:
 'baltimore_lrt' - DONE
 'wmata' - DONE
 'vre' -
-'dc_streetcar' -
+'dc_streetcar' - DONE but may need simplification or alternate
 'sunrail' -
 'tri_rail' -
 'norta' -
@@ -148,6 +148,13 @@ https://commons.wikimedia.org/wiki/File:MTS_Trolley_icon.svg
 
 Additional logos
 ================
+
+DC Streetcar
+------------
+dc_street_logo.svg
+Downloaded off front page of dcstreetcar.com in Dec 2022.
+They offer an (unsuitable b/c png) version of this logo on the developer page,
+so they're probably OK with use of this version.
 
 Sound Transit Logos
 -------------------
