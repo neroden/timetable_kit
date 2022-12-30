@@ -91,6 +91,7 @@ NEC
 * SEPTA.svg (icon only)
 * Baltimore_Light_RailLink_logo.svg (icon only)
 * WMATA_Metro_Logo.svg (icon containing words -- bad, muddy)
+* Virginia_Railway_Express.svg
 
 California
 ----------
@@ -114,9 +115,6 @@ Others
 Added to the Rapid Transit icons category by me, after finding them:
 ====================================================================
 
-WMATA_Metro_Logo_small.svg
---------------------------
-(icon without words, better)
 
 NJT_NJ_Symbol.svg
 -----------------
@@ -129,6 +127,11 @@ MARC_train.svg
 From https://commons.wikimedia.org/wiki/File:MARC_train.svg
 Also from Wikipedia, but this is the full version used in the header of the webpage.
 Public domain because it's in the Maryland State Manual of Traffic Control devices!
+
+
+WMATA_Metro_Logo_small.svg
+--------------------------
+(icon without words, better)
 
 
 Sacramento_Regional_transit.svg
@@ -156,6 +159,10 @@ Additional logos
 NJT_logo_cleaned.svg
 --------------------
 This is the same as NJT_logo with whitespace removed from top and bottom for better printing.
+
+Virginia_Railway_Express_cleaned.svg
+------------------------------------
+Again, whitespace removed.
 
 Sound Transit Logos
 -------------------

@@ -1,0 +1,10 @@
+/*
+Virginia_Railway_Express.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is a finicky-looking logo, must be larger to look OK
+*/
+.vre_logo {
+    height: 1.6em;
+}

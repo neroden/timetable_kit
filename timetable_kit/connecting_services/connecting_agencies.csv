@@ -4,4 +4,5 @@ septa,SEPTA,SEPTA,SEPTA,SEPTA,https://septa.org/
 marc,MARC_train,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
 baltimore_lrt,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
 wmata,WMATA_Metro_Logo_small,WMATA,WMATA,WMATA,https://www.wmata.com/
-dc_streetcar,,DC STREETCAR,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+dc_streetcar,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+vre,Virginia_Railway_Express_cleaned,VRE,Virginia Railway Express,Virginia Railway Express,https://www.vre.org/
