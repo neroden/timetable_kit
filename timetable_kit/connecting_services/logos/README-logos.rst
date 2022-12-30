@@ -40,8 +40,8 @@ This is the list of services we want logos for:
 'norta' - DONE
 'adirondack' - No logo.  Use text.
 'nfta_metro' - Only available file is in a unreadable format.  Use text.
-'metra' -
-'qline' -
+'metra' - DONE
+'qline' - DONE
 'stl_metrolink' -
 'tre' -
 'dart' - DONE
@@ -204,6 +204,17 @@ Metra_Logo_no_slogan.svg
 ------------------------
 Metra_Logo.svg with the slogan removed (since it's unreadable at this print size)
 
+qline-logo-wt.svg
+------------------
+Taken from the QLine webpage on 30 Dec 2022.  It's white!
+
+qline-logo-red.svg
+------------------
+Converted to be "QLine red" by me.  The webpage color is #DB001C.
+
+qline-logo-red-no-detroit.svg
+-----------------------------
+Remove the "Detroit" because it's too small to read at this size.
 
 Sound Transit Logos
 -------------------

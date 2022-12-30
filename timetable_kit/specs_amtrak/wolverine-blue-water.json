@@ -3,7 +3,6 @@
     "heading": "Amtrak's Wolverine & Blue Water",
     "reference_date": "20230107",
     "programmers_warning": "Wolverine trains have identical M-F and SaSu timetables but are listed separately, so days column is overridden: recheck this when GTFS changes.",
-    "bottom_text": "<b>Local connecting trains</b> are provided at Chicago by <a href=\"https://metra.com\">Metra</a>, and at Detroit by the <a href=\"http://qlinedetroit.com\">QLINE Detroit streetcar</a>.",
     "key_tz": "true",
     "for_rpa": "true"
 }
