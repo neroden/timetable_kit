@@ -4,7 +4,7 @@
     "programmers_note": "245 is in GTFS, but not ticketable on amtrak.com, so omitted",
     "landscape": "true",
     "reference_date": "20230107",
-    "bottom_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>; VIA Rail has different train numbers for the same train.<br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.<br><br><b>Local connecting trains</b> are provided at Poughkeepsie, Croton-Harmon, Yonkers, and New York by <a href=\"https://new.mta.info\">the MTA</a>.<br><br>The <a href=\"https://adirondackrr.com/\">Adirondack Railroad</a> runs seasonal scenic trips from Utica into the Adirondacks.",
+    "bottom_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>; VIA Rail has different train numbers for the same train.<br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
     "key_baggage": "true",
     "for_rpa": "true"
 }

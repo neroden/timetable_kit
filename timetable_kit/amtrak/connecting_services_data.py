@@ -72,14 +72,6 @@ connecting_services_dict = {
     "BCV": ["vre"],
     "MSS": ["vre"],
     # Charlotte connections will go here eventually... FIXME
-    # New Orleans
-    "NOL": ["norta"],
-    #
-    # Adirondack route to Canada
-    # FIXME add Montreal etc.
-    # Maple Leaf route to Canada
-    "BFX": ["nfta_metro"],
-    # FIXME add Toronto & Canadian stations
     #
     # Hartford Line
     "SPG": ["hartford_line"],
@@ -92,16 +84,20 @@ connecting_services_dict = {
     "STS": ["shore_line_east", "hartford_line"],
     # NHV done under NEC, above
     #
-    # East Coast to Chicago, from north to south:
-    # Chicago
-    "CHI": ["metra"],
+    # Adirondack route to Canada
+    # FIXME add Montreal etc.
+    #
+    # East Coast to Chicago, from north to south (+ Maple Leaf):
     # Lake Shore Limited heading out of Boston
     "FRA": ["mbta"],
     "WOR": ["mbta"],
     # SPG done under Hartford Line
-    # Empire Service / LSL heading out of NYC
+    # Empire Service / LSL heading out of NYC, plus Maple Leaf
     "CRT": ["metro_north"],
     "POU": ["metro_north"],
+    "UCA": ["adirondack"],
+    "BFX": ["nfta_metro"],
+    # FIXME: add Canadian stations
     # Keystone Service
     "ARD": ["septa"],
     "PAO": ["septa"],
@@ -114,6 +110,9 @@ connecting_services_dict = {
     "MRB": ["marc"],
     #
     # Services out of Chicago, going clockwise:
+    # Chicago
+    "CHI": ["metra"],
+    #
     # Detroit
     "DET": ["qline"],
     # Cardinal:
@@ -121,6 +120,10 @@ connecting_services_dict = {
     #
     # Metra Electric (CONO/Illini/Saluki)
     "HMW": ["metra"],
+    # CONO (also used in Crescent)
+    # New Orleans
+    "NOL": ["norta"],
+    #
     #
     # Metra Heritage Corridor (Lincoln Service / Texas Eagle)
     "SMT": ["metra"],

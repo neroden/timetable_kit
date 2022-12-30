@@ -38,7 +38,8 @@ This is the list of services we want logos for:
 'tri_rail' - DONE
 'miami_metrorail' - DONE
 'norta' - DONE
-'nfta_metro' - ***partial
+'adirondack' - No logo.  Use text.
+'nfta_metro' - Only available file is in a unreadable format.  Use text.
 'metra' -
 'qline' -
 'stl_metrolink' -
@@ -143,6 +144,10 @@ Tri-Rail.svg
 From https://commons.wikimedia.org/wiki/File:Tri-Rail_logo.svg
 This is the full logo with the words.
 
+MDTMetro.svg
+------------
+Miami Metrorail, as used on Wikipedia.
+https://commons.wikimedia.org/wiki/File:MDTMetro.svg
 
 
 Sacramento_Regional_transit.svg
@@ -191,14 +196,13 @@ NORTA.svg
 ---------
 Downloaded from https://www.norta.com/Content/images/logo-map-interaction.svg
 
+NFTA-Metro.ai
+-------------
+Found on brandsoftheworld.com/logo/nfta-metro.
+Not usable, crashes when I attempt to import it.
+
 
 Sound Transit Logos
 -------------------
 From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
 There are several alternatives.
-
-NFTA-Metro.ai
--------------
-Found on brandsoftheworld.com/logo/nfta-metro.
-Will need simplification and work to be usable in this context.
-
