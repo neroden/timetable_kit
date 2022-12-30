@@ -116,7 +116,11 @@ def amtrak_station_name_to_html(
     # I know it's there to distinguish from bus stops, but come on.
     # Let's assume it's the Amtrak station unless otherwise specified.
     # Also saves critical vertical space on Empire Builder timetable.
-    if facility_name and facility_name != "Amtrak Station":
+    #
+    # Also eliminate Providence's "Amtrak/MBTA Station";
+    # saves critical space on NEC timetables, and we're indicating the MBTA connection
+    # in another way anyway.
+    if facility_name and facility_name not in ["Amtrak Station","Amtrak/MBTA Station"] :
         enhanced_facility_name = "".join(
             ["<br><span class=station-footnotes>", " - ", facility_name, "</span>"]
         )
