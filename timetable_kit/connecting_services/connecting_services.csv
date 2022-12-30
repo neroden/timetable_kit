@@ -1,15 +1,18 @@
 service_code,logo_filename,suffix,alt,title,full_name,url
 mbta,MBTA,,,MBTA,MBTA,https://www.mbta.com/
-hartford_line,CT_Rail_icon_only,HL,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
 shore_line_east,CT_Rail_icon_only,SLE,SLE,CT rail Shore Line East,CT rail Shore Line East,https://shorelineeast.com/
+hartford_line,CT_Rail_icon_only,HL,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
 metro_north,MTA logo,MN,MN,Metro-North,Metro-North Railroad,https://new.mta.info/agency/metro-north-railroad
-nyc_subway,MTA logo,NYCT,NYCT,NYC Transit (Subway),NYC Transit (Subway),https://new.mta.info/maps
 lirr,MTA logo,LIRR,LIRR,Long Island Rail Road,Long Island Rail Road,https://new.mta.info/agency/long-island-rail-road
 njt,NJT_logo_cleaned,,NJT,NJ Transit,NJ Transit,https://www.njtransit.com/
+nyc_subway,MTA logo,NYCT,NYCT,NYC Transit (Subway),NYC Transit (Subway),https://new.mta.info/maps
 path,PATH_logo_cleaned,,PATH,PATH,PATH,https://www.panynj.gov/path/en/index.html
 septa,SEPTA,,SEPTA,SEPTA,SEPTA,https://septa.org/
 marc,MARC_train,,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
 baltimore_lrt,,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
 wmata,WMATA_Metro_Logo_small,,WMATA,WMATA,WMATA,https://www.wmata.com/
-dc_streetcar,,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
 vre,Virginia_Railway_Express_cleaned,,VRE,Virginia Railway Express,Virginia Railway Express,https://www.vre.org/
+dc_streetcar,,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+sunrail,,,SunRail,SunRail,SunRail,https://sunrail.com/
+tri_rail,Tri-Rail_icon,,TriRail,TriRail,TriRail,https://www.tri-rail.com/
+miami_metrorail,MDTMetro,,Metrorail,Miami-Dade Metrorail,Miami-Dade Transit Metrorail,https://www.miamidade.gov/global/transportation/metrorail.page

@@ -65,7 +65,7 @@ connecting_services_dict = {
     "DFB": ["tri_rail"],
     "FTL": ["tri_rail"],
     "HOL": ["tri_rail"],
-    "MIA": ["tri_rail"],
+    "MIA": ["tri_rail","miami_metrorail"],
     #
     # Following Crescent:
     # VRE Manassas branch

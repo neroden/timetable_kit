@@ -22,20 +22,20 @@ What we need
 This is the list of services we want logos for:
 'mbta' - DONE
 'shore_line_east' - DONE with CT Rail logo + suffix
-'metro_north' - MTA only
 'hartford_line' - DONE with CT Rail logo + suffix
-'lirr' - ***MTA only
+'metro_north' - DONE with MTA logo & suffix
+'lirr' - DONE with MTA logo & suffix
 'njt' - DONE
-'nyc_subway' - ***MTA only
+'nyc_subway' - DONE with MTA logo & suffix
 'path' - DONE
 'septa' - DONE
 'marc' - DONE
 'baltimore_lrt' - Unreadable in small print. Use text.
 'wmata' - DONE
-'vre' -
+'vre' - DONE
 'dc_streetcar' - No viable logo (bitmap only).  Use text.
-'sunrail' -
-'tri_rail' -
+'sunrail' - No viable logo.  Use text.
+'tri_rail' - DONE
 'norta' -
 'nfta_metro' - ***partial
 'metra' -
@@ -137,6 +137,12 @@ WMATA_Metro_Logo_small.svg
 --------------------------
 (icon without words, better)
 
+Tri-Rail.svg
+------------
+From https://commons.wikimedia.org/wiki/File:Tri-Rail_logo.svg
+This is the full logo with the words.
+
+
 
 Sacramento_Regional_transit.svg
 -------------------------------
@@ -175,6 +181,11 @@ This is the same as NJT_logo with whitespace removed from top and bottom for bet
 Virginia_Railway_Express_cleaned.svg
 ------------------------------------
 Again, whitespace removed.
+
+Tri-Rail_icon.svg
+-----------------
+This is just the icon, extracted from the full logo by me
+
 
 Sound Transit Logos
 -------------------
