@@ -5,6 +5,7 @@ metro_north,MTA logo,MN,MN,Metro-North,Metro-North Railroad,https://new.mta.info
 nyc_subway,MTA logo,NYCT,NYCT,NYC Transit (Subway),NYC Transit (Subway),https://new.mta.info/maps
 lirr,MTA logo,LIRR,LIRR,Long Island Rail Road,Long Island Rail Road,https://new.mta.info/agency/long-island-rail-road
 njt,NJT_logo_cleaned,,NJT,NJ Transit,NJ Transit,https://www.njtransit.com/
+path,PATH_logo_cleaned,,PATH,PATH,PATH,https://www.panynj.gov/path/en/index.html
 septa,SEPTA,,SEPTA,SEPTA,SEPTA,https://septa.org/
 marc,MARC_train,,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
 baltimore_lrt,,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail

@@ -1,0 +1,13 @@
+/*
+PATH_logo_cleaned.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Extracted from the full PATH logo, but without the word.
+
+This one needs to be oversized to be readable.
+*/
+.path_logo {
+    height: 1.25em;
+    vertical-align: -0.25em;
+}

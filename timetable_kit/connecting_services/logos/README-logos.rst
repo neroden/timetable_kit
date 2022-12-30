@@ -83,7 +83,7 @@ NEC
 * MBTA_svg (the "T" logo)
 * Icon-mode-commuter-rail-default.svg (MBTA purple commuter rail logo)
 * MTA_logo.svg (circular icon)
-* PATH_logo.svg (icon)
+* PATH_logo.svg (icon -- DO NOT USE, has artifacts)
 * PATH.svg (icon and word)
 * NJT_logo.svg (three stripes only)
 * PATCO_Line.svg (icon and word)
@@ -163,6 +163,10 @@ Additional logos
 CT_Rail_icon_only.svg
 ---------------------
 Derived from CT_Rail_logo_black.svg, but with just the icon and with extra whitespace removed.
+
+PATH_logo_cleaned.svg
+---------------------
+Derived from PATH.svg, but with just the icon (no word) and with extra whitespace removed.
 
 NJT_logo_cleaned.svg
 --------------------
