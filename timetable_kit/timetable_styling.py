@@ -30,6 +30,7 @@ from timetable_kit.runtime_config import agency as agency
 
 from timetable_kit import icons
 from timetable_kit import text_presentation
+from timetable_kit import connecting_services
 
 from timetable_kit.errors import InputError
 from timetable_kit.debug import debug_print
@@ -223,6 +224,9 @@ def finish_html_timetable(
     # This is used every time an icon is inserted...
     icons_css = icons.get_css_for_all_icons()
 
+    # For connecting service logos as imgs:
+    logos_css = connecting_services.get_css_for_all_logos()
+
     # TODO FIXME: add the alternative embedded SVG version.
     # Weasy can't handle SVG references within HTML.
     # Get the hidden SVGs to prepend to the HTML file, which are referenced in the later HTML
@@ -240,6 +244,7 @@ def finish_html_timetable(
         "font_size": font_size,  # 6pt
         "font_is_tiny": font_is_tiny,  # True
         "icons": icons_css,
+        "logos": logos_css,
         "header_styling": header_styling_css,
         "box_time_characters": box_time_characters,
     }

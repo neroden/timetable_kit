@@ -1,7 +1,7 @@
 agency_code,logo_filename,alt,title,full_name,url
-njt,NJT_logo,NJT,NJ Transit,NJ Transit,https://www.njtransit.com/
+njt,NJT_logo_cleaned,NJT,NJ Transit,NJ Transit,https://www.njtransit.com/
 septa,SEPTA,SEPTA,SEPTA,SEPTA,https://septa.org/
 marc,MARC_train,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
-baltimore_lrt,Baltimore_Light_RailLink_logo,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
-wmata,WMATA_Metro_Logo,WMATA,WMATA,WMATA,https://www.wmata.com/
-dc_streetcar,dc_street_logo,DC Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+baltimore_lrt,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
+wmata,WMATA_Metro_Logo_small,WMATA,WMATA,WMATA,https://www.wmata.com/
+dc_streetcar,,DC STREETCAR,DC Streetcar,DC Streetcar,https://dcstreetcar.com/

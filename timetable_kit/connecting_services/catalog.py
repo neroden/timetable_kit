@@ -89,7 +89,10 @@ def get_filenames_for_all_logos() -> list[str]:
     # Pull the appropriate column, convert to a list
     logo_svg_filenames = connecting_agencies_df["svg_filename"].tolist()
     debug_print(1, logo_svg_filenames)
-    return logo_svg_filenames
+    filtered_logo_svg_filenames = [
+        filename for filename in logo_svg_filenames if not pd.isna(filename)
+    ]
+    return filtered_logo_svg_filenames
 
 
 def get_css_for_all_logos() -> str:
@@ -97,7 +100,11 @@ def get_css_for_all_logos() -> str:
     Get the CSS code to style all the icons we're using.
     """
     logo_css_filenames = connecting_agencies_df["css_filename"].tolist()
-    logo_css_list = [get_logo_css(filename) for filename in logo_css_filenames]
+    logo_css_list = [
+        get_logo_css(filename)
+        for filename in logo_css_filenames
+        if not pd.isna(filename)
+    ]
     logo_css_all = "".join(logo_css_list)
     return logo_css_all
 

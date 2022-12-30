@@ -30,10 +30,10 @@ This is the list of services we want logos for:
 'path' - DONE
 'septa' - DONE
 'marc' - DONE
-'baltimore_lrt' - DONE
+'baltimore_lrt' - Unreadable in small print. Use text.
 'wmata' - DONE
 'vre' -
-'dc_streetcar' - DONE but may need simplification or alternate
+'dc_streetcar' - No viable logo (bitmap only).  Use text.
 'sunrail' -
 'tri_rail' -
 'norta' -
@@ -90,7 +90,7 @@ NEC
 * SETPA_text.svg (icon and word)
 * SEPTA.svg (icon only)
 * Baltimore_Light_RailLink_logo.svg (icon only)
-* WMATA_Metro_Logo.svg (icon containing words)
+* WMATA_Metro_Logo.svg (icon containing words -- bad, muddy)
 
 California
 ----------
@@ -113,6 +113,10 @@ Others
 
 Added to the Rapid Transit icons category by me, after finding them:
 ====================================================================
+
+WMATA_Metro_Logo_small.svg
+--------------------------
+(icon without words, better)
 
 NJT_NJ_Symbol.svg
 -----------------
@@ -149,18 +153,14 @@ https://commons.wikimedia.org/wiki/File:MTS_Trolley_icon.svg
 Additional logos
 ================
 
-DC Streetcar
-------------
-dc_street_logo.svg
-Downloaded off front page of dcstreetcar.com in Dec 2022.
-They offer an (unsuitable b/c png) version of this logo on the developer page,
-so they're probably OK with use of this version.
+NJT_logo_cleaned.svg
+--------------------
+This is the same as NJT_logo with whitespace removed from top and bottom for better printing.
 
 Sound Transit Logos
 -------------------
 From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
 There are several alternatives.
-
 
 NFTA-Metro.ai
 -------------

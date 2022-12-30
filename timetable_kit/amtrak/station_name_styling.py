@@ -6,6 +6,12 @@
 Utility routines to style Amtrak station names as HTML or text.
 """
 
+# Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
+from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
+
+# Find the HTML for a specific connecting agency's logo
+from timetable_kit.connecting_services import get_connecting_agency_logo_html
+
 
 def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str:
     """
@@ -58,7 +64,9 @@ def amtrak_station_name_to_single_line_text(station_name: str, major=False) -> s
     return styled_station_name
 
 
-def amtrak_station_name_to_html(station_name: str, major=False) -> str:
+def amtrak_station_name_to_html(
+    station_name: str, major=False, show_connections=True
+) -> str:
     """
     Produce pretty Amtrak station name for HTML -- potentially multiline, and complex.
 
@@ -67,6 +75,7 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
     New Orleans, LA - Union Passenger Terminal (NOL)
     Produce a pretty-printable HTML version
     If "major", then make the station name bigger and bolder
+    If "show_connections" (default True) then add links for connecting services (complex!)
     """
 
     if " - " in station_name:
@@ -114,7 +123,30 @@ def amtrak_station_name_to_html(station_name: str, major=False) -> str:
     else:
         enhanced_facility_name = ""
 
+    # Connections.  Hoo boy.  Default to nothing.
+    connection_logos_html = ""
+    if show_connections:
+        # station_code had better be correct, since we're going to look it up
+        # stations with no entry in the dict are treated the same as
+        # stations which have an empty list of connecting services
+        connecting_services = connecting_services_dict.get(station_code, [])
+        for connecting_service in connecting_services:
+            # Note, this is "" if the agency is not found (but a debug error will print)
+            # Otherwise it's a complete HTML code for the agency & its icon
+            this_logo_html = get_connecting_agency_logo_html(connecting_service)
+            if this_logo_html:
+                # Add a space before the logo... if it exists at all
+                connection_logos_html += " "
+                connection_logos_html += this_logo_html
+        # Initial implementation tucks all connecting services on the same line.
+        # This seems to be working.
+
     fancy_name = " ".join(
-        [enhanced_city_state_name, enhanced_station_code, enhanced_facility_name]
+        [
+            enhanced_city_state_name,
+            enhanced_station_code,
+            enhanced_facility_name,
+            connection_logos_html,
+        ]
     )
     return fancy_name
