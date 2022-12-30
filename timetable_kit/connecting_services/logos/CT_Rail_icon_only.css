@@ -5,11 +5,7 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This is used for both Hartford Line and Shore Line East (with different suffixes)
 */
-.hartford_line_logo {
-    height: 1em;
-    vertical-align: -0.125em;
-}
-.shore_line_east_logo {
+.hartford_line_logo, .shore_line_east_logo {
     height: 1em;
     vertical-align: -0.125em;
 }
