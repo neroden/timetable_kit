@@ -1,0 +1,11 @@
+/*
+RideKC_Streetcar_icon.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This one should be bigger to look good.
+*/
+.kc_streetcar_logo {
+    height: 1.5em;
+    vertical-align: -0.375em;
+}

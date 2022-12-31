@@ -3,18 +3,28 @@ README-logos.rst
 Part of timetable_kit
 
 This directory contains logos for various transit agencies.
+
+None of the logos are part of timetable_kit proper; they are not subject to its copyright.
+
 Most are believed to be public domain but trademarked.
 Some may be copyrighted and trademarked.
+
+Since they are being used informationally to refer to the agencies, they are
+being used in full compliance with all trademark laws.
 
 These are used solely for the fair-use informational purpose of
 showing that this transit agency offers connecting service at a
 particular station, so copyright should not be an issue.
 
-If a transit agency complains, we will simply replace their 
-logo with a logo of our own design referring to them.
+For the most part, these logos are used by Wikipedia for exactly the same purpose.
 
-In fact, we may have to do that in any case for agencies with logos
-which are unreadable in small print.
+If a transit agency complains, we will remove their logo and refer to them
+with a plaintext acronym or abbreviation.
+
+We already have to do that for agencies with logos which are unreadable in small print.
+
+The CSS files are part of timetable_kit, and are basically alignment and sizing adjustments
+to make the logos as readable as possible given the extreme space constraints of the timetable.
 
 What we need
 =============
@@ -42,7 +52,8 @@ This is the list of services we want logos for:
 'nfta_metro' - Only available file is in a unreadable format.  Use text.
 'metra' - DONE
 'qline' - DONE
-'stl_metrolink' -
+'stl_metrolink' - DONE
+'kc_streetcar' - DONE
 'tre' -
 'dart' - DONE
 'texrail' -
@@ -51,7 +62,6 @@ This is the list of services we want logos for:
 'denver_rtd'
 'frontrunner'
 'uta_trax', 
-'kc_streetcar'
 'nm_railrunner'
 'the_hop'
 'twin_cities_metro_transit'
@@ -219,6 +229,24 @@ Converted to be "QLine red" by me.  The webpage color is #DB001C.
 qline-logo-red-no-detroit.svg
 -----------------------------
 Remove the "Detroit" because it's too small to read at this size.
+
+RideKC_Streetcar_logo.svg
+-------------------------
+From the Wikipedia page for the KC Streetcar.
+This is much too large for our purposes, we just want the icon.
+https://upload.wikimedia.org/wikipedia/en/4/42/RideKC_Streetcar_logo.svg
+
+RideKC_Streetcar_icon.svg
+--------------------------
+Extracted from the above.
+This is too muddy for our purposes.
+
+RideKC_Streetcar_short.svg
+-------------------------
+Has "RideKC" but not the overly-long word "Streetcar".
+Fits with the KC Streetcar brand standards and managable for our purpose.
+
+
 
 Sound Transit Logos
 -------------------
