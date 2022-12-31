@@ -1,11 +1,14 @@
-First priority:
-Connecting Services project
-
-Second priority:
-Repair Virginia Service timetable
+Finish adding Connecting Services:
+- VIA and Canadian stuff
+- Midwestern stuff
+- Denver, Salt Lake, etc.
+- West Coast
 
 Third priority:
-Clean up other "working" timetables
+Clean up other "working" timetables.
+Finished timetables:
+- Virginia Service
+- Michigan Service
 
 Fourth priority:
 Get VIA, or "generic" agency, going
@@ -18,17 +21,6 @@ When new GTFS drops:
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
-
-For Amtrak feeds:
-0 -- write generic local connections as CSV files:
-  a -- agency, columns for agency data
-  b -- agency, list of relevant amtrak stations
-  c -- read these using the usual PANDAS methods
-1 -- generic local connections template (feed off of station list?)
-2 -- boilerplate pattern data (db) for local connections
-3 -- db for which stations have which local connections
-4 -- generator for local connection link HTML
-5 -- patch to add local connection link to station name cell
 
 For generalizing to non-Amtrak feeds:
 A -- abstract the station name styling routines into one (easier to override / underride)
@@ -56,9 +48,6 @@ Fine for after release of timetables:
 0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
 
 0.5 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
-0.75 -- Add "trains on left, stations on top" schema, for AWESOMENESS
-
-1 -- Add Roanoke service to Crescent timetable?
 
 4 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
@@ -89,3 +78,4 @@ Fine for never:
 
 Wishlist:
 1 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
+(OK.  It would be AWESOME.)
