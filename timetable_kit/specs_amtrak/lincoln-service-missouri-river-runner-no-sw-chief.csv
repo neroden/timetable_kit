@@ -1,27 +1,25 @@
-,301,311,319,21,305,307,access,station,300,302,22,318,316,306
-column-options,ardp,,,,,ardp,,,ardp reverse,reverse,reverse,reverse,reverse,ardp reverse
+,311,301,319,21,305,307,access,station,300,302,22,318,306,316
+column-options,ardp,ardp,ardp,,,ardp,,,ardp reverse,reverse,reverse,ardp reverse,ardp reverse,ardp reverse
 route-name,,,,,,,,,,,,,,
-days,CHI,STL,CHI,CHI,CHI,CHI,,,STL,STL,STL,KCY,KCY,STL
+days,STL,STL,STL,STL,STL,STL,,,STL,STL,STL,STL,STL,STL
 updown,,,,,,,,,,,,,,
-CHI,first,blank,first,first,first,first,,,last,last,last,last,blank,last
-SMT,,blank,,,,,,,,,,,blank,
-JOL,,blank,,,,,,,,,,,blank,
-DWT,,blank,,,,,,,,,,,blank,
-PON,,blank,,,,,,,,,,,blank,
-BNL,,blank,,,,,,,,,,,blank,
-LCN,,blank,,,,,,,,,,,blank,
-SPI,,blank,,,,,,,,,,,blank,
-CRV,,blank,,,,,,,,,,,blank,
-ALN,,blank,,,,,,,,,,,blank,
-STL,last,blank,last,,last,last,,,first two-row,first two-row,,first,blank,first two-row
-,,,,"<div style=""text-align:center;"">to Texas</div>",,,,,,,"<div style=""text-align:center;"">from Texas</div>",,,
-STL,blank,first,first,blank,blank,blank,,,blank,blank,blank,last,last,blank
-KWD,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-WAH,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-HEM,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-JEF,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-SED,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-WAR,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-LEE,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-IDP,blank,,,blank,blank,blank,,,blank,blank,blank,,,blank
-KCY,blank,last,last,blank,blank,blank,,,blank,blank,blank,first,first,blank
+CHI,blank,first,first,first,first,first,,,last,last,last,last,last,blank
+SMT,blank,,,,,,,,,,,,,blank
+JOL,blank,,,,,,,,,,,,,blank
+DWT,blank,,,,,,,,,,,,,blank
+PON,blank,,,,,,,,,,,,,blank
+BNL,blank,,,,,,,,,,,,,blank
+LCN,blank,,,,,,,,,,,,,blank
+SPI,blank,,,,,,,,,,,,,blank
+CRV,blank,,,,,,,,,,,,,blank
+ALN,blank,,,,,,,,,,,,,blank
+STL,first two-row,last two-row,,,last two-row,last two-row,,,first two-row,first two-row,,,first two-row,last two-row
+KWD,,blank,,"<div style=""text-align:center;"">to Texas</div>",blank,blank,,,blank,blank,"<div style=""text-align:center;"">from Texas</div>",,blank,
+WAH,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+HEM,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+JEF,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+SED,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+WAR,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+LEE,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+IDP,,blank,,blank,blank,blank,,,blank,blank,blank,,blank,
+KCY,last,blank,last,blank,blank,blank,,,blank,blank,blank,first,blank,first

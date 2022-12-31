@@ -1,12 +1,10 @@
 {
     "title": "Lincoln Service & Missouri River Runner Timetable",
     "heading": "Amtrak's Lincoln Service & Missouri River Runner",
-    "reference_date": "20220710",
+    "reference_date": "20230107",
     "landscape": "true",
-    "bottom_text": "<b>Local connecting trains</b> are provided at Chicago, Summit, and Joliet by <a href=\"https://metra.com\">Metra</a>, at St. Louis by <a href=\"https://www.metrostlouis.org/metrolink/\">Metrolink</a>, and at Kansas City by <a href=\"https://kcstreetcar.org\">KC Streetcar</a>.",
     "key_baggage": "true",
     "key_r": "true",
     "key_d": "true",
-    "compress_credits": "true",
     "for_rpa": "true"
 }
