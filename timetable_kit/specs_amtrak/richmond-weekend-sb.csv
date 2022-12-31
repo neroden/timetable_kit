@@ -37,8 +37,8 @@ QAN,,,,,,,,,,,
 FBG,,,,,,,,,,,
 ASD,,,,,,,,,,,
 RVR,,,,,,,,,,,
-RVM,,,,To Savannah,To Charlotte,,last,To Miami,,,To Miami
-WBG,,,,blank,blank,,blank,blank,,,blank
-NPN,,,last,blank,blank,,blank,blank,last,,blank
-PTB,,,blank,blank,blank,,blank,blank,blank,,blank
-NFK,,,blank,blank,blank,last,blank,blank,blank,last,blank
+RVM,,,,,,,last,,,,
+WBG,,,,,,,blank,,,,
+NPN,,,last,,,,blank,,last,,
+PTB,,,blank,,,,blank,,blank,,
+NFK,,,blank,To Savannah,To Charlotte,last,blank,To Miami,blank,last,To Miami
