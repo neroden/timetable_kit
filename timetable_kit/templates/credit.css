@@ -5,11 +5,14 @@
 CSS file for the credits, and the unofficial_amtrak disclaimer (except fonts).
 
 Often blank, but affected by the "compress_credits" option.
+
+Also compresses the bottom_text and the connecting-services-key
+Basically gets rid of all the blank lines
 #}
 {% if compress_credits %}
 /* Compress the credits paragraphs to save space */
 
-.credit-paragraph {
+.credit-paragraph, .bottom-text, .connecting-services-key {
     margin-top: 0;
     margin-bottom: 0;
 }
