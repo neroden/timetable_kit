@@ -1,10 +1,10 @@
-,station,access,98,164,88,96,92,80 sunday,158,90,124
-column-options,,,ardp,,,,,,,,
+,access,station,98,164,88,96,92,80 sunday,158,90,124
+column-options,,,ardp,,,,,,ardp,,
 route-name,,,,,,,,,,,
 days,,,RVR,RVR,RVR,RVR,RVR,"<div style=""text-align:center; font-weight:bold;"">Su</div>",RVR,RVR,RVR
-NFK,,,from<br>Miami,blank,first,first,from<br>Miami,from<br>Charlotte,first,from<br>Savannah,blank
-PTB,,,first,blank,,,first,first,,first,blank
-NPN,,,,blank,,,,,,,first
+NFK,,,from<br>Miami,blank,first,blank,from<br>Miami,from<br>Charlotte,first,from<br>Savannah,blank
+PTB,,,first,blank,,blank,first,first,,first,blank
+NPN,,,,blank,,first,,,,,first
 WBG,,,,blank,,,,,,,
 RVM,,,,first,,,,,,,
 RVR,,,,,,,,,,,

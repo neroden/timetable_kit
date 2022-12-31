@@ -1,4 +1,4 @@
-,station,access,67,89,79 monday,185,95,91,125,93,85,97
+,access,station,67,89,79 monday,185,95,91,125,93,85,97
 column-options,,,ardp,,,,ardp,,,,,
 route-name,,,,,,,,,,,,
 days,,,BOS,,,,BOS,,,BOS,BOS,
@@ -41,4 +41,4 @@ RVM,,,,,,,,,,,last,
 WBG,,,,,,,,,,,blank,
 NPN,,,last,,,,,,last,,blank,
 PTB,,,blank,,,,,,blank,,blank,
-NFK,,,blank,To Savannah,To Charlotte,last,last,To Miami,blank,last,blank,To Miami
+NFK,,,blank,to Savannah,to Charlotte,last,last,to Miami,blank,last,blank,to Miami
