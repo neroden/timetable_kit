@@ -89,7 +89,7 @@ NEC
 * PATH.svg (icon and word)
 * NJT_logo.svg (three stripes only)
 * PATCO_Line.svg (icon and word)
-* SETPA_text.svg (icon and word)
+* SEPTA_text.svg (icon and word)
 * SEPTA.svg (icon only)
 * Baltimore_Light_RailLink_logo.svg (icon only)
 * WMATA_Metro_Logo.svg (icon containing words -- bad, muddy)
@@ -152,6 +152,10 @@ https://commons.wikimedia.org/wiki/File:MDTMetro.svg
 Metra_Logo.svg
 --------------
 https://commons.wikimedia.org/wiki/File:Metra_Logo.svg
+
+St_Louis_MetroLink_Logo.svg
+---------------------------
+https://commons.wikimedia.org/wiki/File:St_Louis_MetroLink_Logo.svg
 
 
 Sacramento_Regional_transit.svg
