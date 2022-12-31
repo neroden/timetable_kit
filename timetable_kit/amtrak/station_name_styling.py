@@ -123,13 +123,26 @@ def amtrak_station_name_to_html(
     if facility_name and facility_name not in ["Amtrak Station","Amtrak/MBTA Station"] :
         # By default, put the facility name on its own line
         br_for_facility_name = "<br>"
-        if station_code in ["BOS", "BBY", "RVM"]:
+        if station_code in ["BOS", "BBY"]:
             # Save lines on some timetables by putting the facility code on the same line as the station
             # This is needed at Boston for the Richmond timetable
             br_for_facility_name = ""
+        if station_code == "PHL":
+            # facility_name == "William H. Gray III 30th St. Station"
+            # Sorry, Mr. Gray, your name is too long
+            facility_name = "30th St. Station"
+        if station_code == "NYP":
+            # facility_name == "Moynihan Train Hall"
+            # Explain that this is Penn Station
+            # We have the room because we're taking an extra line for connecting services
+            facility_name = "Moynihan Train Hall at Penn Station"
         enhanced_facility_name = "".join(
             [br_for_facility_name,"<span class=station-footnotes>", " - ", facility_name, "</span>"]
         )
+        if station_code == "NYP":
+            # Literally the widest, with all the connecting services.
+            # Needa special-casing, with an extra line for connecting services.
+            enhanced_facility_name += "<br>"
     else:
         enhanced_facility_name = ""
 
