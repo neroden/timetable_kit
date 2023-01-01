@@ -242,11 +242,22 @@ Extracted from the above.
 This is too muddy for our purposes.
 
 RideKC_Streetcar_short.svg
--------------------------
+---------------------------
 Has "RideKC" but not the overly-long word "Streetcar".
 Fits with the KC Streetcar brand standards and managable for our purpose.
 
+TRE_logo.png
+------------
+From https://commons.wikimedia.org/wiki/File:TRE_logo.png
+We do not use PNGs.
 
+TRE_logo_working.svg
+---------------------
+Traced in Inkscape -- working file.  (Yeech.)
+
+TRE_logo_reduced.svg
+---------------------
+Reduced SVG file, usable.
 
 Sound Transit Logos
 -------------------
