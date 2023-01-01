@@ -56,7 +56,7 @@ This is the list of services we want logos for:
 'kc_streetcar' - DONE
 'dart' - DONE
 'tre' - DONE
-'texrail' - No longer using a logo on its website, so use text.
+'texrail' - DONE - No longer using a logo on its website; use old logo variant used by Wikipedia.
 'tucson_sunlink_streetcar' -
 'metrolink' - DONE
 'denver_rtd'
@@ -167,6 +167,12 @@ St_Louis_MetroLink_Logo.svg
 ---------------------------
 https://commons.wikimedia.org/wiki/File:St_Louis_MetroLink_Logo.svg
 
+"TEX partial logo.svg"
+--------------------------
+The agency no longer uses a logo at all.
+This variant is used by Wikipedia on its maps.
+https://commons.wikimedia.org/wiki/File:Trinity_Metro_TEX_only.svg
+
 
 Sacramento_Regional_transit.svg
 -------------------------------
@@ -258,6 +264,7 @@ Traced in Inkscape -- working file.  (Yeech.)
 TRE_logo_reduced.svg
 ---------------------
 Reduced SVG file, usable.
+
 
 Sound Transit Logos
 -------------------
