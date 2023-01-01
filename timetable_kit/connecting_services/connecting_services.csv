@@ -12,7 +12,7 @@ marc,MARC_train,,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedul
 baltimore_lrt,,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
 wmata,WMATA_Metro_Logo_small,,WMATA,WMATA,WMATA,https://www.wmata.com/
 vre,Virginia_Railway_Express_cleaned,,VRE,Virginia Railway Express,Virginia Railway Express,https://www.vre.org/
-dc_streetcar,,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+dc_streetcar,dc_street_logo_reduced,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
 sunrail,,,SunRail,SunRail,SunRail,https://sunrail.com/
 tri_rail,Tri-Rail,,TriRail,TriRail,TriRail,https://www.tri-rail.com/
 miami_metrorail,MDTMetro,,Metrorail,Miami-Dade Metrorail,Miami-Dade Transit Metrorail,https://www.miamidade.gov/global/transportation/metrorail.page

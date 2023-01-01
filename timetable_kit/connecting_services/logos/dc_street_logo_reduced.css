@@ -1,0 +1,9 @@
+/*
+dc_street_logo_reduced.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+*/
+.dc_streetcar_logo {
+    height: 1em;
+    vertical-align: -0.125em;
+}

@@ -1,3 +1,4 @@
+
 README-logos.rst
 ******************
 Part of timetable_kit
@@ -43,7 +44,7 @@ This is the list of services we want logos for:
 'baltimore_lrt' - Unreadable in small print. Use text.
 'wmata' - DONE
 'vre' - DONE
-'dc_streetcar' - No viable logo (bitmap only).  Use text.
+'dc_streetcar' - DONE
 'sunrail' - No viable logo.  Use text.
 'tri_rail' - DONE
 'miami_metrorail' - DONE
@@ -211,6 +212,25 @@ This is the same as NJT_logo with whitespace removed from top and bottom for bet
 Virginia_Railway_Express_cleaned.svg
 ------------------------------------
 Again, whitespace removed.
+
+dc_street_logo.svg
+-------------------
+DC Streetcar logo from their website.  It isn't a real SVG!  It has an embedded bitmap.
+
+dc_street_logo.png
+-------------------
+The bitmap extracted from the above "fake" SVG
+
+dc_street_logo_working.svg
+--------------------------
+My copy for tracing the PNG
+
+dc_street_logo_reduced.svg
+---------------------------
+Just the "DC" letters.
+The streetcar image is unreadable at small sizes.
+The entire "DC Streetcar" word logo is too long; there's too many connecting services at DC already.
+The "DC" logo is distinctive and short enough.
 
 Tri-Rail_icon.svg
 -----------------
