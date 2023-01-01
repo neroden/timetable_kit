@@ -1,0 +1,11 @@
+/*
+2022_Metrolink_Logo.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This one's too big, much like TEXRail.
+*/
+.metrolink_logo {
+    height: 0.75em;
+    vertical-align: 0em;
+}

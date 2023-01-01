@@ -58,8 +58,8 @@ This is the list of services we want logos for:
 'dart' - DONE
 'tre' - DONE
 'texrail' - DONE - No longer using a logo on its website; use old logo variant used by Wikipedia.
-'tucson_sunlink_streetcar' -
-'metrolink' - DONE
+'tucson_sunlink_streetcar' - Does not have a logo. Use text.
+'metrolink' - DONE - may need to be shortened, though
 'denver_rtd'
 'frontrunner'
 'uta_trax', 
@@ -111,9 +111,7 @@ California
 
 * Bart-logo.svg
 * Caltrain_logo.svg
-* Newmetrolinklogo.svg (word)
-* Metrolink_logo.svg (word & icon)
-* Metrolink_icon.svg (icon)
+* Newmetrolinklogo.svg (word) -- note, Metrolink changed its logo in 2022
 * "Los Angeles Metro M logo.svg" (icon only)
 * COASTER_logo.svg (word)
 * Coaster_icon.svg (icon)
@@ -173,6 +171,11 @@ https://commons.wikimedia.org/wiki/File:St_Louis_MetroLink_Logo.svg
 The agency no longer uses a logo at all.
 This variant is used by Wikipedia on its maps.
 https://commons.wikimedia.org/wiki/File:Trinity_Metro_TEX_only.svg
+
+2022_Metrolink_logo.svg
+------------------------
+Metrolink (LA) changed their logo in 2022.
+https://commons.wikimedia.org/wiki/File:2022_Metrolink_Logo.svg
 
 
 Sacramento_Regional_transit.svg
