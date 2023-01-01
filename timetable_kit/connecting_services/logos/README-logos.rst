@@ -54,9 +54,9 @@ This is the list of services we want logos for:
 'qline' - DONE
 'stl_metrolink' - DONE
 'kc_streetcar' - DONE
-'tre' -
 'dart' - DONE
-'texrail' -
+'tre' - DONE
+'texrail' - No longer using a logo on its website, so use text.
 'tucson_sunlink_streetcar' -
 'metrolink' - DONE
 'denver_rtd'

@@ -1,0 +1,11 @@
+/*
+Dallas_Area_Rapid_Transit_logo.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This one is hard to see (because yellow).  Try making bigger.
+*/
+.dart_logo {
+    height: 1.5em;
+    vertical-align: -0.375em;
+}
