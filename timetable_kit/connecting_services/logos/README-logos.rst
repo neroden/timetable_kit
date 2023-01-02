@@ -72,9 +72,9 @@ This is the list of services we want logos for:
 'portland_streetcar' - DONE
 'sacramento_rt' - DONE
 'bart' - DONE
-'ace' - found
-'vta' - found
-'caltrain' - found
+'ace' - DONE
+'vta' - DONE
+'caltrain' - DONE
 'la_metro' - DONE
 'coaster' - found
 'sprinter' - found

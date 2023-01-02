@@ -1,5 +1,5 @@
 Finish adding Connecting Services:
-- California
+- San Diego / Pacific Surfliner
 - VIA and Canadian stuff
 
 Clean up other "working" timetables.
@@ -8,6 +8,7 @@ Finished timetables (need rebuild for arrows)
 - Michigan Services
 - Pennsylvanian
 - Lake Shore Limited
+- Coast Starlight
 
 Broken due to GTFS breakage:
 - Winter Park Express
@@ -35,7 +36,6 @@ Try to do:
 - Heartland Flyer
 - Empire Builder
 - Crescent
-- Coast Starlight (patch severe #11/#14 weirdness)
 - CONO/Illini/Saluki
 - Cardinal
 - Capitol Limited

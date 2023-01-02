@@ -42,5 +42,6 @@ trimet,TriMet_icon,,MAX,TriMet MAX,TriMet MAX Light Rail,https://trimet.org/max/
 portland_streetcar,Portland_Streetcar_symbol,,Streetcar,Portland Streetcar,Portland Streetcar,https://portlandstreetcar.org/
 sacramento_rt,Sacramento_Regional_Transit,,RT,Sacramento RT,Sacramento RT,http://www.sacrt.com/
 bart,Bart-logo,,BART,BART,BART,https://www.bart.gov/
+caltrain,Caltrain_logo,,Caltrain,Caltrain,Caltrain,https://www.caltrain.com/
 ace,Altamont_Corridor_Express_logo,,ACE,Altamont Corridor Express,Altamont Corridor Express,https://acerail.com/
-vta,BSicon_LOGO_SCvta,,VTA,VTA,VTA,https://www.vta.org/
+vta,BSicon_LOGO_SCvta,,VTA,VTA,VTA light rail,https://www.vta.org/
