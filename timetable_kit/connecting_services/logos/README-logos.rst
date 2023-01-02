@@ -1,4 +1,3 @@
-
 README-logos.rst
 ******************
 Part of timetable_kit
@@ -60,7 +59,7 @@ This is the list of services we want logos for:
 'texrail' - DONE - No longer using a logo on its website; use old logo variant used by Wikipedia.
 'tucson_sunlink_streetcar' - Does not have a logo. Use text.
 'metrolink' - DONE - may need to be shortened, though
-'denver_rtd'
+'denver_rtd' - DONE
 'frontrunner'
 'uta_trax', 
 'nm_railrunner'
@@ -171,6 +170,21 @@ https://commons.wikimedia.org/wiki/File:St_Louis_MetroLink_Logo.svg
 The agency no longer uses a logo at all.
 This variant is used by Wikipedia on its maps.
 https://commons.wikimedia.org/wiki/File:Trinity_Metro_TEX_only.svg
+
+
+Regional_Transportation_District_logo.svg
+------------------------------------------
+Denver.  Official is white on red in a square.
+This variant is used by Wikipedia on its maps.
+https://commons.wikimedia.org/wiki/File:Regional_Transportation_District_logo.svg
+
+
+UTA_icon.svg
+-------------
+Without the letters "U T A".
+This variant is used by Wikipedia on its maps.
+https://commons.wikimedia.org/wiki/File:UTA_icon.svg
+
 
 2022_Metrolink_logo.svg
 ------------------------

@@ -139,10 +139,6 @@ def amtrak_station_name_to_html(
         enhanced_facility_name = "".join(
             [br_for_facility_name,"<span class=station-footnotes>", " - ", facility_name, "</span>"]
         )
-        if station_code == "NYP":
-            # Literally the widest, with all the connecting services.
-            # Needa special-casing, with an extra line for connecting services.
-            enhanced_facility_name += "<br>"
     else:
         enhanced_facility_name = ""
 
@@ -150,11 +146,10 @@ def amtrak_station_name_to_html(
     connection_logos_html = ""
     if show_connections:
         # Special-casing for certain stations with LOTS of connections
-        if station_code in []:
-            # PHL has a very long facility_name;
-            # WAS has a very long list of connecting services.
-            # So snarf an extra line.
-            # ...w don't need it.
+        if station_code in ["NYP", "SLC"]:
+            # NYP has a long facility name and a lot of connections
+            # SLC has connections with very long lines
+            # Grab an extra line in these cases
             connection_logos_html += "<br>"
         # station_code had better be correct, since we're going to look it up
         # stations with no entry in the dict are treated the same as
