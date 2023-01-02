@@ -1,7 +1,7 @@
 {
     "title": "Empire Service Weekday Westbound",
     "heading": "Amtrak's Empire Service: Weekday Westbound & Northbound",
-    "programmers_note": "245 is in GTFS, but not ticketable on amtrak.com, so omitted",
+    "programmers_warning": "245 is in GTFS, but not ticketable on amtrak.com, so omitted",
     "landscape": "true",
     "reference_date": "20230107",
     "bottom_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>; VIA Rail has different train numbers for the same train.<br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
