@@ -1,3 +1,8 @@
+Add arrows to the font.
+- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
+- We should have custom arrows.
+- Consider commissioning the designer.
+
 Finish adding Connecting Services:
 - VIA and Canadian stuff
 - Midwestern stuff

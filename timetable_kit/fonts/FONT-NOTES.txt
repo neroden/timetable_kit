@@ -1,4 +1,10 @@
 Notes on choice of font for timetables.
+----
+Arrows.
+
+We are currently using Noto Sans Symbols for arrows, via the fallback method.
+We should install arrows into our own font. FIXME!
+
 
 ----    
 Font size.
