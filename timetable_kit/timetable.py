@@ -1112,7 +1112,11 @@ def fill_tt_spec(
                             if is_first_stop or is_last_stop:
                                 # We used to do this always, but it's sometimes wrong!
                                 # Allow spec creator to override when they want two rows.
-                                if not cell_codes["two_row"]:
+                                if cell_codes["two_row"]:
+                                    # Even if not an ArDp station, force it if
+                                    # the timetable designer so desires
+                                    two_row = True
+                                else:
                                     two_row = False
 
                         cell_text = text_presentation.timepoint_str(
