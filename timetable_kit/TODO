@@ -1,16 +1,9 @@
-Add arrows to the font.
-- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
-- We should have custom arrows.
-- Consider commissioning the designer.
-
 Finish adding Connecting Services:
+- California
 - VIA and Canadian stuff
-- Midwestern stuff
-- Denver, Salt Lake, etc.
-- West Coast
 
 Clean up other "working" timetables.
-Finished timetables:
+Finished timetables (need rebuild for arrows)
 - Virginia Services
 - Michigan Services
 - Pennsylvanian
@@ -42,7 +35,7 @@ Try to do:
 - Heartland Flyer
 - Empire Builder
 - Crescent
-- Coast Starlight
+- Coast Starlight (patch severe #11/#14 weirdness)
 - CONO/Illini/Saluki
 - Cardinal
 - Capitol Limited
@@ -74,6 +67,11 @@ When new GTFS drops:
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
+
+Add arrows to the font:
+- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
+- We should have custom arrows.
+- Consider commissioning the designer (email sent)
 
 For generalizing to non-Amtrak feeds:
 A -- abstract the station name styling routines into one (easier to override / underride)
