@@ -3,7 +3,7 @@
     "title": "Coast Starlight Timetable",
     "heading": "Amtrak's Coast Starlight",
     "reference_date": "20230107",
-    "bottom_text": "<b>San Francisco</b> can be reached by BART from Richmond,<br>by Caltrain from San Jose,<br>or by Amtrak-ticketed connecting bus from Emeryville.",
+    "bottom_text": "<b>San Francisco</b> can be reached by Caltrain from San Jose,<br>or by Amtrak-ticketed connecting bus from Emeryville.",
     "key_on_right": "true",
     "key_baggage": "true",
     "key_d": "true",
