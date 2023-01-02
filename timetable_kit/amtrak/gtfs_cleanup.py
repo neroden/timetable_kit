@@ -23,8 +23,9 @@ def patch_feed(feed):
     new_feed = feed.copy()
     new_calendar = new_feed.calendar
 
-    # Coast Starlight: bogus Saturday calendar,
-    # and everything-but-Saturday calendar which is the same
+    # Coast Starlight: two bogus errors!
+    # 11 is missing Saturday and has two other identical calendars;
+    # 14 has three identical calendars
 
     # First find the route id:
     for index in new_feed.routes.index:
@@ -38,23 +39,26 @@ def patch_feed(feed):
         if new_feed.trips.loc[index, "route_id"] == cs_route_id:
             service_ids.add(new_feed.trips.loc[index, "service_id"])
     # Now cycle through the calendars.
-    # First find and drop the bogus Saturday calendar:
-    # Now find and drop the bogus Saturday calendar:
+    # First find and drop the bogus calendars:
     for index in new_calendar.index:
         if new_calendar.loc[index, "service_id"] in service_ids:  # Coast Starlight
-            if new_calendar.loc[index, "monday"] == 0:  # Not on Monday
-                if new_calendar.loc[index, "saturday"] == 1:  # On Saturday
+            if new_calendar.loc[index, "wednesday"] == 0:  # Not on Wednesday
                     new_calendar = new_calendar.drop(labels=[index], axis="index")
-                    debug_print(1, "Patched saturday special out of Coast Starlight"),
+                    debug_print(1, "Patched not-on-wednesday special out of Coast Starlight"),
                     break
     for index in new_calendar.index:
-        # Now patch the everything-but-Saturday calendar to be every-day-of-the-week:
+        # Now patch the Wednesday calendars to be every-day-of-the-week:
         # (This is the good calendar)
         if new_calendar.loc[index, "service_id"] in service_ids:  # Coast Starlight
-            if new_calendar.loc[index, "saturday"] == 0:  # Not on Saturday
-                new_calendar.loc[index, "saturday"] = 1
-                debug_print(1, "Patched saturday into Coast Starlight general")
-                break
+            new_calendar.loc[index, "sunday"] = 1
+            new_calendar.loc[index, "monday"] = 1
+            new_calendar.loc[index, "tuesday"] = 1
+            new_calendar.loc[index, "wednesday"] = 1
+            new_calendar.loc[index, "thursday"] = 1
+            new_calendar.loc[index, "friday"] = 1
+            new_calendar.loc[index, "saturday"] = 1
+            debug_print(1, "Patched full week into Coast Starlight calendar")
+            break
 
     # And update with the new calendar, just in case it hadn't
     new_feed.calendar = new_calendar

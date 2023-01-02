@@ -1503,6 +1503,7 @@ def produce_several_timetables(
     command_line_reference_date=None,
     input_dirname=None,
     output_dirname=None,
+    patch_the_feed=True,
 ):
     """
     Main program to run from other Python programs.
@@ -1532,8 +1533,9 @@ def produce_several_timetables(
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     # Amtrak-specific patches.  Bleah!  FIXME
-    master_feed = agency().patch_feed(master_feed)
-    debug_print(1, "Feed patched, hopefully")
+    if patch_the_feed:
+        master_feed = agency().patch_feed(master_feed)
+        debug_print(1, "Feed patched, hopefully")
 
     # Deal with ".list" files.
     list_file_list = sew_pages.get_only_list_files(spec_file_list)
@@ -1627,6 +1629,10 @@ def main():
         print("--author is mandatory!")
         sys.exit(1)
 
+    # If nopatch, don't patch the feed.  Otherwise do patch it.
+    patch_the_feed = True
+    patch_the_feed = not args.nopatch
+
     command_line_reference_date = args.reference_date  # Does not default, may be None
 
     produce_several_timetables(
@@ -1640,6 +1646,7 @@ def main():
         command_line_reference_date=command_line_reference_date,
         input_dirname=input_dirname,
         output_dirname=output_dirname,
+        patch_the_feed=patch_the_feed,
     )
 
 
