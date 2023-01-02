@@ -309,6 +309,10 @@ TRE_logo_reduced.svg
 Reduced SVG file, usable.
 
 
+NMRX_logo.svg
+--------------
+Extracted from the PDF timetable from the RailRunner website, using Karbon and Inkscape.
+
 Sound Transit Logos
 -------------------
 From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
