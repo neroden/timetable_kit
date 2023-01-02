@@ -62,18 +62,19 @@ This is the list of services we want logos for:
 'denver_rtd' - DONE
 'frontrunner' - DONE
 'uta_trax' - DONE
-'nm_railrunner'
-'the_hop'
-'twin_cities_metro_transit'
-'sounder'
-'seattle_link'
-'trimet'
+'nm_railrunner' - found - can't test because of Amtrak errors
+'the_hop' - Logo is PNG and unreadable at small size.  Use text.
+'twin_cities_metro_transit'- Overly restrictive licensing text on webpage.  Use text.
+'sounder' - DONE
+'seattle_link' - DONE
+'tacoma_link' - DONE
+'trimet' - DONE
 'portland_streetcar' - DONE
 'sacramento_rt' - DONE
 'bart' - DONE
 'ace'
 'vta'
-'caltrain' - DONE
+'caltrain' - found
 'la_metro' - DONE
 'coaster' - found
 'sprinter' - found
@@ -184,6 +185,26 @@ UTA_icon.svg
 Without the letters "U T A".
 This variant is used by Wikipedia on its maps.
 https://commons.wikimedia.org/wiki/File:UTA_icon.svg
+
+Metro_Minnesota_logo.svg
+------------------------
+Metro Transit has stupidly restrictive text on their webpage, asking for a photo credit
+to Metro Transit and purporting to restrict re-creations, which is unacceptable, so don't use this.
+This is the version from Wikipedia, in case they stop being stupid some day.
+https://commons.wikimedia.org/wiki/File:Metro_Minnesota_logo.svg
+
+Sound_Transit logos
+------------------------------
+Without the words.
+https://commons.wikimedia.org/wiki/File:Sound_Transit_logo_simplified.svg
+Sounder.
+https://commons.wikimedia.org/wiki/File:Sound_Transit_Sounder_logo.svg
+Link.
+https://commons.wikimedia.org/wiki/File:Sound_Transit_Link_Light_Rail_logo.svg
+
+TriMet_icon.svg
+----------------
+https://commons.wikimedia.org/wiki/File:TriMet_icon.svg
 
 
 2022_Metrolink_logo.svg
@@ -313,7 +334,3 @@ NMRX_logo.svg
 --------------
 Extracted from the PDF timetable from the RailRunner website, using Karbon and Inkscape.
 
-Sound Transit Logos
--------------------
-From here: https://en.wikipedia.org/wiki/File:Sound_Transit_logo.svg
-There are several alternatives.

@@ -1,0 +1,11 @@
+/*
+Sound_Transit_logo_simplified.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Not in use.  Use if we decide to merge all Sound Transit as if it's one service.
+*/
+.sound_transit_logo {
+    height: 1em;
+    vertical-align: -0.125em;
+}

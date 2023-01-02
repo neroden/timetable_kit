@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="136" height="96">
+
+<path style="fill:#003e7e;fill-rule:evenodd" d="M 68,52 C 76,52 84,48 84,40 C 84,34 80,28 72,28 C 64,28 64,28 64,28 C 60,28 60,26 60,25 C 60,23 60,21 64,21 L 133,21 130,44 L 92,44 L 84,96 L 33,96 L 38,52 z" />
+<path style="fill:#003e7e;fill-rule:evenodd" d="M 64,12 C 56,12 48,16 48,24 C 48,32 52,36 56,36 L 68,36 C 70,36 72,38 72,40 C 72,42 70,44 68,44 L 0,44 L 4,0 L 136,0 L 134.5,12 z" />
+</svg>

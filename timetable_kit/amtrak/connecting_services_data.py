@@ -164,11 +164,18 @@ connecting_services_dict = {
     # West Coast, north to south
     # Vancouver, BC FIXME
     # Seattle Area
+    # Sound Transit's website is terrible.
     "EVR": ["sounder"],
     "EDM": ["sounder"],
     "SEA": ["sounder", "seattle_link"],
     "TUK": ["sounder"],
-    "TAC": ["sounder"],
+    "TAC": ["sounder", "tacoma_link"],
+    # If we decide to list these all just as "Sound Transit"
+    # "EVR": ["sound_transit"],
+    # "EDM": ["sound_transit"],
+    # "SEA": ["sound_transit"],
+    # "TUK": ["sound_transit"],
+    # "TAC": ["sound_transit"],
     # Portland
     "PDX": ["trimet", "portland_streetcar"],
     # Capitol Corridor

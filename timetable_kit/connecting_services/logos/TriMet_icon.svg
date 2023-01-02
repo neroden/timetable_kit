@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xml:space="preserve"
+   enable-background="new 0 0 200 46.875"
+   viewBox="0 0 100.30136 100.29475"
+   height="100.29475"
+   width="100.30136"
+   y="0px"
+   x="0px"
+   id="Layer_1"
+   version="1.1"><metadata
+     id="metadata27"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+     id="defs25" /><path
+     style="fill:#e0651f"
+     id="path15"
+     d="m 100.30136,50.146272 c 0,27.697326 -22.459969,50.148478 -50.152884,50.148478 C 22.455562,100.29696 0,77.843598 0,50.146272 0,22.453357 22.455562,0 50.148476,0 77.841391,0 100.30136,22.453357 100.30136,50.146272" /><path
+     style="fill:none;stroke:#ffffff;stroke-width:6.08414984"
+     id="path17"
+     d="m 61.61552,58.058533 c -3.310006,1.922936 -7.177927,3.032152 -11.279606,3.032152 -12.421896,0 -22.49525,-10.075563 -22.49525,-22.501871 0,-12.419693 10.073354,-22.475411 22.49525,-22.475411 12.419704,0 22.490851,10.055718 22.490851,22.475411" /><path
+     style="fill:none;stroke:#ffffff;stroke-width:6.08414984"
+     id="path19"
+     d="m 50.876191,37.609704 c 3.38719,1.92514 6.324524,4.752209 8.406229,8.337864 6.203226,10.759177 2.527158,24.524043 -8.232015,30.718452 -10.756967,6.236309 -24.51963,2.533776 -30.725067,-8.229809 -6.205435,-10.752562 -2.53157,-24.508605 8.227605,-30.727274" /><path
+     style="fill:none;stroke:#ffffff;stroke-width:6.08414984"
+     id="path21"
+     d="m 38.169827,57.165427 c 0.0085,-3.786331 0.963668,-7.632201 3.001281,-11.156112 6.21866,-10.756973 19.970299,-14.433041 30.729473,-8.22981 10.756967,6.209846 14.437452,19.968095 8.229809,30.725067 -6.218659,10.756969 -19.970301,14.444066 -30.720659,8.229811" /></svg>

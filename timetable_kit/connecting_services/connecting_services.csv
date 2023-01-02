@@ -30,7 +30,15 @@ tucson_sunlink_streetcar,,,SunLink,Tucson Sun Lnk,Tucson Sun Link (streetcar),ht
 metrolink,2022_Metrolink_Logo,,Metrolink,Metrolink,Metrolink,https://metrolinktrains.com/
 la_metro,Los Angeles Metro M logo,,Metro,LA Metro,Los Angeles Metro,https://www.metro.net/
 denver_rtd,Regional_Transportation_District_logo,,RTD,RTD Denver,RTD Denver,https://www.rtd-denver.com/
-uta_trax,UTA_icon,TRAX,,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
 frontrunner,UTA_icon,FrontRunner,,UTA FrontRunner,Utah Transit Authority FrontRunner,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+uta_trax,UTA_icon,TRAX,,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+nm_railrunner,,,NMRX,NM RailRunner Express,NM RailRunner Express,https://www.riometro.org/395/New-Mexico-Rail-Runner-Express
+the_hop,,,HOP,The Hop streetcar,The Hop streetcar,https://thehopmke.com/
+twin_cities_metro_transit,,,METRO,Metro Transit light rail,Metro Transit light rail,https://www.metrotransit.org/metro
+sounder,Sound_Transit_Sounder_logo,,Sounder,Sounder,Sound Transit: Sounder Commuter Rail,https://www.soundtransit.org/get-to-know-us/maps
+seattle_link,Sound_Transit_Link_Light_Rail_logo,,Link,Link (Seattle),Sound Transit: Link Light Rail (Seattle),https://www.soundtransit.org/get-to-know-us/maps
+tacoma_link,Sound_Transit_Link_Light_Rail_logo,,Link,Link (Tacoma),Sound Transit: Link Light Rail (Tacoma streetcar),https://www.soundtransit.org/get-to-know-us/maps
+trimet,TriMet_icon,,MAX,TriMet MAX,TriMet MAX Light Rail,https://trimet.org/max/
+portland_streetcar,Portland_Streetcar_symbol,,Streetcar,Portland Streetcar,Portland Streetcar,https://portlandstreetcar.org/
 sacramento_rt,Sacramento_Regional_Transit,,RT,Sacramento RT,Sacramento RT,http://www.sacrt.com/
-bart,Bart-logo,,BART,BART,BART,
+bart,Bart-logo,,BART,BART,BART,https://www.bart.gov/
