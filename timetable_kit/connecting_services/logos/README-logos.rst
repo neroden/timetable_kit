@@ -196,6 +196,12 @@ Sacramento_Regional_transit.svg
 -------------------------------
 From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg
 
+Sacramento_new_logo.svg
+-----------------------
+The website shows they've abandoned the blue background.  We modified the above
+logo from Wikipedia to do the same thing.  Unfortunately, yellow shows up really badly
+on a white background, so we stick with the old logo.
+
 
 SPRINTER_logo.svg
 -----------------
