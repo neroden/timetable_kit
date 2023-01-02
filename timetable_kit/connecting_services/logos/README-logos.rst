@@ -72,8 +72,8 @@ This is the list of services we want logos for:
 'portland_streetcar' - DONE
 'sacramento_rt' - DONE
 'bart' - DONE
-'ace'
-'vta'
+'ace' - found
+'vta' - found
 'caltrain' - found
 'la_metro' - DONE
 'coaster' - found
@@ -207,12 +207,6 @@ TriMet_icon.svg
 https://commons.wikimedia.org/wiki/File:TriMet_icon.svg
 
 
-2022_Metrolink_logo.svg
-------------------------
-Metrolink (LA) changed their logo in 2022.
-https://commons.wikimedia.org/wiki/File:2022_Metrolink_Logo.svg
-
-
 Sacramento_Regional_transit.svg
 -------------------------------
 From https://commons.wikimedia.org/wiki/File:Sacramento_Regional_Transit.svg
@@ -222,6 +216,29 @@ Sacramento_new_logo.svg
 The website shows they've abandoned the blue background.  We modified the above
 logo from Wikipedia to do the same thing.  Unfortunately, yellow shows up really badly
 on a white background, so we stick with the old logo.
+
+Altamont_Corridor_Express_logo.svg
+----------------------------------
+https://commons.wikimedia.org/wiki/File:Altamont_Corridor_Express_logo.svg
+
+
+BSicon_LOGO_SCvta.svg
+---------------------
+https://commons.wikimedia.org/wiki/File:BSicon_LOGO_SCvta.svg
+VTA icon, as used on Wikipedia.  The BSicon series is useful.  I should check it more carefully.
+
+VTA_logo_2017.svg
+-----------------
+https://commons.wikimedia.org/wiki/File:VTA_logo_2017.svg
+The VTA logo from which the BSicon was extracted.
+
+
+
+2022_Metrolink_logo.svg
+------------------------
+Metrolink (LA) changed their logo in 2022.
+https://commons.wikimedia.org/wiki/File:2022_Metrolink_Logo.svg
+
 
 
 SPRINTER_logo.svg

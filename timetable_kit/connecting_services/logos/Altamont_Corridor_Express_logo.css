@@ -1,0 +1,9 @@
+/*
+Altamont_Corridor_Express_logo.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+*/
+.ace_logo {
+    height: 1em;
+    vertical-align: -0.125em;
+}
