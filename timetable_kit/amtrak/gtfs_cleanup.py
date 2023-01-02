@@ -45,7 +45,6 @@ def patch_feed(feed):
             if new_calendar.loc[index, "wednesday"] == 0:  # Not on Wednesday
                     new_calendar = new_calendar.drop(labels=[index], axis="index")
                     debug_print(1, "Patched not-on-wednesday special out of Coast Starlight"),
-                    break
     for index in new_calendar.index:
         # Now patch the Wednesday calendars to be every-day-of-the-week:
         # (This is the good calendar)
@@ -58,7 +57,6 @@ def patch_feed(feed):
             new_calendar.loc[index, "friday"] = 1
             new_calendar.loc[index, "saturday"] = 1
             debug_print(1, "Patched full week into Coast Starlight calendar")
-            break
 
     # And update with the new calendar, just in case it hadn't
     new_feed.calendar = new_calendar
