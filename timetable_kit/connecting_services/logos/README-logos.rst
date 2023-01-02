@@ -75,9 +75,9 @@ This is the list of services we want logos for:
 'vta'
 'caltrain' - DONE
 'la_metro' - DONE
-'coaster' - DONE
-'sprinter' - DONE
-'san_diego_trolley' - DONE
+'coaster' - found
+'sprinter' - found
+'san_diego_trolley' - found
 
 From the Wikimedia category
 ===========================
