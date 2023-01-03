@@ -85,6 +85,8 @@ connecting_services_dict = {
     # NHV done under NEC, above
     #
     # Adirondack route to Canada
+    "SLQ": ["via_rail","exo"],
+    "MTR": ["via_rail","exo","montreal_metro"],
     # FIXME add Montreal etc.
     #
     # East Coast to Chicago, from north to south (+ Maple Leaf):
@@ -97,7 +99,13 @@ connecting_services_dict = {
     "POU": ["metro_north"],
     "UCA": ["adirondack"],
     "BFX": ["nfta_metro"],
-    # FIXME: add Canadian stations
+    # Maple Leaf.
+    "NFS": ["via_rail","go_transit"],
+    "SCA": ["via_rail","go_transit"],
+    "GMS": ["via_rail"],
+    "AST": ["via_rail","go_transit"],
+    "OKL": ["via_rail","go_transit"],
+    "TWO": ["via_rail","go_transit","union_pearson_express","ttc"],
     # Keystone Service
     "ARD": ["septa"],
     "PAO": ["septa"],
@@ -163,6 +171,7 @@ connecting_services_dict = {
     #
     # West Coast, north to south
     # Vancouver, BC FIXME
+    "VAC": ["via_rail", "skytrain"],
     # Seattle Area
     # Sound Transit's website is terrible.
     "EVR": ["sounder"],

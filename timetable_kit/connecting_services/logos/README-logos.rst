@@ -80,6 +80,18 @@ This is the list of services we want logos for:
 'sprinter' - DONE
 'san_diego_trolley' - DONE
 
+And from Canada:
+'via_rail'
+Toronto
+'go_transit'
+'union_pearson_express'
+'ttc'
+Montreal
+'exo'
+'montreal_metro'
+Vancouver
+'skytrain'
+
 From the Wikimedia category
 ===========================
 
