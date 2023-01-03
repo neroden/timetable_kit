@@ -76,9 +76,9 @@ This is the list of services we want logos for:
 'vta' - DONE
 'caltrain' - DONE
 'la_metro' - DONE
-'coaster' - found
-'sprinter' - found
-'san_diego_trolley' - found
+'coaster' - DONE
+'sprinter' - DONE
+'san_diego_trolley' - DONE
 
 From the Wikimedia category
 ===========================
@@ -248,6 +248,11 @@ https://commons.wikimedia.org/wiki/File:SPRINTER_logo.svg
 
 There's also this icon, but it's a PNG -- eeewww.
 https://commons.wikimedia.org/wiki/File:Sprinter_San_Diego.png
+
+COASTER_logo.svg
+-----------------
+This is the word logo.
+https://commons.wikimedia.org/wiki/File:COASTER_logo.svg
 
 MTS_Trolley_icon.svg
 --------------------

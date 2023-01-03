@@ -1,29 +1,29 @@
-,stations,access,761,765,567,573,777,581,583,785,591,595
-column-options,,,ardp,,,,,,,,,
-days,,,SLO,GTA,LAX,LAX,SLO,LAX,LAX,GTA,LAX,LAX
-SAN,,,,,,,,,,,,
-OLT,,,,,,,,,,,,
-SOL,,,,,,,,,,,,
-OSD,,,,,,,,,,,,
-SNC,,,,,,,,,,,,
-IRV,,,,,,,,,,,,
-SNA,,,,,,,,,,,,
-ANA,,,,,,,,,,,,
-FUL,,,,,,,,,,,,
-LAX,,,,,567 last,573 last,,581 last,583 last,,591 last,595 last
-GDL,,,,,,,,,,,,
-BUR,,,,,,,,,,,,
-VNC,,,,,,,,,,,,
-CWT,,,,,,,,,,,,
-SIM,,,,,,,,,,,,
-MPK,,,,,,,,,,,,
-CML,,,,,,,,,,,,
-OXN,,,,,,,,,,,,
-VEC,,,,,,,,,,,,
-CPN,,,,,,,,,,,,
-SBA,,,,,,,,,,,,
-GTA,,,,765 last,,,,,,785 last,,
-LPS,,,,,,,,,,,,
-GUA,,,,,,,,,,,,
-GVB,,,,,,,,,,,,
-SLO,,,761 last,,,,777 last,,,,,
+,stations,access,761,765,14,567,573,777,581,583,785,587,591,595,5811
+column-options,,,ardp,,ardp,,,ardp,,,ardp,,,,
+days,,,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX,LAX
+SAN,,,first,first,blank,first,first,first,first,first,first,first,first,first,first
+OLT,,,,,blank,,,,,,,,,,
+SOL,,,,,blank,,,,,,,,,,
+OSD,,,,,blank,,,,,,,,,,
+SNC,,,,,blank,,,,,,,,,,
+IRV,,,,,blank,,,,,,,,,,
+SNA,,,,,blank,,,,,,,,,,
+ANA,,,,,blank,,,,,,,,,,
+FUL,,,,,blank,,,,,,,,,,
+LAX,,,,,first two-row,last,last,,last,last,,last,last,last,
+GDL,,,,,,blank,blank,,blank,blank,,blank,blank,blank,
+BUR,,,,,,blank,blank,,blank,blank,,blank,blank,blank,
+VNC,,,,,,blank,blank,,blank,blank,,blank,blank,blank,to
+CWT,,,,,,blank,blank,,blank,blank,,blank,blank,blank,Santa
+SIM,,,,,,blank,blank,,blank,blank,,blank,blank,blank,Clarita
+MPK,,,,,,blank,blank,,blank,blank,,blank,blank,blank,and
+CML,,,,,,blank,blank,,blank,blank,,blank,blank,blank,Bakersfield
+OXN,,,,,,blank,blank,,blank,blank,,blank,blank,blank,blank
+VEC,,,,,,blank,blank,,blank,blank,,blank,blank,blank,blank
+CPN,,,,,,blank,blank,,blank,blank,,blank,blank,blank,blank
+SBA,,,,,,blank,blank,,blank,blank,,blank,blank,blank,blank
+GTA,,,,last,,blank,blank,,blank,blank,last,blank,blank,blank,blank
+LPS,,,,blank,,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+GUA,,,,blank,,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+GVB,,,,blank,,blank,blank,,blank,blank,blank,blank,blank,blank,blank
+SLO,,,last,blank,,&#x1f870<br>to Seattle,blank,last,blank,blank,blank,blank,blank,blank,blank

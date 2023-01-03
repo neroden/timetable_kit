@@ -205,6 +205,7 @@ major_stations_list = (
     "QCY",  # Quincy service
     "MKE",  # Hiawathas
     "SAN",  # California Coastal
+    "OSD",  # Major connecting point, I'm adding this
     "LAX",
     "SBA",
     "SLO",

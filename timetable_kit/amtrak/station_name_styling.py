@@ -95,6 +95,8 @@ def amtrak_station_name_to_html(
             city_state_name = "Grand Canyon<br>Village, AZ"
         case "Essex Junction-Burlington, VT":
             city_state_name = "Essex Junction<br>-Burlington, VT"
+        case "Lompoc-Surf, CA -Amtrak Station":
+            city_state_name = "Lompoc-Surf, CA"
         # You would think you'd want to do St. Paul-Minneapolis,...
         # but there's plenty of horizontal space in the EB timetable
         # and no vertical space
@@ -146,9 +148,12 @@ def amtrak_station_name_to_html(
     connection_logos_html = ""
     if show_connections:
         # Special-casing for certain stations with LOTS of connections
-        if station_code in ["NYP", "SLC"]:
+        if station_code in ["NYP", "SLC", "SNC", "OSD"]:
             # NYP has a long facility name and a lot of connections
             # SLC has connections with very long lines
+            # On the Pacific Surfliner:
+            # SNC (San Juan Capistrano), OSD (Oceanside)
+            # have excessively wide connection logos
             # Grab an extra line in these cases
             connection_logos_html += "<br>"
         # station_code had better be correct, since we're going to look it up
@@ -174,4 +179,17 @@ def amtrak_station_name_to_html(
             connection_logos_html,
         ]
     )
+    if station_code in ["ANA","OLT"]:
+        # San Diego Old Town has a short station name and a long facility name,
+        # but also several long connecting services.  So put connections on line one,
+        # before the facility name line.
+        # Same with Anaheim.
+        fancy_name = " ".join(
+            [
+                enhanced_city_state_name,
+                enhanced_station_code,
+                connection_logos_html,
+                enhanced_facility_name,
+            ]
+        )
     return fancy_name
