@@ -94,5 +94,5 @@ Example
 
 This is a (probably out of date) timetable made using timetable_kit.
 
-.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/upstate-ny-to-western-vermont-services.jpg
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/richmond-weekday-nb.jpg
 
