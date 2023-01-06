@@ -122,13 +122,13 @@ def amtrak_station_name_to_html(
     # Also eliminate Providence's "Amtrak/MBTA Station";
     # saves critical space on NEC timetables, and we're indicating the MBTA connection
     # in another way anyway.
-    if facility_name and facility_name not in ["Amtrak Station","Amtrak/MBTA Station"] :
+    if facility_name and facility_name not in ["Amtrak Station", "Amtrak/MBTA Station"]:
         # By default, put the facility name on its own line
         br_for_facility_name = "<br>"
         if station_code in ["BOS", "BBY"]:
             # Save lines on some timetables by putting the facility code on the same line as the station
             # This is needed at Boston for the Richmond timetable
-            br_for_facility_name = ""
+            br_for_facility_name = " "
         if station_code == "PHL":
             # facility_name == "William H. Gray III 30th St. Station"
             # Sorry, Mr. Gray, your name is too long
@@ -139,7 +139,13 @@ def amtrak_station_name_to_html(
             # We have the room because we're taking an extra line for connecting services
             facility_name = "Moynihan Train Hall at Penn Station"
         enhanced_facility_name = "".join(
-            [br_for_facility_name,"<span class=station-footnotes>", " - ", facility_name, "</span>"]
+            [
+                br_for_facility_name,
+                "<span class=station-footnotes>",
+                " - ",
+                facility_name,
+                "</span>",
+            ]
         )
     else:
         enhanced_facility_name = ""
@@ -171,25 +177,27 @@ def amtrak_station_name_to_html(
         # Initial implementation tucks all connecting services on the same line.
         # This seems to be working.
 
-    fancy_name = " ".join(
+    fancy_name = "".join(
         [
             enhanced_city_state_name,
+            " ",
             enhanced_station_code,
-            enhanced_facility_name,
-            connection_logos_html,
+            enhanced_facility_name,  # Has its own space or <br> before it
+            connection_logos_html,  # Has spaces or <br> befor it as needed
         ]
     )
-    if station_code in ["ANA","OLT"]:
+    if station_code in ["ANA", "OLT"]:
         # San Diego Old Town has a short station name and a long facility name,
         # but also several long connecting services.  So put connections on line one,
         # before the facility name line.
         # Same with Anaheim.
-        fancy_name = " ".join(
+        fancy_name = "".join(
             [
                 enhanced_city_state_name,
+                " ",
                 enhanced_station_code,
-                connection_logos_html,
-                enhanced_facility_name,
+                enhanced_facility_name,  # Has its own space or <br> before it
+                connection_logos_html,  # Has spaces or <br> befor it as needed
             ]
         )
     return fancy_name
