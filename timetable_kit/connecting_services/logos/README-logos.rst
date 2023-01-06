@@ -57,6 +57,7 @@ This is the list of services we want logos for:
 'dart' - DONE
 'tre' - DONE
 'texrail' - DONE - No longer using a logo on its website; use old logo variant used by Wikipedia.
+'okc_streetcar' - Use text. Logo isn't even a consistent color and is hard to find.
 'tucson_sunlink_streetcar' - Does not have a logo. Use text.
 'metrolink' - DONE - may need to be shortened, though.  FIXME
 'denver_rtd' - DONE

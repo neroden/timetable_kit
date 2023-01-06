@@ -141,6 +141,8 @@ connecting_services_dict = {
     # Texas Eagle
     "DAL": ["tre", "dart"],
     "FTW": ["tre", "texrail"],
+    # Heartland Flyer
+    "OKC": ["okc_streetcar"],
     # Sunset Limited
     "TUS": ["tucson_sunlink_streetcar"],
     "ONA": ["metrolink"],
