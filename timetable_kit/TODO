@@ -6,8 +6,24 @@ Finished timetables (need rebuild for arrows)
 - Virginia Services
 - Michigan Services
 - Pennsylvanian
-- Lake Shore Limited
+- Keystone Service
+- Vermonter
+
 - Coast Starlight
+- Empire Builder
+- California Zephyr
+- Texas Eagle
+- Sunset Limited
+- CONO/Illini/Saluki
+- Crescent
+- Cardinal
+- Capitol Limited
+- Lake Shore Limited
+
+California Zephyr
+NOTE ! NOTE ! NOTE !
+Richmond CA is not handicapped accessible until at LEAST Jan 3 2023 -- check San Joaquins site
+for details
 
 Broken due to GTFS breakage:
 - Winter Park Express
@@ -16,6 +32,7 @@ Broken due to GTFS breakage:
 - Lincoln Service (ibid)
 - Quincy (ibid)
 - Grand Canyon (ibid)
+- Heartland Flyer (ibid)
 - Empire Service
 - Maple Leaf
 - Ethan Allen Express
@@ -23,35 +40,19 @@ Not running:
 - Adirondack
 
 Try to do:
-- Vermonter
-- Texas Eagle
-- Sunset Limited
-- San Joaquins
 - Palmetto-Silver Service (make into two pages)
 - Carolinian-Piedmont (examine at the same time, now that I understand #80/#79 weirdness)
-- Pacific Surfliner
-- Keystone Service
-- Hiawatha
-- Heartland Flyer
-- Empire Builder
-- Crescent
-- CONO/Illini/Saluki
-- Cardinal
-- Capitol Limited
-- California Zephyr
-NOTE ! NOTE ! NOTE !
-Richmond CA is not handicapped accessible until at LEAST Jan 3 2023 -- check San Joaquins site
-for details
 
 Skip for now:
 - NEC [too much work]
 
-Put off, because these have printable state agency timetables:
+Put off, because these have printable state agency timetables, or almost:
 - Cascades
 - Downeaster
 - Hartford Line
 - Pacific Surfliner
 - San Joaquins
+- Hiawatha
 
 Fourth priority:
 Get VIA, or "generic" agency, going
