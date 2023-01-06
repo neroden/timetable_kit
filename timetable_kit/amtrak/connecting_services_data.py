@@ -50,7 +50,7 @@ connecting_services_dict = {
     #
     # Following Silver Service:
     # VRE Fredericksburg branch
-    "ALX": ["wmata","vre"],
+    "ALX": ["wmata", "vre"],
     "WDB": ["vre"],
     "QAN": ["vre"],
     "FBG": ["vre"],
@@ -65,7 +65,7 @@ connecting_services_dict = {
     "DFB": ["tri_rail"],
     "FTL": ["tri_rail"],
     "HOL": ["tri_rail"],
-    "MIA": ["tri_rail","miami_metrorail"],
+    "MIA": ["tri_rail", "miami_metrorail"],
     #
     # Following Crescent:
     # VRE Manassas branch
@@ -85,8 +85,8 @@ connecting_services_dict = {
     # NHV done under NEC, above
     #
     # Adirondack route to Canada
-    "SLQ": ["via_rail","exo"],
-    "MTR": ["via_rail","exo","montreal_metro"],
+    "SLQ": ["via_rail", "exo"],
+    "MTR": ["via_rail", "exo", "montreal_metro"],
     # FIXME add Montreal etc.
     #
     # East Coast to Chicago, from north to south (+ Maple Leaf):
@@ -100,12 +100,12 @@ connecting_services_dict = {
     "UCA": ["adirondack"],
     "BFX": ["nfta_metro"],
     # Maple Leaf.
-    "NFS": ["via_rail","go_transit"],
-    "SCA": ["via_rail","go_transit"],
+    "NFS": ["via_rail", "go_transit"],
+    "SCA": ["via_rail", "go_transit"],
     "GMS": ["via_rail"],
-    "AST": ["via_rail","go_transit"],
-    "OKL": ["via_rail","go_transit"],
-    "TWO": ["via_rail","go_transit","union_pearson_express","ttc"],
+    "AST": ["via_rail", "go_transit"],
+    "OKL": ["via_rail", "go_transit"],
+    "TWO": ["via_rail", "go_transit", "union_pearson_express", "ttc"],
     # Keystone Service
     "ARD": ["septa"],
     "PAO": ["septa"],

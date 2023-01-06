@@ -43,8 +43,10 @@ def patch_feed(feed):
     for index in new_calendar.index:
         if new_calendar.loc[index, "service_id"] in service_ids:  # Coast Starlight
             if new_calendar.loc[index, "wednesday"] == 0:  # Not on Wednesday
-                    new_calendar = new_calendar.drop(labels=[index], axis="index")
-                    debug_print(1, "Patched not-on-wednesday special out of Coast Starlight"),
+                new_calendar = new_calendar.drop(labels=[index], axis="index")
+                debug_print(
+                    1, "Patched not-on-wednesday special out of Coast Starlight"
+                ),
     for index in new_calendar.index:
         # Now patch the Wednesday calendars to be every-day-of-the-week:
         # (This is the good calendar)
