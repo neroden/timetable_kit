@@ -68,6 +68,7 @@ def _generate_logo_key_html(df_row):
     output = _connecting_service_logo_key_tpl.render(params)
     return output
 
+
 def _generate_full_name_nbsp(df_row):
     """
     Given a row, take the "full_name" entry and generate a version with nonbreaking spaces
@@ -112,7 +113,7 @@ def _initialize():
     )
     # Make the "full name" (used for the link in the key) have nonbreaking spaces:
     connecting_services_df["full_name_nbsp"] = connecting_services_df.apply(
-            _generate_full_name_nbsp, axis=1
+        _generate_full_name_nbsp, axis=1
     )
     # This is the CSS class names:
     # Must come before the Jinja template usage!
