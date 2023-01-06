@@ -14,15 +14,15 @@ EFG,,,,,,,,
 CEN,,,,,,,,
 DQN,,,,,,,,
 CDL,391 last,393 last,,,,,390 first,392 first
-FTN,,,,,,,,
-NBN,,,,,,,,
-MEM,,,,,,,,
-MKS,,,,,,,,
-GWD,,,,,,,,
-YAZ,,,,,,,,
-JAN,,,,,,,,
-HAZ,,,,,,,,
-BRH,,,,,,,,
-MCB,,,,,,,,
-HMD,,,,,,,,
-NOL,,,59 last,,,58 first,,
+FTN,blank,blank,,,,,blank,blank
+NBN,blank,blank,,,,,blank,blank
+MEM,blank,blank,,,,,blank,blank
+MKS,blank,blank,,,,,blank,blank
+GWD,blank,blank,,,,,blank,blank
+YAZ,blank,blank,,,,,blank,blank
+JAN,blank,blank,,,,,blank,blank
+HAZ,blank,blank,,,,,blank,blank
+BRH,blank,blank,,,,,blank,blank
+MCB,blank,blank,,,,,blank,blank
+HMD,blank,blank,,,,,blank,blank
+NOL,blank,blank,59 last,,,58 first,blank,blank
