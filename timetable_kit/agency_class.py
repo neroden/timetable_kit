@@ -30,7 +30,7 @@ class Agency:
             zip(feed.routes["route_id"], feed.routes["route_long_name"])
         )
 
-    def get_stop_name(
+    def get_station_name_pretty(
         self, stop_id: str, doing_multiline_text=False, doing_html=False
     ) -> str:
         """Given a stop_id, returns a stop_name from GTFS, with possible prettyprinting"""
@@ -73,20 +73,6 @@ class Agency:
         return False
 
 
-def amtrak_get_stop_name(
-    stop_id: str, doing_multiline_text=False, doing_html=False
-) -> str:
-    raw_stop_name = amtrak.get_station_name(stop_id)
-    major = amtrak.is_standard_major_station(stop_id)
-    if doing_html:
-        cooked_stop_name = amtrak.station_name_to_html(raw_stop_name, major)
-    elif doing_multiline_text:
-        cooked_stop_name = amtrak.station_name_to_multiline_text(raw_stop_name, major)
-    else:
-        cooked_stop_name = amtrak.station_name_to_single_line_text(raw_stop_name, major)
-    return cooked_stop_name
-
-
 if __name__ == "__main__":
     from timetable_kit.initialize import initialize_feed
 
@@ -97,7 +83,7 @@ if __name__ == "__main__":
     my_agency = Agency(master_feed)
     print(my_agency.get_stop_name("ALB"))
     # This works but is ugly / undesirable
-    my_agency.get_stop_name = amtrak_get_stop_name
-    print(my_agency.get_stop_name("ALB"))
-    print(my_agency.get_stop_name("ALB", doing_multiline_text=True))
-    print(my_agency.get_stop_name("ALB", doing_html=True))
+    my_agency.get_station_name_pretty = amtrak.get_station_name_pretty
+    print(my_agency.get_station_name_pretty("ALB"))
+    print(my_agency.get_station_name_pretty("ALB", doing_multiline_text=True))
+    print(my_agency.get_station_name_pretty("ALB", doing_html=True))

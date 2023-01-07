@@ -19,14 +19,9 @@ def get_route_name(today_feed, route_id) -> str:
     return str(route_id)
 
 
-def get_station_name(station_code: str) -> str:
+def get_station_name_pretty(station_code: str) -> str:
     # Unacceptable stub implementation
     return station_code
-
-
-def is_standard_major_station(station_code: str) -> bool:
-    # Trivial implementation
-    return False
 
 # Baggage -- trivial implementations
 def station_has_checked_baggage(station_code: str) -> bool:
@@ -50,21 +45,6 @@ def station_has_inaccessible_platform(station_code: str) -> bool:
     return False
 
 
-# Station name munging
-
-
-def station_name_to_html():
-    return
-
-
-def station_name_to_multiline_text():
-    return
-
-
-def station_name_to_single_line_text():
-    return
-
-
 # Feed correction
 
 
@@ -73,12 +53,12 @@ def patch_feed():
 
 
 # Type of service on train
-def is_connectinqg_service():
-    return
+def is_connecting_service():
+    return False
 
 
 def is_sleeper_train():
-    return
+    return False
 
 
 class Agency:
@@ -97,7 +77,7 @@ class Agency:
             zip(feed.routes["route_id"], feed.routes["route_long_name"])
         )
 
-    def get_stop_name(
+    def get_station_name_pretty(
         self, stop_id: str, doing_multiline_text=False, doing_html=False
     ) -> str:
         """Given a stop_id, returns a stop_name from GTFS, with possible prettyprinting"""
@@ -148,4 +128,4 @@ if __name__ == "__main__":
     )
     master_feed = initialize_feed(gtfs=gtfs_filename)
     my_agency = Agency(master_feed)
-    print(my_agency.get_stop_name("ALB"))
+    print(my_agency.get_station_name_pretty("ALB"))
