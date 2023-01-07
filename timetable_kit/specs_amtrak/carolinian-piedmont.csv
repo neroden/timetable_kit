@@ -1,27 +1,27 @@
 ,73,75,77,79 monday,79 saturday,19, access, station,20 monday,20 saturday,80 monday,80 friday,74,76,78
 column-options,ardp,,,,,ardp,,,ardp reverse,reverse,ardp reverse,reverse,reverse,reverse,reverse
 route-name,,,,,,,,,,,,,,,
-days,CLT,CLT,CLT,CLT,CLT,NYP,,,CLT,CLT,"<div style=""text-align:center; font-weight:bold;"">Daily</div>",CLT,CLT,CLT,CLT
+days,CLT,CLT,CLT,CLT,CLT,NYP,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT
 updown,,,,,,,,,,,,,,,
 NYP,blank,blank,blank,first,first,first,,,last,last,last,last,blank,blank,blank
 NWK,blank,blank,blank,,,,,,,,,,blank,blank,blank
 TRE,blank,blank,blank,,,,,,,,,,blank,blank,blank
 PHL,blank,blank,blank,,,,,,,,,,blank,blank,blank
-WIL,blank,blank,blank,,,,,,,,,,blank,blank,blank
-BAL,blank,blank,blank,,,,,,,,,,blank,blank,blank
-WAS,blank,blank,blank,,,,,,,,,,blank,blank,blank
-ALX,blank,blank,blank,,,,,,,,,,blank,blank,blank
-QAN,blank,blank,blank,,,,,,,,,,blank,blank,blank
-FBG,blank,blank,blank,,,,,,,,,,blank,blank,blank
-RVR,blank,blank,blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,,blank,blank,blank
-PTB,blank,blank,blank,,,,,,,,,,blank,blank,blank
+WIL,blank,"<div style=""text-align: center;"">For</div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;"">For</div>",blank
+BAL,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank
+WAS,blank,"<div style=""text-align: center;"">to Cary,<br>Raleigh,</div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;"">to Wilson,<br>Selma-Smithfield,</div>",blank
+ALX,blank,"<div style=""text-align: center;"">and all</div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;"">and all</div>",blank
+QAN,blank,"<div style=""text-align: center;"">points north</div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;"">points north</div>",blank
+FBG,blank,"<div style=""text-align: center;"">see</div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;"">see</div>",blank
+RVR,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank
+PTB,blank,"<div style=""text-align: center;""><b>(Silver Star)</b></div>",blank,,,,,,,,,,blank,"<div style=""text-align: center;""><b>(Palmetto)</b></div>",blank
 RMT,blank,blank,blank,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>",,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>",,,,blank,blank,blank
 WLN,blank,blank,blank,,,,,,,,,,blank,blank,blank
 SSM,blank,blank,blank,,,,,,,,,,blank,blank,blank
 RGH,first two-row,first two-row,first two-row,,,,,,,,,,last two-row,last two-row,last two-row
 CYN,,,,,,,,,,,,,,,
 DNC,,,,,,,,,,,,,,,
-BNC,,,,,,"<div style=""text-align: center;""><b>Fr-Tu</b></div>",,,,,,,,,
+BNC,,,,,,,,,,,,,,,
 GRO,,,,,,,,,,,,,,,
 HPT,,,,,,,,,,,,,,,
 SAL,,,,,,,,,,,,,,,

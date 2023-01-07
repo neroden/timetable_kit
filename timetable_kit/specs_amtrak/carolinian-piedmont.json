@@ -1,9 +1,8 @@
 {
     "title": "Carolinian and Piedmont Timetable",
     "heading": "Amtrak's Carolinian and Piedmont",
-    "reference_date": "20230105",
-    "bottom_text": "<b>Additional service</b> to Raleigh, Cary, and points north is provided by the Silver Star.  <b>Additional service</b> to Selma-Smithfield, Wilson, and points north is provided by the Palmetto.  See the Silver Service timetable for details.<br><b>Local connecting trains</b> are provided: at New York by <a href=\"https://new.mta.info\">the MTA</a>, at New York, Philadelphia, and all stations in New Jersey by <a href=\"https://www.njtransit.com\">NJ Transit</a>, at Trenton, Philadelphia and Wilmington by <a href=\"http://www.septa.org\">SEPTA</a>, <br>at Baltimore and DC by the <a href=\"https://www.mta.maryland.gov\">Maryland Transit Administration</a>, at DC and Alexandria by <a href=\"https://www.wmata.com/\">WMATA</a>, and at DC, Alexandria, Quantico, and Fredericksburg by <a href=\"http://www.vre.org/\">VRE</a>.",
-    "programmers_warning": "Train 80 has lots of bizarre duplicates.  Consider cleaning the GTFS data.",
+    "reference_date": "20230107",
+    "programmers_warning": "Train 80, 19, and 20 have weird variations on incoming NEC timings.",
     "landscape": true,
     "key_baggage": true,
     "key_d": true,
