@@ -1,8 +1,11 @@
 {# check_amtrak.html
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+#}{%- from "macros.html" import br_or_space -%}{#
 #}<div class="check-amtrak">{#
 #}<p>According to the <a href="{{gtfs_url}}">GTFS data</a>, {#
 #}this was intended to be valid from <b>{{start_date}}</b> through <b>{{end_date}}</b>.<br>{#
-#}Timetables may change for holidays, special events, construction projects, and other reasons.<br>{#
-#}<b>Always check <a href="https://amtrak.com">Amtrak.com</a> for precise times for your exact date of travel.</b></p></div>
+#}<b>Always check <a href="https://amtrak.com">Amtrak.com</a> for precise times for your exact date of travel.</b>{#
+#}{{ br_or_space(not landscape) }}{#
+#}Timetables may change for holidays, special events, construction projects, and other reasons.{#
+#}</p></div>
