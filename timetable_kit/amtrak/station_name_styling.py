@@ -17,7 +17,7 @@ from timetable_kit.amtrak.json_stations import get_station_name
 from timetable_kit.amtrak.special_data import is_standard_major_station
 
 
-def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str:
+def station_name_to_multiline_text(station_name: str, major=False) -> str:
     """
     Produce pretty Amtrak station name for plaintext -- multi-line.
 
@@ -55,7 +55,7 @@ def amtrak_station_name_to_multiline_text(station_name: str, major=False) -> str
     return fancy_name
 
 
-def amtrak_station_name_to_single_line_text(station_name: str, major=False) -> str:
+def station_name_to_single_line_text(station_name: str, major=False) -> str:
     """
     Produce pretty Amtrak station name for plaintext -- single line.
 
@@ -68,9 +68,7 @@ def amtrak_station_name_to_single_line_text(station_name: str, major=False) -> s
     return styled_station_name
 
 
-def amtrak_station_name_to_html(
-    station_name: str, major=False, show_connections=True
-) -> str:
+def station_name_to_html(station_name: str, major=False, show_connections=True) -> str:
     """
     Produce pretty Amtrak station name for HTML -- potentially multiline, and complex.
 

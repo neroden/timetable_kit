@@ -549,7 +549,6 @@ def fill_tt_spec(
     box_time_characters=False,
     doing_multiline_text=True,
     train_numbers_side_by_side=False,
-    is_major_station="standard",
     is_ardp_station="dwell",
     dwell_secs_cutoff=300,
     use_bus_icon_in_cells=False,
@@ -572,10 +571,6 @@ def fill_tt_spec(
         If False, stick with single-line text (and never print arrival times FIXME)
     train_numbers_side_by_side: For column headers for a column with multiple trains, put train numbers side by side.
         Default is to stack them top to bottom.
-    is_major_station: pass a function which says whether a station should be "major";
-        "False" means false for all
-        "standard" means a standard list of Amtrak major stations
-        Defaults to "standard"
     is_ardp_station: pass a function which says whether a station should have arrival times;
         "False" means false for all; "True" means true for all
         Default is "dwell" (case sensitive), which uses dwell_secs_cutoff.
@@ -629,31 +624,7 @@ def fill_tt_spec(
         # Thankfully they're currently the same
         tt_spec = tt_spec.drop(1, axis="index")
 
-    # Load variable function for station name printing
-    prettyprint_station_name = None
-    if doing_html:
-        prettyprint_station_name = agency().station_name_to_html
-    elif doing_multiline_text:
-        prettyprint_station_name = agency().station_name_to_multiline_text
-    else:
-        prettyprint_station_name = agency().station_name_to_single_line_text
-    if not callable(prettyprint_station_name):
-        raise TypeError(
-            "Received prettyprint_station_name which is not callable: ",
-            prettyprint_station_name,
-        )
-
-    # Load variable functions for is_ardp_station and is_major_station
-    match is_major_station:
-        case False:
-            is_major_station = lambda station_code: False
-        case "standard":
-            is_major_station = agency().is_standard_major_station
-    if not callable(is_major_station):
-        raise TypeError(
-            "Received is_major_station which is not callable: ", is_major_station
-        )
-
+    # Load variable functions for is_ardp_station
     match is_ardp_station:
         case False:
             is_ardp_station = lambda station_code: False
@@ -970,9 +941,12 @@ def fill_tt_spec(
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
-                    station_name_raw = agency().get_station_name(station_code)
-                    major = agency().is_standard_major_station(station_code)
-                    station_name_str = prettyprint_station_name(station_name_raw, major)
+                    # FIXME: no way to tell it to use connecting services or not to.
+                    station_name_str = agency().get_station_name_pretty(
+                        station_code,
+                        doing_html=doing_html,
+                        doing_multiline_text=doing_multiline_text,
+                    )
                     tt.iloc[y, x] = station_name_str
                 case [_, "services", _]:
                     # Column for station services codes.  Currently completely vacant.
@@ -1340,7 +1314,6 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=agency().is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             use_bus_icon_in_cells=use_bus_icon_in_cells,
@@ -1361,7 +1334,6 @@ def produce_timetable(
             tt_spec,
             today_feed=reduced_feed,
             reference_date=reference_date,
-            is_major_station=agency().is_standard_major_station,
             is_ardp_station="dwell",
             dwell_secs_cutoff=dwell_secs_cutoff,
             doing_html=True,
