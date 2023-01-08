@@ -19,6 +19,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 </style>{% elif external_stylesheet %}<link rel="stylesheet" href="{{external_stylesheet}}"/>{% endif %}
 </head>
 <body>
+<div class="{% if landscape %}landscape-page{% else %}portrait-page{% endif %}">
 <h1>{{heading}}</h1>
 {% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
@@ -35,5 +36,6 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% include "credit.html" %}
 </div><!-- bigbox-keys -->
 </div><!-- bigbox-layout -->
+</div><!-- {% if landscape %}landscape-page{% else %}portrait-page{% endif %} -->
 </body>
 </html>
