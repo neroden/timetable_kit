@@ -15,7 +15,7 @@ The @page directives are respected by Weasyprint.
 .portrait-page {
     /* This class used for div to hold a whole page*/
     page: portrait-mode;
-    page-break-after: always; /* Use after, don't want a break before the first page */
+    page-break-after: always; /* Modern browser version: break-after: page; not supported yet */
 }
 @page landscape-mode {
     size: Letter landscape; /* change from default A4, for US timetables */
@@ -24,7 +24,7 @@ The @page directives are respected by Weasyprint.
 .landscape-page {
     /* This class used for div to hold a whole page*/
     page: landscape-mode;
-    page-break-after: always; /* Use after, don't want a break before the first page */
+    page-break-after: always; /* Modern browser version: break-after: page; not supported yet */
 }
 {# Primary heading on the page.  Copy old Amtrak style more or less. #}
 h1 {

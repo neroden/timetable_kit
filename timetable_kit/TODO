@@ -1,3 +1,8 @@
+CSS Paged Media:
+- Push feature selection out of CSS and into HTML.
+This allows two unrelated HTML timetable pages (with different options) to share the same CSS,
+which is needed to generate multipage HTML directly.
+
 Finish adding Connecting Services:
 - VIA and Canadian stuff
 
@@ -22,6 +27,9 @@ Done and shipped:
 
 Done, not shipped:
 - Carolinian/Piedmont
+Try to do:
+- Palmetto-Silver Service (make into two pages)
+- NEC [too much work]
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
@@ -41,10 +49,6 @@ Broken due to GTFS breakage:
 - Ethan Allen Express
 Not running:
 - Adirondack
-
-Try to do:
-- Palmetto-Silver Service (make into two pages)
-- NEC [too much work]
 
 Put off, because these have printable state agency timetables, or almost:
 - Cascades
