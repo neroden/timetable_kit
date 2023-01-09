@@ -1,10 +1,9 @@
 {
-    "title": "Palmetto/Silver Service Timetable",
-    "heading": "Amtrak's Palmetto and Silver Service",
+    "title": "Silver Service/Palmetto Timetable page 2",
+    "heading": "Amtrak's Silver Service - Florida",
     "reference_date": "20230107",
+    "top_text": "See previous page for services from New York through Savannah, Georgia.",
     "bottom_text": "Connections at Miami require walking from Amtrak's Miami station to the <a href=\"https://en.wikipedia.org/wiki/Tri-Rail_and_Metrorail_Transfer_station\">Tri-Rail / Metrorail Transfer station</a>.",
-    "comment_regarding_dwell": "Suppressing dwell under 8 min. to fit everything on one page",
-    "dwell_secs_cutoff": 480,
     "key_baggage": true,
     "key_d": true,
     "key_r": true,
