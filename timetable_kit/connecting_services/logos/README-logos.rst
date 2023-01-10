@@ -82,9 +82,9 @@ This is the list of services we want logos for:
 'san_diego_trolley' - DONE
 
 And from Canada:
-'via_rail' -
+'via_rail' - DONE
 Toronto
-'go_transit'
+'go_transit' - DONE
 'union_pearson_express'
 'ttc'
 Montreal
@@ -379,3 +379,9 @@ https://commons.wikimedia.org/wiki/File:VIA_Rail_Canada_Logo.svg
 
 This is way too detailed, so I removed the subtitle in Inkscape:
 VIA_Rail_icon.svg
+
+GO Transit
+----------
+https://commons.wikimedia.org/wiki/File:GO_Transit_logo.svg
+
+This is fine.

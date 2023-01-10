@@ -1,9 +1,9 @@
 /*
-VIA_Rail_icon.css
+GO Transit logo.css
 Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 */
-.via_rail_logo {
+.go_transit_logo {
     height: 1em;
     vertical-align: -0.125em;
 }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="220" viewBox="-23 -11 46 22">
+	<title>GO Transit logo</title>
+	<defs>
+		<clipPath id="c">
+			<path d="m-23-11h46v22h-46zM23 1v-2h-34v-10h-2v22h2V1z"/>
+		</clipPath>
+	</defs>
+	<path  clip-path="url(#c)" fill="#4a7729" d="m-1 0a11 11 0 1 0-11 11h11zm2 0a1 1 0 0 0 22 0A1 1 0 0 0 1 0z"/>
+</svg>
