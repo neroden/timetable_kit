@@ -82,7 +82,7 @@ This is the list of services we want logos for:
 'san_diego_trolley' - DONE
 
 And from Canada:
-'via_rail'
+'via_rail' -
 Toronto
 'go_transit'
 'union_pearson_express'
@@ -368,4 +368,14 @@ Reduced SVG file, usable.
 NMRX_logo.svg
 --------------
 Extracted from the PDF timetable from the RailRunner website, using Karbon and Inkscape.
+Untested due to problems with SW Chief timetable.  FIXME.
 
+Canadian Logos
+==============
+
+VIA Rail
+--------
+https://commons.wikimedia.org/wiki/File:VIA_Rail_Canada_Logo.svg
+
+This is way too detailed, so I removed the subtitle in Inkscape:
+VIA_Rail_icon.svg

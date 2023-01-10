@@ -5,6 +5,7 @@ route-name,,,,,
 days,TWO,,,TWO,TWO
 updown,,,,,
 TWO,64 first,,,63 monday last,63 sunday last
+,"<div style=""text-align:center;"">(see VIA timetable)</div>","<div style=""text-align:center; font-weight: bold;"">~Additional Canadian stations~</div>",,"<div style=""text-align:center;"">(see VIA timetable)</div>","<div style=""text-align:center;"">(see VIA timetable)</div>"
 NFS,,,,,
 NFL,,,,,
 BFX,,,,,

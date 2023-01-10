@@ -1,5 +1,5 @@
 service_code,logo_filename,suffix,alt,title,full_name,url
-mbta,MBTA,,,MBTA,MBTA,https://www.mbta.com/
+mbta,MBTA,,MBTA,MBTA,MBTA,https://www.mbta.com/
 shore_line_east,CT_Rail_icon_only,SLE,SLE,CT rail Shore Line East,CT rail Shore Line East,https://shorelineeast.com/
 hartford_line,CT_Rail_icon_only,HL,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
 metro_north,MTA logo,MN,MN,Metro-North,Metro-North Railroad,https://new.mta.info/agency/metro-north-railroad
@@ -49,3 +49,4 @@ vta,BSicon_LOGO_SCvta,,VTA,VTA,VTA light rail,https://www.vta.org/
 sprinter,SPRINTER_logo,,SPRINTER,SPRINTER,SPRINTER to Escondido,https://gonctd.com/services/sprinter-hybrid-rail/
 coaster,COASTER_logo,,COASTER,COASTER,COASTER,https://gonctd.com/services/coaster-commuter-rail/
 san_diego_trolley,MTS_Trolley_icon,,Trolley,San Diego Trolley,San Diego Trolley,https://www.sdmts.com/transit-services/trolley
+via_rail,VIA_Rail_icon,,VIA Rail Canada,VIA Rail Canada,VIA Rail Canada,https://www.viarail.ca/
