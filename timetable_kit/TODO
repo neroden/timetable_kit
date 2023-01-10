@@ -1,35 +1,30 @@
-CSS Paged Media:
-- Push feature selection out of CSS and into HTML.
-This allows two unrelated HTML timetable pages (with different options) to share the same CSS,
-which is needed to generate multipage HTML directly.
+For generalizing to non-Amtrak feeds:
+1 -- Give the Amtrak module interface a defined (duck) type, so that we can
+     swap in a different module.  This is easier to do than it appears!
+     We can literally just use a variable to hold which module to call.
+2 -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
+3 -- fix the get_time_column_stylings code to check the "agency" data
+4 -- Switch wheelchair access detection to be based on GTFS.
+     Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
+     from the Amtrak stations database.
+5 -- Find a way to grab station names from Amtrak if available (Advanced Information),
+     but from GTFS if not available.
 
-Finish adding Connecting Services:
+Add arrows to the font -- follow up with designer on commission
+- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
+- We should have custom arrows.
+
+For prettiness:
+1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
+
+For internal code cleanup:
+1 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
+
+Finish adding Connecting Services: - TEDIOUS
 - VIA and Canadian stuff
 
-Clean up other "working" timetables.
-Done and shipped:
-- Virginia Services
-- Michigan Services
-- Pennsylvanian
-- Keystone Service
-- Vermonter
-
-- Coast Starlight
-- Empire Builder
-- California Zephyr
-- Texas Eagle
-- Sunset Limited
-- CONO/Illini/Saluki
-- Crescent
-- Cardinal
-- Capitol Limited
-- Lake Shore Limited
-
-Done, not shipped:
-- Carolinian/Piedmont
-Try to do:
-- Palmetto-Silver Service (make into two pages)
-- NEC [too much work]
+Clean up other "working" timetables: - TEDIOUS
+- NEC
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
@@ -58,9 +53,6 @@ Put off, because these have printable state agency timetables, or almost:
 - San Joaquins
 - Hiawatha
 
-Fourth priority:
-Get VIA, or "generic" agency, going
-
 When new GTFS drops:
 1 -- Southwest Chief (currently missing entirely)
 2 -- add Southwest Chief back into Lincoln Service
@@ -69,49 +61,19 @@ When new GTFS drops:
 5 -- Ethan Allen Express to Burlington
 6 -- then recheck everything else
 
-For prettiness:
-1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
-
-Add arrows to the font:
-- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
-- We should have custom arrows.
-- Consider commissioning the designer (email sent)
-
-For generalizing to non-Amtrak feeds:
-A -- abstract the station name styling routines into one (easier to override / underride)
-B -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
-
-0 -- fix the get_time_column_stylings code to check the "agency" data
-1 -- Switch wheelchair access detection to be based on GTFS.
-     Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
-     from the Amtrak stations database.
-2 -- Find a way to grab station names from Amtrak if available (Advanced Information),
-     but from GTFS if not available.
-4 -- Give the Amtrak module interface a defined (duck) type, so that we can
-     swap in a different module.  This is easier to do than it appears!
-     We can literally just use a variable to hold which module to call.
-
-For internal code cleanup:
--1 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
-      Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
-
-0 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
-2 -- improve icon situation (put characters in font?)
-3 -- Update the font to inlcude the standard Unicode arrows (2937, 2193, 2191, etc)
-
 Fine for after release of timetables:
 0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
 
-0.5 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
+1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 
-4 -- Routine to print out calendar for a single route,
+2 -- Routine to print out calendar for a single route,
      with out-of-period dates removed, for inspection
 
-5 -- Test install and resolve other problematic directory references
+3 -- Test install and resolve other problematic directory references
 
-6 -- Resolve command-line functions in amtrak/ into a __main__.py
+4 -- Resolve command-line functions in amtrak/ into a __main__.py
 
-8 -- Improve calendar filtering for days of week
+5 -- Improve calendar filtering for days of week
     Still not clear what the best approach for this is.
 
     Failing to filter for the days of the week can give two calendars
@@ -124,13 +86,26 @@ Fine for after release of timetables:
     To make matters worse, there are calendar gaps in other timetables,
     like the Cardinal one.  We need a better presentation on this crap.
 
-9 -- Sanitize pathnames coming from command line and environment.
+6 -- Sanitize pathnames coming from command line and environment.
     We're very sloppy right now.
 
+7 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
+      Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
+
 Fine for never:
-1 -- implement prototype spec generator using toposort to merge station lists.
+8 -- implement prototype spec generator using toposort to merge station lists.
      This is really a many-step process.
 
 Wishlist:
-1 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
+9 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
 (OK.  It would be AWESOME.)
+
+CSS Paged Media project:
+- Unique table IDs.
+Allows header styling to work on multiple timetables in same HTML document.
+- Put *all* connecting service CSS (also icons, etc) into CSS.
+This allows two unrelated HTML timetable pages to share the same CSS,
+which is needed to generate multipage HTML directly.
+- Move font selection out of CSS jinja substitutions (somehow).
+This allows two unrelated HTML timetable pages to share the same CSS,
+which is needed to generate multipage HTML directly.
