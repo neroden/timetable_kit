@@ -52,17 +52,17 @@ both are contained within ".bigbox-layout".
 Normally the symbol key / footnotes are at the bottom.
 With key_on_right, line these up side by side, somehow!
 #}
-{% if key_on_right %}
-.bigbox-layout {
+
+.bigbox-layout-key-on-right {
     display: block;
 }
-.bigbox-timetable {
+.bigbox-timetable-key-on-right {
     float: left;
 }
-.bigbox-keys {
+.bigbox-keys-key-on-right {
     float: right; {# Tried doing it with display: inline-block, but it floats to the bottom #}
 }
-{% else %}{# Normal, key below table -- this is all defaults #}{#
+
 .bigbox-layout {
     display: block;
 }
@@ -72,4 +72,3 @@ With key_on_right, line these up side by side, somehow!
 .bigbox-keys {
     display: block;
 }
-#}{% endif %}

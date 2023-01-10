@@ -24,11 +24,11 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
 {% if top_text %}<p class="top-text">{{top_text}}</p>{% endif %}
-<div class="bigbox-layout">
-<div class="bigbox-timetable">
+<div class="{% if key_on_right %}bigbox-layout-key-on-right{% else %}bigbox-layout{% endif %}">
+<div class="{% if key_on_right %}bigbox-timetable-key-on-right{% else %}bigbox-timetable{% endif %}">
 {{timetable}}
 </div><!-- bigbox-timetable -->
-<div class="bigbox-keys">
+<div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">
 {% include "symbol_key.html" %}
 {% include "connecting_services_key.html" %}
 {% if bottom_text %}<p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>{% endif %}
