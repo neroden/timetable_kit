@@ -104,6 +104,13 @@ def style_timetable_for_html(
     table_classes is a string of extra CSS classes to add to the table; it will always have 'tt-table'.
     """
 
+    # There's an unpleasant issue here if we want to generate multipage timetables in HTML.  FIXME.
+    # We have to attach the header codes by row & column (Jinja2 for PANDAS won't do mix-in classes).
+    # But that means each timetable needs a *unique* class so the CSS can catch it.
+    # Or the ID selector can be used (#table_id) but that still requires a unique ID,
+    # which is known to the header styling CSS generator.  FIXME!
+    # Possibly we need to pull this ID out of the JSON file?
+
     table_classes += " tt-table"
     table_attributes = "".join(['class="', table_classes, '"'])
 
