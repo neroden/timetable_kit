@@ -13,7 +13,7 @@ This is referenced from connecting_services/
 #}{% if connecting_services_keys_html %}{#
 #}
 
-<p class="connecting-services-key">{#
+<p class="connecting-services-key {% if compress_credits %}compressed-credits{% endif %}">{#
 #}<b>Connecting trains</b> provided by:{{ br_or_space(key_on_right) }}{#
 #}{{ connecting_services_keys_html }}{#
 #}</p>

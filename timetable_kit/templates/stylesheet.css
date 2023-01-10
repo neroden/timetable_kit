@@ -10,18 +10,15 @@
 {% include "font_size.css" %}
 {{ icons }}
 {{ logos }}
+{% include "rpa_logo.css" %}
 {% include "connecting_service_links.css" %}
 {% include "page_standard.css" %}
-{% if for_rpa %}{% include "rpa_logo.css" %}{% endif %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
 {% include "timetable_headers.css" %}
 {{ header_styling }}{# This has to be produced by the main program due to PANDAS limitations #}
-{% if box_time_characters %}
-{% include "time_boxes_characters.css" %}
-{% else %}
+{% include "time_boxes_characters.css" %}{# Used only if we're using a nontabular font. #}
 {% include "time_boxes_simple.css" %}
-{% endif %}
 {% include "time_boxes_extras.css" %}
 {% include "symbol_key.css" %}
 {% include "check_amtrak.css" %}

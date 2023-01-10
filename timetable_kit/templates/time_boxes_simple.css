@@ -16,6 +16,7 @@ Firefox makes them too WIDE and leaves tons of extra space.
 We'll try "em"s.  These work, but, uh... yuck?
 We probably should do more tricks.  TODO.
 #}
+/* These are used with fonts with tabular nums (the default). */
 .box-time12 {
     /* 12:00P, six characters, may be bold: fixed width */
     display: inline-block;

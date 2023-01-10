@@ -9,11 +9,8 @@ Often blank, but affected by the "compress_credits" option.
 Also compresses the bottom_text and the connecting-services-key
 Basically gets rid of all the blank lines
 #}
-{% if compress_credits %}
-/* Compress the credits paragraphs to save space */
-
-.credit-paragraph, .bottom-text, .connecting-services-key {
+/* Mix-in style to compress credits paragraphs */
+.compressed-credits {
     margin-top: 0;
     margin-bottom: 0;
 }
-{% endif %}

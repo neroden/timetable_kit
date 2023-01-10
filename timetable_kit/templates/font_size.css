@@ -14,13 +14,22 @@ with "font-variant-ligatures: no-common-ligatures;" if the font size is tiny.
 services_header_text and timezone_header_text are both spans in a header, which usually has enlarged fonts,
 but should have the same tiny font as the rest of the timetable.
 
-This is the default font size: we apply it to the entire body.
-
 Before setting the entire timetable, we did the following:
 .tt-table, .symbol-key, .timetable_kit_credit, .services-header-text {
 
-#}
+Then we tried this:
 body, .services-header-text, .access-header-text, .timezone-header-text {
+
+Multi-page timetables: this is a bit ugly because we may want to vary this *per timetable*.
+Attach the font size clause to a CSS class in a div which wraps the timetable.
+
+Still need special references to the three header texts which should not be enlarged.
+It is not clear how to change them for multi-page timetables with variations, since this would
+need to be done from Python code.  FIXME
+
+For now all timetables in a multi-page must use the same font size
+#}
+.standard-font-size, .services-header-text, .access-header-text, .timezone-header-text {
     font-size: {{font_size}};{% if font_is_tiny %}
     font-variant-ligatures: no-common-ligatures;{% endif %}
 }

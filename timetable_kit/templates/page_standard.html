@@ -19,7 +19,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 </style>{% elif external_stylesheet %}<link rel="stylesheet" href="{{external_stylesheet}}"/>{% endif %}
 </head>
 <body>
-<div class="{% if landscape %}landscape-page{% else %}portrait-page{% endif %}">
+<div class="{% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
 <h1>{{heading}}</h1>
 {% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
 {% include "check_amtrak.html" %}
@@ -31,11 +31,11 @@ Standard page layout (as opposed to landscape page layout, etc.)
 <div class="bigbox-keys">
 {% include "symbol_key.html" %}
 {% include "connecting_services_key.html" %}
-{% if bottom_text %}<p class="bottom-text">{{bottom_text}}</p>{% endif %}
+{% if bottom_text %}<p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>{% endif %}
 {% include "unofficial_amtrak.html" %}
 {% include "credit.html" %}
 </div><!-- bigbox-keys -->
 </div><!-- bigbox-layout -->
-</div><!-- {% if landscape %}landscape-page{% else %}portrait-page{% endif %} -->
+</div><!-- {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size -->
 </body>
 </html>

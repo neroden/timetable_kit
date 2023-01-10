@@ -2,7 +2,7 @@
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 #}{% from "macros.html" import br_or_space %}{#
-#}<div class="timetable_kit_credit"><p class="credit-paragraph">{#
+#}<div class="timetable_kit_credit"><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
 #}Timetable generated on <b>{{ production_date }}</b> by timetable_kit{#
 #}{{ br_or_space(key_on_right) }}{#
 #}( <a href="{{timetable_kit_url}}">{{timetable_kit_url}}</a> ).{#
@@ -11,7 +11,8 @@
 #}{{ br_or_space(key_on_right) }}{#
 #}the Creative Commons {#
 #}<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.{#
-#}</p><p class="credit-paragraph" style="font-size: 120%; font-weight: bold">{#
+#}</p><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}" {#
+#}style="font-size: 120%; font-weight: bold">{#
 #}Timetable_kit was written by Nathanael Nerode.{#
 #}<br>{#
 #}If you appreciate this timetable,{#
