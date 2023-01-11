@@ -1,0 +1,11 @@
+/*
+Montreal_Metro.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Square, enlarge slightly
+*/
+.montreal_metro_logo {
+    height: 1.25em;
+    vertical-align: -0.125em;
+}

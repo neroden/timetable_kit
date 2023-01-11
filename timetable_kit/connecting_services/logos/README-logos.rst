@@ -88,10 +88,10 @@ Toronto
 'ttc' - DONE
 'union_pearson_express' - No logo in regular use.  Use text.
 Montreal
-'exo'
-'montreal_metro'
+'exo' - DONE - can't be tested due to suspension of Adirondack
+'montreal_metro' - DONE - can't be tested due to suspension of Adirondack
 Vancouver
-'skytrain'
+'skytrain' - No logo in regular use.  Use text.
 
 From the Wikimedia category
 ===========================
@@ -398,3 +398,11 @@ Union Pearson Express
 ----------------------
 They are not currently using a logo other than all caps, sans-serif "UP".
 I think we'll just use text (all-caps, sans serif, bold) rather than trying to copy their font.
+
+Exo (aka RTM)
+--------------
+https://commons.wikimedia.org/wiki/File:Exo.svg
+
+Montreal Metro
+---------------
+https://commons.wikimedia.org/wiki/File:Montreal_Metro.svg
