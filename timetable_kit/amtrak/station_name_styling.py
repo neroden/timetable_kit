@@ -130,6 +130,7 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
         if station_code in ["BOS", "BBY"]:
             # Save lines on some timetables by putting the facility code on the same line as the station
             # This is needed at Boston for the Richmond timetable
+            # Consider at Toronto for the sheer number of connecting services on the next line
             br_for_facility_name = " "
         if station_code == "PHL":
             # facility_name == "William H. Gray III 30th St. Station"
@@ -163,6 +164,8 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             # SNC (San Juan Capistrano), OSD (Oceanside)
             # have excessively wide connection logos
             # Grab an extra line in these cases
+            # TWO (Toronto) has a lot of connections,
+            # but Empire Service timetables have more width than length available
             connection_logos_html += "<br>"
         # station_code had better be correct, since we're going to look it up
         # stations with no entry in the dict are treated the same as

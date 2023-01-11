@@ -1,0 +1,11 @@
+/*
+TTC logo.css
+Part of timetable_kit
+Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Needs to be oversized.
+*/
+.ttc_logo {
+    height: 1.5em;
+    vertical-align: -0.375em;
+}

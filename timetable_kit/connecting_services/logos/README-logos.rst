@@ -85,8 +85,8 @@ And from Canada:
 'via_rail' - DONE
 Toronto
 'go_transit' - DONE
-'union_pearson_express'
-'ttc'
+'ttc' - DONE
+'union_pearson_express' - No logo in regular use.  Use text.
 Montreal
 'exo'
 'montreal_metro'
@@ -384,4 +384,17 @@ GO Transit
 ----------
 https://commons.wikimedia.org/wiki/File:GO_Transit_logo.svg
 
-This is fine.
+"GO Transit logo.svg"
+
+Toronto Transit Commission
+--------------------------
+https://commons.wikimedia.org/wiki/File:TTC.svg
+
+"TTC logo.svg"
+
+This one is quite finicky so must be oversized
+
+Union Pearson Express
+----------------------
+They are not currently using a logo other than all caps, sans-serif "UP".
+I think we'll just use text (all-caps, sans serif, bold) rather than trying to copy their font.
