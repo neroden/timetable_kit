@@ -153,6 +153,22 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
     return trip_short_name in checked_baggage_trains
 
 
+def is_high_speed_train(trip_short_name: str) -> bool:
+    """
+    Given a trip_short_name (train number) return "True" if we should color it as a high speed train.
+
+    Basically we're just counting Acela for Amtrak, to copy the old timetable style.
+    """
+    # So this really should check the GTFS to see if it's an Acela... but we don't. FIXME
+    # Anything from 2100 to 2299 is an Acela.
+    if not trip_short_name.isdigit():
+        return False
+    tsn_as_number = int(trip_short_name)
+    if tsn_as_number >= 2100 and tsn_as_number <= 2299:
+        return True
+    return False
+
+
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
 # (Empire doesn't call out NEC stations on connecting trains)

@@ -27,7 +27,9 @@ canonical_gtfs_url = "https://content.amtrak.com/content/gtfs/GTFS.zip"
 # This is the URL we should publish at the bottom of the timetable as the
 # source for GTFS data.  This should probably be a transit.land or similar
 # reference, in case the canonical url changes.
-published_gtfs_url = "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
+published_gtfs_url = (
+    "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
+)
 
 module_location = Path(__file__).parent
 gtfs_zip_local_path = module_location / "GTFS.zip"

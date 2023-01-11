@@ -8,7 +8,8 @@ This CSS fragment colors cells according to the type of train they go with.
 It depends heavily on Pandas adding custom classes to the cells.
 
 The headers have to be set elsewhere, in timetable_styling.py.
-We should fix this.  ***sigh***
+We should fix this.  ***sigh*** FIXME
+
 #}
 .color-bus {
     background-color: honeydew;
@@ -16,9 +17,12 @@ We should fix this.  ***sigh***
 .color-connecting-train {
     background-color: blanchedalmond;
 }
-.color-day-train {
-    background-color: cornsilk;
-}
 .color-sleeper {
     background-color: lavender;
+}
+.color-high-speed-train {
+    background-color: aliceblue;
+}
+.color-day-train {
+    background-color: cornsilk;
 }

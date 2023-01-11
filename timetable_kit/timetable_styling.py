@@ -86,6 +86,9 @@ def get_time_column_stylings(
     elif agency().is_sleeper_train(tsn):
         color_css = "background-color: lavender;"
         color_css_class = "color-sleeper"
+    elif agency().is_high_speed_train(tsn):
+        color_css = "background-color: aliceblue;"
+        color_css_class = "color-high-speed-train"
     else:
         color_css = "background-color: cornsilk;"
         color_css_class = "color-day-train"
@@ -277,9 +280,9 @@ def finish_html_timetable(
         "end_date": end_date_str,
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
-        "gtfs_url": agency().published_gtfs_url, # e.g. URL to Amtrak GTFS
-        "agency_name": agency().published_name, # e.g. "Amtrak"
-        "agency_website": agency().published_website, # e.g. "Amtrak.com" -- with capitalization, no https://
+        "gtfs_url": agency().published_gtfs_url,  # e.g. URL to Amtrak GTFS
+        "agency_name": agency().published_name,  # e.g. "Amtrak"
+        "agency_website": agency().published_website,  # e.g. "Amtrak.com" -- with capitalization, no https://
     }
 
     # Allows direct icon references in Jinja2

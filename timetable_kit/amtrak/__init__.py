@@ -14,12 +14,6 @@ timetable_kit.amtrak module
 
 Amtrak-specific functions for timetable_kit.
 """
-from . import (
-    agency_cleanup,
-    special_data,
-    station_name_styling,
-    json_stations,  # this is the big one
-)
 
 # Published agency name
 published_name = "Amtrak"
@@ -28,9 +22,11 @@ published_name = "Amtrak"
 published_website = "Amtrak.com"
 
 # Where to find the GTFS
-from .get_gtfs import gtfs_zip_local_path
-from .get_gtfs import gtfs_unzipped_local_path
-from .get_gtfs import published_gtfs_url
+from .get_gtfs import (
+    gtfs_zip_local_path,
+    gtfs_unzipped_local_path,
+    published_gtfs_url,
+)
 
 # How to title the routes at the top of the column
 from .route_names import get_route_name
@@ -53,8 +49,11 @@ from .access import (
 from .gtfs_cleanup import patch_feed
 
 # For colorizing columns
-from .special_data import is_connecting_service  # Highlight in different color
-from .special_data import is_sleeper_train  # Different color, ideally icon
+from .special_data import (
+    is_connecting_service,
+    is_sleeper_train,
+    is_high_speed_train,
+)
 
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
