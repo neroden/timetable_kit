@@ -1,3 +1,6 @@
+Clean up other "working" timetables: - TEDIOUS
+- NEC
+
 For generalizing to non-Amtrak feeds:
 1 -- Give the Amtrak module interface a defined (duck) type, so that we can
      swap in a different module.  This is easier to do than it appears!
@@ -22,9 +25,6 @@ For prettiness:
 
 For internal code cleanup:
 1 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
-
-Clean up other "working" timetables: - TEDIOUS
-- NEC
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
