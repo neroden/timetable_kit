@@ -277,8 +277,9 @@ def finish_html_timetable(
         "end_date": end_date_str,
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
-        # FIXME hardcoded Amtrak URL here
-        "gtfs_url": "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle",
+        "gtfs_url": agency().published_gtfs_url, # e.g. URL to Amtrak GTFS
+        "agency_name": agency().published_name, # e.g. "Amtrak"
+        "agency_website": agency().published_website, # e.g. "Amtrak.com" -- with capitalization, no https://
     }
 
     # Allows direct icon references in Jinja2

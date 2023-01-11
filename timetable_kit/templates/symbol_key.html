@@ -60,15 +60,22 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
       <td>Flag stop (only stops if passengers are ticketed in advance)</td>
     </tr>{#
 #}{% endif %}{% if key_bus %}{#
+NOTE -- agency_name is "Amtrak" for Amtrak timetables.
+So this says "can be booked through Amtrak" / "can be booked through VIA" etc.
+-- don't use for connecting buses which require separate booking.  FIXME
 #}    <tr>
       <td><b>{{bus_icon}}</b></td>
-      <td>Connecting Bus Service (can be booked through Amtrak)</td>
+      <td>Connecting Bus Service (can be booked through {{agency_name}})</td>
     </tr>{#
 #}{% endif %}{% if key_tz %}{#
 #}    <tr>
       <td><b>TZ</b></td>
-      <td>Time zone: ET (Eastern Time), CT (Central Time),{{ br_or_space(key_on_right) }}{#
-#}MT (Mountain Time), or PT (Pacific Time)</td>
+      <td>Time zone: {#
+#}{% if atlantic_time %}AT (Atlantic Time_, {{ br_or_space(key_on_right) }}{% endif %}{#
+#}ET (Eastern Time), CT (Central Time),{{ br_or_space(key_on_right) }}{#
+#}MT (Mountain Time), {#
+#}{% if mountain_standard_time %}MST (Mountain Standard Time), {{ br_or_space(key_on_right) }}{% endif %}{#
+#}or PT (Pacific Time)</td>
     </tr>{#
 #}{% endif %}{#
 #}  </tbody>

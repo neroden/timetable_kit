@@ -1,9 +1,12 @@
 {# unofficial_amtrak.html
    Part of timetable_kit
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+   As part of generalizing beyond Amtrak, this uses "agency_name" ("Amtrak")
+
 #}{% from "macros.html" import br_or_space %}{#
 #}<div class="unofficial-amtrak"><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
-#}This timetable is not an official Amtrak product.{{ br_or_space(key_on_right) }}{#
+#}This timetable is not an official {{ agency_name }} product.{{ br_or_space(key_on_right) }}{#
 #}<b>This timetable is provided AS IS.{{ br_or_space(key_on_right) }}{#
 #}No warranties are provided{{ br_or_space(key_on_right) }}and all warranties are disclaimed.</b>{#
 #}<br>{#
@@ -13,5 +16,5 @@
 #}for <a href="https://www.railpassengers.org/resources/amtrak-timetables/">Rail Passengers Association</a>{#
 #}{% endif %}{#
 #},{{ br_or_space(key_on_right) }}based on <a href="{{gtfs_url}}">GTFS data</a>{#
-#} released to the public by Amtrak,{{ br_or_space(key_on_right) }}and on other data sources.{#
+#} released to the public by {{ agency_name }},{{ br_or_space(key_on_right) }}and on other data sources.{#
 #}</p></div>

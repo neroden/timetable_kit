@@ -21,9 +21,16 @@ from . import (
     json_stations,  # this is the big one
 )
 
+# Published agency name
+published_name = "Amtrak"
+# Published agency website, for printing.
+# Does not include the https:// and should be capitalized for print.
+published_website = "Amtrak.com"
+
 # Where to find the GTFS
 from .get_gtfs import gtfs_zip_local_path
 from .get_gtfs import gtfs_unzipped_local_path
+from .get_gtfs import published_gtfs_url
 
 # How to title the routes at the top of the column
 from .route_names import get_route_name

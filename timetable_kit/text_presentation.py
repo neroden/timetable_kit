@@ -119,13 +119,21 @@ def get_zonediff(local_zone, base_zone, reference_date):
     return diff_hours
 
 
-# This is exceedingly US-centric, FIXME
+# This is exceedingly North-America-centric, FIXME
 tz_letter_dict = {
+    # US zones used by Amtrak:
     "America/New_York": "ET",
     "America/Chicago": "CT",
     "America/Denver": "MT",
     "America/Phoenix": "MST",
     "America/Los_Angeles": "PT",
+    # Canadian zones used by VIA (in addition to America/New_York):
+    "America/Halifax": "AT",
+    "America/Toronto": "ET",
+    "America/Winnipeg": "CT",
+    "America/Regina": "CT",
+    "America/Edmonton": "MT",
+    "America/Vancouver": "PT",
 }
 
 
