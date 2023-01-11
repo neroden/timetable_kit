@@ -1,9 +1,9 @@
 {# licensing.txt
    Part of timetable_kit
-   Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+   Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 #}
 Contains material from timetable_kit.
-Timetable_kit is copyright 2022 Nathanael Nerode.
+Timetable_kit is copyright 2023 Nathanael Nerode.
 Timetable_kit is licensed under GNU Affero GPL v.3 or later.
 
 Material from timetable_kit which appears in generated timetables and

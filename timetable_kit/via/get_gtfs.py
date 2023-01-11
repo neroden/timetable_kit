@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # via/get_gtfs.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Retrieve VIA Rail's static GTFS data from the canonical location.
 
@@ -15,12 +15,18 @@ from zipfile import ZipFile
 
 import requests
 
+# Where we should download the GTFS from.
 # Found at www.viarail.ca/en/developer-resources
 #
 canonical_gtfs_url = "https://www.viarail.ca/sites/all/files/gtfs/viarail.zip"
 
-module_location = Path(__file__).parent
+# This is the URL we should publish at the bottom of the timetable as the
+# source for GTFS data.  This should probably be a transit.land or similar
+# reference, in case the canonical url changes.
+published_gtfs_url = (
+    "https://www.transit.land/feeds/f-f-viarail~traindecharlevoix"
 
+module_location = Path(__file__).parent
 gtfs_zip_local_path = module_location / "gtfs.zip"
 gtfs_unzipped_local_path = module_location / "gtfs"
 

@@ -1,6 +1,6 @@
 # amtrak/gtfs_cleanup.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Patch known errors in Amtrak GTFS.
 

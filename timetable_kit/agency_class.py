@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # genric_agency.py
 # Part of timetable_kit
-# Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Hooks for agency-specific data.
 

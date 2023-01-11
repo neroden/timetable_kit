@@ -1,13 +1,11 @@
 #! /usr/bin/env python3
 # amtrak/get_gtfs.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Retrieve Amtrak's static GTFS data from the canonical location.
 
-HUGE NEWS!  Amtrak is now actually providing GTFS data!
-
-I need to handle the local file munging better, but this is a start.
+Common code needs to be pulled out to the upper level.
 """
 
 import sys  # for sys.exit
@@ -15,9 +13,6 @@ from pathlib import Path
 from zipfile import ZipFile
 
 import requests
-
-# These are mine
-# from timetable_kit import amtrak
 
 # Found at transit.land.
 # Also at The Mobility Database on Github.  MobilityData/mobility-database

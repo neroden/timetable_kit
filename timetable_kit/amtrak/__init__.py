@@ -1,18 +1,12 @@
 # antrak/__init.py__
 # Init file for amtrak subpackage of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-# I'll be quite honest; I don't know what I'm doing here.
-# This seems to work to allow the parent package to say
-#   import timetable_kit.amtrak
-# and then use
-#   amtrak.special_data.whatever
-# later on.  This doesn't seem to work without these lines.
-
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 timetable_kit.amtrak module
 
 Amtrak-specific functions for timetable_kit.
+
+This defines an interface; VIA rail and others need to provide the same interface.
 """
 
 # Published agency name
