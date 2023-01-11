@@ -220,6 +220,8 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "key_l": "If present, include the key for 'may leave before time shown' (L) ",
     "key_f": "If present, include the key for flag stops",
     "key_tz": "If present, include the key for time zones",
+    "mountain_standard_time": "include information about Arizona not using Daylight Savings Time",
+    "atlantic_time": "include the Atlantic time zone for Halifax",
     "key_bus": "If present, include the key for the bus icon",
     "use_bus_icon_in_cells": "If present, use the bus icon in time cells for buses.  Otherwise, don't.",
     "all_stations_accessible": "The key should say that all stations are accessible, rather than putting the icons for accessible and inaccessible.  Used to save the space of the access column; please don't do this unless you need the space."
