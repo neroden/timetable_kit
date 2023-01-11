@@ -10,6 +10,9 @@ For generalizing to non-Amtrak feeds:
 5 -- Find a way to grab station names from Amtrak if available (Advanced Information),
      but from GTFS if not available.
 
+Finish adding Connecting Services:
+- Add Amtrak as connecting service for VIA Rail timetables
+
 Add arrows to the font -- follow up with designer on commission
 - The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
 - We should have custom arrows.
@@ -19,9 +22,6 @@ For prettiness:
 
 For internal code cleanup:
 1 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
-
-Finish adding Connecting Services: - TEDIOUS
-- VIA and Canadian stuff
 
 Clean up other "working" timetables: - TEDIOUS
 - NEC
@@ -46,7 +46,7 @@ Not running:
 - Adirondack
 
 Put off, because these have printable state agency timetables, or almost:
-- Cascades
+- Cascades - Oregon Point bus schedule problem
 - Downeaster
 - Hartford Line
 - Pacific Surfliner
