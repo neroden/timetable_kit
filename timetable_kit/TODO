@@ -2,6 +2,9 @@ Clean up other "working" timetables: - TEDIOUS
 - NEC
 
 For generalizing to non-Amtrak feeds:
+0 -- VIA uses numerical stop_id and puts the station names in stop_code instead.
+     So we have to sort for THAT mess.  We want stop_code in the specs, and in public info,
+     but stop_id must be referenced when fiddling with the raw GTFS data.
 1 -- Give the Amtrak module interface a defined (duck) type, so that we can
      swap in a different module.  This is easier to do than it appears!
      We can literally just use a variable to hold which module to call.
