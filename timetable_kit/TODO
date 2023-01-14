@@ -106,9 +106,13 @@ Wishlist:
 CSS Paged Media project:
 - Unique table IDs.
 Allows header styling to work on multiple timetables in same HTML document.
-- Put *all* connecting service CSS (also icons, etc) into CSS.
-This allows two unrelated HTML timetable pages to share the same CSS,
-which is needed to generate multipage HTML directly.
 - Move font selection out of CSS jinja substitutions (somehow).
 This allows two unrelated HTML timetable pages to share the same CSS,
 which is needed to generate multipage HTML directly.
+
+Long term (?):
+- Patch PANDAS to allow insertion of classes in header rows.
+- This seems straightforward.
+- tests/io/format is where the test is.
+- need a parallel to cell_context (header_context).
+- Have to set up another project contributor profile etc so OMG.  Not this month.
