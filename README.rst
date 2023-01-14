@@ -59,7 +59,7 @@ Look in the timetable_kit folder for the README.rst there for further info on us
 
 Authors
 =======
-Copyright 2021, 2022 Nathanael Nerode.
+Copyright 2021, 2022, 2023 Nathanael Nerode.
 
 Some fonts and icons are from other sources and have their own authors, copyrights,
 and licenses, noted in their directories or files.
