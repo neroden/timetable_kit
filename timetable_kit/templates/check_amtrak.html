@@ -4,9 +4,12 @@
 
    When doing Amtrak, "agency_name" is "Amtrak", "agency_website" is "Amtrak.com"
    This will change for VIA Rail, etc.
+#}{%- from "macros.html" import br_or_space -%}{#
 #}<div class="check-amtrak">{#
 #}<p>According to the <a href="{{gtfs_url}}">GTFS data</a>, {#
 #}this was intended to be valid from <b>{{start_date}}</b> through <b>{{end_date}}</b>.<br>{#
-#}Timetables may change for holidays, special events, construction projects, and other reasons.<br>{#
 #}<b>Always check <a href="https://{{agency_website}}">{{agency_website}}</a>{#
-#} for precise times for your exact date of travel.</b></p></div>
+#} for precise times for your exact date of travel.</b>{#
+#}{{ br_or_space(not landscape) }}{#
+#}Timetables may change for holidays, special events, construction projects, and other reasons.{#
+#}</p></div>
