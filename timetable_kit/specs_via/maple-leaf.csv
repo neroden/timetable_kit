@@ -1,0 +1,28 @@
+,97,access,stations,98 monday,698 sunday
+column-options,ardp,,,ardp reverse,reverse
+route-name,,,,,
+,"<div style=""text-align: center;"">(Amtrak <b>#64</b>)</div>",,,"<div style=""text-align: center;"">(Amtrak <b>#63</b>)</div>","<div style=""text-align: center;"">(Amtrak <b>#63</b>)</div>"
+days,TWO,,,TWO,TWO
+updown,,,,,
+TRTO,97 first,,,98 monday last,698 sunday last
+OAKV,,,,,
+ALDR,,,,,
+GRIM,,,,,
+SCAT,,,,,
+NIAG,,,,,
+NFNY,,,,,
+BUFX,,,,,
+BUFF,,,,,
+ROCH,,,,,
+SYRA,,,,,
+ROME,,,,,
+UTIC,,,,,
+AMST,,,,,
+SCHE,,,,,
+ALBY,,,,,
+HUDS,,,,,
+RHIN,,,,,
+POUG,,,,,
+CROT,,,,,
+YONK,,,,,
+NEWY,97 last,,,98 monday first,698 sunday first
