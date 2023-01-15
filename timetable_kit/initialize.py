@@ -51,30 +51,8 @@ def initialize_feed(gtfs):
     # Fix types on every table in the feed
     gtfs_type_cleanup.fix(master_feed)
 
-    # This is Amtrak-specific
-    fix_known_errors(master_feed)
     debug_print(1, "Feed initialized")
     return master_feed
-
-
-def fix_known_errors(feed):
-    """
-    Change the feed in place to fix known errors.
-    """
-    # Cardinal 1051 (DST switch date) with wrong direction ID
-
-    # There's an error in the trips. Attempt to fix it.
-    # THIS WORKS for fixing errors in a feed.  REMEMBER IT.
-    # Revised for PANDAS 1.4.
-    my_trips = feed.trips
-
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"])
-    my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
-    debug_print(2, my_trips[my_trips["trip_short_name"] == "1051"])
-
-    # Error fixed.  Put back into the feed.
-    feed.trips = my_trips
-    return
 
 
 def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):

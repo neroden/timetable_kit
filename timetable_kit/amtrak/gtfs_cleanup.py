@@ -75,8 +75,14 @@ def patch_feed(feed):
                 debug_print(
                     1, "Found Toronto in position 19 or 20: patched drop_off_type"
                 )
-
     # Update with new stop times
     new_feed.stop_times = new_stop_times
+
+    # Cardinal #1051 (DST switch date) with wrong direction ID
+    my_trips = new_feed.trips
+    debug_print(1, "Patching Cardinal #1051 direction")
+    my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
+    # Update with new trips data
+    new_feed.trips = my_trips
 
     return new_feed
