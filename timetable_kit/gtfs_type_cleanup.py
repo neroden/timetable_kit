@@ -78,7 +78,11 @@ def type_corrected_routes(routes):
 
 def type_corrected_stop_times(stop_times):
     """Return copy of stop_times with integer types in appropriate columns."""
-    new_stop_times = stop_times.astype(
+    # VIA rail uses blanks for some of these.
+    # According to GTFS specs, these should be considered the same as 0.
+    column_replacement_dict = {"pickup_type": 0, "drop_off_type": 0}
+    filled_stop_times = stop_times.fillna(value=column_replacement_dict)
+    new_stop_times = filled_stop_times.astype(
         {
             "trip_id": "str",
             "stop_sequence": "int32",
