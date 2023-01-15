@@ -47,13 +47,15 @@ exactly the order the rows will appear in the timetable.
 SPECIAL ROWS
 ------------
 A blank cell can be left in the left column to use a line for something other than station times, free-form.
-This might be used to provide a line which has a "header" for a "connecting train" section.
+This has been used to provide a line which has a "header" for a "connecting train" section, and for lines for information about trains which continue to cities not on the timetable.
 
 The special code "route-name" in the left column can be used to generate cells containing the name of the train route (route_long_name).  For Amtrak, if this is "Amtrak Thruway Connecting Service", instead the name of the agency (agency_name) will be inserted.
 
 The special code "days" or "days-of-week" in the left column will generate a row with codes like "Daily", "MoWeFr", "SaSu", etc.  For each column where you want such a day to be specified, you must specify a station code in this row and that column.  (This is because the days depend on the station, for trains crossing midnight or in a different timezone than the agency timezone.)  The first station in the timetable is probably a good choice.  To leave out this notation for a particular column, simply omit the station code.
 
 The special code "updown" will generate "Read Up" and "Read Down" notices.  See the "reverse" option in column-options below.
+
+The special code "omit" will omit the entire row from the final timetable -- this allows for comments in the CSV file, which are otherwise impossible.
 
 SHORTHAND SPEC
 --------------

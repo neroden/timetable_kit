@@ -49,16 +49,16 @@ Broken due to GTFS breakage:
 - Empire Service
 - Maple Leaf
 - Ethan Allen Express
+- Capitol Corridor - Ghost buses (weekday is done, weekend is half done)
 Not running:
 - Adirondack
 
 Put off, because these have printable state agency timetables, or almost:
+- San Joaquins
+- Pacific Surfliner
 - Cascades - Oregon Point bus schedule problem
 - Downeaster
 - Hartford Line
-- Pacific Surfliner
-- San Joaquins
-- Hiawatha
 
 When new GTFS drops:
 1 -- Southwest Chief (currently missing entirely)
@@ -69,8 +69,6 @@ When new GTFS drops:
 6 -- then recheck everything else
 
 Fine for after release of timetables:
-0 -- Add "omit" key for row to allow a row of notes for the programmer in the CSV
-
 1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 
 2 -- Routine to print out calendar for a single route,

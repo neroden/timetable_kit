@@ -167,6 +167,20 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
     raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
 
 
+def strip_omits_from_tt_spec(raw_tt_spec):
+    """
+    Given a tt_spec dataframe, strip any rows where the first column is "omit"; used for comments.
+
+    Modifies in place.
+    """
+    # Note: assumes that the column names are 0,1,2,etc.
+    # I couldn't figure out how to do this with iloc FIXME
+    stripped_tt_spec = raw_tt_spec[raw_tt_spec[0] != "omit"].reset_index(drop=True)
+    debug_print(6, "STRIPPED:")
+    debug_print(6, stripped_tt_spec)
+    return stripped_tt_spec
+
+
 def stations_list_from_tt_spec(tt_spec):
     """Given a tt_spec dataframe, return the station list as a list of strings"""
     stations_df = tt_spec.iloc[1:, 0]
@@ -1248,8 +1262,9 @@ def produce_timetable(
 
     # Now we're ready to load the .tt-spec file, finally
     tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
-    tt_spec = augment_tt_spec(tt_spec_raw, feed=master_feed, date=reference_date)
-    debug_print(1, "tt-spec", spec_filename_base, "loaded and augmented")
+    tt_spec_stripped = strip_omits_from_tt_spec(tt_spec_raw)
+    tt_spec = augment_tt_spec(tt_spec_stripped, feed=master_feed, date=reference_date)
+    debug_print(1, "tt-spec", spec_filename_base, "loaded, augmented, and stripped")
 
     # Filter the feed to the relevant day.  Required.
     today_feed = master_feed.filter_by_dates(reference_date, reference_date)
