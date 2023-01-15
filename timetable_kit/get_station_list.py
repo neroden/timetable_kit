@@ -39,8 +39,8 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
-from timetable_kit import runtime_config # for the agency()
-from timetable_kit.runtime_config import agency # for the agency()
+from timetable_kit import runtime_config  # for the agency()
+from timetable_kit.runtime_config import agency  # for the agency()
 
 
 def make_argparser():

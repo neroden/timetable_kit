@@ -41,8 +41,9 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
 )
 
-from timetable_kit import runtime_config # for the agency()
-from timetable_kit.runtime_config import agency # for the agency()
+from timetable_kit import runtime_config  # for the agency()
+from timetable_kit.runtime_config import agency  # for the agency()
+
 
 def find_connecting_buses_from_stop(
     stop_one_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
