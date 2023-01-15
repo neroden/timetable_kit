@@ -5,6 +5,8 @@
     "reference_date": "20230301",
     "bottom_text": "<b>San Francisco</b> can be reached by Caltrain from San Jose,<br>or by Amtrak-ticketed connecting bus from Emeryville.",
     "key_on_right": "true",
+    "key_bus": "true",
+    "use_bus_icon_in_cells": "true",
     "key_baggage": "true",
     "key_d": "true",
     "key_r": "true",

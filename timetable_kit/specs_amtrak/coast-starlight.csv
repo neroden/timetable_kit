@@ -1,4 +1,4 @@
-,11, access, station,14
+,11 / 6610 noheader / 5011 noheader, access, station,14 / 6619 noheader / 5014 noheader
 column-options,ardp,,,ardp reverse
 days,SEA,,,SEA
 updown,,,,
@@ -20,7 +20,11 @@ CIC,,,,
 SAC,,,,
 DAV,,,,
 MTZ,,,,
-EMY,,,,
+SFC,6610 first,,,6619 last
+EMY,6610 last,,,6619 first
+EMY,11,,,14
+EMY,5011 first,,,5014 last
+SFC,5011 last,,,5014 first
 OKJ,,,,
 SJC,,,,
 SNS,,,,
