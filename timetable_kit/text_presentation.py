@@ -1110,6 +1110,13 @@ def style_route_name_for_column(route_name, doing_html=False):
     # "Route name words" / "Route name lines"
     rnw = route_name.split()
     debug_print(2, rnw)
+    # Most VIA Rail route names are "City - City"
+    if rnw.contains("-"):
+        # Here, don't break the city names, do put one on top of the other
+        rnw = route_name.split(" - ")
+        # Should give us a length-two list, with both strings being
+        # 4 or more characters, so will pass the next two tests
+    # The following works well for Amtrak:
     # If four words, combine last two if one is really short
     if len(rnw) >= 4:
         if len(rnw[2]) <= 3 or len(rnw[3]) <= 3:

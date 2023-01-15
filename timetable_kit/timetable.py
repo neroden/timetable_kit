@@ -684,7 +684,7 @@ def fill_tt_spec(
 
     # Pick out the agency timezone.  Although theoretically each agency has its own timezone,
     # The dataset is not allowed by GTFS to have multiple agency timezones,
-    # so the feed is sufficient to specity the agency timezone
+    # so the feed is sufficient to specify the agency timezone
     any_agency_row = today_feed.agency.iloc[0]
     agency_tz = any_agency_row.agency_timezone
     debug_print(1, "Agency time zone", agency_tz)
@@ -841,7 +841,7 @@ def fill_tt_spec(
                             continue
                         my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
-                        # Clean this interface up later.  For now highly Amtrak-specific FIXME
+                        # Clean this interface up later.  FIXME
                         route_name = agency().get_route_name(today_feed, route_id)
                         styled_route_name = (
                             text_presentation.style_route_name_for_column(

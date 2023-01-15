@@ -27,7 +27,8 @@ def get_route_name(today_feed, route_id):
     this_route = filtered_routes.iloc[0]
 
     route_name = this_route.route_long_name
-    # my_route_type = this_route.route_type
+    # NOTE, the portion above this is completely standard and should be pulled
+    # out to "generic agency" code
 
     if route_name == "Amtrak Thruway Connecting Service":
         # This is an uninformative name, so dig deeper...
