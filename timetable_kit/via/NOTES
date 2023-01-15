@@ -1,0 +1,25 @@
+Via Rail has separate stop_code (human-readable) and stop_id (strictly internal)
+
+Via Rail has a number of mystery routes which have NO trip_short_name.
+This is... OK... but these will be inaccessible with current timetable_kit design.
+These are all from connecting service routes, so that's OK, leave them out for now.
+Some may not actually even exist.  They are all in Quebec.
+
+Handle with "connecting service" database?
+
+Alternatively, patch the feed, it's a short list.
+
+Regie intermunicipale de transport de la Gaspesie - Iles de la Madeline (REGIM)
+Gaspe - Campbellton.
+
+Train de La Malbaie / Train de Quebec -- probably both really Train de Charlevoix
+Baie-Saint-Paul, La Malbaie (first one)
+Baie-Saint-Paul, Quebec-Chutes-Montmorency (second one)
+
+Via Rail Air Connect -- goes between Dorval and Trudeau airport in Montreal.
+This one we actually do want to describe.
+
+https://www.viarail.ca/en/plan/intermodality/montreal-trudeau-shuttle
+
+... but it runs "every 45 minutes to 60 minutes".  It uses frequencies.txt.
+This is not something we can implement in a "timetable" fashion.  We won't try.
