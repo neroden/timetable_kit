@@ -1,23 +1,27 @@
-,stations,access,723,11,727,729,737,741,743,745,747,751
-column-options,,,ardp,,,,,,,,,
-route-name,,,,,,,,,,,,
-days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
-COX,,,,,,,,,,,,
-ARN,,,,,,,,,,,,
-RLN,,,,from Chico,,,,,,,,
-RSV,,,,& Oregon,,,,,,,,
-SAC,,,723 first,,,,,,743 first,,,
-DAV,,,,,,,,,,,,
-FFV,,,,,,,,,,,,
-SUI,,,,,,,,,,,,
-MTZ,,,,,,,,,,,,
-RIC,,,,,,,,,,,,
-BKY,,,,,,,,,,,,
-EMY,,,,,,,,,,,,
-OKJ,,,,,,,,,,745 last,,751 last
-OAC,,,,,,,,,,,,
-HAY,,,,,,,,,,,,
-FMT,,,,,,,,,,,,
-GAC,,,,,,,,,,,,
-SCC,,,,,,,,,,,,
-SJC,,,723 last,,727 last,729 last,737 last,741 last,743 last,,747 last,
+,access,stations,723 / 6673 noheader,11 / 5011 noheader,727 / 6677 noheader,729 / 6679 noheader,737 / 3541 noheader / 6637 noheader,741 / 6691 noheader,743 / 6693 noheader,745 / 6695 noheader,747 / 3549 noheader / 6697 noheader,749 / 6699 noheader,751 / 6653 noheader
+column-options,,,,ardp,,,,,,,,,
+route-name,,,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+COX,,,blank,11 blank,blank,blank,3541 first,blank,blank,blank,3549 first,blank,blank
+ARN,,,blank,11 blank,blank,729 first,,blank,blank,blank,,blank,blank
+RLN,,,blank,11 blank,blank,,,blank,blank,blank,,blank,blank
+RSV,,,blank,"from Chico, CA",blank,,,blank,blank,blank,,blank,blank
+SAC,,,blank,& Oregon,blank,,3541 last,blank,blank,blank,3549 last,blank,blank
+SAC,,,723 first two-row,11,727 first two-row,,737 first two-row,741 first two-row,743 first two-row,745 first two-row,747 first two-row,749 first two-row,751 first two-row
+DAV,,,,,,,,,,,,,
+FFV,,,,11 blank,,,,,,,,,
+SUI,,,,11 blank,,,,,,,,,
+MTZ,,,,,,,,,,,,,
+RIC,,,,11 blank,,,,,,,,,
+BKY,,,,11 blank,,,,,,,,,
+EMY,,,723,11,727,729,737,741,743,745,747,749,751
+EMY,,,6673 first,5011 first,6677 first,6679 first,6637 first,6691 first,6693 first,6695 first,6697 first,6699 first,6653 first
+SFC,,,6673 last,5011 last,6677 last,6679 last,6637 last,6691 last,6693 last,6695 last,6697 last,6699 last,6653 last
+OKJ,,,,11 blank,,,,,,745 last,,749 last,751 last
+OAC,,,,11 blank,,,,,,blank,,blank,blank
+HAY,,,,11 blank,,,,,,blank,,blank,blank
+FMT,,,,11 blank,,,,,,blank,,blank,blank
+GAC,,,,11 blank,,,,,,blank,,blank,blank
+SCC,,,,11 blank,,,,,,blank,,blank,blank
+SJC,,,723 last,11,727 last,729 last,737 last,741 last,743 last,blank,747 last,blank,blank
+,,,,to Los Angeles,,,,,,,,,
