@@ -1,23 +1,22 @@
-Clean up other "working" timetables: - TEDIOUS
-- NEC
-
 For generalizing to non-Amtrak feeds:
 0 -- VIA uses numerical stop_id and puts the station names in stop_code instead.
      So we have to sort for THAT mess.  We want stop_code in the specs, and in public info,
      but stop_id must be referenced when fiddling with the raw GTFS data.
-1 -- Give the Amtrak module interface a defined (duck) type, so that we can
-     swap in a different module.  This is easier to do than it appears!
-     We can literally just use a variable to hold which module to call.
+0A -- fish this through the main timetable.py program.
+2A -- Get VIA Rail station names from GTFS (ad-hoc, before general version)
 2 -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
-3 -- fix the get_time_column_stylings code to check the "agency" data
 4 -- Switch wheelchair access detection to be based on GTFS.
      Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
      from the Amtrak stations database.
+1 -- Give the Amtrak module interface a defined (duck) type, so that we can
+     swap in a different module.  This is easier to do than it appears!
+     We can literally just use a variable to hold which module to call.
+3 -- fix the get_time_column_stylings code to check the "agency" data
 5 -- Find a way to grab station names from Amtrak if available (Advanced Information),
      but from GTFS if not available.
 
-Finish adding Connecting Services:
-- Add Amtrak as connecting service for VIA Rail timetables
+Clean up other "working" timetables: - TEDIOUS
+- NEC
 
 Add arrows to the font -- follow up with designer on commission
 - The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
