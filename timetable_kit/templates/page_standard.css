@@ -79,3 +79,12 @@ With key_on_right, line these up side by side, somehow!
 .bigbox-keys {
     display: block;
 }
+{#
+Compression of credits. Used on timetables where space is at a premium.
+
+Affects credits, bottom_text, connecting services key, and unofficial_agency disclaimer.
+#}
+.compressed-credits {
+    margin-top: 0;
+    margin-bottom: 0;
+}
