@@ -1,11 +1,11 @@
-,64,stations,access,63 monday,63 sunday
+,64,access,stations,63 monday,63 sunday
 column-options,ardp,,,ardp reverse,reverse
 route-name,,,,,
 ,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>","<div style=""text-align: center;"">(Via Rail <b>#698</b>)</div>"
 days,TWO,,,TWO,TWO
 updown,,,,,
 TWO,64 first,,,63 monday last,63 sunday last
-,"<div style=""text-align:center;"">(see VIA timetable)</div>","<div style=""text-align:center; font-weight: bold;"">~Additional Canadian stations~</div>",,"<div style=""text-align:center;"">(see VIA timetable)</div>","<div style=""text-align:center;"">(see VIA timetable)</div>"
+,"<div style=""text-align:center;"">(see VIA timetable)</div>",,"<div style=""text-align:center; font-weight: bold;"">~Additional Canadian stations~</div>","<div style=""text-align:center;"">(see VIA timetable)</div>","<div style=""text-align:center;"">(see VIA timetable)</div>"
 NFS,,,,,
 NFL,,,,,
 BFX,,,,,
