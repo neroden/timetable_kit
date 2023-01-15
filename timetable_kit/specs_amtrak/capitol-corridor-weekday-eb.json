@@ -2,10 +2,10 @@
     "title": "Capitol Corridor Weekday Eastbound",
     "heading": "Amtrak's Capitol Corridor: Weekday Eastbound",
     "landscape": "true",
-    "reference_date": "20220301",
+    "reference_date": "20230301",
+    "key_bus": "true",
+    "use_bus_icon_in_cells": "true",
     "key_baggage": "true",
-    "key_r": "true",
     "key_d": "true",
-    "key_l": "true",
     "for_rpa": "true"
 }

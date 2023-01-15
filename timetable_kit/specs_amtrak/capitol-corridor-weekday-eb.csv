@@ -1,24 +1,27 @@
-,stations,access,522,524,528,532 / 3534 noheader,534,536 / 3536 noheader,538,540,542 / 3642 noheader,546 / 3646 noheader,548,14
-column-options,,,ardp,,,,,,,,,,,
-route-name,,,,,,,,,,,,,,
-days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
-SJC,,,blank,,,,blank,,,blank,,,blank,
-SCC,,,blank,,,,blank,,,blank,,,blank,
-GAC,,,blank,,,,blank,,,blank,,,blank,
-FMT,,,blank,,,,blank,,,blank,,,blank,
-HAY,,,blank,,,,blank,,,blank,,,blank,
-OAC,,,blank,,,,blank,,,blank,,,blank,
-OKJ,,,522 first two_row,,,,,,,,,,,
-EMY,,,,,,,,,,,,,,
-BKY,,,,,,,,,,,,,,
-RIC,,,,,,,,,,,,,,
-MTZ,,,,,,,,,,,,,,
-SUI,,,,,,,,,,,,,,
-FFV,,,,,,,,,,,,,,
-DAV,,,,,,,,,,,,,,
-SAC,,,522 last,,,532 last,534 last,536 last,,540 last,542 last,546 last,548 last,
-SAC,,,blank,blank,blank,3534 first,blank,3536 first,,blank,3642 first,3646 first,blank,"to Chico, CA<br>& Oregon"
-RSV,,,blank,blank,blank,,blank,,,blank,,,blank,blank
-RLN,,,blank,blank,blank,,blank,,,blank,,,blank,blank
-ARN,,,blank,blank,blank,,blank,3536 last,538 last,blank,3642 last,3646 last,blank,blank
-COX,,,blank,blank,blank,3534 last,blank,blank,blank,blank,,,blank,blank
+,access,stations,522 / 6622 noheader,524 / 3524 noheader / 6624 noheader,528 / 6628 noheader,532 / 3534 noheader / 6632 noheader,534 / 6634 noheader,536 / 3536 noheader / 6636 noheader,538 / 6638 noheader,540 / 6640 noheader,542 / 3642 noheader / 6642 noheader,544 / 6644 noheader,546 / 3646 noheader / 6646 noheader,548 / 6648 noheader,14 / 5014 noheader
+column-options,,,,,,,,,,,,,,,ardp
+route-name,,,,,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+,,,,,,,,,,,,,,,from Los Angeles
+SJC,,,blank,524 first two-row,528 first two-row,532 first two-row,blank,blank,538 first two-row,blank,542 first two-row,blank,546 first two-row,blank,14
+SCC,,,blank,,,,blank,blank,,blank,,blank,,blank,14 blank
+GAC,,,blank,,,,blank,blank,,blank,,blank,,blank,14 blank
+FMT,,,blank,,,,blank,blank,,blank,,blank,,blank,14 blank
+HAY,,,blank,,,,blank,blank,,blank,,blank,,blank,14 blank
+OAC,,,blank,,,,blank,blank,,blank,,blank,,blank,14 blank
+OKJ,,,522 first two_row,,,,,,,,,,,,14 blank
+SFC,,,6622 first,6624 first,6628 first,6632 first,6634 first,6636 first,6638 first,6640 first,6642 first,6644 first,6646 first,6648 first,5014 first
+EMY,,,6622 last,6624 last,6628 last,6632 last,6634 last,6636 last,6638 last,6640 last,6642 last,6644 last,6646 last,6648 last,5014 last
+EMY,,,522,524,528,532,534,536,538,540,542,544,546,548,14
+BKY,,,,,,,,,,,,,,,14 blank
+RIC,,,,,,,,,,,,,,,14 blank
+MTZ,,,,,,,,,,,,,,,
+SUI,,,,,,,,,,,,,,,14 blank
+FFV,,,,,,,,,,,,,,,14 blank
+DAV,,,,,,,,,,,,,,,
+SAC,,,522 last,524 last,,532 last,534 last,536 last,,540 last,542 last,544 last,546 last,548 last,
+SAC,,,blank,3524 first,blank,3534 first,blank,3536 first,,blank,3642 first,blank,3646 first,blank,"to Chico, CA<br>& Oregon"
+RSV,,,blank,,blank,,blank,,,blank,,blank,,blank,blank
+RLN,,,blank,,blank,,blank,,,blank,,blank,,blank,blank
+ARN,,,blank,3524 last,blank,,blank,3536 last,538 last,blank,3642 last,blank,3646 last,blank,blank
+COX,,,blank,blank,blank,3534 last,blank,blank,blank,blank,blank,blank,blank,blank,blank

@@ -1,24 +1,27 @@
-,stations,access,521,523 / 3623 noheader,525 / 3625 noheader,11,527,531,541 / 3541 noheader,543,545,547,549,551
-column-options,,,ardp,,,,,,,,,,,
-route-name,,,,,,,,,,,,,,
-days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
-COX,,,blank,blank,blank,blank,blank,blank,3541 first,blank,blank,blank,blank,blank
-ARN,,,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank
-RLN,,,blank,blank,blank,"from Chico, CA",blank,blank,,blank,blank,blank,blank,blank
-RSV,,,blank,3623 first,3625 first,& Oregon,blank,blank,,blank,blank,blank,blank,blank
-SAC,,,blank,3623 last,3625 last,11 last,blank,blank,3541 last,blank,blank,blank,blank,blank
-SAC,,,521 first,523 first,525 first,11 first,527 first,531 first,541 first,,,,,
-DAV,,,,,,,,,,,,,,
-FFV,,,,,,,,,,,,,,
-SUI,,,,,,,,,,,,,,
-MTZ,,,,,,,,,,,,,,
-RIC,,,,,,,,,,,,,,
-BKY,,,,,,,,,,,,,,
-EMY,,,,,,,,,,,,,,
-OKJ,,,,,525 last,,,,,543 last,545 last,,549 last,551 last
-OAC,,,,,blank,,,,,blank,blank,,blank,blank
-HAY,,,,,blank,,,,,blank,blank,,blank,blank
-FMT,,,,,blank,,,,,blank,blank,,blank,blank
-GAC,,,,,blank,,,,,blank,blank,,blank,blank
-SCC,,,,,blank,,,,,blank,blank,,blank,blank
-SJC,,,521 last,523 last,blank,,527 last,531 last,541 last,blank,blank,547 last,blank,blank
+,access,stations,521 / 6621 noheader,523 / 3623 noheader / 6623 noheader,525 / 3625 noheader / 6625 noheader,527 / 6627 noheader,11 / 5011 noheader,529 / 6629 noheader,531 / 6631 noheader,541 / 3541 noheader / 6641 noheader,543 / 6643 noheader,545 / 6645 noheader,547 / 6647 noheader,549 / 3549 noheader / 6649 noheader,551 / 6651 noheader
+column-options,,,,,,,ardp,,,,,,,,
+route-name,,,,,,,,,,,,,,,
+days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+COX,,,blank,blank,blank,blank,blank,blank,blank,3541 first,blank,blank,blank,blank,blank
+ARN,,,blank,blank,blank,blank,blank,529 first,blank,,blank,blank,blank,3549 first,blank
+RLN,,,blank,blank,blank,blank,"from Chico, CA",,blank,,blank,blank,blank,,blank
+RSV,,,blank,3623 first,3625 first,blank,& Oregon,,blank,,blank,blank,blank,,blank
+SAC,,,blank,3623 last,3625 last,blank,11,529 last,blank,3541 last,blank,blank,blank,3549 last,blank
+SAC,,,521 first,523 first,525 first,527 first,11 first,529 first,531 first,541 first,,,,549 first,
+DAV,,,,,,,,,,,,,,,
+FFV,,,,,,,11 blank,,,,,,,,
+SUI,,,,,,,11 blank,,,,,,,,
+MTZ,,,,,,,,,,,,,,,
+RIC,,,,,,,11 blank,,,,,,,,
+BKY,,,,,,,11 blank,,,,,,,,
+EMY,,,521,523,525,527,11,529,531,541,543,545,547,549,551
+EMY,,,6621 first,6623 first,6625 first,6627 first,5011 first,6629 first,6631 first,6641 first,6643 first,6645 first,6647 first,6649 first,6651 first
+SFC,,,6621 last,6623 last,6625 last,6627 last,5011 last,6629 last,6631 last,6641 last,6643 last,6645 last,6647 last,6649 last,6651 last
+OKJ,,,,,525 last,,11 blank,,531 last,,543 last,545 last,,549 last,551 last
+OAC,,,,,blank,,11 blank,,blank,,blank,blank,,blank,blank
+HAY,,,,,blank,,11 blank,,blank,,blank,blank,,blank,blank
+FMT,,,,,blank,,11 blank,,blank,,blank,blank,,blank,blank
+GAC,,,,,blank,,11 blank,,blank,,blank,blank,,blank,blank
+SCC,,,,,blank,,11 blank,,blank,,blank,blank,,blank,blank
+SJC,,,521 last,523 last,blank,527 last,11,529 last,blank,541 last,blank,blank,547 last,blank,blank
+,,,,,,,to Los Angeles,,,,,,,,
