@@ -12,6 +12,7 @@ from timetable_kit.debug import debug_print
 
 # The agencies we might need to import
 import timetable_kit.amtrak
+import timetable_kit.via
 
 # These will get set elsewhere, later, by initialization code.
 agency_name = None
@@ -40,7 +41,9 @@ def set_agency(agency: str):
             print("Unimplemented")
             sys.exit(1)
         case "via":
-            print("Unimplemented")
+            debug_print(1, "Using VIA Rail data")
+            agency_name = "VIA Rail"
+            agency_package = timetable_kit.via
             sys.exit(1)
         case _:
             print("Invalid agency subpackage choice")
