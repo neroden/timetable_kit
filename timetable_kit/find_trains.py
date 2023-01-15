@@ -35,14 +35,17 @@ from timetable_kit.tsn import stations_list_from_tsn
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
-    add_gtfs_argument,
     add_date_argument,
     add_debug_argument,
+    add_agency_argument,
+    add_gtfs_argument,
 )
 
+from timetable_kit import runtime_config # for the agency()
+from timetable_kit.runtime_config import agency # for the agency()
 
 def find_connecting_buses_from_stop(
-    stop: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+    stop_one_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
 ) -> list[str]:
     """
     Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
@@ -55,18 +58,18 @@ def find_connecting_buses_from_stop(
     Must be passed a feed, and one stop_id.
     """
     # Start by filtering the stop_times for stop one.
-    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop]
+    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_one_id]
     sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
     trip_ids = sorted_filtered_stop_times["trip_id"].array
     tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
 
     # Should still be in the correct order
-    print("Found trips at", stop, " : ", tsns)
+    print("Found trips at", agency().stop_id_to_stop_code(stop_one_id), " : ", tsns)
     return tsns
 
 
 def find_trains(
-    stop_one: str, stop_two: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+    stop_one_id: str, stop_two_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
 ) -> list[str]:
     """
     Returns a list of trip_short_names (train numbers) which stop at both stops, in that order.
@@ -79,7 +82,7 @@ def find_trains(
     Must be passed a feed, and two stop_ids.
     """
     # Start by filtering the stop_times for stop one.
-    filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one]
+    filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one_id]
     # This is a bit tricky: attempt to maintain sorting order
     sorted_filtered_stop_times_one = filtered_stop_times_one.sort_values(
         by=["departure_time"]
@@ -93,7 +96,7 @@ def find_trains(
     trip_id_to_stop_sequence_one = dict(zip(trip_ids_one, stop_sequences_one))
 
     # Now for stop two.
-    filtered_stop_times_two = feed.stop_times[feed.stop_times.stop_id == stop_two]
+    filtered_stop_times_two = feed.stop_times[feed.stop_times.stop_id == stop_two_id]
     # And make another dict.
     trip_ids_two = filtered_stop_times_two["trip_id"].array
     stop_sequences_two = filtered_stop_times_two["stop_sequence"].array
@@ -167,9 +170,10 @@ def make_argparser():
                     The output should always be reviewed manually before generating tt-spec, especially for days-of-week issues.
                     """,
     )
-    add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
+    add_agency_argument(parser)
+    add_gtfs_argument(parser)
     parser.add_argument(
         "stop_one",
         help="""First stop""",
@@ -198,7 +202,16 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
 
-    gtfs_filename = args.gtfs_filename
+    # Eventually this will be set from the command line -- FIXME
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
+
+    if args.gtfs_filename:
+        gtfs_filename = args.gtfs_filename
+    else:
+        # Default to agency
+        gtfs_filename = agency().gtfs_unzipped_local_path
+
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     today_feed = filter_feed_for_utilities(
@@ -217,13 +230,18 @@ if __name__ == "__main__":
         sys.exit(1)
     if stop_two is None:
         print("Finding trips which stop at", stop_one)
+        # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
+        stop_one_id = agency().stop_code_to_stop_id(stop_one)
         tsns = find_connecting_buses_from_stop(
-            stop_one, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+            stop_one_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
     else:
         print("Finding trips from", stop_one, "to", stop_two)
+        # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
+        stop_one_id = agency().stop_code_to_stop_id(stop_one)
+        stop_two_id = agency().stop_code_to_stop_id(stop_two)
         tsns = find_trains(
-            stop_one, stop_two, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+            stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
 
     if args.extent:

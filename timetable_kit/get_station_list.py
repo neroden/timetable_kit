@@ -28,11 +28,11 @@ from timetable_kit.debug import debug_print, set_debug_level
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
-    add_gtfs_argument,
     add_date_argument,
     add_debug_argument,
-    add_output_dirname_argument,
     add_agency_argument,
+    add_gtfs_argument,
+    add_output_dirname_argument,
 )
 
 from timetable_kit.tsn import (
@@ -42,8 +42,6 @@ from timetable_kit.tsn import (
 from timetable_kit import runtime_config # for the agency()
 from timetable_kit.runtime_config import agency # for the agency()
 
-from timetable_kit import amtrak  # For the path of the default GTFS feed
-
 
 def make_argparser():
     parser = argparse.ArgumentParser(
@@ -52,11 +50,11 @@ def make_argparser():
                        Should be reviewed manually before generating tt-spec.
                     """,
     )
-    add_gtfs_argument(parser)
     add_date_argument(parser)
     add_debug_argument(parser)
-    add_output_dirname_argument(parser)
     add_agency_argument(parser)
+    add_gtfs_argument(parser)
+    add_output_dirname_argument(parser)
     parser.add_argument(
         "--trip",
         dest="trip_short_name",
