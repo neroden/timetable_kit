@@ -16,6 +16,7 @@ Also contains other routines which look up trips by tsn.
 """
 from timetable_kit.errors import GTFSError, NoTripError
 from timetable_kit.debug import debug_print
+from timetable_kit.runtime_config import agency
 
 import gtfs_kit
 
@@ -208,7 +209,10 @@ def stations_list_from_tsn(today_feed, trip_short_name):
 
     trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
 
-    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)
-    sorted_station_list = sorted_stop_times["stop_id"]
-    debug_print(3, sorted_station_list)
-    return sorted_station_list
+    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)  # Sorted.
+    # For VIA rail, the stop_id is not the same as the stop_code.
+    # Add the stop_code.  (For Amtrak, this is a no-op)
+    sorted_stop_times["stop_code"] = agency().stop_id_to_stop_code(sorted_stop_times["stop_id"])
+    debug_print(3, sorted_stop_times)
+    sorted_stop_codes = sorted_stop_times["stop_code"]
+    return sorted_stop_codes

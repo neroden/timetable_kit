@@ -22,6 +22,14 @@ from .get_gtfs import (
     published_gtfs_url,
 )
 
+# These are do-nothings for Amtrak, but
+# quite significant for VIA Rail
+def stop_code_to_stop_id(stop_code: str) -> str:
+    return stop_code
+
+def stop_id_to_stop_code(stop_id: str) -> str:
+    return stop_id
+
 # How to title the routes at the top of the column
 from .route_names import get_route_name
 

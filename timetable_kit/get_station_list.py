@@ -24,7 +24,6 @@ from feed_enhanced import gtfs_days
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.initialize import filter_feed_for_utilities
 
-from timetable_kit import amtrak  # For the path of the default GTFS feed
 from timetable_kit.debug import debug_print, set_debug_level
 
 # Common arguments for the command line
@@ -33,11 +32,17 @@ from timetable_kit.timetable_argparse import (
     add_date_argument,
     add_debug_argument,
     add_output_dirname_argument,
+    add_agency_argument,
 )
 
 from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
+
+from timetable_kit import runtime_config # for the agency()
+from timetable_kit.runtime_config import agency # for the agency()
+
+from timetable_kit import amtrak  # For the path of the default GTFS feed
 
 
 def make_argparser():
@@ -51,6 +56,7 @@ def make_argparser():
     add_date_argument(parser)
     add_debug_argument(parser)
     add_output_dirname_argument(parser)
+    add_agency_argument(parser)
     parser.add_argument(
         "--trip",
         dest="trip_short_name",
@@ -85,11 +91,15 @@ if __name__ == "__main__":
     if not output_dirname:
         output_dirname = "."
 
+    # Eventually this will be set from the command line -- FIXME
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
+
     if args.gtfs_filename:
         gtfs_filename = args.gtfs_filename
     else:
-        # Default to Amtrak
-        gtfs_filename = amtrak.gtfs_unzipped_local_path
+        # Default to agency
+        gtfs_filename = agency().gtfs_unzipped_local_path
 
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
