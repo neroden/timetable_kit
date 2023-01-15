@@ -36,6 +36,13 @@ h1 {
     text-align: center;
 }
 {#
+Warning to check the agency (Amtrak, VIA) site before buying tickets.
+This should be quite large, but not quite as large as the top-text
+#}
+.check-agency {
+    font-size: 125%;
+}
+{#
 top_text specified in the aux file (special notes for the timetable).
 These are important so should be quite large!
 Unimportant notes are specified in bottom_text instead.

@@ -22,7 +22,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 <div class="{% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
 <h1>{{heading}}</h1>
 {% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
-{% include "check_amtrak.html" %}
+{% include "check_agency.html" %}
 {% if top_text %}<p class="top-text">{{top_text}}</p>{% endif %}
 <div class="{% if key_on_right %}bigbox-layout-key-on-right{% else %}bigbox-layout{% endif %}">
 <div class="{% if key_on_right %}bigbox-timetable-key-on-right{% else %}bigbox-timetable{% endif %}">
@@ -32,8 +32,9 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% include "symbol_key.html" %}
 {% if mountain_standard_time %}{% include "mountain_standard_time.html" %}{% endif %}
 {% include "connecting_services_key.html" %}
+{% if montreal_airport_shuttle %}{% include "montreal_airport_shuttle.html" %}{% endif %}{# VIA-specific hack, FIXME #}
 {% if bottom_text %}<p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>{% endif %}
-{% include "unofficial_amtrak.html" %}
+{% include "unofficial_agency.html" %}
 {% include "credit.html" %}
 </div><!-- bigbox-keys -->
 </div><!-- bigbox-layout -->
