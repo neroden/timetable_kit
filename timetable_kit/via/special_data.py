@@ -55,6 +55,15 @@ checked_baggage_trains = set(
 )
 
 
+def station_has_checked_baggage(station_code: str) -> bool:
+    """
+    Does this VIA rail station handle checked baggage?
+
+    Currently we have no data, so must assume not
+    """
+    return False
+
+
 def train_has_checked_baggage(trip_short_name: str) -> bool:
     """
     Given a trip_short_name (train number), return "True" if it has checked baggage and "False" if not.
