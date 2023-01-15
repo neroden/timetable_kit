@@ -1,0 +1,77 @@
+# via/__init.py__
+# Init file for via subpackage of timetable_kit
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""
+timetable_kit.via module
+
+VIA-specific functions for timetable_kit.
+
+This defines an interface; Amtrak and others need to provide the same interface.
+"""
+
+# Published agency name
+published_name = "VIA Rail"
+# Published agency website, for printing.
+# Does not include the https:// and should be capitalized for print.
+published_website = "ViaRail.ca"
+
+# Where to find the GTFS
+from .get_gtfs import (
+    gtfs_zip_local_path,
+    gtfs_unzipped_local_path,
+    published_gtfs_url,
+)
+
+# These are do-nothings for Amtrak, but
+# quite significant for VIA Rail
+from .station_names import (
+    stop_code_to_stop_id,
+    stop_id_to_stop_code,
+)
+
+# How to title the routes at the top of the column
+from .route_names import get_route_name
+
+# Routine to pretty-print a station name
+# (including subtitles, connecting agency logos, etc)
+from .station_names import get_station_name_pretty
+
+# Baggage
+from .special_data import station_has_checked_baggage
+from .special_data import train_has_checked_baggage
+
+# Platform accessibility
+# This is stubbed out.  FIXME
+
+
+def station_has_accessible_platform(station_code: str) -> bool:
+    return False
+
+
+def station_has_inaccessible_platform(station_code: str) -> bool:
+    return False
+
+
+# from .access import (
+#    station_has_accessible_platform,
+#    station_has_inaccessible_platform,
+# )
+
+# VIA does not currently need its feed patched.
+# So this returns its input.
+# If needed, implement as follows:
+# from .gtfs_cleanup import patch_feed
+def patch_feed(feed):
+    return feed
+
+
+# For colorizing columns
+from .special_data import (
+    is_connecting_service,
+    is_sleeper_train,
+    is_high_speed_train,
+)
+
+# For making the key for connecting services (including only those in this timetable)
+# This takes a list of stations as an argument
+from .connecting_services_data import get_all_connecting_services
