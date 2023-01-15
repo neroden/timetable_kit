@@ -22,8 +22,17 @@ import argparse
 # Needed for defaulting the GTFS file:
 from timetable_kit import amtrak
 
-# Determine defaults in initialization code here:
-default_gtfs_filename = amtrak.gtfs_unzipped_local_path
+
+def add_agency_argument(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "--agency",
+        help="""
+            Custom programming is used for timetables for particular agencies.
+            Default is Amtrak.  Others (including generic) are under contruction.
+            """,
+        choices=["generic", "amtrak", "via", "hartford"],
+        default="amtrak",
+    )
 
 
 def add_gtfs_argument(parser: argparse.ArgumentParser):
@@ -35,8 +44,8 @@ def add_gtfs_argument(parser: argparse.ArgumentParser):
         help="""Directory containing GTFS static data files,
                 or zipped GTFS static data feed,
                 or URL for zipped GTFS static data feed;
-                default is Amtrak""",
-        default=default_gtfs_filename,
+                default is based on agency""",
+        default=None,
     )
 
 
@@ -122,18 +131,6 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
              """,
         nargs="*",  # 1 or more filenames
         default=[],  # empty list
-    )
-
-
-def add_agency_argument(parser: argparse.ArgumentParser):
-    parser.add_argument(
-        "--agency",
-        help="""
-            Custom programming is used for timetables for certain agencies.
-            Unimplemented stub.
-            """,
-        choices=["generic", "amtrak", "via", "hartford"],
-        default="amtrak",
     )
 
 

@@ -13,12 +13,6 @@ known problems with Amtrak's GTFS data, and similar.
 (Functions for extracting data from Amtrak's JSON stations database are elsewhere.)
 """
 
-# GLOBAL VARIABLES
-#
-# Known problems in Amtrak data
-global_bad_service_ids = []
-#    2819372, # Cardinal one-day service when it doesn't run on that day
-
 
 def is_connecting_service(tsn):
     """Is this a connecting, non-Amtrak service?"""

@@ -1604,8 +1604,11 @@ def main():
     debug_print(2, "Agency found:", args.agency)
     runtime_config.set_agency(args.agency)
 
-    # The arg parser will default this to Amtrak
-    gtfs_filename = args.gtfs_filename
+    if args.gtfs_filename:
+        gtfs_filename = args.gtfs_filename
+    else:
+        # Default to agency
+        gtfs_filename = agency().gtfs_unzipped_local_path
 
     author = args.author
     if not author:

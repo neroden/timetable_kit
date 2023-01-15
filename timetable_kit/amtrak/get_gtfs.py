@@ -63,7 +63,7 @@ def unzip_gtfs():
     """
     Extract Amtrak's GTFS file from a canonical local location to a canonical local location.
 
-    This isn't used directly by the program; this is just for human inspection.
+    This is used directly by the program.
     """
     with ZipFile(gtfs_zip_local_path, "r") as my_zip:
         if not gtfs_unzipped_local_path.exists():
