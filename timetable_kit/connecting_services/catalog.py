@@ -83,7 +83,9 @@ def _initialize():
     """
     Initialize the connecting services DataFrame and dict from a suitable file in the package.
     """
-    debug_print(1, "Initializing connecting_services_df")
+    # Don't print these, it interferes with output because debug_level isn't set yet.
+    # Consider wrapping the dict in a function and memoizing.  TODO
+    # debug_print(1, "Initializing connecting_services_df")
 
     # First acquire the CSV file as a string
     # This is a read-only global:
@@ -101,7 +103,9 @@ def _initialize():
         pseudo_file, index_col=False, header=0, dtype=str
     )
 
-    debug_print(1, "Adding computed columns to connecting_services_df")
+    # Don't print these, it interferes with output because debug_level isn't set yet.
+    # Consider wrapping the dict in a function and memoizing.  TODO
+    # debug_print(1, "Adding computed columns to connecting_services_df")
 
     # This one is used to install the logo files:
     connecting_services_df["svg_filename"] = (
@@ -140,7 +144,10 @@ def _initialize():
         _generate_logo_key_html, axis=1
     )
 
-    debug_print(1, "Initializing connecting services dict")
+    # Don't print these, it interferes with output because debug_level isn't set yet.
+    # Consider wrapping the dict in a function and memoizing.  TODO
+    # debug_print(1, "Initializing connecting services dict")
+
     # Reset the DataFrame index, in place, to be service_code
     # Must be done after generating "class" column
     # Must be done before most things which use connecting_services_df are called
@@ -151,7 +158,9 @@ def _initialize():
     global connecting_services_dict
     connecting_services_dict = connecting_services_df.to_dict(orient="index")
 
-    debug_print(1, "Connecting services dict initialized")
+    # Don't print these, it interferes with output because debug_level isn't set yet.
+    # Consider wrapping the dict in a function and memoizing.  TODO
+    # debug_print(1, "Connecting services dict initialized")
 
 
 def get_filenames_for_all_logos() -> list[str]:
