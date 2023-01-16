@@ -8,7 +8,7 @@ Development status
 Timetable_kit remains under active development.
 It is quite usable to create Amtrak timetables.
 
-It has not yet been generalized to create non-Amtrak timetables.
+It has not yet been generalized to create non-Amtrak timetables, but VIA Rail is close to working.
 
 Interfaces are moderately stable: old spec files should continue to work, mostly.
 New options continue to be added in spec files.
