@@ -101,7 +101,7 @@ def type_corrected_stop_times(stop_times):
         filled_stop_times = new_stop_times.fillna(value=column_replacement_dict)
         new_stop_times = filled_stop_times.astype(
             {
-                "timepoint": "int32", # 1 = exact time, 0 = may leave early
+                "timepoint": "int32",  # 1 = exact time, 0 = may leave early
             }
         )
     return new_stop_times

@@ -463,7 +463,9 @@ def get_rd_str(
             # which really means "all 1".  Handle this elsewhere!
             # print("timepoint column found")  # Should not happen with Amtrak data
             if timepoint.timepoint == 0:  # and it says times aren't exact
-                print("Inexact timepoint found!") # Should not happen with Amtrak or VIA so far
+                print(
+                    "Inexact timepoint found!"
+                )  # Should not happen with Amtrak or VIA so far
                 if not is_arrival_line:  # This goes on departure line, always
                     rd_str = "L"
 

@@ -26,6 +26,7 @@ from timetable_kit import amtrak
 def add_agency_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
         "--agency",
+        "-a",
         help="""
             Custom programming is used for timetables for particular agencies.
             Default is Amtrak.  Others (including generic) are under contruction.
@@ -117,6 +118,8 @@ def add_spec_files_argument(parser: argparse.ArgumentParser):
 
                 You may specify several spec files at once to generate multiple timetables.
                 The spec files must all be in the same input directory.
+
+                You may also specify a .list file which contains a list of spec filenames.
              """,
         nargs="+",  # 1 or more filenames
         default=[],  # empty list
@@ -151,7 +154,7 @@ def make_tt_arg_parser():
     add_input_dirname_argument(parser)
     parser.add_argument(
         "--author",
-        "-a",
+        "-w",
         dest="author",
         help="""Name of the person generating the timetable.
                 This is mandatory!  You can also set it using the AUTHOR environment variable,
