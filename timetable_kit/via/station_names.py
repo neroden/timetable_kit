@@ -35,6 +35,7 @@ from timetable_kit.initialize import initialize_feed
 # These start blank and are filled in by initialization code on first use (memoized)
 stop_code_to_stop_id_dict = None
 stop_id_to_stop_code_dict = None
+stop_code_to_stop_name_dict = None
 
 
 def _prepare_dicts():
@@ -52,11 +53,14 @@ def _prepare_dicts():
     # Now extract the dicts from the feed
     stop_codes = feed.stops["stop_code"].to_list()
     stop_ids = feed.stops["stop_id"].to_list()
+    stop_names = feed.stops["stop_name"].to_list()
 
     global stop_code_to_stop_id_dict
     global stop_id_to_stop_code_dict
+    global stop_code_to_stop_name_dict
     stop_code_to_stop_id_dict = dict(zip(stop_codes, stop_ids))
     stop_id_to_stop_code_dict = dict(zip(stop_ids, stop_codes))
+    stop_code_to_stop_name_dict = dict(zip(stop_codes, stop_names))
     return
 
 
@@ -78,121 +82,97 @@ def stop_id_to_stop_code(stop_id: str) -> str:
     return stop_id_to_stop_code_dict[stop_id]
 
 
-def get_station_name(station_code: str) -> str:
-    """Given a VIA stop_code, return a suitable station name for plaintext"""
-    # TODO FIXME
-    return station_code
+def stop_code_to_stop_name(stop_code: str) -> str:
+    """Given a VIA stop_code, return a VIA stop_name -- raw"""
+    # Memoized
+    global stop_code_to_stop_name_dict
+    if stop_code_to_stop_name_dict == None:
+        _prepare_dicts()
+    return stop_code_to_stop_name_dict[stop_code]
 
 
-def station_name_to_multiline_text(station_name: str, major=False) -> str:
-    """
-    Produce pretty Amtrak station name for plaintext -- multi-line.
+def get_station_name_pretty(
+    station_code: str, doing_multiline_text=False, doing_html=False
+) -> str:
+    """Given a VIA stop_code, return a suitable station name for plaintext, multiline text, or HTML"""
 
-    Given an Amtrak station name in one of these two forms:
-    Champaign-Urbana, IL (CHM)
-    New Orleans, LA - Union Passenger Terminal (NOL)
-    Produce a pretty-printable text version (possibly multiple lines)
-    If "major", then make the station name bigger and bolder
-    We want to avoid very long lines as they mess up timetable formats
-    """
-    if " - " in station_name:
-        (city_state_name, second_part) = station_name.split(" - ", 1)
-        (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
+    # First, get the raw station name: Memoized
+    stop_name_raw = stop_code_to_stop_name(station_code)
+    # Is it major?
+    major = is_standard_major_station(station_code)
+
+    # Default to no facility name
+    facility_name = None
+    # Default to no connections from the name (this is unused)
+    connections_from_name = []
+
+    # Several stations have (EXO) in parentheses: one has (exo).  Get rid of this.
+    # Some have GO Bus or GO as suffixes.  Get rid of this.
+    # Clarify the confusing Niagara Falls situation.
+    # This can be used to autogenerate connecting data, but isn't currently.  TODO
+    if stop_name_raw.endswith(" (EXO)") or stop_name_raw.endswith(" (exo)"):
+        stop_name_clean = stop_name_raw.removesuffix(" (EXO)").removesuffix(" (exo)")
+        facility_name = "EXO station"
+        connections_from_name.append("exo")
+    elif stop_name_raw.endswith(" GO Bus"):
+        stop_name_clean = stop_name_raw.removesuffix(" GO Bus")
+        facility_name = "GO Bus station"
+    elif stop_name_raw.endswith(" GO"):
+        stop_name_clean = stop_name_raw.removesuffix(" GO")
+        facility_name = "GO station"
+        connections_from_name.append("go_transit")
+    elif stop_name_raw.endswith(" Bus"):
+        stop_name_clean = stop_name_raw.removesuffix(" Bus")
+        facility_name = "Bus station"
+    elif stop_name_raw == "Niagara Falls Station":
+        stop_name_clean = "Niagara Falls, NY"
+    elif stop_name_raw == "Niagara Falls":
+        stop_name_clean = "Niagara Falls, ON"
     else:
-        facility_name = None
-        (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
+        stop_name_clean = stop_name_raw
 
+    # We actually want to add the province to every station,
+    # but VIA doesn't provide that info.  It's too much work.
+    # FIXME
+
+    # Uppercase major stations
     if major:
-        enhanced_city_state_name = city_state_name.upper()
+        stop_name_styled = stop_name_clean.upper()
     else:
-        enhanced_city_state_name = city_state_name
+        stop_name_styled = stop_name_clean
 
-    enhanced_station_code = "".join(["(", station_code, ")"])
+    # Default facility_name_addon to nothing...
+    facility_name_addon = ""
+    if doing_html:
+        # There is some duplication of code between here and the Amtrak module.
+        # Hence the misleading use of "city_state_name".  FIXME by pulling out common code
+        city_state_name = stop_name_clean
 
-    if facility_name:
-        enhanced_facility_name = "".join(["\n", " - ", facility_name])
-    else:
-        enhanced_facility_name = ""
+        if major:
+            enhanced_city_state_name = "".join(
+                ["<span class=major-station >", city_state_name, "</span>"]
+            )
+        else:
+            enhanced_city_state_name = "".join(
+                ["<span class=minor-station >", city_state_name, "</span>"]
+            )
 
-    fancy_name = "".join(
-        [enhanced_city_state_name, " ", enhanced_station_code, enhanced_facility_name]
-    )
-    return fancy_name
-
-
-def station_name_to_single_line_text(station_name: str, major=False) -> str:
-    """
-    Produce pretty Amtrak station name for plaintext -- single line.
-
-    The easy version.  Station name to single line text.
-    """
-    if major:
-        styled_station_name = station_name.upper()
-    else:
-        styled_station_name = station_name
-    return styled_station_name
-
-
-def station_name_to_html(station_name: str, major=False, show_connections=True) -> str:
-    """
-    Produce pretty Amtrak station name for HTML -- potentially multiline, and complex.
-
-    Given an Amtrak station name in one of these two forms:
-    Champaign-Urbana, IL (CHM)
-    New Orleans, LA - Union Passenger Terminal (NOL)
-    Produce a pretty-printable HTML version
-    If "major", then make the station name bigger and bolder
-    If "show_connections" (default True) then add links for connecting services (complex!)
-    """
-
-    if " - " in station_name:
-        (city_state_name, second_part) = station_name.split(" - ", 1)
-        (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-    else:
-        facility_name = None
-        (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-
-    if major:
-        enhanced_city_state_name = "".join(
-            ["<span class=major-station >", city_state_name, "</span>"]
-        )
-    else:
-        enhanced_city_state_name = "".join(
-            ["<span class=minor-station >", city_state_name, "</span>"]
+        enhanced_station_code = "".join(
+            ["<span class=station-footnotes>(", station_code, ")</span>"]
         )
 
-    enhanced_station_code = "".join(
-        ["<span class=station-footnotes>(", station_code, ")</span>"]
-    )
+        if facility_name:
+            facility_name_addon = "".join(
+                [
+                    "<br>",
+                    "<span class=station-footnotes>",
+                    " - ",
+                    facility_name,
+                    "</span>",
+                ]
+            )
 
-    if facility_name:
-        # By default, put the facility name on its own line
-        br_for_facility_name = "<br>"
-        enhanced_facility_name = "".join(
-            [
-                br_for_facility_name,
-                "<span class=station-footnotes>",
-                " - ",
-                facility_name,
-                "</span>",
-            ]
-        )
-    else:
-        enhanced_facility_name = ""
-
-    # Connections.  Hoo boy.  Default to nothing.
-    connection_logos_html = ""
-    if show_connections:
-        # Special-casing for certain stations with LOTS of connections
-        if station_code in []:
-            connection_logos_html += "<br>"
-        # station_code had better be correct, since we're going to look it up
-        # stations with no entry in the dict are treated the same as
-        # stations which have an empty list of connecting services
+        connection_logos_html = ""
         connecting_services = connecting_services_dict.get(station_code, [])
         for connecting_service in connecting_services:
             # Note, this is "" if the agency is not found (but a debug error will print)
@@ -202,47 +182,31 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
                 # Add a space before the logo... if it exists at all
                 connection_logos_html += " "
                 connection_logos_html += this_logo_html
-        # Initial implementation tucks all connecting services on the same line.
-        # This seems to be working.
 
-    fancy_name = "".join(
-        [
-            enhanced_city_state_name,
-            " ",
-            enhanced_station_code,
-            enhanced_facility_name,  # Has its own space or <br> before it
-            connection_logos_html,  # Has spaces or <br> befor it as needed
-        ]
-    )
-    if station_code in []:
-        # Put connections on line one, before the facility name line.
-        fancy_name = "".join(
+        cooked_station_name = "".join(
             [
                 enhanced_city_state_name,
                 " ",
                 enhanced_station_code,
-                enhanced_facility_name,  # Has its own space or <br> before it
-                connection_logos_html,  # Has spaces or <br> befor it as needed
+                facility_name_addon,  # Has its own space or <br> before it
+                connection_logos_html,  # Has spaces or <br> before it as needed
             ]
         )
-    return fancy_name
 
-
-def get_station_name_pretty(
-    station_code: str, doing_multiline_text=False, doing_html=False
-) -> str:
-    if doing_html:
-        # Note here that show_connections is on by default.
-        # There is no mechanism for turning it off.
-        prettyprint_station_name = station_name_to_html
     elif doing_multiline_text:
-        prettyprint_station_name = station_name_to_multiline_text
+        # Multiline text. "Toronto (TRTO)\nSuffix"
+        if facility_name:
+            facility_name_addon = "\n - " + facility_name
+        cooked_station_name = "".join(
+            [stop_name_styled, " (", stop_code, ")", facility_name_addon]
+        )
     else:
-        prettyprint_station_name = station_name_to_single_line_text
-
-    raw_station_name = get_station_name(station_code)
-    major = is_standard_major_station(station_code)
-    cooked_station_name = prettyprint_station_name(raw_station_name, major)
+        # Single Line text: "Toronto - Suffix (TRTO)"
+        if facility_name:
+            facility_name_addon = " - " + facility_name
+        cooked_station_name = "".join(
+            [stop_name_styled, facility_name_addon, " (", stop_code, ")"]
+        )
 
     return cooked_station_name
 
