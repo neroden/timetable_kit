@@ -100,6 +100,17 @@ special_column_names = {
     "timezone",
 }
 
+### Constant set for special row names.
+### These should not be intrepreted as stop_code or station codes
+special_row_names = {
+    "",
+    "route-name",
+    "updown",
+    "days",
+    "days-of-week",
+    "omit",
+}
+
 
 def load_ttspec_json(filename):
     """Load the JSON file for the tt-spec"""
@@ -120,6 +131,9 @@ def load_ttspec_json(filename):
 def load_ttspec_csv(filename):
     """Load a tt-spec CSV file"""
     ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
+    # PANDAS reads blank entries as NaN.
+    # We really don't want NaNs in this file.  They should all be converted to "".
+    ttspec_csv.fillna(value="", inplace=True)
     return ttspec_csv
 
 
@@ -136,7 +150,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
     Note that this tucks on the end of the tt_spec.  A "second row" for column-options
     will therefore be unaffected.  Other second rows may result in confusing results.
     """
-    if pd.isna(raw_tt_spec.iloc[0, 0]):
+    if raw_tt_spec.iloc[0, 0] == "":
         # No key code, nothing to do
         return raw_tt_spec
     key_code = str(raw_tt_spec.iloc[0, 0])
@@ -156,7 +170,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
         # And pull the stations list
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.copy()  # Copy entire original spec
-        new_tt_spec.iloc[0, 0] = float("nan")  # Blank out key_code
+        new_tt_spec.iloc[0, 0] = ""  # Blank out key_code
         newer_tt_spec = pd.concat([new_tt_spec, stations_df])  # Yes, this works
         # The problem is that it leads to duplicate indices (ugh!)
         # So fully reset the index
@@ -185,8 +199,8 @@ def stations_list_from_tt_spec(tt_spec):
     """Given a tt_spec dataframe, return the station list as a list of strings"""
     stations_df = tt_spec.iloc[1:, 0]
     stations_list_raw = stations_df.to_list()
-    stations_list_strings = [str(i) for i in stations_list_raw]
-    stations_list = [i.strip() for i in stations_list_strings if i.strip() != ""]
+    stations_list_strings = [str(i).strip() for i in stations_list_raw]
+    stations_list = [i for i in stations_list_strings if i not in special_row_names]
     return stations_list
 
 
@@ -206,16 +220,9 @@ def get_column_options(tt_spec):
     These inner lists are either empty, or a list of options.
 
     Options are free-form; currently only "reverse" is defined.  More will be defined later.
-    Blank columns lead to a spurious "nan", but as long as we don't check for a "nan" option, who cares?
-    (Possibly fix this later.)
 
     The column options are specified in row 2 of the table.  If they're not there, don't call this.
     """
-
-    def nan_to_blank(s):
-        if pd.isna(s):
-            return ""
-        return s
 
     if str(tt_spec.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
         column_count = tt_spec.shape[1]
@@ -225,8 +232,7 @@ def get_column_options(tt_spec):
     # Now for the main version
     column_options_df = tt_spec.iloc[1, 0:]  # second row, all of it
     column_options_raw_list = column_options_df.to_list()
-    column_options_clean_list = [nan_to_blank(s) for s in column_options_raw_list]
-    column_options_nested_list = [str(i).split() for i in column_options_clean_list]
+    column_options_nested_list = [str(i).split() for i in column_options_raw_list]
     debug_print(1, column_options_nested_list)
     return column_options_nested_list
 
@@ -256,7 +262,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     last: True or False
     blank: True or False
     """
-    if code_text == "" or pd.isna(code_text):
+    if code_text == "":
         return None
 
     code_text = code_text.strip()
@@ -370,7 +376,7 @@ def flatten_train_specs_list(train_specs_list):
     """
     Take a nested list of trains and make a flat list of trains.
 
-    Take a list of trains as specified in a tt_spec such as [NaN,'174 monday','178/21','stations','23/1482']
+    Take a list of trains as specified in a tt_spec such as ['','174 monday','178/21','stations','23/1482']
     and make a flat list of all trains involved ['174 monday','178','21','23','1482']
     without the special keywords like "station".
 
@@ -411,9 +417,9 @@ def service_dates_from_trip_id(feed, trip_id):
     return [start_date, end_date]
 
 
-def get_timepoint_from_trip_id(feed, trip_id, station_code):
+def get_timepoint_from_trip_id(feed, trip_id, stop_id):
     """
-    Given a single trip_id, station_code, and a feed, extract a single timepoint.
+    Given a single trip_id, stop_id, and a feed, extract a single timepoint.
 
     This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
 
@@ -428,7 +434,7 @@ def get_timepoint_from_trip_id(feed, trip_id, station_code):
     # The following is MUCH faster -- cuts test case from 35 secs to 20 secs:
     timepoint_df = feed.stop_times[
         (feed.stop_times["trip_id"] == trip_id)
-        & (feed.stop_times["stop_id"] == station_code)
+        & (feed.stop_times["stop_id"] == stop_id)
     ]
     if timepoint_df.shape[0] == 0:
         return None
@@ -446,8 +452,8 @@ def get_timepoint_from_trip_id(feed, trip_id, station_code):
                     tsn,
                     "with trip id",
                     trip_id,
-                    "stops at station code",
-                    station_code,
+                    "stops at stop_code",
+                    agency().stop_id_to_stop_code(stop_id),
                     "more than once",
                 ]
             )
@@ -456,18 +462,18 @@ def get_timepoint_from_trip_id(feed, trip_id, station_code):
     return timepoint
 
 
-def get_dwell_secs(today_feed, trip_id, station_code):
+def get_dwell_secs(today_feed, trip_id, stop_id):
     """
     Gets dwell time in seconds for a specific trip_id at a specific station
 
     today_feed: a feed
     trip_id: relevant trip_id
-    station_code: station code
+    stop_id: relevant stop_id
 
     Used primarily to determine whether to put both arrival and departure times
     in the timetable for this station.
     """
-    timepoint = get_timepoint_from_trip_id(today_feed, trip_id, station_code)
+    timepoint = get_timepoint_from_trip_id(today_feed, trip_id, stop_id)
 
     if timepoint is None:
         # If the train doesn't stop there, the dwell time is zero;
@@ -517,12 +523,13 @@ def make_stations_max_dwell_map(
     # Prepare the dict to return
     stations_dict = {}
     for station_code in stations_list:
+        stop_id = agency().stop_code_to_stop_id(station_code)
         max_dwell_secs = 0
         for train_spec in flattened_train_spec_set:
             debug_print(3, "debug dwell map:", train_spec, station_code)
             trip_id = trip_from_train_spec_fn(train_spec).trip_id
             max_dwell_secs = max(
-                max_dwell_secs, get_dwell_secs(today_feed, trip_id, station_code)
+                max_dwell_secs, get_dwell_secs(today_feed, trip_id, stop_id)
             )
         if max_dwell_secs >= dwell_secs_cutoff:
             stations_dict[station_code] = True
@@ -570,7 +577,7 @@ def fill_tt_spec(
     """
     Fill a timetable from a tt-spec template using GTFS data
 
-    The tt-spec must be complete (run augment_tt_spec first)
+    The tt-spec must be complete (run augment_tt_spec first) and free of comments (run strip_omits_from_tt_spec)
     today_feed: GTFS feed to work with.  Mandatory.
         This should be filtered to a single representative date.  This is not checked.
         This *may* be filtered to relevant trains only.  It must contain all relevant trains.
@@ -777,13 +784,6 @@ def fill_tt_spec(
 
         for y in range(1, row_count):  # First (0) row is the header
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
-            # NaNs are notoriously hard to match, so convert them.
-            if pd.isna(station_code):
-                station_code = ""
-
-            # Also convert NaNs to empty string in individual cells.
-            if pd.isna(tt_spec.iloc[y, x]):
-                tt_spec.iloc[y, x] = ""
 
             # Reset the styler string:
             cell_css_list = [base_cell_css]
@@ -894,7 +894,10 @@ def fill_tt_spec(
                             output_type="class",
                         )
                     )
-                case ["days" | "days-of-week", _, reference_stop_id]:
+                case ["days" | "days-of-week", _, reference_stop_code]:
+                    reference_stop_id = agency().stop_code_to_stop_id(
+                        reference_stop_code
+                    )
                     # Days of week -- best for a train which doesn't run across midnight
                     cell_css_list.append("days-of-week-cell")
                     # We can only show the days for one station.
@@ -982,7 +985,8 @@ def fill_tt_spec(
                     tt.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
-                    stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
+                    stop_id = agency().stop_code_to_stop_id(station_code)
+                    stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
                     tt.iloc[y, x] = text_presentation.get_zone_str(
@@ -997,8 +1001,11 @@ def fill_tt_spec(
 
                     # For connecting trains, use two different rows and use cell codes.
 
+                    # Convert station_code to stop_id
+                    stop_id = agency().stop_code_to_stop_id(station_code)
+
                     # Pick out the stop timezone -- TODO, precache this as a dict
-                    stop_df = today_feed.stops[today_feed.stops.stop_id == station_code]
+                    stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     try:
                         stop_tz = stop_df.iloc[0].stop_timezone
                     except BaseException as err:
@@ -1027,7 +1034,7 @@ def fill_tt_spec(
                         my_trip = trip_from_train_spec_local(train_spec)
                         debug_print(2, "debug trip_id:", train_spec, my_trip.trip_id)
                         timepoint = get_timepoint_from_trip_id(
-                            today_feed, my_trip.trip_id, station_code
+                            today_feed, my_trip.trip_id, stop_id
                         )
                         if timepoint is not None:
                             # Use the FIRST one which returns a timepoint
@@ -1360,6 +1367,7 @@ def produce_timetable(
         debug_print(1, "HTML styled")
 
         # Produce the final complete page...
+        # station_codes_list is used for connecting services key
         timetable_finished_html = finish_html_timetable(
             timetable_styled_html,
             header_styling_list,
@@ -1368,9 +1376,7 @@ def produce_timetable(
             box_time_characters=False,
             start_date=str(latest_start_date),
             end_date=str(earliest_end_date),
-            station_codes_list=stations_list_from_tt_spec(
-                tt_spec
-            ),  # For connecting services key
+            station_codes_list=stations_list_from_tt_spec(tt_spec),
         )
         path_for_html = output_dir / Path(output_filename_base + ".html")
         with open(path_for_html, "w") as outfile:
