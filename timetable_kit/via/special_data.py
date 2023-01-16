@@ -108,6 +108,10 @@ major_stations_list = (
     # Ontario
     "BLVL",  # Belleville
     "CWLL",  # Cornwall
+    # Western Ontario -- I added these for the Canadian
+    "CAPR",  # Capreol
+    "HNPN",  # Hornepayne
+    "SLKT",  # Sioux Lookout
     # Hamilton
     "KGON",  # Kingston
     "KITC",  # Kitchener
