@@ -10,6 +10,9 @@ This data includes the critical choice of which agency's subpackage to use.
 
 from timetable_kit.debug import debug_print
 
+# For sys.exit
+import sys
+
 # The agencies we might need to import
 import timetable_kit.amtrak
 import timetable_kit.via
@@ -44,7 +47,6 @@ def set_agency(agency: str):
             debug_print(1, "Using VIA Rail data")
             agency_name = "VIA Rail"
             agency_package = timetable_kit.via
-            sys.exit(1)
         case _:
             print("Invalid agency subpackage choice")
             sys.exit(1)
