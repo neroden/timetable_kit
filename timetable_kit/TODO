@@ -1,26 +1,15 @@
-For generalizing to non-Amtrak feeds:
-0 -- VIA uses numerical stop_id and puts the station names in stop_code instead.
-     So we have to sort for THAT mess.  We want stop_code in the specs, and in public info,
-     but stop_id must be referenced when fiddling with the raw GTFS data.
-0A -- fish this through the main timetable.py program.
-2A -- Get VIA Rail station names from GTFS (ad-hoc, before general version).  This is the LAST thing which needs to be
-      implemented to get the VIA module interfaces done
-
 For generalizing to non-Amtrak feeds *better*:
 -------
-2 -- for non-Amtrak data, figure out how to initialize the station name code from GTFS (requires method signature change?)
-4 -- Switch wheelchair access detection to be based on GTFS.
+1 -- Switch wheelchair access detection to be based on GTFS.
      Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
      from the Amtrak stations database.
-1 -- Give the Amtrak module interface a defined (duck) type, so that we can
-     swap in a different module.  This is easier to do than it appears!
-     We can literally just use a variable to hold which module to call.
-3 -- fix the get_time_column_stylings code to check the "agency" data
-5 -- Find a way to grab station names from Amtrak if available (Advanced Information),
-     but from GTFS if not available.
+2 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
 
 Clean up other "working" timetables: - TEDIOUS
 - NEC
+
+Build VIA timetables:
+- Everything except Maple Leaf
 
 Add arrows to the font -- follow up with designer on commission
 - The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
@@ -79,7 +68,7 @@ Fine for after release of timetables:
 
 3 -- Test install and resolve other problematic directory references
 
-4 -- Resolve command-line functions in amtrak/ into a __main__.py
+4 -- Resolve command-line functions in amtrak/ & via/ into a __main__.py
 
 5 -- Improve calendar filtering for days of week
     Still not clear what the best approach for this is.
