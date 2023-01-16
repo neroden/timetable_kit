@@ -1,0 +1,39 @@
+,1,access,stations,timezone,2
+column-options,ardp days,,,,ardp days reverse
+updown,,,,,
+,from Toronto,,continuing to Toronto,,to Toronto
+,see previous page,,see previous page,,see previous page
+WNPG,,,,,
+PLPX,,,,,
+RVRS,,,,,
+MELV,,,,,
+WATR,,,,,
+SASK,,,,,
+BIGG,,,,,
+UNIT,,,,,
+WAIN,,,,,
+VKNG,,,,,
+EDMO,,,,,
+EVAN,,,,,
+EDSN,,,,,
+HINT,,,,,
+JASP,,,,,
+VLMT,,,,,
+BLUE,,,,,
+CLWT,,,,,
+KAMN,,,,,
+ASHN,,,,,
+omit,BBAR on 1 (left bank),,These are 1 km apart,,NBND on 2 (right bank)
+BBAR,,,,,
+NBND,,,,,
+omit,HOPE on 1 (left bank),,These are 6 km apart,,KATZ on 2 (right bank)
+HOPE,,,,,
+KATZ,,,,,
+omit,CHIL on 1 (left bank),,These are 22 km apart,,AGAS on 2 (right bank)
+CHIL,,,,,
+AGAS,,,,,
+omit,ABBO on 1 (left bank),,These are 3 km apart,,MSNH on 2 (right bank)
+omit,"Also note WCE Mission City station is 1 km away from MSNH, and ABBO is 8 km away from Abbotsford",,,,
+ABBO,,,,,
+MSNH,,,,,
+VCVR,1 last,,,,2 first
