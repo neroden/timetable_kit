@@ -1111,7 +1111,7 @@ def style_route_name_for_column(route_name, doing_html=False):
     rnw = route_name.split()
     debug_print(2, rnw)
     # Most VIA Rail route names are "City - City"
-    if rnw.contains("-"):
+    if "-" in rnw:
         # Here, don't break the city names, do put one on top of the other
         rnw = route_name.split(" - ")
         # Should give us a length-two list, with both strings being
