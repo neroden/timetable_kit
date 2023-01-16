@@ -283,6 +283,7 @@ def finish_html_timetable(
         "gtfs_url": agency().published_gtfs_url,  # e.g. URL to Amtrak GTFS
         "agency_name": agency().published_name,  # e.g. "Amtrak"
         "agency_website": agency().published_website,  # e.g. "Amtrak.com" -- with capitalization, no https://
+        "agency_css_class": agency().css_class,  # e.g. amtrak-special-css -- currently just changes header color
     }
 
     # Allows direct icon references in Jinja2

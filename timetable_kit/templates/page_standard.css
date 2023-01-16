@@ -35,6 +35,13 @@ h1 {
     vertical-align: middle;
     text-align: center;
 }
+{# Vary the color of the h1 heading. #}
+h1.amtrak-special-css {
+    background-color: darkblue;
+}
+h1.via-special-css {
+    background-color: crimson;
+}
 {#
 Warning to check the agency (Amtrak, VIA) site before buying tickets.
 This should be quite large, but not quite as large as the top-text
