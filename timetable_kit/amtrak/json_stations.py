@@ -30,6 +30,7 @@ from time import sleep  # Avoid slamming Amtrak's server too fast -- not needed
 
 import pandas as pd
 
+import random
 
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
 
@@ -293,7 +294,7 @@ def download_one_station(station_code: str):
     save_station_details_html(station_code, station_details_html)
 
 
-def download_all_stations(sleep_secs: float = 10.0):
+def download_all_stations(sleep_secs: float = 120.0):
     """
     Download all of Amtrak's station details files.
 
@@ -306,15 +307,18 @@ def download_all_stations(sleep_secs: float = 10.0):
     stations_json = download_stations_json()
     save_stations_json(stations_json)
 
+    # Add a random delay of 0-60 seconds
     if sleep_secs != 0.0:
-        sleep(sleep_secs)
+        rand_secs = random.random() * 60
+        sleep(sleep_secs + rand_secs)
 
     # Then, cycle through the station codes
     stations = pd.io.json.read_json(stations_json, orient="records")
     for code in stations["code"].array:
         download_one_station(code)
         if sleep_secs != 0.0:
-            sleep(sleep_secs)
+            rand_secs = random.random() * 60
+            sleep(sleep_secs + rand_secs)
         # When debugging, don't loop...
         # break
 
