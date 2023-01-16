@@ -45,7 +45,7 @@ from timetable_kit.runtime_config import agency  # for the agency()
 
 def make_argparser():
     parser = argparse.ArgumentParser(
-        description="""Create CSV file with list of stations visited, in order, for a single train number (trip_short_name).
+        description="""Get list of stations visited, in order, for a single train number (trip_short_name).
                        Useful when making tt-specs.
                        Should be reviewed manually before generating tt-spec.
                     """,
@@ -59,21 +59,24 @@ def make_argparser():
         "--trip",
         dest="trip_short_name",
         help="""This specifies which trip_short_name to use to generate the list of stations.
-                For instance, if it's "51", train 51 will be used,
-                and the output will be tt_51_stations.csv.
+                For instance, if it's "51", train 51 will be used.
              """,
     )
     parser.add_argument(
         "trip",
         help="""This specifies which trip_short_name to use to generate the list of stations.
-                For instance, if it's "51", train 51 will be used,
-                and the output will be tt_51_stations.csv.
+                For instance, if it's "51", train 51 will be used.
              """,
         nargs="?",
     )
     parser.add_argument(
         "--day",
         help="""Restrict to trains/buses operating on a particular day of the week""",
+    )
+    parser.add_argument(
+        "--csv",
+        help="""Produce output suitable for redirecting directly into a CSV file.""",
+        action="store_true",
     )
     return parser
 
@@ -83,6 +86,10 @@ if __name__ == "__main__":
     args = my_arg_parser.parse_args()
 
     set_debug_level(args.debug)
+    if args.csv:
+        # No debugging info in output please!
+        set_debug_level(0)
+
     output_dirname = args.output_dirname
     if not output_dirname:
         output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
@@ -120,9 +127,23 @@ if __name__ == "__main__":
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
-    print(station_list_df)
+    if not args.csv:
+        print(station_list_df)
+        sys.exit(0)
+
+    # OK, this is the CSV specific path.
+    station_list = station_list_df.to_list()
+    station_list_commaed = [x + ",,," for x in station_list]
+    station_list_prefixed = [
+        ",access,stations," + str(tsn),
+        "column-options,,,ardp",
+        "days,,," + station_list[0],
+        "updown,,,",
+        *station_list_commaed,
+    ]
+    station_list_csv = "\n".join(station_list_prefixed)
+    print(station_list_csv)
     # Consider dumping to CSV... but don't right now
     # output_filename = "".join([output_dirname, "/", "tt_", tsn, "_", "stations.csv"])
     # station_list_df.to_csv(output_filename, index=False)
     # Note: this will put "stop_id" in top row, which is OK
-    sys.exit(0)

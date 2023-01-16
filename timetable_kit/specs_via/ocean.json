@@ -1,0 +1,12 @@
+{
+    "title": "Ocean",
+    "heading": "VIA Rail's Ocean",
+    "reference_date": "20230301",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "key_f": "true",
+    "key_tz": "true",
+    "atlantic_time": "true",
+    "for_rpa": "true"
+}

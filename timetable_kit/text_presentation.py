@@ -458,8 +458,12 @@ def get_rd_str(
             # FIXME: request that Alan Burnstine implement this if possible
             # This seems to be the only way to identify the infamous "L",
             # which means that the train or bus is allowed to depart ahead of time
-            print("timepoint column found")  # Should not happen with existing data
+            #
+            # Obnoxiously, VIA Rail includes the column but it's blank,
+            # which really means "all 1".  Handle this elsewhere!
+            # print("timepoint column found")  # Should not happen with Amtrak data
             if timepoint.timepoint == 0:  # and it says times aren't exact
+                print("Inexact timepoint found!") # Should not happen with Amtrak or VIA so far
                 if not is_arrival_line:  # This goes on departure line, always
                     rd_str = "L"
 

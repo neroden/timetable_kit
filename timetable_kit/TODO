@@ -1,12 +1,10 @@
-Internal cleanup:
-1 -- memoize connecting services initialization (& wrapperize the dict)
-     so that it doesn't run from auxillary progs like find_trains.py.
-
-For generalizing to non-Amtrak feeds *better*:
+For VIA Rail and generalizing to non-Amtrak feeds:
 -------
 1 -- Switch wheelchair access detection to be based on GTFS.
-     Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
-     from the Amtrak stations database.
+     This is essential before building VIA Rail timetables.
+
+1A -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
+      from the Amtrak stations database.
 2 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
 
 Clean up other "working" timetables: - TEDIOUS
@@ -65,6 +63,10 @@ When new GTFS drops:
 6 -- then recheck everything else
 
 Fine for after release of timetables:
+Internal cleanup:
+0 -- memoize connecting services initialization (& wrapperize the dict)
+     so that it doesn't run from auxillary progs like find_trains.py.
+
 1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 
 2 -- Routine to print out calendar for a single route,

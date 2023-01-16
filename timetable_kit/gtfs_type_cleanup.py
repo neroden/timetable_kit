@@ -78,6 +78,7 @@ def type_corrected_routes(routes):
 
 def type_corrected_stop_times(stop_times):
     """Return copy of stop_times with integer types in appropriate columns."""
+
     # VIA rail uses blanks for some of these.
     # According to GTFS specs, these should be considered the same as 0.
     column_replacement_dict = {"pickup_type": 0, "drop_off_type": 0}
@@ -90,7 +91,19 @@ def type_corrected_stop_times(stop_times):
             "drop_off_type": "int32",  # 1 = pickup only, 2/3 = flag stop
         }
     )
-    # new_stop_times_2 = new_stop_times.sort_values(by=['trip_id'])
+
+    # VIA rail has the timepoint column.  But it's blank.  Which means *1*.
+    # So we have to go around and clean this up too.
+    if "timepoint" in new_stop_times.columns:
+        # Blank in a timepoint means *1* (exact), not *0* (may leave early).
+        # 1 is the default if the row is missing, too
+        column_replacement_dict = {"timepoint": 1}
+        filled_stop_times = new_stop_times.fillna(value=column_replacement_dict)
+        new_stop_times = filled_stop_times.astype(
+            {
+                "timepoint": "int32", # 1 = exact time, 0 = may leave early
+            }
+        )
     return new_stop_times
 
 

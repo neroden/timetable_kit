@@ -49,6 +49,8 @@ def initialize_feed(gtfs):
     # master_feed.validate()
 
     # Fix types on every table in the feed
+    # Also deals with blank entries (NaNs) correctly
+    # Particularly tricky on timepoint, which defaults to 1
     gtfs_type_cleanup.fix(master_feed)
 
     debug_print(1, "Feed initialized")
