@@ -84,7 +84,7 @@ def is_high_speed_train(trip_short_name: str) -> bool:
 
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
-# These are exactly the stations which VIA boldfaces on their website
+# This list started as stations which VIA boldfaces on their website
 # Plus a few US stations, since VIA didn't boldface any of them
 
 # Station code reference: https://cptdb.ca/wiki/index.php/VIA_Rail_Canada_stations
@@ -101,6 +101,7 @@ major_stations_list = (
     "JONQ",  # Jonquiere
     "MTRL",  # Montreal
     "PERC",  # Perce (closed)
+    "SFOY",  # Sainte-Foy (for Quebec City) -- I added this one
     "QBEC",  # Quebec (City)
     "RMSK",  # Rimouski
     "SENN",  # Senneterre

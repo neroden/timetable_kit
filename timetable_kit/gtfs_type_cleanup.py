@@ -76,6 +76,24 @@ def type_corrected_routes(routes):
     return new_routes
 
 
+def type_corrected_stops(stops):
+    """Return copy of stops with integer types in appropriate columns."""
+    new_stops = stops  # default if there is no wheelchair_boarding column
+    if "wheelchair_boarding" in stops.columns:
+        # Wheelchair access column.
+        # Here, blank means "0" -- unknown status.
+        # 1 = accessible, 2 = inaccessible.
+        # Amtrak is missing this column entirely.  VIA Rail has it.
+        column_replacement_dict = {"wheelchair_boarding": 0}
+        filled_stops = stops.fillna(value=column_replacement_dict)
+        new_stops = filled_stops.astype(
+            {
+                "wheelchair_boarding": "int32",
+            }
+        )
+    return new_stops
+
+
 def type_corrected_stop_times(stop_times):
     """Return copy of stop_times with integer types in appropriate columns."""
 
@@ -132,7 +150,8 @@ def fix(feed):
     feed.calendar = new_calendar
     new_routes = type_corrected_routes(feed.routes)
     feed.routes = new_routes
-    # Note that stops.txt contains no integers
+    new_stops = type_corrected_stops(feed.stops)
+    feed.stops = new_stops
     new_stop_times = type_corrected_stop_times(feed.stop_times)
     feed.stop_times = new_stop_times
     # Note that I am currently ignoring transfers.txt, which does contain integers

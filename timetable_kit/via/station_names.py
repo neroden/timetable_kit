@@ -7,12 +7,15 @@ Utility routines to style VIA station names as HTML or text.
 
 Also routines to move from stop_id to and from station_code, and get station names.
 
+Also accessibility info.
+
 Exported:
 get_station_name_pretty
 stop_id_to_stop_code
 stop_code_to_stop_id
 
-FIXME -- very much not ready
+station_has_accessible_platform
+station_has_inaccessible_platform
 """
 
 from timetable_kit.debug import set_debug_level, debug_print
@@ -37,10 +40,19 @@ stop_code_to_stop_id_dict = None
 stop_id_to_stop_code_dict = None
 stop_code_to_stop_name_dict = None
 
+# And the accessibilty dicts
+accessible_platform_dict = None
+inaccessible_platform_dict = None
 
 def _prepare_dicts():
     """
-    Prepare the dicts for stop_code_to_stop_id and stop_id_to_stop_code.
+    Prepare the dicts for:
+    stop_code_to_stop_id
+    stop_id_to_stop_code
+    stop_code_to_stop_name
+    accessible_platform_dict
+    inaccessible_platform_dict
+
     These depend on a previously established feed.
     """
     debug_print(1, "Preparing stop_code / stop_id dicts")
@@ -61,6 +73,32 @@ def _prepare_dicts():
     stop_code_to_stop_id_dict = dict(zip(stop_codes, stop_ids))
     stop_id_to_stop_code_dict = dict(zip(stop_ids, stop_codes))
     stop_code_to_stop_name_dict = dict(zip(stop_codes, stop_names))
+
+    # OK.  Now wheelchair boarding.
+    # First check for parent_station.
+    # If this exists we need to do special stuff, which we have not implemented.
+    # VIA Rail does not have stops with parents.
+    # FIXME Warning! This depends on retaining the NaN blanks in the GTFS data.
+    stops_with_parents = feed.stops.dropna(subset=["parent_station"])
+    if not stops_with_parents.empty:
+        print ("Stops with parents found -- this invalidates wheelchair access detection. Aborting.")
+        print (stops_with_parents)
+        exit(1)
+
+    # We interpret wheelchair_boarding with strict accuracy.
+    # 0 or blank == unknown
+    # 1 == accessible, for at least some services
+    # 2 == inaccessible
+    # gtfs_cleanup.py will correctly turn blanks into 0s for us, so don't need to worry about blanks.
+    # We simply assume the wheelchair_access column exists, since it does for VIA Rail.
+    stop_wheelchair_boarding_list = feed.stops["wheelchair_boarding"].to_list()
+    stop_can_board_list = [bool(x == 1) for x in stop_wheelchair_boarding_list]
+    stop_cannot_board_list = [bool(x == 2) for x in stop_wheelchair_boarding_list]
+    global accessible_platform_dict
+    global inaccessible_platform_dict
+    accessible_platform_dict = dict(zip(stop_codes, stop_can_board_list))
+    inaccessible_platform_dict = dict(zip(stop_codes, stop_cannot_board_list))
+
     return
 
 
@@ -130,6 +168,10 @@ def get_station_name_pretty(
         stop_name_clean = "Niagara Falls, ON"
     else:
         stop_name_clean = stop_name_raw
+
+    # Explain where St. Foy station is
+    if stop_name_clean == "Sainte-Foy":
+        facility_name = "for Quebec City"
 
     # We actually want to add the province to every station,
     # but VIA doesn't provide that info.  It's too much work.
@@ -209,6 +251,36 @@ def get_station_name_pretty(
         )
 
     return cooked_station_name
+
+def station_has_inaccessible_platform(station_code: str) -> bool:
+    """
+    Does the station explicitly have an inaccessible platform?
+
+    This excludes stations which don't say either way.
+
+    Constructs and caches the data on first call.
+
+    From GTFS data.
+    """
+    if inaccessible_platform_dict is None:
+        _prepare_dicts()
+    return inaccessible_platform_dict[station_code]
+
+
+def station_has_accessible_platform(station_code: str) -> bool:
+    """
+    Does this station explicitly have an accessible platform?
+
+    This excludes stations which don't say either way.
+
+    Constructs and caches the data on first call.
+
+    From GTFS data.
+    """
+    if accessible_platform_dict is None:
+        _prepare_dicts()
+    return accessible_platform_dict[station_code]
+
 
 
 ### TESTING

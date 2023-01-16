@@ -45,21 +45,12 @@ from .special_data import station_has_checked_baggage
 from .special_data import train_has_checked_baggage
 
 # Platform accessibility
-# This is stubbed out.  FIXME
-
-
-def station_has_accessible_platform(station_code: str) -> bool:
-    return False
-
-
-def station_has_inaccessible_platform(station_code: str) -> bool:
-    return False
-
-
-# from .access import (
-#    station_has_accessible_platform,
-#    station_has_inaccessible_platform,
-# )
+# This is in station_names for convenience
+# Refactor later FIXME
+from .station_names import (
+   station_has_accessible_platform,
+   station_has_inaccessible_platform,
+)
 
 # VIA does not currently need its feed patched.
 # So this returns its input.
