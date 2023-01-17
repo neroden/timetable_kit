@@ -31,8 +31,8 @@ tucson_sunlink_streetcar,,,SunLink,Tucson Sun Lnk,Tucson Sun Link (streetcar),ht
 metrolink,2022_Metrolink_Logo,,Metrolink,Metrolink,Metrolink,https://metrolinktrains.com/
 la_metro,Los Angeles Metro M logo,,Metro,LA Metro,Los Angeles Metro,https://www.metro.net/
 denver_rtd,Regional_Transportation_District_logo,,RTD,RTD Denver,RTD Denver,https://www.rtd-denver.com/
-frontrunner,UTA_icon,FrontRunner,,UTA FrontRunner,Utah Transit Authority FrontRunner,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
-uta_trax,UTA_icon,TRAX,,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+frontrunner,UTA_icon,FrontRunner,FrontRunner,UTA FrontRunner,Utah Transit Authority FrontRunner,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+uta_trax,UTA_icon,TRAX,TRAX,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
 nm_railrunner,,,NMRX,NM RailRunner Express,NM RailRunner Express,https://www.riometro.org/395/New-Mexico-Rail-Runner-Express
 the_hop,,,HOP,The Hop streetcar,The Hop streetcar,https://thehopmke.com/
 twin_cities_metro_transit,,,METRO,Metro Transit light rail,Metro Transit light rail,https://www.metrotransit.org/metro
@@ -57,3 +57,4 @@ exo,Exo,,Exo,Exo,Exo,https://exo.quebec/
 montreal_metro,Montreal_Metro,,Metro,Montreal Metro,Montreal Metro,https://www.stm.info/en/info/networks/metro
 skytrain,,,SkyTrain,Vancouver SkyTrain,Vancouver SkyTrain,https://www.translink.ca/schedules-and-maps/skytrain?page=1
 amtrak,Amtrak_logo_2,,Amtrak,Amtrak,Amtrak,https://www.amtrak.com/
+keewatin_railway,,,KRC,Keewatin Railway,Keewatin Railway Pas-Pukatawagan service,https://www.krcrail.ca/passenger-service

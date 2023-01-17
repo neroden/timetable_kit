@@ -44,6 +44,8 @@ connecting_services_dict = {
     # on the way to Hervey/Senneterre/Jonquiere
     "SAUV": ["exo", "montreal_metro"],
     "ANJO": ["exo"],
+    # The Pas
+    "TPAS": ["keewatin_railway"],
     # Vancouver, BC
     # "Amtrak" here is the Cascades
     "VCVR": ["amtrak", "skytrain"],
