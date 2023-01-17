@@ -301,7 +301,10 @@ def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
         longhours += zonediff  # this is the timezone adjustment
     except:
+        # Winnipeg-Churchill timetable has NaNs -- don't let it get here!
         raise GTFSError("Timestr didn't parse right", timestr)
+        # Return all-zeroes to identify where it happened
+        # return TimeTuple(day=0,pm=0,hour=0,hour24=0,min=0,sec=0)
     # Note: the following does the right thing for negative hours
     # (which can be created by the timezone adjustment)
     # It will give -1 days and positive hours24.
@@ -639,11 +642,19 @@ def timepoint_str(
 
     zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
+
     # Fill the TimeTuple and prep string for actual departure time
-    departure = explode_timestr(timepoint.departure_time, zonediff)
-    departure_time_str = time_str(departure, box_time_characters=box_time_characters)
+    if pd.isna(timepoint.departure_time):
+        # Stupid finicky stuff for stops with *no specific time*
+        # VIA Rail Winnipeg-Churchill has this
+        departure_time_str = "---"
+        is_pm = 0
+    else:
+        departure = explode_timestr(timepoint.departure_time, zonediff)
+        departure_time_str = time_str(departure, box_time_characters=box_time_characters)
+        is_pm = departure.pm
     if doing_html:
-        if bold_pm and departure.pm == 1:
+        if bold_pm and is_pm == 1:
             departure_time_str = "".join(["<b>", departure_time_str, "</b>"])
         if use_24:
             departure_time_str = "".join(
@@ -655,10 +666,17 @@ def timepoint_str(
             )
 
     # Fill the TimeTuple and prep string for actual time
-    arrival = explode_timestr(timepoint.arrival_time, zonediff)
-    arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
+    if pd.isna(timepoint.arrival_time):
+        # Stupid finicky stuff for stops with *no specific time*
+        # VIA Rail Winnipeg-Churchill has this
+        arrival_time_str = "---"
+        is_pm = 0
+    else:
+        arrival = explode_timestr(timepoint.arrival_time, zonediff)
+        arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
+        is_pm = arrival.pm
     if doing_html:
-        if bold_pm and arrival.pm == 1:
+        if bold_pm and is_pm == 1:
             arrival_time_str = "".join(["<b>", arrival_time_str, "</b>"])
         if use_24:
             arrival_time_str = "".join(
@@ -692,8 +710,16 @@ def timepoint_str(
             days_box_class = "box-days"
         # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
         # It must be last and the entire time field must be left-justified as a result
-        departure_daystring = day_string(calendar, offset=departure.day)
-        arrival_daystring = day_string(calendar, offset=arrival.day)
+        if pd.isna(timepoint.departure_time):
+            # No specified time
+            departure_daystring=""
+        else:
+            departure_daystring = day_string(calendar, offset=departure.day)
+        if pd.isna(timepoint.arrival_time):
+            # No specified time
+            arrival_daystring=""
+        else:
+            arrival_daystring = day_string(calendar, offset=arrival.day)
         if doing_html:
             departure_daystring = "".join(
                 ['<span class="', days_box_class, '">', departure_daystring, "</span>"]
