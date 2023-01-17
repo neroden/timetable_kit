@@ -39,6 +39,11 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
       <td>{{sleeper_icon}}</td>
       <td>Sleeping car service available</td>
     </tr>{#
+#}{% endif %}{% if key_missing_times %}{#
+#}    <tr>
+      <td><b>---</b></td>
+      <td>Stops at this station, no specific time</td>
+    </tr>{#
 #}{% endif %}{% if key_d %}{#
 #}    <tr>
       <td><b>D</b></td>
@@ -57,7 +62,7 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
 #}{% endif %}{% if key_f %}{#
 #}    <tr>
       <td><b>F</b></td>
-      <td>Flag stop (only stops if passengers are ticketed in advance)</td>
+      <td>Flag stop (only stops by request)</td>
     </tr>{#
 #}{% endif %}{% if key_bus %}{#
 NOTE -- agency_name is "Amtrak" for Amtrak timetables.
