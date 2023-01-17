@@ -1,27 +1,10 @@
-For VIA Rail and generalizing to non-Amtrak feeds:
--------
-1 -- Switch wheelchair access detection to be based on GTFS.
-     This is essential before building VIA Rail timetables.
-
-1A -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
-      from the Amtrak stations database.
-2 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
-
 Clean up other "working" timetables: - TEDIOUS
 - NEC
 
 Build VIA timetables:
 - Everything except Maple Leaf
-
-Add arrows to the font -- follow up with designer on commission
-- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
-- We should have custom arrows.
-
-For prettiness:
-1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
-
-For internal code cleanup:
-1 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
+- Canadian & Ocean are done
+- Remote services are mostly done, though could use connection info for Canadian
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
@@ -31,18 +14,19 @@ for details
 Capitol Corridor
 NOTE ! NOTE ! NOTE !
 Amtrak station *is* at Chase Bank -- official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
+-- Need to notify the state of California (goddammit people)
 
 Broken due to GTFS breakage:
-- Winter Park Express
-- Vermont to Upstate NY
-- Southwest Chief
+- Winter Park Express (missing)
+- Vermont to Upstate NY (Burlington bus stop missing)
+- Southwest Chief (missing)
 - Lincoln Service (ibid)
 - Quincy (ibid)
 - Grand Canyon (ibid)
 - Heartland Flyer (ibid)
-- Empire Service
-- Maple Leaf
-- Ethan Allen Express
+- Empire Service (ghost trains, missing trains)
+- Maple Leaf (both Amtrak ***and*** VIA)
+- Ethan Allen Express (Burlington bus stop missing)
 - Capitol Corridor - Ghost buses (weekday is done, weekend is half done)
 Not running:
 - Adirondack
@@ -62,7 +46,23 @@ When new GTFS drops:
 5 -- Ethan Allen Express to Burlington
 6 -- then recheck everything else
 
-Fine for after release of timetables:
+For prettiness:
+1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
+
+For generalizing beyond Amtrak and VIA:
+1 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
+2 -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
+      from the Amtrak stations database.
+
+For simplifying and making Amtrak & VIA work better:
+1 -- Add checked_baggage field to GTFS specification (stops.txt and trips.txt).
+     This is way too SOCIAL for me to want to actually do it!
+     But it would massively simplify a large hunk of code
+
+Add arrows to the font -- follow up with designer on commission:
+- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
+- We should have custom arrows.
+
 Internal cleanup:
 0 -- memoize connecting services initialization (& wrapperize the dict)
      so that it doesn't run from auxillary progs like find_trains.py.
@@ -95,12 +95,15 @@ Internal cleanup:
 7 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
       Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
 
+8 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
+
+
 Fine for never:
-8 -- implement prototype spec generator using toposort to merge station lists.
+9 -- implement prototype spec generator using toposort to merge station lists.
      This is really a many-step process.
 
 Wishlist:
-9 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
+10 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
 (OK.  It would be AWESOME.)
 
 CSS Paged Media project:
