@@ -2,12 +2,12 @@
 column-options,,,,,,,ardp,,,,,,,,
 route-name,,,,,,,,,,,,,,,
 days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
-COX,,,blank,blank,blank,blank,blank,blank,blank,3541 first,blank,blank,blank,blank,blank
-ARN,,,blank,blank,blank,blank,blank,529 first,blank,,blank,blank,blank,3549 first,blank
-RLN,,,blank,blank,blank,blank,"from Chico, CA",,blank,,blank,blank,blank,,blank
-RSV,,,blank,3623 first,3625 first,blank,& Oregon,,blank,,blank,blank,blank,,blank
-SAC,,,blank,3623 last,3625 last,blank,11,529 last,blank,3541 last,blank,blank,blank,3549 last,blank
-SAC,,,521 first,523 first,525 first,527 first,11 first,529 first,531 first,541 first,,,,549 first,
+COX,,,blank,blank,blank,blank,11 blank,blank,blank,3541 first,blank,blank,blank,blank,blank
+ARN,,,blank,blank,blank,blank,11 blank,529 first,blank,,blank,blank,blank,3549 first,blank
+RLN,,,blank,blank,blank,blank,11 blank,,blank,,blank,blank,blank,,blank
+RSV,,,blank,3623 first,3625 first,blank,11 blank,,blank,,blank,blank,blank,,blank
+SAC,,,blank,3623 last,3625 last,blank,"from Chico, CA<br>& Oregon",529 blank,blank,3541 last,blank,blank,blank,3549 last,blank
+SAC,,,521 first two-row,523 first two-row,525 first two-row,527 first two-row,11,529,531 first two-row,541 first two-row,543 first two-row,545 first two-row,547 first two-row,549 first two-row,551 first two-row
 DAV,,,,,,,,,,,,,,,
 FFV,,,,,,,11 blank,,,,,,,,
 SUI,,,,,,,11 blank,,,,,,,,

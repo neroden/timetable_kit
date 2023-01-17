@@ -1,13 +1,13 @@
 ,access,stations,723 / 6673 noheader,11 / 5011 noheader,727 / 6677 noheader,729 / 6679 noheader,737 / 3541 noheader / 6637 noheader,741 / 6691 noheader,743 / 6693 noheader,745 / 6695 noheader,747 / 3549 noheader / 6697 noheader,749 / 6699 noheader,751 / 6653 noheader
-column-options,,,,ardp,,,,,,,,,
+column-options,,,,ardp,,ardp,,,,,,,
 route-name,,,,,,,,,,,,,
 days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
 omit,Note there's a ghost train 529.,,,,,,"GHOST BUS problem -- correct ARN bus for #737 is missing from GTFS, wrong bus is present",,,,,,
-COX,,,blank,11 blank,blank,blank,3541 first,blank,blank,blank,3549 first,blank,blank
-ARN,,,blank,11 blank,blank,729 first,,blank,blank,blank,,blank,blank
+COX,,,blank,11 blank,blank,blank,3541 first,blank,blank,blank,blank,blank,blank
+ARN,,,blank,11 blank,blank,729 first,,blank,blank,blank,3549 first,blank,blank
 RLN,,,blank,11 blank,blank,,,blank,blank,blank,,blank,blank
-RSV,,,blank,"from Chico, CA",blank,,,blank,blank,blank,,blank,blank
-SAC,,,blank,& Oregon,blank,,3541 last,blank,blank,blank,3549 last,blank,blank
+RSV,,,blank,11 blank,blank,,,blank,blank,blank,,blank,blank
+SAC,,,blank,"from Chico, CA<br>& Oregon",blank,729 blank,3541 last,blank,blank,blank,3549 last,blank,blank
 SAC,,,723 first two-row,11,727 first two-row,,737 first two-row,741 first two-row,743 first two-row,745 first two-row,747 first two-row,749 first two-row,751 first two-row
 DAV,,,,,,,,,,,,,
 FFV,,,,11 blank,,,,,,,,,

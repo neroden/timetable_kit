@@ -1,29 +1,29 @@
 ,access,stations,720 / 3524 noheader / 6670 noheader,724 / 6674 noheader,728 / 6678 noheader,732 / 6682 noheader,734 / 6684 noheader,736 / 6686 noheader,738 / 6668 noheader,742 / 6692 noheader,744 / 6694 noheader,746 / 6696 noheader,748 / 6698 noheader,14 / 5014 noheader
-column-options,,,,,,,,,,,,,,ardp
+column-options,,,,,,,,ardp,,,,,,ardp
 route-name,,,,,,,,,,,,,,
 days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
-,,,,,,,,,,,,,,from Los Angeles
-SJC,,,,,,,,,,,,,,
-SCC,,,,,,,,,,,,,,
-GAC,,,,,,,,,,,,,,
-FMT,,,,,,,,,,,,,,
-HAY,,,,,,,,,,,,,,
-OAC,,,,,,,,,,,,,,
-OKJ,,,720 first,,,,734 first,,738 first,,,746 first,,
-omit,"Weekend SF connectors have last two digits 50 + last two digits of train they connect with, except 6668",,,,,,,,,,,,,
+,,,,724 blank,728 blank,732 blank,,736 blank,,742 blank,744 blank,,748 blank,from Los Angeles
+SJC,,,,724 first two-row,728 first two-row,732 first two-row,,736 first two-row,,742 first two-row,744 first two-row,,748 first two-row,
+SCC,,,,,,,,,,,,,,14 blank
+GAC,,,,,,,,,,,,,,14 blank
+FMT,,,,,,,,,,,,,,14 blank
+HAY,,,,,,,,,,,,,,14 blank
+OAC,,,,,,,,,,,,,,14 blank
+OKJ,,,720 first two-row,,,,734 first two-row,,738 first two-row,,,746 first two-row,,14 blank
+omit,"Weekend SF connectors have last two digits 50 + last two digits of train they connect with, except 6668",,,,,,,,,,,,,14 blank
 SFC,,,6670 first,6674 first,6678 first,6682 first,6684 first,6686 first,6668 first,6692 first,6694 first,6696 first,6698 first,5014 first
 EMY,,,6670 last,6674 last,6678 last,6682 last,6684 last,6686 last,6668 last,6692 last,6694 last,6696 last,6698 last,5014 last
 EMY,,,720,724,728,732,734,736,738,742,744,746,748,14
-BKY,,,,,,,,,,,,,,
-RIC,,,,,,,,,,,,,,
+BKY,,,,,,,,,,,,,,14 blank
+RIC,,,,,,,,,,,,,,14 blank
 MTZ,,,,,,,,,,,,,,
-SUI,,,,,,,,,,,,,,
-FFV,,,,,,,,,,,,,,
+SUI,,,,,,,,,,,,,,14 blank
+FFV,,,,,,,,,,,,,,14 blank
 DAV,,,,,,,,,,,,,,
-SAC,,,720 last,724 last,728 last,732 last,734 last,,738 last,742 last,744 last,746 last,748 last,
+SAC,,,720 last,724 last,728 last,732 last,734 last,,738 last,742 last,744 last,746 last,748 last,14
 omit,,,,,,Missing bus connecting from 732,,,,,,,,
-SAC,,,3524 first,blank,blank,,blank,,blank,blank,blank,blank,blank,
-RSV,,,,blank,blank,,blank,,blank,blank,blank,blank,blank,"to Chico, CA"
-RLN,,,,blank,blank,,blank,,blank,blank,blank,blank,blank,& Oregon
+SAC,,,3524 first,blank,blank,blank,blank,736 blank,blank,blank,blank,blank,blank,"to Chico, CA<br>& Oregon"
+RSV,,,,blank,blank,,blank,,blank,blank,blank,blank,blank,
+RLN,,,,blank,blank,,blank,,blank,blank,blank,blank,blank,
 ARN,,,3524 last,blank,blank,,blank,736 last,blank,blank,blank,blank,blank,
 COX,,,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank,
