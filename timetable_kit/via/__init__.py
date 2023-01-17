@@ -52,12 +52,9 @@ from .station_names import (
     station_has_inaccessible_platform,
 )
 
-# VIA does not currently need its feed patched.
-# So this returns its input.
-# If needed, implement as follows:
-# from .gtfs_cleanup import patch_feed
-def patch_feed(feed):
-    return feed
+
+# Patch errors in the feed
+from .gtfs_cleanup import patch_feed
 
 
 # For colorizing columns

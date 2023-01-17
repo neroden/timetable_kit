@@ -44,6 +44,11 @@ connecting_services_dict = {
     # on the way to Hervey/Senneterre/Jonquiere
     "SAUV": ["exo", "montreal_metro"],
     "ANJO": ["exo"],
+    # on the way to Quebec City and Halifax
+    "SLAM": ["exo"],
+    # on the way to Ottawa and points west
+    # Note that Dorval also needs the montreal_airport_shuttle notation
+    "DORV": ["exo"],
     # The Pas
     "TPAS": ["keewatin_railway"],
     # Vancouver, BC

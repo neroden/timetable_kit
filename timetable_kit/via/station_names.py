@@ -172,12 +172,12 @@ def get_station_name_pretty(
     else:
         stop_name_clean = stop_name_raw
 
-    # Explain where St. Foy station is
     if stop_name_clean == "Sainte-Foy":
-        facility_name = "for Quebec City"
-    elif stop_name_clean == "Vancouver":
-        # There ARE two train stations in Vancouver
-        facility_name = "Pacific Central Station"
+        # Explain where St. Foy station is
+        facility_name = "for Quebéc City"
+    elif stop_name_clean == "Quebéc":
+        # Distinguish from other Quebec City stations
+        facility_name = "Gare du Palais"
     elif stop_name_clean in ["Montreal", "Montréal"]:  # remember accented e
         # Two stations here too
         facility_name = "Central Station"
@@ -188,6 +188,9 @@ def get_station_name_pretty(
     elif stop_name_clean == "Toronto":
         # Just for clarity
         facility_name = "Union Station"
+    elif stop_name_clean == "Vancouver":
+        # There ARE two train stations in Vancouver
+        facility_name = "Pacific Central Station"
 
     # We actually want to add the province to every station,
     # but VIA doesn't provide that info.  It's too much work.

@@ -1,0 +1,19 @@
+,access,stations,33,15,35,37,39,29
+column-options,,,ardp,ardp,,,,
+route-name,,,,,,,,
+days,,,MTRL,MTRL,MTRL,MTRL,MTRL,MTRL
+updown,,,,,,,,
+omit,"VIA official schedules confusingly show trains 51 and 633, which are Montreal-Ottawa-Fallowfield.",,,,,,,
+omit,calendar_days.txt: #25 & #637 are suspended,,,,,,,
+QBEC,,,first,from Halifax,first,first,first,first
+SFOY,,,,,,,,
+CHNY,,,,,,,,
+DRMV,,,,,,,,
+SHYA,,,,,,,,
+SLAM,,,,,,,,
+MTRL,,,,last,,,,last
+DORV,,,,blank,,,,blank
+COTO,,,,blank,,,,blank
+ALEX,,,,blank,,,,blank
+CSLM,,,,blank,,,,blank
+OTTW,,,last,blank,last,last,last,blank

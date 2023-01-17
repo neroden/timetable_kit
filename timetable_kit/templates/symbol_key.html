@@ -22,7 +22,8 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
 #}    <tr>
       <td>{{accessible_icon}}</td>
       <td>Platform and train are accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
-#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
+#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
+#}{% if wheelchair_advance_notice %}<br><b>48 hours advance notice required for wheelchair lifts at some stations</b>{% endif %}</td>
     </tr>
     <tr>
       <td>{{inaccessible_icon}}</td>

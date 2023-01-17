@@ -9,6 +9,29 @@ get_route_name()
 VIA is... kind of terrible about route names in their GTFS, so we use some hand-coding.
 """
 
+remote_service_route_names = [
+    "Montréal - Senneterre",
+    "Montréal - Jonquière",
+    "Sudbury - White River",
+    "Winnipeg - Churchill",
+    "The Pas - Churchill",
+    "Jasper - Prince Rupert",
+]
+
+corridor_service_route_names = [
+    "Toronto - London",
+    "Toronto - Kingston",
+    "Montréal - Toronto",
+    "Toronto - Sarnia",
+    "Ottawa - Québec",
+    "Toronto - Windsor",
+    "Ottawa - Montréal",
+    "Ottawa - Toronto",
+    "Québec - Fallowfield",
+    "Québec - Montréal",
+    "Montréal - Aldershot",
+]
+
 
 def get_route_name(today_feed, route_id):
     """
@@ -29,8 +52,10 @@ def get_route_name(today_feed, route_id):
     # NOTE, the portion above this is completely standard and should be pulled
     # out to "generic agency" code
 
-    # Only a few trains still have proper names.
+    # Only a few trains still have proper names (Canadian, Ocean, Maple Leaf).
     # Use them where available.
+    # Preserve remote service names.
+    # Convert all other route names to "Corridor".
     match route_name:
         case "Toronto - Vancouver":
             route_name = "The Canadian"
@@ -39,5 +64,9 @@ def get_route_name(today_feed, route_id):
         case "Montréal - Halifax":
             # Note accented letter in original, make sure this works
             route_name = "The Ocean"
+        case name if name in corridor_service_route_names:
+            # The route names for the Corridor are problematic.
+            # Trains are listed as "Quebec Fallowfield" which simply aren't.
+            route_name = "Corridor"
 
     return route_name
