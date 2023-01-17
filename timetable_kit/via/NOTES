@@ -1,4 +1,5 @@
-Via Rail has separate stop_code (human-readable) and stop_id (strictly internal)
+-----
+Via Rail has separate stop_code (human-readable) and stop_id (strictly internal).
 
 Via Rail has a number of mystery routes which have NO trip_short_name.
 This is... OK... but these will be inaccessible with current timetable_kit design.
@@ -23,3 +24,29 @@ https://www.viarail.ca/en/plan/intermodality/montreal-trudeau-shuttle
 
 ... but it runs "every 45 minutes to 60 minutes".  It uses frequencies.txt.
 This is not something we can implement in a "timetable" fashion.  We won't try.
+-----
+
+We don't parse calendar_dates.txt in the GTFS.
+
+VIA is using it to disable services through the date 20230430:
+498 through 20230430 (to London on Toronto-Sarnia 119-341)
+494 through 20230430 (to London on Toronto-London 119-93)
+491 every 7 days through 20230429 (to London on Toronto-London 119-93)
+540 every weekend through 20230430 (to Quebec on Ottawa-Quebec 617-628)
+371 through 20230428 (to London on Toronto-London 119-93)
+448 every 7 days through 20230429 (to Ottawa on Ottawa-Montreal 617-226)
+446 every 7 days through 20230429 (to Montreal on Ottawa-Montreal 617-226)
+445 through 20230430 (to Ottawa on Ottawa-Montreal 617-226)
+444 through 20230430 (to Montreal on Ottawa-Montreal 617-226)
+388 every 7 days through 20230429 (to Toronto on Toronto-Kingston 119-58)
+519 through 20230430 (to Ottawa on Ottawa-Toronto 617-119)
+518 6 days a week through 20230429 (to Toronto on Toronto-London 119-93)
+501 through 20230430 (to Toronto on Toronto-Sarnia 119-341)
+460 through 20230430 (to Ottawa on Ottawa-Toronto 617-119)
+487 through 20230430 (to Toronto on Ottawa-Toronto 617-119)
+485 5 days a week through 20230427 (to Toronto on Ottawa-Toronto 617-119)
+484 every 7 days through 20230429 (to Toronto on Ottawa-Toronto 617-119)
+514 every 7 days through 20230430 (to Ottawa on Ottawa-Quebec 617-628)
+471 5 days a week through 20230428 (to Toronto on Toronto-Kingston 119-58)
+474 6 days a week through 20230430 (to Kingston on Toronto-Kingston 119-58)
+ 
