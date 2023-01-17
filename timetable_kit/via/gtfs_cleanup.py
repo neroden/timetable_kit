@@ -26,7 +26,7 @@ def patch_feed(feed):
             # because the platform is accessible,
             # but VIA's station info says it's not possible to board the train in a wheelchair.
             # Oh come on, VIA.
-            new_stops.loc[index, "wheelchair_boarding"] == 0
+            new_stops.loc[index, "wheelchair_boarding"] = 0
             debug_print(1, "Patched stop PARE"),
 
     # And update with revised stops table

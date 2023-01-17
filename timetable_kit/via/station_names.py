@@ -32,6 +32,7 @@ from timetable_kit.connecting_services import get_connecting_service_logo_html
 # FIXME -- _prepare_dicts has horrible callbacks into timetable_kit.initialize.initialize_feed
 from timetable_kit.via.get_gtfs import gtfs_unzipped_local_path
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.via.gtfs_cleanup import patch_feed
 
 # Initialization code.  We build the stop_code_to_stop_id and stop_id_to_stop_code dicts
 # from the GTFS.
@@ -55,13 +56,16 @@ def _prepare_dicts():
     inaccessible_platform_dict
 
     These depend on a previously established feed.
+    THIS IS A PROBLEM -- FIXME
     """
     debug_print(1, "Preparing stop_code / stop_id dicts")
 
     # Right now this quite brutally reloads the feed.
     # FIXME this is a HORRIBLE hack and we don't want to do it
     gtfs_filename = gtfs_unzipped_local_path
-    feed = initialize_feed(gtfs=gtfs_filename)
+    raw_feed = initialize_feed(gtfs=gtfs_filename)
+    # Essential -- we need to avoid this duplication FIXME FIXME
+    feed = patch_feed(raw_feed)
 
     # Now extract the dicts from the feed
     stop_codes = feed.stops["stop_code"].to_list()
