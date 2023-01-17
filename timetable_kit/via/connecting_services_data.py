@@ -41,6 +41,9 @@ connecting_services_dict = {
     # Montreal !
     # "Amtrak" here is the Adirondack, currently suspended
     "MTRL": ["amtrak", "exo", "montreal_metro"],
+    # on the way to Hervey/Senneterre/Jonquiere
+    "SAUV": ["exo", "montreal_metro"],
+    "ANJO": ["exo"],
     # Vancouver, BC
     # "Amtrak" here is the Cascades
     "VCVR": ["amtrak", "skytrain"],

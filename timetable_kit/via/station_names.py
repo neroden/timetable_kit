@@ -44,6 +44,7 @@ stop_code_to_stop_name_dict = None
 accessible_platform_dict = None
 inaccessible_platform_dict = None
 
+
 def _prepare_dicts():
     """
     Prepare the dicts for:
@@ -81,8 +82,10 @@ def _prepare_dicts():
     # FIXME Warning! This depends on retaining the NaN blanks in the GTFS data.
     stops_with_parents = feed.stops.dropna(subset=["parent_station"])
     if not stops_with_parents.empty:
-        print ("Stops with parents found -- this invalidates wheelchair access detection. Aborting.")
-        print (stops_with_parents)
+        print(
+            "Stops with parents found -- this invalidates wheelchair access detection. Aborting."
+        )
+        print(stops_with_parents)
         exit(1)
 
     # We interpret wheelchair_boarding with strict accuracy.
@@ -175,6 +178,13 @@ def get_station_name_pretty(
     elif stop_name_clean == "Vancouver":
         # There ARE two train stations in Vancouver
         facility_name = "Pacific Central Station"
+    elif stop_name_clean in ["Montreal", "Montréal"]:  # remember accented e
+        # Two stations here too
+        facility_name = "Central Station"
+    elif stop_name_clean in ["Anjou", "Sauvé"]:  # remember accented e
+        # On the Senneterre timetable,
+        # "EXO station" blows out a line which we need for Montreal
+        facility_name = ""
     elif stop_name_clean == "Toronto":
         # Just for clarity
         facility_name = "Union Station"
@@ -258,6 +268,7 @@ def get_station_name_pretty(
 
     return cooked_station_name
 
+
 def station_has_inaccessible_platform(station_code: str) -> bool:
     """
     Does the station explicitly have an inaccessible platform?
@@ -286,7 +297,6 @@ def station_has_accessible_platform(station_code: str) -> bool:
     if accessible_platform_dict is None:
         _prepare_dicts()
     return accessible_platform_dict[station_code]
-
 
 
 ### TESTING

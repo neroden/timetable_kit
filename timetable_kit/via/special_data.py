@@ -105,23 +105,28 @@ major_stations_list = (
     "QBEC",  # Quebec (City)
     "RMSK",  # Rimouski
     "SENN",  # Senneterre
+    "HERV",  # Hervey -- added for the JONQ/SENN split
     # Ontario
     "BLVL",  # Belleville
     "CWLL",  # Cornwall
-    # Western Ontario -- I added these for the Canadian
-    "CAPR",  # Capreol
-    "HNPN",  # Hornepayne
-    "SLKT",  # Sioux Lookout
-    # Hamilton
+    "HAML",  # Hamilton
     "KGON",  # Kingston
     "KITC",  # Kitchener
     "LNDN",  # London
     "NIAG",  # Niagara Falls
     "OTTW",  # Ottawa
     "SARN",  # Sarnia
-    "SUDB",  # Sudbury
     "TRTO",  # Toronto
     "WDON",  # Windsor
+    # Western Ontario -- I added these for the Canadian
+    "CAPR",  # Capreol
+    "HNPN",  # Hornepayne
+    "SLKT",  # Sioux Lookout
+    # Western Ontario -- I added these for the Sudbury-White River train
+    "SUDB",  # Sudbury -- VIA has this one boldfaced
+    "CART",  # Cartier
+    "CHAP",  # Chapleau
+    "WHTR",  # White River
     # Manitoba
     "CHUR",  # Churchill
     "TPAS",  # The Pas
