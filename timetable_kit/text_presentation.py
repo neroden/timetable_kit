@@ -642,7 +642,6 @@ def timepoint_str(
 
     zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
-
     # Fill the TimeTuple and prep string for actual departure time
     if pd.isna(timepoint.departure_time):
         # Stupid finicky stuff for stops with *no specific time*
@@ -651,7 +650,9 @@ def timepoint_str(
         is_pm = 0
     else:
         departure = explode_timestr(timepoint.departure_time, zonediff)
-        departure_time_str = time_str(departure, box_time_characters=box_time_characters)
+        departure_time_str = time_str(
+            departure, box_time_characters=box_time_characters
+        )
         is_pm = departure.pm
     if doing_html:
         if bold_pm and is_pm == 1:
@@ -712,12 +713,12 @@ def timepoint_str(
         # It must be last and the entire time field must be left-justified as a result
         if pd.isna(timepoint.departure_time):
             # No specified time
-            departure_daystring=""
+            departure_daystring = ""
         else:
             departure_daystring = day_string(calendar, offset=departure.day)
         if pd.isna(timepoint.arrival_time):
             # No specified time
-            arrival_daystring=""
+            arrival_daystring = ""
         else:
             arrival_daystring = day_string(calendar, offset=arrival.day)
         if doing_html:
