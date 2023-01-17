@@ -1,6 +1,6 @@
 ,600,602,access,stations,timezone,601
-column-options,ardp,ardp,,,,
-days,JONQ,JONQ,,,,
+column-options,ardp,ardp,,,,ardp reverse
+days,JONQ,JONQ,,,,JONQ
 updown,,,,,,
 JONQ,600 first,602 first,,,,601 last
 HEBV,,,,,,
