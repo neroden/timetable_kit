@@ -19,6 +19,9 @@ def patch_feed(feed):
     """
 
     new_feed = feed.copy()
+
+    # Wheelchair access for VIA:
+    # VIA uses "0" way too often: consider changing it to "2" (no access)
     new_stops = new_feed.stops
     for index in new_stops.index:
         if new_stops.loc[index, "stop_code"] == "PARE":
@@ -28,6 +31,11 @@ def patch_feed(feed):
             # Oh come on, VIA.
             new_stops.loc[index, "wheelchair_boarding"] = 0
             debug_print(1, "Patched stop PARE"),
+        if new_stops.loc[index, "stop_code"] == "CHUR":
+            # Note that Churchill may have the same problem as Parent (unclear).
+            debug_print(1, "Warning, Churchill wheelchair status questionable")
+        # We have checked VIA's website: Thompson really has a wheelchair lift (as does Winnipeg).
+        # We have checked VIA's website: Prince George, Prince Rupert, & Terrace really have wheelchair lifts.
 
     # And update with revised stops table
     new_feed.stops = new_stops
