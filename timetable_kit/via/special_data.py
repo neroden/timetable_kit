@@ -129,7 +129,10 @@ major_stations_list = (
     "WHTR",  # White River
     # Manitoba
     "CHUR",  # Churchill
+    "GILL",  # Gillam - I added
+    "THOM",  # Thompson - I added
     "TPAS",  # The Pas
+    "CANO",  # Canora - I added
     "WNPG",  # Winnipeg
     # Saskatchewan
     "SASK",  # Saskatoon
