@@ -2,6 +2,7 @@
 column-options,,,,ardp,,,,,,,,,
 route-name,,,,,,,,,,,,,
 days,,,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC,SAC
+omit,Note there's a ghost train 529.,,,,,,"GHOST BUS problem -- correct ARN bus for #737 is missing from GTFS, wrong bus is present",,,,,,
 COX,,,blank,11 blank,blank,blank,3541 first,blank,blank,blank,3549 first,blank,blank
 ARN,,,blank,11 blank,blank,729 first,,blank,blank,blank,,blank,blank
 RLN,,,blank,11 blank,blank,,,blank,blank,blank,,blank,blank
@@ -15,6 +16,7 @@ MTZ,,,,,,,,,,,,,
 RIC,,,,11 blank,,,,,,,,,
 BKY,,,,11 blank,,,,,,,,,
 EMY,,,723,11,727,729,737,741,743,745,747,749,751
+omit,"Weekend SF connectors have last two digits 50 + last two digits of train they connect with, except 6637 & 6653",,,,,,,,,,,,
 EMY,,,6673 first,5011 first,6677 first,6679 first,6637 first,6691 first,6693 first,6695 first,6697 first,6699 first,6653 first
 SFC,,,6673 last,5011 last,6677 last,6679 last,6637 last,6691 last,6693 last,6695 last,6697 last,6699 last,6653 last
 OKJ,,,,11 blank,,,,,,745 last,,749 last,751 last

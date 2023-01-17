@@ -3,7 +3,7 @@
     "heading": "Amtrak's Capitol Corridor: Weekend Eastbound",
     "programmers_warning": "Not revised because of ghost buses and real buses which aren't in GTFS.",
     "landscape": "true",
-    "reference_date": "20230301",
+    "reference_date": "20230401",
     "key_bus": "true",
     "use_bus_icon_in_cells": "true",
     "key_baggage": "true",
