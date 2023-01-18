@@ -64,6 +64,15 @@ Add arrows to the font -- follow up with designer on commission:
 - We should have custom arrows.
 
 Internal cleanup:
+-1 -- Stop the duplicate loading of the feed in VIA's wheelchair access check.
+      We need to drive the feed loading down into a place where it's available to
+      the wheelchair access check directly.  This might be done with the aforementioned
+      "generic agency" code which I haven't written.
+
+    Plan for this: pass the agency through to produce_timetable instead of the feed.
+    Initialize the feed in the initialization of the agency (possibly with commandline override).
+    The feed is then available and present within the agency object.
+
 0 -- memoize connecting services initialization (& wrapperize the dict)
      so that it doesn't run from auxillary progs like find_trains.py.
 
