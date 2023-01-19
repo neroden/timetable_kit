@@ -6,9 +6,9 @@ Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable 
 Development status
 ==================
 Timetable_kit remains under active development.
-It is quite usable to create Amtrak timetables.
+It is quite usable to create Amtrak timetables and VIA Rail Canada timetables, though there remain some issues with VIA timetable generation.
 
-It has not yet been generalized to create non-Amtrak timetables, but VIA Rail is close to working.
+It has not yet been generalized to create timetables in general.
 
 Interfaces are moderately stable: old spec files should continue to work, mostly.
 New options continue to be added in spec files.
@@ -89,10 +89,11 @@ The SpartanTT font is a derivative of the Spartan font specifically for timetabl
 It has extremely small, entirely functional changes which are probably uncopyrightable.
 It is also under the Open Font License.  See README.Spartan for more information on the changes.
 
-Example
-=======
+Examples
+=========
 
-This is a (probably out of date) timetable made using timetable_kit.
+This are some (probably out of date) timetables made using timetable_kit.
 
 .. image:: https://github.com/neroden/timetable_kit/raw/main/samples/richmond-weekday-nb.jpg
-
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/jasper-prince-rupert.jpg
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/upstate-ny-to-western-vermont-services.jpg
