@@ -30,6 +30,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 </div><!-- bigbox-timetable -->
 <div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">
 {% include "symbol_key.html" %}
+{% if central_standard_time %}{% include "central_standard_time.html" %}{% endif %}
 {% if mountain_standard_time %}{% include "mountain_standard_time.html" %}{% endif %}
 {% include "connecting_services_key.html" %}
 {% if montreal_airport_shuttle %}{% include "montreal_airport_shuttle.html" %}{% endif %}{# VIA-specific hack, FIXME #}

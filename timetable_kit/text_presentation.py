@@ -131,7 +131,7 @@ tz_letter_dict = {
     "America/Halifax": "AT",
     "America/Toronto": "ET",
     "America/Winnipeg": "CT",
-    "America/Regina": "CT",
+    "America/Regina": "CST",
     "America/Edmonton": "MT",
     "America/Vancouver": "PT",
 }
