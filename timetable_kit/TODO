@@ -1,10 +1,14 @@
 Clean up other "working" timetables: - TEDIOUS
-- NEC
+- NEC.  Boston first, non-Boston second
 
 Build VIA timetables:
 - Everything except Maple Leaf
 - Canadian & Ocean are done
 - Remote services are mostly done, though could use connection info for Canadian
+- Redo remote services (PARE has been fixed)
+- Quebec City timetables
+- Toronto-Kingston/Ottawa-Montreal timetables
+- West-of-Toronto timetables (can we get these all in one?)
 
 California Zephyr
 NOTE ! NOTE ! NOTE !

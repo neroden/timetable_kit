@@ -1,4 +1,4 @@
-# via/gtfs_cleanup.py
+# via/gtfs_patches.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
@@ -24,13 +24,14 @@ def patch_feed(feed):
     # VIA uses "0" way too often: consider changing it to "2" (no access)
     new_stops = new_feed.stops
     for index in new_stops.index:
-        if new_stops.loc[index, "stop_code"] == "PARE":
+        # PARE has been fixed on 2023-01-19 !
+        # if new_stops.loc[index, "stop_code"] == "PARE":
             # Parent (PARE) station on Jonquiere line is listed as wheelchair accessible
             # because the platform is accessible,
             # but VIA's station info says it's not possible to board the train in a wheelchair.
             # Oh come on, VIA.
-            new_stops.loc[index, "wheelchair_boarding"] = 0
-            debug_print(1, "Patched stop PARE"),
+        #    new_stops.loc[index, "wheelchair_boarding"] = 0
+        #    debug_print(1, "Patched stop PARE"),
         if new_stops.loc[index, "stop_code"] == "CHUR":
             # Note that Churchill may have the same problem as Parent (unclear).
             debug_print(1, "Warning, Churchill wheelchair status questionable")

@@ -32,7 +32,7 @@ from timetable_kit.connecting_services import get_connecting_service_logo_html
 # FIXME -- _prepare_dicts has horrible callbacks into timetable_kit.initialize.initialize_feed
 from timetable_kit.via.get_gtfs import gtfs_unzipped_local_path
 from timetable_kit.initialize import initialize_feed
-from timetable_kit.via.gtfs_cleanup import patch_feed
+from timetable_kit.via.gtfs_patches import patch_feed
 
 # Initialization code.  We build the stop_code_to_stop_id and stop_id_to_stop_code dicts
 # from the GTFS.
@@ -96,7 +96,7 @@ def _prepare_dicts():
     # 0 or blank == unknown
     # 1 == accessible, for at least some services
     # 2 == inaccessible
-    # gtfs_cleanup.py will correctly turn blanks into 0s for us, so don't need to worry about blanks.
+    # gtfs_type_cleanup.py will correctly turn blanks into 0s for us, so don't need to worry about blanks.
     # We simply assume the wheelchair_access column exists, since it does for VIA Rail.
     stop_wheelchair_boarding_list = feed.stops["wheelchair_boarding"].to_list()
     stop_can_board_list = [bool(x == 1) for x in stop_wheelchair_boarding_list]

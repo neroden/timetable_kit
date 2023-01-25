@@ -54,7 +54,7 @@ from .station_names import (
 
 
 # Patch errors in the feed
-from .gtfs_cleanup import patch_feed
+from .gtfs_patches import patch_feed
 
 
 # For colorizing columns

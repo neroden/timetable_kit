@@ -54,7 +54,7 @@ from .access import (
 )
 
 # Special routine to patch Amtrak's defective GTFS feed
-from .gtfs_cleanup import patch_feed
+from .gtfs_patches import patch_feed
 
 # For colorizing columns
 from .special_data import (
