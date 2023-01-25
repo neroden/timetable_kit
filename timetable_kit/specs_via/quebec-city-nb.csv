@@ -1,0 +1,18 @@
+,access,stations,20,22,622,24,26 monday,26 friday,28,14
+column-options,,,ardp,ardp,,,,,,ardp
+omit,calendar_days.txt: #624 suspended,,,,,,,26 has extra stops on Friday only,,
+route-name,,,,,,,,,,
+days,,,MTRL,MTRL,MTRL,MTRL,MTRL,MTRL,MTRL,MTRL
+updown,,,,,,,,,,
+OTTW,,,blank,first,blank,first,first,first,first,blank
+CSLM,,,blank,,blank,,,,,blank
+ALEX,,,blank,,blank,,,,,blank
+COTO,,,blank,,blank,,,,,blank
+DORV,,,blank,,blank,,,,,blank
+MTRL,,,first two-row,,first two-row,,,,,first two-row
+SLAM,,,,,,,,,,
+SHYA,,,,,,,,,,
+DRMV,,,,,,,,,,
+CHNY,,,,,,,,,,
+SFOY,,,,,,,,,,
+QBEC,,,last,last,last,last,last,last,last,to Halifax
