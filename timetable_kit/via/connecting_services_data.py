@@ -38,6 +38,8 @@ connecting_services_dict = {
     "OAKV": ["go_transit"],
     # Toronto!
     "TRTO": ["amtrak", "go_transit", "union_pearson_express", "ttc"],
+    # Ottawa!
+    "OTTW": ["o_train"],
     # Montreal !
     # "Amtrak" here is the Adirondack, currently suspended
     "MTRL": ["amtrak", "exo", "montreal_metro"],

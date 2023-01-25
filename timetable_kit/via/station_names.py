@@ -189,6 +189,9 @@ def get_station_name_pretty(
         # On the Senneterre timetable,
         # "EXO station" blows out a line which we need for Montreal
         facility_name = ""
+    elif stop_name_clean == "Ottawa":
+        # Make it clear which LRT station this goes with
+        facility_name = "Tremblay"
     elif stop_name_clean == "Toronto":
         # Just for clarity
         facility_name = "Union Station"
