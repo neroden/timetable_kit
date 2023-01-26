@@ -1,0 +1,28 @@
+,access,stations,22,24,50,60,52,62,26 monday,26 friday,40,64,28
+column-options,,,ardp,,ardp,,,,,,,,
+omit,calendar-days.txt: no suspended trains here,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,
+days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW
+updown,,,,,,,,,,,,,
+TRTO,,,blank,blank,first,first,first,first,blank,blank,first,first,blank
+GUIL,,,blank,blank,,,,,blank,blank,,,blank
+OSHA,,,blank,blank,,,,,blank,blank,,,blank
+PHOP,,,blank,blank,,,,,blank,blank,,,blank
+CBRG,,,blank,blank,,,,,blank,blank,,,blank
+TRNJ,,,blank,blank,,,,,blank,blank,,,blank
+BLVL,,,blank,blank,,,,,blank,blank,,,blank
+NAPN,,,blank,blank,,,,,blank,blank,,,blank
+KGON,,,blank,blank,,,,,blank,blank,,,blank
+GANA,,,blank,blank,,,,,blank,blank,,,blank
+BRKV,,,blank,blank,,,,,blank,blank,,,blank
+SMTF,,,blank,blank,,,,,blank,blank,,,blank
+FALL,,,blank,blank,,,,,blank,blank,,,blank
+OTTW,,,blank,blank,last,,last,,blank,blank,40 last,,blank
+CWLL,,,blank,blank,blank,,blank,,blank,blank,blank,,blank
+OTTW,,,first two-row,first two-row,blank,,blank,,first two-row,first two-row,blank,,first two-row
+CSLM,,,,,blank,,blank,,,,blank,,
+ALEX,,,,,blank,,blank,,,,blank,,
+COTO,,,,,blank,,blank,,,,blank,,
+DORV,,,,,blank,,blank,,,,blank,,
+MTRL,,,,,blank,last,blank,last,,,blank,last,
+,,,to Quebec<br>City,to Quebec<br>City,,,,,to Quebec<br>City,to Quebec<br>City,blank,,to Quebec<br>City

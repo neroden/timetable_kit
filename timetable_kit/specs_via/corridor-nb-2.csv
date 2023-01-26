@@ -1,0 +1,27 @@
+,access,stations,42,44,38,66,46,68,54,668,48
+column-options,,,ardp,,ardp,,,,,,
+omit,"calendar-days.txt: #644, #650 suspended",,,,,,,,,,
+route-name,,,,,,,,,,,
+days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,TRTO,OTTW
+updown,,,,,,,,,,,
+TRTO,,,first,first,blank,first,first,first,first,first,first
+GUIL,,,,,blank,,,,,,
+OSHA,,,,,blank,,,,,,
+PHOP,,,,,blank,,,,,,
+CBRG,,,,,blank,,,,,,
+TRNJ,,,,,blank,,,,,,
+BLVL,,,,,blank,,,,,,
+NAPN,,,,,blank,,,,,,
+KGON,,,,,blank,,,,,,
+GANA,,,,,blank,,,,,,
+BRKV,,,,,blank,,,,,,
+SMTF,,,,,blank,,,,,,
+FALL,,,,,blank,,,,,,
+OTTW,,,42 last,last,blank,,last,,last,,last
+CWLL,,,blank,blank,blank,,blank,,blank,,blank
+OTTW,,,blank,blank,first two-row,,blank,,blank,,blank
+CSLM,,,blank,blank,,,blank,,blank,,blank
+ALEX,,,blank,blank,,,blank,,blank,,blank
+COTO,,,blank,blank,,,blank,,blank,,blank
+DORV,,,blank,blank,,,blank,,blank,,blank
+MTRL,,,blank,blank,last,last,blank,last,blank,last,blank
