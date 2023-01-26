@@ -38,6 +38,9 @@ connecting_services_dict = {
     "OAKV": ["go_transit"],
     # Toronto!
     "TRTO": ["amtrak", "go_transit", "union_pearson_express", "ttc"],
+    # East from Toronto on the Lakeshore East corridor
+    "GUIL": ["go_transit"],
+    "OSHA": ["go_transit"],
     # Ottawa!
     "OTTW": ["o_train"],
     # Montreal !
