@@ -912,7 +912,7 @@ def fill_tt_spec(
                     )
                     if timepoint is None:
                         # Manual override?  Pass the raw text through.
-                        raw_text = reference_stop_id
+                        raw_text = reference_stop_code
                         tt.iloc[y, x] = raw_text
                     else:
                         # Automatically calculated day string.
