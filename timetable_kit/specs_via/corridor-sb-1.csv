@@ -1,0 +1,28 @@
+,access,stations,41,61,51,643,63,45,33,633,65,53,47
+column-options,,,ardp,,ardp,,,,,,,,
+omit,"calendar-days.txt: #651, 655, 641, 43,  suspended, also 635",,,,,,,,,,,,
+route-name,,,,,,,,,,,,,
+days,,,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW
+updown,,,,,,,,,,,,,
+,,,,,,,,,from<br>Quebec<br>City,,,,
+MTRL,,,blank,first two-row,first two-row,blank,first two-row,blank,,first two-row,first two-row,blank,blank
+DORV,,,blank,,,blank,,blank,,,,blank,blank
+COTO,,,blank,,,blank,,blank,,,,blank,blank
+ALEX,,,blank,,,blank,,blank,,,,blank,blank
+CSLM,,,blank,,,blank,,blank,,,,blank,blank
+OTTW,,,blank,,last,blank,,blank,last,last,,blank,blank
+CWLL,,,blank,,,blank,,blank,blank,blank,,blank,blank
+OTTW,,,first,,first,first,,first,blank,blank,,first,first
+FALL,,,,,,,,,blank,blank,,,
+SMTF,,,,,,,,,blank,blank,,,
+BRKV,,,,,,,,,blank,blank,,,
+GANA,,,,,,,,,blank,blank,,,
+KGON,,,,,,,,,blank,blank,,,
+NAPN,,,,,,,,,blank,blank,,,
+BLVL,,,,,,,,,blank,blank,,,
+TRNJ,,,,,,,,,blank,blank,,,
+CBRG,,,,,,,,,blank,blank,,,
+PHOP,,,,,,,,,blank,blank,,,
+OSHA,,,,,,,,,blank,blank,,,
+GUIL,,,,,,,,,blank,blank,,,
+TRTO,,,last,last,last,last,last,last,blank,blank,last,last,last
