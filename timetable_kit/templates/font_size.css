@@ -10,6 +10,9 @@ Jinja2 template substitution fills in the actual font size, ("6pt").
 
 Note that common ligatures like "ffi" look muddy in tiny fonts, so disable them
 with "font-variant-ligatures: no-common-ligatures;" if the font size is tiny.
+These are eliminated from SpartanTT so we don't need this disabled for that font;
+SpartanTT only has ff and ft ligatures, which are readable.  Consider whether to
+re-enable ligatures.
 
 services_header_text and timezone_header_text are both spans in a header, which usually has enlarged fonts,
 but should have the same tiny font as the rest of the timetable.

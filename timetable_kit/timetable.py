@@ -262,6 +262,8 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     last: True or False
     blank: True or False
     """
+    # TODO: unify this so we can have colored backgrounds for arrows?
+
     if code_text == "":
         return None
 
