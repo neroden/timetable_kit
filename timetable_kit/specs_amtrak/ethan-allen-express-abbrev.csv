@@ -17,8 +17,8 @@ RHI,,blank,blank,,,blank,blank,
 POU,,blank,blank,,,blank,blank,
 CRT,,blank,blank,,,blank,blank,
 YNY,,blank,blank,,,blank,blank,
-NYP,last two-row,blank,blank,,,uprightarrow,uprightarrow,first two-row
-NYP,downrightarrow,first two-row,first two-row,,,last two-row,last two-row,blank
+NYP,last two-row,blank,blank,,,uprightarrow,rightarrow,first two-row
+NYP,downrightarrow,first two-row,first two-row,,,last two-row,last two-row,rightuparrow
 TRE,blank,,,,,,,blank
 PHL,blank,,,,,,,blank
 WIL,blank,,,,,,,blank
