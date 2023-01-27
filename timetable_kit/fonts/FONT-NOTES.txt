@@ -1,3 +1,8 @@
+This is a historical document related to my selection of fonts.
+It is not very relevant now that I have SpartanTT, but is retained to avoid
+duplication of research for later.
+
+
 Notes on choice of font for timetables.
 ----
 Arrows.
