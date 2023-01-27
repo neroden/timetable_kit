@@ -3,7 +3,7 @@ Fragment of CSS for importing the Spartan MB font family, version 1.004
 */
 
 @font-face {
-    font-family: "Spartan1004";
+    font-family: "Spartan";
     src: url("fonts/Spartan1004/Spartan-Medium.ttf") format("truetype");
 }
 @font-face {
