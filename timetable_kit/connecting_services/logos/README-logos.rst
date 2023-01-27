@@ -81,12 +81,17 @@ This is the list of services we want logos for:
 'sprinter' - DONE
 'san_diego_trolley' - DONE
 
+NOTE:
+Chicago CTA has no direct connection to Amtrak but should probably be mentioned anyway.
+Think about how best to do this.
+
 And from Canada:
 'via_rail' - DONE
 Toronto
 'go_transit' - DONE
 'ttc' - DONE
 'union_pearson_express' - No logo in regular use.  Use text.
+'waterloo_ion' - DONE
 Ottawa
 'o_train' - DONE
 Montreal
@@ -94,6 +99,12 @@ Montreal
 'montreal_metro' - DONE - can't be tested due to suspension of Adirondack
 Vancouver
 'skytrain' - No logo in regular use.  Use text.
+
+Note:
+- In Vancouver, West Coast Express does not have a direct connection to VIA or Amtrak
+- In Edmonton, it's impossible to reach the VIA Rail station using light rail (it's 1 km + away).
+
+
 
 From the Wikimedia category
 ===========================
@@ -401,8 +412,14 @@ Union Pearson Express
 They are not currently using a logo other than all caps, sans-serif "UP".
 I think we'll just use text (all-caps, sans serif, bold) rather than trying to copy their font.
 
+Waterloo Region "ION" light rail
+-----------------------------------
+https://commons.wikimedia.org/wiki/File:Waterloo_ION_logo.svg
+
+
+Ottawa
+-------
 O-Train_logo.svg
------------------
 https://commons.wikimedia.org/wiki/File:O-Train_logo.svg
 
 Needs to be oversized.
