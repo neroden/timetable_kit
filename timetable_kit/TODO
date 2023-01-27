@@ -2,12 +2,15 @@ Clean up other "working" timetables: - TEDIOUS
 - NEC.  Boston first, non-Boston second
 
 Build VIA timetables:
-- REBUILD remotes services (PARE fixed)
+- REBUILD remote services (PARE fixed)
 - REISSUE Canadian (Saskatchewan Time)
 - REISSUE Ocean (wheelchair access warning)
 - REVISE Toronto-Kingtson-Ottawa-Montreal (move Cornwall & simplify)
 - SKIP Maple Leaf until new GTFS drops
 - Build-from-scratch West-of-Toronto timetables (can we get these all in one?)
+
+Rebuild Amtrak timetables:
+- REISSUE Keystone Service (various minor bugs)
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
