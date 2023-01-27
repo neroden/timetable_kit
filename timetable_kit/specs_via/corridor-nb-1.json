@@ -3,10 +3,9 @@
     "heading": "VIA Rail's Toronto-Ottawa-Montreal services Northbound Page 1/2",
     "reference_date": "20230301",
     "landscape": "true",
-    "montreal_airport_shuttle": "true",
-    "wheelchair_advance_notice": "true",
-    "key_baggage_disabled": "true",
     "key_r": "true",
     "key_d": "true",
+    "wheelchair_advance_notice": "true",
+    "montreal_airport_shuttle": "true",
     "for_rpa": "true"
 }

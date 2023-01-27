@@ -3,13 +3,13 @@
     "heading": "VIA Rail's Ocean",
     "reference_date": "20230301",
     "bottom_text": "<b>Québec City</b>: Via Rail operates a shuttle between Sainte-Foy and Québec City (Gare du Palais) in both directions; reservations are required.",
-    "wheelchair_advance_notice": "true",
-    "note_regarding_wheelchair": "Drummondville & Saint-Hyacinthe.",
     "key_baggage": "true",
     "key_r": "true",
     "key_d": "true",
     "key_f": "true",
     "key_tz": "true",
     "atlantic_time": "true",
+    "wheelchair_advance_notice": "true",
+    "note_regarding_wheelchair": "Drummondville & Saint-Hyacinthe.",
     "for_rpa": "true"
 }

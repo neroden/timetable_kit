@@ -2,10 +2,11 @@
     "title": "Montréal-Senneterre",
     "heading": "VIA Rail: Montréal-Senneterre",
     "reference_date": "20230301",
-    "bottom_text": "<p><b>Stops between two stations:</b><br>On this train, you can request a stop at a specific mile marker<br>if requested 48 hours in advance.<br>Contact <a href=\"https://www.viarail.ca/en/explore-our-destinations/stations/stops-between-two-explore-our-destinations/stations\">VIA Rail</a> for details.</p><p>The Jonquiere and Senneterre trains run combined between Montreal and Hervey;<br>they are the same train, and cars split or join at Hervey.",
+    "bottom_text": "<p><b>Stops between two stations:</b><br>On this train, you can request a stop at a specific<br>mile marker if requested 48 hours in advance.<br>Contact <a href=\"https://www.viarail.ca/en/explore-our-destinations/stations/stops-between-two-explore-our-destinations/stations\">VIA Rail</a> for details.</p><p>The Jonquiere and Senneterre trains run combined:<br>between Montreal and Hervey, they are the same train,<br>and cars split or join at Hervey.",
     "key_on_right": "true",
-    "key_baggage_disabled": "true",
+    "key_baggage": "true",
     "key_f": "true",
     "key_tz": "true",
+    "wheelchair_advance_notice": "true",
     "for_rpa": "true"
 }
