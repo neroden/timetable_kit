@@ -29,35 +29,35 @@ from timetable_kit.icons import (
 )
 
 
-# These look thin and there isn't an "up and right" arrow.
-long_cell_substitution_map = {
-    "blank": " ",
-    "downarrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2193;</div>',
-    "uparrow": '<div style="text-align: center; font-size: 120%; font-weight: bold;">&#x2191;</div>',
-    "downrightarrow": '<div style="text-align: right; font-size: 120%; font-weight: bold;">&#x2937;</div>',
-}
-
-# The arrowheads on these are too hard to see.
-directional_cell_substitution_map = {
-    "blank": " ",
-    "downarrow": '<div style="text-align: center;">&#x2b07;</div>',
-    "uparrow": '<div style="text-align: center;">&#x2b06;</div>',
-    "downrightarrow": '<div style="text-align: right">&#x2b0a;</div>',
-}
-
 # These work, but only at 120%.
 thick_cell_substitution_map = {
     "blank": " ",
     "downarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87b;</div>',
     "uparrow": '<div style="text-align: center; font-size: 120%;">&#x1f879;</div>',
-    "downrightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87e;</div>',
-    "uprightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87d;</div>',
     "rightarrow": '<div style="text-align: center; font-size: 120%;">&#x1f87a;</div>',
+    "downrightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87e;</div>',
+    "rightdownarrow": '<div style="text-align: left; font-size: 120%;">&#x1f87e;</div>',
+    "uprightarrow": '<div style="text-align: right; font-size: 120%;">&#x1f87d;</div>',
+    "rightuparrow": '<div style="text-align: left; font-size: 120%;">&#x1f87d;</div>',
+}
+
+# New, for the new version of SpartanTT
+new_cell_substitution_map = {
+    "blank": " ",
+    "downarrow": '<div style="text-align: center; font-weight: bold;">&#x2193;</div>',
+    "uparrow": '<div style="text-align: center; font-weight: bold;">&#x2191;</div>',
+    "rightarrow": '<div style="text-align: center; font-weight: bold;">&#x2192;</div>',
+    "downrightarrow": '<div style="text-align: right; font-weight: bold;">&#x2198;</div>',
+    "rightdownarrow": '<div style="text-align: left; font-weight: bold;">&#x2198;</div>',
+    "uprightarrow": '<div style="text-align: right; font-weight: bold;">&#x2197;</div>',
+    "rightuparrow": '<div style="text-align: left; font-weight: bold;">&#x2197;</div>',
 }
 
 
+# Used with Noto arrows
 cell_substitution_map = thick_cell_substitution_map
-
+# Used for Matt Bailey's new SpartanTT
+# cell_substitution_map = new_cell_substitution_map
 
 def get_cell_substitution(cell_text: str) -> str:
     """
@@ -67,7 +67,10 @@ def get_cell_substitution(cell_text: str) -> str:
     "downarrow" -> suitable downwards pointing arrow in HTML/Unicode
     "uparrow" -> suitable upwards pointing arrow in HTML/Unicode
     "downrightarrow" -> suitable downwards-then-right pointing arrow in HTML/Unicode
+    "rightdownarrow" -> suitable right-then-down pointing arrow in HTML/Unicode
     "uprightarrow" -> suitable upwards-then-right pointing arrow in HTML/Unicode
+    "rightuparrow" -> suitable right-then-up pointing arrow in HTML/Unicode
+    "rightarrow" -> suitable right pointing arrow in HTML/Unicode
 
     Otherwise, return None.
     """
