@@ -41,10 +41,46 @@ def is_sleeper_train(train_number):
 
 
 # Trains with checked baggage cars.
-# I have no idea how to find this out from VIA.
-# FIXME.
+# Email dated Jan 26, 2023 at 7:05 AM:
+"""
+Good morning,
 
-other_checked_baggage_day_trains = ()
+Thank you for contacting Via Rail Canada.
+
+No trains in the Corridor have checked baggage service at this time.
+
+Only Long Haul trains (Toronto to Vancouver, Halifax to Montreal, 
+Winnipeg to Churchill, Montreal to Jonquiere/Senneterre, Jasper to 
+Prince Rupert and Sudbury to White River) have checked baggage service 
+and only at manned stations on these routes.
+
+If you have any further questions, please do not hesitate to contact us.
+
+Sincerely,
+
+Nathalie
+Customer Service
+Via Rail Canada
+"""
+
+other_checked_baggage_day_trains = set(
+    (
+        "600",  # Jonquiere
+        "601",
+        "602",
+        "603",  # Senneterre
+        "604",
+        "606",
+        "185",  # Sudbury - White River
+        "186",
+        "690",  # Winnipeg - Churchill
+        "691",
+        "692",
+        "693",
+        "5",  # Jasper - Prince Rupert
+        "6",
+    )
+)
 
 # Assemble these trains as a set.  Ugly!
 checked_baggage_trains = set(

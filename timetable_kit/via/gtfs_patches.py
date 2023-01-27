@@ -26,10 +26,10 @@ def patch_feed(feed):
     for index in new_stops.index:
         # PARE has been fixed on 2023-01-19 !
         # if new_stops.loc[index, "stop_code"] == "PARE":
-            # Parent (PARE) station on Jonquiere line is listed as wheelchair accessible
-            # because the platform is accessible,
-            # but VIA's station info says it's not possible to board the train in a wheelchair.
-            # Oh come on, VIA.
+        # Parent (PARE) station on Jonquiere line is listed as wheelchair accessible
+        # because the platform is accessible,
+        # but VIA's station info says it's not possible to board the train in a wheelchair.
+        # Oh come on, VIA.
         #    new_stops.loc[index, "wheelchair_boarding"] = 0
         #    debug_print(1, "Patched stop PARE"),
         if new_stops.loc[index, "stop_code"] == "CHUR":

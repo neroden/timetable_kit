@@ -59,6 +59,7 @@ cell_substitution_map = thick_cell_substitution_map
 # Used for Matt Bailey's new SpartanTT
 # cell_substitution_map = new_cell_substitution_map
 
+
 def get_cell_substitution(cell_text: str) -> str:
     """
     Given special simple-substitution cell texts, provide the substitution.
