@@ -61,7 +61,9 @@ Authors
 =======
 Copyright 2021, 2022, 2023 Nathanael Nerode.
 
-Some fonts and icons are from other sources and have their own authors, copyrights,
+SpartanTT Copyright 2023 Matt Bailey, Mirko Velimirovic, Nathanael Nerode.
+
+Some fonts, icons, and logos are from other sources and have their own authors, copyrights,
 and licenses, noted in their directories or files.
 
 Licenses
@@ -78,16 +80,18 @@ To view a copy of this license, visit
 http://creativecommons.org/licenses/by/4.0/
 or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
+The font SpartanTT is licensed under the Open Font License 1.1.
+See fonts/OFL.txt for more information.
+https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+
 Some fonts and icons are from other sources and have their own copyrights and licenses.
 They are all free, libre, and open-source.  See their subdirectories for more information.
 
-The Spartan font is copyright Matt Bailey and Mirko Velimirovic.
-It is licensed under the the Open Font License.  See fonts/Spartan and fonts/Spartan/OFL.txt
-for more information.
+Connecting service logos in the timetable_kit/connecting_services/logos directory may be subject to other copyrights
+and some might not be free, libre, or open-source.  They are mostly trademarks, used strictly to refer to the appropriate transit service or agency,
+which is legal to do without asking permission under trademark law.  They can be disabled (replaced with alternate text references)
+by removing the reference to the logo file in the connecting_services/connecting_services.csv file.
 
-The SpartanTT font is a derivative of the Spartan font specifically for timetables.
-It has extremely small, entirely functional changes which are probably uncopyrightable.
-It is also under the Open Font License.  See README.Spartan for more information on the changes.
 
 Examples
 =========
