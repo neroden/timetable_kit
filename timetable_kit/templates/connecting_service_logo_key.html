@@ -18,10 +18,10 @@ Therefore we don't make the logo into a link here, so the title will show
 #}{% if logo_filename %}{#
 #}<img class="{{ class }}" src="logos/{{ svg_filename }}" alt="{{ alt }}" title="{{ title }}">{#
 #}{% else %}{# No logo_filename available; use alt text; format same way as in link above
-#}{{ alt }}{#
+#}{{ alt_nbsp }}{# Note, non-breaking-space variant of alt text
 #}{% endif %}{#
 #}{% if suffix %}{# Perhaps this is a logo *plus* a text suffix
-#}{{ suffix }}{#
+#}{{ suffix_nbsp }}{# Note, non-breaking-space variant of suffix
 #}{% endif %}{#
 #}</span>{# Close the connecting-service-link span
 #}&nbsp;{# *Non-breaking* space, separating logo and definition

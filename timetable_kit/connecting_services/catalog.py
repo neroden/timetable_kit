@@ -78,6 +78,24 @@ def _generate_full_name_nbsp(df_row):
     return full_name_nbsp
 
 
+def _generate_alt_nbsp(df_row):
+    """
+    Given a row, take the "alt" entry and generate a version with nonbreaking spaces
+    """
+    alt = df_row["alt"]
+    alt_nbsp = alt.replace(" ", "&nbsp;")
+    return alt_nbsp
+
+
+def _generate_suffix_nbsp(df_row):
+    """
+    Given a row, take the "suffix" entry and generate a version with nonbreaking spaces
+    """
+    suffix = df_row["suffix"]
+    suffix_nbsp = suffix.replace(" ", "&nbsp;")
+    return suffix_nbsp
+
+
 ### FUNCTIONS ###
 def _initialize():
     """
@@ -118,6 +136,14 @@ def _initialize():
     # Make the "full name" (used for the link in the key) have nonbreaking spaces:
     connecting_services_df["full_name_nbsp"] = connecting_services_df.apply(
         _generate_full_name_nbsp, axis=1
+    )
+    # Make the "alt" (used as the key when there's no logo) have nonbreaking spaces:
+    connecting_services_df["alt_nbsp"] = connecting_services_df.apply(
+        _generate_alt_nbsp, axis=1
+    )
+    # Make the "suffix" (used when the same logo covers several services) have nonbreaking spaces:
+    connecting_services_df["suffix_nbsp"] = connecting_services_df.apply(
+        _generate_suffix_nbsp, axis=1
     )
     # This is the CSS class names:
     # Must come before the Jinja template usage!
