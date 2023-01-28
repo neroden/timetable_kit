@@ -36,6 +36,12 @@ connecting_services_dict = {
     "GRIM": [],  # No GO at Grimsby
     "ALDR": ["go_transit"],
     "OAKV": ["go_transit"],
+    # Southwest Ontario, Kitchener Line
+    "KITC": ["go_transit"],
+    "GUEL": ["go_transit"],
+    "GEOR": ["go_transit"],
+    "BRMP": ["go_transit"],
+    "MALT": ["go_transit"],
     # Toronto!
     "TRTO": ["amtrak", "go_transit", "union_pearson_express", "ttc"],
     # East from Toronto on the Lakeshore East corridor
