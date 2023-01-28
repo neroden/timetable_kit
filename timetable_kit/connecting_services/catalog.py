@@ -91,7 +91,11 @@ def _generate_suffix_nbsp(df_row):
     """
     Given a row, take the "suffix" entry and generate a version with nonbreaking spaces
     """
+    # This is harder than the other two because this MIGHT be a blank row
     suffix = df_row["suffix"]
+    if pd.isna(suffix):
+        # No change, bail out
+        return suffix
     suffix_nbsp = suffix.replace(" ", "&nbsp;")
     return suffix_nbsp
 
