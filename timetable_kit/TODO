@@ -1,26 +1,24 @@
 Clean up other "working" timetables: - TEDIOUS
-- NEC.  Boston first, non-Boston second
+1 - Redo Ethan Allen when we have the new font (it has arrows, wait for new font)
+2 - NEC.  Boston first, non-Boston second
 
 Build VIA timetables:
-- REBUILD remote services (PARE fixed)
-- REISSUE Canadian (Saskatchewan Time)
-- REISSUE Ocean (wheelchair access warning)
-- REVISE Toronto-Kingtson-Ottawa-Montreal (move Cornwall & simplify)
 - SKIP Maple Leaf until new GTFS drops
 - Build-from-scratch West-of-Toronto timetables (can we get these all in one?)
-
-Rebuild Amtrak timetables:
-- REISSUE Keystone Service (various minor bugs)
+- Finish the Corridor booklet
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
-Richmond CA is not handicapped accessible until at LEAST Jan 3 2023 -- check San Joaquins site
-for details
+Richmond CA is not handicapped accessible until at LEAST Jan 3 2023
+(check San Joaquins site)
+Waiting for information from San Joaquins to figure out when this will change
+Emailed them 27 Jan 2023
 
 Capitol Corridor
 NOTE ! NOTE ! NOTE !
-Amtrak station *is* at Chase Bank -- official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
--- Need to notify the state of California (goddammit people)
+Amtrak station *is* at Chase Bank
+Official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
+-- Need to notify the Capitol Corridor (darnit people)
 
 Broken due to GTFS breakage:
 - Winter Park Express (missing)
@@ -39,10 +37,15 @@ Not running:
 
 Put off, because these have printable state agency timetables, or almost:
 - San Joaquins
+---- Note: Richmond elevator issue, other possible issues
 - Pacific Surfliner
+---- Note: Masses of temporary suspensions not in dataset
 - Cascades - Oregon Point bus schedule problem
+---- Note: Cascades GTFS data changed on 2023-01-27
 - Downeaster
+---- Note: I haven't prepped Downeaster AT ALL yet
 - Hartford Line
+---- Note: in good shape but not rechecked recently
 
 When new GTFS drops:
 1 -- Southwest Chief (currently missing entirely)
@@ -64,10 +67,6 @@ For simplifying and making Amtrak & VIA work better:
 1 -- Add checked_baggage field to GTFS specification (stops.txt and trips.txt).
      This is way too SOCIAL for me to want to actually do it!
      But it would massively simplify a large hunk of code
-
-Add arrows to the font -- follow up with designer on commission:
-- The arrows are currently pulled from Noto Sans Symbols via "backup font" method.
-- We should have custom arrows.
 
 Internal cleanup:
 -1 -- Stop the duplicate loading of the feed in VIA's wheelchair access check.
