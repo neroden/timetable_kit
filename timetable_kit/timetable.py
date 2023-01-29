@@ -1342,7 +1342,14 @@ def produce_timetable(
             dwell_secs_cutoff=dwell_secs_cutoff,
             use_bus_icon_in_cells=use_bus_icon_in_cells,
         )
-        # NOTE, need to add the header
+        # We need to strip the HTML comments used to distinguish the header columns
+        list_of_columns = timetable.columns
+        non_unique_header_replacement_list = [
+            unique_header[unique_header.find("-->"):].removeprefix("-->")
+            for unique_header in list_of_columns
+        ]
+        timetable.columns = non_unique_header_replacement_list
+        # NOTE, need to include the header
         path_for_csv = output_dir / Path(output_filename_base + "-out.csv")
         timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV output done")
