@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="plus" format="2">
+  <advance width="1482"/>
+  <unicode hex="002B"/>
+  <outline>
+    <contour>
+      <point x="765" y="316" type="line"/>
+      <point x="765" y="804" type="line"/>
+      <point x="1253" y="804" type="line"/>
+      <point x="1253" y="852" type="line"/>
+      <point x="765" y="852" type="line"/>
+      <point x="765" y="1340" type="line"/>
+      <point x="717" y="1340" type="line"/>
+      <point x="717" y="852" type="line"/>
+      <point x="229" y="852" type="line"/>
+      <point x="229" y="804" type="line"/>
+      <point x="717" y="804" type="line"/>
+      <point x="717" y="316" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1482m765,316l765,804l1253,804l1253,852l765,852l765,1340l717,1340l717,852l229,852l229,804l717,804l717,316</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 804 48</string>
+          <string>vstem 717 48</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="gravecomb" format="2">
+  <advance width="263"/>
+  <unicode hex="0300"/>
+  <anchor x="131" y="1024" name="_top"/>
+  <anchor x="131" y="1660" name="top"/>
+  <outline>
+    <contour>
+      <point x="337" y="1308" type="line"/>
+      <point x="-8" y="1508" type="line"/>
+      <point x="-62" y="1416" type="line"/>
+      <point x="299" y="1247" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

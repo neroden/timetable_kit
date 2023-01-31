@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ygrave" format="2">
+  <advance width="1259"/>
+  <unicode hex="1EF3"/>
+  <anchor x="629" y="0" name="bottom"/>
+  <anchor x="544" y="1671" name="top"/>
+  <outline>
+    <component base="y"/>
+    <component base="grave" xOffset="296"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.recipe</key>
+  <string>y+grave</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

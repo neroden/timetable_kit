@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ocircumflex" format="2">
+  <advance width="1960"/>
+  <unicode hex="00D4"/>
+  <anchor x="980" y="0" name="bottom"/>
+  <anchor x="980" y="824" name="center"/>
+  <anchor x="1000" y="0" name="ogonek"/>
+  <anchor x="19" y="1650" name="topleft"/>
+  <anchor x="1940" y="1650" name="topright"/>
+  <anchor x="980" y="2306" name="top"/>
+  <outline>
+    <component base="O"/>
+    <component base="circumflex" xOffset="595" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>O</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>O</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

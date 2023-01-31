@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Wacute" format="2">
+  <advance width="2300"/>
+  <unicode hex="1E82"/>
+  <anchor x="1150" y="0" name="bottom"/>
+  <anchor x="1150" y="2324" name="top"/>
+  <outline>
+    <component base="W"/>
+    <component base="acute" xOffset="908" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>W</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>W</string>
+  <key>com.fontlab.recipe</key>
+  <string>W+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

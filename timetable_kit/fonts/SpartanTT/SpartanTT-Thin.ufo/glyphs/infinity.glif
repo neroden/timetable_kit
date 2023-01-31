@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="infinity" format="2">
+  <advance width="2164"/>
+  <unicode hex="221E"/>
+  <outline>
+    <contour>
+      <point x="566" y="135" type="curve" smooth="yes"/>
+      <point x="764" y="135"/>
+      <point x="917" y="298"/>
+      <point x="1082" y="507" type="curve"/>
+      <point x="1247" y="298"/>
+      <point x="1400" y="135"/>
+      <point x="1598" y="135" type="curve" smooth="yes"/>
+      <point x="1802" y="135"/>
+      <point x="2001" y="305"/>
+      <point x="2001" y="545" type="curve" smooth="yes"/>
+      <point x="2001" y="785"/>
+      <point x="1801" y="954"/>
+      <point x="1598" y="954" type="curve" smooth="yes"/>
+      <point x="1400" y="954"/>
+      <point x="1247" y="791"/>
+      <point x="1082" y="583" type="curve"/>
+      <point x="917" y="791"/>
+      <point x="764" y="954"/>
+      <point x="566" y="954" type="curve" smooth="yes"/>
+      <point x="363" y="954"/>
+      <point x="163" y="785"/>
+      <point x="163" y="545" type="curve" smooth="yes"/>
+      <point x="163" y="305"/>
+      <point x="362" y="135"/>
+    </contour>
+    <contour>
+      <point x="565" y="185" type="curve" smooth="yes"/>
+      <point x="390" y="185"/>
+      <point x="213" y="331"/>
+      <point x="213" y="545" type="curve" smooth="yes"/>
+      <point x="213" y="759"/>
+      <point x="391" y="904"/>
+      <point x="565" y="904" type="curve" smooth="yes"/>
+      <point x="748" y="904"/>
+      <point x="881" y="744"/>
+      <point x="1052" y="545" type="curve"/>
+      <point x="881" y="345"/>
+      <point x="747" y="185"/>
+    </contour>
+    <contour>
+      <point x="1599" y="185" type="curve" smooth="yes"/>
+      <point x="1417" y="185"/>
+      <point x="1283" y="345"/>
+      <point x="1112" y="545" type="curve"/>
+      <point x="1283" y="744"/>
+      <point x="1416" y="904"/>
+      <point x="1599" y="904" type="curve" smooth="yes"/>
+      <point x="1773" y="904"/>
+      <point x="1951" y="759"/>
+      <point x="1951" y="545" type="curve" smooth="yes"/>
+      <point x="1951" y="331"/>
+      <point x="1774" y="185"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>o</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>o</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

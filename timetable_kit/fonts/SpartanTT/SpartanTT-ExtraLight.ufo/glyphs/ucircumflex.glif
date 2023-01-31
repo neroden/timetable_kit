@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ucircumflex" format="2">
+  <advance width="1211"/>
+  <unicode hex="00FB"/>
+  <anchor x="605" y="0" name="bottom"/>
+  <anchor x="617" y="0" name="ogonek"/>
+  <anchor x="605" y="1680" name="top"/>
+  <outline>
+    <component base="u"/>
+    <component base="circumflex" xOffset="262"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>u</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>u</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

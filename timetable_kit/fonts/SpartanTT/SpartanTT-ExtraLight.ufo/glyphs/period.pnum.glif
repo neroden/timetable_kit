@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="period.pnum" format="2">
+  <advance width="742"/>
+  <outline>
+    <contour>
+      <point x="371" y="-32" type="curve" smooth="yes"/>
+      <point x="404" y="-32"/>
+      <point x="431" y="-5"/>
+      <point x="431" y="28" type="curve" smooth="yes"/>
+      <point x="431" y="61"/>
+      <point x="404" y="88"/>
+      <point x="371" y="88" type="curve" smooth="yes"/>
+      <point x="338" y="88"/>
+      <point x="311" y="61"/>
+      <point x="311" y="28" type="curve" smooth="yes"/>
+      <point x="311" y="-5"/>
+      <point x="338" y="-32"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsRight</key>
+  <string>=lsb("period.pnum")</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w742m371,-32c404,-32 431,-5 431,28c431,61 404,88 371,88c338,88 311,61 311,28c311,-5 338,-32 371,-32</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 120</string>
+          <string>vstem 311 120</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

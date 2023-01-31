@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="perthousand" format="2">
+  <advance width="3215"/>
+  <unicode hex="2030"/>
+  <outline>
+    <component base="percent"/>
+    <contour>
+      <point x="2588" y="-32" type="curve" smooth="yes"/>
+      <point x="2813" y="-32"/>
+      <point x="2987" y="130"/>
+      <point x="2987" y="362" type="curve" smooth="yes"/>
+      <point x="2987" y="594"/>
+      <point x="2813" y="756"/>
+      <point x="2588" y="756" type="curve" smooth="yes"/>
+      <point x="2364" y="756"/>
+      <point x="2188" y="594"/>
+      <point x="2188" y="362" type="curve" smooth="yes"/>
+      <point x="2188" y="130"/>
+      <point x="2364" y="-32"/>
+    </contour>
+    <contour>
+      <point x="2588" y="31" type="curve" smooth="yes"/>
+      <point x="2399" y="31"/>
+      <point x="2260" y="168"/>
+      <point x="2260" y="362" type="curve" smooth="yes"/>
+      <point x="2260" y="556"/>
+      <point x="2399" y="693"/>
+      <point x="2588" y="693" type="curve" smooth="yes"/>
+      <point x="2778" y="693"/>
+      <point x="2915" y="556"/>
+      <point x="2915" y="362" type="curve" smooth="yes"/>
+      <point x="2915" y="168"/>
+      <point x="2778" y="31"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>percent</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>percent</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>07d233638cc09d3fc88cda47881876f5cd5a545904e531843cc2cc19b5d7a34df4800580e75cff1c4c0ac475963dc2c6658094a086dfab0b2a371a4d7e1a120d</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 63</string>
+          <string>hstem 693 63</string>
+          <string>vstem 2188 72</string>
+          <string>vstem 2915 72</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

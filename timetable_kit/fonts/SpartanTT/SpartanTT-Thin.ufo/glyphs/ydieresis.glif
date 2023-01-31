@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ydieresis" format="2">
+  <advance width="1216"/>
+  <unicode hex="00FF"/>
+  <anchor x="609" y="0" name="bottom"/>
+  <anchor x="608" y="1446" name="top"/>
+  <outline>
+    <component base="y"/>
+    <component base="dieresis" xOffset="324"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

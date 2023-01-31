@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="i" format="2">
+  <advance width="658"/>
+  <unicode hex="0069"/>
+  <anchor x="330" y="0" name="bottom"/>
+  <anchor x="475" y="0" name="ogonek"/>
+  <outline>
+    <component base="idotless"/>
+    <contour>
+      <point x="330" y="1237" type="curve" smooth="yes"/>
+      <point x="426" y="1237"/>
+      <point x="503" y="1315"/>
+      <point x="503" y="1411" type="curve" smooth="yes"/>
+      <point x="503" y="1508"/>
+      <point x="426" y="1585"/>
+      <point x="330" y="1585" type="curve" smooth="yes"/>
+      <point x="233" y="1585"/>
+      <point x="155" y="1508"/>
+      <point x="155" y="1411" type="curve" smooth="yes"/>
+      <point x="155" y="1315"/>
+      <point x="233" y="1237"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w658m330,1237c426,1237 503,1315 503,1411c503,1508 426,1585 330,1585c233,1585 155,1508 155,1411c155,1315 233,1237 330,1237</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 1237 348</string>
+          <string>vstem 155 348</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

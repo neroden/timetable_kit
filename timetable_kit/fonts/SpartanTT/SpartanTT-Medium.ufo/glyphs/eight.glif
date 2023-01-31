@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="eight" format="2">
+  <advance width="1500"/>
+  <unicode hex="0038"/>
+  <outline>
+    <contour>
+      <point x="749" y="-32" type="curve" smooth="yes"/>
+      <point x="1060" y="-32"/>
+      <point x="1295" y="172"/>
+      <point x="1295" y="444" type="curve" smooth="yes"/>
+      <point x="1295" y="641"/>
+      <point x="1175" y="808"/>
+      <point x="990" y="880" type="curve"/>
+      <point x="1136" y="950"/>
+      <point x="1230" y="1093" name=".hr01"/>
+      <point x="1230" y="1257" type="curve" smooth="yes"/>
+      <point x="1230" y="1512"/>
+      <point x="999" y="1680"/>
+      <point x="749" y="1680" type="curve" smooth="yes"/>
+      <point x="479" y="1680"/>
+      <point x="268" y="1497"/>
+      <point x="268" y="1256" type="curve" smooth="yes"/>
+      <point x="268" y="1096"/>
+      <point x="360" y="951"/>
+      <point x="509" y="880" type="curve"/>
+      <point x="325" y="809"/>
+      <point x="204" y="642" name=".hr02"/>
+      <point x="204" y="445" type="curve" smooth="yes"/>
+      <point x="204" y="171"/>
+      <point x="439" y="-32"/>
+    </contour>
+    <contour>
+      <point x="749" y="146" type="curve" smooth="yes"/>
+      <point x="558" y="146"/>
+      <point x="425" y="283"/>
+      <point x="425" y="464" type="curve" smooth="yes"/>
+      <point x="425" y="650"/>
+      <point x="565" y="783"/>
+      <point x="749" y="783" type="curve" smooth="yes"/>
+      <point x="936" y="783"/>
+      <point x="1074" y="648"/>
+      <point x="1074" y="464" type="curve" smooth="yes"/>
+      <point x="1074" y="283"/>
+      <point x="941" y="146"/>
+    </contour>
+    <contour>
+      <point x="749" y="958" type="curve" smooth="yes"/>
+      <point x="586" y="958"/>
+      <point x="466" y="1078"/>
+      <point x="466" y="1239" type="curve" smooth="yes"/>
+      <point x="466" y="1400" name=".hr03"/>
+      <point x="587" y="1522"/>
+      <point x="749" y="1522" type="curve" smooth="yes"/>
+      <point x="911" y="1522"/>
+      <point x="1033" y="1400"/>
+      <point x="1033" y="1239" type="curve" smooth="yes"/>
+      <point x="1033" y="1078"/>
+      <point x="912" y="958"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>efe0355da85e07504e12fab5c9dc53615d2bd9c8130e24e2fe60cfde915d38cf74497532860dfa06436fdb501784c8129d5e692e5213fe1e5521bc6caf847f89</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 178</string>
+          <string>vstem 1074 221</string>
+          <string>hstem 783 175</string>
+          <string>hstem 1522 158</string>
+          <string>vstem 268 198</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 1033 197</string>
+          <string>hstem 1522 158</string>
+          <string>vstem 268 198</string>
+          <string>hstem -32 178</string>
+          <string>hstem 783 175</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 204 221</string>
+          <string>hstem -32 178</string>
+          <string>hstem 783 175</string>
+          <string>vstem 1074 221</string>
+          <string>hstem 1522 158</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr02</string>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 268 198</string>
+          <string>hstem 1522 158</string>
+          <string>vstem 1033 197</string>
+          <string>hstem 783 175</string>
+          <string>hstem -32 178</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr03</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

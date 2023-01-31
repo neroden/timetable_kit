@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="colon.pnum" format="2">
+  <advance width="734"/>
+  <outline>
+    <component base="period" xOffset="-8"/>
+    <component base="period" xOffset="-8" yOffset="1044"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>period.pnum</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>period.pnum</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="M.ss01" format="2">
+  <advance width="2054"/>
+  <anchor x="1027" y="134" name="bottom"/>
+  <anchor x="1027" y="1650" name="top"/>
+  <outline>
+    <contour>
+      <point x="245" y="0" type="line"/>
+      <point x="473" y="1534" type="line"/>
+      <point x="997" y="134" type="line"/>
+      <point x="1057" y="134" type="line"/>
+      <point x="1581" y="1534" type="line"/>
+      <point x="1809" y="0" type="line"/>
+      <point x="1865" y="0" type="line"/>
+      <point x="1623" y="1650" type="line"/>
+      <point x="1563" y="1650" type="line"/>
+      <point x="1027" y="214" type="line"/>
+      <point x="491" y="1650" type="line"/>
+      <point x="431" y="1650" type="line"/>
+      <point x="189" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w2054m245,0l473,1534l997,134l1057,134l1581,1534l1809,0l1865,0l1623,1650l1563,1650l1027,214l491,1650l431,1650l189,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 1650 -20</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

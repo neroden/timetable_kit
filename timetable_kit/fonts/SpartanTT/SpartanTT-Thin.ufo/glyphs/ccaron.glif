@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ccaron" format="2">
+  <advance width="1187"/>
+  <unicode hex="010D"/>
+  <anchor x="649" y="0" name="bottom"/>
+  <anchor x="681" y="0" name="cedilla"/>
+  <anchor x="649" y="1680" name="top"/>
+  <outline>
+    <component base="c"/>
+    <component base="caron" xOffset="313"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>c</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>c</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

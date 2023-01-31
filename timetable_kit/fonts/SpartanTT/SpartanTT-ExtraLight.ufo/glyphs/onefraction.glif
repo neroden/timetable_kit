@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="onefraction" format="2">
+  <advance width="1498"/>
+  <unicode hex="215F"/>
+  <outline>
+    <component base="one.numr" xOffset="127"/>
+    <component base="fraction" xOffset="605"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>one.numr</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>one.dnom</string>
+  <key>com.fontlab.recipe</key>
+  <string>one.numr_fraction</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

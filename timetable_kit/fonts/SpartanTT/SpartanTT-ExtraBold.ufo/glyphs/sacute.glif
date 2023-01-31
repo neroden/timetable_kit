@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="sacute" format="2">
+  <advance width="1034"/>
+  <unicode hex="015B"/>
+  <anchor x="530" y="0" name="bottom"/>
+  <anchor x="524" y="1695" name="top"/>
+  <outline>
+    <component base="s"/>
+    <component base="acute" xOffset="309"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>s</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>s</string>
+  <key>com.fontlab.recipe</key>
+  <string>s+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

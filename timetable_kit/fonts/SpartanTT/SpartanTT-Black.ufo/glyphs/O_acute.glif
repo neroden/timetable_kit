@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Oacute" format="2">
+  <advance width="1788"/>
+  <unicode hex="00D3"/>
+  <anchor x="894" y="0" name="bottom"/>
+  <anchor x="894" y="824" name="center"/>
+  <anchor x="1006" y="0" name="ogonek"/>
+  <anchor x="20" y="1650" name="topleft"/>
+  <anchor x="1768" y="1650" name="topright"/>
+  <anchor x="894" y="2324" name="top"/>
+  <outline>
+    <component base="O"/>
+    <component base="acute" xOffset="652" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>O</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>O</string>
+  <key>com.fontlab.recipe</key>
+  <string>O+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

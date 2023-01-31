@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Cacute" format="2">
+  <advance width="1536"/>
+  <unicode hex="0106"/>
+  <anchor x="871" y="0" name="bottom"/>
+  <anchor x="893" y="2318" name="top"/>
+  <outline>
+    <component base="C"/>
+    <component base="acute" xOffset="706" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.recipe</key>
+  <string>C+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

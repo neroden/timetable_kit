@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Scedilla" format="2">
+  <advance width="1361"/>
+  <unicode hex="015E"/>
+  <anchor x="567" y="-595" name="bottom"/>
+  <anchor x="732" y="1680" name="top"/>
+  <outline>
+    <component base="S"/>
+    <component base="cedilla" xOffset="287" yOffset="-7"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>S</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>S</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

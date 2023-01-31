@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="f_f_t" format="2">
+  <advance width="1719"/>
+  <outline>
+    <contour>
+      <point x="1413" y="-32" type="curve" smooth="yes"/>
+      <point x="1486" y="-32"/>
+      <point x="1540" y="-10"/>
+      <point x="1567" y="10" type="curve"/>
+      <point x="1541" y="92" type="line"/>
+      <point x="1521" y="77"/>
+      <point x="1483" y="58"/>
+      <point x="1434" y="58" type="curve" smooth="yes"/>
+      <point x="1333" y="58"/>
+      <point x="1298" y="126"/>
+      <point x="1298" y="254" type="curve" smooth="yes"/>
+      <point x="1298" y="946" type="line"/>
+      <point x="1561" y="946" type="line"/>
+      <point x="1561" y="1024" type="line"/>
+      <point x="1298" y="1024" type="line"/>
+      <point x="1298" y="1406" type="line"/>
+      <point x="1195" y="1406" type="line"/>
+      <point x="1195" y="1024" type="line"/>
+      <point x="825" y="1024" type="line"/>
+      <point x="825" y="1428" type="line" smooth="yes"/>
+      <point x="825" y="1596"/>
+      <point x="884" y="1660"/>
+      <point x="995" y="1660" type="curve" smooth="yes"/>
+      <point x="1035" y="1660"/>
+      <point x="1067" y="1652"/>
+      <point x="1093" y="1638" type="curve"/>
+      <point x="1133" y="1710" type="line"/>
+      <point x="1100" y="1731"/>
+      <point x="1050" y="1750"/>
+      <point x="981" y="1750" type="curve" smooth="yes"/>
+      <point x="826" y="1750"/>
+      <point x="722" y="1654"/>
+      <point x="722" y="1421" type="curve" smooth="yes"/>
+      <point x="722" y="1024" type="line"/>
+      <point x="387" y="1024" type="line"/>
+      <point x="387" y="1428" type="line" smooth="yes"/>
+      <point x="387" y="1596"/>
+      <point x="446" y="1660"/>
+      <point x="556" y="1660" type="curve" smooth="yes"/>
+      <point x="597" y="1660"/>
+      <point x="630" y="1651"/>
+      <point x="655" y="1637" type="curve"/>
+      <point x="695" y="1710" type="line"/>
+      <point x="662" y="1731"/>
+      <point x="612" y="1750"/>
+      <point x="543" y="1750" type="curve" smooth="yes"/>
+      <point x="388" y="1750"/>
+      <point x="284" y="1654"/>
+      <point x="284" y="1421" type="curve" smooth="yes"/>
+      <point x="284" y="1024" type="line"/>
+      <point x="190" y="1024" type="line"/>
+      <point x="190" y="946" type="line"/>
+      <point x="284" y="946" type="line"/>
+      <point x="284" y="0" type="line" name=".hr01"/>
+      <point x="387" y="0" type="line"/>
+      <point x="387" y="946" type="line"/>
+      <point x="722" y="946" type="line"/>
+      <point x="722" y="0" type="line"/>
+      <point x="825" y="0" type="line"/>
+      <point x="825" y="946" type="line"/>
+      <point x="1195" y="946" type="line"/>
+      <point x="1195" y="244" type="line" smooth="yes"/>
+      <point x="1195" y="109"/>
+      <point x="1226" y="-32" name=".hr02"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>aaa0c2b6902d1ef8799b9d8c1c4c676f6c5e59c8c97ca60464a5ed2e97452256bea5fb05313c760b32c79949d026a63dfac324b9e151e9ead2ab6ee7db9221c8</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 90</string>
+          <string>vstem 1195 103</string>
+          <string>hstem 946 78</string>
+          <string>vstem 722 103</string>
+          <string>hstem 1660 90</string>
+          <string>vstem 284 103</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>vstem 284 103</string>
+          <string>hstem 946 78</string>
+          <string>vstem 722 103</string>
+          <string>vstem 1195 103</string>
+          <string>hstem 1660 90</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 90</string>
+          <string>hstem 1660 90</string>
+          <string>hstem 946 78</string>
+          <string>vstem 284 103</string>
+          <string>vstem 722 103</string>
+          <string>vstem 1195 103</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr02</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

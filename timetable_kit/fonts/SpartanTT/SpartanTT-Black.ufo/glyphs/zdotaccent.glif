@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="zdotaccent" format="2">
+  <advance width="1180"/>
+  <unicode hex="017C"/>
+  <anchor x="590" y="0" name="bottom"/>
+  <anchor x="590" y="1724" name="top"/>
+  <outline>
+    <component base="z"/>
+    <component base="dotaccent" xOffset="350"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>z</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>z</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

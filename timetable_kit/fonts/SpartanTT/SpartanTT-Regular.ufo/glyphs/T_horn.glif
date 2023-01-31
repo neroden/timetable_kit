@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Thorn" format="2">
+  <advance width="1367"/>
+  <unicode hex="00DE"/>
+  <anchor x="684" y="0" name="bottom"/>
+  <anchor x="684" y="1650" name="top"/>
+  <outline>
+    <contour>
+      <point x="417" y="0" type="line"/>
+      <point x="417" y="343" type="line"/>
+      <point x="694" y="343" type="line" smooth="yes"/>
+      <point x="1017" y="343"/>
+      <point x="1218" y="528"/>
+      <point x="1218" y="818" type="curve" smooth="yes"/>
+      <point x="1218" y="1107"/>
+      <point x="1017" y="1292"/>
+      <point x="694" y="1292" type="curve" smooth="yes"/>
+      <point x="417" y="1292" type="line"/>
+      <point x="417" y="1650" type="line"/>
+      <point x="271" y="1650" type="line"/>
+      <point x="271" y="0" type="line"/>
+    </contour>
+    <contour>
+      <point x="417" y="1173" type="line"/>
+      <point x="661" y="1173" type="line" smooth="yes"/>
+      <point x="910" y="1173"/>
+      <point x="1070" y="1037"/>
+      <point x="1070" y="818" type="curve" smooth="yes"/>
+      <point x="1070" y="598"/>
+      <point x="910" y="462"/>
+      <point x="661" y="462" type="curve" smooth="yes"/>
+      <point x="417" y="462" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>P</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>P</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>6ebc3b191671a7962b7ed3a05f5d7df946f5bf5131fde731a9611fe51beecfd6d60086ecddfdae722a19c14e5a3029379c81bcfc8f86643946d2c3b5810b182e</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 343 119</string>
+          <string>hstem 1173 119</string>
+          <string>hstem 1650 -20</string>
+          <string>vstem 271 146</string>
+          <string>vstem 1070 148</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

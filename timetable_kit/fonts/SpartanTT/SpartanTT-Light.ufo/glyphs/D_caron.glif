@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Dcaron" format="2">
+  <advance width="1645"/>
+  <unicode hex="010E"/>
+  <anchor x="823" y="0" name="bottom"/>
+  <anchor x="823" y="825" name="center"/>
+  <anchor x="823" y="2305" name="top"/>
+  <outline>
+    <component base="D"/>
+    <component base="caron" xOffset="470" yOffset="625"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

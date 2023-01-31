@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="dollar" format="2">
+  <advance width="1406"/>
+  <unicode hex="0024"/>
+  <outline>
+    <component base="S" xOffset="30"/>
+    <contour>
+      <point x="609" y="1926" type="line"/>
+      <point x="609" y="1664" type="line"/>
+      <point x="859" y="1664" type="line"/>
+      <point x="859" y="1926" type="line"/>
+    </contour>
+    <contour>
+      <point x="609" y="-10" type="line"/>
+      <point x="609" y="-276" type="line"/>
+      <point x="859" y="-276" type="line"/>
+      <point x="859" y="-10" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1406m609,1926l609,1664l859,1664l859,1926m609,-10l609,-276l859,-276l859,-10</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 609 250</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

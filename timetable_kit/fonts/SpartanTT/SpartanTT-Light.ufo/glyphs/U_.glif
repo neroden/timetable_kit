@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="U" format="2">
+  <advance width="1627"/>
+  <unicode hex="0055"/>
+  <anchor x="813" y="0" name="bottom"/>
+  <anchor x="864" y="0" name="ogonek"/>
+  <anchor x="813" y="1650" name="top"/>
+  <outline>
+    <contour>
+      <point x="813" y="-32" type="curve" smooth="yes"/>
+      <point x="1176" y="-32"/>
+      <point x="1370" y="187"/>
+      <point x="1370" y="593" type="curve" smooth="yes"/>
+      <point x="1370" y="1650" type="line"/>
+      <point x="1264" y="1650" type="line"/>
+      <point x="1264" y="610" type="line" smooth="yes"/>
+      <point x="1264" y="254"/>
+      <point x="1112" y="73"/>
+      <point x="813" y="73" type="curve" smooth="yes"/>
+      <point x="514" y="73"/>
+      <point x="363" y="254"/>
+      <point x="363" y="610" type="curve" smooth="yes"/>
+      <point x="363" y="1650" type="line"/>
+      <point x="257" y="1650" type="line"/>
+      <point x="257" y="593" type="line" smooth="yes"/>
+      <point x="257" y="187"/>
+      <point x="450" y="-32"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>c7a40ba7a540ccfc7ca57af7e65d39b7cea00e66d7427ec7de5528e5872125bfa90e9b287e433b82a2c2e0387293093ca32793b49fa2cf28a082ca42596a112c</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 105</string>
+          <string>hstem 1650 -20</string>
+          <string>vstem 257 106</string>
+          <string>vstem 1264 106</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

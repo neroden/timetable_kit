@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Amacron" format="2">
+  <advance width="1664"/>
+  <unicode hex="0100"/>
+  <anchor x="832" y="0" name="bottom"/>
+  <anchor x="1637" y="0" name="ogonek"/>
+  <anchor x="832" y="2114" name="top"/>
+  <outline>
+    <component base="A"/>
+    <component base="macron" xOffset="424" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>A</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>A</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

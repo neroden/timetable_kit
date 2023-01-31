@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Lacute" format="2">
+  <advance width="1240"/>
+  <unicode hex="0139"/>
+  <anchor x="628" y="0" name="bottom"/>
+  <anchor x="621" y="825" name="center"/>
+  <anchor x="1220" y="1650" name="topright"/>
+  <anchor x="556" y="2307" name="top"/>
+  <outline>
+    <component base="L"/>
+    <component base="acute" xOffset="507" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>L</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>L</string>
+  <key>com.fontlab.recipe</key>
+  <string>L+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

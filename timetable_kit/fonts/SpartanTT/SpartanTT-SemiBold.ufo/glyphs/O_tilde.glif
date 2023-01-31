@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Otilde" format="2">
+  <advance width="1926"/>
+  <unicode hex="00D5"/>
+  <anchor x="963" y="0" name="bottom"/>
+  <anchor x="963" y="824" name="center"/>
+  <anchor x="1001" y="0" name="ogonek"/>
+  <anchor x="19" y="1650" name="topleft"/>
+  <anchor x="1906" y="1650" name="topright"/>
+  <anchor x="963" y="2182" name="top"/>
+  <outline>
+    <component base="O"/>
+    <component base="tilde" xOffset="443" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>O</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>O</string>
+  <key>com.fontlab.recipe</key>
+  <string>O+tilde</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

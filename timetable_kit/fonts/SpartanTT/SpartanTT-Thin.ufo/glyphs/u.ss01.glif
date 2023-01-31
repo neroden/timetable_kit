@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="u.ss01" format="2">
+  <advance width="1228"/>
+  <anchor x="614" y="0" name="bottom"/>
+  <anchor x="1105" y="10" name="ogonek"/>
+  <outline>
+    <contour>
+      <point x="609" y="-32" type="curve" smooth="yes"/>
+      <point x="723" y="-32"/>
+      <point x="883" y="22"/>
+      <point x="937" y="154" type="curve"/>
+      <point x="937" y="0" type="line" name=".hr01"/>
+      <point x="993" y="0" type="line"/>
+      <point x="993" y="1024" type="line"/>
+      <point x="937" y="1024" type="line"/>
+      <point x="937" y="322" type="line" smooth="yes"/>
+      <point x="937" y="176"/>
+      <point x="817" y="18" name=".hr02"/>
+      <point x="609" y="18" type="curve" smooth="yes"/>
+      <point x="377" y="18"/>
+      <point x="273" y="158"/>
+      <point x="273" y="402" type="curve" smooth="yes"/>
+      <point x="273" y="1024" type="line"/>
+      <point x="217" y="1024" type="line"/>
+      <point x="217" y="384" type="line" smooth="yes"/>
+      <point x="217" y="144"/>
+      <point x="319" y="-32"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>27ec64441f0b9253f6093ad69c7e564961421d8b2ea72816e15134fc8fae65843293aa8850a4087cb0728b3b4e0c285b5056d12c6831353047ccca399eba3f60</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 50</string>
+          <string>vstem 937 56</string>
+          <string>hstem 1024 -20</string>
+          <string>vstem 217 56</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>vstem 937 56</string>
+          <string>hstem 1024 -20</string>
+          <string>vstem 217 56</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 50</string>
+          <string>vstem 217 56</string>
+          <string>hstem 1024 -20</string>
+          <string>vstem 937 56</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr02</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

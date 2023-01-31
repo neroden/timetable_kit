@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="idotless" format="2">
+  <advance width="629"/>
+  <unicode hex="0131"/>
+  <anchor x="315" y="0" name="bottom"/>
+  <anchor x="433" y="0" name="ogonek"/>
+  <anchor x="314" y="1025" name="top"/>
+  <outline>
+    <contour>
+      <point x="433" y="0" type="line"/>
+      <point x="433" y="1024" type="line"/>
+      <point x="196" y="1024" type="line"/>
+      <point x="196" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w629m433,0l433,1024l196,1024l196,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 1024 -20</string>
+          <string>vstem 196 237</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

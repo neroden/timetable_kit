@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="parenleft" format="2">
+  <advance width="760"/>
+  <unicode hex="0028"/>
+  <outline>
+    <contour>
+      <point x="612" y="-504" type="line"/>
+      <point x="454" y="-269"/>
+      <point x="262" y="120"/>
+      <point x="262" y="614" type="curve" smooth="yes"/>
+      <point x="262" y="1093"/>
+      <point x="443" y="1482"/>
+      <point x="612" y="1734" type="curve"/>
+      <point x="574" y="1750" type="line"/>
+      <point x="406" y="1540"/>
+      <point x="196" y="1132"/>
+      <point x="196" y="614" type="curve" smooth="yes"/>
+      <point x="196" y="96"/>
+      <point x="406" y="-311"/>
+      <point x="574" y="-520" type="curve"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w760m612,-504c454,-269 262,120 262,614c262,1093 443,1482 612,1734l574,1750c406,1540 196,1132 196,614c196,96 406,-311 574,-520</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 196 66</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

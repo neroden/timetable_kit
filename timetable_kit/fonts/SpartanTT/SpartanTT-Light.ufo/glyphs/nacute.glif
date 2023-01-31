@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="nacute" format="2">
+  <advance width="1258"/>
+  <unicode hex="0144"/>
+  <anchor x="647" y="0" name="bottom"/>
+  <anchor x="661" y="1675" name="top"/>
+  <outline>
+    <component base="n"/>
+    <component base="acute" xOffset="589" yOffset="-7"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>n</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>n</string>
+  <key>com.fontlab.recipe</key>
+  <string>n+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

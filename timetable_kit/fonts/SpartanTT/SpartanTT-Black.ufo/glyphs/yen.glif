@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="yen" format="2">
+  <advance width="1767"/>
+  <unicode hex="00A5"/>
+  <outline>
+    <component base="Y" xOffset="114"/>
+    <contour>
+      <point x="230" y="898" type="line"/>
+      <point x="230" y="588" type="line"/>
+      <point x="1536" y="588" type="line"/>
+      <point x="1536" y="898" type="line"/>
+    </contour>
+    <contour>
+      <point x="230" y="502" type="line"/>
+      <point x="230" y="192" type="line"/>
+      <point x="1536" y="192" type="line"/>
+      <point x="1536" y="502" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1767m230,898l230,588l1536,588l1536,898m230,502l230,192l1536,192l1536,502</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 192 310</string>
+          <string>hstem 588 310</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

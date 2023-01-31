@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="uhungarumlaut" format="2">
+  <advance width="1292"/>
+  <unicode hex="0171"/>
+  <anchor x="646" y="0" name="bottom"/>
+  <anchor x="666" y="0" name="ogonek"/>
+  <anchor x="646" y="1679" name="top"/>
+  <outline>
+    <component base="u"/>
+    <component base="hungarumlaut" xOffset="321" yOffset="-1"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>u</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>u</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ncommaaccent" format="2">
+  <advance width="1833"/>
+  <unicode hex="0145"/>
+  <anchor x="917" y="1650" name="top"/>
+  <anchor x="917" y="-745" name="bottom"/>
+  <outline>
+    <component base="N"/>
+    <component base="commaaccentcomb" xOffset="525"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>N</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>N</string>
+  <key>com.fontlab.recipe</key>
+  <string>N+commaaccentcomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

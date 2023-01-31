@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Q" format="2">
+  <advance width="2010"/>
+  <unicode hex="0051"/>
+  <outline>
+    <component base="O" xOffset="-39" yOffset="-1"/>
+    <contour>
+      <point x="1087" y="459" type="line"/>
+      <point x="1283" y="247"/>
+      <point x="1552" y="53"/>
+      <point x="1820" y="-54" type="curve"/>
+      <point x="1849" y="17" type="line"/>
+      <point x="1590" y="110"/>
+      <point x="1320" y="300"/>
+      <point x="1127" y="493" type="curve"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

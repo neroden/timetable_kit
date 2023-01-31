@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="summation" format="2">
+  <advance width="1574"/>
+  <unicode hex="2211"/>
+  <outline>
+    <contour>
+      <point x="1286" y="0" type="line"/>
+      <point x="1286" y="68" type="line"/>
+      <point x="414" y="68" type="line"/>
+      <point x="931" y="860" type="line"/>
+      <point x="414" y="1652" type="line"/>
+      <point x="1286" y="1652" type="line"/>
+      <point x="1286" y="1720" type="line"/>
+      <point x="288" y="1720" type="line"/>
+      <point x="850" y="860" type="line"/>
+      <point x="288" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>H</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>H</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1574m1286,0l1286,68l414,68l931,860l414,1652l1286,1652l1286,1720l288,1720l850,860l288,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 0 68</string>
+          <string>hstem 1652 68</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

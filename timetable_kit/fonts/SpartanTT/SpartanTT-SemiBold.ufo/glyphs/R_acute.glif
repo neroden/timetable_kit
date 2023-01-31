@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Racute" format="2">
+  <advance width="1462"/>
+  <unicode hex="0154"/>
+  <anchor x="730" y="0" name="bottom"/>
+  <anchor x="762" y="2315" name="top"/>
+  <outline>
+    <component base="R"/>
+    <component base="acute" xOffset="598" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>R</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>R</string>
+  <key>com.fontlab.recipe</key>
+  <string>R+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

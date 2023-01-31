@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ycircumflex" format="2">
+  <advance width="1460"/>
+  <unicode hex="0176"/>
+  <anchor x="730" y="0" name="bottom"/>
+  <anchor x="730" y="2306" name="top"/>
+  <outline>
+    <component base="Y"/>
+    <component base="circumflex" xOffset="394" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>Y</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>Y</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

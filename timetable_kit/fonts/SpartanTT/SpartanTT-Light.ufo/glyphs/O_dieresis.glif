@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Odieresis" format="2">
+  <advance width="2033"/>
+  <unicode hex="00D6"/>
+  <anchor x="1017" y="0" name="bottom"/>
+  <anchor x="1017" y="824" name="center"/>
+  <anchor x="1045" y="0" name="ogonek"/>
+  <anchor x="19" y="1650" name="topleft"/>
+  <anchor x="2013" y="1650" name="topright"/>
+  <anchor x="1017" y="2093" name="top"/>
+  <outline>
+    <component base="O"/>
+    <component base="dieresis" xOffset="712" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>O</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>O</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

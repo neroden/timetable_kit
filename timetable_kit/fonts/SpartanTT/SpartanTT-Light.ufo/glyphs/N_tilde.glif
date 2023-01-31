@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ntilde" format="2">
+  <advance width="1705"/>
+  <unicode hex="00D1"/>
+  <anchor x="853" y="0" name="bottom"/>
+  <anchor x="853" y="2162" name="top"/>
+  <outline>
+    <component base="N"/>
+    <component base="tilde" xOffset="364" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>N</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>N</string>
+  <key>com.fontlab.recipe</key>
+  <string>N+tilde</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

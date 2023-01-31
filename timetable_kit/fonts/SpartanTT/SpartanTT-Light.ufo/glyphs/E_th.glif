@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Eth" format="2">
+  <advance width="1677"/>
+  <unicode hex="00D0"/>
+  <outline>
+    <component base="D" xOffset="32"/>
+    <contour>
+      <point x="148" y="868" type="line"/>
+      <point x="148" y="782" type="line"/>
+      <point x="906" y="782" type="line"/>
+      <point x="906" y="868" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1677m148,868l148,782l906,782l906,868</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 782 86</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="arrowboth" format="2">
+  <advance width="2420"/>
+  <unicode hex="2194"/>
+  <outline>
+    <contour>
+      <point x="273" y="853" type="line"/>
+      <point x="273" y="797" type="line"/>
+      <point x="2147" y="797" type="line"/>
+      <point x="2147" y="853" type="line"/>
+    </contour>
+    <contour>
+      <point x="910" y="1650" type="line"/>
+      <point x="235" y="825" type="line"/>
+      <point x="910" y="0" type="line"/>
+      <point x="988" y="0" type="line"/>
+      <point x="295" y="844" type="line"/>
+      <point x="295" y="806" type="line"/>
+      <point x="988" y="1650" type="line"/>
+    </contour>
+    <contour>
+      <point x="1432" y="1650" type="line"/>
+      <point x="2125" y="806" type="line"/>
+      <point x="2125" y="844" type="line"/>
+      <point x="1432" y="0" type="line"/>
+      <point x="1510" y="0" type="line"/>
+      <point x="2185" y="825" type="line"/>
+      <point x="1510" y="1650" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>hyphen</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>hyphen</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>d49b222a6e46b69daccf92f7313bc7f06390ee79189b3c5e27122894b58ef63f00f220b3ca207386dbd1744c6469a5b8e52f0df900c21098bbe364f438f500bc</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 797 56</string>
+          <string>hstem 1650 -20</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

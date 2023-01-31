@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Scaron" format="2">
+  <advance width="1365"/>
+  <unicode hex="0160"/>
+  <anchor x="689" y="0" name="bottom"/>
+  <anchor x="721" y="0" name="cedilla"/>
+  <anchor x="712" y="2326" name="top"/>
+  <outline>
+    <component base="S"/>
+    <component base="caron" xOffset="312" yOffset="646"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>S</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>S</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="caron" format="2">
+  <advance width="770"/>
+  <unicode hex="02C7"/>
+  <anchor x="385" y="1024" name="_top"/>
+  <anchor x="385" y="1680" name="top"/>
+  <outline>
+    <component base="caroncomb"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>caroncomb</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>caroncomb</string>
+  <key>com.fontlab.recipe</key>
+  <string>caroncomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

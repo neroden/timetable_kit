@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="O" format="2">
+  <advance width="2070"/>
+  <unicode hex="004F"/>
+  <anchor x="1035" y="0" name="bottom"/>
+  <anchor x="1035" y="825" name="center"/>
+  <anchor x="1067" y="0" name="ogonek"/>
+  <anchor x="1035" y="1650" name="top"/>
+  <anchor x="20" y="1650" name="topleft"/>
+  <anchor x="2050" y="1650" name="topright"/>
+  <outline>
+    <contour>
+      <point x="1035" y="-32" type="curve" smooth="yes"/>
+      <point x="1497" y="-32"/>
+      <point x="1867" y="348"/>
+      <point x="1867" y="824" type="curve" smooth="yes"/>
+      <point x="1867" y="1300"/>
+      <point x="1497" y="1680"/>
+      <point x="1035" y="1680" type="curve" smooth="yes"/>
+      <point x="573" y="1680"/>
+      <point x="203" y="1300"/>
+      <point x="203" y="824" type="curve" smooth="yes"/>
+      <point x="203" y="348"/>
+      <point x="573" y="-32"/>
+    </contour>
+    <contour>
+      <point x="1035" y="22" type="curve" smooth="yes"/>
+      <point x="607" y="22"/>
+      <point x="263" y="380"/>
+      <point x="263" y="824" type="curve" smooth="yes"/>
+      <point x="263" y="1268"/>
+      <point x="607" y="1626"/>
+      <point x="1035" y="1626" type="curve" smooth="yes"/>
+      <point x="1463" y="1626"/>
+      <point x="1807" y="1268"/>
+      <point x="1807" y="824" type="curve" smooth="yes"/>
+      <point x="1807" y="380"/>
+      <point x="1463" y="22"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>d0e123e06fcf0292be6929a9cfae80d4e334d86ac5dbe3351d7e7fec8acac82a25e21fa9e7104489efceb96f6740cf2d71419113291348da031296f0d38417a3</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 54</string>
+          <string>hstem 1626 54</string>
+          <string>vstem 203 60</string>
+          <string>vstem 1807 60</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

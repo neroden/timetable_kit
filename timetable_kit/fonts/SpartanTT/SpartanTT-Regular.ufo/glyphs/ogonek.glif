@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ogonek" format="2">
+  <advance width="526"/>
+  <unicode hex="02DB"/>
+  <anchor x="263" y="24" name="_ogonek"/>
+  <outline>
+    <component base="ogonekcomb"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>ogonekcomb</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>ogonekcomb</string>
+  <key>com.fontlab.recipe</key>
+  <string>ogonekcomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="cent" format="2">
+  <advance width="1163"/>
+  <unicode hex="00A2"/>
+  <outline>
+    <component base="c" xOffset="40"/>
+    <contour>
+      <point x="502" y="1272" type="line"/>
+      <point x="502" y="1003" type="line"/>
+      <point x="718" y="1003" type="line"/>
+      <point x="718" y="1272" type="line"/>
+    </contour>
+    <contour>
+      <point x="563" y="0" type="line" name=".hr01"/>
+      <point x="563" y="-258" type="line"/>
+      <point x="779" y="-258" type="line"/>
+      <point x="779" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1163m502,1272l502,1003l718,1003l718,1272m563,0l563,-258l779,-258l779,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 502 216</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 563 216</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

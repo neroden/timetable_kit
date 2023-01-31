@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="foursuperior" format="2">
+  <advance width="950"/>
+  <unicode hex="2074"/>
+  <outline>
+    <contour>
+      <point x="637" y="1040" type="line"/>
+      <point x="637" y="1152" type="line"/>
+      <point x="716" y="1152" type="line"/>
+      <point x="716" y="1216" type="line"/>
+      <point x="637" y="1216" type="line"/>
+      <point x="637" y="1650" type="line"/>
+      <point x="568" y="1650" type="line"/>
+      <point x="230" y="1184" type="line"/>
+      <point x="230" y="1152" type="line"/>
+      <point x="569" y="1152" type="line"/>
+      <point x="569" y="1040" type="line"/>
+    </contour>
+    <contour>
+      <point x="569" y="1554" type="line"/>
+      <point x="569" y="1216" type="line"/>
+      <point x="327" y="1216" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>asterisk</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>asterisk</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

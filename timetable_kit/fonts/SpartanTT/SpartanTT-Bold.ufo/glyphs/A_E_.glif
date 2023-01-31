@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="AE" format="2">
+  <advance width="1913"/>
+  <unicode hex="00C6"/>
+  <outline>
+    <contour>
+      <point x="832" y="1235" type="line"/>
+      <point x="832" y="661" type="line"/>
+      <point x="610" y="661" type="line"/>
+    </contour>
+    <contour>
+      <point x="689" y="1651" type="line"/>
+      <point x="27" y="0" type="line"/>
+      <point x="359" y="0" type="line"/>
+      <point x="505" y="390" type="line"/>
+      <point x="832" y="390" type="line"/>
+      <point x="832" y="0" type="line"/>
+      <point x="1742" y="0" type="line"/>
+      <point x="1742" y="271" type="line" name=".hr01"/>
+      <point x="1140" y="271" type="line"/>
+      <point x="1140" y="692" type="line"/>
+      <point x="1718" y="692" type="line"/>
+      <point x="1718" y="963" type="line"/>
+      <point x="1140" y="963" type="line"/>
+      <point x="1140" y="1380" type="line"/>
+      <point x="1742" y="1380" type="line"/>
+      <point x="1742" y="1651" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>A</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>E</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>1286e64d592e3e099f5ca1cc9f4d6f571091ce05637eeac0ea6c6224f303739341fc0b49f739ee283fb98658b331f1afad43e5087520472a23009abd28ad29d0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 832 308</string>
+          <string>hstem 390 271</string>
+          <string>hstem 1380 271</string>
+          <string>hstem 21 -21</string>
+          <string>hstem 692 271</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 0 271</string>
+          <string>vstem 832 308</string>
+          <string>hstem 692 271</string>
+          <string>hstem 1380 271</string>
+          <string>hstem 390 271</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

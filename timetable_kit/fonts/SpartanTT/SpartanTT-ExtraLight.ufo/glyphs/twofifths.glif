@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="twofifths" format="2">
+  <advance width="2133"/>
+  <unicode hex="2156"/>
+  <outline>
+    <component base="two.numr"/>
+    <component base="fraction" xOffset="945"/>
+    <component base="five.dnom" xOffset="1165"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>two.numr</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>five.dnom</string>
+  <key>com.fontlab.recipe</key>
+  <string>two.numr_fraction_five.dnom</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

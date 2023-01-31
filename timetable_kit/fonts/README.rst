@@ -8,6 +8,8 @@ It is licensed under the the Open Font License.  See OFL.txt for more informatio
 
 https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
 
+The zip file commissioned from Matt Bailey is in the "upstream" folder; the unpacked version is in the SpartanTT folder.
+
 
 SPARTAN 1.004
 -------------

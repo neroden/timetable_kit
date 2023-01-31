@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ring" format="2">
+  <advance width="590"/>
+  <unicode hex="02DA"/>
+  <anchor x="295" y="1024" name="_top"/>
+  <anchor x="295" y="1725" name="top"/>
+  <outline>
+    <component base="ringcomb"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>ringcomb</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>ringcomb</string>
+  <key>com.fontlab.recipe</key>
+  <string>ringcomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

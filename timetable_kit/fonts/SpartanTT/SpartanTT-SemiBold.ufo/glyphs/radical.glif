@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="radical" format="2">
+  <advance width="1747"/>
+  <unicode hex="221A"/>
+  <outline>
+    <contour>
+      <point x="724" y="-32" type="line"/>
+      <point x="1115" y="1547" type="line"/>
+      <point x="1502" y="1547" type="line"/>
+      <point x="1502" y="1720" type="line"/>
+      <point x="967" y="1720" type="line"/>
+      <point x="603" y="178" type="line"/>
+      <point x="431" y="609" type="line"/>
+      <point x="244" y="609" type="line"/>
+      <point x="503" y="-32" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>H</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>H</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

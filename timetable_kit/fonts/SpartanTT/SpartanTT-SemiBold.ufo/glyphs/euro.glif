@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="euro" format="2">
+  <advance width="1906"/>
+  <unicode hex="20AC"/>
+  <outline>
+    <component base="C" xOffset="233"/>
+    <contour>
+      <point x="180" y="1067" type="line"/>
+      <point x="180" y="918" type="line"/>
+      <point x="1425" y="918" type="line"/>
+      <point x="1425" y="1067" type="line"/>
+    </contour>
+    <contour>
+      <point x="180" y="728" type="line"/>
+      <point x="180" y="579" type="line"/>
+      <point x="1425" y="579" type="line"/>
+      <point x="1425" y="728" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1906m180,1067l180,918l1425,918l1425,1067m180,728l180,579l1425,579l1425,728</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 579 149</string>
+          <string>hstem 918 149</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

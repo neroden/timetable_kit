@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="gcommaaccent" format="2">
+  <advance width="1442"/>
+  <unicode hex="0123"/>
+  <anchor x="692" y="-520" name="bottom"/>
+  <anchor x="692" y="1665" name="top"/>
+  <outline>
+    <component base="g"/>
+    <component base="commaturnedabovecomb" xOffset="328"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>g</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>g</string>
+  <key>com.fontlab.recipe</key>
+  <string>g+commaturnedabovecomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

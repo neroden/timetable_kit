@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="I" format="2">
+  <advance width="642"/>
+  <unicode hex="0049"/>
+  <anchor x="321" y="0" name="bottom"/>
+  <anchor x="349" y="0" name="ogonek"/>
+  <anchor x="321" y="1650" name="top"/>
+  <outline>
+    <contour>
+      <point x="349" y="0" type="line"/>
+      <point x="349" y="1650" type="line"/>
+      <point x="293" y="1650" type="line"/>
+      <point x="293" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w642m349,0l349,1650l293,1650l293,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 1650 -20</string>
+          <string>vstem 293 56</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

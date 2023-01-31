@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="lslash" format="2">
+  <advance width="1000"/>
+  <unicode hex="0142"/>
+  <outline>
+    <component base="l" xOffset="152"/>
+    <contour>
+      <point x="830" y="1018" type="line"/>
+      <point x="830" y="1326" type="line"/>
+      <point x="170" y="808" type="line"/>
+      <point x="170" y="501" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>l</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>l</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

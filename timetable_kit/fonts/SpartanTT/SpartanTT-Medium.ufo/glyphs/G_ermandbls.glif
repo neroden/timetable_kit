@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Germandbls" format="2">
+  <advance width="1592"/>
+  <unicode hex="1E9E"/>
+  <outline>
+    <contour>
+      <point x="985" y="-29" type="curve" smooth="yes"/>
+      <point x="1245" y="-29"/>
+      <point x="1449" y="140"/>
+      <point x="1449" y="403" type="curve" smooth="yes"/>
+      <point x="1449" y="766"/>
+      <point x="1062" y="777"/>
+      <point x="1062" y="881" type="curve" smooth="yes"/>
+      <point x="1062" y="955"/>
+      <point x="1254" y="1001" name=".hr01"/>
+      <point x="1254" y="1264" type="curve" smooth="yes"/>
+      <point x="1254" y="1533"/>
+      <point x="1055" y="1681"/>
+      <point x="792" y="1681" type="curve" smooth="yes"/>
+      <point x="451" y="1681"/>
+      <point x="256" y="1433"/>
+      <point x="256" y="1031" type="curve" smooth="yes"/>
+      <point x="256" y="0" type="line"/>
+      <point x="460" y="0" type="line"/>
+      <point x="460" y="1046" type="line" smooth="yes"/>
+      <point x="460" y="1321"/>
+      <point x="571" y="1481"/>
+      <point x="778" y="1481" type="curve" smooth="yes"/>
+      <point x="930" y="1481"/>
+      <point x="1046" y="1394"/>
+      <point x="1046" y="1228" type="curve" smooth="yes"/>
+      <point x="1046" y="1010"/>
+      <point x="844" y="1013"/>
+      <point x="844" y="859" type="curve" smooth="yes"/>
+      <point x="844" y="643"/>
+      <point x="1247" y="691" name=".hr02"/>
+      <point x="1247" y="417" type="curve" smooth="yes"/>
+      <point x="1247" y="263"/>
+      <point x="1131" y="167"/>
+      <point x="975" y="167" type="curve" smooth="yes"/>
+      <point x="881" y="167"/>
+      <point x="798" y="200"/>
+      <point x="702" y="258" type="curve"/>
+      <point x="600" y="94" type="line"/>
+      <point x="736" y="12"/>
+      <point x="861" y="-29"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>H</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>S</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>72fc5ac8658aeae789c830e241e9cdc59afb5c6d2443e7f27abdae354ffde49218033e549bfabc896529f484044ef73d2f462bb5b22df3c3772540c1d5effe1e</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -29 196</string>
+          <string>vstem 1247 202</string>
+          <string>hstem 1481 200</string>
+          <string>vstem 256 204</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 1046 208</string>
+          <string>hstem 1481 200</string>
+          <string>vstem 256 204</string>
+          <string>hstem 21 -21</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 1247 202</string>
+          <string>hstem -29 196</string>
+          <string>hstem 1481 200</string>
+          <string>vstem 256 204</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr02</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

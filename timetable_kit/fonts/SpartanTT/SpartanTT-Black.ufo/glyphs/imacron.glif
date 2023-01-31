@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="imacron" format="2">
+  <advance width="814"/>
+  <unicode hex="012B"/>
+  <anchor x="407" y="0" name="bottom"/>
+  <anchor x="615" y="0" name="ogonek"/>
+  <anchor x="407" y="1528" name="top"/>
+  <outline>
+    <component base="idotless" xOffset="42"/>
+    <component base="macron" xOffset="-1"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.recipe</key>
+  <string>idotless+macron</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

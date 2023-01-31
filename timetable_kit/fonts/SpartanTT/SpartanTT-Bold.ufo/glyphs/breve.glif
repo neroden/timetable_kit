@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="breve" format="2">
+  <advance width="892"/>
+  <unicode hex="02D8"/>
+  <anchor x="446" y="1024" name="_top"/>
+  <anchor x="446" y="1680" name="top"/>
+  <outline>
+    <component base="brevecomb"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>brevecomb</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>brevecomb</string>
+  <key>com.fontlab.recipe</key>
+  <string>brevecomb</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

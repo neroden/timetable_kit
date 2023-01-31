@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Eacute" format="2">
+  <advance width="1325"/>
+  <unicode hex="00C9"/>
+  <anchor x="675" y="0" name="bottom"/>
+  <anchor x="1156" y="0" name="ogonek"/>
+  <anchor x="686" y="2321" name="top"/>
+  <outline>
+    <component base="E"/>
+    <component base="acute" xOffset="471" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.recipe</key>
+  <string>E+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="tcaron" format="2">
+  <advance width="940"/>
+  <unicode hex="0165"/>
+  <anchor x="597" y="0" name="bottom"/>
+  <anchor x="470" y="512" name="center"/>
+  <anchor x="820" y="1024" name="topright"/>
+  <anchor x="503" y="2064" name="top"/>
+  <outline>
+    <component base="t"/>
+    <component base="caron" xOffset="41" yOffset="384"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>t</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>t</string>
+  <key>com.fontlab.recipe</key>
+  <string>t_caron</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

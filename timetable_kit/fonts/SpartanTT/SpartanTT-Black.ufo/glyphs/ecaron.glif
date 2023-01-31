@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ecaron" format="2">
+  <advance width="1264"/>
+  <unicode hex="011B"/>
+  <anchor x="682" y="0" name="bottom"/>
+  <anchor x="713" y="0" name="ogonek"/>
+  <anchor x="639" y="1712" name="top"/>
+  <outline>
+    <component base="e"/>
+    <component base="caron" xOffset="177" yOffset="32"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>e</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>e</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

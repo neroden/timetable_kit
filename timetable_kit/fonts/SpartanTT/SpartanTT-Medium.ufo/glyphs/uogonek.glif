@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="uogonek" format="2">
+  <advance width="1292"/>
+  <unicode hex="0173"/>
+  <outline>
+    <contour>
+      <point x="646" y="-32" type="curve" smooth="yes"/>
+      <point x="722" y="-32"/>
+      <point x="789" y="-21"/>
+      <point x="847" y="0" type="curve"/>
+      <point x="794" y="0" type="line"/>
+      <point x="679" y="-125"/>
+      <point x="615" y="-229"/>
+      <point x="615" y="-330" type="curve" smooth="yes"/>
+      <point x="615" y="-458"/>
+      <point x="720" y="-559"/>
+      <point x="866" y="-559" type="curve" smooth="yes"/>
+      <point x="974" y="-559"/>
+      <point x="1080" y="-504"/>
+      <point x="1141" y="-415" type="curve"/>
+      <point x="1056" y="-352" type="line"/>
+      <point x="1004" y="-413"/>
+      <point x="948" y="-442"/>
+      <point x="883" y="-442" type="curve" smooth="yes"/>
+      <point x="787" y="-442"/>
+      <point x="738" y="-382"/>
+      <point x="738" y="-304" type="curve" smooth="yes"/>
+      <point x="738" y="-200"/>
+      <point x="826" y="-56"/>
+      <point x="966" y="71" type="curve" smooth="yes"/>
+      <point x="1060" y="156"/>
+      <point x="1107" y="292"/>
+      <point x="1107" y="479" type="curve" smooth="yes"/>
+      <point x="1107" y="1024" type="line"/>
+      <point x="913" y="1024" type="line"/>
+      <point x="913" y="520" type="line" smooth="yes"/>
+      <point x="913" y="244"/>
+      <point x="834" y="129"/>
+      <point x="646" y="129" type="curve" smooth="yes"/>
+      <point x="458" y="129"/>
+      <point x="379" y="244"/>
+      <point x="379" y="520" type="curve" smooth="yes"/>
+      <point x="379" y="1024" type="line"/>
+      <point x="185" y="1024" type="line"/>
+      <point x="185" y="479" type="line" smooth="yes"/>
+      <point x="185" y="140"/>
+      <point x="340" y="-32"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>u</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>u-71</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>f4f86aff2c53eaae808cc9ac78313adcc00090e373ed9889be8145cbff1b06c7565b0d5b3e2c6128e39fd1ba1360418d28f146895ecdb1ff5d07902589889f90</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem -32 161</string>
+          <string>hstem 1024 -20</string>
+          <string>vstem 185 194</string>
+          <string>vstem 913 194</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

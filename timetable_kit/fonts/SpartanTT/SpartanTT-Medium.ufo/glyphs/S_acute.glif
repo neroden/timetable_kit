@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Sacute" format="2">
+  <advance width="1366"/>
+  <unicode hex="015A"/>
+  <anchor x="698" y="0" name="bottom"/>
+  <anchor x="730" y="0" name="cedilla"/>
+  <anchor x="747" y="2331" name="top"/>
+  <outline>
+    <component base="S"/>
+    <component base="acute" xOffset="602" yOffset="644"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>S</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>S</string>
+  <key>com.fontlab.recipe</key>
+  <string>S+acute</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

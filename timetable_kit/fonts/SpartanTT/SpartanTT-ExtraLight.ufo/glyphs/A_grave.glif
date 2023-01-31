@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Agrave" format="2">
+  <advance width="1653"/>
+  <unicode hex="00C0"/>
+  <anchor x="827" y="0" name="bottom"/>
+  <anchor x="1505" y="0" name="ogonek"/>
+  <anchor x="827" y="2284" name="top"/>
+  <outline>
+    <component base="A"/>
+    <component base="grave" xOffset="713" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>A</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>A</string>
+  <key>com.fontlab.recipe</key>
+  <string>A+grave</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Wgrave" format="2">
+  <advance width="2494"/>
+  <unicode hex="1E80"/>
+  <anchor x="1247" y="0" name="bottom"/>
+  <anchor x="1247" y="2287" name="top"/>
+  <outline>
+    <component base="W"/>
+    <component base="grave" xOffset="1093" yOffset="626"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>W</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>W</string>
+  <key>com.fontlab.recipe</key>
+  <string>W+grave</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

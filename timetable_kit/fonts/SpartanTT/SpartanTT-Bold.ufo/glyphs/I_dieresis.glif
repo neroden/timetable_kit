@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Idieresis" format="2">
+  <advance width="766"/>
+  <unicode hex="00CF"/>
+  <anchor x="383" y="0" name="bottom"/>
+  <anchor x="537" y="0" name="ogonek"/>
+  <anchor x="383" y="2180" name="top"/>
+  <outline>
+    <component base="I"/>
+    <component base="dieresis" xOffset="-8" yOffset="627"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>I</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>I</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="exclam" format="2">
+  <advance width="733"/>
+  <unicode hex="0021"/>
+  <outline>
+    <component base="period" xOffset="-14"/>
+    <contour>
+      <point x="420" y="393" type="line"/>
+      <point x="434" y="1720" type="line"/>
+      <point x="297" y="1720" type="line"/>
+      <point x="311" y="393" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w733m420,393l434,1720l297,1720l311,393</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>vstem 297 137</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

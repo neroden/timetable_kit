@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="seven.pnum" format="2">
+  <advance width="1241"/>
+  <outline>
+    <contour>
+      <point x="235" y="0" type="line"/>
+      <point x="1107" y="1619" type="line"/>
+      <point x="1107" y="1650" type="line"/>
+      <point x="148" y="1650" type="line"/>
+      <point x="148" y="1583" type="line"/>
+      <point x="997" y="1583" type="line"/>
+      <point x="145" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1241m235,0l1107,1619l1107,1650l148,1650l148,1583l997,1583l145,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 1583 67</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

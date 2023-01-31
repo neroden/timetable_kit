@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ograve" format="2">
+  <advance width="1409"/>
+  <unicode hex="00F2"/>
+  <anchor x="704" y="0" name="bottom"/>
+  <anchor x="704" y="512" name="center"/>
+  <anchor x="720" y="0" name="ogonek"/>
+  <anchor x="704" y="1661" name="top"/>
+  <outline>
+    <component base="o"/>
+    <component base="grave" xOffset="550"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>o</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>o</string>
+  <key>com.fontlab.recipe</key>
+  <string>o+grave</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

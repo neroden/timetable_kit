@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="oneninth" format="2">
+  <advance width="1760"/>
+  <unicode hex="2151"/>
+  <outline>
+    <component base="one.numr" xOffset="21"/>
+    <component base="fraction" xOffset="530"/>
+    <component base="nine.dnom" xOffset="825"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>one.numr</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>nine.dnom</string>
+  <key>com.fontlab.recipe</key>
+  <string>one.numr_fraction_nine.dnom</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="icircumflex" format="2">
+  <advance width="702"/>
+  <unicode hex="00EE"/>
+  <anchor x="352" y="0" name="bottom"/>
+  <anchor x="448" y="0" name="ogonek"/>
+  <anchor x="351" y="1681" name="top"/>
+  <outline>
+    <component base="idotless" xOffset="49"/>
+    <component base="circumflex" xOffset="-34" yOffset="1"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.recipe</key>
+  <string>idotless+circumflex</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

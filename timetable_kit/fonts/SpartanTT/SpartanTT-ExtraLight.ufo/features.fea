@@ -1,0 +1,198 @@
+#> classes
+#/> tags
+@ss01 = [M a j t u];
+@ss02 = [M.ss01 a.ss01 j.ss01 t.ss01 u.ss01];
+#/< tags
+#< classes
+
+languagesystem DFLT dflt;
+
+languagesystem latn dflt;
+languagesystem latn AZE;
+languagesystem latn CRT;
+languagesystem latn KAZ;
+languagesystem latn TAT;
+languagesystem latn TRK;
+languagesystem latn ROM;
+languagesystem latn MOL;
+
+feature aalt {
+# Access All Alternates
+
+#> feature
+  feature locl;
+  feature sups;
+  feature numr;
+  feature dnom;
+  feature salt;
+  feature pnum;
+  feature tnum;
+  feature ss01;
+  feature ss02;
+#< feature
+} aalt;
+feature ccmp {
+lookup ccmp_Other_1 {
+	@CombiningTopAccents = [acutecomb brevecomb caroncomb circumflexcomb commaturnedabovecomb dieresiscomb dotaccentcomb gravecomb hungarumlautcomb macroncomb ringcomb tildecomb];
+	@CombiningNonTopAccents = [cedillacomb ogonekcomb];
+	sub [i]' @CombiningTopAccents by [idotless];
+	sub [i]' @CombiningNonTopAccents @CombiningTopAccents by [idotless];
+} ccmp_Other_1;
+} ccmp;
+feature locl {
+lookup locl_latn_0 {
+	script latn;
+	language AZE;
+	language CRT;
+	language KAZ;
+	language TAT;
+	language TRK;
+	sub i by idotaccent;
+} locl_latn_0;
+
+lookup locl_latn_1 {
+	script latn;
+	language ROM;
+	language MOL;
+	sub Scedilla by Scommaaccent;
+	sub scedilla by scommaaccent;
+	sub Tcedilla by Tcommaaccent;
+	sub tcedilla by tcommaaccent;
+} locl_latn_1;
+} locl;
+feature sups {
+sub one by onesuperior;
+sub two by twosuperior;
+sub three by threesuperior;
+sub four by foursuperior;
+} sups;
+feature numr {
+sub zero by zero.numr;
+sub one by one.numr;
+sub two by two.numr;
+sub three by three.numr;
+sub four by four.numr;
+sub five by five.numr;
+sub six by six.numr;
+sub seven by seven.numr;
+sub eight by eight.numr;
+sub nine by nine.numr;
+} numr;
+feature dnom {
+sub zero by zero.dnom;
+sub one by one.dnom;
+sub two by two.dnom;
+sub three by three.dnom;
+sub four by four.dnom;
+sub five by five.dnom;
+sub six by six.dnom;
+sub seven by seven.dnom;
+sub eight by eight.dnom;
+sub nine by nine.dnom;
+} dnom;
+feature frac {
+lookup FRAC {
+	sub slash by fraction;
+} FRAC;
+lookup UP {
+	sub [zero one two three four five six seven eight nine] by [zero.numr one.numr two.numr three.numr four.numr five.numr six.numr seven.numr eight.numr nine.numr];
+} UP;
+lookup DOWN {
+	sub fraction [zero.numr one.numr two.numr three.numr four.numr five.numr six.numr seven.numr eight.numr nine.numr]' by [zero.dnom one.dnom two.dnom three.dnom four.dnom five.dnom six.dnom seven.dnom eight.dnom nine.dnom];
+	sub [zero.dnom one.dnom two.dnom three.dnom four.dnom five.dnom six.dnom seven.dnom eight.dnom nine.dnom] [zero.numr one.numr two.numr three.numr four.numr five.numr six.numr seven.numr eight.numr nine.numr]' by [zero.dnom one.dnom two.dnom three.dnom four.dnom five.dnom six.dnom seven.dnom eight.dnom nine.dnom];
+} DOWN;
+} frac;
+feature ordn {
+sub [zero one two three four five six seven eight nine] [A a]' by ordfeminine;
+sub [zero one two three four five six seven eight nine] [O o]' by ordmasculine;
+} ordn;
+feature dlig {
+lookupflag IgnoreMarks;
+sub f f j by f_f_j;
+sub f f t by f_f_t;
+sub f j by f_j;
+sub f f i by f_f_i;
+sub f f l by f_f_l;
+sub f i by fi;
+sub f l by fl;
+} dlig;
+feature liga {
+lookupflag IgnoreMarks;
+sub f f by f_f;
+sub f t by f_t;
+} liga;
+feature salt {
+# Stylistic Alternates
+
+#> feature
+  sub M from [M.ss01];
+  sub a from [a.ss01];
+  sub j from [j.ss01];
+  sub t from [t.ss01];
+  sub u from [u.ss01];
+#< feature
+} salt;
+feature pnum {
+# Proportional Figures
+
+#> feature
+  sub A.tnum by A;
+  sub P.tnum by P;
+  sub colon by colon.pnum;
+  sub eight by eight.pnum;
+  sub five by five.pnum;
+  sub four by four.pnum;
+  sub nine by nine.pnum;
+  sub one by one.pnum;
+  sub period by period.pnum;
+  sub seven by seven.pnum;
+  sub six by six.pnum;
+  sub space.tnum by space;
+  sub three by three.pnum;
+  sub two by two.pnum;
+  sub zero by zero.pnum;
+#< feature
+} pnum;
+feature tnum {
+# Tabular Figures
+
+#> feature
+  sub A by A.tnum;
+  sub P by P.tnum;
+  sub colon.pnum by colon;
+  sub eight.pnum by eight;
+  sub five.pnum by five;
+  sub four.pnum by four;
+  sub nine.pnum by nine;
+  sub one.pnum by one;
+  sub period.pnum by period;
+  sub seven.pnum by seven;
+  sub six.pnum by six;
+  sub space by space.tnum;
+  sub three.pnum by three;
+  sub two.pnum by two;
+  sub zero.pnum by zero;
+#< feature
+} tnum;
+feature ss01 {
+# Stylistic Set 01–20
+
+#> feature
+  sub M.ss01 by M;
+  sub a.ss01 by a;
+  sub j.ss01 by j;
+  sub t.ss01 by t;
+  sub u.ss01 by u;
+#< feature
+} ss01;
+feature ss02 {
+# Stylistic Set 01–20
+
+#> feature
+  sub M by M.ss01;
+  sub a by a.ss01;
+  sub j by j.ss01;
+  sub t by t.ss01;
+  sub u by u.ss01;
+#< feature
+} ss02;

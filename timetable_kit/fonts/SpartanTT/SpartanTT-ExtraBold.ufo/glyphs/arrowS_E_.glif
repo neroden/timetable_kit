@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="arrowSE" format="2">
+  <advance width="1929"/>
+  <unicode hex="2198"/>
+  <outline>
+    <contour>
+      <point x="1461" y="31" type="line"/>
+      <point x="1727" y="298" type="line"/>
+      <point x="529" y="1496" type="line"/>
+      <point x="262" y="1230" type="line"/>
+    </contour>
+    <contour>
+      <point x="1759" y="0" type="line"/>
+      <point x="1759" y="1216" type="line"/>
+      <point x="1386" y="1589" type="line"/>
+      <point x="1422" y="310" type="line"/>
+      <point x="1449" y="337" type="line"/>
+      <point x="170" y="373" type="line"/>
+      <point x="542" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.metricsLeft</key>
+  <string>hyphen</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>hyphen</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1929m1461,31l1727,298l529,1496l262,1230m1759,0l1759,1216l1386,1589l1422,310l1449,337l170,373l542,0</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 0 373</string>
+          <string>vstem 1386 373</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

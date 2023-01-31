@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="A" format="2">
+  <advance width="1652"/>
+  <unicode hex="0041"/>
+  <anchor x="826" y="0" name="bottom"/>
+  <anchor x="1494" y="0" name="ogonek"/>
+  <anchor x="826" y="1650" name="top"/>
+  <outline>
+    <contour>
+      <point x="218" y="0" type="line"/>
+      <point x="454" y="610" type="line"/>
+      <point x="1198" y="610" type="line"/>
+      <point x="1434" y="0" type="line"/>
+      <point x="1494" y="0" type="line"/>
+      <point x="852" y="1650" type="line"/>
+      <point x="800" y="1650" type="line"/>
+      <point x="158" y="0" type="line"/>
+    </contour>
+    <contour>
+      <point x="826" y="1582" type="line"/>
+      <point x="1179" y="660" type="line"/>
+      <point x="473" y="660" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>w1652m218,0l454,610l1198,610l1434,0l1494,0l852,1650l800,1650l158,0m826,1582l1179,660l473,660</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 610 50</string>
+          <string>hstem 1650 -20</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

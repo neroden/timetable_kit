@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ccedilla" format="2">
+  <advance width="1476"/>
+  <unicode hex="00C7"/>
+  <anchor x="754" y="-595" name="bottom"/>
+  <anchor x="831" y="1650" name="top"/>
+  <outline>
+    <component base="C"/>
+    <component base="cedilla" xOffset="474" yOffset="-7"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

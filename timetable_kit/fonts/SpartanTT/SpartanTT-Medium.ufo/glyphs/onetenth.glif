@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="onetenth" format="2">
+  <advance width="2510"/>
+  <unicode hex="2152"/>
+  <outline>
+    <component base="one.numr" xOffset="21"/>
+    <component base="fraction" xOffset="530"/>
+    <component base="one.dnom" xOffset="925"/>
+    <component base="zero.dnom" xOffset="1434"/>
+  </outline>
+  <lib>
+  <dict>
+  <key>com.fontlab.autolayer</key>
+  <true/>
+  <key>com.fontlab.metricsLeft</key>
+  <string>one.numr</string>
+  <key>com.fontlab.metricsRight</key>
+  <string>zero.dnom</string>
+  <key>com.fontlab.recipe</key>
+  <string>one.numr_fraction_one.dnom_zero.dnom</string>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  </dict>
+  </lib>
+</glyph>

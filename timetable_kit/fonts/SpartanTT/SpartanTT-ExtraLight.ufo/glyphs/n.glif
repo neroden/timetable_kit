@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="n" format="2">
+  <advance width="1240"/>
+  <unicode hex="006E"/>
+  <anchor x="639" y="0" name="bottom"/>
+  <anchor x="639" y="1015" name="top"/>
+  <outline>
+    <contour>
+      <point x="306" y="0" type="line"/>
+      <point x="306" y="616" type="line" smooth="yes"/>
+      <point x="306" y="822"/>
+      <point x="428" y="990"/>
+      <point x="648" y="990" type="curve" smooth="yes"/>
+      <point x="843" y="990"/>
+      <point x="953" y="858"/>
+      <point x="953" y="624" type="curve" smooth="yes"/>
+      <point x="953" y="0" type="line"/>
+      <point x="1028" y="0" type="line"/>
+      <point x="1028" y="635" type="line" smooth="yes"/>
+      <point x="1028" y="903"/>
+      <point x="895" y="1056"/>
+      <point x="664" y="1056" type="curve" smooth="yes"/>
+      <point x="470" y="1056"/>
+      <point x="351" y="946"/>
+      <point x="306" y="828" type="curve"/>
+      <point x="306" y="1024" type="line" name=".hr01"/>
+      <point x="231" y="1024" type="line"/>
+      <point x="231" y="0" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>e868806d1564fdf840dc3eeb0925e6f7567c061846ad98dab5e12b8d7862d34263d33c62b468160ffc5df70ee56b709d5c314e086877d8e225df631d5d59c044</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>vstem 231 75</string>
+          <string>hstem 990 66</string>
+          <string>vstem 953 75</string>
+        </array>
+      </dict>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 1024 -20</string>
+          <string>vstem 231 75</string>
+          <string>hstem 21 -21</string>
+          <string>vstem 953 75</string>
+        </array>
+        <key>pointTag</key>
+        <string>.hr01</string>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>

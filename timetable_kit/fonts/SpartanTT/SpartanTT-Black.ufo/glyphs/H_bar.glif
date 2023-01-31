@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Hbar" format="2">
+  <advance width="1696"/>
+  <unicode hex="0126"/>
+  <outline>
+    <contour>
+      <point x="636" y="0" type="line"/>
+      <point x="636" y="580" type="line"/>
+      <point x="1060" y="580" type="line"/>
+      <point x="1060" y="0" type="line"/>
+      <point x="1500" y="0" type="line"/>
+      <point x="1500" y="1650" type="line"/>
+      <point x="1060" y="1650" type="line"/>
+      <point x="1060" y="874" type="line"/>
+      <point x="636" y="874" type="line"/>
+      <point x="636" y="1650" type="line"/>
+      <point x="196" y="1650" type="line"/>
+      <point x="196" y="0" type="line"/>
+    </contour>
+    <contour>
+      <point x="1630" y="1064" type="line"/>
+      <point x="1630" y="1358" type="line"/>
+      <point x="66" y="1358" type="line"/>
+      <point x="66" y="1064" type="line"/>
+    </contour>
+  </outline>
+  <lib>
+  <dict>
+  <key>public.markColor</key>
+  <string>0.6,1,0.602,1</string>
+  <key>public.postscript.hints</key>
+  <dict>
+    <key>formatVersion</key>
+    <string>1</string>
+    <key>id</key>
+    <string>835f46b9d492d0ba501586f7e71cb23ad6c968bc409486641c0819f103551008b6906a6adb287a084e92d81cf77fe6bedf96368080bd8995a57040b2b0619eaf</string>
+    <key>hintSetList</key>
+    <array>
+      <dict>
+        <key>stems</key>
+        <array>
+          <string>hstem 21 -21</string>
+          <string>hstem 580 294</string>
+          <string>hstem 1064 294</string>
+          <string>hstem 1650 -20</string>
+          <string>vstem 196 440</string>
+          <string>vstem 1060 440</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+  </dict>
+  </lib>
+</glyph>
