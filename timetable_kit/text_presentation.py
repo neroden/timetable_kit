@@ -55,9 +55,9 @@ new_cell_substitution_map = {
 
 
 # Used with Noto arrows
-cell_substitution_map = thick_cell_substitution_map
+# cell_substitution_map = thick_cell_substitution_map
 # Used for Matt Bailey's new SpartanTT
-# cell_substitution_map = new_cell_substitution_map
+cell_substitution_map = new_cell_substitution_map
 
 
 def get_cell_substitution(cell_text: str) -> str:
