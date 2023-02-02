@@ -431,3 +431,7 @@ https://commons.wikimedia.org/wiki/File:Exo.svg
 Montreal Metro
 ---------------
 https://commons.wikimedia.org/wiki/File:Montreal_Metro.svg
+
+This is ugly, involving weird Adobe hackery and filters.  I rebuilt it as
+
+Montreal_Metro_nomask.svg
