@@ -1,16 +1,17 @@
 Recent GTFS changes:
-- Coast Starlight bug fixed.  (Timetable updated.)
+- Coast Starlight bug *temporarily* fixed, NB timing changes (timetable updated).
+- Crescent.  Timing changes (doesn't include Feb suspension).  Timetable updated.
+- Charlottesville.  Timing changes.  Timetable updated.
+- Roanoake.  Timing changes.  Timetable updated.
+- Missouri River Runner. Timetable updated (awaiting SW Chief repairs, sadly).
+
 - NEC.  ???
-- Crescent.  February suspensions?
-- Charlottesville.  Timing changes
-- Roanoake.  Timing changes.
 - Springfield MA through-to-NEC train.
-- Missouri River Runner.
 - Pacific Surfliner.  Many changes.  Short trains LAX to Irvine...
 - Sunset Limited. Timing?
 - Texas Eagle.  Timing?
-- Various buses
-- ACE
+- Various buses (we don't make timetables for these)
+- ACE (we don't make timetables for these)
 
 Clean up other "working" timetables: - TEDIOUS
 1 - Redo Ethan Allen when we have the new font (it has arrows, wait for new font)
@@ -93,7 +94,7 @@ Internal cleanup:
     The feed is then available and present within the agency object.
 
 0 -- memoize connecting services initialization (& wrapperize the dict)
-     so that it doesn't run from auxillary progs like find_trains.py.
+     so that it doesn't run from auxillary progs like list_trains.py.
 
 1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 
