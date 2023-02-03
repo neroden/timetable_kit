@@ -1,3 +1,8 @@
+Improve ./list_trains.py:
+-- add an optional sorting-station parameter, and possibly allow multiple station pairs
+   for the NEC
+
+
 Recent GTFS changes:
 - Coast Starlight bug *temporarily* fixed, NB timing changes (timetable updated).
 - Crescent.  Timing changes (doesn't include Feb suspension).  Timetable updated.
@@ -15,12 +20,7 @@ Recent GTFS changes:
 
 Clean up other "working" timetables: - TEDIOUS
 1 - Redo Ethan Allen when we have the new font (it has arrows, wait for new font)
-2 - NEC.  Boston first, non-Boston second
-
-Build VIA timetables:
-- SKIP Maple Leaf until new GTFS drops
-- Build-from-scratch West-of-Toronto timetables (can we get these all in one?)
-- Finish the Corridor booklet
+2 - NEC.  Full BOS-WAS (search by NYP-PHL)
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
@@ -49,6 +49,11 @@ Broken due to GTFS breakage:
 - Capitol Corridor - Ghost buses, missing buses
 Not running:
 - Adirondack
+
+VIA Rail stuff:
+- Check corridor for "unsuspended" trains
+- Check for fixes in Maple Leaf data
+- Check for which stations are "manned" for checked baggage info
 
 Put off, because these have printable state agency timetables, or almost:
 - San Joaquins
