@@ -36,6 +36,7 @@ from timetable_kit.tsn import stations_list_from_tsn
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
+    add_day_argument,
     add_debug_argument,
     add_agency_argument,
     add_gtfs_argument,
@@ -184,10 +185,7 @@ def make_argparser():
         help="""Last stop""",
         nargs="?",
     )
-    parser.add_argument(
-        "--day",
-        help="""Restrict to trains/buses operating on a particular day of the week""",
-    )
+    add_day_argument(parser)
     parser.add_argument(
         "--extent",
         help="""Display first and last stations for each trip""",
@@ -233,9 +231,7 @@ if __name__ == "__main__":
         print("Finding trips which stop at", stop_one)
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
         stop_one_id = agency().stop_code_to_stop_id(stop_one)
-        tsns = get_trips_at(
-            stop_one_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
-        )
+        tsns = get_trips_at(stop_one_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
     else:
         print("Finding trips from", stop_one, "to", stop_two)
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)

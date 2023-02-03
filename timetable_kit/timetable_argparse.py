@@ -22,6 +22,9 @@ import argparse
 # Needed for defaulting the GTFS file:
 from timetable_kit import amtrak
 
+# For the GTFS day options:
+from timetable_kit.feed_enhanced import gtfs_days
+
 
 def add_agency_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
@@ -64,6 +67,18 @@ def add_date_argument(parser: argparse.ArgumentParser):
                 Should be in YYYYMMDD format.
              """,
         type=str,
+    )
+
+
+def add_day_argument(parser: argparse.ArgumentParser):
+    """
+    Add the --day argument to a parser.
+    Currently used only for list_trains.py.
+    """
+    parser.add_argument(
+        "--day",
+        help="""Restrict to trains/buses operating on a particular day of the week""",
+        choices=[*gtfs_days, "weekday", "weekend"],
     )
 
 

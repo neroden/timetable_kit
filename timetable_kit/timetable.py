@@ -1345,7 +1345,7 @@ def produce_timetable(
         # We need to strip the HTML comments used to distinguish the header columns
         list_of_columns = timetable.columns
         non_unique_header_replacement_list = [
-            unique_header[unique_header.find("-->"):].removeprefix("-->")
+            unique_header[unique_header.find("-->") :].removeprefix("-->")
             for unique_header in list_of_columns
         ]
         timetable.columns = non_unique_header_replacement_list
