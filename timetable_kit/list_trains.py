@@ -1,14 +1,14 @@
 #! /usr/bin/env python3
-# find_trains.py
+# list_trains.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
 Two modes of invocation
-./find_trains STATION:
+./list_trains STATION:
 Find all the trains (& buses, etc.) which stop at STATION.
 
-./find_trains STATION_A STATION_B:
+./list_trains STATION_A STATION_B:
 Find all the trains (& buses, etc.) from station A to station B (by all routes).
 
 Sort by departure time.
@@ -45,7 +45,7 @@ from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.runtime_config import agency  # for the agency()
 
 
-def find_connecting_buses_from_stop(
+def get_trips_at(
     stop_one_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
 ) -> list[str]:
     """
@@ -69,7 +69,7 @@ def find_connecting_buses_from_stop(
     return tsns
 
 
-def find_trains(
+def get_trips_between(
     stop_one_id: str, stop_two_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
 ) -> list[str]:
     """
@@ -233,7 +233,7 @@ if __name__ == "__main__":
         print("Finding trips which stop at", stop_one)
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
         stop_one_id = agency().stop_code_to_stop_id(stop_one)
-        tsns = find_connecting_buses_from_stop(
+        tsns = get_trips_at(
             stop_one_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
     else:
@@ -241,7 +241,7 @@ if __name__ == "__main__":
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
         stop_one_id = agency().stop_code_to_stop_id(stop_one)
         stop_two_id = agency().stop_code_to_stop_id(stop_two)
-        tsns = find_trains(
+        tsns = get_trips_between(
             stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
 

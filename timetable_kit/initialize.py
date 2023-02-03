@@ -60,7 +60,7 @@ def initialize_feed(gtfs):
 def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
     """
     Filter the feed down based on command line arguments, for the auxiliary utility programs
-    such as find_trains.py and get_station_list.py
+    such as list_trains.py and list_stations.py
 
     Returns a new, filtered feed.
     """

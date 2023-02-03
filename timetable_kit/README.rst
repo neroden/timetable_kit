@@ -19,8 +19,8 @@ folder (see the file amtrak/README.rst in that folder).
 You will also need to write a tt-spec: this consists of a CSV file and a JSON file each in a special format.
 tt-spec-documentation.rst contains documentation on the tt-spec format and future plans for it.
 
-find_trains.py gets all the trains from one station to another station (one way).
-get_station_list.py gets all the stations served by a particular train (in order).
+list_trains.py gets all the trains from one station to another station (one way).
+list_stations.py gets all the stations served by a particular train (in order).
 These are intended as utilities for designing your tt-spec files.
 
 NOTES contains various notes on things learned, work in progress, etc.

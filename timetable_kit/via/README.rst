@@ -9,7 +9,7 @@ TRTO = Toronto
 
 You need to specify the agency.::
     ./timetable.py --agency via
-    ./find_trains.py --agency via HLFX TRTO
+    ./list_trains.py --agency via HLFX TRTO
 
 Work in progress.
 

@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
-# get_station_list.py
+# list_stations.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
-Get all the stations for a particular train number (trip_short_name), in order.
+List all the stations for a particular train number (trip_short_name), in order.
 """
 
 import sys  # For sys.exit

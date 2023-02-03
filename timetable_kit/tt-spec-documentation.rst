@@ -268,6 +268,6 @@ ADDITIONAL TOOLS
 ================
 These commands may be helpful in preparing spec files:
 
-find_trains.py -- get the trains running from station A to station B
-get_station_list.py -- get the list of stations which a particular train stops at
+list_trains.py -- get the trains running from station A to station B
+list_stations.py -- get the list of stations which a particular train stops at
 compare.py -- find timing differences on a route between similar services listed in GTFS
