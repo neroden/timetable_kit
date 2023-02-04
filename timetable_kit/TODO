@@ -1,7 +1,6 @@
 Improve ./list_trains.py:
--- add an optional sorting-station parameter, and possibly allow multiple station pairs
-   for the NEC
-
+-- add an optional sorting-station parameter --order
+-- allow multiple station pair calls (BOS NYP NYP PHL), via better argument handling
 
 Recent GTFS changes:
 - Coast Starlight bug *temporarily* fixed, NB timing changes (timetable updated).
