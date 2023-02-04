@@ -32,7 +32,7 @@ def add_agency_argument(parser: argparse.ArgumentParser):
         "-a",
         help="""
             Custom programming is used for timetables for particular agencies.
-            Default is Amtrak.  Others (including generic) are under contruction.
+            Default is Amtrak. VIA is working.  Others (including generic) are under construction.
             """,
         choices=["generic", "amtrak", "via", "hartford"],
         default="amtrak",
