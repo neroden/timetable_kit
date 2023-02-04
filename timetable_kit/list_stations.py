@@ -29,6 +29,7 @@ from timetable_kit.debug import debug_print, set_debug_level
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
+    add_day_argument,
     add_debug_argument,
     add_agency_argument,
     add_gtfs_argument,
@@ -51,6 +52,7 @@ def make_argparser():
                     """,
     )
     add_date_argument(parser)
+    add_day_argument(parser)
     add_debug_argument(parser)
     add_agency_argument(parser)
     add_gtfs_argument(parser)
@@ -68,10 +70,6 @@ def make_argparser():
                 For instance, if it's "51", train 51 will be used.
              """,
         nargs="?",
-    )
-    parser.add_argument(
-        "--day",
-        help="""Restrict to trains/buses operating on a particular day of the week""",
     )
     parser.add_argument(
         "--csv",
