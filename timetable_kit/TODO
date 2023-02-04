@@ -1,7 +1,5 @@
 Improve ./list_trains.py:
--- add an optional sorting-station parameter, and possibly allow multiple station pairs
-   for the NEC
-
+-- add an optional sorting-station parameter --order
 
 Recent GTFS changes:
 - Coast Starlight bug *temporarily* fixed, NB timing changes (timetable updated).
@@ -13,13 +11,9 @@ Recent GTFS changes:
 - NEC.  ???
 - Springfield MA through-to-NEC train.
 - Pacific Surfliner.  Many changes.  Short trains LAX to Irvine...
-- Sunset Limited. Timing?
-- Texas Eagle.  Timing?
-- Various buses (we don't make timetables for these)
-- ACE (we don't make timetables for these)
 
 Clean up other "working" timetables: - TEDIOUS
-1 - Redo Ethan Allen when we have the new font (it has arrows, wait for new font)
+1 - Redo Ethan Allen (including "buses" version)
 2 - NEC.  Full BOS-WAS (search by NYP-PHL)
 
 California Zephyr

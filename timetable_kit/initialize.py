@@ -63,19 +63,33 @@ def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
     such as list_trains.py and list_stations.py
 
     Returns a new, filtered feed.
+
+    day_of_week is as given in command line argument --day: either a GTFS day,
+    "weekend", or "weekday"
     """
     if reference_date is None:
         reference_date = datetime.date.today().strftime("%Y%m%d")
     debug_print(1, "Working with reference date ", reference_date, ".", sep="")
     today_feed = feed.filter_by_dates(reference_date, reference_date)
 
-    # Restrict by day of week if specified.
-    if day_of_week is not None:
-        day_of_week = day_of_week.lower()
-        if day_of_week not in feed_enhanced.gtfs_days:
-            print("Specifed day of week not understood.")
-            exit(1)
-        debug_print(1, "Restricting to ", day_of_week, ".", sep="")
-        today_feed = today_feed.filter_by_day_of_week(day_of_week)
+    # Restrict by day(s) of week if specified.
+    match day_of_week:
+        case "weekday":
+            days_list = ["monday", "tuesday", "wednesday", "thursday", "friday"]
+            debug_print(1, "Restricting to weekdays.")
+            today_feed = today_feed.filter_by_days_of_week(days_list)
+        case "weekend":
+            days_list = ["saturday", "sunday"]
+            debug_print(1, "Restricting to weekends.")
+            today_feed = today_feed.filter_by_days_of_week(days_list)
+        case None:
+            # No filtering necessary
+            pass
+        case _:
+            if day_of_week not in feed_enhanced.gtfs_days:
+                print("Specifed day of week not understood.")
+                exit(1)
+            debug_print(1, "Restricting to ", day_of_week, ".", sep="")
+            today_feed = today_feed.filter_by_day_of_week(day_of_week)
 
     return today_feed

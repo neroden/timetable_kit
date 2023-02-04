@@ -73,11 +73,11 @@ def add_date_argument(parser: argparse.ArgumentParser):
 def add_day_argument(parser: argparse.ArgumentParser):
     """
     Add the --day argument to a parser.
-    Currently used only for list_trains.py.
     """
     parser.add_argument(
         "--day",
-        help="""Restrict to trains/buses operating on a particular day of the week""",
+        help="""Restrict to trains/buses operating on a particular day of the week, or weekdays, or weekend""",
+        type=str.lower,  # Automatically lowercases all input to this option
         choices=[*gtfs_days, "weekday", "weekend"],
     )
 

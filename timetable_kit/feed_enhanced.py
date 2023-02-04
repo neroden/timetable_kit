@@ -67,7 +67,7 @@ def filter_by_dates(self, first_date, last_date):
 
 def filter_by_day_of_week(
     self,
-    day,
+    day: str,
 ):
     """
     Filters the feed to trips which are running on the selected day.
@@ -95,6 +95,45 @@ def filter_by_day_of_week(
     new_feed = self.copy()
     # This is where we filter the calendar by the value in the day column:
     new_feed.calendar = self.calendar[self.calendar[day] == 1]
+    # Now filter trips by the service_ids in the calendar
+    service_ids = new_feed.calendar["service_id"].array
+    new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
+    # Now filter stop_times by the trip_ids in trips
+    trip_ids = new_feed.trips["trip_id"].array
+    new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
+    return new_feed
+
+
+def filter_by_days_of_week(
+    self,
+    days: list[str],
+):
+    """
+    Filters the feed to trips which are running on one of the selected days.
+    - Filters calendar (direct)
+    - Filters trips (by service_ids in calendar)
+    - Filters stop_times (by trip_ids in trips)
+    - FIXME: no other second-layer filtering
+    """
+    # This assumes integer types for the day column in the calendar.
+    for day in days:
+        if day not in gtfs_days:
+            raise InputError("Expected GTFS day name")
+
+    new_feed = self.copy()
+    # This is where we filter the calendar by the value in the day column.
+    # This was easy with one day but is much more complex with multiple days.
+    # First we have to create a calendar with an auxiliary column.
+    tmp_calendar = self.calendar.copy()
+    tmp_calendar["interesting"] = 0
+    for day in days:
+        tmp_calendar["interesting"] = tmp_calendar["interesting"] + tmp_calendar[day]
+
+    # Filter based on the new column.
+    tmp2_calendar = tmp_calendar[tmp_calendar["interesting"] >= 1]
+    # Now drop the auxiliary column and use the new calendar.
+    new_feed.calendar = tmp2_calendar.drop("interesting", axis="columns")
+
     # Now filter trips by the service_ids in the calendar
     service_ids = new_feed.calendar["service_id"].array
     new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
@@ -327,6 +366,7 @@ def get_trip_short_name(self, trip_id):
 # Monkey patch starts here
 gtfs_kit.Feed.filter_by_dates = filter_by_dates
 gtfs_kit.Feed.filter_by_day_of_week = filter_by_day_of_week
+gtfs_kit.Feed.filter_by_days_of_week = filter_by_days_of_week
 gtfs_kit.Feed.filter_by_route_ids = filter_by_route_ids
 gtfs_kit.Feed.filter_by_service_ids = filter_by_service_ids
 gtfs_kit.Feed.filter_bad_service_ids = filter_bad_service_ids

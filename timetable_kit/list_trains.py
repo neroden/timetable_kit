@@ -47,7 +47,7 @@ from timetable_kit.runtime_config import agency  # for the agency()
 
 
 def get_trips_at(
-    stop_one_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+    stop_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
 ) -> list[str]:
     """
     Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
@@ -60,13 +60,13 @@ def get_trips_at(
     Must be passed a feed, and one stop_id.
     """
     # Start by filtering the stop_times for stop one.
-    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_one_id]
+    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_id]
     sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
     trip_ids = sorted_filtered_stop_times["trip_id"].array
     tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
 
     # Should still be in the correct order
-    print("Found trips at", agency().stop_id_to_stop_code(stop_one_id), " : ", tsns)
+    # print("Found trips at", agency().stop_id_to_stop_code(stop_id), " : ", tsns)
     return tsns
 
 
@@ -128,7 +128,7 @@ def get_trips_between(
     tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids_both]
 
     # Should still be in the correct order
-    print("Found trains: ", tsns)
+    # print("Found trains: ", tsns)
     return tsns
 
 
@@ -167,25 +167,27 @@ def make_argparser():
                     With TWO arguments, produce list of trains/buses (trip_short_name) which stop at the first stop, and later at the last stop.
                     Useful for making sure you found all the trains from NYP to PHL.
 
+                    FOUR or a larger even number of arguments will be treated as a list of pairs,
+                    so BOS NYP NYP PHL will get the trains from BOS to NYP and the trains from NYP to PHL.
+
                     In either case, results are sorted by departure time at the first stop.
 
                     The output should always be reviewed manually before generating tt-spec, especially for days-of-week issues.
                     """,
     )
     add_date_argument(parser)
+    add_day_argument(parser)
     add_debug_argument(parser)
     add_agency_argument(parser)
     add_gtfs_argument(parser)
     parser.add_argument(
-        "stop_one",
-        help="""First stop""",
+        "stops",
+        help="""List of stops: either 1 stop (everything stopping at A),
+                two stops (everything going from A to B),
+                or a larger even number of stops (everything going from A to B or from C to D).
+             """,
+        nargs="*",
     )
-    parser.add_argument(
-        "stop_two",
-        help="""Last stop""",
-        nargs="?",
-    )
-    add_day_argument(parser)
     parser.add_argument(
         "--extent",
         help="""Display first and last stations for each trip""",
@@ -221,25 +223,55 @@ if __name__ == "__main__":
     trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
     # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
 
-    stop_one = args.stop_one
-    stop_two = args.stop_two
-
-    if stop_one is None:
+    stops = args.stops
+    if not stops:
+        print("Error: Must specify at least one stop.")
         argparser.print_usage()
         sys.exit(1)
-    if stop_two is None:
-        print("Finding trips which stop at", stop_one)
+
+    if len(stops) == 1:
+        stop = stops[0]
+        print("Finding trips which stop at", stop)
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
-        stop_one_id = agency().stop_code_to_stop_id(stop_one)
-        tsns = get_trips_at(stop_one_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+        stop_id = agency().stop_code_to_stop_id(stop)
+        tsns = get_trips_at(stop_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+    elif len(stops) % 2 != 0:
+        # Odd number of stops
+        print("Error: Must either specify one stop or an even number of stops.")
+        argparser.print_usage()
+        sys.exit(1)
     else:
-        print("Finding trips from", stop_one, "to", stop_two)
-        # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
-        stop_one_id = agency().stop_code_to_stop_id(stop_one)
-        stop_two_id = agency().stop_code_to_stop_id(stop_two)
-        tsns = get_trips_between(
-            stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
-        )
+        # Turn list of stops into list of pairs of stops
+        pairs = zip(stops[::2], stops[1::2])
+        # Start with a blank list of tsns
+        tsns = []
+        for (stop_one, stop_two) in pairs:
+            print("Finding trips from", stop_one, "to", stop_two)
+            # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
+            stop_one_id = agency().stop_code_to_stop_id(stop_one)
+            stop_two_id = agency().stop_code_to_stop_id(stop_two)
+            this_pair_tsns = get_trips_between(
+                stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+            )
+            # Report the duplicates.
+            # We expect duplicates if we've entered multiple pairs, so only report dupes
+            # if they occured from a single pair.
+            seen = set()
+            dupes = []
+            for tsn in this_pair_tsns:
+                if tsn not in seen:
+                    seen.add(tsn)
+                else:
+                    # Note, if it appears three times, it'll be added to "dupes" twice
+                    dupes.append(tsn)
+            if dupes:
+                print("Warning, some tsns appear more than once:", dupes)
+
+            # Now add to the master list
+            tsns.extend(this_pair_tsns)
+
+    # Right.  NOW remove the duplicates and reorder -- FIXME
+    print("Trains found:", tsns)
 
     if args.extent:
         # We want to print first and last stops for each.
