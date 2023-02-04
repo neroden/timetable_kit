@@ -241,6 +241,18 @@ if __name__ == "__main__":
             stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
         )
 
+    # Report the duplicates
+    seen = set()
+    dupes = []
+    for tsn in tsns:
+        if tsn not in seen:
+            seen.add(tsn)
+        else:
+            # Note, if it appears three times, it'll be added to "dupes" twice
+            dupes.append(tsn)
+    if dupes:
+        print("Warning, some tsns appear more than once:", dupes)
+
     if args.extent:
         # We want to print first and last stops for each.
         for tsn in tsns:
