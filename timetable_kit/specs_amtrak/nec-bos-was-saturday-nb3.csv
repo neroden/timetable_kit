@@ -1,16 +1,16 @@
-, access, station,66,150,160,162,660,54,98,2250,152,664
+, access, station,670,2218,156,20,168,92,146,672,80,192
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
-days,,,WAS,NYP,NYP,WAS,PHL,WAS,WAS,WAS,WAS,PHL
+days,,,PHL,WAS,WAS,WAS,WAS,WAS,WAS,PHL,WAS,WAS
 updown,,,,,,,,,,,,
-WAS,,,first,first,first,first,first,first,first,first,first,first
+WAS,,,,first,first,first,first,first,first,,first,first
 NCR,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
 ABE,,,,,,,,,,,,
 NRK,,,,,,,,,,,,
 WIL,,,,,,,,,,,,
-PHL,,,,,,,,,,,,
+PHL,,,first,,,,,,,first,,
 PHN,,,,,,,,,,,,
 CWH,,,,,,,,,,,,
 TRE,,,,,,,,,,,,
@@ -19,7 +19,7 @@ NBK,,,,,,,,,,,,
 MET,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 NWK,,,,,,,,,,,,
-NYP,,,,,,,last,,last,,last,last
+NYP,,,last,last,last,last,,last,last,last,last,last
 NRO,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
@@ -32,4 +32,4 @@ KIN,,,,,,,,,,,,
 PVD,,,,,,,,,,,,
 RTE,,,,,,,,,,,,
 BBY,,,,,,,,,,,,
-BOS,,,last,last,last,last,,last,,last,,
+BOS,,,,,,,last,,,,,
