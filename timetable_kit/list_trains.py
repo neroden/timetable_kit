@@ -163,32 +163,6 @@ def report_dupes(tsn_list: list[str]):
         print("Warning, some tsns appear more than once:", dupes)
 
 
-def make_spec(route_ids, feed):
-    """Not ready to use: put to one side for testing purposes"""
-    # Creates a prototype timetable.  It will definitely need to be manipulated by hand.
-    # Totally incomplete. FIXME
-    route_ids = [
-        route_id("Illini"),
-        route_id("Saluki"),
-        route_id("City Of New Orleans"),
-    ]
-
-    route_feed = feed.filter_by_route_ids(route_ids)
-    today_feed = route_feed.filter_by_dates(reference_date, reference_date)
-    # reference_date is currently a global
-
-    print("Allbound:")
-    print(today_feed.trips)
-
-    print("Upbound:")
-    up_trips = today_feed.trips[today_feed.trips.direction_id == 0]
-    print(up_trips)
-
-    print("Downbound:")
-    down_trips = today_feed.trips[today_feed.trips.direction_id == 1]
-    print(down_trips)
-
-
 def make_argparser():
     parser = argparse.ArgumentParser(
         description="""
@@ -223,7 +197,7 @@ def make_argparser():
         "--sort",
         help="""Sort the trains by their departure time at this stop code""",
         type=str,
-        dest="synchronization_stop",
+        dest="sync_stop",
     )
     parser.add_argument(
         "--extent",
@@ -250,6 +224,9 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
+    stops = args.stops
+    sync_stop = args.sync_stop
+
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     today_feed = filter_feed_for_utilities(
@@ -260,12 +237,10 @@ if __name__ == "__main__":
     trip_id_to_tsn = make_trip_id_to_tsn_dict(today_feed)
     # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
 
-    stops = args.stops
     if not stops:
         argparser.print_usage()
         print("Error: Must specify at least one stop.")
         sys.exit(1)
-
     if len(stops) == 1:
         stop = stops[0]
         print("Finding trips which stop at", stop)
@@ -302,16 +277,12 @@ if __name__ == "__main__":
             trip_ids.extend(this_pair_trip_ids)
 
     # We have a list of trip_ids.
-    if args.synchronization_stop:
+    if sync_stop:
         # Remove duplicates.  (FIXME: do in non-sorting case too?)
         trip_ids = list(set(trip_ids))
         # Sort.
-        synchronization_stop_id = agency().stop_code_to_stop_id(
-            args.synchronization_stop
-        )
-        sorted_trip_ids = sort_by_time_at_stop(
-            trip_ids, synchronization_stop_id, feed=today_feed
-        )
+        sync_stop_id = agency().stop_code_to_stop_id(sync_stop)
+        sorted_trip_ids = sort_by_time_at_stop(trip_ids, sync_stop_id, feed=today_feed)
     else:
         sorted_trip_ids = trip_ids
 
