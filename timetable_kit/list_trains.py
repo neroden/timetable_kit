@@ -195,7 +195,11 @@ def make_argparser():
     )
     parser.add_argument(
         "--sort",
-        help="""Sort the trains by their departure time at this stop code""",
+        help="""
+             Sort the trains by their departure time at this stop code.
+             Trains not stopping at this stop code will be listed last.
+             Note that multi-day trains may be listed after other trains.
+             """,
         type=str,
         dest="sync_stop",
     )
