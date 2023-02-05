@@ -32,8 +32,8 @@ Broken due to GTFS breakage:
 - Maple Leaf (both Amtrak ***and*** VIA)
 - Ethan Allen Express (Burlington bus stop missing)
 - Capitol Corridor - Ghost buses, missing buses
-Not running:
-- Adirondack
+Partially running:
+- Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
 VIA Rail stuff:
 - Check corridor for "unsuspended" trains
