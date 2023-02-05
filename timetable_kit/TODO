@@ -1,13 +1,4 @@
-Improve ./list_trains.py:
--- add an optional sorting-station parameter --order
-
-Recent GTFS changes:
-- Coast Starlight bug *temporarily* fixed, NB timing changes (timetable updated).
-- Crescent.  Timing changes (doesn't include Feb suspension).  Timetable updated.
-- Charlottesville.  Timing changes.  Timetable updated.
-- Roanoake.  Timing changes.  Timetable updated.
-- Missouri River Runner. Timetable updated (awaiting SW Chief repairs, sadly).
-
+Recent changes, timetables not yet rebuilt:
 - NEC.  ???
 - Springfield MA through-to-NEC train.
 - Pacific Surfliner.  Many changes.  Short trains LAX to Irvine...
