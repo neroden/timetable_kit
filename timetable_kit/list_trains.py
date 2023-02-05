@@ -46,45 +46,35 @@ from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.runtime_config import agency  # for the agency()
 
 
-def get_trips_at(
-    stop_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
-) -> list[str]:
+def get_trips_at(stop_id: str, *, feed: gtfs_kit.Feed) -> list[str]:
     """
-    Returns a list of trip_short_names (train numbers) which stop at the chosen stop.
+    Returns a list of trip_ids which stop at the chosen stop.
 
     Preferably, use a feed restricted to a single day (today_feed).  Not required though.
 
-    Requires a trip_id_to_tsn map (dict).
-
-    Consider returning trip_ids instead. FIXME
     Must be passed a feed, and one stop_id.
     """
-    # Start by filtering the stop_times for stop one.
+    # Start by filtering the stop_times for this stop.
     filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_id]
+    # FIXME -- do we need to sort here?
     sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
     trip_ids = sorted_filtered_stop_times["trip_id"].array
-    tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
-
-    # Should still be in the correct order
-    # print("Found trips at", agency().stop_id_to_stop_code(stop_id), " : ", tsns)
-    return tsns
+    return trip_ids
 
 
 def get_trips_between(
-    stop_one_id: str, stop_two_id: str, *, feed: gtfs_kit.Feed, trip_id_to_tsn: dict
+    stop_one_id: str, stop_two_id: str, *, feed: gtfs_kit.Feed
 ) -> list[str]:
     """
-    Returns a list of trip_short_names (train numbers) which stop at both stops, in that order.
+    Returns a list of trip_ids which stop at both stops, in that order.
 
     Preferably, use a feed restricted to a single day (today_feed).  Not required though.
 
-    Requires a trip_id_to_tsn map (dict).
-
-    Consider returning trip_ids instead. FIXME
     Must be passed a feed, and two stop_ids.
     """
     # Start by filtering the stop_times for stop one.
     filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one_id]
+    # FIXME -- do we need to sort here?
     # This is a bit tricky: attempt to maintain sorting order
     sorted_filtered_stop_times_one = filtered_stop_times_one.sort_values(
         by=["departure_time"]
@@ -124,12 +114,53 @@ def get_trips_between(
             ):
                 # Stops at the first station before the second station...
                 trip_ids_both.append(trip_id)
+    return trip_ids_both
 
-    tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids_both]
 
-    # Should still be in the correct order
-    # print("Found trains: ", tsns)
-    return tsns
+def sort_by_time_at_stop(
+    trip_id_list: list[str],
+    stop_id: str,
+    *,
+    feed: gtfs_kit.Feed,
+) -> list[str]:
+    """
+    Sort a list of trip_ids by departure time at a particular stop.
+
+    Any trip_ids which do not stop at that stop are put last.
+    """
+    # Start by filtering the stop_times for the specified stop.
+    filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_id]
+    # Filter again for the trip_ids.
+    filtered_stop_times = filtered_stop_times[
+        filtered_stop_times.trip_id.isin(trip_id_list)
+    ]
+    # Note that GTFS requires departure_time even for the last stop.
+    sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
+    sorted_trip_ids = sorted_filtered_stop_times["trip_id"].to_list()
+
+    # Catch the ones which didn't stop at this stop and add them to the end.
+    # Include duplicates.
+    extra_trip_ids = []
+    for x in trip_id_list:
+        if x not in sorted_trip_ids:
+            extra_trip_ids.append(x)
+    sorted_trip_ids.extend(extra_trip_ids)
+
+    return sorted_trip_ids
+
+
+def report_dupes(tsn_list: list[str]):
+    """Report duplicates in a list of tsns."""
+    seen = set()
+    dupes = []
+    for tsn in tsn_list:
+        if tsn not in seen:
+            seen.add(tsn)
+        else:
+            # Note, if it appears three times, it'll be added to "dupes" twice
+            dupes.append(tsn)
+    if dupes:
+        print("Warning, some tsns appear more than once:", dupes)
 
 
 def make_spec(route_ids, feed):
@@ -175,11 +206,11 @@ def make_argparser():
                     The output should always be reviewed manually before generating tt-spec, especially for days-of-week issues.
                     """,
     )
+    add_agency_argument(parser)
+    add_gtfs_argument(parser)
     add_date_argument(parser)
     add_day_argument(parser)
     add_debug_argument(parser)
-    add_agency_argument(parser)
-    add_gtfs_argument(parser)
     parser.add_argument(
         "stops",
         help="""List of stops: either 1 stop (everything stopping at A),
@@ -187,6 +218,12 @@ def make_argparser():
                 or a larger even number of stops (everything going from A to B or from C to D).
              """,
         nargs="*",
+    )
+    parser.add_argument(
+        "--sort",
+        help="""Sort the trains by their departure time at this stop code""",
+        type=str,
+        dest="synchronization_stop",
     )
     parser.add_argument(
         "--extent",
@@ -219,14 +256,14 @@ if __name__ == "__main__":
         master_feed, reference_date=args.reference_date, day_of_week=args.day
     )
 
-    # Make the two interconverting dicts -- actually we only need one of them
-    trip_id_to_tsn = make_trip_id_to_tsn_dict(master_feed)
-    # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_monday_feed)
+    # Make the two interconverting dicts -- we only need one
+    trip_id_to_tsn = make_trip_id_to_tsn_dict(today_feed)
+    # tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
 
     stops = args.stops
     if not stops:
-        print("Error: Must specify at least one stop.")
         argparser.print_usage()
+        print("Error: Must specify at least one stop.")
         sys.exit(1)
 
     if len(stops) == 1:
@@ -234,44 +271,56 @@ if __name__ == "__main__":
         print("Finding trips which stop at", stop)
         # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
         stop_id = agency().stop_code_to_stop_id(stop)
-        tsns = get_trips_at(stop_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn)
+        trip_ids = get_trips_at(stop_id, feed=today_feed)
+        tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
     elif len(stops) % 2 != 0:
         # Odd number of stops
-        print("Error: Must either specify one stop or an even number of stops.")
         argparser.print_usage()
+        print("Error: Must either specify one stop or an even number of stops.")
         sys.exit(1)
     else:
         # Turn list of stops into list of pairs of stops
         pairs = zip(stops[::2], stops[1::2])
         # Start with a blank list of tsns
-        tsns = []
+        trip_ids = []
         for (stop_one, stop_two) in pairs:
             print("Finding trips from", stop_one, "to", stop_two)
             # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
             stop_one_id = agency().stop_code_to_stop_id(stop_one)
             stop_two_id = agency().stop_code_to_stop_id(stop_two)
-            this_pair_tsns = get_trips_between(
-                stop_one_id, stop_two_id, feed=today_feed, trip_id_to_tsn=trip_id_to_tsn
+            this_pair_trip_ids = get_trips_between(
+                stop_one_id, stop_two_id, feed=today_feed
             )
-            # Report the duplicates.
+
+            # Report duplicates.  Important for catching GTFS weirdness.
             # We expect duplicates if we've entered multiple pairs, so only report dupes
             # if they occured from a single pair.
-            seen = set()
-            dupes = []
-            for tsn in this_pair_tsns:
-                if tsn not in seen:
-                    seen.add(tsn)
-                else:
-                    # Note, if it appears three times, it'll be added to "dupes" twice
-                    dupes.append(tsn)
-            if dupes:
-                print("Warning, some tsns appear more than once:", dupes)
+            this_pair_tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
+            report_dupes(this_pair_tsns)
 
             # Now add to the master list
-            tsns.extend(this_pair_tsns)
+            trip_ids.extend(this_pair_trip_ids)
 
-    # Right.  NOW remove the duplicates and reorder -- FIXME
-    print("Trains found:", tsns)
+    # We have a list of trip_ids.
+    if args.synchronization_stop:
+        # Remove duplicates.  (FIXME: do in non-sorting case too?)
+        trip_ids = list(set(trip_ids))
+        # Sort.
+        synchronization_stop_id = agency().stop_code_to_stop_id(
+            args.synchronization_stop
+        )
+        sorted_trip_ids = sort_by_time_at_stop(
+            trip_ids, synchronization_stop_id, feed=today_feed
+        )
+    else:
+        sorted_trip_ids = trip_ids
+
+    # Convert to tsns.  Note that duplicate TSNs can appear here (with different trip_ids),
+    # And we definitely want the user to know about this, so leave those duplicates.
+    sorted_tsns = [trip_id_to_tsn[trip_id] for trip_id in sorted_trip_ids]
+
+    # Report the results!
+    print("Trains found:", sorted_tsns)
 
     if args.extent:
         # We want to print first and last stops for each.
