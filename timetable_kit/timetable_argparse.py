@@ -76,7 +76,11 @@ def add_day_argument(parser: argparse.ArgumentParser):
     """
     parser.add_argument(
         "--day",
-        help="""Restrict to trains/buses operating on a particular day of the week, or weekdays, or weekend""",
+        help="""Restrict to trains/buses operating on a particular day of the week, or weekdays, or weekend.
+                WARNING: only checks the day of the week for the FIRST station the train stops at,
+                and only in the base time zone of the agency.
+                Manually check if you have trains which run overnight or start in a different time zone.
+                """,
         type=str.lower,  # Automatically lowercases all input to this option
         choices=[*gtfs_days, "weekday", "weekend"],
     )
