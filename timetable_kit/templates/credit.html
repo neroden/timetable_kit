@@ -13,8 +13,9 @@
 #}subject to the Creative Commons {#
 #}<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.{#
 #}</p><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}" {#
-#}{% if not compress_right_credits %}style="font-size: 120%; font-weight: bold"{% endif %}>{#
-#}Timetable_kit was written by Nathanael Nerode.{#
+#}{% if not compress_right_credits %}style="font-size: 120%; font-weight: bold"{% else %}{#
+#}style="font-size: 110%; font-weight: bold"{% endif %}>{#
+#}Timetable_kit was written{{ br_or_space(compress_right_credits) }}by Nathanael Nerode.{#
 #}<br>{#
 #}If you appreciate this timetable,{#
 #}{{ br_or_space(key_on_right) }}{#
