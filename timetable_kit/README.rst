@@ -23,6 +23,8 @@ list_trains.py gets all the trains from one station to another station (one way)
 list_stations.py gets all the stations served by a particular train (in order).
 These are intended as utilities for designing your tt-spec files.
 
+make_spec.py > output.csv can be used to make a prototype tt-spec CSV file, but it *will* need to be edited by hand in a spreadsheet.
+
 NOTES contains various notes on things learned, work in progress, etc.
 TODO is my to-do list.
 
