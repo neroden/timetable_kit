@@ -38,6 +38,8 @@ connecting_services_dict = {
     "NBK": ["njt"],
     "PJC": ["njt"],
     "TRE": ["septa", "njt"],
+    "CWH": ["septa"],
+    "PHN": ["septa"],
     "PHL": ["septa", "njt"],
     "WIL": ["septa"],
     "NRK": ["septa"],
