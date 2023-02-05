@@ -1,24 +1,25 @@
-,stations,access,261,63 monday,281,233,283,291,235,49,237,239,241,243
-column-options,,,days short-days-box,ardp,,,,,,ardp,,,,
-route-name,,,,,,,,,,,,,,
-,,,,"<div style=""text-align: center;"">(Via Rail #98)</div>",,,,,,,,,,
-days,,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
-NYP,,,261 first,63 monday first,281 first,233 first,283 first,291 first,235 first,49 first,237 first,239 first,241 first,243 first
-YNY,,,,,,,,,,,,,,
-CRT,,,,,,,,,,,,,,
-POU,,,,,,,,,,,,,,
-RHI,,,,,,,,,,,,,,
-HUD,,,,,,,,,,,,,,
-ALB,,,261 last,,,233 last,,,235 last,,237 last, 239 last, 241 last,243 last
-SDY,,,blank,,,blank,,,blank,,blank,blank,blank,blank
-AMS,,,blank,,,blank,,"<span>Continues To<br>Burlington, VT</span>",blank,,blank,blank,blank,blank
-UCA,,,blank,,,blank,,blank,blank,,blank,blank,blank,blank
-ROM,,,blank,,,blank,,blank,blank,,blank,blank,blank,blank
-SYR,,,blank,,,blank,,blank,blank,,blank,blank,blank,blank
-ROC,,,blank,,,blank,,blank,blank,,blank,blank,blank,blank
-BUF,,,blank,,,blank,,blank,blank,,blank,blank,blank,blank
-BFX,,,blank,,,blank,,blank,blank,"<span>Continues To<br>Chicago, IL</span>",blank,blank,blank,blank
-NFL,,,blank,,281 last,blank,283 last,blank,blank,blank,blank,blank,blank,blank
-NFS,,,blank,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-,Additional Canadian stations,,blank,(see Via Rail),blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
-TWO,,,blank,63 monday last,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+,stations,access,261,63 monday,69,281,233,283,291,235,49,237,239,241,243
+column-options,,,days short-days-box,ardp,,,,,,,ardp,,,,
+omit,Note that 261 shows in Sunday trains  Ghost trains: 245 (Albany-NYC),,,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,,,
+,,,,"<div style=""text-align: center;"">(Via Rail #98)</div>",,,,,,,,,,,
+days,,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+NYP,,,261 first,63 monday first,69 first,281 first,233 first,283 first,291 first,235 first,49 first,237 first,239 first,241 first,243 first
+YNY,,,,,,,,,,,,,,,
+CRT,,,,,,,,,,,,,,,
+POU,,,,,,,,,,,,,,,
+RHI,,,,,,,,,,,,,,,
+HUD,,,,,,,,,,,,,,,
+ALB,,,261 last,,69 last,,233 last,,,235 last,,237 last, 239 last, 241 last,243 last
+SDY,,,blank,,blank,,blank,,,blank,,blank,blank,blank,blank
+AMS,,,blank,,blank,,blank,,"<span>Continues To<br>Burlington, VT</span>",blank,,blank,blank,blank,blank
+UCA,,,blank,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+ROM,,,blank,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+SYR,,,blank,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+ROC,,,blank,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+BUF,,,blank,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+BFX,,,blank,,blank,,blank,,blank,blank,"<span>Continues To<br>Chicago, IL</span>",blank,blank,blank,blank
+NFL,,,blank,,blank,281 last,blank,283 last,blank,blank,blank,blank,blank,blank,blank
+NFS,,,blank,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+,Additional Canadian stations,,blank,(see Via Rail),blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank
+TWO,,,blank,63 monday last,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank

@@ -1,5 +1,6 @@
 ,stations,access,232,234,236,280,240,238,284,290,48,244,68,64
 column-options,,,,,,ardp,,,,,ardp,,,ardp
+omit,Ghost trains: 230 (ALB-NYP),,,,,,,,,,,,,
 route-name,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,"<div style=""text-align: center;"">(Via Rail #97)</div>"
 days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP

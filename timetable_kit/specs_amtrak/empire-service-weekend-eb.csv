@@ -1,8 +1,9 @@
 ,stations,access,250,260,280,240,238,284,256,290,48,244,68,64
 column-options,,,,,ardp,,,,,,ardp,,,ardp
+omit,Ghost trains: 288 (Niagara Falls train),,,,,,,,,,,,,
 route-name,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,"<div style=""text-align: center;"">(Via Rail #97)</div>"
-days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,"<b style=""text-align:center"">Su</b>",NYP
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 TWO,,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,64 first
 ,Additional Canadian stations,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,(see Via Rail)
 NFS,,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,
