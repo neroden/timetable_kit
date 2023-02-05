@@ -1,9 +1,9 @@
-, access, station,66,150,2290,162,660,2248,54,98,152,662
+, access, station,66,150,2290,162,660,2248,54,98,152 saturday,662
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
 days,,,WAS,NYP,NYP,WAS,PHL,WAS,WAS,WAS,WAS,PHL
 updown,,,,,,,,,,,,
-WAS,,,first,,,first,,first,first,first,first,
+WAS,,,first,,,first,,first,first,first,152 saturday first,
 NCR,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
@@ -19,7 +19,7 @@ NBK,,,,,,,,,,,,
 MET,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 NWK,,,,,,,,,,,,
-NYP,,,,first,first,,last,,,last,last,last
+NYP,,,,first,first,,last,,,last,152 saturday last,last
 NRO,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
