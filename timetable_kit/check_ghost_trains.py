@@ -5,17 +5,62 @@
 # Initial version started by Christopher Juckins
 
 import sys
-#from urllib.request import urlopen
 from urllib.request import Request, urlopen
 
 
 """
-This essentially compares two lists:
+This program essentially compares two lists:
 
 a) The list of trains in a .csv spec file that we think are running
 b) The list of trains from an external .txt file that are actually running
 
 It will print differences so manual tweaks to the .csv can be done.
+
+The external .txt files for trains actually running are on 
+https://juckins.net/timetable_kit/trains_running/
+
+The following is the list of route names as given in Amtrak's Track-A-Train data
+(converted to lowercase, any spaces or slashes replaced with a "-") that are
+used in the .txt files:
+
+acela
+amtrak-cascades
+auto-train
+california-zephyr
+capitol-corridor
+capitol-limited
+cardinal
+carolinian-piedmont
+city-of-new-orleans
+coast-starlight
+crescent
+downeaster
+empire-builder
+empire-service
+ethan-allen-express
+heartland-flyer
+hiawatha
+illinois-service
+keystone
+lake-shore-limited
+lincoln-service-missouri-river-runner
+maple-leaf
+michigan-services
+missouri-river-runner
+northeast-regional
+pacific-surfliner
+pennsylvanian
+san-joaquins
+silver-service-palmetto
+southwest-chief
+sunset-limited
+texas-eagle
+vermonter
+winter-park-express
+
+Adirondack is missing but will likely come back in the future.
+
+Example filename: trains-actually-running-empire-service.txt
 """
 
 # TO DO:
@@ -53,13 +98,12 @@ the process of importing the list of trains_running (which is probably
 newline-separated? space-separated?), and the process of looping over 
 multiple CSV files and merging the lists from different CSV files.
 """
-#
-# Add in method to download the actual running files from the following URL:
-# https://juckins.net/timetable_kit/trains_running/
 
 if __name__ == "__main__":
     
-    # Quick framework test
+    #--- 
+    # Quick comparison framework test
+    #---
     csv_input = ["20", "66", "174"]
     print('csv_input: ', csv_input)
 
@@ -73,13 +117,18 @@ if __name__ == "__main__":
     print('csv_ghost_train: ', csv_ghost_train)
     print('')
 
-    # Download test file
+
+    #---
+    # Section to download external test file and read into list
+    #---
     url_basename = 'https://juckins.net/timetable_kit/trains_running'
-    train_running_filename = 'trains-actually-running-empire-service.txt'
-    url_to_open = url_basename + '/' + train_running_filename
+    url_prefixfilename = 'trains-actually-running'
+    url_routename = 'empire-service'
+    url_filename = url_prefixfilename + '-' + url_routename + '.txt'
+    url_to_open = url_basename + '/' + url_filename
     print('url to open', url_to_open)
 
-    # Get the file and print out
+    # Get the file and print out contents
     req = Request(
         url = url_to_open,
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -89,10 +138,11 @@ if __name__ == "__main__":
     print(webpage)
 
     # Split each line from the webpage into a list
+    # Note this includes the 2 header lines that we remove later
     train_num_list = webpage.split('\n')
     #print('train_num_list: ', train_num_list)
 
-    # Remove blank strings from our list
+    # Remove any blank strings from our list
     while("" in train_num_list):
         train_num_list.remove("")
 
@@ -102,12 +152,13 @@ if __name__ == "__main__":
     #for i in range(2, number_of_lines):
     #    print(train_num_list[i])
 
-    # Create and print out our final comparison list (ignore first 2 lines)
-    print('Trains running on', train_num_list[0])
-    number_of_lines = len(train_num_list)
+    # Create and print our final list for comparison
+    # Ignore the first 2 header lines
     train_num_list_compare = list()
+    number_of_lines = len(train_num_list)
     for i in range(2, number_of_lines):
         train_num_list_compare.append(train_num_list[i])
+    print('Trains running on', train_num_list[0])
     print(train_num_list_compare)
     
 
