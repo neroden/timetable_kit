@@ -19,6 +19,8 @@ It will print differences so manual tweaks to the .csv can be done.
 The external .txt files for trains actually running are on 
 https://juckins.net/timetable_kit/trains_running/
 
+Example filename: trains-actually-running-empire-service.txt
+
 The following is the list of route names as given in Amtrak's Track-A-Train data
 (converted to lowercase, any spaces or slashes replaced with a "-") that are
 used in the .txt files:
@@ -59,8 +61,6 @@ vermonter
 winter-park-express
 
 Adirondack is missing but will likely come back in the future.
-
-Example filename: trains-actually-running-empire-service.txt
 """
 
 # TO DO:
