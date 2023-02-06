@@ -5,6 +5,9 @@
 # Initial version started by Christopher Juckins
 
 import sys
+#from urllib.request import urlopen
+from urllib.request import Request, urlopen
+
 
 """
 This essentially compares two lists:
@@ -58,24 +61,28 @@ if __name__ == "__main__":
     
     # Quick framework test
     csv_input = ["20", "66", "174"]
+    print('csv_input: ', csv_input)
+
     trains_running = ["20", "80", "174"]
-    
-    print('csv_input:')
-    print(csv_input)
-    
-    print('')
-    
-    print('trains_running:')
-    print(trains_running)
-    
-    print('')
+    print('trains_running: ', trains_running)
     
     missing_from_csv_input = list(set(trains_running).difference(csv_input))
-    print('missing_from_csv_input:')
-    print(missing_from_csv_input)
-    
-    print('')
+    print('missing_from_csv_input:', missing_from_csv_input)
     
     csv_ghost_train = list(set(csv_input).difference(trains_running))
-    print('csv_ghost_train:')
-    print(csv_ghost_train)
+    print('csv_ghost_train: ', csv_ghost_train)
+
+    # Download test file
+    url_basename = 'https://juckins.net/timetable_kit/trains_running'
+    train_running_filename = 'trains-actually-running-empire-service.txt'
+    url_to_open = url_basename + '/' + train_running_filename
+    print('url to open', url_to_open)
+
+    # Get the file and print out
+    req = Request(
+        url = url_to_open,
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        )
+    webpage = urlopen(req).read().decode('utf-8')
+    print(webpage)
+
