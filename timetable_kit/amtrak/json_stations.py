@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # amtrak_json_stations.py
 # Part of timetable_kit
-# Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
 Routines for extracting Amtrak's JSON station data and working with it.

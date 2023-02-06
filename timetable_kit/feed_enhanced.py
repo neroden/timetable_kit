@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # feed_enhanced.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
 This module monkey-patches the Feed class from gtfs_kit to add methods.

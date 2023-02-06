@@ -1,6 +1,6 @@
 # via/route_names.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Get the name for a route.
 
