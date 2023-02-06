@@ -71,6 +71,7 @@ if __name__ == "__main__":
     
     csv_ghost_train = list(set(csv_input).difference(trains_running))
     print('csv_ghost_train: ', csv_ghost_train)
+    print('')
 
     # Download test file
     url_basename = 'https://juckins.net/timetable_kit/trains_running'
@@ -84,5 +85,29 @@ if __name__ == "__main__":
         headers = {'User-Agent': 'Mozilla/5.0'}
         )
     webpage = urlopen(req).read().decode('utf-8')
+    print('')
     print(webpage)
+
+    # Split each line from the webpage into a list
+    train_num_list = webpage.split('\n')
+    #print('train_num_list: ', train_num_list)
+
+    # Remove blank strings from our list
+    while("" in train_num_list):
+        train_num_list.remove("")
+
+    # Print our list, but ignore first 2 lines
+    #print('Trains running on', train_num_list[0])
+    #number_of_lines = len(train_num_list)
+    #for i in range(2, number_of_lines):
+    #    print(train_num_list[i])
+
+    # Create and print out our final comparison list (ignore first 2 lines)
+    print('Trains running on', train_num_list[0])
+    number_of_lines = len(train_num_list)
+    train_num_list_compare = list()
+    for i in range(2, number_of_lines):
+        train_num_list_compare.append(train_num_list[i])
+    print(train_num_list_compare)
+    
 
