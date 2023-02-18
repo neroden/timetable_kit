@@ -1180,5 +1180,19 @@ def style_updown(reverse: bool, doing_html=False) -> str:
     if not doing_html:
         return text
 
-    final_str = "".join(["<b>", text, "</b>"])
-    return final_str
+    # doing_html
+
+    # The added arrows are nice, but...
+    # Silver Service doesn't have enough room for the arrows.
+    # Have to flag this off of the .json file.
+    using_arrows = False
+    if doing_html and using_arrows:
+        if reverse:
+            arrow = "&#x2191;" # Up arrow in SpartanTT font
+        else:
+            arrow = "&#x2193;" # Down arrow in SpartanTT font
+        # Put arrows on right and left, with spaces
+        text = " ".join([arrow, text, arrow])
+
+    text = "".join(["<b>", text, "</b>"])
+    return text
