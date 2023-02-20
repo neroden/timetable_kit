@@ -1,8 +1,8 @@
 ,5 / 5005 noheader, access, stations, timezone,6 / 5006 noheader
 column-options,ardp,,,,reverse ardp
 days,CHI,,,,CHI
-updown,5 first,,,,6 last
-CHI,,,,,
+updown,,,,,
+CHI,5 first,,,,6 last
 NPV,,,,,
 PCT,,,,,
 GBB,,,,,
