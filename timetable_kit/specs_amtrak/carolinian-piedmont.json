@@ -1,7 +1,7 @@
 {
     "title": "Carolinian and Piedmont Timetable",
     "heading": "Amtrak's Carolinian and Piedmont",
-    "reference_date": "20230301",
+    "reference_date": "20230401",
     "programmers_warning": "Train 80, 19, and 20 have weird variations on incoming NEC timings.",
     "landscape": true,
     "key_baggage": true,

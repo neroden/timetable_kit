@@ -1,7 +1,7 @@
 {
     "title": "Heartland Flyer Timetable",
     "heading": "Amtrak's Heartland Flyer",
-    "reference_date": "20230301",
+    "reference_date": "20230401",
     "top_text": "The Heartland Flyer runs from Fort Worth to Oklahoma City.<br>It connects with both directions of the Texas Eagle at Fort Worth.<br>Amtrak Thruway Bus service operated by <a href=\"https://www.beeline-express.com/routes/wichita-okc/\">BeeLine Express</a> connects from Oklahoma City to Wichita,<br>and to Newton, where it connects with both directions of the Southwest Chief.  It will wait for late trains at Newton.",
     "key_bus": "true",
     "use_bus_icon_in_cells": "true",

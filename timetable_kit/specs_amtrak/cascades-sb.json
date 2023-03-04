@@ -1,7 +1,7 @@
 {
     "title": "Cascades Southbound",
     "heading": "Amtrak's Cascades: Southbound",
-    "reference_date": "20230301",
+    "reference_date": "20230401",
     "programmers_warning": "Oregon Point buses missing.  Coast Starlight duplicate timetable problems.",
     "key_baggage": "true",
     "for_rpa": "true",

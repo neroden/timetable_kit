@@ -2,7 +2,7 @@
     "programmers_warning": "This is for use with raw GTFS to identify whether timetables actually differ by day of week, or not",
     "title": "Coast Starlight Timetable",
     "heading": "Amtrak's Coast Starlight",
-    "reference_date": "20230301",
+    "reference_date": "20230401",
     "key_on_right": "true",
     "key_baggage": "true",
     "key_d": "true",
