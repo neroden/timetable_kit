@@ -1,13 +1,5 @@
-- Mass substitution of reference dates.
-
-Recent changes, timetables not yet rebuilt:
-- NEC.  ???
-- Springfield MA through-to-NEC train.
-- Pacific Surfliner.  Many changes.  Short trains LAX to Irvine...
-
-Clean up other "working" timetables: - TEDIOUS
-1 - Redo Ethan Allen (including "buses" version)
-2 - NEC.  Full BOS-WAS (search by NYP-PHL)
+Utilities improvement
+- Write general utility for mass substitution of reference dates.
 
 California Zephyr
 NOTE ! NOTE ! NOTE !
@@ -15,27 +7,31 @@ Richmond CA is not handicapped accessible until at LEAST Jan 3 2023
 (check San Joaquins site)
 Waiting for information from San Joaquins to figure out when this will change
 Emailed them 27 Jan 2023
+Emailed them again 5 Mar 2023
+
+Broken due to GTFS breakage:
+- NEC (ghost trains, missing trains)
+- Virginia Services (NEC issues)
+- Empire Service (ghost trains, missing trains)
+- Maple Leaf (both Amtrak ***and*** VIA) -- short versions OK
+- Ethan Allen Express (Burlington bus stop missing) -- short version OK
+- Vermonter (recent build bugs, check)
+- Vermont to Upstate NY (Burlington bus stop missing)
+- Southwest Chief (missing)
+- Grand Canyon (ibid)
+- Heartland Flyer (ibid)
+- Lincoln Service (ibid) -- short version OK
+- Quincy (ibid) -- short version OK
+- Capitol Corridor - Ghost buses, missing buses
+- Winter Park Express (missing)
+Partially running:
+- Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
 Capitol Corridor
 NOTE ! NOTE ! NOTE !
 Amtrak station *is* at Chase Bank
 Official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
 -- Need to notify the Capitol Corridor (darnit people)
-
-Broken due to GTFS breakage:
-- Winter Park Express (missing)
-- Vermont to Upstate NY (Burlington bus stop missing)
-- Southwest Chief (missing)
-- Lincoln Service (ibid)
-- Quincy (ibid)
-- Grand Canyon (ibid)
-- Heartland Flyer (ibid)
-- Empire Service (ghost trains, missing trains)
-- Maple Leaf (both Amtrak ***and*** VIA)
-- Ethan Allen Express (Burlington bus stop missing)
-- Capitol Corridor - Ghost buses, missing buses
-Partially running:
-- Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
 VIA Rail stuff:
 - Check corridor for "unsuspended" trains
