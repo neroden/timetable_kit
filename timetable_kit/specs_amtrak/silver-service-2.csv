@@ -1,26 +1,26 @@
-,91,97, access, station,98,92
-column-options,ardp,ardp,,,ardp reverse,ardp reverse
-route-name,,,,,,
-days,NYP,NYP,,,NYP,NYP
-updown,,,,,,
-,"<div style=""text-align:center;"">from New York</div>","<div style=""text-align:center;"">from New York</div>",,,"<div style=""text-align:center;"">to New York</div>","<div style=""text-align:center;"">to New York</div>"
-SAV,,,,,,
-JSP,,,,,,
-JAX,,,,,,
-PAK,,,,,,
-DLD,,,,,,
-WPK,,,,,,
-ORL,,,,,,
-KIS,,,,,,
-LAK,,,,,,
-TPA,,,,,,
-LKL,,,,,,
-WTH,,,,,,
-SBG,,,,,,
-OKE,,,,,,
-WPB,,,,,,
-DLB,,,,,,
-DFB,,,,,,
-FTL,,,,,,
-HOL,,,,,,
-MIA,91 last,97 last,,,98 first,92 first
+,91,97, access, station,98 saturday,98 sunday,92
+column-options,ardp,ardp,,,ardp reverse,ardp reverse,ardp reverse
+route-name,,,,,,,
+days,NYP,NYP,,,NYP,NYP,NYP
+updown,,,,,,,
+,"<div style=""text-align:center;"">from New York</div>","<div style=""text-align:center;"">from New York</div>",,,"<div style=""text-align:center;"">to New York</div>","<div style=""text-align:center;"">to New York</div>","<div style=""text-align:center;"">to New York</div>"
+SAV,,,,,,,
+JSP,,,,,,,
+JAX,,,,,,,
+PAK,,,,,,,
+DLD,,,,,,,
+WPK,,,,,,,
+ORL,,,,,,,
+KIS,,,,,,,
+LAK,,,,,,,
+TPA,,,,,,,
+LKL,,,,,,,
+WTH,,,,,,,
+SBG,,,,,,,
+OKE,,,,,,,
+WPB,,,,,,,
+DLB,,,,,,,
+DFB,,,,,,,
+FTL,,,,,,,
+HOL,,,,,,,
+MIA,91 last,97 last,,,98 first,98 first,92 first
