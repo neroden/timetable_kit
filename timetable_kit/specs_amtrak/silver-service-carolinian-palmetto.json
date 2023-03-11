@@ -1,0 +1,10 @@
+{
+    "title": "Silver Service/Carolinian/Palmetto Timetable",
+    "heading": "Amtrak's Silver Service-Carolinian-Palmetto",
+    "reference_date": "20230401",
+    "key_baggage": true,
+    "key_d": true,
+    "key_r": true,
+    "landscape": "true",
+    "for_rpa": "true"
+}
