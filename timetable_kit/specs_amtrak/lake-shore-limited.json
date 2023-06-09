@@ -1,7 +1,7 @@
 {
     "title": "Lake Shore Limited Timetable",
     "heading": "Amtrak's Lake Shore Limited",
-    "reference_date": "20230401",
+    "reference_date": "20230613",
     "top_text": "Trains 48 and 448 are the <b>same train</b> from Chicago to Albany; cars separate to go to New York City and Boston.<br>Trains 49 and 449 join at Albany to become the <b>same train</b> from Albany to Chicago.",
     "train_numbers_side_by_side": "true",
     "key_baggage": "true",

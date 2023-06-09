@@ -112,17 +112,26 @@ def compare_similar_services(route_id, *, feed):
     print("Calendar:")
     print(route_feed.calendar)
 
-    print("Downbound:")
-    downbound_trips = route_feed.trips[route_feed.trips.direction_id == 0]  # W for LSL
-    print(downbound_trips)
-    base_trip = downbound_trips.iloc[0, :]  # row 0, all columns
-    compare_stop_lists(base_trip, downbound_trips, feed=route_feed)
+    downbound_trips = route_feed.trips[route_feed.trips.direction_id == "0"]  # W for LSL
+    if not downbound_trips.empty():
+        print("Downbound:")
+        print(downbound_trips)
+        base_trip = downbound_trips.iloc[0, :]  # row 0, all columns
+        compare_stop_lists(base_trip, downbound_trips, feed=route_feed)
 
-    print("Upbound:")
-    upbound_trips = route_feed.trips[route_feed.trips.direction_id == 1]  # E for LSL
-    print(upbound_trips)
-    base_trip = upbound_trips.iloc[0, :]  # row 0, all columns
-    compare_stop_lists(base_trip, upbound_trips, feed=route_feed)
+    upbound_trips = route_feed.trips[route_feed.trips.direction_id == "1"]  # E for LSL
+    if not upbound_trips.empty():
+        print("Upbound:")
+        print(upbound_trips)
+        base_trip = upbound_trips.iloc[0, :]  # row 0, all columns
+        compare_stop_lists(base_trip, upbound_trips, feed=route_feed)
+
+    mysterybound_trips = route_feed.trips[route_feed.trips.direction_id == ""]  # Some trips don't list this
+    if not mysterybound_trips.empty():
+        print("Mysterybound:")
+        print(mysterybound_trips)
+        base_trip = mysterybound_trips.iloc[0, :]  # row 0, all columns
+        compare_stop_lists(base_trip, mysterybound_trips, feed=route_feed)
 
 
 def make_argparser():

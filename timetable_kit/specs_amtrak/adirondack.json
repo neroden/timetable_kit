@@ -1,7 +1,7 @@
 {
     "title": "Adirondack Timetable",
     "heading": "Amtrak's Adirondack",
-    "reference_date": "20230404",
+    "reference_date": "20230613",
     "programmers_warning": "Not present in current GTFS as of 14 Jan 2023",
     "key_d": "true",
     "key_r": "true",
