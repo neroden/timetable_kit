@@ -1,14 +1,10 @@
-Utilities improvement
-- Write general utility for mass substitution of reference dates.
+New GTFS has dropped.
+- Verify that the direction_id fix works.
+- Build SW Chief timetable.
+- Build Adirondack timetable & verify that it's present.
+- Build Coast Starlight timetable & check for same old problem.
 
-California Zephyr
-NOTE ! NOTE ! NOTE !
-Richmond CA is not handicapped accessible until at LEAST Jan 3 2023
-(check San Joaquins site)
-Waiting for information from San Joaquins to figure out when this will change
-Emailed them 27 Jan 2023
-Emailed them again 5 Mar 2023
-
+Recheck ALL of these:
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
