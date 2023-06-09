@@ -2,7 +2,7 @@
     "title": "Ethan Allen Express Timetable",
     "heading": "Amtrak's Ethan Allen Express & Burlington Buses",
     "programmers_warning": "Missing GTFS data for Burlington Transit Center.",
-    "reference_date": "20230401",
+    "reference_date": "20230613",
     "key_on_right": "true",
     "key_bus": "true",
     "use_bus_icon_in_cells": "true",
