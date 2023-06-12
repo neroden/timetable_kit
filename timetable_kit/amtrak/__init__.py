@@ -26,6 +26,7 @@ from .get_gtfs import (
     published_gtfs_url,
 )
 
+
 # These are do-nothings for Amtrak, but
 # quite significant for VIA Rail
 def stop_code_to_stop_id(stop_code: str) -> str:

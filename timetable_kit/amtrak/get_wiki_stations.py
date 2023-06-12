@@ -105,7 +105,6 @@ def split_bus_stop_name(name):
 
 
 def get_wiki_stations(wiki_page_filename, csv_filename, train_station_list_filename):
-
     wiki_page_path = Path(wiki_page_filename)
 
     wikitables = pd.read_html(wiki_page_path)
