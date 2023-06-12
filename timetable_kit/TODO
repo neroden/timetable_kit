@@ -1,9 +1,14 @@
 New GTFS has dropped.
-- Bug in Arizona times (listing as Denver rather than Phoenix), reported
-- Numerous buses listed as trains in routes.txt, reported (need to patch if not fixed soon)
+- Ready for final checks: Southwest Chief, Grand Canyon
 - Build Adirondack timetable & verify that it's present.
 - Build Coast Starlight timetable & check for same old problem.
+- Check for Crescent problem reported by Chris Juckins
+- Check for missing Vermont Burlington bus station
 - Spiff up the ghost train / missing train checks.
+
+Known bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+- Numerous buses listed as trains in routes.txt, reported & patched
 
 Recheck ALL of these:
 Broken due to GTFS breakage:

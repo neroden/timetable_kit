@@ -13,6 +13,73 @@ from timetable_kit import feed_enhanced
 from timetable_kit.debug import debug_print
 
 
+arizona_stops_list = [
+    # Sunset Limited
+    "YUM",  # Yuma
+    "TUC",  # Tucson
+    "MRC",  # Maricopa
+    "BEN",  # Benson
+    # Southwest Chief
+    "WLO",  # Winslow
+    "FLG",  # Flagstaff
+    "KNG",  # Kingman
+    # Grand Canyon stuff
+    "WMH",  # Williams Holiday Inn
+    "WMA",  # Williams Grand Canyon Railroad
+    "TSY",  # Tusayan / Grand Canyon Village
+    "GCB",  # Grand Canyon Village / Maswik Lodge
+    "GCN",  # Grand Canyon Grand Canyon Railroad
+]
+
+
+def patch_arizona(stops):
+    for index in stops.index:
+        if stops.loc[index, "stop_id"] in arizona_stops_list:
+            if stops.loc[index, "stop_timezone"] == "America/Denver":
+                stops.loc[index, "stop_timezone"] = "America/Phoenix"
+                debug_print(
+                    1,
+                    "Found Arizona station with wrong timezone: patched stop_timezone",
+                )
+    return stops
+
+
+train_agencies = [
+    "Grand Canyon Railway",  # 44 -- in routes.txt as Thruway Connecting
+    "Altamont Corridor Express",  # 99 -- in routes.txt as Thruway Connecting
+    "Shore Line East",  # 1230 -- in routes.txt as Commuter Rail
+    "Placeholder train number for CTrail",  # 1234 -- in routes.txt as Thruway Connecting
+    "Virginia Railway Express",  # 1237 -- in routes.txt as Commuter Rail
+    "MARC",  # 1238 -- in routes.txt as Commuter Rail
+]
+
+
+def patch_buses(feed):
+    """
+    Bus services incorrectly listed as trains
+
+    Fix feed in place
+    """
+    routes = feed.routes
+    for index in routes.index:
+        if routes.loc[index, "route_long_name"] == "Amtrak Thruway Connecting Service":
+            if routes.loc[index, "route_type"] == 2:
+                # Supposed train.  Is it really?
+                agency_id = routes.loc[index, "agency_id"]
+                agency_name = feed.agency.loc[
+                    feed.agency["agency_id"] == agency_id, "agency_name"
+                ].item()
+                if agency_name in train_agencies:
+                    # we're good
+                    pass
+                else:
+                    debug_print(
+                        1, "Patched bus route listed as train for: " + agency_name
+                    )
+                    routes.loc[index, "route_type"] = 3
+    feed.routes = routes
+
+
 def patch_feed(feed):
     """
     Take an Amtrak feed and patch it for known errors.
@@ -21,8 +88,16 @@ def patch_feed(feed):
     """
 
     new_feed = feed.copy()
-    new_calendar = new_feed.calendar
 
+    # The Arizona Problem
+    new_stops = patch_arizona(new_feed.stops)
+    new_feed.stops = new_stops
+
+    # Buses listed as trains fixes
+    patch_buses(new_feed)
+
+    # Coast Starlight fix
+    new_calendar = new_feed.calendar
     # Coast Starlight: two bogus errors!
     # 11 is missing Saturday and has two other identical calendars;
     # 14 has three identical calendars
