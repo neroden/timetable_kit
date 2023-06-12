@@ -262,7 +262,7 @@ if __name__ == "__main__":
         pairs = zip(stops[::2], stops[1::2])
         # Start with a blank list of tsns
         trip_ids = []
-        for (stop_one, stop_two) in pairs:
+        for stop_one, stop_two in pairs:
             print("Finding trips from", stop_one, "to", stop_two)
             # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
             stop_one_id = agency().stop_code_to_stop_id(stop_one)

@@ -22,6 +22,7 @@ from timetable_kit import feed_enhanced
 from timetable_kit import gtfs_type_cleanup
 from timetable_kit.debug import debug_print
 
+
 #### INITIALIZATION CODE
 def initialize_feed(gtfs):
     """

@@ -246,6 +246,7 @@ def day_string(calendar, offset: int = 0) -> str:
         days_of_service["saturday"],
         days_of_service["sunday"],
     ]
+
     # Do the offset rotation.
     def rotate_right(l, n):
         return l[-n:] + l[:-n]
@@ -1188,9 +1189,9 @@ def style_updown(reverse: bool, doing_html=False) -> str:
     using_arrows = False
     if doing_html and using_arrows:
         if reverse:
-            arrow = "&#x2191;" # Up arrow in SpartanTT font
+            arrow = "&#x2191;"  # Up arrow in SpartanTT font
         else:
-            arrow = "&#x2193;" # Down arrow in SpartanTT font
+            arrow = "&#x2193;"  # Down arrow in SpartanTT font
         # Put arrows on right and left, with spaces
         text = " ".join([arrow, text, arrow])
 
