@@ -100,56 +100,51 @@ multiple CSV files and merging the lists from different CSV files.
 """
 
 if __name__ == "__main__":
-    
-    #--- 
+    # ---
     # Quick comparison framework test
-    #---
+    # ---
     csv_input = ["20", "66", "174"]
-    print('csv_input: ', csv_input)
+    print("csv_input: ", csv_input)
 
     trains_running = ["20", "80", "174"]
-    print('trains_running: ', trains_running)
-    
+    print("trains_running: ", trains_running)
+
     missing_from_csv_input = list(set(trains_running).difference(csv_input))
-    print('missing_from_csv_input:', missing_from_csv_input)
-    
+    print("missing_from_csv_input:", missing_from_csv_input)
+
     csv_ghost_train = list(set(csv_input).difference(trains_running))
-    print('csv_ghost_train: ', csv_ghost_train)
-    print('')
+    print("csv_ghost_train: ", csv_ghost_train)
+    print("")
 
-
-    #---
+    # ---
     # Section to download external test file and read into list
-    #---
-    url_basename = 'https://juckins.net/timetable_kit/trains_running'
-    url_prefixfilename = 'trains-actually-running'
-    url_routename = 'empire-service'
-    url_filename = url_prefixfilename + '-' + url_routename + '.txt'
-    url_to_open = url_basename + '/' + url_filename
-    print('url to open', url_to_open)
+    # ---
+    url_basename = "https://juckins.net/timetable_kit/trains_running"
+    url_prefixfilename = "trains-actually-running"
+    url_routename = "empire-service"
+    url_filename = url_prefixfilename + "-" + url_routename + ".txt"
+    url_to_open = url_basename + "/" + url_filename
+    print("url to open", url_to_open)
 
     # Get the file and print out contents
-    req = Request(
-        url = url_to_open,
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        )
-    webpage = urlopen(req).read().decode('utf-8')
-    print('')
+    req = Request(url=url_to_open, headers={"User-Agent": "Mozilla/5.0"})
+    webpage = urlopen(req).read().decode("utf-8")
+    print("")
     print(webpage)
 
     # Split each line from the webpage into a list
     # Note this includes the 2 header lines that we remove later
-    train_num_list = webpage.split('\n')
-    #print('train_num_list: ', train_num_list)
+    train_num_list = webpage.split("\n")
+    # print('train_num_list: ', train_num_list)
 
     # Remove any blank strings from our list
-    while("" in train_num_list):
+    while "" in train_num_list:
         train_num_list.remove("")
 
     # Print our list, but ignore first 2 lines
-    #print('Trains running on', train_num_list[0])
-    #number_of_lines = len(train_num_list)
-    #for i in range(2, number_of_lines):
+    # print('Trains running on', train_num_list[0])
+    # number_of_lines = len(train_num_list)
+    # for i in range(2, number_of_lines):
     #    print(train_num_list[i])
 
     # Create and print our final list for comparison
@@ -158,7 +153,5 @@ if __name__ == "__main__":
     number_of_lines = len(train_num_list)
     for i in range(2, number_of_lines):
         train_num_list_compare.append(train_num_list[i])
-    print('Trains running on', train_num_list[0])
+    print("Trains running on", train_num_list[0])
     print(train_num_list_compare)
-    
-

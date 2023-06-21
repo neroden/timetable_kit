@@ -19,7 +19,6 @@ This simply reverses the rows in a CSV file
 # This part cannot.
 
 if __name__ == "__main__":
-
     # Simple interface.
     filename = sys.argv[1]
     out_filename = filename.removesuffix(".csv") + "_reversed.csv"

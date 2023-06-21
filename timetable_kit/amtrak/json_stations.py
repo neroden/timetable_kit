@@ -473,7 +473,6 @@ Another good option is ./amtrak_stations""",
 
 # MAIN PROGRAM
 if __name__ == "__main__":
-
     arg_parser = make_arg_parser()
     args = arg_parser.parse_args()
 

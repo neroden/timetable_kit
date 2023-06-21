@@ -23,7 +23,6 @@ arg_parser.add_argument(
 )
 
 if __name__ == "__main__":
-
     args = arg_parser.parse_args()
     station_code = args.code
     print(amtrak.json_stations.station_details_url(station_code))

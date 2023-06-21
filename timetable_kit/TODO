@@ -1,8 +1,14 @@
 New GTFS has dropped.
-- Verify that the direction_id fix works.
-- Build SW Chief timetable.
+- Ready for final checks: Southwest Chief, Grand Canyon
 - Build Adirondack timetable & verify that it's present.
 - Build Coast Starlight timetable & check for same old problem.
+- Check for Crescent problem reported by Chris Juckins
+- Check for missing Vermont Burlington bus station
+- Spiff up the ghost train / missing train checks.
+
+Known bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+- Numerous buses listed as trains in routes.txt, reported & patched
 
 Recheck ALL of these:
 Broken due to GTFS breakage:
@@ -13,7 +19,6 @@ Broken due to GTFS breakage:
 - Ethan Allen Express (Burlington bus stop missing) -- short version OK
 - Vermonter (recent build bugs, check)
 - Vermont to Upstate NY (Burlington bus stop missing)
-- Southwest Chief (missing)
 - Grand Canyon (ibid)
 - Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK

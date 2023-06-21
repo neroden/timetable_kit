@@ -164,7 +164,6 @@ def make_station_stats():
 
 # MAIN PROGRAM
 if __name__ == "__main__":
-
     if not station_stats_dir.exists():
         station_stats_dir.mkdir(parents=True)
 

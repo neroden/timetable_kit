@@ -11,8 +11,9 @@ A bit of a hackish workaround for a known piece of tedium during timetable updat
 
 import argparse
 from pathlib import Path
-import os # for os.PathLike for type hints
-import re, shutil, tempfile # for the in-place file editing
+import os  # for os.PathLike for type hints
+import re, shutil, tempfile  # for the in-place file editing
+
 
 def make_argparser():
     """
@@ -23,23 +24,24 @@ def make_argparser():
     )
     # First positional argument is the date
     parser.add_argument(
-        'new_date',
-        help = "New reference date (in YYYYMMDD format)",
+        "new_date",
+        help="New reference date (in YYYYMMDD format)",
         type=str,
     )
     # Second positional argument is the directory, defaulting to specs_amtrak
     parser.add_argument(
-        'directory',
-        help = "Directory containing .json files to modify (e.g. ./specs_amtrak)",
-        nargs= "?",
+        "directory",
+        help="Directory containing .json files to modify (e.g. ./specs_amtrak)",
+        nargs="?",
         default="./specs_amtrak",
     )
-    return parser;
+    return parser
 
 
 # This routine is ripped off wholesale from Cecil Curry's 2015 implementation at
 # https://stackoverflow.com/questions/4427542/how-to-do-sed-like-text-replace-with-python
 # Thanks to Cecil.
+
 
 def stream_edit_in_place(filename, pattern, repl):
     """
@@ -53,7 +55,7 @@ def stream_edit_in_place(filename, pattern, repl):
     # writing with updating). This is usually a good thing. In this case,
     # however, binary writing imposes non-trivial encoding constraints trivially
     # resolved by switching to text writing. Let's do that.
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp_file:
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_file:
         with open(filename) as src_file:
             for line in src_file:
                 tmp_file.write(pattern_compiled.sub(repl, line))
@@ -69,12 +71,12 @@ def update_reference_date_for_file(file: str | os.PathLike, new_date: str) -> No
     # Sanity check.  Date must be 8 digits (YYYYMMDD).
     test_pattern = r"[0-9]{8}"
     if not re.fullmatch(test_pattern, new_date):
-        raise Exception("Date is not in correct format: ", new_date);
+        raise Exception("Date is not in correct format: ", new_date)
 
     # Search and replace.
     search_pattern = r'"reference_date":\s*"([0-9]{8})"'
     replace_string = "".join(['"reference_date": "', new_date, '"'])
-    stream_edit_in_place(file, search_pattern, replace_string);
+    stream_edit_in_place(file, search_pattern, replace_string)
 
 
 if __name__ == "__main__":
@@ -85,5 +87,5 @@ if __name__ == "__main__":
 
     for file in directory.iterdir():
         if file.suffix == ".json":
-            print("Updating ", file);
+            print("Updating ", file)
             update_reference_date_for_file(file, new_date)
