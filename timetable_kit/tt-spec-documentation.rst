@@ -241,6 +241,10 @@ to make a new timetable, but it is what it is.
 
 reference_date can be overridden by the command line, and probably should be when experimenting.
 
+It is best to not use a reference date on which daylight savings change time happens; this may not be handled correctly.
+
+Timetable_kit currently does not check calendar_dates.txt at all, so if your GTFS feed has special dates in that table, don't use one of those dates.
+
 output_subdir is the name of a subdirectory of output_dir to put the output in; 
 this is useful if you are making one set of timetables for one time period,
 and one set for another time period, at the same time.
