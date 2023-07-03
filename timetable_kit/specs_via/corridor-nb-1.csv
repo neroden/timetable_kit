@@ -1,6 +1,7 @@
 ,access,stations,22,24,50,60,52,62,26 monday,26 friday,40,64,28
 column-options,,,ardp,,ardp,,,,,,,,
-omit,calendar-days.txt: no suspended trains here,,,,,,,,,,,,
+omit,city pair (for checking against list_trains.py),,om,om,to,tm,to,tm,om,om,to,tm,om
+omit,"calendar-days.txt #624, #34 suspended",,,,,,,,,,,,
 route-name,,,,,,,,,,,,,
 days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW
 updown,,,,,,,,,,,,,
