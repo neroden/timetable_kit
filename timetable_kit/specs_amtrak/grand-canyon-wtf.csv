@@ -1,0 +1,13 @@
+,8954,8570,7904,8574,8572,8953,access,station,8854,8571,8577,7903,8853,8573
+column-options,ardp no-rd,,ardp no-rd,,,ardp,,,reverse ardp no-rd,reverse,reverse,reverse ardp,reverse ardp no-rd,reverse
+route-name,,,,,,,,,,,,,,
+days,FLG,FLG,WMA,FLG,FLG,FLG,,,FLG,FLG,FLG,WMA,FLG,FLG
+updown,,,,,,,,,,,,,,
+,"<div style=""text-align: center; font-weight: bold;"">from the west</div>",,,,,"<div style=""text-align: center; font-weight: bold;"">from the east</div>",,,"<div style=""text-align: center; font-weight: bold;"">to the east</div>",,,,"<div style=""text-align: center; font-weight: bold;"">to the west</div>",
+FLG,,blank,blank,blank,blank,,,,,blank,blank,blank,,blank
+FLG,8954 first,8570 first,blank,8574 first,8572 first,8953 first,,,8854 last,8571 last,8577 last,blank,8853 last,8573 last
+WMH,8954 last,,blank,,,8953 last,,,8854 first,,,uprightarrow,8853 first,
+TSY,downarrow,,blank,,,,,,,,,uparrow,,
+GCB,Walk from<br>Holiday Inn<br>to GCR Depot,8570 last,blank,8574 last,8572 last,,,,,8571 first,8577 first,Walk from<br>GCR Depot to<br>Holiday Inn,,8573 first
+WMA,downrightarrow,rightarrow,7904 first,blank,blank,,,,,blank,blank,7903 last,,blank
+GCN,,blank,7904 last,blank,blank,,,,,blank,blank,7903 first,,blank

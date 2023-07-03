@@ -3,7 +3,7 @@
     "heading": "Amtrak's Empire Service: Weekend Westbound & Northbound",
     "progammers_warning": "69 is the GTFS but not ticketable on amtrak.com so omitted",
     "landscape": "true",
-    "reference_date": "20230613",
+    "reference_date": "20230711",
     "bottom_text": "The Maple Leaf is operated jointly by Amtrak and <a href=\"https://www.viarail.ca/en\">VIA Rail Canada</a>; VIA Rail has different train numbers for the same train.<br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
     "key_baggage": "true",
     "for_rpa": "true"
