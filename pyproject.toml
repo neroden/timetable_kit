@@ -6,12 +6,12 @@ authors = ["Nathanael Nerode <ncn_floss10@fastmail.fm>"]
 license = "GNU Affero General Public License v3.0 or later"
 
 [tool.poetry.dependencies]
-python = ">=3.10"
-gtfs-kit = ">=5.2.0"
-pandas = ">=1.4.1"
-Jinja2 = ">=3.0.3"
-weasyprint = ">=54.2"
-lxml = ">=4.9.0"
+python = "^3.10"
+gtfs-kit = "^5.2.0"
+pandas = "^1.4.1"
+Jinja2 = "^3.0.3"
+weasyprint = "^54.2"
+lxml = "^4.9.0"
 
 [tool.poetry.dev-dependencies]
 
