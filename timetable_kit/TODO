@@ -14,7 +14,7 @@ Recheck ALL of these:
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
-- Empire Service (ghost trains, missing trains)
+- Empire Servic ee (ghost trains, missing trains)
 - Maple Leaf (both Amtrak ***and*** VIA) -- short versions OK
 - Ethan Allen Express (Burlington bus stop missing) -- short version OK
 - Vermonter (recent build bugs, check)

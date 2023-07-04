@@ -23,6 +23,7 @@ def get_station_name_pretty(station_code: str) -> str:
     # Unacceptable stub implementation
     return station_code
 
+
 # Baggage -- trivial implementations
 def station_has_checked_baggage(station_code: str) -> bool:
     return False
