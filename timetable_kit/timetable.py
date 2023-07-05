@@ -18,6 +18,7 @@ import os.path  # for os.path abilities
 import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
+from typing import Optional
 
 import gtfs_kit
 import pandas as pd
@@ -68,11 +69,10 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
+# tt-spec loading and parsing code
 
-### tt-spec loading and parsing code
-
-### Constant set for the special column names.
-### These should not be interpreted as trip_short_names or train numbers.
+# Constant set for the special column names.
+# These should not be interpreted as trip_short_names or train numbers.
 special_column_names = {
     "",
     "station",
@@ -97,17 +97,20 @@ special_row_names = {
 def load_ttspec_json(filename):
     """Load the JSON file for the tt-spec"""
     path = Path(filename)
-    if path.is_file():
-        with open(path, "r") as f:
-            auxfile_str = f.read()
-            aux = json.loads(auxfile_str)
-            debug_print(1, "tt-spec JSON file loaded")
-            return aux
-        print("Shouldn't get here, file load failed.")
-    else:
+
+    try:
+        f = open(path, "r")
+    except FileNotFoundError:
         # Make it blank, basically
         debug_print(1, "No tt-spec JSON file.")
         return {}
+    except IOError as e:
+        raise IOError("Shouldn't get here, file load failed.") from e
+    else:
+        with f:
+            aux = json.load(f)
+            debug_print(1, "tt-spec JSON file loaded")
+        return aux
 
 
 def load_ttspec_csv(filename):
@@ -219,7 +222,7 @@ def get_column_options(tt_spec):
     return column_options_nested_list
 
 
-def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
+def get_cell_codes(code_text: str, train_specs: list[str]) -> Optional[dict[str, str | bool | None]]:
     """
     Given special code text in a cell, decipher it
 
@@ -257,16 +260,8 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     ]
 
     # The cell code may end with two_row or two-row.  Remove it.
-    two_row = False
-    if code_text.endswith("two_row"):
-        two_row = True
-        code_text = code_text.removesuffix("two_row").strip()
-    elif code_text.endswith("two-row"):
-        two_row = True
-        code_text = code_text.removesuffix("two-row").strip()
-    elif code_text.endswith("tworow"):
-        two_row = True
-        code_text = code_text.removesuffix("tworow").strip()
+    two_row = code_text.endswith("two_row") or code_text.endswith("two-row") or code_text.endswith("tworow")
+    code = code_text.removesuffix("two_row").strip().removesuffix("two-row").strip().removesuffix("tworow").strip()
 
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
@@ -395,8 +390,8 @@ def service_dates_from_trip_id(feed, trip_id):
 
     calendar_row = feed.calendar[feed.calendar.service_id == service_id]
 
-    start_date = (calendar_row.start_date).squeeze()
-    end_date = (calendar_row.end_date).squeeze()
+    start_date = calendar_row.start_date.squeeze()
+    end_date = calendar_row.end_date.squeeze()
 
     return [start_date, end_date]
 
@@ -419,7 +414,7 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
     timepoint_df = feed.stop_times[
         (feed.stop_times["trip_id"] == trip_id)
         & (feed.stop_times["stop_id"] == stop_id)
-    ]
+        ]
     if timepoint_df.shape[0] == 0:
         return None
     if timepoint_df.shape[0] > 1:
@@ -430,17 +425,8 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
         trip_id_to_tsn_dict = make_trip_id_to_tsn_dict(feed)
         tsn = trip_id_to_tsn_dict[trip_id]
         raise TwoStopsError(
-            " ".join(
-                [
-                    "Train number",
-                    tsn,
-                    "with trip id",
-                    trip_id,
-                    "stops at stop_code",
-                    agency().stop_id_to_stop_code(stop_id),
-                    "more than once",
-                ]
-            )
+            f"Train number {tsn} with trip id {trip_id} stops at stop_code "
+            f"{agency().stop_id_to_stop_code(stop_id)} more than once"
         )
     timepoint = timepoint_df.iloc[0]  # Pull out the one remaining row
     return timepoint
@@ -546,17 +532,17 @@ def raise_error_if_not_one_row(trips):
 
 
 def fill_tt_spec(
-    tt_spec,
-    *,
-    today_feed,
-    reference_date,
-    doing_html=False,
-    box_time_characters=False,
-    doing_multiline_text=True,
-    train_numbers_side_by_side=False,
-    is_ardp_station="dwell",
-    dwell_secs_cutoff=300,
-    use_bus_icon_in_cells=False,
+        tt_spec,
+        *,
+        today_feed,
+        reference_date,
+        doing_html=False,
+        box_time_characters=False,
+        doing_multiline_text=True,
+        train_numbers_side_by_side=False,
+        is_ardp_station="dwell",
+        dwell_secs_cutoff=300,
+        use_bus_icon_in_cells=False,
 ):
     """
     Fill a timetable from a tt-spec template using GTFS data
@@ -600,7 +586,7 @@ def fill_tt_spec(
         try:
             my_trip_id = train_spec_to_trip_id[train_spec]
         except KeyError as e:
-            raise InputError("No trip_id for ", train_spec) from e
+            raise InputError(f"No trip_id for {train_spec}") from e
         my_trips = today_feed.trips[today_feed.trips.trip_id == my_trip_id]
         raise_error_if_not_one_row(my_trips)
         my_trip = my_trips.iloc[0]
@@ -632,9 +618,9 @@ def fill_tt_spec(
     # Load variable functions for is_ardp_station
     match is_ardp_station:
         case False:
-            is_ardp_station = lambda station_code: False
+            is_ardp_station = lambda _: False
         case True:
-            is_ardp_station = lambda station_code: True
+            is_ardp_station = lambda _: True
         case "dwell":
             # Prep max dwell map.  This is the second-slowest part of the program.
             stations_max_dwell_map = make_stations_max_dwell_map(
@@ -992,9 +978,8 @@ def fill_tt_spec(
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     try:
                         stop_tz = stop_df.iloc[0].stop_timezone
-                    except BaseException as err:
-                        print("While finding time zone at", station_code)
-                        raise
+                    except Exception as e:
+                        raise Exception(f"Problem while finding time zone at {station_code}") from e
 
                     debug_print(
                         3,
@@ -1139,7 +1124,7 @@ def fill_tt_spec(
     # The header replacement list has a potential duplicates problem.
     # Eliminate this by prefixing the column number in an HTML comment.
     unique_header_replacement_list = [
-        "".join(["<!-- ", str(i), " -->", header])
+        f"<!-- {i} --> {header}"
         for (i, header) in enumerate(header_replacement_list)
     ]
 
@@ -1149,7 +1134,7 @@ def fill_tt_spec(
     tt.columns = unique_header_replacement_list
     styler_t.columns = unique_header_replacement_list
 
-    return (tt, styler_t, header_styling_list)
+    return tt, styler_t, header_styling_list
 
 
 def produce_timetable(
@@ -1284,7 +1269,9 @@ def produce_timetable(
     if find_tsn_dupes(reduced_feed):
         debug_print(
             1,
-            "Warning, tsn duplicates!  If you use one of these without a day disambiguator, a random trip will be picked!  Usually a bad idea!",
+            "Warning, tsn duplicates! "
+            "If you use one of these without a day disambiguator, "
+            "a random trip will be picked!  Usually a bad idea!",
         )
 
     # Print the calendar for debugging
@@ -1327,7 +1314,7 @@ def produce_timetable(
         # We need to strip the HTML comments used to distinguish the header columns
         list_of_columns = timetable.columns
         non_unique_header_replacement_list = [
-            unique_header[unique_header.find("-->") :].removeprefix("-->")
+            unique_header[unique_header.find("-->"):].removeprefix("-->")
             for unique_header in list_of_columns
         ]
         timetable.columns = non_unique_header_replacement_list
@@ -1336,10 +1323,9 @@ def produce_timetable(
         timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV output done")
 
-    if do_jpg:
-        do_pdf = True
-    if do_pdf:
-        do_html = True
+    # make sure there are no dangling needs
+    do_pdf = do_pdf or do_jpg
+    do_html = do_html or do_pdf
 
     if do_html:
         # Main timetable, same for HTML and PDF
@@ -1385,9 +1371,7 @@ def produce_timetable(
     if do_jpg:
         # Convert PDF to JPG
         path_for_jpg = output_dir / Path(output_filename_base + ".jpg")
-        vips_command = "".join(
-            ["vips copy ", str(path_for_weasy), "[dpi=300] ", str(path_for_jpg)]
-        )
+        vips_command = f"vips copy {path_for_weasy} [dpi=300] {path_for_jpg}"
         os.system(vips_command)
 
 
@@ -1513,7 +1497,7 @@ def produce_several_timetables(
 
     if not gtfs_filename:
         print("produce_several_timetables: gtfs_filename is mandatory!")
-        sys_exit(1)
+        sys.exit(1)
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     # Amtrak-specific patches.  Bleah!  FIXME
@@ -1573,9 +1557,9 @@ def main():
         my_arg_parser.print_help()
         sys.exit(1)
 
-    spec_file_list = [*args.tt_spec_files, *(args.positional_spec_files)]
+    spec_file_list = [*args.tt_spec_files, *args.positional_spec_files]
 
-    if spec_file_list == []:
+    if not spec_file_list:
         print(
             "You need to specify at least one spec file.  Use the --help option for help."
         )
@@ -1617,7 +1601,6 @@ def main():
         sys.exit(1)
 
     # If nopatch, don't patch the feed.  Otherwise, do patch it.
-    patch_the_feed = True
     patch_the_feed = not args.nopatch
 
     command_line_reference_date = args.reference_date  # Does not default, may be None
