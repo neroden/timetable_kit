@@ -1,12 +1,7 @@
 #! /usr/bin/env python3
 # check_ghost_trains.py
 # Part of timetable_kit
-# Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-# Initial version started by Christopher Juckins
-
-import sys
-from urllib.request import Request, urlopen
-
+# Copyright 2023 Christopher Juckins & Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
 This program essentially compares two lists:
@@ -26,6 +21,7 @@ The following is the list of route names as given in Amtrak's Track-A-Train data
 used in the .txt files:
 
 acela
+adirondack
 amtrak-cascades
 auto-train
 california-zephyr
@@ -63,15 +59,8 @@ winter-park-express
 Adirondack is missing but will likely come back in the future.
 """
 
-# TO DO:
-#
-# Add in NN's csv-checker code provided via email
-"""
-Now, leaning on the code I've already written, this code should import a list 
-of train numbers from a single .csv file...
-...I should probably refactor this a little and move some of these subroutines
-into different files, but anyway this should work.  Assuming you have your 
-venv set up with timetable_kit and pandas.
+import sys
+from urllib.request import Request, urlopen  # for reading juckins webpage
 
 from timetable_kit.timetable import (
     load_ttspec_csv,
@@ -82,76 +71,98 @@ from timetable_kit.tsn import (
     train_spec_to_tsn,
 )
 
-# Get the CSV as a Pandas DataFrame
-tt_spec_csv = load_ttspec_csv(filename)
-# Extract the train specs from the top row as a list
-train_specs_list = train_specs_list_from_tt_spec(tt_spec)
-# Flatten 48/448 notations, eliminate "noheader" suffixes
-flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
-# Eliminate "monday", "tuesday" etc suffixes
-flattened_tsn_list = [
-    train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
-]
 
-This leaves only the process of reading the arguments list to get the filenames,
-the process of importing the list of trains_running (which is probably 
-newline-separated? space-separated?), and the process of looping over 
-multiple CSV files and merging the lists from different CSV files.
-"""
+def get_trains_from_csv(filename):
+    """Given a CSV train spec file, get the list of trains in it"""
+    # Get the CSV as a Pandas DataFrame
+    tt_spec_csv = load_ttspec_csv(filename)
+    # Extract the train specs from the top row as a list
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec_csv)
+    # Flatten 48/448 notations, eliminate "noheader" suffixes
+    flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
+    # Eliminate "monday", "tuesday" etc suffixes
+    flattened_tsn_list = [
+        train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
+    ]
+    return flattened_tsn_list
 
-if __name__ == "__main__":
-    # ---
-    # Quick comparison framework test
-    # ---
-    csv_input = ["20", "66", "174"]
-    print("csv_input: ", csv_input)
 
-    trains_running = ["20", "80", "174"]
-    print("trains_running: ", trains_running)
-
-    missing_from_csv_input = list(set(trains_running).difference(csv_input))
-    print("missing_from_csv_input:", missing_from_csv_input)
-
-    csv_ghost_train = list(set(csv_input).difference(trains_running))
-    print("csv_ghost_train: ", csv_ghost_train)
-    print("")
-
-    # ---
-    # Section to download external test file and read into list
-    # ---
+def get_trains_from_juckins(route_name):
+    """Get a list of trains actually running on a given route from juckins.net"""
+    # Get the webpage
     url_basename = "https://juckins.net/timetable_kit/trains_running"
     url_prefixfilename = "trains-actually-running"
-    url_routename = "empire-service"
-    url_filename = url_prefixfilename + "-" + url_routename + ".txt"
-    url_to_open = url_basename + "/" + url_filename
-    print("url to open", url_to_open)
+    url_routename = route_name
+    url_to_open = "".join(
+        [url_basename, "/", url_prefixfilename, "-", url_routename, ".txt"]
+    )
+    print("url to open:", url_to_open)
 
     # Get the file and print out contents
     req = Request(url=url_to_open, headers={"User-Agent": "Mozilla/5.0"})
     webpage = urlopen(req).read().decode("utf-8")
-    print("")
-    print(webpage)
 
     # Split each line from the webpage into a list
     # Note this includes the 2 header lines that we remove later
     train_num_list = webpage.split("\n")
-    # print('train_num_list: ', train_num_list)
+
+    # Print the first two lines, they have useful information
+    print(train_num_list[0], train_num_list[1])
 
     # Remove any blank strings from our list
     while "" in train_num_list:
         train_num_list.remove("")
 
-    # Print our list, but ignore first 2 lines
-    # print('Trains running on', train_num_list[0])
-    # number_of_lines = len(train_num_list)
-    # for i in range(2, number_of_lines):
-    #    print(train_num_list[i])
-
     # Create and print our final list for comparison
     # Ignore the first 2 header lines
-    train_num_list_compare = list()
-    number_of_lines = len(train_num_list)
-    for i in range(2, number_of_lines):
-        train_num_list_compare.append(train_num_list[i])
-    print("Trains running on", train_num_list[0])
-    print(train_num_list_compare)
+    return train_num_list[2:]
+
+
+if __name__ == "__main__":
+    # This is currently hardwired for the Empire Service.
+
+    # ---
+    # Section to download external test file and read into list
+    # ---
+    trains_running = []
+    route_names = [
+        "empire-service",
+        "ethan-allen-express",
+        "adirondack",
+        "maple-leaf",
+        "lake-shore-limited",
+    ]
+    for route_name in route_names:
+        trains_running.extend(get_trains_from_juckins(route_name))
+    print("Trains running on", route_names)
+    print(trains_running)
+
+    #
+    # Section to get trains listed in csv
+    specs_dirname = "./specs_amtrak/"
+    specs_suffix = ".csv"
+    filenames = [
+        "empire-service-weekday-eb",
+        "empire-service-weekday-wb",
+        "empire-service-weekend-eb",
+        "empire-service-weekend-wb",
+    ]
+    full_filenames = [specs_dirname + f + specs_suffix for f in filenames]
+    trains_listed = []
+    for ff in full_filenames:
+        for train_num in get_trains_from_csv(ff):
+            if train_num not in trains_listed:
+                trains_listed.append(train_num)
+    print("Trains listed in CSVs:", trains_listed)
+
+    # ---
+    # Comparison
+    # ---
+
+    missing_from_csv = list(set(trains_running).difference(trains_listed))
+    print("trains running but not in CSV:", missing_from_csv)
+
+    ghost_trains = list(set(trains_listed).difference(trains_running))
+    print("ghost trains (in CSV but not running):", ghost_trains)
+
+    print("")

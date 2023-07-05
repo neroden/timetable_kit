@@ -1,4 +1,4 @@
--- Complete the ghost train check script (before doing Empire Service revisions)
+-- Complete the ghost train check script (currently hardwired to Empire Service)
 
 New GTFS has dropped.
 - Done: All VIA Rail, including Maple Leaf (don't use the Amtrak one, it's wrong)
