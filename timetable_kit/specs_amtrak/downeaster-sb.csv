@@ -1,0 +1,17 @@
+,access,station,680,690,682,692,684,694,686,696,688,698
+column-options,,,,,,,,,,,,
+route-name,,,,,,,,,,,,
+days,,,BON,BON,BON,BON,BON,BON,BON,BON,BON,BON
+omit,identical weekend timetables with different train numbers,,,,,,,,,,,
+omit,,,,,,,,,,,,
+BRK,,,,,,,,,,,,
+FRE,,,,,,,,,,,,
+POR,,,,,,,,,,,,
+SAO,,,,,,,,,,,,
+WEM,,,,,,,,,,,,
+DOV,,,,,,,,,,,,
+DHM,,,,,,,,,,,,
+EXR,,,,,,,,,,,,
+HHL,,,,,,,,,,,,
+WOB,,,,,,,,,,,,
+BON,,,,,,,,,,,,

@@ -7,10 +7,10 @@ LOCAL_WEST="heartland-flyer grand-canyon"
 MIDWEST="hiawatha.list illinois-missouri-services.list city-of-new-orleans-illini-saluki michigan-services.list"
 LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list"
 LOCAL_NEW_ENGLAND="vermonter ethan-allen-express-abbrev vermont-to-upstate-ny adirondack-short berkshire-flyer"
+# Omits Downeaster because official timetable is MUCH better than mine (go Maine)
+# Omits Maple Leaf (long AND short version) due to Amtrak errors; get it from VIA
 # Incomplete version of Ethan Allen due to missing bus data
 # Omits Adirondack due to suspensions
-# Omits Maple Leaf (long AND short version) due to Amtrak errors; get it from VIA
-# Omits Downeaster due to official timetable existing, bus data issues (reconsider this)
 # We have to actually make a spec for the Downeaster
 LOCAL_NORTHEAST="empire-service.list keystone-service.list pennsylvanian"
 LOCAL_SOUTHEAST="virginia-services.list carolinian-piedmont"

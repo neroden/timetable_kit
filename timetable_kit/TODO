@@ -42,14 +42,14 @@ VIA Rail stuff:
 - Check for which stations are "manned" for checked baggage info
 
 Put off, because these have printable state agency timetables, or almost:
+- Downeaster
+---- The official timetable is better than anything I can produce.
 - San Joaquins
 ---- Note: Richmond elevator issue, other possible issues
 - Pacific Surfliner
 ---- Note: Masses of temporary suspensions not in dataset
 - Cascades - Oregon Point bus schedule problem
 ---- Note: Cascades GTFS data changed on 2023-01-27
-- Downeaster
----- Note: I haven't prepped Downeaster AT ALL yet
 - Hartford Line
 ---- Note: in good shape but not rechecked recently
 
