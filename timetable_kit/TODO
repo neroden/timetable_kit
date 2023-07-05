@@ -2,11 +2,11 @@ New GTFS has dropped.
 - Done: All VIA Rail, including Maple Leaf (don't use the Amtrak one, it's wrong)
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
+- Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY
 
 - Build Adirondack timetable & verify that it's present.
 - Build Coast Starlight timetable & check for same old problem.
 - Check for Crescent problem reported by Chris Juckins
-- Check for missing Vermont Burlington bus station
 - Spiff up the ghost train / missing train checks.
 
 Known bugs:
@@ -14,19 +14,21 @@ Known bugs:
 - Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
 
 Recheck ALL of these:
+4 -- Maple Leaf in Empire Service
+2 -- recheck Southwest Chief back into Lincoln Service
+3 -- recheck Southwest Chief back into Quincy Service
+6 -- then recheck everything else
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
-- Empire Service (ghost trains, missing trains)
-- Ethan Allen Express (Burlington bus stop missing) -- short version OK
-- Vermonter (recent build bugs, check)
-- Vermont to Upstate NY (Burlington bus stop missing)
+- Empire Service (ghost trains, missing trains, Maple Leaf issues)
 - Grand Canyon (ibid)
 - Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK
 - Quincy (ibid) -- short version OK
 - Capitol Corridor - Ghost buses, missing buses
 - Winter Park Express (missing)
+- Maple Leaf Amtrak -- Canadian data wrong (VIA data is all OK now)
 Partially running:
 - Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
@@ -37,8 +39,7 @@ Official State of California CC timetable still lists it as Salesforce Transit P
 -- Need to notify the Capitol Corridor (darnit people)
 
 VIA Rail stuff:
-- Check corridor for "unsuspended" trains
-- Check for fixes in Maple Leaf data
+- Check corridor for "unsuspended" trains (no change)
 - Check for which stations are "manned" for checked baggage info
 
 Put off, because these have printable state agency timetables, or almost:
@@ -52,14 +53,6 @@ Put off, because these have printable state agency timetables, or almost:
 ---- Note: Cascades GTFS data changed on 2023-01-27
 - Hartford Line
 ---- Note: in good shape but not rechecked recently
-
-When new GTFS drops:
-1 -- Southwest Chief (currently missing entirely)
-2 -- add Southwest Chief back into Lincoln Service
-3 -- add Southwest Chief back into Quincy Service
-4 -- Maple Leaf back to Canada / Empire Service (currently very buggy)
-5 -- Ethan Allen Express to Burlington
-6 -- then recheck everything else
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
