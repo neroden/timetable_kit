@@ -1,5 +1,8 @@
 New GTFS has dropped.
-- Ready for final checks: Southwest Chief, Grand Canyon
+- Done: All VIA Rail, including Maple Leaf (don't use the Amtrak one, it's wrong)
+- Done: Silver Service, Carolinian/Palmetto
+- Done: Southwest Chief, Grand Canyon
+
 - Build Adirondack timetable & verify that it's present.
 - Build Coast Starlight timetable & check for same old problem.
 - Check for Crescent problem reported by Chris Juckins
@@ -8,14 +11,13 @@ New GTFS has dropped.
 
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
-- Numerous buses listed as trains in routes.txt, reported & patched
+- Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
 
 Recheck ALL of these:
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
 - Empire Service (ghost trains, missing trains)
-- Maple Leaf (both Amtrak ***and*** VIA) -- short versions OK
 - Ethan Allen Express (Burlington bus stop missing) -- short version OK
 - Vermonter (recent build bugs, check)
 - Vermont to Upstate NY (Burlington bus stop missing)
