@@ -1,5 +1,6 @@
 New GTFS has dropped.
-- Done: All VIA Rail, including Maple Leaf (don't use the Amtrak one, it's wrong)
+-- Maple Leaf has PROBLEMS.  Via GTFS agrees with Via ticketing, Amtrak GTFS agrees with Amtrak ticketing, but they don't agree with each other!
+- Done: All VIA Rail (but see Maple Leaf)
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
 - Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
@@ -13,6 +14,7 @@ New GTFS has dropped.
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
 - Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
+- Maple Leaf American data wrong in VIA (Amtrak is probably correct)
 
 Recheck ALL of these:
 4 -- Maple Leaf in Empire Service
