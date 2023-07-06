@@ -1,16 +1,14 @@
--- Complete the ghost train check script (currently hardwired to Empire Service)
-
 New GTFS has dropped.
 - Done: All VIA Rail, including Maple Leaf (don't use the Amtrak one, it's wrong)
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
 - Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
 
-- Rebuild Empire Service accounting for Maple Leaf issues
-- Fix the "ghost check"
-- Build Coast Starlight timetable & check for same old problem.
+- Rebuild Empire Service accounting for Maple Leaf issues & train number changes
+- Rebuild Keystone, train number changes
+- Rebuild NEC with train number changes
+- Build Coast Starlight timetable
 - Check for Crescent problem reported by Chris Juckins
-- Spiff up the ghost train / missing train checks.
 
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
