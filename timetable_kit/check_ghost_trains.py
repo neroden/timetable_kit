@@ -59,7 +59,8 @@ winter-park-express
 Adirondack is missing but will likely come back in the future.
 """
 
-import sys
+import argparse
+
 from urllib.request import Request, urlopen  # for reading juckins webpage
 
 from timetable_kit.timetable import (
@@ -70,6 +71,72 @@ from timetable_kit.timetable import (
 from timetable_kit.tsn import (
     train_spec_to_tsn,
 )
+from timetable_kit.sew_pages import (
+    read_list_file,
+)
+
+
+# This only works on a specific list of preprogrammed services.
+# The keys are names of the services which can be given to this program
+# at the command line.
+# Each entry's value is a dict with two keys.
+# "list_file" gives a .list file in specs_amtrak/
+# "route_names" gives a list for looking up in juckins's table of trains actually running.
+prepared_timetables = {
+    "nec": {
+        "list_file": "nec-bos-was.list",
+        "route_names": [
+            "acela",
+            "northeast-regional",
+            "vermonter",
+            "keystone",
+            "pennsylvanian",
+            "cardinal",
+            "carolinian-piedmont",
+            "crescent",
+            "silver-service-palmetto",
+        ],
+    },
+    "empire-service": {
+        "list_file": "empire-service.list",
+        "route_names": [
+            "empire-service",
+            "ethan-allen-express",
+            "adirondack",
+            "maple-leaf",
+            "lake-shore-limited",
+        ],
+    },
+    "keystone-service": {
+        "list_file": "keystone-service.list",
+        "route_names": [
+            "keystone-service",
+            "pennsylvanian",
+        ],
+    },
+}
+
+
+def make_argparser():
+    """
+    Generate argument parser for check_ghost_trains.py
+    """
+    parser = argparse.ArgumentParser(
+        description="""Check CSV spec files for Amtrak routes against lists of trains actually running from juckins.net""",
+    )
+    parser.add_argument(
+        "timetable",
+        help="Timetable to check for",
+        choices=prepared_timetables.keys(),
+    )
+    return parser
+
+
+def get_csvs_from_list(filename, input_dir):
+    """Given a .list file, get the list of CSV train spec filepaths"""
+    raw_list = read_list_file(filename, input_dir=input_dir)
+    cooked_list = [input_dir + "/" + item + ".csv" for item in raw_list]
+    return cooked_list
 
 
 def get_trains_from_csv(filename):
@@ -119,19 +186,14 @@ def get_trains_from_juckins(route_name):
 
 
 if __name__ == "__main__":
-    # This is currently hardwired for the Empire Service.
+    my_arg_parser = make_argparser()
+    args = my_arg_parser.parse_args()
 
     # ---
     # Section to download external test file and read into list
     # ---
+    route_names = prepared_timetables[args.timetable]["route_names"]
     trains_running = []
-    route_names = [
-        "empire-service",
-        "ethan-allen-express",
-        "adirondack",
-        "maple-leaf",
-        "lake-shore-limited",
-    ]
     for route_name in route_names:
         trains_running.extend(get_trains_from_juckins(route_name))
     print("Trains running on", route_names)
@@ -139,15 +201,10 @@ if __name__ == "__main__":
 
     #
     # Section to get trains listed in csv
-    specs_dirname = "./specs_amtrak/"
-    specs_suffix = ".csv"
-    filenames = [
-        "empire-service-weekday-eb",
-        "empire-service-weekday-wb",
-        "empire-service-weekend-eb",
-        "empire-service-weekend-wb",
-    ]
-    full_filenames = [specs_dirname + f + specs_suffix for f in filenames]
+    input_dir = "./specs_amtrak"
+    list_file = prepared_timetables[args.timetable]["list_file"]
+    full_filenames = get_csvs_from_list(list_file, input_dir)
+    print("Checking CSVs:", full_filenames)
     trains_listed = []
     for ff in full_filenames:
         for train_num in get_trains_from_csv(ff):
