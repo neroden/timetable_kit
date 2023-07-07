@@ -23,6 +23,7 @@ agency_name = None
 agency_package = None
 agency_input_dir = None
 
+
 def set_agency(agency: str):
     """
     Set the agency subpackage to use to get agency-specific data (e.g. generic, amtrak, via).

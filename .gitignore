@@ -2,13 +2,11 @@
 stations/
 station_stats/
 gtfs/
-merged-gtfs/
 
 # Typical downloaded GTFS files for timetable_kit
 # & generated merged GTFS files
 GTFS.zip
 gtfs.zip
-merged-gtfs.zip
 
 # Generated output files for timetable_kit
 bad_stations.csv
