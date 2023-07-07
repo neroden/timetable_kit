@@ -20,5 +20,5 @@ ALL_AMTRAK="$LD_WEST $LOCAL_WEST $MIDWEST $LD_EAST $LOCAL_NEW_ENGLAND $LOCAL_NOR
 ./timetable.py --input-dir specs_amtrak --agency amtrak --spec $ALL_AMTRAK
 
 
-ALL_VIA="canadian.list remote-services.list corridor.list maple-leaf"
+ALL_VIA="canadian.list ocean remote-services.list corridor.list"
 ./timetable.py --input-dir specs_via --agency via --spec $ALL_VIA
