@@ -16,11 +16,12 @@ import sys
 # The agencies we might need to import
 import timetable_kit.amtrak
 import timetable_kit.via
+import timetable_kit.hartford_line
 
 # These will get set elsewhere, later, by initialization code.
 agency_name = None
 agency_package = None
-
+agency_input_dir = None
 
 def set_agency(agency: str):
     """
@@ -31,6 +32,7 @@ def set_agency(agency: str):
 
     global agency_name
     global agency_package
+    global agency_input_dir
 
     match agency:
         case "generic":
@@ -40,13 +42,17 @@ def set_agency(agency: str):
             debug_print(1, "Using Amtrak data")
             agency_name = "Amtrak"
             agency_package = timetable_kit.amtrak
+            agency_input_dir = "specs_amtrak"
         case "hartford":
-            print("Unimplemented")
-            sys.exit(1)
+            debug_print(1, "Using Hartford Line data with Amtrak data")
+            agency_name = "Hartford Line"
+            agency_package = timetable_kit.hartford_line
+            agency_input_dir = "specs_hartford"
         case "via":
             debug_print(1, "Using VIA Rail data")
             agency_name = "VIA Rail"
             agency_package = timetable_kit.via
+            agency_input_dir = "specs_via"
         case _:
             print("Invalid agency subpackage choice")
             sys.exit(1)

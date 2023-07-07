@@ -15,7 +15,7 @@ import argparse
 
 from pathlib import Path
 import os  # for os.getenv
-import os.path  # for os.path abilities
+import os.path  # for os.path abilities including os.path.isdir
 import sys  # Solely for sys.path and solely for debugging
 import shutil  # To copy files
 import json
@@ -60,9 +60,10 @@ from timetable_kit.runtime_config import agency as agency
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
 
-# To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
-# amtrak.special_data
-# amtrak.json_stations
+# For anything where the code varies by agency, we always explicitly call:
+# agency().special_data
+# agency().json_stations
+# And similarly for all other agency-specific callouts
 
 from timetable_kit import text_presentation
 from timetable_kit import icons
@@ -1603,21 +1604,24 @@ def main():
     set_debug_level(args.debug)
     debug_print(2, "Successfully set debug level to 2.")
 
+    # Get the selected agency
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
+
+    input_dirname = args.input_dirname
+    if not input_dirname:
+        # Pull the selected input_dir from the agency, if the directory exists
+        input_dirname = runtime_config.agency_input_dir
+    if not input_dirname or not os.path.isdir(input_dirname):
+        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
+    if not input_dirname:
+        input_dirname = "."
+
     output_dirname = args.output_dirname
     if not output_dirname:
         output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
     if not output_dirname:
         output_dirname = "."
-
-    input_dirname = args.input_dirname
-    if not input_dirname:
-        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
-    if not input_dirname:
-        input_dirname = "."
-
-    # Eventually this will be set from the command line -- FIXME
-    debug_print(2, "Agency found:", args.agency)
-    runtime_config.set_agency(args.agency)
 
     if args.gtfs_filename:
         gtfs_filename = args.gtfs_filename
