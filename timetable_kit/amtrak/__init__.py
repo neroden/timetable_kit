@@ -11,6 +11,8 @@ This defines an interface; VIA rail and others need to provide the same interfac
 
 # Published agency name
 published_name = "Amtrak"
+published_names_or = "Amtrak"
+published_names_and = "Amtrak"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"

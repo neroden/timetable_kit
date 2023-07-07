@@ -6,7 +6,7 @@
 
 #}{% from "macros.html" import br_or_space %}{#
 #}<div class="unofficial-agency"><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
-#}This timetable is not an official {{ agency_name }} product.{{ br_or_space(key_on_right) }}{#
+#}This timetable is not an official {{ agency_names_or }} product.{{ br_or_space(key_on_right) }}{#
 #}<b>This timetable is provided AS IS.{{ br_or_space(key_on_right) }}{#
 #}No warranties are provided{{ br_or_space(key_on_right) }}and all warranties are disclaimed.</b>{#
 #}<br>{#
@@ -15,9 +15,15 @@
 #}{{ br_or_space(key_on_right) }}{#
 #}for <a href="https://www.railpassengers.org/resources/amtrak-timetables/">Rail Passengers Association</a>{#
 #}{% endif %}{#
+#}{% if agency_name == "Maple Leaf" %}
+#},{{ br_or_space(key_on_right) }}based on GTFS data{#
+#} released to the public{#
+#}{{ br_or_space(key_on_right) }}by Amtrak and by VIA Rail, and other data sources.{#
+#}{% include "via_disclaimer.html" %}{#
+#}{% else %}{#
 #},{{ br_or_space(key_on_right) }}based on <a href="{{gtfs_url}}">GTFS data</a>{#
 #} released to the public{#
-#}{{ br_or_space(key_on_right) }}by {{ agency_name }}, and other data sources.{#
-#}{% if agency_name == "VIA Rail" %}<br>"Contains information licensed under the{{ br_or_space(key_on_right) }}{#
-#} Open Government Licence - Canada."{% endif %}{#
+#}{{ br_or_space(key_on_right) }}by {{ agency_names_and }}, and other data sources.{#
+#}{% if agency_name == "VIA Rail" %}{% include "via_disclaimer.html" %}{% endif %}{#
+#}{% endif %}{#
 #}</p></div>
