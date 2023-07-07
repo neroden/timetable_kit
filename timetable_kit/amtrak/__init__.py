@@ -21,7 +21,6 @@ css_class = "amtrak-special-css"
 
 # Where to find the GTFS
 from .get_gtfs import (
-    gtfs_zip_local_path,
     gtfs_unzipped_local_path,
     published_gtfs_url,
 )
