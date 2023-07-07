@@ -1,8 +1,7 @@
-,600,602,access,stations,timezone,601
-column-options,ardp,ardp,,,,ardp reverse
-days,JONQ,JONQ,,,,JONQ
+,602,600,access,stations,timezone,601
+column-options,ardp days short-days-box,ardp days short-days-box,,,,ardp days reverse
 updown,,,,,,
-JONQ,600 first,602 first,,,,601 last
+JONQ,602 first,600 first,,,,601 last
 HEBV,,,,,,
 CHBD,,,,,,
 LBOU,,,,,,
@@ -45,4 +44,4 @@ SJUS,,,,,,
 JOLI,,,,,,
 ANJO,,,,,,
 SAUV,,,,,,
-MTRL,600 last,602 last,,,,601 first
+MTRL,602 last,600 last,,,,601 first

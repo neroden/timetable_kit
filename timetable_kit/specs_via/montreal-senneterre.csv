@@ -1,8 +1,7 @@
-,604,606,access,stations,timezone,603
-column-options,ardp,ardp,,,,ardp reverse
-days,SENN,SENN,,,,SENN
+,606,604,access,stations,timezone,603
+column-options,ardp days short-days-box,ardp days short-days-box,,,,ardp days reverse
 updown,,,,,,
-SENN,604 first,606 first,,,,603 last
+SENN,606 first,604 first,,,,603 last
 MEGI,,,,,,
 SIGN,,,,,,
 PRSS,,,,,,
@@ -61,4 +60,4 @@ SJUS,,,,,,
 JOLI,,,,,,
 ANJO,,,,,,
 SAUV,,,,,,
-MTRL,604 last,606 last,,,,603 first
+MTRL,606 last,604 last,,,,603 first
