@@ -1,11 +1,19 @@
 New GTFS has dropped.
 -- Maple Leaf has PROBLEMS.  Via GTFS agrees with Via ticketing, Amtrak GTFS agrees with Amtrak ticketing, but they don't agree with each other!
 - Prep merged Maple Leaf (pain in the neck...)
-- Make a Vermonter / Valley Flyer timetable.
-- Done: All VIA Rail (but see Maple Leaf)
+Note:
+Tickets entirely within the US must be booked through Amtrak
+Tickets entirely within Canada must be booked through VIA
+Cross-border tickets originating in the US must be booked through Amtrak
+Cross-border tickets originating in Canada may be booked through Amtrak or VIA
+
+
+
+- Done: VIA Rail Canadian, Ocean, Remote Service, Corridor (but NOT Maple Leaf)
+- Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
+- Done: Valley Flyer (w/Vermonter), Hartford Line/Valley Flyer, Berkshire Flyer
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
-- Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
 
 - Rebuild Empire Service accounting for Maple Leaf issues & train number changes
 - Rebuild Keystone, train number changes
