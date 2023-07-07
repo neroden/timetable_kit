@@ -1,5 +1,5 @@
 # hartford_line/__init.py__
-# Init file for amtrak subpackage of timetable_kit
+# Init file for hartford_line subpackage of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 timetable_kit.hartford_line module

@@ -15,9 +15,6 @@ import gtfs_kit
 # For sys.exit
 import sys
 
-# For reprocessing the trip_short_name strings
-import re
-
 # Mine
 from timetable_kit import amtrak
 from timetable_kit import hartford_line
