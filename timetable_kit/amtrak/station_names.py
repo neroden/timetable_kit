@@ -1,4 +1,4 @@
-# amtrak/station_name_styling.py
+# amtrak/station_names.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 

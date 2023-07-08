@@ -43,7 +43,7 @@ from .route_names import get_route_name
 
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc)
-from .station_name_styling import get_station_name_pretty
+from .station_names import get_station_name_pretty
 
 # Baggage
 from .baggage import station_has_checked_baggage
