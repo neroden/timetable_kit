@@ -1,0 +1,3 @@
+-- Strip Canadian stations from American train in stop_times
+-- Strip American stations from Canadian train in stop_times
+-- Mangle together the .csv

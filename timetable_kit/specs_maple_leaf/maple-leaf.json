@@ -1,0 +1,10 @@
+{
+    "title": "Maple Leaf",
+    "heading": "Amtrak & VIA Rail's Maple Leaf",
+    "reference_date": "20230715",
+    "top_text": "The Maple Leaf is operated jointly by Amtrak and <img class=\"via_rail_logo\" src=\"logos/VIA_Rail_icon.svg\" alt=\"VIA Rail Canada\" title=\"VIA Rail Canada\"><a href=\"https://www.viarail.ca/\">VIA Rail Canada</a>.<br>Tickets for trips entirely within Canada must be bought from VIA Rail.<br>Tickets for trips starting in the US must be bought from Amtrak.<br>Tickets from Canada to the US may be bought from Amtrak or VIA.<br><br>Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "for_rpa": "true"
+}

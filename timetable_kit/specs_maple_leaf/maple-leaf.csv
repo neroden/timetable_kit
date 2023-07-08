@@ -1,0 +1,28 @@
+,64,access,stations,63 monday,63 sunday
+column-options,ardp,,,ardp reverse,reverse
+route-name,,,,,
+,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>","<div style=""text-align: center;"">(Via Rail <b>#698</b>)</div>"
+days,TWO,,,TWO,TWO
+updown,,,,,
+TWO,64 first,,,63 monday last,63 sunday last
+OKL,,,,,
+AST,,,,,
+GMS,,,,,
+SCA,,,,,
+NFS,,,,,
+NFL,,,,,
+BFX,,,,,
+BUF,,,,,
+ROC,,,,,
+SYR,,,,,
+ROM,,,,,
+UCA,,,,,
+AMS,,,,,
+SDY,,,,,
+ALB,,,,,
+HUD,,,,,
+RHI,,,,,
+POU,,,,,
+CRT,,,,,
+YNY,,,,,
+NYP,64 last,,,63 monday first,63 sunday first
