@@ -53,8 +53,9 @@ from timetable_kit.amtrak.route_names import get_route_name
 
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc)
-# This needs to be different from Amtrak's.
-from .station_names import get_station_name_pretty
+# This can be the same as Amtrak's.
+# (Amtrak station DB DOES include Canadian stations)
+from timetable_kit.amtrak.station_names import get_station_name_pretty
 
 # Baggage
 from timetable_kit.amtrak.baggage import station_has_checked_baggage
