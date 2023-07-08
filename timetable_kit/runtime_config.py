@@ -17,11 +17,15 @@ import sys
 import timetable_kit.amtrak
 import timetable_kit.via
 import timetable_kit.hartford_line
+import timetable_kit.maple_leaf
 
 # These will get set elsewhere, later, by initialization code.
 agency_name = None
 agency_package = None
 agency_input_dir = None
+
+# These are the choices which can be set at the command line.
+agency_choices = ["generic", "amtrak", "via", "hartford", "maple_leaf"]
 
 
 def set_agency(agency: str):
@@ -54,6 +58,11 @@ def set_agency(agency: str):
             agency_name = "VIA Rail"
             agency_package = timetable_kit.via
             agency_input_dir = "specs_via"
+        case "maple_leaf":
+            debug_print(1, "Using Amtrak and VIA Rail data for Maple Leaf")
+            agency_name = "Maple Leaf"
+            agency_package = timetable_kit.maple_leaf
+            agency_input_dir = "specs_maple_leaf"
         case _:
             print("Invalid agency subpackage choice")
             sys.exit(1)
