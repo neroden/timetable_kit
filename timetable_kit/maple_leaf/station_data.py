@@ -44,6 +44,37 @@ via_code_to_amtrak_code = {
     via_code: amtrak_code for amtrak_code, via_code in amtrak_code_to_via_code.items()
 }
 
+# Which stations are Canadian?
+canadian_stations = [
+    "NFS",
+    "SCA",
+    "GMS",
+    "AST",
+    "OKL",
+    "TWO",
+]
+
+# Which stations are American?
+american_stations = [
+    "NYP",
+    "YNY",
+    "CRT",
+    "POU",
+    "RHI",
+    "HUD",
+    "ALB",
+    "SDY",
+    "AMS",
+    "UCA",
+    "ROM",
+    "SYR",
+    "ROC",
+    "BUF",
+    "BFX",
+    "NFL",
+    "CBN",  # Canadian border
+]
+
 # Testing
 if __name__ == "__main__":
     print(via_code_to_amtrak_code["GRIM"])
