@@ -1,4 +1,5 @@
 New GTFS has dropped.
+- Patch wheelchair access into Amtrak GTFS in gtfs_patches, rather than treating it as a module-level choice.
 -- Maple Leaf has PROBLEMS.  Via GTFS agrees with Via ticketing, Amtrak GTFS agrees with Amtrak ticketing, but they don't agree with each other!
 - Prep merged Maple Leaf (pain in the neck...)
 Note:
