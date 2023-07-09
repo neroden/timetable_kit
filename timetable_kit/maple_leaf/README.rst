@@ -15,10 +15,8 @@ This will generate a partially merged feed usable ONLY for making Maple Leaf tim
 
 The merged file ends up in maple_leaf/gtfs.
 
-Then you should be able to run
+Then run
 
 * ./timetable.py --agency maple_leaf maple-leaf
 
 to get a timetable.
-
-This is not functional yet.  Work in progress.
