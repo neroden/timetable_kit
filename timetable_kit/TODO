@@ -5,7 +5,7 @@ New GTFS has dropped.
 - Done: (Downeaster)
 - Done: Vermonter, Vermonter/Valley Flyer, Hartford Line/Valley Flyer
 - Done: Ethan Allen Express, Vermont to Upstate NY, Berkshire Flyer, Adirondack,
-- Done: Empire Service, Keystone Service
+- Done: Empire Service, Keystone Service, Virginia Services
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
 
@@ -24,7 +24,6 @@ Recheck ALL of these:
 6 -- then recheck everything else
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
-- Virginia Services (NEC issues)
 - Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK
 - Quincy (ibid) -- short version OK
