@@ -1,9 +1,9 @@
-, access, station,2163,85,97,173,2165,651,127,129,2167,653
+, access, station,85,649,2163,97,173,2165,651,127,129,2167
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
 days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,
-BOS,,,first,first,,first,first,,,,first,
+BOS,,,first,,first,,first,first,,,,first
 BBY,,,,,,,,,,,,
 RTE,,,,,,,,,,,,
 PVD,,,,,,,,,,,,
@@ -16,7 +16,7 @@ NHV,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 NRO,,,,,,,,,,,,
-NYP,,,,,first,,,first,first,first,,first
+NYP,,,,first two-row,,first two-row,,,first two-row,first two-row,first two-row,
 NWK,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 MET,,,,,,,,,,,,
@@ -26,10 +26,11 @@ TRE,,,,,,,,,,,,
 CWH,,,,,,,,,,,,
 PHN,,,,,,,,,,,,
 PHL,,,,,,,,,,,,
-WIL,,,,,,,,,,,,
-NRK,,,,,,,,,,,,
+WIL,,,,to,,,,,to,,,
+NRK,,,,Harrisburg,,,,,Harrisburg,,,
 ABE,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 NCR,,,,,,,,,,,,
-WAS,,,last,,,,last,,,,last,
+WAS,,,,,last,,last,last,,last,last,last
+,,,to Richmond,,,to Miami,,,,,,
