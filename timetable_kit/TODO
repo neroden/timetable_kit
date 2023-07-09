@@ -2,12 +2,13 @@ New GTFS has dropped.
 
 - Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
 - Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
-- Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
-- Done: Valley Flyer (w/Vermonter), Hartford Line/Valley Flyer, Berkshire Flyer
+- Done: (Downeaster)
+- Done: Vermonter, Vermonter/Valley Flyer, Hartford Line/Valley Flyer
+- Done: Ethan Allen Express, Vermont to Upstate NY, Berkshire Flyer, Adirondack,
+- Done: Empire Service
 - Done: Silver Service, Carolinian/Palmetto
 - Done: Southwest Chief, Grand Canyon
 
-- Rebuild Empire Service accounting for Maple Leaf issues & train number changes
 - Rebuild Keystone, train number changes
 - Rebuild NEC with train number changes
 - Build Coast Starlight timetable
@@ -19,23 +20,17 @@ Known bugs:
 - Maple Leaf American data wrong in VIA (Amtrak is probably correct)
 
 Recheck ALL of these:
-4 -- Maple Leaf in Empire Service
 2 -- recheck Southwest Chief back into Lincoln Service
 3 -- recheck Southwest Chief back into Quincy Service
 6 -- then recheck everything else
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
-- Empire Service (ghost trains, missing trains, Maple Leaf issues)
-- Grand Canyon (ibid)
 - Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK
 - Quincy (ibid) -- short version OK
 - Capitol Corridor - Ghost buses, missing buses
 - Winter Park Express (missing)
-- Maple Leaf Amtrak -- Canadian data wrong (VIA data is all OK now)
-Partially running:
-- Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
 VIA Rail stuff:
 - Check for which stations are "manned" for checked baggage info
