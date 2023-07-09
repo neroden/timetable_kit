@@ -4,6 +4,8 @@ New GTFS has dropped.
 --- check for overwide pages
 --- Weekday Southbound is done.
 --- Saturday Southbound is done.
+--- Sunday Southbound is done.
+(Only Northbound left!)
 
 - Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
 - Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
@@ -13,7 +15,10 @@ New GTFS has dropped.
 - Done: Berkshire Flyer, Adirondack,
 - Done: Empire Service, 
 - Done: Keystone Service, Pennsylvanian,
-- Done: Virginia Services, Cardinal, Carolinian/Piedmont, Silver Service/Palmetto, Crescent
+- Done: Virginia Services, Carolinian/Piedmont
+- Done: Lake Shore Limited, Capitol Limited,
+- Done: Cardinal, Crescent, Silver Service/Palmetto,
+- Done: Sunset Limited, Texas Eagle, Heartland Flyer
 - Done: Southwest Chief, Grand Canyon
 
 - Build Coast Starlight timetable
@@ -29,7 +34,6 @@ Recheck ALL of these:
 3 -- recheck Southwest Chief back into Quincy Service
 6 -- then recheck everything else
 Broken due to GTFS breakage:
-- Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK
 - Quincy (ibid) -- short version OK
 - Capitol Corridor - Ghost buses, missing buses
