@@ -16,7 +16,7 @@ from timetable_kit.debug import debug_print
 arizona_stops_list = [
     # Sunset Limited
     "YUM",  # Yuma
-    "TUC",  # Tucson
+    "TUS",  # Tucson
     "MRC",  # Maricopa
     "BEN",  # Benson
     # Southwest Chief
