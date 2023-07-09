@@ -1,9 +1,9 @@
-, access, station,79,185,2151,643,141,2153,95,43,2155,91
+, access, station,79,2151,185,141,643,2153,95,2155,43,91
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
 days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,
-BOS,,,,,first,,,first,first,,first,
+BOS,,,,first,,,,first,first,first,,
 BBY,,,,,,,,,,,,
 RTE,,,,,,,,,,,,
 PVD,,,,,,,,,,,,
@@ -16,7 +16,7 @@ NHV,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 NRO,,,,,,,,,,,,
-NYP,,,first,first,,first,first,,,first,,first
+NYP,,,first,,first,first,first,,,,first,first
 NWK,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 MET,,,,,,,,,,,,
@@ -32,4 +32,4 @@ ABE,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 NCR,,,,,,,,,,,,
-WAS,,,,,last,,,last,,,last,
+WAS,,,,last,,,,last,,last,,
