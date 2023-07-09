@@ -1,4 +1,10 @@
 New GTFS has dropped.
+- NEC:
+--- Saturday Northbound
+--- Sunday Northbound
+--- check ghost trains
+--- check for misaligned order (trains out of order)
+--- check for overwide pages
 
 - Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
 - Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
