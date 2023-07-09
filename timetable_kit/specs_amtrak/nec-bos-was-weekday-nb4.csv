@@ -1,9 +1,9 @@
-, access, station,42,2168,184,94,20,2170,148,652,134,2172
+, access, station,42,2168,184,94,20 tuesday,2170,148,652,2172,92
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
-days,,,PHL,WAS,WAS,WAS,WAS,WAS,WAS,PHL,WAS,WAS
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,
-WAS,,,,first two-row,,,,first two-row,,,,first two-row
+WAS,,,,first two-row,,,,first two-row,,,first two-row,
 NCR,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
@@ -19,7 +19,7 @@ NBK,,,,,,,,,,,,
 MET,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 NWK,,,,,,,,,,,,
-NYP,,,last,,,,last,,,last,last,
+NYP,,,last,,,,last,,,last,,last
 NRO,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
@@ -32,4 +32,4 @@ KIN,,,,,,,,,,,,
 PVD,,,,,,,,,,,,
 RTE,,,,,,,,,,,,
 BBY,,,,,,,,,,,,
-BOS,,,,last,last,last,,last,last,,,last
+BOS,,,,last,last,last,,last,last,,last,
