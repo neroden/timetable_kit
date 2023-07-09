@@ -1,22 +1,22 @@
-, access, station,143,121,43,91,195,2271,157,2263,145
+, access, station,143,121,43,195,91,2271,157,2263,145
 column-options,,,ardp,,,,,,,,ardp
 route-name,,,,,,,,,,,
 days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,
-BOS,,,,,,,first,,,,
+BOS,,,,,,first,,first,,first,
 BBY,,,,,,,,,,,
 RTE,,,,,,,,,,,
 PVD,,,,,,,,,,,
 KIN,,,,,,,,,,,
 WLY,,,,,,,,,,,
 MYS,,,,,,,,,,,
-NLC,,,,,,,,,,,
+NLC,,,from<br>Springfield,,,,,,,,
 OSB,,,,,,,,,,,
 NHV,,,,,,,,,,,
 BRP,,,,,,,,,,,
 STM,,,,,,,,,,,
 NRO,,,,,,,,,,,
-NYP,,,first,first,first,first,,,first,,first
+NYP,,,,first two-row,first two-row,,first two-row,,first two-row,,first two-row
 NWK,,,,,,,,,,,
 EWR,,,,,,,,,,,
 MET,,,,,,,,,,,
@@ -26,10 +26,11 @@ TRE,,,,,,,,,,,
 CWH,,,,,,,,,,,
 PHN,,,,,,,,,,,
 PHL,,,,,,,,,,,
-WIL,,,,,,,,,,,
-NRK,,,,,,,,,,,
+WIL,,,,,to,,,,,,
+NRK,,,,,Pittsburgh,,,,,,
 ABE,,,,,,,,,,,
 BAL,,,,,,,,,,,
 BWI,,,,,,,,,,,
 NCR,,,,,,,,,,,
-WAS,,,,,,,,,,,
+WAS,,,last,last,,,,last,,last,
+,,,,,,to Richmond,to Miami,,to Norfolk,,to Roanoke

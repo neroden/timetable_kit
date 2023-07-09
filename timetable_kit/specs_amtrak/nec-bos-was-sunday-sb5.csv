@@ -3,7 +3,7 @@ column-options,,,ardp,,,,ardp
 route-name,,,,,,,
 days,,,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,
-BOS,,,,first,first,,first
+BOS,,,,first,first,,
 BBY,,,,,,,
 RTE,,,,,,,
 PVD,,,,,,,
@@ -16,7 +16,7 @@ NHV,,,,,,,
 BRP,,,,,,,
 STM,,,,,,,
 NRO,,,,,,,
-NYP,,,first,,,first,
+NYP,,,first two-row,,,first two-row,first two-row
 NWK,,,,,,,
 EWR,,,,,,,
 MET,,,,,,,
@@ -26,10 +26,11 @@ TRE,,,,,,,
 CWH,,,,,,,
 PHN,,,,,,,
 PHL,,,,,,,
-WIL,,,,,,,
-NRK,,,,,,,
+WIL,,,,,,to,
+NRK,,,,,,Harrisburg,
 ABE,,,,,,,
 BAL,,,,,,,
 BWI,,,,,,,
 NCR,,,,,,,
-WAS,,,,,,,
+WAS,,,last,last,last,last,last
+,,,,,,,to Newport<br>News
