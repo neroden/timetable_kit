@@ -248,6 +248,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
     "last" (last station for train, show arrival only)
     "first two_row" -- use two-row format
     "last two_row" -- use two-row format
+    "two-row" -- use two-row format, show arrival and departure always
     "blank" -- if this train does not stop at this station, make a blank cell with this train's color
 
     Specifying just a train spec is supported.
@@ -341,8 +342,16 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
             "two_row": two_row,  # ignored in this case, but OK
         }
 
-    # Simple train number.
+    # Simple train number. (Possibly with two-row.)
     train_spec = code_text.strip()
+    if train_spec == "" and two_row:
+        return {
+            "train_spec": None,
+            "last": False,
+            "first": False,
+            "blank": False,
+            "two_row": two_row,
+        }
     if train_spec not in train_specs:
         return None
     return {
@@ -1108,14 +1117,10 @@ def fill_tt_spec(
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
                             if is_first_stop or is_last_stop:
-                                # We used to do this always, but it's sometimes wrong!
-                                # Allow spec creator to override when they want two rows.
-                                if cell_codes["two_row"]:
-                                    # Even if not an ArDp station, force it if
-                                    # the timetable designer so desires
-                                    two_row = True
-                                else:
-                                    two_row = False
+                                two_row = False
+                            if cell_codes["two_row"]:
+                                # Allow spec creator to force two_row
+                                two_row = True
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
