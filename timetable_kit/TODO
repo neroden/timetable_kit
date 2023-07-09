@@ -1,16 +1,7 @@
 New GTFS has dropped.
-- Patch wheelchair access into Amtrak GTFS in gtfs_patches, rather than treating it as a module-level choice.
--- Maple Leaf has PROBLEMS.  Via GTFS agrees with Via ticketing, Amtrak GTFS agrees with Amtrak ticketing, but they don't agree with each other!
-- Prep merged Maple Leaf (pain in the neck...)
-Note:
-Tickets entirely within the US must be booked through Amtrak
-Tickets entirely within Canada must be booked through VIA
-Cross-border tickets originating in the US must be booked through Amtrak
-Cross-border tickets originating in Canada may be booked through Amtrak or VIA
 
-
-
-- Done: VIA Rail Canadian, Ocean, Remote Service, Corridor (but NOT Maple Leaf)
+- Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
+- Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
 - Done: (Downeaster), Vermonter, Ethan Allen Express, Vermont to Upstate NY, Adirondack (short)
 - Done: Valley Flyer (w/Vermonter), Hartford Line/Valley Flyer, Berkshire Flyer
 - Done: Silver Service, Carolinian/Palmetto
@@ -46,14 +37,7 @@ Broken due to GTFS breakage:
 Partially running:
 - Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
 
-Capitol Corridor
-NOTE ! NOTE ! NOTE !
-Amtrak station *is* at Chase Bank
-Official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
--- Need to notify the Capitol Corridor (darnit people)
-
 VIA Rail stuff:
-- Check corridor for "unsuspended" trains (no change)
 - Check for which stations are "manned" for checked baggage info
 
 Put off, because these have printable state agency timetables, or almost:
@@ -72,6 +56,7 @@ For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 For generalizing beyond Amtrak and VIA:
+0 -- Fix up templates for multi-agency timetables, by redesigning the interface to allow for a list
 1 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
 2 -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
       from the Amtrak stations database.
