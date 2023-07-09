@@ -1,7 +1,7 @@
 {
     "title": "Hiawatha Northbound",
     "heading": "Amtrak's Hiawatha: Northbound",
-    "reference_date": "20230722",
+    "reference_date": "20230815",
     "top_text": "Check <a href=\"https://amtrakhiawatha.com\">AmtrakHiawatha.com</a> for additional and connecting bus service and updated schedules.",
     "key_baggage": "true",
     "for_rpa": "true"
