@@ -1,7 +1,7 @@
 , access, station,67,151,89,51,661,79 sunday,153,2205,155,663
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
-days,,,BOS,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,
 BOS,,,first,,,,,,,,,
 BBY,,,,,,,,,,,,
@@ -16,7 +16,7 @@ NHV,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 NRO,,,,,,,,,,,,
-NYP,,,,first,first,first,first,79 sunday first,first,first,first,first
+NYP,,,,first,first,first,first,first,first,first,first,first
 NWK,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 MET,,,,,,,,,,,,
