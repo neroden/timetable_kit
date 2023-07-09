@@ -1,5 +1,8 @@
-,48 / 448,access,station,timezone,49 / 449
-column-options,ardp days,,,,ardp reverse days
+,48 / 448 tuesday,access,station,timezone,49 / 449 tuesday
+column-options,ardp,,,,ardp reverse
+days,CHI,,,,CHI
+omit,In summer 2023 there is a separate schedule for 448/449 which skips Worcester on weekends sometimes.,,,,
+omit,We want the timetable to show daily service; we'll explain the Worcester thing in a note.,,,,
 updown,,,,,
 CHI,48 first,,,,49 last
 SOB,,,,,
@@ -24,10 +27,10 @@ POU,,,,,
 CRT,,,,,
 NYP,48 last,,,,49 first
 ,"<div style=""text-align: center""><hr>Train <b>#448</b> to Boston</div>",,,,"<div style=""text-align: center""><hr>Train <b>#449</b> from Boston</div>"
-ALB,448 first,,,,449 last
+ALB,448 tuesday first,,,,449 tuesday last
 PIT,,,,,
 SPG,,,,,
 WOR,,,,,
 FRA,,,,,
 BBY,,,,,
-BOS,448 last,,,,449 first
+BOS,448 tuesday last,,,,449 tuesday first
