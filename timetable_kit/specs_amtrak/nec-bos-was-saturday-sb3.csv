@@ -16,7 +16,7 @@ NHV,,,,,,,,,,,
 BRP,,,,,,,,,,,
 STM,,,,,,,,,,,
 NRO,,,,,,,,,,,
-NYP,,,,first,,,first,first,,,first
+NYP,,,,first two-row,,,first two-row,first two-row,,,first two-row
 NWK,,,,,,,,,,,
 EWR,,,,,,,,,,,
 MET,,,,,,,,,,,
@@ -26,10 +26,11 @@ TRE,,,,,,,,,,,
 CWH,,,,,,,,,,,
 PHN,,,,,,,,,,,
 PHL,,,,,,,,,,,
-WIL,,,,,,,,,,,
-NRK,,,,,,,,,,,
+WIL,,,,,,,to,,,,to
+NRK,,,,,,,Harrisburg,,,,Harrisburg
 ABE,,,,,,,,,,,
 BAL,,,,,,,,,,,
 BWI,,,,,,,,,,,
 NCR,,,,,,,,,,,
-WAS,,,,,last,,,,,,
+WAS,,,last,,last,,,,last,last,
+,,,,to New<br>Orleans,,to Norfolk,,to Miami,,,
