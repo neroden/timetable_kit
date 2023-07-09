@@ -1,25 +1,22 @@
-,stations,access,250,260,280,240,238,284,256,290,48,244,64,68
-column-options,,,,,ardp,,,,,,ardp,,ardp,
-omit,Ghost trains: 288 (Niagara Falls train),,,,,,,,,,,,,
+,stations,250,260,280 saturday,240 sunday,238 saturday,284 saturday,290 saturday,48,244 saturday,1244,246,64,68
+column-options,,,,ardp,,,,,ardp,,,,ardp,ardp
 route-name,,,,,,,,,,,,,,
-,,,,,,,,,,,,,"<div style=""text-align: center;"">(Via Rail #97)</div>",
-days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
-TWO,,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,64 first,blank
-,Additional Canadian stations,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,(see Via Rail),blank
-NFS,,,blank,blank,blank,blank,blank,blank,blank,blank,blank,blank,,blank
-NFL,,,blank,blank,280 first,blank,blank,284 first,blank,blank,blank,blank,,blank
-BFX,,,blank,blank,,blank,blank,,blank,blank,"<span>From<br>Chicago, IL</span>",blank,,blank
-BUF,,,blank,blank,,blank,blank,,blank,blank,,blank,,blank
-ROC,,,blank,blank,,blank,blank,,blank,blank,,blank,,blank
-SYR,,,blank,blank,,blank,blank,,blank,blank,,blank,,blank
-ROM,,,blank,blank,,blank,blank,,blank,blank,,blank,,blank
-UCA,,,blank,blank,,blank,blank,,blank,blank,,blank,,blank
-AMS,,,blank,blank,,blank,blank,,blank,"<span>From<br>Burlington, VT</span>",,blank,,blank
-SDY,,,blank,blank,,blank,blank,,blank,,,blank,,blank
-ALB,,,250 first two-row,260 first two-row,,240 first two-row,238 first two-row,,256 first two-row,,,244 first two-row,,68 first two-row
+days,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+,,,,,,,,,,,,,"<span>From<br>Toronto, ON</span>",
+NFL,,blank,blank,first two-row,blank,blank,first two-row,blank,blank,blank,blank,blank,,blank
+BFX,,blank,blank,,blank,blank,,blank,"<span>From<br>Chicago, IL</span>",blank,blank,blank,,blank
+BUF,,blank,blank,,blank,blank,,blank,,blank,blank,blank,,blank
+ROC,,blank,blank,,blank,blank,,blank,,blank,blank,blank,,blank
+SYR,,blank,blank,,blank,blank,,blank,,blank,blank,blank,,blank
+ROM,,blank,blank,,blank,blank,,blank,,blank,blank,blank,,blank
+UCA,,blank,blank,,blank,blank,,blank,,blank,blank,blank,,blank
+AMS,,blank,blank,,blank,blank,,"<span>From<br>Burlington, VT</span>",,blank,blank,blank,,"<span>From<br>Montreal, QC</span>"
+SAR,,blank,blank,,blank,blank,,,,blank,blank,blank,,
+SDY,,blank,blank,,blank,blank,,,,blank,blank,blank,,
+ALB,,first two-row,first two-row,,first two-row,first two-row,,,,first two-row,first two-row,first two-row,,
 HUD,,,,,,,,,,,,,,
 RHI,,,,,,,,,,,,,,
 POU,,,,,,,,,,,,,,
 CRT,,,,,,,,,,,,,,
 YNY,,,,,,,,,,,,,,
-NYP,,,250 last,260 last,280 last,240 last,238 last,284 last,256 last,290 last,48 last,244 last,64 last,68 last
+NYP,,last,last,last,last,last,last,last,last,last,last,last,last,last
