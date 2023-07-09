@@ -1,7 +1,7 @@
 , access, station,130,2154,600,172,644,98,56,2158,646
 column-options,,,ardp,,,,,,,,ardp
 route-name,,,,,,,,,,,
-days,,,WAS,WAS,PHL,WAS,PHL,WAS,WAS,WAS,PHL
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,
 WAS,,,,first two-row,,,,,,first two-row,
 NCR,,,,,,,,,,,

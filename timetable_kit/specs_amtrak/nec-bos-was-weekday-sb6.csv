@@ -1,7 +1,7 @@
 , access, station,2193,177,179,639,65,67
 column-options,,,ardp,,,,,ardp
 route-name,,,,,,,,
-days,,,BOS,BOS,BOS,NYP,BOS,BOS
+days,,,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,
 BOS,,,first,first,first,,first,first
 BBY,,,,,,,,

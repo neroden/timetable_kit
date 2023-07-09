@@ -1,5 +1,5 @@
 , access, station,,178,2122,654,136,196,2122,80,656,138,2126
-column-options,,,,,,,,,,,,,ardp
+column-options,,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,,
 days,,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,,
