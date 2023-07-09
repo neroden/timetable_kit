@@ -1,10 +1,8 @@
 New GTFS has dropped.
 - NEC:
---- Saturday Northbound
---- Sunday Northbound
---- check ghost trains
---- check for misaligned order (trains out of order)
+--- check for misaligned order (trains out of order), fix first/last/two-row, add "to/from" notations
 --- check for overwide pages
+--- Weekday Southbound is done.
 
 - Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
 - Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
@@ -17,21 +15,19 @@ New GTFS has dropped.
 - Done: Virginia Services, Cardinal, Carolinian/Piedmont, Silver Service/Palmetto, Crescent
 - Done: Southwest Chief, Grand Canyon
 
-- Rebuild NEC with train number changes
 - Build Coast Starlight timetable
-- Check for Crescent problem reported by Chris Juckins
 
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
 - Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
 - Maple Leaf American data wrong in VIA (Amtrak is probably correct)
+- One "missing train" in NEC (assume this is real and has been discontinued)
 
 Recheck ALL of these:
 2 -- recheck Southwest Chief back into Lincoln Service
 3 -- recheck Southwest Chief back into Quincy Service
 6 -- then recheck everything else
 Broken due to GTFS breakage:
-- NEC (ghost trains, missing trains)
 - Heartland Flyer (ibid)
 - Lincoln Service (ibid) -- short version OK
 - Quincy (ibid) -- short version OK
@@ -50,8 +46,12 @@ Put off, because these have printable state agency timetables, or almost:
 ---- Note: Masses of temporary suspensions not in dataset
 - Cascades - Oregon Point bus schedule problem
 ---- Note: Cascades GTFS data changed on 2023-01-27
-- Hartford Line
----- Note: in good shape but not rechecked recently
+
+For making updates easier:
+-- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
+from the ./list_trains.py program (this is currently largely manual)
+
+-- Auto-destination cell code to generate the words "to Charlotte" (etc) by looking at the train route?
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
