@@ -6,19 +6,23 @@ LOCAL_WEST="heartland-flyer grand-canyon"
 # due to official timetable existing (reconsider this)
 MIDWEST="hiawatha.list illinois-missouri-services.list city-of-new-orleans-illini-saluki michigan-services.list"
 LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list"
-LOCAL_NEW_ENGLAND="vermonter ethan-allen-express-abbrev vermont-to-upstate-ny adirondack-short berkshire-flyer"
+LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express vermont-to-upstate-ny adirondack-short berkshire-flyer"
 # Omits Downeaster because official timetable is MUCH better than mine (go Maine)
-# Omits Maple Leaf (long AND short version) due to Amtrak errors; get it from VIA
-# Incomplete version of Ethan Allen due to missing bus data
-# Omits Adirondack due to suspensions
-# We have to actually make a spec for the Downeaster
+# Amtrak timetables omit Maple Leaf (see below)
+# Adirondack is "short" due to suspensions
 LOCAL_NORTHEAST="empire-service.list keystone-service.list pennsylvanian"
 LOCAL_SOUTHEAST="virginia-services.list carolinian-piedmont"
 NEC="nec-bos-was.list"
 
 ALL_AMTRAK="$LD_WEST $LOCAL_WEST $MIDWEST $LD_EAST $LOCAL_NEW_ENGLAND $LOCAL_NORTHEAST $LOCAL_SOUTHEAST"
-./timetable.py --input-dir specs_amtrak --agency amtrak --spec $ALL_AMTRAK
+./timetable.py --agency amtrak --spec $ALL_AMTRAK
 
-
+# VIA timetables omit Maple Leaf (see below)
 ALL_VIA="canadian.list ocean remote-services.list corridor.list"
-./timetable.py --input-dir specs_via --agency via --spec $ALL_VIA
+./timetable.py --agency via --spec $ALL_VIA
+
+# Maple Leaf is best done as a VIA/Amtrak hybrid
+./timetable.py --agency maple_leaf --spec maple-leaf
+
+# Hartford Line is an Amtrak/Hartford Line hybrid
+./timetable.py --agency hartford --spec hartford-line-valley-flyer.list
