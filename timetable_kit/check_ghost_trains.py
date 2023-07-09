@@ -60,6 +60,7 @@ Adirondack is missing but will likely come back in the future.
 """
 
 import argparse
+import re
 
 from urllib.request import Request, urlopen  # for reading juckins webpage
 
@@ -217,6 +218,22 @@ if __name__ == "__main__":
     # ---
 
     missing_from_csv = list(set(trains_running).difference(trains_listed))
+    # Filter out false positives for the NEC
+    if (args.timetable == "nec"):
+        print("Excluding 6XX-series (PHL-HAR)")
+        print("Excluding 4XX-series (NHV-points north)")
+        print("Excluding 7X-series (RGH-CLT)")
+        real_missing = []
+        for x in missing_from_csv:
+            if re.fullmatch(r'4\d\d',x):
+                pass
+            elif re.fullmatch(r'6\d\d',x):
+                pass
+            elif re.fullmatch(r'7\d',x):
+                pass
+            else:
+                real_missing.append(x)
+        missing_from_csv=real_missing
     print("trains running but not in CSV:", missing_from_csv)
 
     ghost_trains = list(set(trains_listed).difference(trains_running))
