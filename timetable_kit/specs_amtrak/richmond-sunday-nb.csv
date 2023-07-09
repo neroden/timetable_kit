@@ -1,7 +1,8 @@
-,access,station,98,164,88,96,92,80 sunday,158,90,124
+,access,station,98 saturday,164,88,96,92,80 sunday,158,90,124
 column-options,,,ardp,,,,,,ardp,,
 route-name,,,,,,,,,,,
 days,,,RVR,RVR,RVR,RVR,RVR,"<div style=""text-align:center; font-weight:bold;"">Su</div>",RVR,RVR,RVR
+omit,,,the one which starts in Miami on Saturday is in RVR on Sunday,,,,,,,,
 NFK,,,from<br>Miami,blank,first,blank,from<br>Miami,from<br>Charlotte,first,from<br>Savannah,blank
 PTB,,,first,blank,,blank,first,first,,first,blank
 NPN,,,,blank,,first,,,,,first
