@@ -1,16 +1,17 @@
-, access, station,178,654,136,2122,80 tuesday,80 thursday,656,138,2126
+, access, station,178,654,136,80 tuesday,80 thursday,2122,656,138,658
 column-options,,,ardp,,,,,,,,ardp
 route-name,,,,,,,,,,,
 days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,
-WAS,,,,,,first two-row,,,,,first two-row
+,,,,,,from<br>Charlotte,from<br>Charlotte,,,from<br>Norfolk,
+WAS,,,first two-row,,first two-row,,,first two-row,,,
 NCR,,,,,,,,,,,
 BWI,,,,,,,,,,,
 BAL,,,,,,,,,,,
 ABE,,,,,,,,,,,
-NRK,,,,,,,,,,,
-WIL,,,,,,,,,,,
-PHL,,,,first,,,,,first,,
+NRK,,,,from,,,,,from,,from
+WIL,,,,Harrisburg,,,,,Harrisburg,,Harrisburg
+PHL,,,,,,,,,,,
 PHN,,,,,,,,,,,
 CWH,,,,,,,,,,,
 TRE,,,,,,,,,,,
@@ -19,13 +20,13 @@ NBK,,,,,,,,,,,
 MET,,,,,,,,,,,
 EWR,,,,,,,,,,,
 NWK,,,,,,,,,,,
-NYP,,,,last,,last,,,last,last,last
+NYP,,,,last two-row,,last two-row,last two-row,last two-row,last two-row,last two-row,last two-row
 NRO,,,,,,,,,,,
 STM,,,,,,,,,,,
 BRP,,,,,,,,,,,
 NHV,,,,,,,,,,,
 OSB,,,,,,,,,,,
-NLC,,,,,,,,,,,
+NLC,,,,,to<br>Springfield,,,,,,
 MYS,,,,,,,,,,,
 WLY,,,,,,,,,,,
 KIN,,,,,,,,,,,
