@@ -1,0 +1,6 @@
+,53, access, station,52
+column-options,ardp,,,reverse ardp
+days,LOR,,,SFA
+updown,,,,
+LOR,first,,,last
+SFA,last,,,first
