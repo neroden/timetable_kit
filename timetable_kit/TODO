@@ -1,31 +1,3 @@
-New GTFS has dropped.
--- Everything except the NEC is done.  (Timetables currently released are listed in current.sh)
-- NEC:
---- check for misaligned order (trains out of order), fix first/last/two-row, add "to/from" notations
---- check for overwide pages
---- Weekday Southbound is done.
---- Saturday Southbound is done.
---- Sunday Southbound is done.
---- Weekday Northbound is done.
---- Saturday Northbound is done.
-(Only Sunday Northbound left!)
-
-Known bugs:
-- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
-- Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
-- Maple Leaf American data wrong in VIA (Amtrak is probably correct)
-- One "missing train" in NEC (assume this is real and has been discontinued)
-
-VIA Rail stuff:
-- Check for which stations are "manned" for checked baggage info
-
-Put off, because these have printable state agency timetables, or almost:
-- Downeaster
----- The official timetable is better than anything I can produce.
-- San Joaquins
-- Pacific Surfliner
-- Cascades - Oregon Point bus schedule problem
-
 For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
 from the ./list_trains.py program (this is currently largely manual)
@@ -111,3 +83,22 @@ Long term (?):
 - tests/io/format is where the test is.
 - need a parallel to cell_context (header_context).
 - Have to set up another project contributor profile etc so OMG.  Not this month.
+
+Timetable update stuff:
+-----------------------
+Known Amtrak GTFS bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+- Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
+- Maple Leaf American data wrong in VIA (Amtrak is probably correct)
+- One "missing train" in NEC (assume this is real and has been discontinued)
+
+VIA Rail stuff:
+- Check for which stations are "manned" for checked baggage info
+
+Amtrak schedules to put off, because these have printable state agency timetables, or almost:
+- Downeaster
+---- The official timetable is better than anything I can produce.
+- San Joaquins
+- Capitol Corridor
+- Pacific Surfliner
+- Cascades - Oregon Point bus schedule problem
