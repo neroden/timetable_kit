@@ -7,7 +7,8 @@ New GTFS has dropped.
 --- Saturday Southbound is done.
 --- Sunday Southbound is done.
 --- Weekday Northbound is done.
-(Only Northbound weekend left!)
+--- Saturday Northbound is done.
+(Only Sunday Northbound left!)
 
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
