@@ -1,9 +1,10 @@
 , access, station,158,2226,90,124,128,66
 column-options,,,ardp,,,,,ardp
 route-name,,,,,,,,
-days,,,NYP,NYP,NYP,NYP,NYP,NYP
+days,,,NYP,NYP,NYP,NYP,WAS,WAS
 updown,,,,,,,,
-WAS,,,,,,,,
+,,,from<br>Norfolk,,from<br>Savannah,from<br>Newport News,,from<br>Roanoke
+WAS,,,,first two-row,,,first two-row,
 NCR,,,,,,,,
 BWI,,,,,,,,
 BAL,,,,,,,,
@@ -19,10 +20,10 @@ NBK,,,,,,,,
 MET,,,,,,,,
 EWR,,,,,,,,
 NWK,,,,,,,,
-NYP,,,last,,last,last,,
-NRO,,,,,,,,
-STM,,,,,,,,
-BRP,,,,,,,,
+NYP,,,last two-row,last two-row,last two-row,last two-row,last two-row,last two-row
+NRO,,,,,,,arrives in,
+STM,,,,,,,New York,
+BRP,,,,,,,Monday,
 NHV,,,,,,,,
 OSB,,,,,,,,
 NLC,,,,,,,,
