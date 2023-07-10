@@ -30,13 +30,8 @@ Known bugs:
 - Maple Leaf American data wrong in VIA (Amtrak is probably correct)
 - One "missing train" in NEC (assume this is real and has been discontinued)
 
-Recheck ALL of these:
-2 -- recheck Southwest Chief back into Lincoln Service
-3 -- recheck Southwest Chief back into Quincy Service
 6 -- then recheck everything else
 Broken due to GTFS breakage:
-- Lincoln Service (ibid) -- short version OK
-- Quincy (ibid) -- short version OK
 - Capitol Corridor - Ghost buses, missing buses
 - Winter Park Express (missing)
 
