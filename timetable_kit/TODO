@@ -4,6 +4,8 @@ from the ./list_trains.py program (this is currently largely manual)
 
 -- Auto-destination cell code to generate the words "to Charlotte" (etc) by looking at the train route?
 
+-- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
+
 For VIA and generic timetables:
 1 -- start reading calendar_dates.txt
 
