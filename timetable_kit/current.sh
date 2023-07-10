@@ -1,3 +1,28 @@
+#! /bin/bash
+# Part of timetable_kit
+# Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Make all the timetables currently being prepared
+
+# Get Amtrak stations DB (very slow, don't do normally)
+# cd amtrak
+# ./json_stations.py download
+# cd ..
+
+# Get new gtfs for every agency
+cd amtrak
+./get_gtfs.py
+cd ..
+cd via
+./get_gtfs.py
+cd ..
+cd maple_leaf
+./merge_gtfs.py
+cd ..
+cd hartford_line
+./get_gtfs.py
+./merge_gtfs.py
+cd ..
+
 # Amtrak timetables currently produceable (we think)
 LD_WEST="empire-builder california-zephyr southwest-chief sunset-limited texas-eagle coast-starlight"
 LOCAL_WEST="heartland-flyer grand-canyon"
