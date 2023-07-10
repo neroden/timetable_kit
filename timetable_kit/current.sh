@@ -5,7 +5,7 @@ LOCAL_WEST="heartland-flyer grand-canyon"
 # Omits capitol-corridor.list, san-joaquin.list, pacific-surfliner.list, cascades.list
 # due to official timetable existing (reconsider this)
 MIDWEST="hiawatha.list illinois-missouri-services.list city-of-new-orleans-illini-saluki michigan-services.list"
-LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list"
+LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list auto-train"
 LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express vermont-to-upstate-ny adirondack berkshire-flyer"
 # Omits Downeaster because official timetable is MUCH better than mine (go Maine)
 # Amtrak timetables omit Maple Leaf (see below)
