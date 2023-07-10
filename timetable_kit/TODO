@@ -1,4 +1,5 @@
 New GTFS has dropped.
+-- Everything except the NEC is done.  (Timetables currently released are listed in current.sh)
 - NEC:
 --- check for misaligned order (trains out of order), fix first/last/two-row, add "to/from" notations
 --- check for overwide pages
@@ -6,34 +7,13 @@ New GTFS has dropped.
 --- Saturday Southbound is done.
 --- Sunday Southbound is done.
 --- Weekday Northbound is done.
-(Only Northbound left!)
-
-- Done more or less: Maple Leaf (joint Amtrak/VIA timetable)
-- Done: VIA Rail Canadian, Ocean, Remote Service, Corridor
-- Done: (Downeaster)
-- Done: Vermonter, Vermonter/Valley Flyer, Hartford Line/Valley Flyer
-- Done: Ethan Allen Express, Vermont to Upstate NY,
-- Done: Berkshire Flyer, Adirondack,
-- Done: Empire Service, 
-- Done: Keystone Service, Pennsylvanian,
-- Done: Virginia Services, Carolinian/Piedmont
-- Done: Lake Shore Limited, Capitol Limited,
-- Done: Cardinal, Crescent, Silver Service/Palmetto,
-- Done: Sunset Limited, Texas Eagle, Heartland Flyer
-- Done: Southwest Chief, Grand Canyon
-
-- Build Coast Starlight timetable
+(Only Northbound weekend left!)
 
 Known bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
 - Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
 - Maple Leaf American data wrong in VIA (Amtrak is probably correct)
 - One "missing train" in NEC (assume this is real and has been discontinued)
-
-6 -- then recheck everything else
-Broken due to GTFS breakage:
-- Capitol Corridor - Ghost buses, missing buses
-- Winter Park Express (missing)
 
 VIA Rail stuff:
 - Check for which stations are "manned" for checked baggage info
@@ -42,11 +22,8 @@ Put off, because these have printable state agency timetables, or almost:
 - Downeaster
 ---- The official timetable is better than anything I can produce.
 - San Joaquins
----- Note: Richmond elevator issue, other possible issues
 - Pacific Surfliner
----- Note: Masses of temporary suspensions not in dataset
 - Cascades - Oregon Point bus schedule problem
----- Note: Cascades GTFS data changed on 2023-01-27
 
 For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
