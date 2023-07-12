@@ -1,0 +1,30 @@
+, access, station,20 monday,20 saturday,80 monday,80 sunday,72,74,76,78
+column-options,,,ardp,,ardp,,,,,
+route-name,,,,,,,,,,
+days,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT,CLT
+updown,,,,,,,,,,
+,,,"<div style=""text-align: right;"">from</div>","<div style=""text-align: left;""> New Orleans</div>",,,,,,
+CLT,,,,,first,first,first,first,first,first
+KAN,,,,,,,,,,
+SAL,,,,,,,,,,
+HPT,,,,,,,,,,
+GRO,,,,,,,,,,
+BNC,,,,,,,,,,
+DNC,,,,,,,,,,
+CYN,,,,,,,,,,
+RGH,,,,,,,last two-row,last two-row,last two-row,last two-row
+SSM,,,,,,,blank,blank,blank,blank
+WLN,,,,,,,blank,blank,blank,blank
+RMT,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>",,,,blank,blank,blank,blank
+PTB,,,,,,,blank,blank,"<div style=""text-align: center;"">For</div>",blank
+RVR,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>",,,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank
+FBG,,,,,,,blank,blank,"<div style=""text-align: center;"">to Wilson,<br>Selma-Smithfield,</div>",blank
+QAN,,,,,,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank
+ALX,,,,,,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank
+WAS,,,,,,,blank,blank,"<div style=""text-align: center;"">see</div>",blank
+BAL,,,,,,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank
+WIL,,,,,,,blank,blank,"<div style=""text-align: center;""><b>(Palmetto)</b></div>",blank
+PHL,,,,,,,blank,blank,blank,blank
+TRE,,,,,,,blank,blank,blank,blank
+NWK,,,,,,,blank,blank,blank,blank
+NYP,,,last,last,last,last,blank,blank,blank,blank

@@ -1,11 +1,9 @@
 {
-    "title": "Carolinian and Piedmont Timetable",
-    "heading": "Amtrak's Carolinian and Piedmont",
+    "title": "Carolinian and Piedmont Northbound",
+    "heading": "Amtrak's Carolinian and Piedmont Northbound",
     "reference_date": "20230722",
     "programmers_warning": "Train 80, 19, and 20 have weird variations on incoming NEC timings.",
-    "landscape": true,
     "key_baggage": true,
     "key_d": true,
-    "compress_credits": true,
     "for_rpa": true
 }

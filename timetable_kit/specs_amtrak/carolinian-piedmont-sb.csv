@@ -1,0 +1,30 @@
+,access,station,71,73,75,77,79 sunday,79 monday,19
+column-options,,,ardp,,,,,,ardp
+route-name,,,,,,,,,
+days,,,CLT,CLT,CLT,CLT,CLT,CLT,NYP
+updown,,,,,,,,,
+NYP,,,blank,blank,blank,blank,first,first,first
+NWK,,,blank,blank,blank,blank,,,
+TRE,,,blank,blank,blank,blank,,,
+PHL,,,blank,blank,blank,blank,,,
+WIL,,,blank,blank,"<div style=""text-align: center;"">For</div>",blank,,,
+BAL,,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank,,,
+WAS,,,blank,blank,"<div style=""text-align: center;"">to Cary,<br>Raleigh,</div>",blank,,,
+ALX,,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank,,,
+QAN,,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank,,,
+FBG,,,blank,blank,"<div style=""text-align: center;"">see</div>",blank,,,
+RVR,,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>"
+PTB,,,blank,blank,"<div style=""text-align: center;""><b>(Silver Star)</b></div>",blank,,,
+RMT,,,blank,blank,blank,blank,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>"
+WLN,,,blank,blank,blank,blank,,,
+SSM,,,blank,blank,blank,blank,,,
+RGH,,,first two-row,first two-row,first two-row,first two-row,,,
+CYN,,,,,,,,,
+DNC,,,,,,,,,
+BNC,,,,,,,,,
+GRO,,,,,,,,,
+HPT,,,,,,,,,
+SAL,,,,,,,,,
+KAN,,,,,,,,,
+CLT,,,last,last,last,last,last,last,
+,,,,,,,,,"<div style=""text-align: center;"">to New Orleans</div>"
