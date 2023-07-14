@@ -71,11 +71,11 @@ def get_keys_html(services_list, one_line=True) -> str:
     if not services_list:
         return ""
     # Strip services which aren't in our dictionary.
-    cleaned_services_list = [
+    cleaned_services = (
         service
         for service in services_list
         if service in connecting_services_dict.keys()
-    ]
+    )
 
     if one_line:
         space_or_br = " "
@@ -94,11 +94,11 @@ def get_keys_html(services_list, one_line=True) -> str:
 ### TESTING CODE ###
 if __name__ == "__main__":
     print("Testing plaintext:")
-    print(get_connecting_service_icon_html("marc", doing_html=False))
-    print(get_connecting_service_icon_html("baltimore_lrt", doing_html=False))
+    print(get_connecting_service_logo_html("marc", doing_html=False))
+    print(get_connecting_service_logo_html("baltimore_lrt", doing_html=False))
     print("Testing HTML:")
-    print(get_connecting_service_icon_html("marc"))
-    print(get_connecting_service_icon_html("baltimore_lrt"))
+    print(get_connecting_service_logo_html("marc"))
+    print(get_connecting_service_logo_html("baltimore_lrt"))
     print("Testing key:")
     print(get_connecting_service_key_html("marc"))
     print(get_connecting_service_key_html("baltimore_lrt"))

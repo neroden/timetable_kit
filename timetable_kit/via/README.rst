@@ -7,7 +7,7 @@ The best source of VIA station codes is https://cptdb.ca/wiki/index.php/VIA_Rail
 
 First, remember to download the GTFS data for VIA::
 
-    python ./via/get_gttfs.py
+    python ./via/get_gtfs.py
 
 When you want Via stuff you need to specify the agency to be "via", for example::
 

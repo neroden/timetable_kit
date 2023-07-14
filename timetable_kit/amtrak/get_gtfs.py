@@ -15,7 +15,7 @@ from zipfile import ZipFile
 import requests
 
 # Found at transit.land.
-# Also at The Mobility Database on Github.  MobilityData/mobility-database
+# Also at The Mobility Database on GitHub.  MobilityData/mobility-database
 # This is the URL we should download the GTFS from.
 canonical_gtfs_url = "https://content.amtrak.com/content/gtfs/GTFS.zip"
 

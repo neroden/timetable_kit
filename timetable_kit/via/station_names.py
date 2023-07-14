@@ -5,9 +5,9 @@
 """
 Utility routines to style VIA station names as HTML or text.
 
-Also routines to move from stop_id to and from station_code, and get station names.
+Also, routines to move from stop_id to and from station_code, and get station names.
 
-Also accessibility info.
+Also, accessibility info.
 
 Exported:
 get_station_name_pretty
@@ -113,7 +113,7 @@ def stop_code_to_stop_id(stop_code: str) -> str:
     """Given a VIA stop_code, return a VIA stop_id"""
     # Memoized
     global stop_code_to_stop_id_dict
-    if stop_code_to_stop_id_dict == None:
+    if stop_code_to_stop_id_dict is None:
         _prepare_dicts()
     return stop_code_to_stop_id_dict[stop_code]
 
@@ -122,7 +122,7 @@ def stop_id_to_stop_code(stop_id: str) -> str:
     """Given a VIA stop_id, return a VIA stop_code"""
     # Memoized
     global stop_id_to_stop_code_dict
-    if stop_id_to_stop_code_dict == None:
+    if stop_id_to_stop_code_dict is None:
         _prepare_dicts()
     return stop_id_to_stop_code_dict[stop_id]
 
@@ -131,7 +131,7 @@ def stop_code_to_stop_name(stop_code: str) -> str:
     """Given a VIA stop_code, return a VIA stop_name -- raw"""
     # Memoized
     global stop_code_to_stop_name_dict
-    if stop_code_to_stop_name_dict == None:
+    if stop_code_to_stop_name_dict is None:
         _prepare_dicts()
     return stop_code_to_stop_name_dict[stop_code]
 

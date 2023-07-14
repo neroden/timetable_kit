@@ -121,7 +121,7 @@ def get_accessible_icon_html(doing_html=True) -> str:
     """
     Return suitable HTML for displaying the "wheelchair access" icon.
 
-    Amtrak data does not show full accessibility.  This is being used for basic
+    Amtrak's data does not show full accessibility.  This is being used for basic
     platform accessibility at this time.
     """
     if doing_html:

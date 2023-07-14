@@ -12,7 +12,7 @@ which trains have sleeper cars, etc.
 """
 
 
-def is_connecting_service(tsn):
+def is_connecting_service(_tsn):
     """Is this a connecting, non-VIA service?"""
 
     # VIA has two non-VIA services in their data, but they *don't have tsns*.
@@ -91,11 +91,11 @@ checked_baggage_trains = set(
 )
 
 
-def station_has_checked_baggage(station_code: str) -> bool:
+def station_has_checked_baggage(_station_code: str) -> bool:
     """
     Does this VIA rail station handle checked baggage?
 
-    Currently we have no data, so must assume not
+    Currently, we have no data, so must assume not
     """
     return False
 
@@ -109,7 +109,7 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
     return trip_short_name in checked_baggage_trains
 
 
-def is_high_speed_train(trip_short_name: str) -> bool:
+def is_high_speed_train(_trip_short_name: str) -> bool:
     """
     Given a trip_short_name (train number) return "True" if we should color it as a high speed train.
 

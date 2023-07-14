@@ -74,7 +74,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
     """
     tsns = feed.trips["trip_short_name"].array
 
-    # Here, duplicates are likely so we should check every time.
+    # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     tsn_set = set()
     for x in tsns:
@@ -86,7 +86,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
 
     trip_ids = feed.trips["trip_id"].array
     # We have duplicates and will take the last one.
-    # but hopefully they're total duplicates so it doesn't matter...
+    # but hopefully they're total duplicates, so it doesn't matter...
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
     return tsn_to_trip_id
 
@@ -101,7 +101,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
     days of the week.  Annoying, and bad practice, but allowed by GTFS.
     """
     total_dict = dict()
-    tsns = feed.trips["trip_short_name"].array
+    # tsns = feed.trips["trip_short_name"].array
     for day in gtfs_days:
         day_suffix = " " + day
         # We need to filter calendar and trips for the day of the week.
@@ -155,9 +155,10 @@ def find_tsn_dupes(feed) -> set[str]:
     """
     tsns = feed.trips["trip_short_name"].array
 
-    # Here, duplicates are likely so we should check every time.
+    # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     debug_print(1, "Finding duplicate tsns, if any:")
+    # FIXME: this appears to have no effect, since nothing will be found in the empty set... what is this?
     tsn_set = set()
     tsn_dupes_set = set()
     for x in tsns:
@@ -169,8 +170,8 @@ def find_tsn_dupes(feed) -> set[str]:
     return tsn_dupes_set
 
 
-### These two are used routinely in the main timetable generator
-### And in the stations list generator
+# These two are used routinely in the main timetable generator
+# And in the stations list generator
 
 
 def trip_from_tsn(today_feed, trip_short_name):

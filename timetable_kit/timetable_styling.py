@@ -176,7 +176,7 @@ def finish_html_timetable(
     *,
     author,
     aux=None,
-    for_weasyprint=False,
+    _for_weasyprint=False,
     box_time_characters=False,
     start_date,
     end_date,
@@ -212,7 +212,7 @@ def finish_html_timetable(
         debug_print(1, "Key on right")
         connecting_services_one_line = False
 
-    ### FONTS
+    # FONTS
     font_name = "SpartanTT"
     font_size = "6pt"
     font_is_tiny = True

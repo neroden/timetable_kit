@@ -381,7 +381,7 @@ def flatten_train_specs_list(train_specs_list):
     return flattened_ts_set
 
 
-#### Subroutines for fill_tt_spec
+# Subroutines for fill_tt_spec
 
 
 def service_dates_from_trip_id(feed, trip_id):
@@ -420,7 +420,7 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
     timepoint_df = feed.stop_times[
         (feed.stop_times["trip_id"] == trip_id)
         & (feed.stop_times["stop_id"] == stop_id)
-        ]
+    ]
     if timepoint_df.shape[0] == 0:
         return None
     if timepoint_df.shape[0] > 1:
@@ -538,17 +538,17 @@ def raise_error_if_not_one_row(trips):
 
 
 def fill_tt_spec(
-        tt_spec,
-        *,
-        today_feed,
-        reference_date,
-        doing_html=False,
-        box_time_characters=False,
-        doing_multiline_text=True,
-        train_numbers_side_by_side=False,
-        is_ardp_station="dwell",
-        dwell_secs_cutoff=300,
-        use_bus_icon_in_cells=False,
+    tt_spec,
+    *,
+    today_feed,
+    reference_date,
+    doing_html=False,
+    box_time_characters=False,
+    doing_multiline_text=True,
+    train_numbers_side_by_side=False,
+    is_ardp_station="dwell",
+    dwell_secs_cutoff=300,
+    use_bus_icon_in_cells=False,
 ):
     """
     Fill a timetable from a tt-spec template using GTFS data
@@ -1329,7 +1329,7 @@ def produce_timetable(
         timetable.to_csv(path_for_csv, index=False, header=True)
         debug_print(1, "CSV output done")
 
-    # make sure there are no dangling needs
+    # make sure there are no dangling tasks
     do_pdf = do_pdf or do_jpg
     do_html = do_html or do_pdf
 

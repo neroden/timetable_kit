@@ -22,7 +22,7 @@ from timetable_kit.errors import (
 
 """
 gtfs_days is the list of all the days (Monday through Sunday) which form gtfs column headers,
-appropriately lowercased for the column headers.
+appropriately lowercase for the column headers.
 """
 gtfs_days = (
     "monday",
@@ -197,7 +197,7 @@ def filter_bad_service_ids(self, bad_service_ids):
     Returns a new filtered feed (original feed unchanged)
     - filters calendar and trips (direct)
     - filtered trips is used to avoid known-bad data
-    - filtered calender is not currently used
+    - filtered calendar is not currently used
     """
     new_feed = self.copy()
     # First filter the trips.

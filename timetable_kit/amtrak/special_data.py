@@ -17,7 +17,7 @@ known problems with Amtrak's GTFS data, and similar.
 def is_connecting_service(tsn):
     """Is this a connecting, non-Amtrak service?"""
 
-    # TODO: converet to use agency data, and push "uphill"
+    # TODO: convert to use agency data, and push "uphill"
     # Currently this only runs on non-buses (generally trains)
 
     # Amtrak's train numbers are all numbers.
@@ -171,7 +171,7 @@ major_stations_list = (
     "BOS",  # NEC timetable stations first
     "NHV",
     "NYP",
-    "NYG",  # Just in case there's a reroute
+    "NYG",  # Just in case there's a rerouting
     "PHL",
     "WAS",
     "RVR",  # Virginia services.  Richmond Staples Mill + 3 terminuses

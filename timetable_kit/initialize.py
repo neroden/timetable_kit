@@ -23,7 +23,7 @@ from timetable_kit import gtfs_type_cleanup
 from timetable_kit.debug import debug_print
 
 
-#### INITIALIZATION CODE
+# INITIALIZATION CODE
 def initialize_feed(gtfs):
     """
     Initialize the master_feed and related variables.
@@ -36,7 +36,7 @@ def initialize_feed(gtfs):
     debug_print(1, "Using GTFS file " + str(gtfs))
     gtfs_path = Path(gtfs)
     # The unit is only relevant if we read the shapes file; we currently don't.
-    # Also affects display miles so default to mi.
+    # Also affects display miles so default to miles.
     master_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 

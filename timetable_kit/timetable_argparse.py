@@ -149,7 +149,7 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
         "positional_spec_files",
         help="""
-             Spec files may be specified wiwhout the --spec prefix for convenience.
+             Spec files may be specified without the --spec prefix for convenience.
              """,
         nargs="*",  # 1 or more filenames
         default=[],  # empty list
@@ -217,8 +217,8 @@ def make_tt_arg_parser():
 # Testing code
 if __name__ == "__main__":
     print("Testing argument parser:")
-    parser = make_tt_arg_parser()
-    args = parser.parse_args()
+    main_parser = make_tt_arg_parser()
+    args = main_parser.parse_args()
     print("GTFS Filename: " + str(args.gtfs_filename))
     print("Reference Date: " + str(args.reference_date))
     print("Output Dirname: " + str(args.output_dirname))

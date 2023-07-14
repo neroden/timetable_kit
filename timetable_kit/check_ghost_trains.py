@@ -119,9 +119,9 @@ if __name__ == "__main__":
     # Section to download external test file and read into list
     # ---
     url_basename = "https://juckins.net/timetable_kit/trains_running"
-    url_prefixfilename = "trains-actually-running"
-    url_routename = "empire-service"
-    url_filename = url_prefixfilename + "-" + url_routename + ".txt"
+    url_prefix_filename = "trains-actually-running"
+    url_route_name = "empire-service"
+    url_filename = url_prefix_filename + "-" + url_route_name + ".txt"
     url_to_open = url_basename + "/" + url_filename
     print("url to open", url_to_open)
 

@@ -14,7 +14,7 @@ Recheck ALL of these:
 Broken due to GTFS breakage:
 - NEC (ghost trains, missing trains)
 - Virginia Services (NEC issues)
-- Empire Servic ee (ghost trains, missing trains)
+- Empire Service (ghost trains, missing trains)
 - Maple Leaf (both Amtrak ***and*** VIA) -- short versions OK
 - Ethan Allen Express (Burlington bus stop missing) -- short version OK
 - Vermonter (recent build bugs, check)
@@ -83,7 +83,7 @@ Internal cleanup:
     The feed is then available and present within the agency object.
 
 0 -- memoize connecting services initialization (& wrapperize the dict)
-     so that it doesn't run from auxillary progs like list_trains.py.
+     so that it doesn't run from auxiliary progs like list_trains.py.
 
 1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 

@@ -58,17 +58,17 @@ def make_station_stats():
     )
 
     # These are sets, so the "add only if not present" logic is automatic
-    possible_features = set(())
-    possible_baggage = set(())
-    possible_parking = set(())
-    possible_accessibility = set(())
+    possible_features = set()
+    possible_baggage = set()
+    possible_parking = set()
+    possible_accessibility = set()
     # Hours are different, don't try the same trick
     # possible_hours = set(())
 
     # Simultaneously accumulate certain lists of stations...
-    inaccessible_platforms = set(())
-    no_wheelchair_lifts = set(())
-    high_platforms = set(())
+    inaccessible_platforms = set()
+    no_wheelchair_lifts = set()
+    high_platforms = set()
 
     for code in cleaned_station_list:
         print("Analyzing " + code)
@@ -97,7 +97,7 @@ def make_station_stats():
                 print("Whoops, extra JSON information for station " + code)
 
         # We ignore the keys other than "feature" and pull out the strings after "feature"
-        # We know there are some {} dicts so we have to check for the feature key presence
+        # We know there are some {} dicts, so we have to check for the feature key presence
         for x in feature_json:
             if "feature" in x:
                 possible_features.add(x["feature"])
