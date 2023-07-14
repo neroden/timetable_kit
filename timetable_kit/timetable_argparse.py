@@ -13,7 +13,7 @@ Also includes routines for adding common arguments to parsers for other commands
 import argparse
 
 # For the GTFS day options:
-from timetable_kit.feed_enhanced import gtfs_days
+from timetable_kit.feed_enhanced import GTFS_DAYS
 
 # For the choice of the agency subpackage:
 from timetable_kit.runtime_config import agency_choices
@@ -75,7 +75,7 @@ def add_day_argument(parser: argparse.ArgumentParser):
                 Manually check if you have trains which run overnight or start in a different time zone.
                 """,
         type=str.lower,  # Automatically lowercases all input to this option
-        choices=[*gtfs_days, "weekday", "weekend"],
+        choices=[*GTFS_DAYS, "weekday", "weekend"],
     )
 
 

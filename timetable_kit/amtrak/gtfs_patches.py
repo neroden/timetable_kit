@@ -9,9 +9,8 @@ This should be reviewed every time Amtrak releases a new GTFS.
 
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
-from timetable_kit import feed_enhanced
 from timetable_kit.debug import debug_print
-
+from timetable_kit.feed_enhanced import FeedEnhanced
 
 arizona_stops_list = [
     # Sunset Limited
@@ -54,7 +53,7 @@ train_agencies = [
 ]
 
 
-def patch_buses(feed):
+def patch_buses(feed: FeedEnhanced):
     """
     Bus services incorrectly listed as trains
 
@@ -80,7 +79,7 @@ def patch_buses(feed):
     feed.routes = routes
 
 
-def patch_coast_starlight(new_feed):
+def patch_coast_starlight(new_feed: FeedEnhanced):
     """
     Patch an old Coast Starlight bug.
     The bug appears to be fixed as of July 7, 2023,
@@ -129,7 +128,7 @@ def patch_coast_starlight(new_feed):
     new_feed.calendar = new_calendar
 
 
-def patch_feed(feed):
+def patch_feed(feed: FeedEnhanced):
     """
     Take an Amtrak feed and patch it for known errors.
 
