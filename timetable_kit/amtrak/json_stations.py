@@ -142,7 +142,7 @@ def station_details_local_path(station_code: str) -> str:
         raise ValueError("Station code not of length 3")
     filename = station_details_filename(station_code)
     path = station_details_dir / filename
-    return path
+    return str(path)
 
 
 def download_station_details(station_code: str) -> str:
@@ -232,7 +232,7 @@ def station_details_html_local_path(station_code: str) -> str:
         raise ValueError("Station code not of length 3")
     filename = station_details_html_filename(station_code)
     path = station_details_dir / filename
-    return path
+    return str(path)
 
 
 def download_station_details_html(station_code: str) -> str:

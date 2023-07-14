@@ -176,28 +176,29 @@ def get_station_name_pretty(
     else:
         stop_name_clean = stop_name_raw
 
-    if stop_name_clean == "Sainte-Foy":
-        # Explain where St. Foy station is
-        facility_name = "for Quebéc City"
-    elif stop_name_clean == "Quebéc":
-        # Distinguish from other Quebec City stations
-        facility_name = "Gare du Palais"
-    elif stop_name_clean in ["Montreal", "Montréal"]:  # remember accented e
-        # Two stations here too
-        facility_name = "Central Station"
-    elif stop_name_clean in ["Anjou", "Sauvé"]:  # remember accented e
-        # On the Senneterre timetable,
-        # "EXO station" blows out a line which we need for Montreal
-        facility_name = ""
-    elif stop_name_clean == "Ottawa":
-        # Make it clear which LRT station this goes with
-        facility_name = "Tremblay"
-    elif stop_name_clean == "Toronto":
-        # Just for clarity
-        facility_name = "Union Station"
-    elif stop_name_clean == "Vancouver":
-        # There ARE two train stations in Vancouver
-        facility_name = "Pacific Central Station"
+    match stop_name_clean:
+        case "Sainte-Foy":
+            # Explain where St. Foy station is
+            facility_name = "for Quebéc City"
+        case "Quebéc":
+            # Distinguish from other Quebec City stations
+            facility_name = "Gare du Palais"
+        case "Montreal" | "Montréal":  # remember accented e
+            # Two stations here too
+            facility_name = "Central Station"
+        case "Anjou" | "Sauvé":  # remember accented e
+            # On the Senneterre timetable,
+            # "EXO station" blows out a line which we need for Montreal
+            facility_name = ""
+        case "Ottawa":
+            # Make it clear which LRT station this goes with
+            facility_name = "Tremblay"
+        case "Toronto":
+            # Just for clarity
+            facility_name = "Union Station"
+        case "Vancouver":
+            # There ARE two train stations in Vancouver
+            facility_name = "Pacific Central Station"
 
     # We actually want to add the province to every station,
     # but VIA doesn't provide that info.  It's too much work.
@@ -216,28 +217,13 @@ def get_station_name_pretty(
         # Hence the misleading use of "city_state_name".  FIXME by pulling out common code
         city_state_name = stop_name_clean
 
-        if major:
-            enhanced_city_state_name = "".join(
-                ["<span class=major-station >", city_state_name, "</span>"]
-            )
-        else:
-            enhanced_city_state_name = "".join(
-                ["<span class=minor-station >", city_state_name, "</span>"]
-            )
+        enhanced_city_state_name = f"<span class={'major' if major else 'minor'}-station >{city_state_name}</span>"
 
-        enhanced_station_code = "".join(
-            ["<span class=station-footnotes>(", station_code, ")</span>"]
-        )
+        enhanced_station_code = f"<span class=station-footnotes>({station_code})</span>"
 
-        if facility_name:
-            facility_name_addon = "".join(
-                [
-                    "<br>",
-                    "<span class=station-footnotes>",
-                    " - ",
-                    facility_name,
-                    "</span>",
-                ]
+        if facility_name not in (None, ""):
+            facility_name_addon = (
+                f"<br><span class=station-footnotes> - {facility_name}</span>"
             )
 
         connection_logos_html = ""
@@ -251,30 +237,22 @@ def get_station_name_pretty(
                 connection_logos_html += " "
                 connection_logos_html += this_logo_html
 
-        cooked_station_name = "".join(
-            [
-                enhanced_city_state_name,
-                " ",
-                enhanced_station_code,
-                facility_name_addon,  # Has its own space or <br> before it
-                connection_logos_html,  # Has spaces or <br> before it as needed
-            ]
+        cooked_station_name = (
+            f"{enhanced_city_state_name} {enhanced_station_code}"
+            + facility_name_addon  # Has its own space or <br> before it
+            + connection_logos_html  # Has spaces or <br> before it as needed
         )
 
     elif doing_multiline_text:
         # Multiline text. "Toronto (TRTO)\nSuffix"
         if facility_name:
             facility_name_addon = "\n - " + facility_name
-        cooked_station_name = "".join(
-            [stop_name_styled, " (", stop_code, ")", facility_name_addon]
-        )
+        cooked_station_name = f"{stop_name_styled} ({stop_code}){facility_name_addon}"
     else:
         # Single Line text: "Toronto - Suffix (TRTO)"
         if facility_name:
             facility_name_addon = " - " + facility_name
-        cooked_station_name = "".join(
-            [stop_name_styled, facility_name_addon, " (", stop_code, ")"]
-        )
+        cooked_station_name = f"{stop_name_styled}{facility_name_addon} ({stop_code})"
 
     return cooked_station_name
 

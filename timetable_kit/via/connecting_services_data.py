@@ -68,7 +68,7 @@ connecting_services_dict = {
 }
 
 
-def get_all_connecting_services(station_list: list[str]) -> list:
+def get_all_connecting_services(station_list: list[str]) -> list[str]:
     """
     Given a list of station codes, return a list of services which connect
     (with no duplicates)
@@ -85,5 +85,5 @@ def get_all_connecting_services(station_list: list[str]) -> list:
 if __name__ == "__main__":
     print("File parsed.")
     # This both lists all the services, and tests get_all_connecting_services at the same time
-    services = get_all_connecting_services(connecting_services_dict.keys())
+    services = get_all_connecting_services(list(connecting_services_dict.keys()))
     print("All known connecting services:", services)

@@ -32,10 +32,7 @@ def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str
         return ""
     # Found the service, get the HTML
     # (prebuilt in catalog.py during initialization)
-    if doing_html:
-        return service_dict["logo_html"]
-    else:
-        return service_dict["alt"]
+    return service_dict["logo_html" if doing_html else "alt"]
 
 
 def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
@@ -55,7 +52,7 @@ def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
     if doing_html:
         return service_dict["logo_key_html"]
     else:
-        return " : ".join([service_dict["alt"], service_dict["full_name"]])
+        return f'{service_dict["alt"]} : {service_dict["full_name"]}'
 
 
 def get_keys_html(services_list, one_line=True) -> str:
@@ -77,16 +74,11 @@ def get_keys_html(services_list, one_line=True) -> str:
         if service in connecting_services_dict.keys()
     )
 
-    if one_line:
-        space_or_br = " "
-    else:
-        space_or_br = "<br>"
+    space_or_br = " " if one_line else "<br>"
 
     all_keys = space_or_br.join(
-        [
-            (connecting_services_dict[service])["logo_key_html"]
-            for service in cleaned_services_list
-        ]
+        connecting_services_dict[service]["logo_key_html"]
+        for service in cleaned_services
     )
     return all_keys
 

@@ -16,8 +16,10 @@ import argparse
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
 from timetable_kit.debug import set_debug_level
+
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
+
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
@@ -59,20 +61,10 @@ def compare_stop_lists(base_trip, trips, *, feed):
         except:
             print("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
-            print(
-                " ".join(
-                    ["Identical:", str(base_trip.trip_id), "and", str(trip.trip_id)]
-                )
-                + "."
-            )
+            print(f"Identical: {base_trip.trip_id} and {trip.trip_id}.")
         else:
             reduced_comparison = comparison.dropna(axis="index", how="all")
-            print(
-                " ".join(
-                    ["Comparing:", str(base_trip.trip_id), "vs.", str(trip.trip_id)]
-                )
-                + ":"
-            )
+            print(f"Comparing: {base_trip.trip_id} vs. {trip.trip_id}:")
             # print( reduced_comparison )
             # Works up to here!
 
@@ -164,7 +156,6 @@ if __name__ == "__main__":
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name
-
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)

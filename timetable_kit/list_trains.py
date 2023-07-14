@@ -28,6 +28,7 @@ from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
+
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
@@ -38,8 +39,6 @@ from timetable_kit.timetable_argparse import (
 )
 from timetable_kit.tsn import make_trip_id_to_tsn_dict
 from timetable_kit.tsn import stations_list_from_tsn
-
-
 
 
 def get_trips_at(stop_id: str, *, feed: gtfs_kit.Feed) -> list[str]:

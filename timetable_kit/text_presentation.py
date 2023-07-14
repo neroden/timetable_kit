@@ -19,6 +19,7 @@ from zoneinfo import ZoneInfo  # still for time zones
 import pandas as pd
 
 from timetable_kit.debug import debug_print
+
 # These are mine
 from timetable_kit.errors import GTFSError, InputError
 from timetable_kit.icons import (
@@ -58,7 +59,7 @@ new_cell_substitution_map = {
 cell_substitution_map = new_cell_substitution_map
 
 
-def get_cell_substitution(cell_text: str) -> str:
+def get_cell_substitution(cell_text: str) -> Optional[str]:
     """
     Given special simple-substitution cell texts, provide the substitution.
 
@@ -142,10 +143,7 @@ tz_letter_dict = {
 def get_zone_str(zone_name, doing_html=False):
     """Return a two-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
     letter = tz_letter_dict[zone_name]
-    if doing_html:
-        return "".join(['<span class="box-tz">', letter, "</span>"])
-    else:
-        return letter
+    return f'<span class="box-tz">{letter}</span>' if doing_html else letter
 
 
 # This dictionary of special cases for daystring is easier to read
@@ -328,33 +326,18 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
 
     # String suitable for plaintext
     # Note that this is very explicitly designed to be fixed width
-    time_text = [
-        "{: >2}".format(time.hour24),
-        ":",
-        "{:0>2}".format(time.min),
-    ]
-    time_str = "".join(time_text)  # String suitable for plaintext
+    time_str = f"{time.hour24: >2}:{time.min:0>2}"
     if box_time_characters:
         # There are exactly five characters, by construction.  23:59 is largest.
-        html_time_str = "".join(
-            [
-                '<span class="box-digit">',
-                time_str[0],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[1],
-                "</span>",
-                '<span class="box-colon">',
-                time_str[2],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[3],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[4],
-                "</span>",
-            ]
+        html_time_str = (
+            # what is this for, anyway? it isn't used
+            '<span class="box-digit">' + time_str[0] + "</span>"
+            '<span class="box-digit">' + time_str[1] + "</span>"
+            '<span class="box-colon">' + time_str[2] + "</span>"
+            '<span class="box-digit">' + time_str[3] + "</span>"
+            '<span class="box-digit">' + time_str[4] + "</span>"
         )
+        time_str = html_time_str  # don't know if this is supposed to be here, but it's like this in the next function
     return time_str
 
 
@@ -372,39 +355,18 @@ def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
 
     # String suitable for plaintext
     # Note that this is very explicitly designed to be fixed width
-    hour = time.hour
-    if hour == 0:
-        hour = 12
-    time_text = [
-        "{: >2}".format(hour),
-        ":",
-        "{:0>2}".format(time.min),
-        ampm_str[time.pm],
-    ]
-    time_str = "".join(time_text)  # String suitable for plaintext
+    time_str = (
+        f"{12 if time.hour == 0 else time.hour: >2}:{time.min:0>2}{ampm_str[time.pm]}"
+    )
     if box_time_characters:
         # There are exactly six characters, by construction. 12:59P is largest.
-        html_time_str = "".join(
-            [
-                '<span class="box-1">',
-                time_str[0],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[1],
-                "</span>",
-                '<span class="box-colon">',
-                time_str[2],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[3],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[4],
-                "</span>",
-                '<span class="box-ap">',
-                time_str[5],
-                "</span>",
-            ]
+        html_time_str = (
+            '<span class="box-1">' + time_str[0] + "</span>"
+            '<span class="box-digit">' + time_str[1] + "</span>"
+            '<span class="box-colon">' + time_str[2] + "</span>"
+            '<span class="box-digit">' + time_str[3] + "</span>"
+            '<span class="box-digit">' + time_str[4] + "</span>"
+            '<span class="box-ap">' + time_str[5] + "</span>"
         )
         time_str = html_time_str
     return time_str
@@ -449,13 +411,17 @@ def get_rd_str(
 
     match [timepoint.drop_off_type, timepoint.pickup_type, "timepoint" in timepoint]:
         case [1, 0, _]:
-            if not is_first_stop:  # This is obvious at the first station
-                if not is_arrival_line:  # put on departure line
-                    rd_str = "R"  # Receive passengers only
+            if (
+                not is_first_stop  # This is obvious at the first station
+                and not is_arrival_line  # put on departure line
+            ):
+                rd_str = "R"  # Receive passengers only
         case [0, 1, _]:
-            if not is_last_stop:  # This is obvious at the last station
-                if not is_departure_line:  # put on arrival line
-                    rd_str = "D"  # Discharge passengers only
+            if (
+                not is_last_stop  # This is obvious at the last station
+                and not is_departure_line  # put on arrival line
+            ):
+                rd_str = "D"  # Discharge passengers only
         case [1, 1, _]:
             if not is_second_line:  # it'll be on the first line
                 rd_str = "*"  # Not for ordinary passengers (staff only, perhaps)
@@ -473,9 +439,8 @@ def get_rd_str(
             # which really means "all 1".  Handle this elsewhere!
             # print("timepoint column found")  # Should not happen with Amtrak data
             if timepoint.timepoint == 0:  # and it says times aren't exact
-                print(
-                    "Inexact timepoint found!"
-                )  # Should not happen with Amtrak or VIA so far
+                # Should not happen with Amtrak or VIA so far
+                print("Inexact timepoint found!")
                 if not is_arrival_line:  # This goes on departure line, always
                     rd_str = "L"
 
@@ -489,9 +454,9 @@ def get_rd_str(
     if doing_html:
         if rd_str != " ":
             # Boldface it:
-            rd_str = "".join(["<b>", rd_str, "</b>"])
+            rd_str = f"<b>{rd_str}</b>"
         # Always wrap it in the span, even if it's a blank space:
-        rd_str = "".join(['<span class="box-rd">', rd_str, "</span>"])
+        rd_str = f'<span class="box-rd">{rd_str}</span>'
     return rd_str
 
 
@@ -506,16 +471,12 @@ def get_baggage_str(doing_html=False):
     Currently, the HTML implementation references an external checked baggage icon.
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
-    if not doing_html:
-        return get_baggage_icon_html(doing_html=False)
-    return "".join(
-        [
-            baggage_box_prefix,
-            '<span class="baggage-symbol">',
-            get_baggage_icon_html(doing_html=True),
-            "</span>",
-            baggage_box_postfix,
-        ]
+    baggage_icon = get_baggage_icon_html(doing_html=doing_html)
+
+    return (
+        f'{baggage_box_prefix}<span class="baggage-symbol">{baggage_icon}</span>{baggage_box_postfix}'
+        if doing_html
+        else baggage_icon
     )
 
 
@@ -525,9 +486,7 @@ def get_blank_baggage_str(doing_html=False):
 
     The HTML implementation boxes it to line things up properly.
     """
-    if not doing_html:
-        return " "
-    return "".join([baggage_box_prefix, baggage_box_postfix])
+    return baggage_box_prefix + baggage_box_postfix if doing_html else " "
 
 
 bus_box_prefix = '<span class="box-bus">'
@@ -634,10 +593,7 @@ def timepoint_str(
     -- no_rd: Leave out the usual space for "R" or "D" notations. Used to save space.
     """
 
-    if doing_html:
-        linebreak = "<br>"
-    else:
-        linebreak = "\n"
+    linebreak = "<br>" if doing_html else "\n"
 
     if not doing_html:
         box_time_characters = False
@@ -664,15 +620,11 @@ def timepoint_str(
         is_pm = departure.pm
     if doing_html:
         if bold_pm and is_pm == 1:
-            departure_time_str = "".join(["<b>", departure_time_str, "</b>"])
+            departure_time_str = f"<b>{departure_time_str}</b>"
         if use_24:
-            departure_time_str = "".join(
-                ['<span class="box-time24">', departure_time_str, "</span>"]
-            )
+            departure_time_str = f'<span class="box-time24">{departure_time_str}</span>'
         else:
-            departure_time_str = "".join(
-                ['<span class="box-time12">', departure_time_str, "</span>"]
-            )
+            departure_time_str = f'<span class="box-time12">{departure_time_str}</span>'
 
     # Fill the TimeTuple and prep string for actual time
     if pd.isna(timepoint.arrival_time):
@@ -686,25 +638,21 @@ def timepoint_str(
         is_pm = arrival.pm
     if doing_html:
         if bold_pm and is_pm == 1:
-            arrival_time_str = "".join(["<b>", arrival_time_str, "</b>"])
+            arrival_time_str = f"<b>{arrival_time_str}</b>"
         if use_24:
-            arrival_time_str = "".join(
-                ['<span class="box-time24">', arrival_time_str, "</span>"]
-            )
+            arrival_time_str = f'<span class="box-time24">{arrival_time_str}</span>'
         else:
-            arrival_time_str = "".join(
-                ['<span class="box-time12">', arrival_time_str, "</span>"]
-            )
+            arrival_time_str = f'<span class="box-time12">{arrival_time_str}</span>'
 
     # Need this for lines just containing "Ar" or "Dp"
     blank_rd_str = ""
     blank_time_str = ""
     if doing_html:
-        blank_rd_str = "".join(['<span class="box-rd">', "", "</span>"])
+        blank_rd_str = '<span class="box-rd"></span>'
         if use_24:
-            blank_time_str = "".join(['<span class="box-time24">', "", "</span>"])
+            blank_time_str = '<span class="box-time24"></span>'
         else:
-            blank_time_str = "".join(['<span class="box-time12">', "", "</span>"])
+            blank_time_str = '<span class="box-time12"></span>'
 
     # Fill in the day strings, if we're using it
     departure_daystring = ""
@@ -730,19 +678,17 @@ def timepoint_str(
         else:
             arrival_daystring = day_string(calendar, offset=arrival.day)
         if doing_html:
-            departure_daystring = "".join(
-                ['<span class="', days_box_class, '">', departure_daystring, "</span>"]
+            departure_daystring = (
+                f'<span class="{days_box_class}">{departure_daystring}</span>'
             )
-            arrival_daystring = "".join(
-                ['<span class="', days_box_class, '">', arrival_daystring, "</span>"]
+            arrival_daystring = (
+                f'<span class="{days_box_class}">{arrival_daystring}</span>'
             )
-            blank_daystring = "".join(
-                ['<span class="', days_box_class, '">', "", "</span>"]
-            )
+            blank_daystring = f'<span class="{days_box_class}"></span>'
         else:
             # Add a necessary spacer: CSS does it for us in HTML
-            departure_daystring = "".join([" ", departure_daystring])
-            arrival_daystring = "".join([" ", arrival_daystring])
+            departure_daystring = " " + departure_daystring
+            arrival_daystring = " " + arrival_daystring
             blank_daystring = ""
 
     ar_str = ""  # If we are not adding the padding at all -- unwise with two_row
@@ -804,15 +750,16 @@ def timepoint_str(
             bus_str = get_blank_bus_str(doing_html=doing_html)
 
         # Each element joined herein includes HTML annotations, and is completely blank if unused
-        complete_line_str = "".join(
-            [
-                ar_dp_str,
-                "" if no_rd else rd_str,
-                arrival_time_str if discharge_only else departure_time_str,
-                arrival_daystring if discharge_only else departure_daystring,
-                baggage_str,
-                bus_str,
-            ]
+        complete_line_str = (
+            ar_dp_str
+            + ("" if no_rd else rd_str)
+            + (
+                arrival_time_str + arrival_daystring
+                if discharge_only
+                else departure_time_str + departure_daystring
+            )
+            + baggage_str
+            + bus_str
         )
         return complete_line_str
 
@@ -877,15 +824,13 @@ def timepoint_str(
             arrival_line_str = ""
         elif receive_only or (no_dwell and not discharge_only):
             # This just prints the "Ar" but does the alignment (hopefully)
-            arrival_line_str = "".join(
-                [
-                    ar_str,
-                    "" if no_rd else blank_rd_str,
-                    blank_time_str,
-                    blank_daystring,
-                    blank_baggage_str,
-                    blank_bus_str,
-                ]
+            arrival_line_str = (
+                ar_str
+                + ("" if no_rd else blank_rd_str)
+                + blank_time_str
+                + blank_daystring
+                + blank_baggage_str
+                + blank_bus_str
             )
         else:
             arrival_rd_str = get_rd_str(
@@ -894,18 +839,16 @@ def timepoint_str(
                 is_first_stop=is_first_stop,
                 is_last_stop=is_last_stop,
                 is_first_line=(not reverse),  # arrival is first unless reversing
-                is_second_line=(reverse),
+                is_second_line=reverse,
                 is_arrival_line=True,
             )
-            arrival_line_str = "".join(
-                [
-                    ar_str,
-                    "" if no_rd else arrival_rd_str,
-                    arrival_time_str,
-                    arrival_daystring,
-                    arrival_baggage_str,
-                    arrival_bus_str,
-                ]
+            arrival_line_str = (
+                ar_str
+                + ("" if no_rd else arrival_rd_str)
+                + arrival_time_str
+                + arrival_daystring
+                + arrival_baggage_str
+                + arrival_bus_str
             )
         if is_last_stop:
             # Don't include the "Dp" on a specified is_first_stop two_row.
@@ -914,15 +857,13 @@ def timepoint_str(
             departure_line_str = ""
         elif discharge_only:
             # This just prints the "Dp" but does the alignment (hopefully)
-            departure_line_str = "".join(
-                [
-                    dp_str,
-                    "" if no_rd else blank_rd_str,
-                    blank_time_str,
-                    blank_daystring,
-                    blank_baggage_str,
-                    blank_bus_str,
-                ]
+            departure_line_str = (
+                dp_str
+                + ("" if no_rd else blank_rd_str)
+                + blank_time_str
+                + blank_daystring
+                + blank_baggage_str
+                + blank_bus_str
             )
         else:
             departure_rd_str = get_rd_str(
@@ -930,24 +871,22 @@ def timepoint_str(
                 doing_html=doing_html,
                 is_first_stop=is_first_stop,
                 is_last_stop=is_last_stop,
-                is_second_line=(reverse),  # departure is second unless reversing
+                is_second_line=reverse,  # departure is second unless reversing
                 is_first_line=(not reverse),
                 is_departure_line=True,
             )
-            departure_line_str = "".join(
-                [
-                    dp_str,
-                    "" if no_rd else departure_rd_str,
-                    departure_time_str,
-                    departure_daystring,
-                    departure_baggage_str,
-                    departure_bus_str,
-                ]
+            departure_line_str = (
+                dp_str
+                + ("" if no_rd else departure_rd_str)
+                + departure_time_str
+                + departure_daystring
+                + departure_baggage_str
+                + departure_bus_str
             )
 
         # Patch the two rows together.
         if not reverse:
-            complete_line_str = linebreak.join([arrival_line_str, departure_line_str])
+            complete_line_str = f"{arrival_line_str}{linebreak}{departure_line_str}"
         else:  # reverse
             complete_line_str = linebreak.join([departure_line_str, arrival_line_str])
         return complete_line_str
@@ -1042,16 +981,10 @@ def get_time_column_header(
                     # Not train or bus.  Does not occur on Amtrak.
                     time_column_prefix = "Trip #s"
 
-        time_column_header = "".join(
-            [
-                "<small>",
-                time_column_prefix,
-                "</small>",
-                "<br>",
-                "<strong>",
-                " / ".join(tsns),  # Note! Works cleanly for single-element case
-                "</strong>",
-            ]
+        time_column_header = (
+            f"<small>{time_column_prefix}</small>"
+            "<br>"
+            f"<strong>{' / '.join(tsns)}</strong>"  # Note! Works cleanly for single-element case
         )
         return time_column_header
 
@@ -1060,30 +993,20 @@ def get_time_column_header(
     # Putting slashes between the train and bus number has proven to make
     # overly-wide columns.  Aaargh!
 
-    prefixed_route_numbers = [
-        "".join(
-            [
-                "<small>",
-                route_number_prefix_map[
-                    int(route_from_train_spec(train_spec).route_type)
-                ],
-                "</small>",
-                "<br>",
-                "<strong>",
-                # Strip the " monday" type suffix
-                # Special for CTrail: clean off the "CTrail" prefix
-                # This is hacky; FIXME
-                train_spec_to_tsn(train_spec).removeprefix("CTrail "),
-                "</strong>",
-            ]
-        )
+    prefixed_route_numbers = (
+        f"<small>{route_number_prefix_map[int(route_from_train_spec(train_spec).route_type)]}</small>"
+        "<br>"
+        # Strip the " monday" type suffix
+        # Special for CTrail: clean off the "CTrail" prefix
+        # This is hacky; FIXME
+        f"<strong>{train_spec_to_tsn(train_spec).removeprefix('CTrail ')}</strong>"
         for train_spec in fewer_train_specs
-    ]
+    )
     time_column_header = "<hr>".join(prefixed_route_numbers)
     return time_column_header
 
 
-def get_station_column_header(doing_html=False):
+def get_station_column_header(_doing_html=False):
     """
     Return the header for a column of station names.
 
@@ -1099,10 +1022,11 @@ def get_services_column_header(doing_html=False):
     Tricky because the column should be very narrow.
     Wraps with a special CSS div, so it can be rotated.
     """
-    if doing_html:
-        return '<div class="services-header-text">Station<br>Services</div>'
-    else:
-        return "Services"
+    return (
+        '<div class="services-header-text">Station<br>Services</div>'
+        if doing_html
+        else "Services"
+    )
 
 
 def get_access_column_header(doing_html=False):
@@ -1116,9 +1040,7 @@ def get_access_column_header(doing_html=False):
     """
     if doing_html:
         accessible_icon_html = get_accessible_icon_html(doing_html=doing_html)
-        return "".join(
-            ['<div class="access-header-text">', " ", accessible_icon_html, "</div>"]
-        )
+        return f'<div class="access-header-text"> {accessible_icon_html}</div>'
     else:
         # Spell this one out for CSV production.
         return "Access"
@@ -1159,27 +1081,20 @@ def style_route_name_for_column(route_name, doing_html=False):
         # 4 or more characters, so will pass the next two tests
     # The following works well for Amtrak:
     # If four words, combine last two if one is really short
-    if len(rnw) >= 4:
-        if len(rnw[2]) <= 3 or len(rnw[3]) <= 3:
-            rnw = [rnw[0], rnw[1], "".join([rnw[2], " ", rnw[3]]), *rnw[4:]]
+    if len(rnw) >= 4 and (len(rnw[2]) <= 3 or len(rnw[3]) <= 3):
+        rnw[2] = f"{rnw[2]} {rnw.pop(3)}"
     # Combine first two words if one is really short
-    if len(rnw) >= 2:
-        if len(rnw[0]) <= 3 or len(rnw[1]) <= 3:
-            rnw = ["".join([rnw[0], " ", rnw[1]]), *rnw[2:]]
+    if len(rnw) >= 2 and (len(rnw[0]) <= 3 or len(rnw[1]) <= 3):
+        rnw[0] = f"{rnw[0]} {rnw.pop(1)}"
 
-    linebroken_str = "<br>".join(rnw)
-    final_str = "".join(['<div class="box-route-name">', linebroken_str, "</div>"])
-    return final_str
+    return f'<div class="box-route-name">{"<br>".join(rnw)}</div>'
 
 
 def style_updown(reverse: bool, doing_html=False) -> str:
     """
     Style "Read Up" or "Read Down" column subheader
     """
-    if reverse:
-        text = "Read Up"
-    else:
-        text = "Read Down"
+    text = "Read Up" if reverse else "Read Down"
 
     if not doing_html:
         return text
@@ -1196,7 +1111,7 @@ def style_updown(reverse: bool, doing_html=False) -> str:
         else:
             arrow = "&#x2193;"  # Down arrow in SpartanTT font
         # Put arrows on right and left, with spaces
-        text = " ".join([arrow, text, arrow])
+        text = f"{arrow} {text} {arrow}"
 
-    text = "".join(["<b>", text, "</b>"])
+    text = f"<b>{text}</b>"
     return text

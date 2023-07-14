@@ -228,7 +228,9 @@ def get_column_options(tt_spec):
     return column_options_nested_list
 
 
-def get_cell_codes(code_text: str, train_specs: list[str]) -> Optional[dict[str, str | bool | None]]:
+def get_cell_codes(
+    code_text: str, train_specs: list[str]
+) -> Optional[dict[str, str | bool | None]]:
     """
     Given special code text in a cell, decipher it
 
@@ -266,8 +268,19 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> Optional[dict[str,
     ]
 
     # The cell code may end with two_row or two-row.  Remove it.
-    two_row = code_text.endswith("two_row") or code_text.endswith("two-row") or code_text.endswith("tworow")
-    code = code_text.removesuffix("two_row").strip().removesuffix("two-row").strip().removesuffix("tworow").strip()
+    two_row = (
+        code_text.endswith("two_row")
+        or code_text.endswith("two-row")
+        or code_text.endswith("tworow")
+    )
+    code = (
+        code_text.removesuffix("two_row")
+        .strip()
+        .removesuffix("two-row")
+        .strip()
+        .removesuffix("tworow")
+        .strip()
+    )
 
     if code_text.endswith("last"):
         train_spec = code_text.removesuffix("last").strip()
@@ -369,14 +382,12 @@ def flatten_train_specs_list(train_specs_list):
 
     Removes "noheader" suffixes (we never want them in flattened form).
     """
-    flattened_ts_list = []
+    flattened_ts_set = set()
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
-        cleaned_train_specs = [
-            train_spec.removesuffix("noheader").strip() for train_spec in train_specs
-        ]
-        flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
-    flattened_ts_set = set(flattened_ts_list)
+        for train_spec in train_specs:
+            flattened_ts_set.add(train_spec.removesuffix("noheader").strip())
+
     flattened_ts_set = flattened_ts_set - special_column_names
     return flattened_ts_set
 
@@ -985,7 +996,9 @@ def fill_tt_spec(
                     try:
                         stop_tz = stop_df.iloc[0].stop_timezone
                     except Exception as e:
-                        raise Exception(f"Problem while finding time zone at {station_code}") from e
+                        raise Exception(
+                            f"Problem while finding time zone at {station_code}"
+                        ) from e
 
                     debug_print(
                         3,
@@ -1130,8 +1143,7 @@ def fill_tt_spec(
     # The header replacement list has a potential duplicates problem.
     # Eliminate this by prefixing the column number in an HTML comment.
     unique_header_replacement_list = [
-        f"<!-- {i} --> {header}"
-        for (i, header) in enumerate(header_replacement_list)
+        f"<!-- {i} --> {header}" for (i, header) in enumerate(header_replacement_list)
     ]
 
     #
@@ -1190,32 +1202,19 @@ def produce_timetable(
     # Load the .json file first, as it determines high-level stuff
     aux = load_ttspec_json(ttspec_json_path)
 
-    if output_dirname:
-        output_dir = Path(output_dirname)
-    else:
-        output_dir = Path(".")
+    output_dir = Path(output_dirname if output_dirname else ".")
 
     if "output_subdir" in aux:
         output_subdir = aux["output_subdir"]
         output_dir = output_dir / output_subdir
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-    if "output_filename" in aux:
-        # The aux file may specify the output filename
-        output_filename_base = aux["output_filename"]
-    else:
-        # Or, make it the same as the input filename
-        output_filename_base = spec_filename_base
 
-    if "for_rpa" in aux:
-        for_rpa = aux["for_rpa"]
-    else:
-        for_rpa = False
+    # The aux file may specify the output filename or make it the same as the input filename
+    output_filename_base = aux.get("output_filename", spec_filename_base)
 
-    if "train_numbers_side_by_side" in aux:
-        train_numbers_side_by_side = aux["train_numbers_side_by_side"]
-    else:
-        train_numbers_side_by_side = False
+    for_rpa = aux.get("for_rpa", False)
+    train_numbers_side_by_side = aux.get("train_numbers_side_by_side", False)
 
     # Copy the icons and fonts to the output dir.
     # This is memoized, so it won't duplicate work if you do multiple tables.
@@ -1233,14 +1232,9 @@ def produce_timetable(
     if "programmers_warning" in aux:
         print("WARNING: ", aux["programmers_warning"])
 
-    if "dwell_secs_cutoff" in aux:
-        dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
-    else:
-        dwell_secs_cutoff = 300
+    dwell_secs_cutoff = int(aux.get("dwell_secs_cutoff", 300))
 
-    use_bus_icon_in_cells = False
-    if "use_bus_icon_in_cells" in aux:
-        use_bus_icon_in_cells = True
+    use_bus_icon_in_cells = "use_bus_icon_in_cells" in aux
 
     # Now we're ready to load the .tt-spec file, finally
     tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
@@ -1320,7 +1314,7 @@ def produce_timetable(
         # We need to strip the HTML comments used to distinguish the header columns
         list_of_columns = timetable.columns
         non_unique_header_replacement_list = [
-            unique_header[unique_header.find("-->"):].removeprefix("-->")
+            unique_header[unique_header.find("-->") :].removeprefix("-->")
             for unique_header in list_of_columns
         ]
         timetable.columns = non_unique_header_replacement_list

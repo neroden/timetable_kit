@@ -15,6 +15,7 @@ This has very similar code to baggage.py
 import sys  # for sys.exit
 
 import pandas as pd
+
 # For parsing the HTML pages
 from lxml import html
 
@@ -22,6 +23,7 @@ from timetable_kit.amtrak.json_stations import (
     load_stations_json,
     load_station_details_html,
 )
+
 # These are mine
 from timetable_kit.debug import set_debug_level, debug_print
 

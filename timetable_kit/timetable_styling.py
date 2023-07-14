@@ -15,6 +15,7 @@ This uses Jinja2, via the load_resources module.
 
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
+
 # import pandas as pd
 from pandas.io.formats.style import Styler
 
@@ -198,14 +199,9 @@ def finish_html_timetable(
 
     # We need to add the extras to make this a full HTML & CSS file now.
     # We're going to feed the entire aux file through, but we need some defaults
-    if "title" not in aux:
-        aux["title"] = "A Timetable"
-
-    if "heading" not in aux:
-        aux["heading"] = "A Timetable"
-
-    if "landscape" in aux:
-        debug_print(1, "Landscape orientation")
+    aux.setdefault("title", "A Timetable")
+    aux.setdefault("heading", "A Timetable")
+    aux.setdefault("landscape", "Landscape orientation")
 
     connecting_services_one_line = True
     if "key_on_right" in aux:
@@ -225,12 +221,9 @@ def finish_html_timetable(
         backup_font_name = "sans-serif"
 
     # The @font-face directives:
-    fonts_css_list = []
-    for font in [font_name]:
-        fonts_css_list.append(get_font_css(font))
-    font_faces_css = "".join(fonts_css_list)
+    font_faces_css = get_font_css(font_name)
 
-    ### ICONS
+    # ICONS
 
     # For icons as imgs.
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)

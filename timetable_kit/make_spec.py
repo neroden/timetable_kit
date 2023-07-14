@@ -26,6 +26,7 @@ from timetable_kit.list_trains import (
     sort_by_time_at_stop,
 )
 from timetable_kit.runtime_config import agency  # for the agency()
+
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,

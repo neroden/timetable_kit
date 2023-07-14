@@ -74,15 +74,15 @@ def make_checked_baggage_dict() -> dict[str, bool]:
             # baggage_json is a list.
             # Each element looks like {"feature", "blahblahblah"}.
             for x in baggage_json:
-                if "feature" in x:
-                    if x["feature"] in [
-                        "Checked baggage service available "  # Yes, with the space
-                    ]:
-                        checked_baggage_dict[code] = True
-                        break
-                    if x["feature"] in ["No checked baggage service"]:  # No space here
-                        checked_baggage_dict[code] = False
-                        break
+                feature = x.get("feature")
+                if (
+                    feature == "Checked baggage service available "
+                ):  # Yes, with the space
+                    checked_baggage_dict[code] = True
+                    break
+                if feature == "No checked baggage service":  # No space here
+                    checked_baggage_dict[code] = False
+                    break
             else:  # Did not break out of the loop
                 debug_print(
                     2, "No information for", code, ": assuming no checked baggage"

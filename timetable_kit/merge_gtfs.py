@@ -61,7 +61,7 @@ def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
 # This is the set of all genuine table names in the feed
 # Not including the internal ones.
 # FIXME -- this is fragile.  Make more robust.
-table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - set(["dist_units"])
+table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - {"dist_units"}
 
 
 def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:

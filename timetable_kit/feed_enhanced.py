@@ -17,7 +17,8 @@ import gtfs_kit
 
 from timetable_kit.errors import (
     NoTripError,
-    TwoTripsError, InputError,
+    TwoTripsError,
+    InputError,
 )
 
 """

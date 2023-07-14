@@ -76,14 +76,12 @@ if True:
     re_left_parenthesis = r"[(]"
     re_station_code = r"([^)]{3})"  # no right parens in station code
     re_right_parenthesis = r"[)]"
-    re_split_bus_stop = "".join(
-        [
-            re_station_name,
-            re_whitespace,
-            re_left_parenthesis,
-            re_station_code,
-            re_right_parenthesis,
-        ]
+    re_split_bus_stop = (
+        re_station_name
+        + re_whitespace
+        + re_left_parenthesis
+        + re_station_code
+        + re_right_parenthesis
     )
     split_bus_stop = re.compile(re_split_bus_stop)
 
@@ -97,7 +95,7 @@ def split_bus_stop_name(name):
     match = split_bus_stop.match(name)
     if not match:
         # Didn't match; leave stop code blank
-        return (name, "")
+        return name, ""
     return match.groups()
 
 

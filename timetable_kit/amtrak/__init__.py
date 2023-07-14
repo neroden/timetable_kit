@@ -14,21 +14,27 @@ from .access import (
     station_has_accessible_platform,
     station_has_inaccessible_platform,
 )
+
 # Baggage
 from .baggage import station_has_checked_baggage
+
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services
+
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_zip_local_path,
     gtfs_unzipped_local_path,
     published_gtfs_url,
 )
+
 # Special routine to patch Amtrak's defective GTFS feed
 from .gtfs_patches import patch_feed
+
 # How to title the routes at the top of the column
 from .route_names import get_route_name
+
 # For colorizing columns
 from .special_data import (
     is_connecting_service,
@@ -36,6 +42,7 @@ from .special_data import (
     is_high_speed_train,
 )
 from .special_data import train_has_checked_baggage
+
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc.)
 from .station_name_styling import get_station_name_pretty

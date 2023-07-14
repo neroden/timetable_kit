@@ -92,19 +92,17 @@ def make_accessibility_dicts() -> None:
             # First pass through for accessible platform:
             for x in access_json:
                 # Each element looks like {"feature", "blahblahblah"}.
-                if "feature" in x:
-                    if x["feature"] in ["Accessible platform"]:
-                        accessible_platform_dict[code] = True
-                        break
+                if x.get("feature") == "Accessible platform":
+                    accessible_platform_dict[code] = True
+                    break
             else:  # Did not break out of the loop
                 accessible_platform_dict[code] = False
 
             # Second pass through for inaccessible platform:
             for x in access_json:
-                if "feature" in x:
-                    if x["feature"] in ["No accessible platform"]:
-                        inaccessible_platform_dict[code] = True
-                        break
+                if x.get("feature") == "No accessible platform":
+                    inaccessible_platform_dict[code] = True
+                    break
             else:  # Did not break out of the loop
                 inaccessible_platform_dict[code] = False
 

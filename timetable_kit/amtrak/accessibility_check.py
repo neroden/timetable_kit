@@ -41,7 +41,7 @@ def make_station_stats():
     stations = pd.io.json.read_json(stations_json, orient="records")
     # OK.  So let's dump-print that table...
     stations.to_csv(stations_csv_path, index=False)
-    print(str(stations_csv_path) + " dumped.")
+    print(stations_csv_path, "dumped.")
     # Note: 'country' is blank or CA for Canada (nothing else); stationAlias is of little value
 
     station_list = stations["code"].array

@@ -22,17 +22,15 @@ def is_connecting_service(_tsn):
     return False
 
 
-# Parentheses makes a TUPLE.
-sleeper_trains = set(
-    (
-        "1",  # Canadian
-        "2",  # Canadian
-        "3",  # Truncated Canadian Vancouver - Edmonton
-        "4",  # Truncated Canadian
-        "14",  # Ocean
-        "15",  # Ocean
-    )
-)
+# Parentheses makes a TUPLE, pointy brackets make a SET.
+sleeper_trains = {
+    "1",  # Canadian
+    "2",  # Canadian
+    "3",  # Truncated Canadian Vancouver - Edmonton
+    "4",  # Truncated Canadian
+    "14",  # Ocean
+    "15",  # Ocean
+}
 
 
 def is_sleeper_train(train_number):
@@ -63,32 +61,25 @@ Customer Service
 Via Rail Canada
 """
 
-other_checked_baggage_day_trains = set(
-    (
-        "600",  # Jonquiere
-        "601",
-        "602",
-        "603",  # Senneterre
-        "604",
-        "606",
-        "185",  # Sudbury - White River
-        "186",
-        "690",  # Winnipeg - Churchill
-        "691",
-        "692",
-        "693",
-        "5",  # Jasper - Prince Rupert
-        "6",
-    )
-)
+other_checked_baggage_day_trains = {
+    "600",  # Jonquiere
+    "601",
+    "602",
+    "603",  # Senneterre
+    "604",
+    "606",
+    "185",  # Sudbury - White River
+    "186",
+    "690",  # Winnipeg - Churchill
+    "691",
+    "692",
+    "693",
+    "5",  # Jasper - Prince Rupert
+    "6",
+}
 
-# Assemble these trains as a set.  Ugly!
-checked_baggage_trains = set(
-    [
-        *sleeper_trains,
-        *other_checked_baggage_day_trains,
-    ]
-)
+# Assemble these trains as a set.
+checked_baggage_trains = sleeper_trains | other_checked_baggage_day_trains
 
 
 def station_has_checked_baggage(_station_code: str) -> bool:
