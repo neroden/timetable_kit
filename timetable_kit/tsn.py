@@ -20,11 +20,8 @@ from timetable_kit.runtime_config import agency
 
 # import gtfs_kit
 
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
-from timetable_kit import feed_enhanced
-
 # List of days which are GTFS column headers
-from timetable_kit.feed_enhanced import gtfs_days
+from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
 
 def train_spec_to_tsn(train_spec: str) -> str:
@@ -35,7 +32,7 @@ def train_spec_to_tsn(train_spec: str) -> str:
     possibly followed by "noheader".
     """
     train_spec = train_spec.removesuffix("noheader").strip()
-    for day in gtfs_days:
+    for day in GTFS_DAYS:
         tentative_tsn = train_spec.removesuffix(" " + day)
         if tentative_tsn != train_spec:
             # Only remove one suffix!
@@ -44,7 +41,7 @@ def train_spec_to_tsn(train_spec: str) -> str:
     return train_spec
 
 
-def make_trip_id_to_tsn_dict(feed) -> dict[str, str]:
+def make_trip_id_to_tsn_dict(feed: FeedEnhanced) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_id to trip_short_name.
     """
@@ -60,7 +57,7 @@ def make_trip_id_to_tsn_dict(feed) -> dict[str, str]:
     return trip_id_to_tsn
 
 
-def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
+def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_short_name to trip_id.
 
@@ -91,7 +88,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
     return tsn_to_trip_id
 
 
-def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
+def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_short_name + " " + day_of_week to trip_id.
 
@@ -102,7 +99,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
     """
     total_dict = dict()
     # tsns = feed.trips["trip_short_name"].array
-    for day in gtfs_days:
+    for day in GTFS_DAYS:
         day_suffix = " " + day
         # We need to filter calendar and trips for the day of the week.
         # This filters stop_times too, which is overkill;
@@ -131,7 +128,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
     return total_dict
 
 
-def find_tsn_dupes(feed) -> set[str]:
+def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
     """
     Find trip_short_names which have multiple trip_ids.  Returns the set of duplicate tsns.
 
@@ -174,7 +171,7 @@ def find_tsn_dupes(feed) -> set[str]:
 # And in the stations list generator
 
 
-def trip_from_tsn(today_feed, trip_short_name):
+def trip_from_tsn(today_feed: FeedEnhanced, trip_short_name):
     """
     Given a single train number (trip_short_name), and a feed containing only one day, produces the trip record.
 
@@ -197,7 +194,7 @@ def trip_from_tsn(today_feed, trip_short_name):
     return this_trip_today
 
 
-def stations_list_from_tsn(today_feed, trip_short_name):
+def stations_list_from_tsn(today_feed: FeedEnhanced, trip_short_name):
     """
     Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
 

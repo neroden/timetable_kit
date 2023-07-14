@@ -26,8 +26,7 @@ from weasyprint import HTML as weasyHTML
 
 from timetable_kit import connecting_services
 
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
-from timetable_kit import feed_enhanced
+
 from timetable_kit import icons
 
 # This stores critical data supplied at runtime such as the agency subpackage to use.
@@ -48,7 +47,7 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError,
 )
-from timetable_kit.feed_enhanced import gtfs_days
+from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
@@ -131,7 +130,7 @@ def load_ttspec_csv(filename):
     return ttspec_csv
 
 
-def augment_tt_spec(raw_tt_spec, *, feed, date):
+def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
     """
     Fill in the station list for a tt-spec if it has a key code.
 
@@ -155,7 +154,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
 
         # Find the train name and possibly filter by day...
         key_train_name = key_code.removeprefix("stations of ")
-        for day in gtfs_days:
+        for day in GTFS_DAYS:
             if key_train_name.endswith(day):
                 key_train_name = key_train_name.removesuffix(day).strip()
                 today_feed = today_feed.filter_by_day_of_week(day)
@@ -276,7 +275,7 @@ def get_cell_codes(
         or code_text.endswith("two-row")
         or code_text.endswith("tworow")
     )
-    code = (
+    code_text = (
         code_text.removesuffix("two_row")
         .strip()
         .removesuffix("two-row")
@@ -391,14 +390,14 @@ def flatten_train_specs_list(train_specs_list):
         for train_spec in train_specs:
             flattened_ts_set.add(train_spec.removesuffix("noheader").strip())
 
-    flattened_ts_set = flattened_ts_set - special_column_names
+    flattened_ts_set -= special_column_names
     return flattened_ts_set
 
 
 # Subroutines for fill_tt_spec
 
 
-def service_dates_from_trip_id(feed, trip_id):
+def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
     """
     Given a single trip_id, get the associated service dates by looking up the service_id in the calendar
 
@@ -416,7 +415,7 @@ def service_dates_from_trip_id(feed, trip_id):
     return [start_date, end_date]
 
 
-def get_timepoint_from_trip_id(feed, trip_id, stop_id):
+def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     """
     Given a single trip_id, stop_id, and a feed, extract a single timepoint.
 
@@ -452,7 +451,7 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
     return timepoint
 
 
-def get_dwell_secs(today_feed, trip_id, stop_id):
+def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
     """
     Gets dwell time in seconds for a specific trip_id at a specific station
 
@@ -483,7 +482,7 @@ def get_dwell_secs(today_feed, trip_id, stop_id):
 
 
 def make_stations_max_dwell_map(
-    today_feed, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
+    today_feed: FeedEnhanced, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
 ):
     """
     Return a dict from station_code to True/False, based on the trains in the tt_spec.
@@ -536,7 +535,7 @@ def raise_error_if_not_one_row(trips):
     This returns nothing if successful; it is solely sanity-check code.
 
     For speed, we have to work with trips directly rather than modifying the feed,
-    which is why this is needed for fill_tt_spec, rather than merely in feed_enhanced.
+    which is why this is needed for fill_tt_spec, rather than merely in FeedEnhanced.
     """
     num_rows = trips.shape[0]
     if num_rows == 0:
@@ -554,7 +553,7 @@ def raise_error_if_not_one_row(trips):
 def fill_tt_spec(
     tt_spec,
     *,
-    today_feed,
+    today_feed: FeedEnhanced,
     reference_date,
     doing_html=False,
     box_time_characters=False,
@@ -700,7 +699,7 @@ def fill_tt_spec(
         match column_key_str.lower():
             case "station" | "stations":
                 column_header = text_presentation.get_station_column_header(
-                    doing_html=doing_html
+                    _doing_html=doing_html
                 )
             case "services":
                 column_header = text_presentation.get_services_column_header(
@@ -1161,11 +1160,11 @@ def fill_tt_spec(
 def produce_timetable(
     *,
     spec_file,
-    do_csv,
-    do_html,
-    do_pdf,
-    do_jpg,
-    master_feed,
+    do_csv: bool,
+    do_html: bool,
+    do_pdf: bool,
+    do_jpg: bool,
+    master_feed: FeedEnhanced,
     author,
     command_line_reference_date,
     input_dirname,

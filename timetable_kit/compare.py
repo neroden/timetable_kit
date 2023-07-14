@@ -14,8 +14,8 @@ import argparse
 
 # My packages: Local module imports
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
-from timetable_kit import feed_enhanced
 from timetable_kit.debug import set_debug_level
+from timetable_kit.feed_enhanced import FeedEnhanced
 
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
@@ -87,7 +87,7 @@ def compare_stop_lists(base_trip, trips, *, feed):
             print(enhanced_comparison)
 
 
-def compare_similar_services(route_id, *, feed):
+def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """
     Find timing differences on a route between similar services.
 

@@ -10,7 +10,6 @@ import argparse
 import os  # For os.getenv
 import sys  # For sys.exit
 
-from timetable_kit import feed_enhanced
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
@@ -103,12 +102,11 @@ if __name__ == "__main__":
         case (None, None):
             raise ValueError("Can't generate a station list without a specific trip.")
         case (None, tsn) | (tsn, None):
-            pass
+            tsn = tsn.strip()  # Avoid whitespace problems
         case (_, _):
             raise ValueError(
                 "Specified trip_short_name two different ways.  Use only one."
             )
-    tsn = tsn.strip()  # Avoid whitespace problems
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
@@ -118,13 +116,13 @@ if __name__ == "__main__":
 
     # OK, this is the CSV specific path.
     station_list = station_list_df.to_list()
-    station_list_commaed = [x + ",,," for x in station_list]
+    station_list_command = [x + ",,," for x in station_list]
     station_list_prefixed = [
         ",access,stations," + str(tsn),
         "column-options,,,ardp",
         "days,,," + station_list[0],
         "updown,,,",
-        *station_list_commaed,
+        *station_list_command,
     ]
     station_list_csv = "\n".join(station_list_prefixed)
     print(station_list_csv)

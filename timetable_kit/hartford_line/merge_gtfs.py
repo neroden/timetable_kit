@@ -9,7 +9,6 @@ Routines for modifying Hartford Line GTFS and merging it with Amtrak's GTFS.
 from pathlib import Path
 from zipfile import ZipFile
 
-import pandas as pd
 import gtfs_kit
 
 # Mine

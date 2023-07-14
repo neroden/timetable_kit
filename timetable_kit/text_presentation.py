@@ -230,7 +230,7 @@ def day_string(calendar, offset: int = 0) -> str:
     # Use modulo to correct the offset to the range 0:6
     # Note timezone differences can lead to -1 offset.
     # Later stations on the route lead to positive offset.
-    offset = offset % 7
+    offset %= 7
 
     # OK.  Fast encoding version here as a list of 1s and 0s.
     days_of_service_vector = [

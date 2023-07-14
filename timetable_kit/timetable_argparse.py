@@ -23,7 +23,7 @@ import argparse
 # from timetable_kit import amtrak
 
 # For the GTFS day options:
-from timetable_kit.feed_enhanced import gtfs_days
+from timetable_kit.feed_enhanced import GTFS_DAYS
 
 
 def add_agency_argument(parser: argparse.ArgumentParser):
@@ -82,7 +82,7 @@ def add_day_argument(parser: argparse.ArgumentParser):
                 Manually check if you have trains which run overnight or start in a different time zone.
                 """,
         type=str.lower,  # Automatically lowercases all input to this option
-        choices=[*gtfs_days, "weekday", "weekend"],
+        choices=[*GTFS_DAYS, "weekday", "weekend"],
     )
 
 

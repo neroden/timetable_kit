@@ -12,7 +12,7 @@ Implements "empire-service.list" form of timetable meta-spec.
 from pathlib import Path
 import os  # for os.system
 
-from timetable_kit.debug import set_debug_level, debug_print
+from timetable_kit.debug import debug_print
 from timetable_kit.errors import InputError
 
 

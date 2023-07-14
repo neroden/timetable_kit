@@ -13,8 +13,8 @@ Deletes the shapes table, since we don't use it.
 import sys  # for argv
 from pathlib import Path
 
-import pandas as pd
 import gtfs_kit
+import pandas as pd
 
 
 def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
