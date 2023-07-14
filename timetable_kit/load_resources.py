@@ -40,7 +40,6 @@ get_logo_svg(filename: str) -> str
 get_connecting_services_csv(filename: str) -> str
 """
 
-import jinja2
 from jinja2 import (
     Environment,
     ChoiceLoader,

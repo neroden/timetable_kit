@@ -15,13 +15,13 @@ This uses Jinja2, via the load_resources module.
 
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
-import pandas as pd
+# import pandas as pd
 from pandas.io.formats.style import Styler
 
 # My packages
 # This is tricky.
 # We need runtime data such as the subpackage for the agency (amtrak, via, etc.)
-import timetable_kit.runtime_config
+# import timetable_kit.runtime_config
 
 # And we need a shorthand way to refer to it
 from timetable_kit.runtime_config import agency as agency

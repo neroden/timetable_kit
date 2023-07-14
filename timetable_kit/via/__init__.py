@@ -9,16 +9,6 @@ VIA-specific functions for timetable_kit.
 This defines an interface; Amtrak and others need to provide the same interface.
 """
 
-# Published agency name
-published_name = "VIA Rail"
-# Published agency website, for printing.
-# Does not include the https:// and should be capitalized for print.
-published_website = "ViaRail.ca"
-
-# CSS class for special modifications to the output.
-# Currently only used to change the header bar color.
-css_class = "via-special-css"
-
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_zip_local_path,
@@ -37,7 +27,7 @@ from .station_names import (
 from .route_names import get_route_name
 
 # Routine to pretty-print a station name
-# (including subtitles, connecting agency logos, etc)
+# (including subtitles, connecting agency logos, etc.)
 from .station_names import get_station_name_pretty
 
 # Baggage
@@ -52,10 +42,8 @@ from .station_names import (
     station_has_inaccessible_platform,
 )
 
-
 # Patch errors in the feed
 from .gtfs_patches import patch_feed
-
 
 # For colorizing columns
 from .special_data import (
@@ -67,3 +55,13 @@ from .special_data import (
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services
+
+# Published agency name
+published_name = "VIA Rail"
+# Published agency website, for printing.
+# Does not include the https:// and should be capitalized for print.
+published_website = "ViaRail.ca"
+
+# CSS class for special modifications to the output.
+# Currently only used to change the header bar color.
+css_class = "via-special-css"

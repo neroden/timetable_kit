@@ -19,7 +19,6 @@ import json
 import pandas as pd
 
 # These are mine
-from timetable_kit.amtrak import json_stations
 from timetable_kit.amtrak.json_stations import (
     load_stations_json,
     load_station_details,

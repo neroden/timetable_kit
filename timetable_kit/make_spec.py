@@ -9,27 +9,23 @@ Prepare a spec file -- MUST BE CHECKED MANUALLY !!!!
 Takes the same arguments as list_trains.py, PLUS --trip like list_stations.py
 """
 
-import sys  # for exit
 import argparse
-import datetime
+import sys  # for exit
 
 import pandas as pd
 
-import gtfs_kit
-
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
+from timetable_kit import runtime_config  # for the agency()
+from timetable_kit.debug import set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
-
-from timetable_kit.debug import debug_print, set_debug_level
-from timetable_kit.tsn import (
-    make_trip_id_to_tsn_dict,
-    stations_list_from_tsn,
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.list_trains import (
+    get_trips_between,
+    report_dupes,
+    sort_by_time_at_stop,
 )
-
+from timetable_kit.runtime_config import agency  # for the agency()
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
@@ -38,14 +34,9 @@ from timetable_kit.timetable_argparse import (
     add_agency_argument,
     add_gtfs_argument,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
-
-from timetable_kit.list_trains import (
-    get_trips_between,
-    report_dupes,
-    sort_by_time_at_stop,
+from timetable_kit.tsn import (
+    make_trip_id_to_tsn_dict,
+    stations_list_from_tsn,
 )
 
 

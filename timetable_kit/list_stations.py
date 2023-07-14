@@ -6,26 +6,16 @@
 List all the stations for a particular train number (trip_short_name), in order.
 """
 
-import sys  # For sys.exit
-import os  # For os.getenv
-
 import argparse
-import datetime
+import os  # For os.getenv
+import sys  # For sys.exit
 
-# import pandas as pd # we call pandas routines but only on dataframes
-
-# We may not actually need these directly?
-import gtfs_kit
-
-# Monkey-patch the feed class
 from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
-from timetable_kit.initialize import filter_feed_for_utilities
-
+from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
-
+from timetable_kit.initialize import filter_feed_for_utilities
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.runtime_config import agency  # for the agency()
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
@@ -35,13 +25,9 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_output_dirname_argument,
 )
-
 from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
 
 
 def make_argparser():

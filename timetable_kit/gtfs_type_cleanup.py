@@ -8,10 +8,6 @@ Gtfs_kit is an excellent tool, but it puts practically everything into string ty
 this is not always useful for later work.  These subroutines convert certain columns to integers.
 """
 
-# Other people's packages
-import pandas as pd
-import gtfs_kit
-
 
 def type_corrected_agency(agency):
     """

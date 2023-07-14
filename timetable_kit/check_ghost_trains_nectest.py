@@ -4,9 +4,6 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 # Initial version started by Christopher Juckins
 
-import sys
-from urllib.request import Request, urlopen
-
 if __name__ == "__main__":
     # ---
     # Quick comparison framework test

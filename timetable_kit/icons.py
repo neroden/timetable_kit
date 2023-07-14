@@ -15,7 +15,7 @@ Referenced inline SVGs would be ideal for HTML-on-web output.
 For now, we do strictly icons referenced as img.
 """
 
-from timetable_kit.load_resources import get_icon_svg, get_icon_css
+from timetable_kit.load_resources import get_icon_css
 
 
 def get_filenames_for_all_icons() -> list[str]:

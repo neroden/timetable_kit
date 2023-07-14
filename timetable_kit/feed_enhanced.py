@@ -12,11 +12,12 @@ There is also an extraction method to pull out a single trip record from a reduc
 with error checking to make sure there's exactly one trip.
 """
 from operator import not_  # Needed for bad_service_id filter
+
 import gtfs_kit
+
 from timetable_kit.errors import (
-    GTFSError,
     NoTripError,
-    TwoTripsError,
+    TwoTripsError, InputError,
 )
 
 """

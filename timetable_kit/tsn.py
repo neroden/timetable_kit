@@ -14,11 +14,11 @@ the week.  So we may need to map for days of the week as well.
 
 Also contains other routines which look up trips by tsn.
 """
-from timetable_kit.errors import GTFSError, NoTripError
+from timetable_kit.errors import NoTripError
 from timetable_kit.debug import debug_print
 from timetable_kit.runtime_config import agency
 
-import gtfs_kit
+# import gtfs_kit
 
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced

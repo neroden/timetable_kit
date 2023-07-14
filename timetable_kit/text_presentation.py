@@ -11,23 +11,22 @@ Some routines have HTML variants and plaintext variants.
 All the "character twiddling" operations are in here.
 """
 
-import pandas as pd
-import gtfs_kit
 from collections import namedtuple
-
 from datetime import datetime, timedelta  # for time zones
+from typing import Optional
 from zoneinfo import ZoneInfo  # still for time zones
 
-# These are mine
-from timetable_kit.errors import GTFSError, FutureCodeError
+import pandas as pd
+
 from timetable_kit.debug import debug_print
-from timetable_kit.tsn import train_spec_to_tsn
+# These are mine
+from timetable_kit.errors import GTFSError, InputError
 from timetable_kit.icons import (
     get_baggage_icon_html,
     get_bus_icon_html,
     get_accessible_icon_html,
 )
-
+from timetable_kit.tsn import train_spec_to_tsn
 
 # These work, but only at 120%.
 thick_cell_substitution_map = {

@@ -11,7 +11,7 @@ import sys  # for sys.exit
 import argparse
 
 # These are mine
-from timetable_kit import amtrak
+from . import json_stations
 
 arg_parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -25,5 +25,5 @@ arg_parser.add_argument(
 if __name__ == "__main__":
     args = arg_parser.parse_args()
     station_code = args.code
-    print(amtrak.json_stations.station_details_url(station_code))
+    print(json_stations.station_details_url(station_code))
     sys.exit(0)

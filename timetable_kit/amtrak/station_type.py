@@ -13,20 +13,17 @@ This has very similar code to baggage.py
 """
 
 import sys  # for sys.exit
-from pathlib import Path
-import pandas as pd
-import json
 
+import pandas as pd
 # For parsing the HTML pages
 from lxml import html
 
-# These are mine
-from timetable_kit.debug import set_debug_level, debug_print
-from timetable_kit.amtrak import json_stations
 from timetable_kit.amtrak.json_stations import (
     load_stations_json,
     load_station_details_html,
 )
+# These are mine
+from timetable_kit.debug import set_debug_level, debug_print
 
 # This is a map from what we might see in the web page,
 # to the key information in the form:

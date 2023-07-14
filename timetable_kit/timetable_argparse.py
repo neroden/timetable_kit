@@ -20,7 +20,7 @@ import argparse
 # Is this actually done here?  No, it's done in the caller.
 
 # Needed for defaulting the GTFS file:
-from timetable_kit import amtrak
+# from timetable_kit import amtrak
 
 # For the GTFS day options:
 from timetable_kit.feed_enhanced import gtfs_days

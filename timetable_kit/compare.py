@@ -12,25 +12,19 @@ Used to see how many services with different dates are actually the same service
 # Other people's packages
 import argparse
 
-import pandas as pd
-import gtfs_kit
-
 # My packages: Local module imports
-from timetable_kit.debug import set_debug_level, debug_print
-
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
-
-# To intialize the feed -- does type changes
+from timetable_kit.debug import set_debug_level
+# To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
-
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_debug_argument,
 )
 
-### "Compare" Debugging routines to check for changes in timetable
+# "Compare" Debugging routines to check for changes in timetable
 
 
 def compare_stop_lists(base_trip, trips, *, feed):
