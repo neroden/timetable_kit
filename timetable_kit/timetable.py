@@ -25,6 +25,9 @@ import pandas as pd
 from weasyprint import HTML as weasyHTML
 
 from timetable_kit import connecting_services
+
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
+from timetable_kit import feed_enhanced
 from timetable_kit import icons
 
 # This stores critical data supplied at runtime such as the agency subpackage to use.
