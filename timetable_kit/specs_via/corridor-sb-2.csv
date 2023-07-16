@@ -1,6 +1,7 @@
 ,access,stations,35,67,645,55,69,59,37,669,39
 column-options,,,ardp,ardp,,,,,,,
-omit,"calendar-days.txt: 647 suspended, also 637, 639",,,,,,,,,,
+omit,city pair (for checking against list_trains.py),,mo,mt,ot,ot,mt,ot,mo,mt,mo
+omit,"calendar-days.txt: 647 suspended, also 635, 637, 639",,,,,,,,,,
 route-name,,,,,,,,,,,
 days,,,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW
 updown,,,,,,,,,,,

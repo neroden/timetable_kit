@@ -1,44 +1,43 @@
-,access,station,65,89,79 saturday,153,195,91,99,87,97
-column-options,,,ardp,,,,ardp,,,,
-route-name,,,,,,,,,,,
-days,,,BOS,,,,BOS,,BOS,BOS,
-BOS,,,first,blank,blank,blank,first,blank,first,first,blank
-BBY,,,,blank,blank,blank,,blank,,,blank
-RTE,,,,blank,blank,blank,,blank,,,blank
-PVD,,,,blank,blank,blank,,blank,,,blank
-KIN,,,,blank,blank,blank,,blank,,,blank
-WLY,,,,blank,blank,blank,,blank,,,blank
-MYS,,,,blank,blank,blank,,blank,,,blank
-NLC,,,,blank,blank,blank,,blank,,,blank
-OSB,,,,blank,blank,blank,,blank,,,blank
-days,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
-NHV,,,,blank,blank,blank,,blank,,,blank
-BRP,,,,blank,blank,blank,,blank,,,blank
-STM,,,,blank,blank,blank,,blank,,,blank
-NRO,,,,blank,blank,blank,,blank,,,blank
-NYP,,,,first two-row,first two-row,first two-row,,first two-row,,,first two-row
-NWK,,,,,,,,,,,
-EWR,,,,,,,,,,,
-MET,,,,,,,,,,,
-NBK,,,,,,,,,,,
-PJC,,,,,,,,,,,
-TRE,,,,,,,,,,,
-PHL,,,,,,,,,,,
-WIL,,,,,,,,,,,
-NRK,,,,,,,,,,,
-ABE,,,,,,,,,,,
-BAL,,,,,,,,,,,
-BWI,,,,,,,,,,,
-NCR,,,,,,,,,,,
-WAS,,,,,,,,,,,
-ALX,,,,,,,,,,,
-WDB,,,,,,,,,,,
-QAN,,,,,,,,,,,
-FBG,,,,,,,,,,,
-ASD,,,,,,,,,,,
-RVR,,,,,,,,,,,
-RVM,,,,,,,last,,,,
-WBG,,,,,,,blank,,,,
-NPN,,,last,,,,blank,,last,,
-PTB,,,blank,,,,blank,,blank,,
-NFK,,,blank,to Savannah,to Charlotte,last,blank,to Miami,blank,last,to Miami
+,access,station,65,89,79 saturday,153,195,91,157,99,87,97
+column-options,,,ardp,,,,ardp,,,,,
+route-name,,,,,,,,,,,,
+days,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
+BOS,,,blank,blank,blank,blank,first,blank,blank,first,first,blank
+BBY,,,blank,blank,blank,blank,,blank,blank,,,blank
+RTE,,,On Sundays,blank,blank,blank,,blank,blank,,,blank
+PVD,,,train #67,blank,blank,blank,,blank,from,,,blank
+KIN,,,runs; see,blank,blank,blank,,blank,Springfield,,,blank
+WLY,,,weekday,blank,blank,blank,,blank,MA,,,blank
+MYS,,,schedule,blank,blank,blank,,blank,(see,,,blank
+NLC,,,blank,blank,blank,blank,,blank,Hartford<br>Line,,,blank
+OSB,,,blank,blank,blank,blank,,blank,timetable),,,blank
+NHV,,,blank,blank,blank,blank,,blank,,,,blank
+BRP,,,blank,blank,blank,blank,,blank,,,,blank
+STM,,,blank,blank,blank,blank,,blank,,,,blank
+NRO,,,blank,blank,blank,blank,,blank,,,,blank
+NYP,,,first two-row,first two-row,first two-row,first two-row,,first two-row,,,,first two-row
+NWK,,,,,,,,,,,,
+EWR,,,,,,,,,,,,
+MET,,,,,,,,,,,,
+NBK,,,,,,,,,,,,
+PJC,,,,,,,,,,,,
+TRE,,,,,,,,,,,,
+PHL,,,,,,,,,,,,
+WIL,,,,,,,,,,,,
+NRK,,,,,,,,,,,,
+ABE,,,,,,,,,,,,
+BAL,,,,,,,,,,,,
+BWI,,,,,,,,,,,,
+NCR,,,,,,,,,,,,
+WAS,,,,,,,,,,,,
+ALX,,,,,,,,,,,,
+WDB,,,,,,,,,,,,
+QAN,,,,,,,,,,,,
+FBG,,,,,,,,,,,,
+ASD,,,,,,,,,,,,
+RVR,,,,,,,,,,,,
+RVM,,,,,,,last,,,,,
+WBG,,,,,,,blank,,,,,
+NPN,,,last,,,,blank,,,last,,
+PTB,,,blank,,,,blank,,,blank,,
+NFK,,,blank,to Savannah,to Charlotte,last,blank,to Miami,,blank,last,to Miami

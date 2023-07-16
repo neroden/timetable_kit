@@ -1,8 +1,9 @@
-,access,stations,41,61,51,643,63,45,33,633,65,53,47
-column-options,,,ardp,,ardp,,,,,,,,
-omit,"calendar-days.txt: #651, 655, 641, 43,  suspended, also 635",,,,,,,,,,,,
+,access,stations,41,31,61,643,63,45,33,633,65,53,47
+column-options,,,ardp,ardp,,,,,,,,,
+omit,city pair (for checking against list_trains.py),,ot,mo,mt,ot,mt,ot,mo,mo,mt,ot,ot
+omit,"calendar-days.txt: #651, 655, 641, 43,  suspended",,,,,,,,,,,,
 route-name,,,,,,,,,,,,,
-days,,,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW
+days,,,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW
 updown,,,,,,,,,,,,,
 ,,,,,,,,,from<br>Quebec<br>City,,,,
 MTRL,,,blank,first two-row,first two-row,blank,first two-row,blank,,first two-row,first two-row,blank,blank

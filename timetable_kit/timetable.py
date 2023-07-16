@@ -14,7 +14,7 @@ timetable.py --help gives documentation
 
 import json
 import os  # for os.getenv
-import os.path  # for os.path abilities
+import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
@@ -25,18 +25,13 @@ import pandas as pd
 from weasyprint import HTML as weasyHTML
 
 from timetable_kit import connecting_services
-
-
 from timetable_kit import icons
-
 # This stores critical data supplied at runtime such as the agency subpackage to use.
 from timetable_kit import runtime_config
-
 # For calling out to the system to sew individual PDF pages together to one PDF
 from timetable_kit import sew_pages
 from timetable_kit import text_presentation
 from timetable_kit.debug import set_debug_level, debug_print
-
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
@@ -48,7 +43,6 @@ from timetable_kit.errors import (
     InputError,
 )
 from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
-
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
@@ -56,12 +50,13 @@ from timetable_kit.initialize import initialize_feed
 # If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
-# To make it easier to isolate Amtrak dependencies in the main code, we always explicitly call:
-# amtrak.special_data
-# amtrak.json_stations
+
+# For anything where the code varies by agency, we always explicitly call:
+# agency().special_data
+# agency().json_stations
+# And similarly for all other agency-specific callouts
 from timetable_kit.runtime_config import agency as agency
 from timetable_kit.timetable_argparse import make_tt_arg_parser
-
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
     get_time_column_stylings,
@@ -242,6 +237,7 @@ def get_cell_codes(
     "last" (last station for train, show arrival only)
     "first two_row" -- use two-row format
     "last two_row" -- use two-row format
+    "two-row" -- use two-row format, show arrival and departure always
     "blank" -- if this train does not stop at this station, make a blank cell with this train's color
 
     Specifying just a train spec is supported.
@@ -338,8 +334,16 @@ def get_cell_codes(
             "two_row": two_row,  # ignored in this case, but OK
         }
 
-    # Simple train number.
+    # Simple train number. (Possibly with two-row.)
     train_spec = code_text.strip()
+    if train_spec == "" and two_row:
+        return {
+            "train_spec": None,
+            "last": False,
+            "first": False,
+            "blank": False,
+            "two_row": two_row,
+        }
     if train_spec not in train_specs:
         return None
     return {
@@ -637,9 +641,9 @@ def fill_tt_spec(
     # Load variable functions for is_ardp_station
     match is_ardp_station:
         case False:
-            is_ardp_station = lambda _: False
+            is_ardp_station = lambda _station_code: False
         case True:
-            is_ardp_station = lambda _: True
+            is_ardp_station = lambda _station_code: True
         case "dwell":
             # Prep max dwell map.  This is the second-slowest part of the program.
             stations_max_dwell_map = make_stations_max_dwell_map(
@@ -1095,14 +1099,10 @@ def fill_tt_spec(
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
                             if is_first_stop or is_last_stop:
-                                # We used to do this always, but it's sometimes wrong!
-                                # Allow spec creator to override when they want two rows.
-                                if cell_codes["two_row"]:
-                                    # Even if not an ArDp station, force it if
-                                    # the timetable designer so desires
-                                    two_row = True
-                                else:
-                                    two_row = False
+                                two_row = False
+                            if cell_codes["two_row"]:
+                                # Allow spec creator to force two_row
+                                two_row = True
 
                         cell_text = text_presentation.timepoint_str(
                             timepoint,
@@ -1571,21 +1571,24 @@ def main():
     set_debug_level(args.debug)
     debug_print(2, "Successfully set debug level to 2.")
 
+    # Get the selected agency
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
+
+    input_dirname = args.input_dirname
+    if not input_dirname:
+        # Pull the selected input_dir from the agency, if the directory exists
+        input_dirname = runtime_config.agency_input_dir
+    if not input_dirname or not os.path.isdir(input_dirname):
+        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
+    if not input_dirname:
+        input_dirname = "."
+
     output_dirname = args.output_dirname
     if not output_dirname:
         output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
     if not output_dirname:
         output_dirname = "."
-
-    input_dirname = args.input_dirname
-    if not input_dirname:
-        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
-    if not input_dirname:
-        input_dirname = "."
-
-    # Eventually this will be set from the command line -- FIXME
-    debug_print(2, "Agency found:", args.agency)
-    runtime_config.set_agency(args.agency)
 
     if args.gtfs_filename:
         gtfs_filename = args.gtfs_filename

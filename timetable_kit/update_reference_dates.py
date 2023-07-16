@@ -39,6 +39,11 @@ def make_argparser():
         nargs="?",
         default="./specs_amtrak",
     )
+    parser.add_argument(
+        "--nec",
+        help="Just do the NEC",
+        action="store_true",
+    )
     return parser
 
 
@@ -93,5 +98,8 @@ if __name__ == "__main__":
 
     for file in directory.iterdir():
         if file.suffix == ".json":
-            print("Updating ", file)
+            if args.nec and not file.name.startswith("nec"):
+                print("Skipping", file)
+                continue
+            print("Updating", file)
             update_reference_date_for_file(file, new_date)

@@ -1,15 +1,16 @@
-, access, station,672,80,166,2224,158,90,2228,124,66
+, access, station,132,122,2258,146,2222,80,672,166,2224
 column-options,,,ardp,,,,,,,,ardp
 route-name,,,,,,,,,,,
-days,,,PHL,WAS,WAS,WAS,WAS,WAS,WAS,WAS,WAS
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,
-WAS,,,,,,first two-row,,,first two-row,,
+,,,,,,,,from<br>Charlotte,,,
+WAS,,,first two-row,first two-row,first two-row,first two-row,first two-row,,,first two-row,first two-row
 NCR,,,,,,,,,,,
 BWI,,,,,,,,,,,
 BAL,,,,,,,,,,,
 ABE,,,,,,,,,,,
-NRK,,,,,,,,,,,
-WIL,,,,,,,,,,,
+NRK,,,,,,,,,from,,
+WIL,,,,,,,,,Harrisburg,,
 PHL,,,,,,,,,,,
 PHN,,,,,,,,,,,
 CWH,,,,,,,,,,,
@@ -19,17 +20,17 @@ NBK,,,,,,,,,,,
 MET,,,,,,,,,,,
 EWR,,,,,,,,,,,
 NWK,,,,,,,,,,,
-NYP,,,last,last,,last,last,last,last,last,
+NYP,,,,last two-row,,,last two-row,last two-row,last two-row,,last two-row
 NRO,,,,,,,,,,,
 STM,,,,,,,,,,,
 BRP,,,,,,,,,,,
 NHV,,,,,,,,,,,
 OSB,,,,,,,,,,,
-NLC,,,,,,,,,,,
+NLC,,,,,,to<br>Springfield,,,,,
 MYS,,,,,,,,,,,
 WLY,,,,,,,,,,,
 KIN,,,,,,,,,,,
 PVD,,,,,,,,,,,
 RTE,,,,,,,,,,,
 BBY,,,,,,,,,,,
-BOS,,,,,last,,,,,,last
+BOS,,,last,,last,,,,,last,

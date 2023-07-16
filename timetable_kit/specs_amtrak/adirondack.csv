@@ -1,7 +1,8 @@
 ,68, access, station,timezone,69
 column-options,days ardp,,,,days ardp reverse
 updown,,,,,
-MTR,68 first,,,,69 last
+omit,"To mark ""suspended"" in a column: ",,,,"<div style=""text-align: center;"">Suspended</div>"
+MTR,first,,,,last
 SLQ,,,,,
 RSP,,,,,
 PLB,,,,,
@@ -18,4 +19,4 @@ RHI,,,,,
 POU,,,,,
 CRT,,,,,
 YNY,,,,,
-NYP,68 last,,,,69 first
+NYP,last,,,,first

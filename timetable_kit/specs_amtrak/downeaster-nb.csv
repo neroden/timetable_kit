@@ -1,0 +1,17 @@
+,access,station,681,691,683,693,685,695,687,697,689,699,1689
+column-options,,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,
+days,,,BON,BON,BON,BON,BON,BON,BON,BON,BON,BON,BON
+omit,,identical weekend timetables with different train numbers,,,,,,,,,,,
+omit,,Special northbound events train 1689 on special days only,,,,,,,,,,,
+BON,,,,,,,,,,,,,
+WOB,,,,,,,,,,,,,
+HHL,,,,,,,,,,,,,
+EXR,,,,,,,,,,,,,
+DHM,,,,,,,,,,,,,
+DOV,,,,,,,,,,,,,
+WEM,,,,,,,,,,,,,
+SAO,,,,,,,,,,,,,
+POR,,,,,,,,,,,,,
+FRE,,,,,,,,,,,,,
+BRK,,,,,,,,,,,,,

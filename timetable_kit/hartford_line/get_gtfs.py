@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # hartford_line/get_gtfs.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 Retrieve CT Rail Hartford Line's static GTFS data from the canonical location.
 
@@ -16,20 +16,23 @@ from zipfile import ZipFile
 import requests
 
 # Found at transit.land.  New on 6-14-2022.
+# Transitland URL (out of date):
+# published_gtfs_url = "https://www.transit.land/feeds/f-cttransit~hartford~line"
+# Old canonical GTFS url (out of date):
+# canonical_gtfs_url = "http://www.hartfordline.com/files/gtfs/gtfs.zip"
 #
-# Transitland URL:
-# https://www.transit.land/feeds/f-cttransit~hartford~line
-#
-canonical_gtfs_url = "http://www.hartfordline.com/files/gtfs/gtfs.zip"
+# Dammit!  They moved the GTFS AND changed its format. 7 Jul 2023.
+# An alternate GTFS seems to be at:
+# https://www.cttransit.com/about/developers
+# But it uses *numerical* service IDs 1 (disabled), 2 (weekday), 3 (weekend)
+# and it's at https://www.ctrides.com/hlgtfs.zip
+published_gtfs_url = "https://www.ctrides.com/hlgtfs.zip"
+canonical_gtfs_url = published_gtfs_url
 
 module_location = Path(__file__).parent
 
-# Note that Amtrak's was uppercase, Hartford Line's is lowercase...
-gtfs_zip_local_path = module_location / "gtfs.zip"
-gtfs_unzipped_local_path = module_location / "gtfs"
-
-# This cannot possibly be the right way to do this.
-# wget is probably cleanest, but adds yet another dependency
+gtfs_raw_zip_local_path = module_location / "gtfs_raw.zip"
+gtfs_raw_unzipped_local_path = module_location / "gtfs_raw"
 
 
 def download_gtfs():
@@ -51,10 +54,10 @@ def download_gtfs():
     return response.content  # This is binary data
 
 
-def save_gtfs(gtfs_zip):
+def save_gtfs(gtfs_raw_zip):
     """Save Hartford Line's GTFS file in a canonical local location."""
-    with open(gtfs_zip_local_path, "wb") as binary_file:
-        binary_file.write(gtfs_zip)
+    with open(gtfs_raw_zip_local_path, "wb") as binary_file:
+        binary_file.write(gtfs_raw_zip)
 
 
 def unzip_gtfs():
@@ -63,16 +66,16 @@ def unzip_gtfs():
 
     This isn't used directly by the program; this is just for human inspection.
     """
-    with ZipFile(gtfs_zip_local_path, "r") as my_zip:
-        if not gtfs_unzipped_local_path.exists():
-            gtfs_unzipped_local_path.mkdir(parents=True)
-        my_zip.extractall(path=gtfs_unzipped_local_path)
-        print("Extracted to " + str(gtfs_unzipped_local_path))
+    with ZipFile(gtfs_raw_zip_local_path, "r") as my_zip:
+        if not gtfs_raw_unzipped_local_path.exists():
+            gtfs_raw_unzipped_local_path.mkdir(parents=True)
+        my_zip.extractall(path=gtfs_raw_unzipped_local_path)
+        print("Extracted to " + str(gtfs_raw_unzipped_local_path))
 
 
 # MAIN PROGRAM
 if __name__ == "__main__":
     save_gtfs(download_gtfs())
-    print("Hartford Line GTFS saved at " + str(gtfs_zip_local_path))
+    print("Hartford Line GTFS saved at " + str(gtfs_raw_zip_local_path))
     unzip_gtfs()
     sys.exit(0)

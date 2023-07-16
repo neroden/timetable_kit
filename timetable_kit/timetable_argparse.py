@@ -25,6 +25,9 @@ import argparse
 # For the GTFS day options:
 from timetable_kit.feed_enhanced import GTFS_DAYS
 
+# For the choice of the agency subpackage:
+from timetable_kit.runtime_config import agency_choices
+
 
 def add_agency_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
@@ -34,7 +37,7 @@ def add_agency_argument(parser: argparse.ArgumentParser):
             Custom programming is used for timetables for particular agencies.
             Default is Amtrak. VIA is working.  Others (including generic) are under construction.
             """,
-        choices=["generic", "amtrak", "via", "hartford"],
+        choices=agency_choices,
         default="amtrak",
     )
 

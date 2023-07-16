@@ -1,0 +1,11 @@
+{
+    "title": "Maple Leaf",
+    "heading": "Amtrak & VIA Rail's Maple Leaf",
+    "reference_date": "20230715",
+    "top_text": "The Maple Leaf is operated jointly by Amtrak and <img class=\"via_rail_logo\" src=\"logos/VIA_Rail_icon.svg\" alt=\"VIA Rail Canada\" title=\"VIA Rail Canada\"><a href=\"https://www.viarail.ca/\">VIA Rail Canada</a>.<br>Tickets for trips entirely within Canada must be bought from VIA Rail.<br>Tickets for trips starting in the US must be bought from Amtrak.<br>Tickets from Canada to the US may be bought from Amtrak or VIA.<br><br>Passengers crossing the border must detrain for customs and immigration inspections at Niagara Falls in both directions.  Appropriate documentation (passports, visas, vaccination cards, etc.) is required to cross the US-Canadian border; please check government websites for details.",
+    "bottom_text": "This timetable uses <a href=\"https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle\">Amtrak GTFS data</a> for the American station times and <a href=\"https://www.transit.land/feeds/f-f-viarail~traindecharlevoix\">VIA Rail GTFS data</a> for the Canadian station times.<br>Wheelchair access information is from Amtrak's webpages.<br>\"Contains information licensed under the Open Government Licence - Canada.\"<br>Amtrak station codes are three letters; VIA station codes are four letters.",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "for_rpa": "true"
+}

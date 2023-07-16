@@ -1,26 +1,30 @@
 ,access,stations,70,84,72,76,98-63,78
 column-options,,,ardp,ardp,,,ardp,
 omit,"suspended: #82, #80 (before #70), #88 (last train)",,,,,,,
+omit,"When the Maple Leaf has a different weekend schedule, this is 698-63.  But starting in early July 2023, it doesn't any more.",,,,,,,
 route-name,,,,,,,,
 days,,,TRTO,TRTO,TRTO,TRTO,TRTO,TRTO
 updown,,,,,,,,
-NEWY,,,blank,blank,blank,blank,first,blank
-YONK,,,blank,blank,blank,blank,,blank
-CROT,,,blank,blank,blank,blank,,blank
-POUG,,,blank,blank,blank,blank,,blank
-RHIN,,,blank,blank,blank,blank,,blank
-HUDS,,,blank,blank,blank,blank,,blank
-ALBY,,,blank,blank,blank,blank,,blank
-SCHE,,,blank,blank,blank,blank,,blank
-AMST,,,blank,blank,blank,blank,,blank
-UTIC,,,blank,blank,blank,blank,,blank
-ROME,,,blank,blank,blank,blank,,blank
-SYRA,,,blank,blank,blank,blank,,blank
-ROCH,,,blank,blank,blank,blank,,blank
-BUFF,,,blank,blank,blank,blank,,blank
-BUFX,,,blank,blank,blank,blank,,blank
-NFNY,,,blank,blank,blank,blank,,blank
-NIAG,,,blank,blank,blank,blank,,blank
+omit,"VIA Rail's timing data for NY stations is WRONG as of July 2023, so don't use it!",,,,,,,
+omit,NEWY,,blank,blank,blank,blank,first,blank
+omit,YONK,,blank,blank,blank,blank,,blank
+omit,CROT,,blank,blank,blank,blank,,blank
+omit,POUG,,blank,blank,blank,blank,,blank
+omit,RHIN,,blank,blank,blank,blank,,blank
+omit,HUDS,,blank,blank,blank,blank,,blank
+omit,ALBY,,blank,blank,blank,blank,,blank
+omit,SCHE,,blank,blank,blank,blank,,blank
+omit,AMST,,blank,blank,blank,blank,,blank
+omit,UTIC,,blank,blank,blank,blank,,blank
+omit,ROME,,blank,blank,blank,blank,,blank
+omit,SYRA,,blank,blank,blank,blank,,blank
+omit,ROCH,,blank,blank,blank,blank,,blank
+omit,BUFF,,blank,blank,blank,blank,,blank
+omit,BUFX,,blank,blank,blank,blank,,blank
+omit,NFNY,,blank,blank,blank,blank,,blank
+,,,,,,,from New York,(see Maple Leaf
+NIAG,,,blank,blank,blank,blank,last,timetable)
+NIAG,,,blank,blank,blank,blank,first,blank
 SCAT,,,blank,blank,blank,blank,,blank
 GRIM,,,blank,blank,blank,blank,,blank
 SARN,,,blank,first,blank,blank,,blank

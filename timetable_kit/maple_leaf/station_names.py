@@ -1,13 +1,21 @@
-# amtrak/station_name_styling.py
+# maple_leaf/station_names.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Utility routines to style Amtrak station names as HTML or text.
+Utility routines to style Amtrak and VIA station names as HTML or text for the Maple Leaf.
+
+This mostly uses the Amtrak approach (lots of duplicated code) but with some special tweaks.
+
+It probably deserves a refactor to eliminate the code duplication, but there are some tricky
+problems with potential circular dependencies.
 """
 
 # Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
-from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
+from timetable_kit.maple_leaf.connecting_services_data import connecting_services_dict
+
+# VIA rail station codes
+from timetable_kit.maple_leaf.station_data import amtrak_code_to_via_code
 
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
@@ -37,14 +45,23 @@ def station_name_to_multiline_text(station_name: str, major=False) -> str:
         (city_state_name, suffix) = station_name.split(" (", 1)
         (station_code, _) = suffix.split(")", 1)
 
-    enhanced_city_state_name = city_state_name.upper() if major else city_state_name
+    if major:
+        enhanced_city_state_name = city_state_name.upper()
+    else:
+        enhanced_city_state_name = city_state_name
 
-    enhanced_station_code = f"({station_code})"
+    # Special tweak for Maple Leaf -- we add the VIA rail station code too
+    via_code = amtrak_code_to_via_code[station_code]
 
-    enhanced_facility_name = f"\n - {facility_name}" if facility_name else ""
+    enhanced_station_code = "".join(["(", station_code, " / ", via_code, ")"])
 
-    fancy_name = (
-        f"{enhanced_city_state_name} {enhanced_station_code}{enhanced_facility_name}"
+    if facility_name:
+        enhanced_facility_name = "".join(["\n", " - ", facility_name])
+    else:
+        enhanced_facility_name = ""
+
+    fancy_name = "".join(
+        [enhanced_city_state_name, " ", enhanced_station_code, enhanced_facility_name]
     )
     return fancy_name
 
@@ -55,7 +72,11 @@ def station_name_to_single_line_text(station_name: str, major=False) -> str:
 
     The easy version.  Station name to single line text.
     """
-    return station_name.upper() if major else station_name
+    if major:
+        styled_station_name = station_name.upper()
+    else:
+        styled_station_name = station_name
+    return styled_station_name
 
 
 def station_name_to_html(station_name: str, major=False, show_connections=True) -> str:
@@ -94,15 +115,20 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
         # and no vertical space
 
     if major:
-        enhanced_city_state_name = (
-            f"<span class=major-station >{city_state_name}</span>"
+        enhanced_city_state_name = "".join(
+            ["<span class=major-station >", city_state_name, "</span>"]
         )
     else:
-        enhanced_city_state_name = (
-            f"<span class=minor-station >{city_state_name}</span>"
+        enhanced_city_state_name = "".join(
+            ["<span class=minor-station >", city_state_name, "</span>"]
         )
 
-    enhanced_station_code = f"<span class=station-footnotes>({station_code})</span>"
+    # Special tweak for Maple Leaf  -- we add the VIA rail station code too
+    via_code = amtrak_code_to_via_code[station_code]
+
+    enhanced_station_code = "".join(
+        ["<span class=station-footnotes>(", station_code, " / ", via_code, ")</span>"]
+    )
 
     # It looks stupid to see "- Amtrak Station."
     # I know it's there to distinguish from bus stops, but come on.
@@ -129,7 +155,15 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             # Explain that this is Penn Station
             # We have the room because we're taking an extra line for connecting services
             facility_name = "Moynihan Train Hall at Penn Station"
-        enhanced_facility_name = f"{br_for_facility_name}<span class=station-footnotes> - {facility_name}</span>"
+        enhanced_facility_name = "".join(
+            [
+                br_for_facility_name,
+                "<span class=station-footnotes>",
+                " - ",
+                facility_name,
+                "</span>",
+            ]
+        )
     else:
         enhanced_facility_name = ""
 
@@ -162,26 +196,29 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
         # Initial implementation tucks all connecting services on the same line.
         # This seems to be working.
 
-    fancy_name = (
-        f"{enhanced_city_state_name} {enhanced_station_code}"
-        + enhanced_facility_name  # Has its own space or <br> before it
-        + connection_logos_html  # Has spaces or <br> before it as needed
+    fancy_name = "".join(
+        [
+            enhanced_city_state_name,
+            " ",
+            enhanced_station_code,
+            enhanced_facility_name,  # Has its own space or <br> before it
+            connection_logos_html,  # Has spaces or <br> befor it as needed
+        ]
     )
-    # FIXME: This is commented out because it's the same assignment after a check. Is it supposed to be here?
-    # if station_code in ["ANA", "OLT"]:
-    #     # San Diego Old Town has a short station name and a long facility name,
-    #     # but also several long connecting services.  So put connections on line one,
-    #     # before the facility name line.
-    #     # Same with Anaheim.
-    #     fancy_name = "".join(
-    #         [
-    #             enhanced_city_state_name,
-    #             " ",
-    #             enhanced_station_code,
-    #             enhanced_facility_name,  # Has its own space or <br> before it
-    #             connection_logos_html,  # Has spaces or <br> before it as needed
-    #         ]
-    #     )
+    if station_code in ["ANA", "OLT"]:
+        # San Diego Old Town has a short station name and a long facility name,
+        # but also several long connecting services.  So put connections on line one,
+        # before the facility name line.
+        # Same with Anaheim.
+        fancy_name = "".join(
+            [
+                enhanced_city_state_name,
+                " ",
+                enhanced_station_code,
+                enhanced_facility_name,  # Has its own space or <br> before it
+                connection_logos_html,  # Has spaces or <br> befor it as needed
+            ]
+        )
     return fancy_name
 
 

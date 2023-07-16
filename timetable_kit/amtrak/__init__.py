@@ -24,7 +24,6 @@ from .connecting_services_data import get_all_connecting_services
 
 # Where to find the GTFS
 from .get_gtfs import (
-    gtfs_zip_local_path,
     gtfs_unzipped_local_path,
     published_gtfs_url,
 )
@@ -45,10 +44,12 @@ from .special_data import train_has_checked_baggage
 
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc.)
-from .station_name_styling import get_station_name_pretty
+from .station_names import get_station_name_pretty
 
 # Published agency name
 published_name = "Amtrak"
+published_names_or = "Amtrak"
+published_names_and = "Amtrak"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"
@@ -56,7 +57,6 @@ published_website = "Amtrak.com"
 # CSS class for special modifications to the output.
 # Currently only used to change the header bar color.
 css_class = "amtrak-special-css"
-
 
 # These are do-nothings for Amtrak, but
 # quite significant for VIA Rail

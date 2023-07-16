@@ -1,16 +1,17 @@
-, access, station,86,182,2160,648,174,84,2164,176,650,2166
+, access, station,86,646,182,648,2160,174,84,2164,176,650
 column-options,,,ardp,,,,,,,,,ardp
 route-name,,,,,,,,,,,,
-days,,,WAS,WAS,WAS,PHL,WAS,WAS,WAS,WAS,PHL,WAS
+days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
 updown,,,,,,,,,,,,
-WAS,,,,,first two-row,,,,,,,first two-row
+,,,from<br>Richmond,,,,,from<br>Newport News,from<br>Norfolk,,from<br>Roanoke,
+WAS,,,,,first two-row,,first two-row,,,first two-row,,
 NCR,,,,,,,,,,,,
 BWI,,,,,,,,,,,,
 BAL,,,,,,,,,,,,
 ABE,,,,,,,,,,,,
-NRK,,,,,,,,,,,,
-WIL,,,,,,,,,,,,
-PHL,,,,,,first,,,,,first,
+NRK,,,,from,,from,,,,,,from
+WIL,,,,Harrisburg,,Harrisburg,,,,,,Harrisburg
+PHL,,,,,,,,,,,,
 PHN,,,,,,,,,,,,
 CWH,,,,,,,,,,,,
 TRE,,,,,,,,,,,,
@@ -19,7 +20,7 @@ NBK,,,,,,,,,,,,
 MET,,,,,,,,,,,,
 EWR,,,,,,,,,,,,
 NWK,,,,,,,,,,,,
-NYP,,,,last,,last,,last,last,,last,
+NYP,,,,last two-row,last two-row,last two-row,,,last two-row,,,last two-row
 NRO,,,,,,,,,,,,
 STM,,,,,,,,,,,,
 BRP,,,,,,,,,,,,
@@ -32,4 +33,4 @@ KIN,,,,,,,,,,,,
 PVD,,,,,,,,,,,,
 RTE,,,,,,,,,,,,
 BBY,,,,,,,,,,,,
-BOS,,,last,,,,last,,,last,,last
+BOS,,,last,,,,last,last,,last,last,

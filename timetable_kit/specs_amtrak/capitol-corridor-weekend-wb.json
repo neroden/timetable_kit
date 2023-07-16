@@ -3,7 +3,7 @@
     "heading": "Amtrak's Capitol Corridor: Weekend Westbound",
     "programmers_warning": "Not revised because of ghost buses and real buses which aren't in GTFS.",
     "landscape": "true",
-    "reference_date": "20230613",
+    "reference_date": "20230722",
     "bottom_text": "Trains <b>may leave 5 minutes early</b> at Santa Clara/Great America and Santa Clara Transit Center",
     "compress_credits": "true",
     "key_bus": "true",

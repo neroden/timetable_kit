@@ -11,7 +11,6 @@ This defines an interface; Amtrak and others need to provide the same interface.
 
 # Where to find the GTFS
 from .get_gtfs import (
-    gtfs_zip_local_path,
     gtfs_unzipped_local_path,
     published_gtfs_url,
 )
@@ -58,6 +57,8 @@ from .connecting_services_data import get_all_connecting_services
 
 # Published agency name
 published_name = "VIA Rail"
+published_names_or = "VIA Rail"
+published_names_and = "VIA Rail"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "ViaRail.ca"

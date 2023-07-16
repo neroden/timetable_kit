@@ -1,13 +1,14 @@
-,89,79 sunday,79 monday,91,97, access, station,98 sunday,98 saturday,92,80,90
+,89,79 sunday,79 monday,91,97, access, station,98 sunday,98 saturday,92,80 monday,90
 column-options,ardp,,,,,,,ardp reverse,reverse,reverse,reverse,reverse
 route-name,,,,,,,,,,,,
 days,NYP,NYP,NYP,NYP,NYP,,,NYP,NYP,NYP,"<div style=""text-align:center; font-weight:bold;"">Daily</div>",NYP
 updown,,,,,,,,,,,,
+omit,,,,,,,,"train from Miami on Sunday, in NYP Monday","train from Miami on Saturday, in NYP Sunday",,,
 NYP,first,first,first,first,first,,,last,last,last,last,last
 NWK,,,,,,,,,,,,
 MET,,,,,,,,,,,,
-NBK,,,,,,,,,,,,
-PJC,,,,,,,,,,,,
+omit,NBK does not have stops for these trains at this time.,,,,,,,,,,,
+omit,PJC does not have stops for these trains at this time.,,,,,,,,,,,
 TRE,,,,,,,,,,,,
 PHL,,,,,,,,,,,,
 WIL,,,,,,,,,,,,
@@ -20,9 +21,9 @@ FBG,,,,,,,,,,,,
 RVR,,,,,,,,,,,,
 PTB,,,,,,,,,,,,
 RMT,,,,,,,,,,,,
-WLN,,,,,,,,,,,,
-SSM,,,,,,,,,,,,
-RGH,,,,,,,,,,,,
+WLN,,,,,,,,,Times north,,,
+SSM,,,,,,,,,of WAS,,,
+RGH,,,,,,,,,differ<br>on Sunday,,,
 CYN,,,,,,,,,,,,
 SOP,,"<div style=""text-align:center;"">to</div>","<div style=""text-align:center;"">to</div>",,,,,,,,"<div style=""text-align:center;"">from</div>",
 HAM,,"<div style=""text-align:center;"">Charlotte</div>","<div style=""text-align:center;"">Charlotte</div>",,,,,,,,"<div style=""text-align:center;"">Charlotte</div>",

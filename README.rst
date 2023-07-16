@@ -6,7 +6,7 @@ Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable 
 Development status
 ==================
 Timetable_kit remains under active development.
-It is quite usable to create Amtrak timetables and VIA Rail Canada timetables, though there remain some issues with VIA timetable generation.
+It is quite usable to create Amtrak timetables and VIA Rail Canada timetables.
 
 It has not yet been generalized to create timetables in general.
 

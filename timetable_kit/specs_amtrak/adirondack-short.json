@@ -1,9 +1,0 @@
-{
-    "title": "Adirondack Timetable (Shortened Service)",
-    "heading": "Amtrak's Adirondack (Shortened Service)",
-    "reference_date": "20230613",
-    "programmers_warning": "Only NYP to ALB is present in current GTFS as of 26 Jan 2023",
-    "key_d": "true",
-    "key_r": "true",
-    "for_rpa": "true"
-}

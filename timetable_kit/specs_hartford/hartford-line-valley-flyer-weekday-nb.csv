@@ -1,13 +1,13 @@
-,station,CTrail 4450,CTrail 4452,CTrail 4400,CTrail 4404,490,470,CTrail 4406,56,CTrail 4458,474,CTrail 4462,476,CTrail 4414,CTrail 4466,494,148,478,412
-column-options,,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,ardp no-rd,no-rd,,no-rd,,no-rd,no-rd,no-rd,ardp no-rd,no-rd,no-rd
+,station,CTrail 4450,CTrail 4452,CTrail 4400,CTrail 4404,490,470,CTrail 4406,56,CTrail 4458,474,CTrail 4462,476,CTrail 4414,CTrail 4466,494,148,478,136
+column-options,,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd,no-rd
 ,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>","<div style=""text-align: center; font-weight:bold;"">CTrail</b>","<div style=""text-align: center; font-weight:bold;"">CTrail</b>","<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>","<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,,,
 route-name,"<div style=""text-align: right; font-weight: bold;"">Route name &#x1f872;</div>",,,,,,,,,,,,,,,,,,
-days,,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,NHV
-WAS,,blank,blank,blank,blank,blank,blank,blank,56 first,blank,blank,blank,blank,blank,blank,blank,148 first,blank,blank
-,(additional stations),blank,blank,blank,blank,blank,blank,blank,56 blank,blank,blank,blank,blank,blank,blank,blank,148 blank,blank,blank
-NYP,,blank,blank,blank,blank,blank,blank,blank,56,blank,blank,blank,blank,blank,blank,blank,148,blank,blank
-,(additional stations),blank,blank,blank,blank,blank,blank,blank,56 blank,blank,blank,blank,blank,blank,blank,blank,148 blank,blank,blank
-NHV,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row
+days,,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD
+WAS,,blank,blank,blank,blank,blank,blank,blank,56 first,blank,blank,blank,blank,blank,blank,blank,148 first,blank,136 first
+,(more stations),blank,blank,blank,blank,blank,blank,blank,56 blank,blank,blank,blank,blank,blank,blank,blank,148 blank,blank,136 blank
+NYP,,blank,blank,blank,blank,blank,blank,blank,,blank,blank,blank,blank,blank,blank,blank,,blank,
+,(more stations),blank,blank,blank,blank,blank,blank,blank,56 blank,blank,blank,blank,blank,blank,blank,blank,148 blank,blank,136 blank
+NHV,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,
 STS,,,,,,,,,,,,,,,,,,,
 WFD,,,,,,,,,,,,,,,,,,,
 MDN,,,,,,,,,,,,,,,,,,,

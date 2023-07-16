@@ -15,7 +15,7 @@ from timetable_kit.feed_enhanced import FeedEnhanced
 arizona_stops_list = [
     # Sunset Limited
     "YUM",  # Yuma
-    "TUC",  # Tucson
+    "TUS",  # Tucson
     "MRC",  # Maricopa
     "BEN",  # Benson
     # Southwest Chief
@@ -79,22 +79,12 @@ def patch_buses(feed: FeedEnhanced):
     feed.routes = routes
 
 
-def patch_feed(feed: FeedEnhanced):
+def patch_coast_starlight(new_feed: FeedEnhanced):
     """
-    Take an Amtrak feed and patch it for known errors.
-
-    Return another feed.
+    Patch an old Coast Starlight bug.
+    The bug appears to be fixed as of July 7, 2023,
+    So this is unused code now
     """
-
-    new_feed = feed.copy()
-
-    # The Arizona Problem
-    new_stops = patch_arizona(new_feed.stops)
-    new_feed.stops = new_stops
-
-    # Buses listed as trains fixes
-    patch_buses(new_feed)
-
     # Coast Starlight fix
     new_calendar = new_feed.calendar
     # Coast Starlight: two bogus errors!
@@ -136,6 +126,23 @@ def patch_feed(feed: FeedEnhanced):
 
     # And update with the new calendar, just in case it hadn't
     new_feed.calendar = new_calendar
+
+
+def patch_feed(feed: FeedEnhanced):
+    """
+    Take an Amtrak feed and patch it for known errors.
+
+    Return another feed.
+    """
+
+    new_feed = feed.copy()
+
+    # The Arizona Problem
+    new_stops = patch_arizona(new_feed.stops)
+    new_feed.stops = new_stops
+
+    # Buses listed as trains fixes
+    patch_buses(new_feed)
 
     # Toronto: incorrectly listed as "no pickups" in stop one.
     new_stop_times = new_feed.stop_times

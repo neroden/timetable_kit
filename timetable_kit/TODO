@@ -1,68 +1,19 @@
-New GTFS has dropped.
-- Ready for final checks: Southwest Chief, Grand Canyon
-- Build Adirondack timetable & verify that it's present.
-- Build Coast Starlight timetable & check for same old problem.
-- Check for Crescent problem reported by Chris Juckins
-- Check for missing Vermont Burlington bus station
-- Spiff up the ghost train / missing train checks.
+For making updates easier:
+-- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
+from the ./list_trains.py program (this is currently largely manual)
 
-Known bugs:
-- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
-- Numerous buses listed as trains in routes.txt, reported & patched
+-- Auto-destination cell code to generate the words "to Charlotte" (etc) by looking at the train route?
 
-Recheck ALL of these:
-Broken due to GTFS breakage:
-- NEC (ghost trains, missing trains)
-- Virginia Services (NEC issues)
-- Empire Service (ghost trains, missing trains)
-- Maple Leaf (both Amtrak ***and*** VIA) -- short versions OK
-- Ethan Allen Express (Burlington bus stop missing) -- short version OK
-- Vermonter (recent build bugs, check)
-- Vermont to Upstate NY (Burlington bus stop missing)
-- Grand Canyon (ibid)
-- Heartland Flyer (ibid)
-- Lincoln Service (ibid) -- short version OK
-- Quincy (ibid) -- short version OK
-- Capitol Corridor - Ghost buses, missing buses
-- Winter Park Express (missing)
-Partially running:
-- Adirondack (timetable and support files created as adirondack-short on 26 Jan 2023)
+-- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
 
-Capitol Corridor
-NOTE ! NOTE ! NOTE !
-Amtrak station *is* at Chase Bank
-Official State of California CC timetable still lists it as Salesforce Transit Plaza, incorrectly
--- Need to notify the Capitol Corridor (darnit people)
-
-VIA Rail stuff:
-- Check corridor for "unsuspended" trains
-- Check for fixes in Maple Leaf data
-- Check for which stations are "manned" for checked baggage info
-
-Put off, because these have printable state agency timetables, or almost:
-- San Joaquins
----- Note: Richmond elevator issue, other possible issues
-- Pacific Surfliner
----- Note: Masses of temporary suspensions not in dataset
-- Cascades - Oregon Point bus schedule problem
----- Note: Cascades GTFS data changed on 2023-01-27
-- Downeaster
----- Note: I haven't prepped Downeaster AT ALL yet
-- Hartford Line
----- Note: in good shape but not rechecked recently
-
-When new GTFS drops:
-1 -- Southwest Chief (currently missing entirely)
-2 -- add Southwest Chief back into Lincoln Service
-3 -- add Southwest Chief back into Quincy Service
-4 -- Maple Leaf back to Canada / Empire Service (currently very buggy)
-5 -- Ethan Allen Express to Burlington
-6 -- then recheck everything else
+For VIA and generic timetables:
+1 -- start reading calendar_dates.txt
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 For generalizing beyond Amtrak and VIA:
+0 -- Fix up templates for multi-agency timetables, by redesigning the interface to allow for a list
 1 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
 2 -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
       from the Amtrak stations database.
@@ -137,3 +88,22 @@ Long term (?):
 - tests/io/format is where the test is.
 - need a parallel to cell_context (header_context).
 - Have to set up another project contributor profile etc so OMG.  Not this month.
+
+Timetable update stuff:
+-----------------------
+Known Amtrak GTFS bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+- Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
+- Maple Leaf American data wrong in VIA (Amtrak is probably correct)
+- One "missing train" in NEC (assume this is real and has been discontinued)
+
+VIA Rail stuff:
+- Check for which stations are "manned" for checked baggage info
+
+Amtrak schedules to put off, because these have printable state agency timetables, or almost:
+- Downeaster
+---- The official timetable is better than anything I can produce.
+- San Joaquins
+- Capitol Corridor
+- Pacific Surfliner
+- Cascades - Oregon Point bus schedule problem

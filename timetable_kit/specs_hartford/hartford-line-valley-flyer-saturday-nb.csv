@@ -1,22 +1,22 @@
-,station,CTrail 6400 saturday,450,CTrail 6402 saturday,460,CTrail 6454 saturday,54,CTrail 6456 saturday,464,CTrail 6458 saturday,488,140,CTrail 6410 saturday
-column-options,,,,,,,ardp,,,,ardp,ardp,
-,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>"
-route-name,"<div style=""text-align: right; font-weight: bold;"">Route name &#x1f872;</div>",,,,,,,,,,,,
-days,,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD
-WAS,,blank,blank,blank,blank,blank,54 first,blank,blank,blank,blank,140 first,blank
-,(additional stations),blank,blank,blank,blank,blank,54 blank,blank,blank,blank,blank,140 blank,blank
-NYP,,blank,blank,blank,blank,blank,54,blank,blank,blank,blank,140,blank
-,(additional stations),blank,blank,blank,blank,blank,54 blank,blank,blank,blank,blank,140 blank,blank
-NHV,,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row,first two-row,first two-row,,first two-row
-STS,,,,,,,,,,,,,
-WFD,,,,,,,,,,,,,
-MDN,,,,,,,,,,,,,
-BER,,,,,,,,,,,,,
-HFD,,,,,,,,last,,last,,,
-WND,,,,,,,,,,,,,
-WNL,,,,,,,,blank,,blank,,,
-SPG,,last,last,last,last,last,,blank,last,blank,,last,last
-HLK,,blank,blank,blank,blank,blank,,blank,blank,blank,,blank,blank
-NHT,,blank,blank,blank,blank,blank,,blank,blank,blank,,blank,blank
-GFD,,blank,blank,blank,blank,blank,,blank,blank,blank,last,blank,blank
-,,,,,,,continues<br>to Vermont,,,,,,
+,station,CTrail 6400 saturday,450,CTrail 6402 saturday,460,CTrail 6454 saturday,54,CTrail 6456 saturday,464,CTrail 6458 saturday,488,140,CTrail 6410 saturday,146
+column-options,,,,,,,ardp,,,,ardp,ardp,,ardp
+,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",,,"<div style=""text-align: center; font-weight:bold;"">CTrail</b>",
+route-name,"<div style=""text-align: right; font-weight: bold;"">Route name &#x1f872;</div>",,,,,,,,,,,,,
+days,,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD,HFD
+WAS,,blank,blank,blank,blank,blank,54 first,blank,blank,blank,blank,140 first,blank,146 first
+,(more stations),blank,blank,blank,blank,blank,54 blank,blank,blank,blank,blank,140 blank,blank,146 blank
+NYP,,blank,blank,blank,blank,blank,,blank,blank,blank,blank,,blank,
+,(more stations),blank,blank,blank,blank,blank,54 blank,blank,blank,blank,blank,140 blank,blank,146 blank
+NHV,,first two-row,first two-row,first two-row,first two-row,first two-row,,first two-row,first two-row,first two-row,first two-row,,first two-row,
+STS,,,,,,,,,,,,,,
+WFD,,,,,,,,,,,,,,
+MDN,,,,,,,,,,,,,,
+BER,,,,,,,,,,,,,,
+HFD,,,,,,,,last,,last,,,,
+WND,,,,,,,,,,,,,,
+WNL,,,,,,,,blank,,blank,,,,
+SPG,,last,last,last,last,last,,blank,last,blank,,last,last,last
+HLK,,blank,blank,blank,blank,blank,,blank,blank,blank,,blank,blank,blank
+NHT,,blank,blank,blank,blank,blank,,blank,blank,blank,,blank,blank,blank
+GFD,,blank,blank,blank,blank,blank,,blank,blank,blank,last,blank,blank,blank
+,,,,,,,continues<br>to Vermont,,,,,,,

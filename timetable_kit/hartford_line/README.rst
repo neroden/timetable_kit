@@ -9,4 +9,6 @@ In order to actually get and merge the feeds, the user has to run the following:
 * hartford_line/get_gtfs.py
 * hartford_line/merge_gtfs.py
 
-The merged file ends up in hartford_line/merged-gtfs.zip.
+The Hartford Line GTFS is downloaded to hartford_line/gtfs_raw
+
+The merged GTFS is at hartford_line/gtfs
