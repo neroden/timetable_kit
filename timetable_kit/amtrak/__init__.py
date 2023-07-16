@@ -58,6 +58,7 @@ published_website = "Amtrak.com"
 # Currently only used to change the header bar color.
 css_class = "amtrak-special-css"
 
+
 # These are do-nothings for Amtrak, but
 # quite significant for VIA Rail
 def stop_code_to_stop_id(stop_code: str) -> str:

@@ -26,12 +26,15 @@ from weasyprint import HTML as weasyHTML
 
 from timetable_kit import connecting_services
 from timetable_kit import icons
+
 # This stores critical data supplied at runtime such as the agency subpackage to use.
 from timetable_kit import runtime_config
+
 # For calling out to the system to sew individual PDF pages together to one PDF
 from timetable_kit import sew_pages
 from timetable_kit import text_presentation
 from timetable_kit.debug import set_debug_level, debug_print
+
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
@@ -43,6 +46,7 @@ from timetable_kit.errors import (
     InputError,
 )
 from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
+
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
@@ -57,6 +61,7 @@ from timetable_kit.initialize import initialize_feed
 # And similarly for all other agency-specific callouts
 from timetable_kit.runtime_config import agency as agency
 from timetable_kit.timetable_argparse import make_tt_arg_parser
+
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
     get_time_column_stylings,
