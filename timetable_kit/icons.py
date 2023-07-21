@@ -57,8 +57,11 @@ def get_css_for_all_icons() -> str:
 baggage_letter = "G"
 
 baggage_img_str = (
-    '<img class="baggage-icon-img" src="icons/baggage-ncn.svg" '
-    f'alt="{baggage_letter}" title="Checked Baggage">'
+    '<img '
+    'class="baggage-icon-img" '
+    'src="icons/baggage-ncn.svg" '
+    f'alt="{baggage_letter}" '
+    'title="Checked Baggage">'
 )
 
 baggage_span_str = f'<span class="baggage-symbol">{baggage_img_str}</span>'
@@ -84,8 +87,11 @@ def get_baggage_icon_css():
 accessible_letter = "W"
 
 accessible_img_str = (
-    '<img class="accessible-icon-img" src="icons/accessible.svg" '
-    f'alt="{accessible_letter}" title="Wheelchair accessible">'
+    '<img '
+    'class="accessible-icon-img" '
+    'src="icons/accessible.svg" '
+    f'alt="{accessible_letter}" '
+    f'title="Wheelchair accessible">'
 )
 
 accessible_span_str = f'<span class="accessible-symbol">{accessible_img_str}</span>'
@@ -112,8 +118,11 @@ def get_accessible_icon_css():
 inaccessible_letter = "N"
 
 inaccessible_img_str = (
-    '<img class="inaccessible-icon-img" src="icons/inaccessible-ncn.svg" '
-    f'alt="{inaccessible_letter}" title="Not wheelchair accessible">'
+    '<img '
+    'class="inaccessible-icon-img" '
+    'src="icons/inaccessible-ncn.svg" '
+    f'alt="{inaccessible_letter}" '
+    'title="Not wheelchair accessible">'
 )
 
 inaccessible_span_str = (
@@ -139,7 +148,11 @@ def get_inaccessible_icon_css():
 bus_letter = "B"
 
 bus_img_str = (
-    f'<img class="bus-icon-img" src="icons/bus-ncn.svg" alt="{bus_letter}" title="Bus">'
+    '<img '
+    'class="bus-icon-img" '
+    'src="icons/bus-ncn.svg" '
+    f'alt="{bus_letter}" '
+    'title="Bus">'
 )
 
 bus_span_str = f'<span class="bus-symbol">{bus_img_str}</span>'
@@ -162,7 +175,14 @@ def get_bus_icon_css():
 # Use if icon is not available
 sleeper_letter = "S"
 
-sleeper_img_str = '<img class="sleeper-icon-img" src="icons/bed-solid.svg" alt="Sleeper" title="Sleeping Car Service">'
+
+sleeper_img_str = (
+    '<img '
+    'class="sleeper-icon-img" '
+    'src="icons/bed-solid.svg" '
+    'alt="Sleeper" '
+    'title="Sleeping Car Service">'
+)
 
 
 sleeper_span_str = f'<span class="sleeper-symbol">{sleeper_img_str}</span>'

@@ -16,6 +16,9 @@ lxml = "^4.9.0"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 
+[tool.black]
+skip-string-normalization = true  # prevents black from making multiline declarations of html strings look odd
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
