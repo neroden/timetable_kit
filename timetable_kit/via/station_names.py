@@ -17,33 +17,32 @@ stop_code_to_stop_id
 station_has_accessible_platform
 station_has_inaccessible_platform
 """
+import typing
 
+# Find the HTML for a specific connecting agency's logo
+from timetable_kit.connecting_services import get_connecting_service_logo_html
 from timetable_kit.debug import set_debug_level, debug_print
-
-# Should the station be boldfaced
-from timetable_kit.via.special_data import is_standard_major_station
+from timetable_kit.initialize import initialize_feed
 
 # Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
 from timetable_kit.via.connecting_services_data import connecting_services_dict
 
-# Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_service_logo_html
-
 # FIXME -- _prepare_dicts has horrible callbacks into timetable_kit.initialize.initialize_feed
 from timetable_kit.via.get_gtfs import gtfs_unzipped_local_path
-from timetable_kit.initialize import initialize_feed
 from timetable_kit.via.gtfs_patches import patch_feed
+
+# Should the station be boldfaced
+from timetable_kit.via.special_data import is_standard_major_station
 
 # Initialization code.  We build the stop_code_to_stop_id and stop_id_to_stop_code dicts
 # from the GTFS.
 # These start blank and are filled in by initialization code on first use (memoized)
-stop_code_to_stop_id_dict = None
-stop_id_to_stop_code_dict = None
-stop_code_to_stop_name_dict = None
-
-# And the accessibilty dicts
-accessible_platform_dict = None
-inaccessible_platform_dict = None
+stop_code_to_stop_id_dict: dict[str, str] = dict()
+stop_id_to_stop_code_dict: dict[str, str] = dict()
+stop_code_to_stop_name_dict: dict[str, str] = dict()
+# And the accessibility dicts
+accessible_platform_dict: dict[str, bool] = dict()
+inaccessible_platform_dict: dict[str, bool] = dict()
 
 
 def _prepare_dicts():
@@ -205,10 +204,7 @@ def get_station_name_pretty(
     # FIXME
 
     # Uppercase major stations
-    if major:
-        stop_name_styled = stop_name_clean.upper()
-    else:
-        stop_name_styled = stop_name_clean
+    stop_name_styled = stop_name_clean.upper() if major else stop_name_clean
 
     # Default facility_name_addon to nothing...
     facility_name_addon = ""
@@ -234,8 +230,7 @@ def get_station_name_pretty(
             this_logo_html = get_connecting_service_logo_html(connecting_service)
             if this_logo_html:
                 # Add a space before the logo... if it exists at all
-                connection_logos_html += " "
-                connection_logos_html += this_logo_html
+                connection_logos_html += " " + this_logo_html
 
         cooked_station_name = (
             f"{enhanced_city_state_name} {enhanced_station_code}"

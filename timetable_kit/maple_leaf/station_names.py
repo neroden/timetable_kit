@@ -11,18 +11,19 @@ It probably deserves a refactor to eliminate the code duplication, but there are
 problems with potential circular dependencies.
 """
 
+# These are used to select how to do the pretty-printing
+from timetable_kit.amtrak.json_stations import get_station_name
+from timetable_kit.amtrak.special_data import is_standard_major_station
+
+# Find the HTML for a specific connecting agency's logo
+from timetable_kit.connecting_services import get_connecting_service_logo_html
+from timetable_kit.generic_agency.station_names import parse_station_name
+
 # Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
 from timetable_kit.maple_leaf.connecting_services_data import connecting_services_dict
 
 # VIA rail station codes
 from timetable_kit.maple_leaf.station_data import amtrak_code_to_via_code
-
-# Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_service_logo_html
-
-# These are used to select how to do the prettyprinting
-from timetable_kit.amtrak.json_stations import get_station_name
-from timetable_kit.amtrak.special_data import is_standard_major_station
 
 
 def station_name_to_multiline_text(station_name: str, major=False) -> str:
@@ -36,14 +37,7 @@ def station_name_to_multiline_text(station_name: str, major=False) -> str:
     If "major", then make the station name bigger and bolder
     We want to avoid very long lines as they mess up timetable formats
     """
-    if " - " in station_name:
-        (city_state_name, second_part) = station_name.split(" - ", 1)
-        (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-    else:
-        facility_name = None
-        (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
+    (city_state_name, facility_name, station_code) = parse_station_name(station_name)
 
     enhanced_city_state_name = city_state_name.upper() if major else city_state_name
 
@@ -78,15 +72,7 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
     If "major", then make the station name bigger and bolder
     If "show_connections" (default True) then add links for connecting services (complex!)
     """
-
-    if " - " in station_name:
-        (city_state_name, second_part) = station_name.split(" - ", 1)
-        (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-    else:
-        facility_name = None
-        (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
+    (city_state_name, facility_name, station_code) = parse_station_name(station_name)
 
     # Special cases for exceptionally long city/state names.
     # Insert line breaks.
