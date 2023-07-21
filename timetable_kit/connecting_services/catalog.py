@@ -213,12 +213,11 @@ def get_css_for_all_logos() -> str:
     Get the CSS code to style all the icons we're using.
     """
     logo_css_filenames = connecting_services_df["css_filename"].tolist()
-    logo_css_list = [
+    logo_css_all = "".join(
         get_logo_css(filename)
         for filename in logo_css_filenames
         if not pd.isna(filename) and filename
-    ]
-    logo_css_all = "".join(logo_css_list)
+    )
     return logo_css_all
 
 

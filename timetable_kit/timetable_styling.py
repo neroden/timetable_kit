@@ -116,7 +116,7 @@ def style_timetable_for_html(
     # Possibly we need to pull this ID out of the JSON file?
 
     table_classes += " tt-table"
-    table_attributes = "".join(['class="', table_classes, '"'])
+    table_attributes = f'class="{table_classes}"'
 
     # Note that the styler doesn't escape HTML per default --> yay
     # Make the table more readable by not using cell IDs.
@@ -164,9 +164,7 @@ def make_header_styling_css(header_styling_list) -> str:
     accumulated_css = ""
     # The CSS selector is: a descendant of .tt_table which is both th, .col_heading, and .col0 (or whatever number)
     for col_num, attributes in enumerate(header_styling_list):
-        this_css = "".join(
-            [".tt-table th.col_heading.col", str(col_num), " { ", attributes, " }\n"]
-        )
+        this_css = f".tt-table th.col_heading.col{col_num} {{ {attributes} }}\n"
         accumulated_css += this_css
     return accumulated_css
 

@@ -37,13 +37,13 @@ def get_css_for_all_icons() -> str:
     Get the CSS code to style all the icons we're using.
     """
     full_css = "\n".join(
-        [
+        (
             get_baggage_icon_css(),
             get_accessible_icon_css(),
             get_inaccessible_icon_css(),
             get_sleeper_icon_css(),
             get_bus_icon_css(),
-        ]
+        )
     )
     return full_css
 

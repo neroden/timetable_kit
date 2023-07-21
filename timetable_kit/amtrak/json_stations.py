@@ -102,16 +102,14 @@ def station_details_filename(station_code: str) -> str:
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This might well be case sensitive
-    first_station_code = str.lower(station_code)
-    second_station_code = str.upper(station_code)
-    filename = "".join(
-        [
-            first_station_code,
-            station_details_url_infix,
-            second_station_code,
-            station_details_url_postfix,
-        ]
+    # This might well be case-sensitive
+    first_station_code = station_code.lower()
+    second_station_code = station_code.upper()
+    filename = (
+        first_station_code
+        + station_details_url_infix
+        + second_station_code
+        + station_details_url_postfix
     )
     return filename
 
@@ -126,12 +124,7 @@ def station_details_url(station_code: str) -> str:
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
     filename = station_details_filename(station_code)
-    url = "".join(
-        [
-            station_details_url_prefix,
-            filename,
-        ]
-    )
+    url = station_details_url_prefix + filename
     return url
 
 
@@ -152,15 +145,12 @@ def download_station_details(station_code: str) -> str:
     my_text = response.text
     if response.status_code != requests.codes.ok:
         print(
-            "".join(
-                [
-                    "Download JSON for ",
-                    station_code,
-                    " returned error ",
-                    str(response.status_code),
-                    "; blanking file.",
-                ]
-            )
+            "Download JSON for ",
+            station_code,
+            " returned error ",
+            response.status_code,
+            "; blanking file.",
+            sep="",
         )
         my_text = "{}"  # Don't fill with whatever garbage we got; this is valid JSON
     return my_text
@@ -196,13 +186,8 @@ def station_details_html_filename(station_code: str) -> str:
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This is likely to be case sensitive
-    filename = "".join(
-        [
-            str.lower(station_code),
-            station_details_html_file_postfix,
-        ]
-    )
+    # This is likely to be case-sensitive
+    filename = station_code.lower() + station_details_html_file_postfix
     return filename
 
 
@@ -215,13 +200,8 @@ def station_details_html_url(station_code: str) -> str:
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This might be case sensitive
-    url = "".join(
-        [
-            station_details_html_url_prefix,
-            str.lower(station_code),
-        ]
-    )
+    # This might be case-sensitive
+    url = station_details_html_url_prefix + station_code.lower()
     return url
 
 
@@ -242,15 +222,12 @@ def download_station_details_html(station_code: str) -> str:
     my_text = response.text
     if response.status_code != requests.codes.ok:
         print(
-            "".join(
-                [
-                    "Download HTML for ",
-                    station_code,
-                    " returned error ",
-                    str(response.status_code),
-                    "; blanking file.",
-                ]
-            )
+            "Download HTML for ",
+            station_code,
+            " returned error ",
+            response.status_code,
+            "; blanking file.",
+            sep="",
         )
         my_text = ""  # Don't fill with whatever garbage we got; this is valid HTML
     return my_text
@@ -492,7 +469,7 @@ if __name__ == "__main__":
         if args.station_code is None:
             download_all_stations(sleep_secs=args.sleep_secs)
         else:
-            download_one_station(str.upper(args.station_code))
+            download_one_station(args.station_code.upper())
     if args.command_name == "process":
         do_station_processing()
     sys.exit(0)

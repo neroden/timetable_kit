@@ -83,13 +83,13 @@ def assemble_pdf_from_list(filename: str, *, input_dir, output_dir):
     # before reading the list file:
     page_name_list = read_list_file(filename, input_dir=input_dir)
 
-    infile_list = [page_name + ".pdf" for page_name in page_name_list]
-    infile_path_list = [str(Path(output_dir) / infile) for infile in infile_list]
+    infiles = (page_name + ".pdf" for page_name in page_name_list)
+    infile_paths = (str(Path(output_dir) / infile) for infile in infiles)
 
     outfile = filename.removesuffix(".list") + ".pdf"
     outfile_path = str(Path(output_dir) / outfile)
 
-    pdf_merge_command = " ".join(["pdftk", *infile_path_list, "output", outfile_path])
+    pdf_merge_command = f"pdftk {' '.join(infile_paths)} output {outfile_path}"
     debug_print(1, pdf_merge_command)
     os.system(pdf_merge_command)
 

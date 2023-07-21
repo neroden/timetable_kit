@@ -90,7 +90,7 @@ def gtfs_date_to_isoformat(gtfs_date: str) -> str:
     gtfs_date = str(gtfs_date)
     if len(gtfs_date) != 8:
         raise GTFSError("Datestr wrong length", gtfs_date)
-    iso_str = "-".join([gtfs_date[:4], gtfs_date[4:6], gtfs_date[6:8]])
+    iso_str = f"{gtfs_date[:4]}-{gtfs_date[4:6]}-{gtfs_date[6:8]}"
     return iso_str
 
 
@@ -331,11 +331,11 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
         # There are exactly five characters, by construction.  23:59 is largest.
         html_time_str = (
             # what is this for, anyway? it isn't used
-            '<span class="box-digit">' + time_str[0] + "</span>"
-            '<span class="box-digit">' + time_str[1] + "</span>"
-            '<span class="box-colon">' + time_str[2] + "</span>"
-            '<span class="box-digit">' + time_str[3] + "</span>"
-            '<span class="box-digit">' + time_str[4] + "</span>"
+            f'<span class="box-digit">{time_str[0]}</span>'
+            f'<span class="box-digit">{time_str[1]}</span>'
+            f'<span class="box-colon">{time_str[2]}</span>'
+            f'<span class="box-digit">{time_str[3]}</span>'
+            f'<span class="box-digit">{time_str[4]}</span>'
         )
         time_str = html_time_str  # don't know if this is supposed to be here, but it's like this in the next function
     return time_str
@@ -361,12 +361,12 @@ def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
     if box_time_characters:
         # There are exactly six characters, by construction. 12:59P is largest.
         html_time_str = (
-            '<span class="box-1">' + time_str[0] + "</span>"
-            '<span class="box-digit">' + time_str[1] + "</span>"
-            '<span class="box-colon">' + time_str[2] + "</span>"
-            '<span class="box-digit">' + time_str[3] + "</span>"
-            '<span class="box-digit">' + time_str[4] + "</span>"
-            '<span class="box-ap">' + time_str[5] + "</span>"
+            f'<span class="box-1">{time_str[0]}</span>'
+            f'<span class="box-digit">{time_str[1]}</span>'
+            f'<span class="box-digit">{time_str[3]}</span>'
+            f'<span class="box-colon">{time_str[2]}</span>'
+            f'<span class="box-digit">{time_str[4]}</span>'
+            f'<span class="box-ap">{time_str[5]}</span>'
         )
         time_str = html_time_str
     return time_str
@@ -500,16 +500,14 @@ def get_bus_str(doing_html=False):
     Currently, the HTML implementation references an external bus icon.
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
-    if not doing_html:
-        return get_bus_icon_html(doing_html=False)
-    return "".join(
-        [
-            bus_box_prefix,
-            '<span class="bus-symbol">',
-            get_bus_icon_html(doing_html=True),
-            "</span>",
-            bus_box_postfix,
-        ]
+    return (
+        (
+            bus_box_prefix
+            + f'<span class="bus-symbol">{get_bus_icon_html(doing_html=True)}</span>'
+            + bus_box_postfix
+        )
+        if doing_html
+        else get_bus_icon_html(doing_html=False)
     )
 
 
@@ -519,9 +517,7 @@ def get_blank_bus_str(doing_html=False):
 
     The HTML implementation boxes it to line things up properly.
     """
-    if not doing_html:
-        return " "
-    return "".join([bus_box_prefix, bus_box_postfix])
+    return (bus_box_prefix + bus_box_postfix) if doing_html else " "
 
 
 def timepoint_str(
@@ -754,7 +750,7 @@ def timepoint_str(
             ar_dp_str
             + ("" if no_rd else rd_str)
             + (
-                arrival_time_str + arrival_daystring
+                (arrival_time_str + arrival_daystring)
                 if discharge_only
                 else departure_time_str + departure_daystring
             )
@@ -885,10 +881,10 @@ def timepoint_str(
             )
 
         # Patch the two rows together.
-        if not reverse:
-            complete_line_str = f"{arrival_line_str}{linebreak}{departure_line_str}"
-        else:  # reverse
-            complete_line_str = linebreak.join([departure_line_str, arrival_line_str])
+        if reverse:
+            complete_line_str = departure_line_str + linebreak + arrival_line_str
+        else:
+            complete_line_str = arrival_line_str + linebreak + departure_line_str
         return complete_line_str
 
     # We should not reach here; we should have returned earlier.
@@ -932,11 +928,9 @@ def get_time_column_header(
         raise InputError("No train_specs?")
 
     # Strip the "noheader" train specs; we don't mention them.
-    fewer_train_specs = []
-    for train_spec in train_specs:
-        if train_spec.endswith("noheader"):
-            continue
-        fewer_train_specs.append(train_spec)
+    fewer_train_specs = [
+        train_spec for train_spec in train_specs if not train_spec.endswith("noheader")
+    ]
 
     # It's OK if stripping noheader train specs leads to no header.
     # In this case return blank.  Uniqueness of headers is handled later.
@@ -951,7 +945,7 @@ def get_time_column_header(
         # Old algorithm.  For Empire Builder, Lake Shore Limited.
 
         # Strip the " monday" type suffixes
-        tsns = [train_spec_to_tsn(train_spec) for train_spec in fewer_train_specs]
+        tsns = (train_spec_to_tsn(train_spec) for train_spec in fewer_train_specs)
 
         # For HTML, let's get FANCY... May change this later.
         # Route types: 2 is a train, 3 is a bus
@@ -1053,12 +1047,7 @@ def get_timezone_column_header(doing_html=False):
     Tricky because the column should be very narrow.
     Wraps with a special CSS div, so it can be rotated.
     """
-    if doing_html:
-        # return '<div class="timezone-header-text">Time<br>Zone</div>'
-        # Keep it one line, space is at a premium
-        return '<div class="timezone-header-text">TZ</div>'
-    else:
-        return "Time Zone"
+    return '<div class="timezone-header-text">TZ</div>' if doing_html else "Time Zone"
 
 
 def style_route_name_for_column(route_name, doing_html=False):

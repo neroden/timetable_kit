@@ -47,27 +47,16 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
         (city_state_name, suffix) = station_name.split(" (", 1)
         (station_code, _) = suffix.split(")", 1)
 
-    (city_name, state_name) = city_state_name.split(", ", 1)
-    # Remove the comma, join with a space
-    city_state_name = " ".join([city_name, state_name])
+    city_state_name = city_state_name.replace(",", "")
 
-    if major:
-        enhanced_city_state_name = "".join(
-            ["<span class=major-station >", city_state_name, "</span>"]
-        )
-    else:
-        enhanced_city_state_name = "".join(
-            ["<span class=minor-station >", city_state_name, "</span>"]
-        )
-
-    enhanced_station_code = "".join(
-        ["<span class=station-footnotes>(", station_code, ")</span>"]
+    enhanced_city_state_name = (
+        f"<span class={'major' if major else 'minor'}-station >{city_state_name}</span>"
     )
+    enhanced_station_code = f"<span class=station-footnotes>({station_code})</span>"
 
     # Only do facility names for a few stations
     if facility_name and facility_name not in ["Amtrak Station", "Amtrak/MBTA Station"]:
         # Put the facility name on its own line for Hartford Line
-        br_for_facility_name = "<br>"
         if station_code == "NYP":
             # On Hartford Line timetable, we have no room.
             # facility_name == "Moynihan Train Hall"
@@ -78,14 +67,8 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             # On Hartford Line timetable, we have no room.
             # facility_name = "State Street Station"
             facility_name = "State Street"
-        enhanced_facility_name = "".join(
-            [
-                br_for_facility_name,
-                "<span class=station-footnotes>",
-                " - ",
-                facility_name,
-                "</span>",
-            ]
+        enhanced_facility_name = (
+            f"<br><span class=station-footnotes> - {facility_name}</span>"
         )
     else:
         enhanced_facility_name = ""
@@ -103,26 +86,23 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             this_logo_html = get_connecting_service_logo_html(connecting_service)
             if this_logo_html:
                 # Add a space before the logo... if it exists at all
-                connection_logos_html += " "
-                connection_logos_html += this_logo_html
+                connection_logos_html += " " + this_logo_html
         # Initial implementation tucks all connecting services on the same line.
         # This seems to be working.
 
-    fancy_name = "".join(
-        [
-            enhanced_city_state_name,
-            enhanced_facility_name,  # Has its own space or <br> before it
-            " ",
-            enhanced_station_code,  # Looks better after the facility name for Hartford Line
-            connection_logos_html,  # Has spaces or <br> before it as needed
-        ]
+    fancy_name = (
+        enhanced_city_state_name
+        + enhanced_facility_name  # Has its own space or <br> before it
+        + " "
+        + enhanced_station_code  # Looks better after the facility name for Hartford Line
+        + connection_logos_html  # Has spaces or <br> before it as needed
     )
     return fancy_name
 
 
 # This is a complete duplicate of the Amtrak version. :sigh: Refactoring would be nice.
 def get_station_name_pretty(
-    station_code: str, doing_multiline_text=False, doing_html=False
+    station_code: str, _doing_multiline_text=False, doing_html=False
 ) -> str:
     if doing_html:
         # Note here that show_connections is on by default.

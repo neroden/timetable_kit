@@ -45,23 +45,15 @@ def station_name_to_multiline_text(station_name: str, major=False) -> str:
         (city_state_name, suffix) = station_name.split(" (", 1)
         (station_code, _) = suffix.split(")", 1)
 
-    if major:
-        enhanced_city_state_name = city_state_name.upper()
-    else:
-        enhanced_city_state_name = city_state_name
+    enhanced_city_state_name = city_state_name.upper() if major else city_state_name
 
     # Special tweak for Maple Leaf -- we add the VIA rail station code too
     via_code = amtrak_code_to_via_code[station_code]
 
-    enhanced_station_code = "".join(["(", station_code, " / ", via_code, ")"])
-
-    if facility_name:
-        enhanced_facility_name = "".join(["\n", " - ", facility_name])
-    else:
-        enhanced_facility_name = ""
-
-    fancy_name = "".join(
-        [enhanced_city_state_name, " ", enhanced_station_code, enhanced_facility_name]
+    enhanced_station_code = f"({station_code} / {via_code})"
+    enhanced_facility_name = f"\n - {facility_name}" if facility_name else ""
+    fancy_name = (
+        f"{enhanced_city_state_name} {enhanced_station_code}{enhanced_facility_name}"
     )
     return fancy_name
 
@@ -72,11 +64,7 @@ def station_name_to_single_line_text(station_name: str, major=False) -> str:
 
     The easy version.  Station name to single line text.
     """
-    if major:
-        styled_station_name = station_name.upper()
-    else:
-        styled_station_name = station_name
-    return styled_station_name
+    return station_name.upper() if major else station_name
 
 
 def station_name_to_html(station_name: str, major=False, show_connections=True) -> str:
@@ -114,20 +102,15 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
         # but there's plenty of horizontal space in the EB timetable
         # and no vertical space
 
-    if major:
-        enhanced_city_state_name = "".join(
-            ["<span class=major-station >", city_state_name, "</span>"]
-        )
-    else:
-        enhanced_city_state_name = "".join(
-            ["<span class=minor-station >", city_state_name, "</span>"]
-        )
+    enhanced_city_state_name = (
+        f"<span class={'major' if major else 'minor'}-station >{city_state_name}</span>"
+    )
 
     # Special tweak for Maple Leaf  -- we add the VIA rail station code too
     via_code = amtrak_code_to_via_code[station_code]
 
-    enhanced_station_code = "".join(
-        ["<span class=station-footnotes>(", station_code, " / ", via_code, ")</span>"]
+    enhanced_station_code = (
+        f"<span class=station-footnotes>({station_code} / {via_code})</span>"
     )
 
     # It looks stupid to see "- Amtrak Station."
@@ -155,15 +138,7 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             # Explain that this is Penn Station
             # We have the room because we're taking an extra line for connecting services
             facility_name = "Moynihan Train Hall at Penn Station"
-        enhanced_facility_name = "".join(
-            [
-                br_for_facility_name,
-                "<span class=station-footnotes>",
-                " - ",
-                facility_name,
-                "</span>",
-            ]
-        )
+        enhanced_facility_name = f"{br_for_facility_name}<span class=station-footnotes> - {facility_name}</span>"
     else:
         enhanced_facility_name = ""
 
@@ -191,34 +166,32 @@ def station_name_to_html(station_name: str, major=False, show_connections=True) 
             this_logo_html = get_connecting_service_logo_html(connecting_service)
             if this_logo_html:
                 # Add a space before the logo... if it exists at all
-                connection_logos_html += " "
-                connection_logos_html += this_logo_html
+                connection_logos_html += " " + this_logo_html
         # Initial implementation tucks all connecting services on the same line.
         # This seems to be working.
 
-    fancy_name = "".join(
-        [
-            enhanced_city_state_name,
-            " ",
-            enhanced_station_code,
-            enhanced_facility_name,  # Has its own space or <br> before it
-            connection_logos_html,  # Has spaces or <br> befor it as needed
-        ]
+    fancy_name = (
+        enhanced_city_state_name
+        + " "
+        + enhanced_station_code
+        + enhanced_facility_name  # Has its own space or <br> before it
+        + connection_logos_html  # Has spaces or <br> before it as needed
     )
-    if station_code in ["ANA", "OLT"]:
-        # San Diego Old Town has a short station name and a long facility name,
-        # but also several long connecting services.  So put connections on line one,
-        # before the facility name line.
-        # Same with Anaheim.
-        fancy_name = "".join(
-            [
-                enhanced_city_state_name,
-                " ",
-                enhanced_station_code,
-                enhanced_facility_name,  # Has its own space or <br> before it
-                connection_logos_html,  # Has spaces or <br> befor it as needed
-            ]
-        )
+    # FIXME: This condition does nothing, as the assignment within is identical
+    # if station_code in ["ANA", "OLT"]:
+    #     # San Diego Old Town has a short station name and a long facility name,
+    #     # but also several long connecting services.  So put connections on line one,
+    #     # before the facility name line.
+    #     # Same with Anaheim.
+    #     fancy_name = "".join(
+    #         [
+    #             enhanced_city_state_name,
+    #             " ",
+    #             enhanced_station_code,
+    #             enhanced_facility_name,  # Has its own space or <br> before it
+    #             connection_logos_html,  # Has spaces or <br> befor it as needed
+    #         ]
+    #     )
     return fancy_name
 
 

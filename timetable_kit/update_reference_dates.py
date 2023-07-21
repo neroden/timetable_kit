@@ -86,7 +86,7 @@ def update_reference_date_for_file(file: str | os.PathLike, new_date: str) -> No
 
     # Search and replace.
     search_pattern = r'"reference_date":\s*"([0-9]{8})"'
-    replace_string = "".join(['"reference_date": "', new_date, '"'])
+    replace_string = f'"reference_date": "{new_date}"'
     stream_edit_in_place(file, search_pattern, replace_string)
 
 
