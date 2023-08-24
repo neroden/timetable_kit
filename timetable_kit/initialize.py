@@ -36,7 +36,7 @@ def initialize_feed(gtfs):
     debug_print(1, "Using GTFS file " + str(gtfs))
     gtfs_path = Path(gtfs)
     # The unit is only relevant if we read the shapes file; we currently don't.
-    # Also affects display miles so default to mi.
+    # Also affects display miles so default to "mi".
     master_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 

@@ -10,9 +10,11 @@ A bit of a hackish workaround for a known piece of tedium during timetable updat
 """
 
 import argparse
-from pathlib import Path
 import os  # for os.PathLike for type hints
-import re, shutil, tempfile  # for the in-place file editing
+import re  # for the in-place file editing
+import shutil
+import tempfile
+from pathlib import Path
 
 
 def make_argparser():

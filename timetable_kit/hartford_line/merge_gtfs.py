@@ -89,7 +89,7 @@ def run():
     print("Repaired trips")
 
     # Delete all Hartford Line stops rows.  This makes an invalid feed, but all the stops are
-    # listed in Amtrak's feed (after stop_id_conversion, so it'll be fine after merging.
+    # listed in Amtrak's feed (after stop_id_conversion), so it'll be fine after merging.
     new_stops = hl_feed.stops[0:0]
     hl_feed.stops = new_stops
 

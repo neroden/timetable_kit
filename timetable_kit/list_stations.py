@@ -6,25 +6,17 @@
 List all the stations for a particular train number (trip_short_name), in order.
 """
 
-import sys  # For sys.exit
-import os  # For os.getenv
-
 import argparse
-import datetime
-
-# import pandas as pd # we call pandas routines but only on dataframes
-
-# We may not actually need these directly?
-import gtfs_kit
+import os  # For os.getenv
+import sys  # For sys.exit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
-from timetable_kit.initialize import filter_feed_for_utilities
-
+from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
+from timetable_kit.initialize import filter_feed_for_utilities
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.runtime_config import agency  # for the agency()
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -35,13 +27,9 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_output_dirname_argument,
 )
-
 from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
 
 
 def make_argparser():
@@ -131,13 +119,13 @@ if __name__ == "__main__":
 
     # OK, this is the CSV specific path.
     station_list = station_list_df.to_list()
-    station_list_commaed = [x + ",,," for x in station_list]
+    station_list_command = [x + ",,," for x in station_list]
     station_list_prefixed = [
         ",access,stations," + str(tsn),
         "column-options,,,ardp",
         "days,,," + station_list[0],
         "updown,,,",
-        *station_list_commaed,
+        *station_list_command,
     ]
     station_list_csv = "\n".join(station_list_prefixed)
     print(station_list_csv)

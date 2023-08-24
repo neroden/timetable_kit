@@ -83,7 +83,7 @@ def patch_buses(feed):
 def patch_coast_starlight(new_feed):
     """
     Patch an old Coast Starlight bug.
-    The bug appears to be fixed as of July 7, 2023
+    The bug appears to be fixed as of July 7, 2023,
     So this is unused code now
     """
     # Coast Starlight fix

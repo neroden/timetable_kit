@@ -3,7 +3,7 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 This file exists to hold data which is set at runtime, but is the same across a single run of
-timetable.py.  This data needs to be shared by multiple modules so it needs to be "low-level".
+timetable.py.  This data needs to be shared by multiple modules, so it needs to be "low-level".
 
 This data includes the critical choice of which agency's subpackage to use.
 """

@@ -14,17 +14,14 @@ the week.  So we may need to map for days of the week as well.
 
 Also contains other routines which look up trips by tsn.
 """
-from timetable_kit.errors import GTFSError, NoTripError
-from timetable_kit.debug import debug_print
-from timetable_kit.runtime_config import agency
-
-import gtfs_kit
-
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
 from timetable_kit import feed_enhanced
+from timetable_kit.debug import debug_print
+from timetable_kit.errors import NoTripError
+from timetable_kit.runtime_config import agency
+
 
 # List of days which are GTFS column headers
-from timetable_kit.feed_enhanced import gtfs_days
 
 
 def train_spec_to_tsn(train_spec: str) -> str:
@@ -35,7 +32,7 @@ def train_spec_to_tsn(train_spec: str) -> str:
     possibly followed by "noheader".
     """
     train_spec = train_spec.removesuffix("noheader").strip()
-    for day in gtfs_days:
+    for day in feed_enhanced.gtfs_days:
         tentative_tsn = train_spec.removesuffix(" " + day)
         if tentative_tsn != train_spec:
             # Only remove one suffix!
@@ -74,7 +71,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
     """
     tsns = feed.trips["trip_short_name"].array
 
-    # Here, duplicates are likely so we should check every time.
+    # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     tsn_set = set()
     for x in tsns:
@@ -86,7 +83,7 @@ def make_tsn_to_trip_id_dict(feed) -> dict[str, str]:
 
     trip_ids = feed.trips["trip_id"].array
     # We have duplicates and will take the last one.
-    # but hopefully they're total duplicates so it doesn't matter...
+    # but hopefully they're total duplicates, so it doesn't matter...
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
     return tsn_to_trip_id
 
@@ -102,7 +99,7 @@ def make_tsn_and_day_to_trip_id_dict(feed) -> dict[str, str]:
     """
     total_dict = dict()
     tsns = feed.trips["trip_short_name"].array
-    for day in gtfs_days:
+    for day in feed_enhanced.gtfs_days:
         day_suffix = " " + day
         # We need to filter calendar and trips for the day of the week.
         # This filters stop_times too, which is overkill;
@@ -155,7 +152,7 @@ def find_tsn_dupes(feed) -> set[str]:
     """
     tsns = feed.trips["trip_short_name"].array
 
-    # Here, duplicates are likely so we should check every time.
+    # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     debug_print(1, "Finding duplicate tsns, if any:")
     tsn_set = set()
