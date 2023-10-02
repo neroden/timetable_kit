@@ -15,6 +15,7 @@ from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
+from timetable_kit.runtime_config import agency_singleton
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -91,6 +92,8 @@ if __name__ == "__main__":
         gtfs_filename = agency().gtfs_unzipped_local_path
 
     master_feed = initialize_feed(gtfs=gtfs_filename)
+    # Initialize the agency singleton from the feed.
+    agency_singleton().init_from_feed(master_feed)
 
     today_feed = filter_feed_for_utilities(
         master_feed, reference_date=args.reference_date, day_of_week=args.day

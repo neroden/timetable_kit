@@ -54,6 +54,7 @@ from timetable_kit.initialize import initialize_feed
 # We call these repeatedly, so give them shorthand names
 from timetable_kit.runtime_config import agency as agency
 from timetable_kit.runtime_config import agency_singleton as agency_singleton
+
 # If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
