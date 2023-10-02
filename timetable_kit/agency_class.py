@@ -8,6 +8,8 @@ Hooks for agency-specific data.
 Currently, the only specific agency is Amtrak, which has its own submodule
 
 However, this contains generic code which should be used for agencies which are not Amtrak
+
+This is unused, obsolete and will be deleted later.
 """
 
 import gtfs_kit
