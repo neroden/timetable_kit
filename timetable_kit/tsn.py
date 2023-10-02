@@ -155,8 +155,10 @@ def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
     # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     debug_print(1, "Finding duplicate tsns, if any:")
-    # FIXME: this appears to have no effect, since nothing will be found in the empty set... what is this?
+
+    # Accumulate tsns which are found in the tsns array
     tsn_set = set()
+    # Accumulate tsns which are found in the tsns array *twice*
     tsn_dupes_set = set()
     for x in tsns:
         if x in tsn_set:
