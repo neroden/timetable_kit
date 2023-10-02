@@ -12,6 +12,9 @@ This defines an interface; each agency needs to provide the same interface
 # Hartford Line leans on Amtrak functions, but this does not work
 # import timetable_kit.amtrak as amtrak
 
+# The singleton instance of a class, for stateful memoization
+from .agency import get_singleton
+
 # Published agency name
 published_name = "CTRail Hartford Line"
 published_names_or = "CTRail Hartford Line or Amtrak"

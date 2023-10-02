@@ -1,4 +1,4 @@
-# hartford_line/__init.py__
+# maple_leaf/__init.py__
 # Init file for maple_leaf subpackage of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
@@ -8,6 +8,8 @@ Maple Leaf specific functions for timetable_kit.
 
 This defines an interface; each agency needs to provide the same interface
 """
+
+from .agency import get_singleton
 
 # Hartford Line leans on Amtrak functions, but this does not work
 # import timetable_kit.amtrak as amtrak

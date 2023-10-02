@@ -80,3 +80,12 @@ def agency():
 
     debug_print(3, "Retrieving agency_package", agency_package)
     return agency_package
+
+
+def agency_singleton():
+    """
+    Get the agency singleton to use to get agency-specific data (e.g. generic, amtrak, via).
+    This is an instance of a class inside the agency subpackage.  We would use the agency
+    subpackage itself, but we want to use inheritance with memoized stateful data.
+    """
+    return agency().get_singleton()

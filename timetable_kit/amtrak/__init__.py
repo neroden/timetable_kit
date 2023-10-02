@@ -9,6 +9,9 @@ Amtrak-specific functions for timetable_kit.
 This defines an interface; VIA rail and others need to provide the same interface.
 """
 
+# The singleton instance of a class, for stateful memoization
+from .agency import get_singleton
+
 # Published agency name
 published_name = "Amtrak"
 published_names_or = "Amtrak"
