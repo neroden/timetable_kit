@@ -31,13 +31,6 @@ from .get_gtfs import (
     published_gtfs_url,
 )
 
-# These are do-nothings for Amtrak, but
-# quite significant for VIA Rail
-from .station_names import (
-    stop_code_to_stop_id,
-    stop_id_to_stop_code,
-)
-
 # How to title the routes at the top of the column
 from .route_names import get_route_name
 
@@ -49,13 +42,26 @@ from .station_names import get_station_name_pretty
 from .special_data import station_has_checked_baggage
 from .special_data import train_has_checked_baggage
 
+
+# This is a temporary testing hack
+# Later we will call these directly from the singleton
+# These are do-nothings for Amtrak, but
+# quite significant for VIA Rail
+def stop_code_to_stop_id(stop_code: str):
+    return get_singleton().stop_code_to_stop_id(stop_code)
+
+
+def stop_id_to_stop_code(stop_id: str):
+    return get_singleton().stop_id_to_stop_code(stop_id)
+
+
 # Platform accessibility
-# This is in station_names for convenience
-# Refactor later FIXME
-from .station_names import (
-    station_has_accessible_platform,
-    station_has_inaccessible_platform,
-)
+def station_has_accessible_platform(station_code: str):
+    return get_singleton().station_has_accessible_platform(station_code)
+
+
+def station_has_inaccessible_platform(station_code: str):
+    return get_singleton().station_has_inaccessible_platform(station_code)
 
 
 # Patch errors in the feed
