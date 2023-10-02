@@ -119,13 +119,13 @@ if __name__ == "__main__":
 
     # OK, this is the CSV specific path.
     station_list = station_list_df.to_list()
-    station_list_command = [x + ",,," for x in station_list]
+    station_list_with_commas = [x + ",,," for x in station_list]
     station_list_prefixed = [
         ",access,stations," + str(tsn),
         "column-options,,,ardp",
         "days,,," + station_list[0],
         "updown,,,",
-        *station_list_command,
+        *station_list_with_commas,
     ]
     station_list_csv = "\n".join(station_list_prefixed)
     print(station_list_csv)

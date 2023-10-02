@@ -396,8 +396,7 @@ def flatten_train_specs_list(train_specs_list):
             train_spec.removesuffix("noheader").strip() for train_spec in train_specs
         ]
         flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
-    flattened_ts_set = set(flattened_ts_list)
-    flattened_ts_set -= special_column_names
+    flattened_ts_set = set(flattened_ts_list) - special_column_names
     return flattened_ts_set
 
 
