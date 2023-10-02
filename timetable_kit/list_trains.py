@@ -211,8 +211,6 @@ if __name__ == "__main__":
 
     set_debug_level(args.debug)
 
-    # Eventually this will be set from the command line -- FIXME
-    debug_print(2, "Agency found:", args.agency)
     runtime_config.set_agency(args.agency)
 
     if args.gtfs_filename:
@@ -220,9 +218,6 @@ if __name__ == "__main__":
     else:
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
-
-    stops = args.stops
-    sync_stop = args.sync_stop
 
     # Initialize the feed.
     master_feed = initialize_feed(gtfs=gtfs_filename)
@@ -232,6 +227,9 @@ if __name__ == "__main__":
     today_feed = filter_feed_for_utilities(
         master_feed, reference_date=args.reference_date, day_of_week=args.day
     )
+
+    stops = args.stops
+    sync_stop = args.sync_stop
 
     # Make the two interconverting dicts -- we only need one
     trip_id_to_tsn = make_trip_id_to_tsn_dict(today_feed)

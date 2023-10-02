@@ -24,6 +24,7 @@ from timetable_kit.list_trains import (
     sort_by_time_at_stop,
 )
 from timetable_kit.runtime_config import agency  # for the agency()
+from timetable_kit.runtime_config import agency_singleton
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -97,17 +98,20 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
+    # Initialize the feed.
+    master_feed = initialize_feed(gtfs=gtfs_filename)
+    # Initialize the agency singleton from the feed.
+    agency_singleton().init_from_feed(master_feed)
+
+    today_feed = filter_feed_for_utilities(
+        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    )
+
     stops = args.stops
     sync_stop = args.sync_stop
 
     key_tsn = args.trip_short_name
     key_tsn = key_tsn.strip()  # Avoid whitespace problems
-
-    master_feed = initialize_feed(gtfs=gtfs_filename)
-
-    today_feed = filter_feed_for_utilities(
-        master_feed, reference_date=args.reference_date, day_of_week=args.day
-    )
 
     # Make the two interconverting dicts -- we only need one
     trip_id_to_tsn = make_trip_id_to_tsn_dict(today_feed)

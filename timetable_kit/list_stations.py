@@ -81,8 +81,6 @@ if __name__ == "__main__":
     if not output_dirname:
         output_dirname = "."
 
-    # Eventually this will be set from the command line -- FIXME
-    debug_print(2, "Agency found:", args.agency)
     runtime_config.set_agency(args.agency)
 
     if args.gtfs_filename:
@@ -91,6 +89,7 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
+    # Initialize the feed.
     master_feed = initialize_feed(gtfs=gtfs_filename)
     # Initialize the agency singleton from the feed.
     agency_singleton().init_from_feed(master_feed)
