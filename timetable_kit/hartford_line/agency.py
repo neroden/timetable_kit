@@ -23,8 +23,8 @@ class AgencyHartfordLine(Agency):
 # Establish the singleton
 _singleton = AgencyHartfordLine()
 
+
 def get_singleton():
     """Get singleton for Hartford Line"""
     global _singleton
     return _singleton
-

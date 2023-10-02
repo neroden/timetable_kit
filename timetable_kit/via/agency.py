@@ -23,6 +23,7 @@ class AgencyVIA(Agency):
 # Establish the singleton
 _singleton = AgencyVIA()
 
+
 def get_singleton():
     """Get singleton for VIA"""
     global _singleton

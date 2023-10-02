@@ -19,11 +19,12 @@ class AgencyAmtrak(Agency):
     ) -> None:
         super().__init__()
 
+
 # Establish the singleton
 _singleton = AgencyAmtrak()
+
 
 def get_singleton():
     """Get singleton for Amtrak"""
     global _singleton
     return _singleton
-

@@ -23,6 +23,7 @@ class AgencyMapleLeaf(Agency):
 # Establish the singleton
 _singleton = AgencyMapleLeaf()
 
+
 def get_singleton():
     """Get singleton for Maple Leaf"""
     global _singleton

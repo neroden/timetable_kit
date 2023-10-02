@@ -10,6 +10,7 @@ Functions for a generic agency.
 
 # The Agency class type, for others to inherit from
 from .agency import Agency
+
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 

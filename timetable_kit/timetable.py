@@ -51,9 +51,9 @@ from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
-# We call this repeatedly, so give it a shorthand name
+# We call these repeatedly, so give them shorthand names
 from timetable_kit.runtime_config import agency as agency
-
+from timetable_kit.runtime_config import agency_singleton as agency_singleton
 # If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
@@ -62,6 +62,8 @@ from timetable_kit.runtime_config import agency as agency
 # agency().special_data
 # agency().json_stations
 # And similarly for all other agency-specific callouts
+# Except for calls to the singleton, which use agency_singleton()
+
 from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
@@ -1528,12 +1530,19 @@ def produce_several_timetables(
     if not gtfs_filename:
         print("produce_several_timetables: gtfs_filename is mandatory!")
         sys.exit(1)
+
+    # The following are rather finicky in their ordering:
+
+    # Acquire the feed, enhance it, do generic patching.
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     # Amtrak-specific patches.  Bleah!  FIXME
     if patch_the_feed:
         master_feed = agency().patch_feed(master_feed)
         debug_print(1, "Feed patched, hopefully")
+
+    # Initialize the agency singleton from the feed.
+    agency_singleton().init_from_feed(master_feed)
 
     # Deal with ".list" files.
     list_file_list = sew_pages.get_only_list_files(spec_file_list)
