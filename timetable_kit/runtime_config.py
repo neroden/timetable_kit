@@ -18,6 +18,7 @@ import timetable_kit.amtrak
 import timetable_kit.via
 import timetable_kit.hartford_line
 import timetable_kit.maple_leaf
+import timetable_kit.generic_agency
 
 # These will get set elsewhere, later, by initialization code.
 agency_name = None
@@ -41,8 +42,10 @@ def set_agency(agency: str):
 
     match agency:
         case "generic":
-            print("Unimplemented")
-            sys.exit(1)
+            debug_print(1, "Generic agency: not fully implemented")
+            agency_name = "Generic"
+            agency_package = timetable_kit.generic_agency
+            agency_input_dir = "specs_generic"
         case "amtrak":
             debug_print(1, "Using Amtrak data")
             agency_name = "Amtrak"
