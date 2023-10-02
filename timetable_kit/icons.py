@@ -15,7 +15,7 @@ Referenced inline SVGs would be ideal for HTML-on-web output.
 For now, we do strictly icons referenced as img.
 """
 
-from timetable_kit.load_resources import get_icon_svg, get_icon_css
+from timetable_kit.load_resources import get_icon_css
 
 
 def get_filenames_for_all_icons() -> list[str]:
@@ -121,7 +121,7 @@ def get_accessible_icon_html(doing_html=True) -> str:
     """
     Return suitable HTML for displaying the "wheelchair access" icon.
 
-    Amtrak data does not show full accessibility.  This is being used for basic
+    Amtrak's data does not show full accessibility.  This is being used for basic
     platform accessibility at this time.
     """
     if doing_html:

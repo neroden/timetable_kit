@@ -12,11 +12,13 @@ There is also an extraction method to pull out a single trip record from a reduc
 with error checking to make sure there's exactly one trip.
 """
 from operator import not_  # Needed for bad_service_id filter
+
 import gtfs_kit
+
 from timetable_kit.errors import (
-    GTFSError,
     NoTripError,
     TwoTripsError,
+    InputError,
 )
 
 """
@@ -196,7 +198,7 @@ def filter_bad_service_ids(self, bad_service_ids):
     Returns a new filtered feed (original feed unchanged)
     - filters calendar and trips (direct)
     - filtered trips is used to avoid known-bad data
-    - filtered calender is not currently used
+    - filtered calendar is not currently used
     """
     new_feed = self.copy()
     # First filter the trips.

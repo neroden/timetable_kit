@@ -95,7 +95,7 @@ def station_has_checked_baggage(station_code: str) -> bool:
     """
     Does this VIA rail station handle checked baggage?
 
-    Currently we have no data, so must assume not
+    Currently, we have no data, so must assume not
     """
     return False
 

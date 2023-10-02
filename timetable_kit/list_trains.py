@@ -16,22 +16,18 @@ Filter by reference date.
 Optionally filter by day of week.
 """
 
-import sys  # for exit
 import argparse
-import datetime
+import sys  # for exit
 
 import gtfs_kit
 
 # Monkey-patch the feed class
 from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
-from timetable_kit.initialize import filter_feed_for_utilities
-
+from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
-from timetable_kit.tsn import make_trip_id_to_tsn_dict
-from timetable_kit.tsn import stations_list_from_tsn
+from timetable_kit.initialize import filter_feed_for_utilities
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.runtime_config import agency  # for the agency()
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -41,9 +37,8 @@ from timetable_kit.timetable_argparse import (
     add_agency_argument,
     add_gtfs_argument,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
+from timetable_kit.tsn import make_trip_id_to_tsn_dict
+from timetable_kit.tsn import stations_list_from_tsn
 
 
 def get_trips_at(stop_id: str, *, feed: gtfs_kit.Feed) -> list[str]:
@@ -273,7 +268,7 @@ if __name__ == "__main__":
 
             # Report duplicates.  Important for catching GTFS weirdness.
             # We expect duplicates if we've entered multiple pairs, so only report dupes
-            # if they occured from a single pair.
+            # if they occurred from a single pair.
             this_pair_tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
             report_dupes(this_pair_tsns)
 

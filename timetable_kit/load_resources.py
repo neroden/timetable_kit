@@ -40,7 +40,6 @@ get_logo_svg(filename: str) -> str
 get_connecting_services_csv(filename: str) -> str
 """
 
-import jinja2
 from jinja2 import (
     Environment,
     ChoiceLoader,
@@ -151,7 +150,7 @@ def get_icon_svg(filename: str) -> str:
 
 def get_logo_css(filename: str) -> str:
     """
-    Load an logo CSS file (specify full filename including .css) and return it as a string.
+    Load a logo CSS file (specify full filename including .css) and return it as a string.
 
     This uses Jinja2, logo_loader, and logo_environment.
     """
@@ -163,7 +162,7 @@ def get_logo_css(filename: str) -> str:
 
 def get_logo_svg(filename: str) -> str:
     """
-    Load an logo SVG file (specify full filename including .svg) and return it as a string.
+    Load a logo SVG file (specify full filename including .svg) and return it as a string.
 
     This uses Jinja2, logo_loader, and logo_environment.
     Technically this is the same code as get_logo_css right now.

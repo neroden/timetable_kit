@@ -21,7 +21,7 @@ Note: 6pt is 8px.
 
 Spartan (from Google) is readable at 6pt.  Practically nothing else is.
     
-6pt may be unnecessarily grim for screen use, or even print use perhaps.
+6pt may be unnecessarily grim for screen use, or even print use, perhaps.
     
 The WAVE accessibility checker complains about sizes less than 13.75 px / 10.35pt
 10.35pt is the minimum for DejaVu Sans (given that smaller text is at 80%)
@@ -38,7 +38,7 @@ I like the look of DejaVu Sans.  It seems the most reliable.  But it is not good
 
 Other fonts to consider include Quicksand (pretty, art-decoish)
 and Liberation Sans (good, but uglier I think)
-Roboto is clean and good and small sizes; narrower than Deja Vu.
+Roboto is clean and good and small sizes; narrower than Déjà vu.
 B612 is also worth considering
 
 Spartan (from Google) appears to be based on the classic Spartan Classified font, possibly
@@ -55,7 +55,7 @@ Raleway is fairly clean, but has non-tabular nums.  Second best so far.
 
 
 Tabular number fonts include DejaVu, Open Sans, Roboto, 
-Roboto Condensed (unreadable), Titillium Web (too tall vertically and unreadable,
+Roboto Condensed (unreadable), Titillium Web (too tall vertically and unreadable),
 Varela Round (no bold).
 
 National Park is elegant, non-tabular, and not good at small sizes at all.  :-(

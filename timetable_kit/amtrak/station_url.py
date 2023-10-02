@@ -7,11 +7,9 @@ Given an Amtrak three-letter station code, return the URL for that station's JSO
 
 Utility program for the user.  Not used by the timetable program.
 """
-import sys  # for sys.exit
 import argparse
 
-# These are mine
-from timetable_kit import amtrak
+from timetable_kit.amtrak.json_stations import station_details_url
 
 arg_parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -25,5 +23,4 @@ arg_parser.add_argument(
 if __name__ == "__main__":
     args = arg_parser.parse_args()
     station_code = args.code
-    print(amtrak.json_stations.station_details_url(station_code))
-    sys.exit(0)
+    print(station_details_url(station_code))

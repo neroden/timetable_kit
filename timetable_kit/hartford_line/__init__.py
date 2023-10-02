@@ -51,7 +51,7 @@ def stop_id_to_stop_code(stop_id: str) -> str:
 from timetable_kit.amtrak.route_names import get_route_name
 
 # Routine to pretty-print a station name
-# (including subtitles, connecting agency logos, etc)
+# (including subtitles, connecting agency logos, etc.)
 # This needs to be different from Amtrak's.
 from .station_names import get_station_name_pretty
 

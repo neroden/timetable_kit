@@ -11,47 +11,46 @@ timetable.py --help gives documentation
 """
 
 # Other people's packages
-import argparse
 
-from pathlib import Path
+import json
 import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
-import sys  # Solely for sys.path and solely for debugging
 import shutil  # To copy files
-import json
+import sys  # Solely for sys.path and solely for debugging
+from pathlib import Path
 
-import pandas as pd
 import gtfs_kit
+import pandas as pd
 from weasyprint import HTML as weasyHTML
-from weasyprint import CSS as weasyCSS
+
+from timetable_kit import connecting_services
+
+# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
+from timetable_kit import feed_enhanced
+from timetable_kit import icons
+
+# This stores critical data supplied at runtime such as the agency subpackage to use.
+from timetable_kit import runtime_config
+
+# For calling out to the system to sew individual PDF pages together to one PDF
+from timetable_kit import sew_pages
+from timetable_kit import text_presentation
+from timetable_kit.debug import set_debug_level, debug_print
 
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
 from timetable_kit.errors import (
     GTFSError,
-    NoStopError,
     TwoStopsError,
     NoTripError,
     TwoTripsError,
     InputError,
 )
-from timetable_kit.debug import set_debug_level, debug_print
-from timetable_kit.timetable_argparse import make_tt_arg_parser
-
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
-from timetable_kit import feed_enhanced
-
 from timetable_kit.feed_enhanced import gtfs_days
 
-# To intialize the feed -- does type changes
+# To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
-
-# For reversing the type changes to output GTFS again
-from timetable_kit import gtfs_type_cleanup
-
-# This stores critical data supplied at runtime such as the agency subpackage to use.
-from timetable_kit import runtime_config
 
 # We call this repeatedly, so give it a shorthand name
 from timetable_kit.runtime_config import agency as agency
@@ -64,10 +63,7 @@ from timetable_kit.runtime_config import agency as agency
 # agency().special_data
 # agency().json_stations
 # And similarly for all other agency-specific callouts
-
-from timetable_kit import text_presentation
-from timetable_kit import icons
-from timetable_kit import connecting_services
+from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
@@ -75,7 +71,6 @@ from timetable_kit.timetable_styling import (
     style_timetable_for_html,
     finish_html_timetable,
 )
-
 from timetable_kit.tsn import (
     train_spec_to_tsn,
     make_trip_id_to_tsn_dict,
@@ -85,8 +80,6 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
-# For calling out to the system to sew individual PDF pages together to one PDF
-from timetable_kit import sew_pages
 
 ### tt-spec loading and parsing code
 
@@ -102,7 +95,7 @@ special_column_names = {
 }
 
 ### Constant set for special row names.
-### These should not be intrepreted as stop_code or station codes
+### These should not be interpreted as stop_code or station codes
 special_row_names = {
     "",
     "route-name",
@@ -258,7 +251,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
 
     Returns None if there was no code in the cell (the usual case)
 
-    Otherwise returns a dict:
+    Otherwise, returns a dict:
     train_spec: the train_spec
     first: True or False
     last: True or False
@@ -403,8 +396,7 @@ def flatten_train_specs_list(train_specs_list):
             train_spec.removesuffix("noheader").strip() for train_spec in train_specs
         ]
         flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
-    flattened_ts_set = set(flattened_ts_list)
-    flattened_ts_set = flattened_ts_set - special_column_names
+    flattened_ts_set = set(flattened_ts_list) - special_column_names
     return flattened_ts_set
 
 
@@ -423,8 +415,8 @@ def service_dates_from_trip_id(feed, trip_id):
 
     calendar_row = feed.calendar[feed.calendar.service_id == service_id]
 
-    start_date = (calendar_row.start_date).squeeze()
-    end_date = (calendar_row.end_date).squeeze()
+    start_date = calendar_row.start_date.squeeze()
+    end_date = calendar_row.end_date.squeeze()
 
     return [start_date, end_date]
 
@@ -489,7 +481,7 @@ def get_dwell_secs(today_feed, trip_id, stop_id):
 
     if timepoint is None:
         # If the train doesn't stop there, the dwell time is zero;
-        # and we need thie behavior for make_stations_max_dwell_map
+        # and we need this behavior for make_stations_max_dwell_map
         return 0
 
     # There's a catch!  If this station is "discharge only" or "receive only",
@@ -557,7 +549,7 @@ def raise_error_if_not_one_row(trips):
     The error text is based on the assumption that this is a GTFS trips frame.
     This returns nothing if successful; it is solely sanity-check code.
 
-    For speed we have to work with trips directly rather than modifying the feed,
+    For speed, we have to work with trips directly rather than modifying the feed,
     which is why this is needed for fill_tt_spec, rather than merely in feed_enhanced.
     """
     num_rows = trips.shape[0]
@@ -693,7 +685,7 @@ def fill_tt_spec(
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
     # FIXME.
 
-    # Base CSS for every data cell.  We probably shouldn't do this but it tests that the styler works.
+    # Base CSS for every data cell.  We probably shouldn't do this, but it tests that the styler works.
     base_cell_css = ""
 
     # NOTE, border variations not implemented yet FIXME
@@ -715,7 +707,7 @@ def fill_tt_spec(
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
         column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
-        # Create blank train_specs list so we can call get_cell_codes on a special column without crashing
+        # Create blank train_specs list, so we can call get_cell_codes on a special column without crashing
         train_specs = []
 
         column_header_styling = ""  # default
@@ -755,7 +747,7 @@ def fill_tt_spec(
                     train_numbers_side_by_side=train_numbers_side_by_side,
                 )
                 if doing_html:
-                    # Style the header with the color & stylings for the first tsn
+                    # Style the header with the color & styling for the first tsn
                     # ...which isn't "noheader"...
                     # ...because I don't know how to do multiples! FIXME
                     header_styling_train_spec = None
@@ -978,7 +970,7 @@ def fill_tt_spec(
                     )
                     tt.iloc[y, x] = station_name_str
                 case [_, "services", _]:
-                    # Column for station services codes.  Currently completely vacant.
+                    # Column for station services codes.  Currently, completely vacant.
                     cell_css_list.append("services-cell")
                     services_str = ""
                     tt.iloc[y, x] = services_str
@@ -1059,7 +1051,7 @@ def fill_tt_spec(
                         cell_css_list.append("blank-cell")
                         # For now, we style if we have a single train.
                         # Including if it's specified with a cell code like "94 blank".
-                        # Otherwise leave it white, because it's hard to know what color to use.
+                        # Otherwise, leave it white, because it's hard to know what color to use.
                         if len(train_specs_to_check) == 1:
                             cell_css_list.append(
                                 get_time_column_stylings(
@@ -1173,7 +1165,7 @@ def fill_tt_spec(
     tt.columns = unique_header_replacement_list
     styler_t.columns = unique_header_replacement_list
 
-    return (tt, styler_t, header_styling_list)
+    return tt, styler_t, header_styling_list
 
 
 def produce_timetable(
@@ -1251,7 +1243,7 @@ def produce_timetable(
         train_numbers_side_by_side = False
 
     # Copy the icons and fonts to the output dir.
-    # This is memoized so it won't duplicate work if you do multiple tables.
+    # This is memoized, so it won't duplicate work if you do multiple tables.
     copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
     if command_line_reference_date:
@@ -1308,7 +1300,8 @@ def produce_timetable(
     if find_tsn_dupes(reduced_feed):
         debug_print(
             1,
-            "Warning, tsn duplicates!  If you use one of these without a day disambiguator, a random trip will be picked!  Usually a bad idea!",
+            "Warning, tsn duplicates!  If you use one of these without a day"
+            " disambiguator, a random trip will be picked!  Usually a bad idea!",
         )
 
     # Print the calendar for debugging
@@ -1537,7 +1530,7 @@ def produce_several_timetables(
 
     if not gtfs_filename:
         print("produce_several_timetables: gtfs_filename is mandatory!")
-        sys_exit(1)
+        sys.exit(1)
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     # Amtrak-specific patches.  Bleah!  FIXME
@@ -1597,7 +1590,7 @@ def main():
         my_arg_parser.print_help()
         sys.exit(1)
 
-    spec_file_list = [*(args.tt_spec_files), *(args.positional_spec_files)]
+    spec_file_list = [*args.tt_spec_files, *args.positional_spec_files]
 
     if spec_file_list == []:
         print(
@@ -1643,8 +1636,7 @@ def main():
         print("--author is mandatory!")
         sys.exit(1)
 
-    # If nopatch, don't patch the feed.  Otherwise do patch it.
-    patch_the_feed = True
+    # If nopatch, don't patch the feed.  Otherwise, do patch it.
     patch_the_feed = not args.nopatch
 
     command_line_reference_date = args.reference_date  # Does not default, may be None

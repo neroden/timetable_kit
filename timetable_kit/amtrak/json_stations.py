@@ -95,14 +95,14 @@ def load_stations_json():
 
 def station_details_filename(station_code: str) -> str:
     """
-    Return filename for a Amtrak station details JSON file
+    Return filename for an Amtrak station details JSON file
 
     This does uppercase/lowercase correction.
     """
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This might well be case sensitive
+    # This might well be case-sensitive
     first_station_code = str.lower(station_code)
     second_station_code = str.upper(station_code)
     filename = "".join(
@@ -189,14 +189,14 @@ def load_station_details(station_code: str) -> str:
 
 def station_details_html_filename(station_code: str) -> str:
     """
-    Return filename for a Amtrak station details HTML file
+    Return filename for an Amtrak station details HTML file
 
     This does uppercase/lowercase correction.
     """
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This is likely to be case sensitive
+    # This is likely to be case-sensitive
     filename = "".join(
         [
             str.lower(station_code),
@@ -215,7 +215,7 @@ def station_details_html_url(station_code: str) -> str:
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
-    # This might be case sensitive
+    # This might be case-sensitive
     url = "".join(
         [
             station_details_html_url_prefix,
