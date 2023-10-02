@@ -17,6 +17,7 @@ from timetable_kit import feed_enhanced
 
 # My packages: Local module imports
 from timetable_kit.debug import set_debug_level
+from timetable_kit.feed_enhanced import FeedEnhanced
 
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
@@ -98,7 +99,7 @@ def compare_stop_lists(base_trip, trips, *, feed):
             print(enhanced_comparison)
 
 
-def compare_similar_services(route_id, *, feed):
+def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """
     Find timing differences on a route between similar services.
 
@@ -167,7 +168,6 @@ if __name__ == "__main__":
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name
-
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)

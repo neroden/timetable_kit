@@ -7,11 +7,11 @@ Patch known errors in VIA GTFS.
 This should be reviewed every time VIA releases a new GTFS.
 """
 
-from timetable_kit import feed_enhanced
 from timetable_kit.debug import debug_print
+from timetable_kit.feed_enhanced import FeedEnhanced
 
 
-def patch_feed(feed):
+def patch_feed(feed: FeedEnhanced):
     """
     Take an VIA feed and patch it for known errors.
 

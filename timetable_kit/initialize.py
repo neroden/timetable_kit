@@ -3,7 +3,7 @@
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 """
-Initalize the GTFS feed and related stuff
+Initialize the GTFS feed and related stuff
 
 Used by multiple command-line programs
 """
@@ -16,15 +16,13 @@ import gtfs_kit
 
 # My packages: Local module imports
 
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
-from timetable_kit import feed_enhanced
-
 from timetable_kit import gtfs_type_cleanup
 from timetable_kit.debug import debug_print
+from timetable_kit.feed_enhanced import FeedEnhanced, GTFS_DAYS
 
 
-#### INITIALIZATION CODE
-def initialize_feed(gtfs):
+# INITIALIZATION CODE
+def initialize_feed(gtfs) -> FeedEnhanced:
     """
     Initialize the master_feed and related variables.
 
@@ -40,11 +38,8 @@ def initialize_feed(gtfs):
     master_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
     debug_print(1, "Feed loaded")
 
-    # We don't use the shapes file.  It takes up a LOT of memory.  Destroy it.
-    master_feed.shapes = None
-
     # Need to clean up times to zero-pad them for sorting.
-    master_feed = master_feed.clean_times()
+    master_feed = FeedEnhanced.clean_times(master_feed)
 
     # Don't waste time.
     # master_feed.validate()
@@ -55,10 +50,12 @@ def initialize_feed(gtfs):
     gtfs_type_cleanup.fix(master_feed)
 
     debug_print(1, "Feed initialized")
-    return master_feed
+    return FeedEnhanced.enhance(master_feed)
 
 
-def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
+def filter_feed_for_utilities(
+    feed: FeedEnhanced, reference_date=None, day_of_week=None
+):
     """
     Filter the feed down based on command line arguments, for the auxiliary utility programs
     such as list_trains.py and list_stations.py
@@ -87,8 +84,8 @@ def filter_feed_for_utilities(feed, reference_date=None, day_of_week=None):
             # No filtering necessary
             pass
         case _:
-            if day_of_week not in feed_enhanced.gtfs_days:
-                print("Specifed day of week not understood.")
+            if day_of_week not in GTFS_DAYS:
+                print("Specified day of week not understood.")
                 exit(1)
             debug_print(1, "Restricting to ", day_of_week, ".", sep="")
             today_feed = today_feed.filter_by_day_of_week(day_of_week)

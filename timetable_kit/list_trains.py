@@ -19,12 +19,9 @@ Optionally filter by day of week.
 import argparse
 import sys  # for exit
 
-import gtfs_kit
-
-# Monkey-patch the feed class
-from timetable_kit import feed_enhanced
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
+from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.initialize import filter_feed_for_utilities
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
@@ -41,7 +38,7 @@ from timetable_kit.tsn import make_trip_id_to_tsn_dict
 from timetable_kit.tsn import stations_list_from_tsn
 
 
-def get_trips_at(stop_id: str, *, feed: gtfs_kit.Feed) -> list[str]:
+def get_trips_at(stop_id: str, *, feed: FeedEnhanced) -> list[str]:
     """
     Returns a list of trip_ids which stop at the chosen stop.
 
@@ -58,7 +55,7 @@ def get_trips_at(stop_id: str, *, feed: gtfs_kit.Feed) -> list[str]:
 
 
 def get_trips_between(
-    stop_one_id: str, stop_two_id: str, *, feed: gtfs_kit.Feed
+    stop_one_id: str, stop_two_id: str, *, feed: FeedEnhanced
 ) -> list[str]:
     """
     Returns a list of trip_ids which stop at both stops, in that order.
@@ -116,7 +113,7 @@ def sort_by_time_at_stop(
     trip_id_list: list[str],
     stop_id: str,
     *,
-    feed: gtfs_kit.Feed,
+    feed: FeedEnhanced,
 ) -> list[str]:
     """
     Sort a list of trip_ids by departure time at a particular stop.

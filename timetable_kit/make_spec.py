@@ -14,8 +14,6 @@ import sys  # for exit
 
 import pandas as pd
 
-# Monkey-patch the feed class
-from timetable_kit import feed_enhanced
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
