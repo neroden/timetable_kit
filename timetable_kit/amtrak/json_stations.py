@@ -22,6 +22,7 @@ get_station_name is the primary one.
 
 import sys
 from pathlib import Path
+from io import StringIO  # Needed to parse JSON
 import argparse
 
 import requests
@@ -313,7 +314,10 @@ def download_all_stations(sleep_secs: float = 120.0):
         sleep(sleep_secs + rand_secs)
 
     # Then, cycle through the station codes
-    stations = pd.io.json.read_json(stations_json, orient="records")
+    # Have to set up a StringIO wrapper
+    stations_json_as_file = StringIO(stations_json)
+    # This line just works!
+    stations = pd.io.json.read_json(stations_json_as_file, orient="records")
     for code in stations["code"].array:
         download_one_station(code)
         if sleep_secs != 0.0:
@@ -352,8 +356,11 @@ def make_station_name_dict():
     Expects json stations to be downloaded already, in a suitable local file
     """
     stations_json = load_stations_json()
-    # Believe it or not, this line JUST WORKS!!!!  Wow!
-    stations = pd.io.json.read_json(stations_json, orient="records")
+
+    # Have to set up a StringIO wrapper
+    stations_json_as_file = StringIO(stations_json)
+    # This line just works!
+    stations = pd.io.json.read_json(stations_json_as_file, orient="records")
     return dict(zip(stations.code, stations.autoFillName))
 
 
@@ -392,7 +399,10 @@ def do_station_processing():
         stations_json = download_stations_json()
 
     # Believe it or not, this line JUST WORKS!!!!  Wow!
-    stations = pd.io.json.read_json(stations_json, orient="records")
+    # Have to set up a StringIO wrapper
+    stations_json_as_file = StringIO(stations_json)
+    # This line just works!
+    stations = pd.io.json.read_json(stations_json_as_file, orient="records")
 
     # OK.  So let's dump-print that table...
     stations_csv_path = Path("./stations.csv")
