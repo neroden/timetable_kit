@@ -32,13 +32,41 @@ class Agency:
         self._accessible_platform_dict = None
         self._inaccessible_platform_dict = None
 
+    def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
+        """
+        Apply patches suitable for this agency to a feed;
+        return a patched feed.
+
+        For a generic agency, this does nothing.
+
+        Does not alter the data in the agency object.
+        Do this before init_from_feed.
+        """
+        return feed
+
+    def patch_feed_wheelchair_access_only(self, feed: FeedEnhanced) -> FeedEnhanced:
+        """
+        Apply only the patches to add wheelchair boarding information for this agency;
+        return a patched feed.
+
+        For a generic agency, this does nothing.
+
+        Does not alter the data in the agency object.
+        Do this before init_from_feed.
+        """
+        return feed
+
     def init_from_feed(self, feed: FeedEnhanced):
-        """Initalize this object with an enhanced GTFS feed.  Used for translating stop_code to and from stop_id."""
-        """We don't want to do this at object creation for multiple reasons."""
-        """1. We need to call agency routines on the feed before using it."""
-        """2. We may not need to use this agency object at all, but it may need to be created in initialization."""
-        """3. We may not need to initialize these tables in subclasses."""
-        """4. This is expensive in both memory usage and time."""
+        """
+        Initalize this object with an enhanced GTFS feed.
+        Used for translating stop_code to and from stop_id.
+        Also used for wheelchair boarding info.
+        We don't want to do this at object creation for multiple reasons.
+        1. We need to call agency routines on the feed before using it.
+        2. We may not need to use this agency object at all, but it may need to be created in initialization.
+        3. We may not need to initialize these tables in subclasses.
+        4. This is expensive in both memory usage and time.
+        """
         if self._feed is not None:
             debug_print(
                 1,

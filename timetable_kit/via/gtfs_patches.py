@@ -11,7 +11,7 @@ from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
 
 
-def patch_feed(feed: FeedEnhanced):
+def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
     """
     Take an VIA feed and patch it for known errors.
 

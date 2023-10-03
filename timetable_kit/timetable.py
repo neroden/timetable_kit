@@ -1539,8 +1539,12 @@ def produce_several_timetables(
 
     # Amtrak-specific patches.  Bleah!  FIXME
     if patch_the_feed:
-        master_feed = agency().patch_feed(master_feed)
+        master_feed = agency_singleton().patch_feed(master_feed)
         debug_print(1, "Feed patched, hopefully")
+    else:
+        # Have to patch in the wheelchair access info regardless
+        master_feed = agency_singleton().patch_feed_wheelchair_access_only(master_feed)
+        debug_print(1, "Feed patched for wheelchair access only")
 
     # Initialize the agency singleton from the feed.
     agency_singleton().init_from_feed(master_feed)

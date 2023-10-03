@@ -8,7 +8,9 @@ This holds a class for "AgencyVIA" intended to be used as a singleton.
 """
 from __future__ import annotations
 
+from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.generic_agency import Agency
+import timetable_kit.via.gtfs_patches as gtfs_patches  # for patch_feed
 
 
 class AgencyVIA(Agency):
@@ -18,6 +20,15 @@ class AgencyVIA(Agency):
         self: AgencyVIA,
     ) -> None:
         super().__init__()
+
+    def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
+        """
+        Apply VIA-specific patches to a feed.
+        Returns the patched feed.
+        Does not alter data in the Agency object.
+        """
+        # This is defined in its own file in the VIA subpackage.
+        return gtfs_patches.patch_feed(feed)
 
 
 # Establish the singleton
