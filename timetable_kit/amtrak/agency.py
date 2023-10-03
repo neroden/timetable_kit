@@ -51,6 +51,10 @@ class AgencyAmtrak(Agency):
         access.patch_add_wheelchair_boarding(new_feed)  # Alters in place
         return new_feed
 
+    def unofficial_disclaimer() -> str:
+        """Returns a string for a disclaimer about this not being an official product"""
+        return "This timetable is not an official Amtrak product."
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()

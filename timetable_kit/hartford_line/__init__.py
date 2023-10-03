@@ -14,7 +14,6 @@ This defines an interface; each agency needs to provide the same interface
 
 # Published agency name
 published_name = "CTRail Hartford Line"
-published_names_or = "CTRail Hartford Line or Amtrak"
 published_names_and = "CTRail Hartford Line and Amtrak"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.

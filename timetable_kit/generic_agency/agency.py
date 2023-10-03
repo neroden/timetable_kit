@@ -76,6 +76,12 @@ class Agency:
             )
         self._feed = feed
 
+    def unofficial_disclaimer(self, doing_html: bool = True):
+        """Returns a string for a disclaimer about this not being an official product"""
+        # Agency names in GTFS are a mess and basically unusable.
+        # So without a specific agency name, we have to say something very generic.
+        return "This timetable is not an official product."
+
     def _prepare_dicts(self):
         """
         Prepare the dicts for:

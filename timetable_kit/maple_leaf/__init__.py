@@ -16,7 +16,6 @@ from .agency import get_singleton
 
 # Published agency name
 published_name = "Amtrak and VIA Rail"
-published_names_or = "Amtrak or VIA Rail"
 published_names_and = "Amtrak and VIA Rail"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
