@@ -28,12 +28,6 @@ from .merge_gtfs import (
     gtfs_unzipped_local_path,
 )
 
-# Published URL for the Hartford Line GTFS
-from .get_gtfs import (
-    published_gtfs_url,
-)
-
-
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 

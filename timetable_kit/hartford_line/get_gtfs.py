@@ -15,19 +15,11 @@ from zipfile import ZipFile
 
 import requests
 
-# Found at transit.land.  New on 6-14-2022.
-# Transitland URL (out of date):
-# published_gtfs_url = "https://www.transit.land/feeds/f-cttransit~hartford~line"
-# Old canonical GTFS url (out of date):
-# canonical_gtfs_url = "http://www.hartfordline.com/files/gtfs/gtfs.zip"
-#
-# Dammit!  They moved the GTFS AND changed its format. 7 Jul 2023.
-# An alternate GTFS seems to be at:
+# GTFS seems to be at:
 # https://www.cttransit.com/about/developers
 # But it uses *numerical* service IDs 1 (disabled), 2 (weekday), 3 (weekend)
 # and it's at https://www.ctrides.com/hlgtfs.zip
-published_gtfs_url = "https://www.ctrides.com/hlgtfs.zip"
-canonical_gtfs_url = published_gtfs_url
+canonical_gtfs_url = "https://www.ctrides.com/hlgtfs.zip"
 
 module_location = Path(__file__).parent
 

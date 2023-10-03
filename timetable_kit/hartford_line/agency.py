@@ -16,7 +16,7 @@ class AgencyHartfordLine(AgencyAmtrak):
 
     _agency_names = ["CTRail Hartford Line", "Amtrak"]
     _agency_published_gtfs_urls = [
-        "https://www.ctrides.com/hlgtfs.zip",
+        "https://www.cttransit.com/about/developers",
         AgencyAmtrak._agency_published_gtfs_urls[0],
     ]
 

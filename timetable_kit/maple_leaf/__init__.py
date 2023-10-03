@@ -30,13 +30,6 @@ from .merge_gtfs import (
     gtfs_unzipped_local_path,
 )
 
-# Published URL for the GTFS.... um.  Use Amtrak for now
-# Need to redo the templates to allow multiples
-published_gtfs_url = (
-    "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
-)
-
-
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 

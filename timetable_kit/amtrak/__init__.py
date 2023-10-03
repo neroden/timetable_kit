@@ -36,7 +36,6 @@ from .connecting_services_data import get_all_connecting_services
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_unzipped_local_path,
-    published_gtfs_url,
 )
 
 # How to title the routes at the top of the column
