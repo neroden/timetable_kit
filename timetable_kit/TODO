@@ -1,3 +1,11 @@
+
+For internal cleanliness & generalizing beyond Amtrak and VIA: 
+-- Continue transition from module-level functions to singletons
+-- Simplify Amtrak JSON->GTFS wheelchair access coding
+
+For generalizing beyond Amtrak and VIA:
+0 -- Fix up templates for multi-agency timetables, by redesigning the interface to allow for a list
+
 For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
 from the ./list_trains.py program (this is currently largely manual)
@@ -12,24 +20,14 @@ For VIA and generic timetables:
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
-For generalizing beyond Amtrak and VIA:
-0 -- Fix up templates for multi-agency timetables, by redesigning the interface to allow for a list
-1 -- Write "generic agency" code (largely based on VIA), then have Amtrak & VIA inherit from it
-2 -- Write a routine to patch Amtrak's GTFS based on the wheelchair access detection
-      from the Amtrak stations database.
-
 For simplifying and making Amtrak & VIA work better:
 1 -- Add checked_baggage field to GTFS specification (stops.txt and trips.txt).
      This is way too SOCIAL for me to want to actually do it!
      But it would massively simplify a large hunk of code
 
 Internal cleanup:
--1 -- Stop the duplicate loading of the feed in VIA's wheelchair access check.
-      We need to drive the feed loading down into a place where it's available to
-      the wheelchair access check directly.  This might be done with the aforementioned
-      "generic agency" code which I haven't written.
-
-    Plan for this: pass the agency through to produce_timetable instead of the feed.
+    Deal with the convoluted interactions between the agency object and the feed object.
+    Possoble plan for this: pass the agency through to produce_timetable instead of the feed.
     Initialize the feed in the initialization of the agency (possibly with commandline override).
     The feed is then available and present within the agency object.
 
