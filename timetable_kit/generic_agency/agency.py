@@ -21,6 +21,15 @@ from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
 class Agency:
     """Agency-specific code for interpreting specs and GTFS feeds for a generic agency"""
 
+    # The following class variables are overridden in subclasses.
+    # This is a list of the agency names for the disclaimers and credit
+    # (There is typically one, but sometimes more)
+    _agency_names = []
+    # This is a list of the agency (ticketing/website) URLs, parellel to the list of agency names
+    _agency_urls = []
+    # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
+    _agency_published_gtfs_urls = []
+
     def __init__(
         self: Agency,
     ) -> None:
@@ -34,13 +43,6 @@ class Agency:
         self._stop_code_to_stop_name_dict = None
         self._accessible_platform_dict = None
         self._inaccessible_platform_dict = None
-        # This is a list of the agency names for the disclaimers and credit
-        # (There is typically one, but sometimes more)
-        self._agency_names = []
-        # This is a list of the agency URLs, parellel to the list of agency names
-        self._agency_urls = []
-        # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
-        self._agency_published_gtfs_urls = []
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -97,6 +99,15 @@ class Agency:
                 "product.",
             ]
         )
+
+    def by_agency_with_gtfs_link(self, doing_html: bool = True):
+        """Returns a string like "by Amtrak and by VIA Rail", with the "by Amtrak" being a link to the Amtrak GTFS and similarly for the "by VIA Rail"."""
+        # Note that href_wrap has different behavior if doing_html is false
+        wrapped_by_names = [
+            href_wrap("by " + name, url, doing_html)
+            for name, url in zip(self._agency_names, self._agency_published_gtfs_urls)
+        ]
+        return " ".join(and_clause(wrapped_by_names))
 
     def _prepare_dicts(self):
         """

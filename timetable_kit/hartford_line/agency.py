@@ -14,11 +14,16 @@ from timetable_kit.amtrak import AgencyAmtrak
 class AgencyHartfordLine(AgencyAmtrak):
     """Hartford Line-specific code for interpreting specs and GTFS feeds"""
 
+    _agency_names = ["CTRail Hartford Line", "Amtrak"]
+    _agency_published_gtfs_urls = [
+        "https://www.ctrides.com/hlgtfs.zip",
+        AgencyAmtrak._agency_published_gtfs_urls[0],
+    ]
+
     def __init__(
         self: AgencyHartfordLine,
     ) -> None:
         super().__init__()
-        self._agency_names = ["CTRail Hartford Line", "Amtrak"]
 
 
 # Establish the singleton

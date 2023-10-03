@@ -16,11 +16,15 @@ import timetable_kit.amtrak.access as access  # for patch_add_wheelchair_boardin
 class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
 
+    _agency_names = ["Amtrak"]
+    _agency_published_gtfs_urls = [
+        "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
+    ]
+
     def __init__(
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
-        self._agency_names = ["Amtrak"]
 
     def stop_code_to_stop_id(self, stop_code: str) -> str:
         # Identity function for Amtrak

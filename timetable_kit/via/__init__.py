@@ -9,6 +9,9 @@ VIA-specific functions for timetable_kit.
 This defines an interface; Amtrak and others need to provide the same interface.
 """
 
+# The class for inheritance
+from .agency import AgencyVIA
+
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 

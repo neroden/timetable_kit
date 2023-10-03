@@ -16,11 +16,15 @@ import timetable_kit.via.gtfs_patches as gtfs_patches  # for patch_feed
 class AgencyVIA(Agency):
     """VIA-specific code for interpreting specs and GTFS feeds"""
 
+    _agency_names = ["VIA Rail"]
+    _agency_published_gtfs_urls = [
+        "https://www.transit.land/feeds/f-f-viarail~traindecharlevoix"
+    ]
+
     def __init__(
         self: AgencyVIA,
     ) -> None:
         super().__init__()
-        self._agency_names = ["VIA Rail"]
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """

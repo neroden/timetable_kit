@@ -9,16 +9,22 @@ This holds a class for "AgencyMapleLeaf" intended to be used as a singleton.
 from __future__ import annotations
 
 from timetable_kit.amtrak import AgencyAmtrak
+from timetable_kit.via import AgencyVIA
 
 
 class AgencyMapleLeaf(AgencyAmtrak):
     """Maple Leaf-specific code for interpreting specs and GTFS feeds"""
 
+    _agency_names = ["Amtrak", "VIA Rail"]
+    _agency_published_gtfs_urls = [
+        AgencyAmtrak._agency_published_gtfs_urls[0],
+        AgencyVIA._agency_published_gtfs_urls[0],
+    ]
+
     def __init__(
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
-        self._agency_names = ["Amtrak", "VIA Rail"]
 
 
 # Establish the singleton
