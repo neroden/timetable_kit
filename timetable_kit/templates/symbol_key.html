@@ -67,12 +67,11 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
       <td>Flag stop (only stops by request)</td>
     </tr>{#
 #}{% endif %}{% if key_bus %}{#
-NOTE -- agency_name is "Amtrak" for Amtrak timetables.
-So this says "can be booked through Amtrak" / "can be booked through VIA" etc.
+This says "can be booked through Amtrak" / "can be booked through VIA" etc.
 -- don't use for connecting buses which require separate booking.  FIXME
 #}    <tr>
       <td><b>{{bus_icon}}</b></td>
-      <td>Connecting Bus Service (can be booked through {{agency_name}})</td>
+      <td>{{connecting_bus_key_sentence}}Connecting Bus Service</td>
     </tr>{#
 #}{% endif %}{% if key_tz %}{#
 #}    <tr>

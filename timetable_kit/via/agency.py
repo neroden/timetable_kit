@@ -67,6 +67,20 @@ class AgencyVIA(Agency):
         # FIXME later.  For now, return false.
         return False
 
+    def connecting_bus_key_sentence(self, doing_html=True) -> str:
+        """
+        Sentence to put in the symbol key for connecting bus services
+        """
+        return "Connecting Bus Service (can be booked through VIA Rail)"
+
+    def add_via_disclaimer(self, doing_html=True) -> bool:
+        """
+        Should we add the VIA disclaimer?
+
+        This is boolean because the disclaimer is multiline and needs Jinja macros.
+        """
+        return True
+
 
 # Establish the singleton
 _singleton = AgencyVIA()

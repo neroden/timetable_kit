@@ -23,7 +23,7 @@ class Agency:
 
     # The following class variables are overridden in subclasses.
     # This is a list of the agency names for the disclaimers and credit
-    # (There is typically one, but sometimes more)
+    # (There is typically one, but sometimes more.)
     _agency_names = []
     # This is a list of the agency (ticketing/website) URLs, parellel to the list of agency names
     _agency_urls = []
@@ -284,6 +284,22 @@ class Agency:
         # and seeing which trains are run by different agencies.
         # That's complicated.
         # For the default, we return false.
+        return False
+
+    # Connecting bus service key
+    def connecting_bus_key_sentence(self, doing_html=True) -> str:
+        """
+        Sentence to put in the symbol key for connecting bus services
+        """
+        return "Connecting Bus Service"
+
+    def add_via_disclaimer(self, doing_html=True) -> bool:
+        """
+        Should we add the VIA disclaimer?
+
+        This is boolean because the disclaimer is multiline and needs Jinja macros.
+        """
+        # There is probably a better way to do this.
         return False
 
 

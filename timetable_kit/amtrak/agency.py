@@ -100,6 +100,12 @@ class AgencyAmtrak(Agency):
         # However, we have a working implementation based on tsns.
         return special_data.is_connecting_service(tsn)
 
+    def connecting_bus_key_sentence(self, doing_html=True) -> str:
+        """
+        Sentence to put in the symbol key for connecting bus services
+        """
+        return "Connecting Bus Service (can be booked through Amtrak)"
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()

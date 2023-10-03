@@ -12,7 +12,9 @@ from timetable_kit.amtrak import AgencyAmtrak
 from timetable_kit.via import AgencyVIA
 
 
-class AgencyMapleLeaf(AgencyAmtrak):
+# This should mostly be based on Amtrak.
+# The inheritance from VIA is to grab the VIA disclaimer.
+class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
     """Maple Leaf-specific code for interpreting specs and GTFS feeds"""
 
     _agency_names = ["Amtrak", "VIA Rail"]

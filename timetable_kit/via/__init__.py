@@ -16,8 +16,6 @@ from .agency import AgencyVIA
 from .agency import get_singleton
 
 
-# Published agency name
-published_name = "VIA Rail"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "ViaRail.ca"

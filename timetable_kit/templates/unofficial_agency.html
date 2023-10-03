@@ -2,8 +2,6 @@
    Part of timetable_kit
    Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-   As part of generalizing beyond Amtrak, this uses "agency_name" ("Amtrak")
-
 #}{% from "macros.html" import br_or_space %}{#
 #}<div class="unofficial-agency"><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
 #}{{ unofficial_disclaimer }}{{ br_or_space(key_on_right) }}{#
@@ -17,5 +15,5 @@
 #}{% endif %}{#
 #},{{ br_or_space(key_on_right) }}based on GTFS data released to the public,{#
 #}{{ br_or_space(key_on_right) }}{{ by_agency_with_gtfs_link }}and on other data sources.{#
-#}{% if agency_name == "VIA Rail" or agency_name =="Maple Leaf" %}{% include "via_disclaimer.html" %}{% endif %}{#
+#}{% if add_via_disclaimer %}{% include "via_disclaimer.html" %}{% endif %}{#
 #}</p></div>

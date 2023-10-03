@@ -15,8 +15,6 @@ from .agency import AgencyAmtrak
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-# Published agency name
-published_name = "Amtrak"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"

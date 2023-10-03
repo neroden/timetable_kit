@@ -281,12 +281,13 @@ def finish_html_timetable(
         "end_date": end_date_str,
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
-        "agency_name": agency().published_name,  # e.g. "Amtrak"
         "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
         "unofficial_disclaimer": agency_singleton().unofficial_disclaimer(),
         "by_agency_with_gtfs_link": agency_singleton().by_agency_with_gtfs_link(),  # "by Amtrak"
         "agency_website": agency().published_website,  # e.g. "Amtrak.com" -- with capitalization, no https://
         "agency_css_class": agency().css_class,  # e.g. amtrak-special-css -- currently just changes header color
+        "connecting_bus_key_sentence": agency_singleton().connecting_bus_key_sentence(),  # "Connecting Bus Service (can be booked through Amtrak)"
+        "add_via_disclaimer": agency_singleton().add_via_disclaimer(),  # True or False
     }
 
     # Allows direct icon references in Jinja2

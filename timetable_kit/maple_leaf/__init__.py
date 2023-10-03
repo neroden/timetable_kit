@@ -14,8 +14,6 @@ from .agency import get_singleton
 # Hartford Line leans on Amtrak functions, but this does not work
 # import timetable_kit.amtrak as amtrak
 
-# Published agency name
-published_name = "Amtrak and VIA Rail"
 # Published agency website, for printing.
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"
