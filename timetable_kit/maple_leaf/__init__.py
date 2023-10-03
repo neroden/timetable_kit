@@ -76,11 +76,6 @@ from .station_names import get_station_name_pretty
 from timetable_kit.amtrak.baggage import station_has_checked_baggage
 from timetable_kit.amtrak.special_data import train_has_checked_baggage
 
-# Special routine to patch Amtrak's defective GTFS feed
-# (VIA does not currently need patches)
-# This also patches the wheelchair-access information
-# from Amtrak's JSON database into the feed
-from timetable_kit.amtrak.gtfs_patches import patch_feed
 
 # For colorizing columns
 from timetable_kit.amtrak.special_data import (

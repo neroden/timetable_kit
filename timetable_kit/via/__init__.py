@@ -64,10 +64,6 @@ def station_has_inaccessible_platform(station_code: str):
     return get_singleton().station_has_inaccessible_platform(station_code)
 
 
-# Patch errors in the feed
-from .gtfs_patches import patch_feed
-
-
 # For colorizing columns
 from .special_data import (
     is_connecting_service,

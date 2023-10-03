@@ -62,9 +62,6 @@ from .get_gtfs import (
     published_gtfs_url,
 )
 
-# Special routine to patch Amtrak's defective GTFS feed
-from .gtfs_patches import patch_feed
-
 # How to title the routes at the top of the column
 from .route_names import get_route_name
 
