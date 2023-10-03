@@ -14,6 +14,10 @@ from timetable_kit.via import AgencyVIA
 # For get_station_name_pretty, our version
 import timetable_kit.maple_leaf.station_names as station_names
 
+# Map from station codes to connecting service names
+# This is stashed in a class variable
+from timetable_kit.via.connecting_services_data import connecting_services_dict
+
 
 # This should mostly be based on Amtrak.
 # The inheritance from VIA is to grab the VIA disclaimer.
@@ -29,6 +33,8 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         AgencyAmtrak._agency_published_gtfs_urls[0],
         AgencyVIA._agency_published_gtfs_urls[0],
     ]
+    # Initialized from connecting_services_data.py
+    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyAmtrak,

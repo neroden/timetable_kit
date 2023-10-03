@@ -30,6 +30,9 @@ class Agency:
     _agency_websites = []
     # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
     _agency_published_gtfs_urls = []
+    # This is the dict of *all* the possible connecting services
+    # Generally initialized from a static file in the module
+    _connecting_services_dict = []
 
     def __init__(
         self: Agency,
@@ -331,6 +334,19 @@ class Agency:
         """
         # Default is blank.  This generates class="".
         return ""
+
+    def get_all_connecting_services(self, station_list: list[str]) -> list[str]:
+        """
+        Given a list of station codes, return a list of services which connect
+        (with no duplicates)
+        """
+        all_services = []
+        for station in station_list:
+            new_services = self._connecting_services_dict.get(station, [])
+            for service in new_services:
+                if service not in all_services:
+                    all_services.append(service)
+        return all_services
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True

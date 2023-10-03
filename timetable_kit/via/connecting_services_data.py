@@ -68,6 +68,7 @@ connecting_services_dict = {
 }
 
 
+# This is now only used for testing; the real version is in generic_agency
 def get_all_connecting_services(station_list: list[str]) -> list:
     """
     Given a list of station codes, return a list of services which connect

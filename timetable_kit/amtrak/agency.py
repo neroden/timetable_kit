@@ -25,6 +25,10 @@ import timetable_kit.amtrak.baggage as baggage
 # for get_station_name_pretty
 import timetable_kit.amtrak.station_names as station_names
 
+# Map from station codes to connecting service names
+# This is stashed in a class variable
+from timetable_kit.via.connecting_services_data import connecting_services_dict
+
 
 class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
@@ -34,6 +38,8 @@ class AgencyAmtrak(Agency):
     _agency_published_gtfs_urls = [
         "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
     ]
+    # Initialized from connecting_services_data.py
+    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyAmtrak,

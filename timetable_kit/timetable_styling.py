@@ -243,7 +243,7 @@ def finish_html_timetable(
 
     # Key for connecting services:
     # First use the station codes list to get a list of all *relevant* services
-    services_list = agency().get_all_connecting_services(station_codes_list)
+    services_list = agency_singleton().get_all_connecting_services(station_codes_list)
     # Then feed that through to get the full key html:
     connecting_services_keys_html = connecting_services.get_keys_html(
         services_list=services_list, one_line=connecting_services_one_line

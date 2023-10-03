@@ -17,7 +17,7 @@ import timetable_kit.via.gtfs_patches as gtfs_patches
 # For checked baggage, sleeper trains
 import timetable_kit.via.special_data as special_data
 
-# All these are for get_station_name_pretty
+# All the rest are for get_station_name_pretty
 from timetable_kit.debug import set_debug_level, debug_print
 
 # For subroutines of get_station_name_pretty
@@ -26,7 +26,8 @@ import timetable_kit.via.station_names as station_names
 # Should the station be boldfaced
 from timetable_kit.via.special_data import is_standard_major_station
 
-# Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
+# Map from station codes to connecting service names
+# This is stashed in a class variable
 from timetable_kit.via.connecting_services_data import connecting_services_dict
 
 # Find the HTML for a specific connecting agency's logo
@@ -41,6 +42,8 @@ class AgencyVIA(Agency):
     _agency_published_gtfs_urls = [
         "https://www.transit.land/feeds/f-f-viarail~traindecharlevoix"
     ]
+    # Initialized from connecting_services_data.py
+    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyVIA,
