@@ -5,40 +5,19 @@
 """
 Utility routines to style VIA station names as HTML or text.
 
-Exported:
-get_station_name_pretty
+Subroutine of get_station_name_pretty
 """
-
-from timetable_kit.debug import set_debug_level, debug_print
-
-# The singleton -- for converting stop code to stop name
-from timetable_kit.via import get_singleton
-
-# Should the station be boldfaced
-from timetable_kit.via.special_data import is_standard_major_station
-
-# Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
-from timetable_kit.via.connecting_services_data import connecting_services_dict
-
-# Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_service_logo_html
+from __future__ import annotations
 
 
-def get_station_name_pretty(
-    station_code: str, doing_multiline_text=False, doing_html=False
-) -> str:
-    """Given a VIA stop_code, return a suitable station name for plaintext, multiline text, or HTML"""
+def _fix_name_and_facility(
+    stop_name_raw: str, facility_name: Optional[str]
+) -> Tuple[str, Optional[str]]:
+    """
+    Fix situations where the stop name contains facility info.
 
-    # First, get the raw station name: Memoized
-    stop_name_raw = get_singleton().stop_code_to_stop_name(station_code)
-    # Is it major?
-    major = is_standard_major_station(station_code)
-
-    # Default to no facility name
-    facility_name = None
-    # Default to no connections from the name (this is unused)
-    connections_from_name = []
-
+    Returns (name, facility)
+    """
     # Several stations have (EXO) in parentheses: one has (exo).  Get rid of this.
     # Some have GO Bus or GO as suffixes.  Get rid of this.
     # Clarify the confusing Niagara Falls situation.
@@ -87,81 +66,4 @@ def get_station_name_pretty(
             # There ARE two train stations in Vancouver
             facility_name = "Pacific Central Station"
 
-    # We actually want to add the province to every station,
-    # but VIA doesn't provide that info.  It's too much work.
-    # FIXME
-
-    # Uppercase major stations
-    if major:
-        stop_name_styled = stop_name_clean.upper()
-    else:
-        stop_name_styled = stop_name_clean
-
-    # Default facility_name_addon to nothing...
-    facility_name_addon = ""
-    if doing_html:
-        # There is some duplication of code between here and the Amtrak module.
-        # Hence the misleading use of "city_state_name".  FIXME by pulling out common code
-        city_state_name = stop_name_clean
-
-        if major:
-            enhanced_city_state_name = "".join(
-                ["<span class=major-station >", city_state_name, "</span>"]
-            )
-        else:
-            enhanced_city_state_name = "".join(
-                ["<span class=minor-station >", city_state_name, "</span>"]
-            )
-
-        enhanced_station_code = "".join(
-            ["<span class=station-footnotes>(", station_code, ")</span>"]
-        )
-
-        if facility_name:
-            facility_name_addon = "".join(
-                [
-                    "<br>",
-                    "<span class=station-footnotes>",
-                    " - ",
-                    facility_name,
-                    "</span>",
-                ]
-            )
-
-        connection_logos_html = ""
-        connecting_services = connecting_services_dict.get(station_code, [])
-        for connecting_service in connecting_services:
-            # Note, this is "" if the agency is not found (but a debug error will print)
-            # Otherwise it's a complete HTML code for the agency & its icon
-            this_logo_html = get_connecting_service_logo_html(connecting_service)
-            if this_logo_html:
-                # Add a space before the logo... if it exists at all
-                connection_logos_html += " "
-                connection_logos_html += this_logo_html
-
-        cooked_station_name = "".join(
-            [
-                enhanced_city_state_name,
-                " ",
-                enhanced_station_code,
-                facility_name_addon,  # Has its own space or <br> before it
-                connection_logos_html,  # Has spaces or <br> before it as needed
-            ]
-        )
-
-    elif doing_multiline_text:
-        # Multiline text. "Toronto (TRTO)\nSuffix"
-        if facility_name:
-            facility_name_addon = "\n - " + facility_name
-        cooked_station_name = "".join(
-            [stop_name_styled, " (", stop_code, ")", facility_name_addon]
-        )
-    else:
-        # Single Line text: "Toronto - Suffix (TRTO)"
-        if facility_name:
-            facility_name_addon = " - " + facility_name
-        cooked_station_name = "".join(
-            [stop_name_styled, facility_name_addon, " (", stop_code, ")"]
-        )
-
-    return cooked_station_name
+    return (stop_name_clean, facility_name)

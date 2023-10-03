@@ -1,6 +1,6 @@
 # via/agency.py
 # Part of timetable_kit
-# Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """
 timetable_kit.via.agency module
 
@@ -16,6 +16,21 @@ import timetable_kit.via.gtfs_patches as gtfs_patches
 
 # For checked baggage, sleeper trains
 import timetable_kit.via.special_data as special_data
+
+# All these are for get_station_name_pretty
+from timetable_kit.debug import set_debug_level, debug_print
+
+# For subroutines of get_station_name_pretty
+import timetable_kit.via.station_names as station_names
+
+# Should the station be boldfaced
+from timetable_kit.via.special_data import is_standard_major_station
+
+# Map from station codes to connecting service names (matching those in timetable_kit.connecting_services)
+from timetable_kit.via.connecting_services_data import connecting_services_dict
+
+# Find the HTML for a specific connecting agency's logo
+from timetable_kit.connecting_services import get_connecting_service_logo_html
 
 
 class AgencyVIA(Agency):
@@ -87,6 +102,107 @@ class AgencyVIA(Agency):
         Name of a CSS class for agency-specific styling
         """
         return "via-special-css"
+
+    def get_station_name_pretty(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Given a VIA stop_code, return a suitable pretty-printed station name
+        for plaintext, multiline text, or HTML
+        """
+        # This is long.
+
+        # First, get the raw station name: Memoized
+        stop_name_raw = self.stop_code_to_stop_name(station_code)
+        # Is it major?
+        major = is_standard_major_station(station_code)
+
+        # Default to no facility name
+        facility_name = None
+
+        # Call a subroutine to handle all the special cases
+        # for specific named stations (Montreal, Vancouver, Niagara Falls, etc.)
+        (stop_name_clean, facility_name) = station_names._fix_name_and_facility(
+            stop_name_raw, facility_name
+        )
+
+        # We actually want to add the province to every station,
+        # but VIA doesn't provide that info.  It's too much work.
+        # FIXME
+
+        # Uppercase major stations
+        if major:
+            stop_name_styled = stop_name_clean.upper()
+        else:
+            stop_name_styled = stop_name_clean
+
+        # Default facility_name_addon to nothing...
+        facility_name_addon = ""
+        if doing_html:
+            # There is some duplication of code between here and the Amtrak module.
+            # Hence the misleading use of "city_state_name".  FIXME by pulling out common code
+            city_state_name = stop_name_clean
+
+            if major:
+                enhanced_city_state_name = "".join(
+                    ["<span class=major-station >", city_state_name, "</span>"]
+                )
+            else:
+                enhanced_city_state_name = "".join(
+                    ["<span class=minor-station >", city_state_name, "</span>"]
+                )
+
+            enhanced_station_code = "".join(
+                ["<span class=station-footnotes>(", station_code, ")</span>"]
+            )
+
+            if facility_name:
+                facility_name_addon = "".join(
+                    [
+                        "<br>",
+                        "<span class=station-footnotes>",
+                        " - ",
+                        facility_name,
+                        "</span>",
+                    ]
+                )
+
+            connection_logos_html = ""
+            connecting_services = connecting_services_dict.get(station_code, [])
+            for connecting_service in connecting_services:
+                # Note, this is "" if the agency is not found (but a debug error will print)
+                # Otherwise it's a complete HTML code for the agency & its icon
+                this_logo_html = get_connecting_service_logo_html(connecting_service)
+                if this_logo_html:
+                    # Add a space before the logo... if it exists at all
+                    connection_logos_html += " "
+                    connection_logos_html += this_logo_html
+
+            cooked_station_name = "".join(
+                [
+                    enhanced_city_state_name,
+                    " ",
+                    enhanced_station_code,
+                    facility_name_addon,  # Has its own space or <br> before it
+                    connection_logos_html,  # Has spaces or <br> before it as needed
+                ]
+            )
+
+        elif doing_multiline_text:
+            # Multiline text. "Toronto (TRTO)\nSuffix"
+            if facility_name:
+                facility_name_addon = "\n - " + facility_name
+            cooked_station_name = "".join(
+                [stop_name_styled, " (", stop_code, ")", facility_name_addon]
+            )
+        else:
+            # Single Line text: "Toronto - Suffix (TRTO)"
+            if facility_name:
+                facility_name_addon = " - " + facility_name
+            cooked_station_name = "".join(
+                [stop_name_styled, facility_name_addon, " (", stop_code, ")"]
+            )
+        return cooked_station_name
 
 
 # Establish the singleton

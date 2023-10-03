@@ -11,6 +11,9 @@ from __future__ import annotations
 from timetable_kit.amtrak import AgencyAmtrak
 from timetable_kit.via import AgencyVIA
 
+# For get_station_name_pretty, our version
+import timetable_kit.maple_leaf.station_names as station_names
+
 
 # This should mostly be based on Amtrak.
 # The inheritance from VIA is to grab the VIA disclaimer.
@@ -31,6 +34,18 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
+
+    def get_station_name_pretty(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Pretty-print a station name.
+        """
+        return station_names.get_station_name_pretty(
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
 
 
 # Establish the singleton

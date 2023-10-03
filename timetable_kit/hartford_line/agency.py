@@ -10,6 +10,9 @@ from __future__ import annotations
 
 from timetable_kit.amtrak import AgencyAmtrak
 
+# For our version of get_station_name_pretty
+import timetable_kit.hartford_line.station_names as station_names
+
 
 class AgencyHartfordLine(AgencyAmtrak):
     """Hartford Line-specific code for interpreting specs and GTFS feeds"""
@@ -25,6 +28,18 @@ class AgencyHartfordLine(AgencyAmtrak):
         self: AgencyHartfordLine,
     ) -> None:
         super().__init__()
+
+    def get_station_name_pretty(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Pretty-print a station name.
+        """
+        return station_names.get_station_name_pretty(
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
 
 
 # Establish the singleton

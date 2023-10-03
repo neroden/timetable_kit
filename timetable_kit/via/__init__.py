@@ -23,10 +23,6 @@ from .get_gtfs import (
 # How to title the routes at the top of the column
 from .route_names import get_route_name
 
-# Routine to pretty-print a station name
-# (including subtitles, connecting agency logos, etc.)
-from .station_names import get_station_name_pretty
-
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services

@@ -27,18 +27,9 @@ class Agency:
     # stop_name_dict
 
     def __init__(self, feed: gtfs_kit.Feed):
-        self.stop_name_dict = dict(zip(feed.stops["stop_id"], feed.stops["stop_name"]))
         self.route_name_dict = dict(
             zip(feed.routes["route_id"], feed.routes["route_long_name"])
         )
-
-    def get_station_name_pretty(
-        self, stop_id: str, doing_multiline_text=False, doing_html=False
-    ) -> str:
-        """Given a stop_id, returns a stop_name from GTFS, with possible prettyprinting"""
-        raw_name = self.stop_name_dict[stop_id]
-        # FIXME -- need to do the prettyprinting
-        return raw_name
 
     def get_route_name(self, route_id: str) -> str:
         """Given a route_id, return a route_long_name from GTFS"""
@@ -58,8 +49,3 @@ if __name__ == "__main__":
     master_feed = initialize_feed(gtfs=gtfs_filename)
     my_agency = Agency(master_feed)
     print(my_agency.get_stop_name("ALB"))
-    # This works but is ugly / undesirable
-    my_agency.get_station_name_pretty = amtrak.get_station_name_pretty
-    print(my_agency.get_station_name_pretty("ALB"))
-    print(my_agency.get_station_name_pretty("ALB", doing_multiline_text=True))
-    print(my_agency.get_station_name_pretty("ALB", doing_html=True))

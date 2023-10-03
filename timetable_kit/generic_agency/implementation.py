@@ -17,8 +17,3 @@ def get_route_name(today_feed, route_id) -> str:
     """
     # Unacceptable stub implementation
     return str(route_id)
-
-
-def get_station_name_pretty(station_code: str) -> str:
-    # Unacceptable stub implementation
-    return station_code

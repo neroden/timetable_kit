@@ -172,7 +172,7 @@ class Agency:
 
         if "stop_code" not in self._feed.stops.columns:
             # Amtrak doesn't have stop_code, so don't make the translation dicts in this case.
-            # Also don't make the stop name dict, as Amtrak has its own way of finding names.
+            # Also won't need the stop name dict, as Amtrak has its own way of finding names.
             # In this case, copy the stop_ids into the stop_codes for the wheelchair access dicts later.
             stop_codes = stop_ids
             pass
@@ -181,8 +181,10 @@ class Agency:
             stop_codes = self._feed.stops["stop_code"].to_list()
             self._stop_code_to_stop_id_dict = dict(zip(stop_codes, stop_ids))
             self._stop_id_to_stop_code_dict = dict(zip(stop_ids, stop_codes))
-            # And make the stop name dict.
-            self._stop_code_to_stop_name_dict = dict(zip(stop_codes, stop_names))
+
+        # We make the stop name dict even if there wasn't a stop_codes column.
+        # A generic agency may need it, although Amtrak does not use it.
+        self._stop_code_to_stop_name_dict = dict(zip(stop_codes, stop_names))
 
         # OK.  Now wheelchair boarding.
 
@@ -329,6 +331,18 @@ class Agency:
         """
         # Default is blank.  This generates class="".
         return ""
+
+    def get_station_name_pretty(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Pretty-print a station name.
+
+        The default implementation just prints the station name from GTFS.
+        """
+        # First, get the raw station name: Memoized
+        stop_name_raw = self.stop_code_to_stop_name(station_code)
+        return stop_name_raw
 
 
 # Establish the singleton

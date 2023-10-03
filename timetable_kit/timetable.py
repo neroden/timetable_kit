@@ -965,7 +965,7 @@ def fill_tt_spec(
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
                     # FIXME: no way to tell it to use connecting services or not to.
-                    station_name_str = agency().get_station_name_pretty(
+                    station_name_str = agency_singleton().get_station_name_pretty(
                         station_code,
                         doing_html=doing_html,
                         doing_multiline_text=doing_multiline_text,

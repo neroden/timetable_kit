@@ -26,7 +26,3 @@ from .get_gtfs import (
 
 # How to title the routes at the top of the column
 from .route_names import get_route_name
-
-# Routine to pretty-print a station name
-# (including subtitles, connecting agency logos, etc.)
-from .station_names import get_station_name_pretty

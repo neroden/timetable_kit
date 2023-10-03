@@ -22,6 +22,9 @@ import timetable_kit.amtrak.special_data as special_data
 # for whether stations have checked baggage
 import timetable_kit.amtrak.baggage as baggage
 
+# for get_station_name_pretty
+import timetable_kit.amtrak.station_names as station_names
+
 
 class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
@@ -112,6 +115,27 @@ class AgencyAmtrak(Agency):
         Name of a CSS class for agency-specific styling
         """
         return "amtrak-special-css"
+
+    def stop_code_to_stop_name(self, stop_code: str) -> str:
+        """
+        This should not be called on Amtrak-derived GTFS.
+        Throw an error.
+        """
+        raise RuntimeError(
+            "stop_code_to_stop_name called on Amtrak-derived GTFS; should not happen"
+        )
+
+    def get_station_name_pretty(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Pretty-print a station name.
+        """
+        return station_names.get_station_name_pretty(
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
 
 
 # Establish the singleton
