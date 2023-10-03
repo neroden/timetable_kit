@@ -107,7 +107,25 @@ class Agency:
             href_wrap("by " + name, url, doing_html)
             for name, url in zip(self._agency_names, self._agency_published_gtfs_urls)
         ]
-        return " ".join(and_clause(wrapped_by_names))
+        joined_clause = " ".join(and_clause(wrapped_by_names))
+        if joined_clause:
+            joined_clause += ", "
+        # The way this is used in the Jinja template, it's preceded by ", ".
+        # If blank, leave blank.
+        # If not blank, finish off with ", ".
+        # We can't move this all into code because we need to be able to refer to
+        # key_on_right to do line breaking in the Jinja template.
+        return joined_clause
+
+    def gtfs_data_link(self, doing_html: bool = True):
+        """Returns the string "GTFS data", possibly with an appropriate link."""
+        if doing_html and len(self._agency_published_gtfs_urls) == 1:
+            return href_wrap(
+                "GTFS data", self._agency_published_gtfs_urls[0], doing_html
+            )
+        else:
+            # With 0 or 2+ GTFS urls or when not doing HTML, don't make a link.
+            return "GTFS data"
 
     def _prepare_dicts(self):
         """

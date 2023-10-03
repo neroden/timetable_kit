@@ -281,10 +281,10 @@ def finish_html_timetable(
         "end_date": end_date_str,
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
-        "gtfs_url": agency().published_gtfs_url,  # e.g. URL to Amtrak GTFS
         "agency_name": agency().published_name,  # e.g. "Amtrak"
+        "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
         "unofficial_disclaimer": agency_singleton().unofficial_disclaimer(),
-        "agency_names_and": agency().published_names_and,  # e.g. "Amtrak" -- "Amtrak and VIA Rail" for Maple Leaf
+        "by_agency_with_gtfs_link": agency_singleton().by_agency_with_gtfs_link(),  # "by Amtrak"
         "agency_website": agency().published_website,  # e.g. "Amtrak.com" -- with capitalization, no https://
         "agency_css_class": agency().css_class,  # e.g. amtrak-special-css -- currently just changes header color
     }
