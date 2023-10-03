@@ -42,18 +42,6 @@ from .station_names import get_station_name_pretty
 from .special_data import station_has_checked_baggage
 from .special_data import train_has_checked_baggage
 
-
-# This is a temporary testing hack
-# Later we will call these directly from the singleton
-# Platform accessibility
-def station_has_accessible_platform(station_code: str):
-    return get_singleton().station_has_accessible_platform(station_code)
-
-
-def station_has_inaccessible_platform(station_code: str):
-    return get_singleton().station_has_inaccessible_platform(station_code)
-
-
 # For colorizing columns
 from .special_data import (
     is_connecting_service,

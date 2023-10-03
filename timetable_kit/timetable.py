@@ -977,12 +977,13 @@ def fill_tt_spec(
                 case [_, "access", _]:
                     cell_css_list.append("access-cell")
                     access_str = ""
-                    # Currently Amtrak-specific.
-                    if agency().station_has_accessible_platform(station_code):
+                    if agency_singleton().station_has_accessible_platform(station_code):
                         access_str += icons.get_accessible_icon_html(
                             doing_html=doing_html
                         )
-                    elif agency().station_has_inaccessible_platform(station_code):
+                    elif agency_singleton().station_has_inaccessible_platform(
+                        station_code
+                    ):
                         access_str += icons.get_inaccessible_icon_html(
                             doing_html=doing_html
                         )

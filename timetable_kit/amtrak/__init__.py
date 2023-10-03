@@ -27,18 +27,6 @@ published_website = "Amtrak.com"
 # Currently only used to change the header bar color.
 css_class = "amtrak-special-css"
 
-
-# This is a temporary testing hack
-# Later we will call these directly from the singleton
-# Platform accessibility
-def station_has_accessible_platform(station_code: str):
-    return get_singleton().station_has_accessible_platform(station_code)
-
-
-def station_has_inaccessible_platform(station_code: str):
-    return get_singleton().station_has_inaccessible_platform(station_code)
-
-
 # Baggage
 from .baggage import station_has_checked_baggage
 

@@ -41,17 +41,6 @@ published_gtfs_url = (
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-
-# This is a temporary testing hack
-# Platform accessibility
-def station_has_accessible_platform(station_code: str):
-    return get_singleton().station_has_accessible_platform(station_code)
-
-
-def station_has_inaccessible_platform(station_code: str):
-    return get_singleton().station_has_inaccessible_platform(station_code)
-
-
 # Most of the rest of this should be copied from Amtrak
 
 # How to title the routes at the top of the column
