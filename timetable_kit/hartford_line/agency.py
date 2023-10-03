@@ -8,10 +8,10 @@ This holds a class for "AgencyHartfordLine" intended to be used as a singleton.
 """
 from __future__ import annotations
 
-from timetable_kit.generic_agency import Agency
+from timetable_kit.amtrak import AgencyAmtrak
 
 
-class AgencyHartfordLine(Agency):
+class AgencyHartfordLine(AgencyAmtrak):
     """Hartford Line-specific code for interpreting specs and GTFS feeds"""
 
     def __init__(
