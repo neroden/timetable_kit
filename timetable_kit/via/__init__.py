@@ -41,7 +41,6 @@ from .station_names import get_station_name_pretty
 # For colorizing columns
 from .special_data import (
     is_connecting_service,
-    is_high_speed_train,
 )
 
 # For making the key for connecting services (including only those in this timetable)

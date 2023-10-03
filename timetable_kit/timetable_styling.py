@@ -87,7 +87,7 @@ def get_time_column_stylings(
     elif agency_singleton().is_sleeper_train(tsn):
         color_css = "background-color: lavender;"
         color_css_class = "color-sleeper"
-    elif agency().is_high_speed_train(tsn):
+    elif agency_singleton().is_high_speed_train(tsn):
         color_css = "background-color: aliceblue;"
         color_css_class = "color-high-speed-train"
     else:

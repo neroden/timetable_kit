@@ -108,16 +108,6 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
     """
     return trip_short_name in checked_baggage_trains
 
-
-def is_high_speed_train(trip_short_name: str) -> bool:
-    """
-    Given a trip_short_name (train number) return "True" if we should color it as a high speed train.
-
-    For VIA?  False.
-    """
-    return False
-
-
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
 # This list started as stations which VIA boldfaces on their website

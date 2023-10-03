@@ -40,7 +40,6 @@ from .route_names import get_route_name
 # For colorizing columns
 from .special_data import (
     is_connecting_service,
-    is_high_speed_train,
 )
 
 # Routine to pretty-print a station name

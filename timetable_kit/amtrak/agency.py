@@ -84,6 +84,12 @@ class AgencyAmtrak(Agency):
         """
         return special_data.is_sleeper_train(tsn)
 
+    def is_high_speed_train(self, tsn: str) -> bool:
+        """
+        Should this train be marked as high-speed in the timetable?
+        """
+        return special_data.is_high_speed_train(tsn)
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()
