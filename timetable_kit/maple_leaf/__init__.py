@@ -38,14 +38,27 @@ published_gtfs_url = (
 )
 
 
-# These are do-nothings for Amtrak and Hartford Line, but
-# quite significant for VIA Rail
-def stop_code_to_stop_id(stop_code: str) -> str:
-    return stop_code
+# The singleton instance of a class, for stateful memoization
+from .agency import get_singleton
 
 
-def stop_id_to_stop_code(stop_id: str) -> str:
-    return stop_id
+# This is a temporary testing hack
+# Later we will call these directly from the singleton
+def stop_code_to_stop_id(stop_code: str):
+    return get_singleton().stop_code_to_stop_id(stop_code)
+
+
+def stop_id_to_stop_code(stop_id: str):
+    return get_singleton().stop_id_to_stop_code(stop_id)
+
+
+# Platform accessibility
+def station_has_accessible_platform(station_code: str):
+    return get_singleton().station_has_accessible_platform(station_code)
+
+
+def station_has_inaccessible_platform(station_code: str):
+    return get_singleton().station_has_inaccessible_platform(station_code)
 
 
 # Most of the rest of this should be copied from Amtrak
@@ -63,15 +76,10 @@ from .station_names import get_station_name_pretty
 from timetable_kit.amtrak.baggage import station_has_checked_baggage
 from timetable_kit.amtrak.special_data import train_has_checked_baggage
 
-# Platform accessibility
-# (BUT WAIT... Need to use GTFS data for VIA) TODO
-from timetable_kit.amtrak.access import (
-    station_has_accessible_platform,
-    station_has_inaccessible_platform,
-)
-
 # Special routine to patch Amtrak's defective GTFS feed
 # (VIA does not currently need patches)
+# This also patches the wheelchair-access information
+# from Amtrak's JSON database into the feed
 from timetable_kit.amtrak.gtfs_patches import patch_feed
 
 # For colorizing columns

@@ -8,14 +8,14 @@ This holds a class for "AgencyMapleLeaf" intended to be used as a singleton.
 """
 from __future__ import annotations
 
-from timetable_kit.generic_agency import Agency
+from timetable_kit.amtrak import AgencyAmtrak
 
 
-class AgencyMapleLeaf(Agency):
+class AgencyMapleLeaf(AgencyAmtrak):
     """Maple Leaf-specific code for interpreting specs and GTFS feeds"""
 
     def __init__(
-        self: AgencyMapleLeaf,
+        self: AgencyAmtrak,
     ) -> None:
         super().__init__()
 

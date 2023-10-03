@@ -146,23 +146,56 @@ def station_wheelchair_boarding_gtfs_code(station_code: str) -> int:
         return 0
 
 
+def combine_wheelchair_boarding_columns(old: int, new: int) -> int:
+    """
+    Combine two wheelchair boarding GTFS codes.
+    Prefer "old", but if "old" is 0, use "new".
+    """
+    if old:
+        return old
+    else:
+        return new
+
+
 def patch_add_wheelchair_boarding(feed: FeedEnhanced):
     """
     Patch an Amtrak GTFS feed to add the wheelchair boarding information from Amtrak's JSON stations database.
 
     Fix feed in place.
     """
-    if "wheelchair_boarding" in feed.stops.columns:
-        debug_print(
-            1, "Wheelchair boarding already present in Amtrak GTFS -- not patching"
-        )
-        return
-
-    # Assign a new column by applying the test function to the stop_id column
     new_stops = feed.stops
-    new_stops["wheelchair_boarding"] = new_stops["stop_id"].map(
-        station_wheelchair_boarding_gtfs_code
-    )
+    if "wheelchair_boarding" in feed.stops.columns:
+        # This happens in the Frankenfeed for the Maple Leaf
+        debug_print(1, "Wheelchair boarding already present in GTFS")
+        # Rename the old wheelchair_boarding column to wb_old
+        new_stops.columns = [
+            "wb_old" if name == "wheelchair_boarding" else name
+            for name in new_stops.columns
+        ]
+        debug_print(3, new_stops)
+        # Assign a new column by applying the test function to the stop_id column
+        new_stops["wb_json"] = new_stops["stop_id"].map(
+            station_wheelchair_boarding_gtfs_code
+        )
+        debug_print(3, new_stops)
+        # Construct the new, combo column
+        new_stops["wheelchair_boarding"] = new_stops.apply(
+            lambda row: combine_wheelchair_boarding_columns(
+                row["wb_old"], row["wb_json"]
+            ),
+            axis=1,
+        )
+
+        # Dispose of the intermediate calculations
+        new_stops = new_stops.drop(columns=["wb_old", "wb_json"])
+        print(new_stops)
+    else:
+        # Simple version, no pre-existing column
+        # Assign a new column by applying the test function to the stop_id column
+        new_stops["wheelchair_boarding"] = new_stops["stop_id"].map(
+            station_wheelchair_boarding_gtfs_code
+        )
+
     debug_print(1, "GTFS patched for wheelchair boarding")
     debug_print(2, new_stops)
 

@@ -20,3 +20,5 @@ Then run
 * ./timetable.py --agency maple_leaf maple-leaf
 
 to get a timetable.
+
+Note: use the Amtrak station codes, not the VIA station codes, in the spec file.

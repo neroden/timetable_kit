@@ -33,7 +33,7 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 
 def filter_feed_by_route_names(feed, route_names: list[str]):
     """
-    Filteres a feed down to JUST the data for named routes.
+    Filters a feed down to JUST the data for named routes.
     Erase the shapes data for speed.
 
     Returs the filtered feed.
@@ -133,6 +133,19 @@ def eliminate_redundant_via_stations(via_ml_feed, amtrak_ml_feed):
     return new_feed
 
 
+def remove_stop_code_column(feed):
+    """
+    Since we're basing this on the Amtrak data, the stop_code column is redundant.
+    More problematically, we want to use the Amtrak code where stop_code == stop_id
+    and having this column confuses _prepare_dicts in generic_agency/agency.py,
+    so we *have* to delete it.
+
+    Alter in place.
+    """
+    new_stops = feed.stops.drop(columns=["stop_code"])
+    feed.stops = new_stops
+
+
 def run():
     """
     timetable_kit.maple_leaf.merge_gtfs.run
@@ -171,6 +184,8 @@ def run():
 
     print("Merging feeds")
     merged_feed = merge_feed(amtrak_ml_feed, via_ml_feed)
+    print("Eliminating stop_code column")
+    remove_stop_code_column(merged_feed)
 
     # Experimentally, writing the feed out is slow.  Unzipping it is fast.
     # Writing it out unzipped is just as slow.
