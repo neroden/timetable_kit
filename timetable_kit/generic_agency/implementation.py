@@ -33,19 +33,6 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
     return False
 
 
-# Access
-
-
-def station_has_accessible_platform(station_code: str) -> bool:
-    # Unacceptable stub implementation
-    return False
-
-
-def station_has_inaccessible_platform(station_code: str) -> bool:
-    # Unacceptable stub implementation
-    return False
-
-
 # Feed correction
 
 
@@ -100,16 +87,6 @@ class Agency:
 
     def train_has_checked_baggage(self, tsn: str) -> bool:
         """Does this trip_short_name carry checked baggage?  Default implementation: no"""
-        return False
-
-    def station_has_inaccessible_platform(self, stop_id: str) -> bool:
-        """Does this station have an explicitly inaccessible platform?  Default implementation: no"""
-        # FIXME: pull from GTFS
-        return False
-
-    def station_has_accessible_platform(self, stop_id: str) -> bool:
-        """Does this station have an explicitly accessible platform?  Default implementation: no"""
-        # FIXME: pull from GTFS
         return False
 
     def is_connecting_service(self, tsn: str) -> bool:
