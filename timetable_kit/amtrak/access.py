@@ -120,7 +120,7 @@ def make_accessibility_dicts() -> None:
     return
 
 
-def station_gtfs_wheelchair_boarding_code(station_code: str) -> int:
+def station_wheelchair_boarding_gtfs_code(station_code: str) -> int:
     """
     What is the correct GTFS wheelchair boarding code number for the station?
     0 = unknown
@@ -146,20 +146,29 @@ def station_gtfs_wheelchair_boarding_code(station_code: str) -> int:
         return 0
 
 
-def patch_gtfs_for_amtrak_accessibility(feed: FeedEnhanced) -> FeedEnhanced:
-    """Patch an Amtrak GTFS feed with the accessibility information from Amtrak's JSON stations database."""
+def patch_add_wheelchair_boarding(feed: FeedEnhanced):
+    """
+    Patch an Amtrak GTFS feed to add the wheelchair boarding information from Amtrak's JSON stations database.
+
+    Fix feed in place.
+    """
+    if "wheelchair_boarding" in feed.stops.columns:
+        debug_print(
+            1, "Wheelchair boarding already present in Amtrak GTFS -- not patching"
+        )
+        return
+
     # Assign a new column by applying the test function to the stop_id column
     new_stops = feed.stops
     new_stops["wheelchair_boarding"] = new_stops["stop_id"].map(
-        station_gtfs_wheelchair_boarding_code
+        station_wheelchair_boarding_gtfs_code
     )
     debug_print(1, "GTFS patched for wheelchair boarding")
     debug_print(2, new_stops)
 
-    # And construct a new feed to return.
-    new_feed = feed.copy()
-    new_feed.stops = new_stops
-    return new_feed
+    # Now patch the feed in place.
+    feed.stops = new_stops
+    return
 
 
 # TESTING
@@ -170,4 +179,4 @@ if __name__ == "__main__":
     from timetable_kit.initialize import initialize_feed
 
     master_feed = initialize_feed("./gtfs")
-    new_feed = patch_gtfs_for_amtrak_accessibility(master_feed)
+    patch_add_wheelchair_boarding(master_feed)
