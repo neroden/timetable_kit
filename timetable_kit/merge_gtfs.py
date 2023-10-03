@@ -17,6 +17,23 @@ import gtfs_kit
 import pandas as pd
 
 
+def remove_stop_code_column(feed):
+    """
+    Remove the stop code column from the stops file in a feed.
+
+    Use with care.
+
+    For merged feeds where we're using Amtrak as the base, we don't want stop_code.
+    We want to use the Amtrak code where stop_code == stop_id.
+    Having this column confuses _prepare_dicts in generic_agency/agency.py,
+    screwing up the wheelchair boarding dicts, so we *have* to delete it.
+
+    Alter in place.
+    """
+    new_stops = feed.stops.drop(columns=["stop_code"])
+    feed.stops = new_stops
+
+
 def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
     """
     Return a copy of the feed, with all the tables which have unique IDs indexed by them.

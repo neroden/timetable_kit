@@ -18,6 +18,7 @@ import gtfs_kit
 from timetable_kit import amtrak
 from timetable_kit import via
 from timetable_kit.merge_gtfs import merge_feed
+from timetable_kit.merge_gtfs import remove_stop_code_column
 
 from timetable_kit.maple_leaf.station_data import (
     amtrak_code_to_via_code,
@@ -131,19 +132,6 @@ def eliminate_redundant_via_stations(via_ml_feed, amtrak_ml_feed):
     print(reduced_stops)
     new_feed.stops = reduced_stops
     return new_feed
-
-
-def remove_stop_code_column(feed):
-    """
-    Since we're basing this on the Amtrak data, the stop_code column is redundant.
-    More problematically, we want to use the Amtrak code where stop_code == stop_id
-    and having this column confuses _prepare_dicts in generic_agency/agency.py,
-    so we *have* to delete it.
-
-    Alter in place.
-    """
-    new_stops = feed.stops.drop(columns=["stop_code"])
-    feed.stops = new_stops
 
 
 def run():

@@ -15,6 +15,7 @@ import gtfs_kit
 from timetable_kit import amtrak
 from timetable_kit import hartford_line
 from timetable_kit.merge_gtfs import merge_feed
+from timetable_kit.merge_gtfs import remove_stop_code_column
 
 module_location = Path(__file__).parent
 
@@ -100,6 +101,8 @@ def run():
 
     print("Merging feeds")
     merged_feed = merge_feed(amtrak_feed, hl_feed)
+    print("Eliminating stop code column")
+    remove_stop_code_column(merged_feed)
 
     # Experimentally, writing the feed out is slow.  Unzipping it is fast.
     # Writing it out unzipped is just as slow.
