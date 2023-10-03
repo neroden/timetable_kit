@@ -24,7 +24,8 @@ from pandas.io.formats.style import Styler
 import timetable_kit.runtime_config
 
 # And we need a shorthand way to refer to it
-from timetable_kit.runtime_config import agency as agency
+from timetable_kit.runtime_config import agency
+from timetable_kit.runtime_config import agency_singleton
 
 # If we don't use the "as", calls to agency() will "None" out
 

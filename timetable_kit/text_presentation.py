@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo  # still for time zones
 
 import pandas as pd
 
-import html # used for escaping with href_wrap
+import html  # used for escaping with href_wrap
 
 from timetable_kit.debug import debug_print
 
@@ -1197,19 +1197,3 @@ def style_updown(reverse: bool, doing_html=False) -> str:
 
     text = "".join(["<b>", text, "</b>"])
     return text
-
-def href_wrap(text: str, url: str, doing_html: bool = True) -> str:
-    """
-    Given text and a URL, wrap the text in an HREF anchor pointing to the URL.
-
-    Escapes text and URL properly.
-
-    if doing_html is false, prints text ( url ).
-    """
-    if doing_html:
-        cooked_url = html.escape(url, quote=True)
-        cooked_text = html.escape(text)
-        return f'<a href="{cooked_url}">{cooked_text}</a>'
-    else:
-        # Plaintext version: print the URL.
-        return f'{text} ( {url} )'

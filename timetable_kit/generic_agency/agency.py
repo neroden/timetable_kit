@@ -13,6 +13,9 @@ from __future__ import annotations
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.debug import debug_print
 
+# For text twiddling
+from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
+
 
 # Intended to be used both directly and by subclasses
 class Agency:
@@ -31,6 +34,13 @@ class Agency:
         self._stop_code_to_stop_name_dict = None
         self._accessible_platform_dict = None
         self._inaccessible_platform_dict = None
+        # This is a list of the agency names for the disclaimers and credit
+        # (There is typically one, but sometimes more)
+        self._agency_names = []
+        # This is a list of the agency URLs, parellel to the list of agency names
+        self._agency_urls = []
+        # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
+        self._agency_published_gtfs_urls = []
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -80,7 +90,13 @@ class Agency:
         """Returns a string for a disclaimer about this not being an official product"""
         # Agency names in GTFS are a mess and basically unusable.
         # So without a specific agency name, we have to say something very generic.
-        return "This timetable is not an official product."
+        return " ".join(
+            [
+                "This timetable is not an official",
+                *or_clause(self._agency_names),
+                "product.",
+            ]
+        )
 
     def _prepare_dicts(self):
         """

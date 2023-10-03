@@ -20,6 +20,7 @@ class AgencyAmtrak(Agency):
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
+        self._agency_names = ["Amtrak"]
 
     def stop_code_to_stop_id(self, stop_code: str) -> str:
         # Identity function for Amtrak
@@ -50,10 +51,6 @@ class AgencyAmtrak(Agency):
         new_feed = feed.copy()
         access.patch_add_wheelchair_boarding(new_feed)  # Alters in place
         return new_feed
-
-    def unofficial_disclaimer() -> str:
-        """Returns a string for a disclaimer about this not being an official product"""
-        return "This timetable is not an official Amtrak product."
 
 
 # Establish the singleton

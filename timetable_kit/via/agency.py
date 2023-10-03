@@ -20,6 +20,7 @@ class AgencyVIA(Agency):
         self: AgencyVIA,
     ) -> None:
         super().__init__()
+        self._agency_names = ["VIA Rail"]
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -29,10 +30,6 @@ class AgencyVIA(Agency):
         """
         # This is defined in its own file in the VIA subpackage.
         return gtfs_patches.patch_feed(feed)
-
-    def unofficial_disclaimer() -> str:
-        """Returns a string for a disclaimer about this not being an official product"""
-        return "This timetable is not an official VIA Rail product."
 
 
 # Establish the singleton

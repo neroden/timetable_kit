@@ -18,10 +18,7 @@ class AgencyMapleLeaf(AgencyAmtrak):
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
-
-    def unofficial_disclaimer() -> str:
-        """Returns a string for a disclaimer about this not being an official product"""
-        return "This timetable is not an official Amtrak or VIA Rail product."
+        self._agency_names = ["Amtrak", "VIA Rail"]
 
 
 # Establish the singleton
