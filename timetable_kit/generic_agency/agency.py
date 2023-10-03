@@ -25,7 +25,7 @@ class Agency:
         # It is filled in by init_from_feed, due to complex initialization ordering requirements.
         self._feed = None
         # These are built from the GTFS feed.
-        # They start blank and are filled in by initialization code on first use (memoized)
+        # They start "None" and are filled in by initialization code on first use (memoized)
         self._stop_code_to_stop_id_dict = None
         self._stop_id_to_stop_code_dict = None
         self._stop_code_to_stop_name_dict = None
@@ -66,6 +66,8 @@ class Agency:
         2. We may not need to use this agency object at all, but it may need to be created in initialization.
         3. We may not need to initialize these tables in subclasses.
         4. This is expensive in both memory usage and time.
+
+        This must be run before several of the other methods on this are usable.
         """
         if self._feed is not None:
             debug_print(
@@ -154,22 +156,22 @@ class Agency:
 
     def stop_code_to_stop_id(self, stop_code: str) -> str:
         """Given a stop_code, return a stop_id"""
-        # Memoized
-        if self._stop_code_to_stop_id_dict == None:
+        # Memoized.  None is a sentinel value meaning uninitalized
+        if self._stop_code_to_stop_id_dict is None:
             self._prepare_dicts()
         return self._stop_code_to_stop_id_dict[stop_code]
 
     def stop_id_to_stop_code(self, stop_id: str) -> str:
         """Given a stop_id, return a stop_code"""
-        # Memoized
-        if self._stop_id_to_stop_code_dict == None:
+        # Memoized.  None is a sentinel value meaning uninitalized
+        if self._stop_id_to_stop_code_dict is None:
             self._prepare_dicts()
         return self._stop_id_to_stop_code_dict[stop_id]
 
     def stop_code_to_stop_name(self, stop_code: str) -> str:
         """Given a stop_code, return a stop_name -- raw"""
-        # Memoized
-        if self._stop_code_to_stop_name_dict == None:
+        # Memoized.  None is a sentinel value meaning uninitalized
+        if self._stop_code_to_stop_name_dict is None:
             self._prepare_dicts()
         return self._stop_code_to_stop_name_dict[stop_code]
 
@@ -178,11 +180,8 @@ class Agency:
         Does the station explicitly have an inaccessible platform?
 
         This excludes stations which don't say either way.
-
-        Constructs and caches the data on first call.
-
-        From GTFS data.
         """
+        # Memoized.  None is a sentinel value meaning uninitalized
         if self._inaccessible_platform_dict is None:
             self._prepare_dicts()
         return self._inaccessible_platform_dict[station_code]
@@ -192,11 +191,8 @@ class Agency:
         Does this station explicitly have an accessible platform?
 
         This excludes stations which don't say either way.
-
-        Constructs and caches the data on first call.
-
-        From GTFS data.
         """
+        # Memoized.  None is a sentinel value meaning uninitalized
         if self._accessible_platform_dict is None:
             self._prepare_dicts()
         return self._accessible_platform_dict[station_code]
