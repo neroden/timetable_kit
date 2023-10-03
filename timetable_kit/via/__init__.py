@@ -15,11 +15,6 @@ from .agency import AgencyVIA
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-
-# Published agency website, for printing.
-# Does not include the https:// and should be capitalized for print.
-published_website = "ViaRail.ca"
-
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_unzipped_local_path,

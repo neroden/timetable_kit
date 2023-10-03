@@ -27,6 +27,7 @@ class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
 
     _agency_names = ["Amtrak"]
+    _agency_websites = ["Amtrak.com"]
     _agency_published_gtfs_urls = [
         "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
     ]

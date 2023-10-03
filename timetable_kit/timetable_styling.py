@@ -281,13 +281,13 @@ def finish_html_timetable(
         "end_date": end_date_str,
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
-        "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
-        "unofficial_disclaimer": agency_singleton().unofficial_disclaimer(),
-        "by_agency_with_gtfs_link": agency_singleton().by_agency_with_gtfs_link(),  # "by Amtrak"
-        "agency_website": agency().published_website,  # e.g. "Amtrak.com" -- with capitalization, no https://
-        "agency_css_class": agency_singleton().agency_css_class(),  # Used to change color of top heading (possibly other stuff later)
         "connecting_bus_key_sentence": agency_singleton().connecting_bus_key_sentence(),  # "Connecting Bus Service (can be booked through Amtrak)"
-        "add_via_disclaimer": agency_singleton().add_via_disclaimer(),  # True or False
+        "agency_css_class": agency_singleton().agency_css_class(),  # Used to change color of top heading (possibly other stuff later)
+        "unofficial_disclaimer": agency_singleton().unofficial_disclaimer(),  # "This is unofficial" disclaimer
+        "always_check_disclaimer": agency_singleton().always_check_disclaimer(),  # "Always check agency website"
+        "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
+        "by_agency_with_gtfs_link": agency_singleton().by_agency_with_gtfs_link(),  # for GTFS released "by Amtrak"
+        "add_via_disclaimer": agency_singleton().add_via_disclaimer(),  # True or False, should we add the VIA disclaimer
     }
 
     # Allows direct icon references in Jinja2

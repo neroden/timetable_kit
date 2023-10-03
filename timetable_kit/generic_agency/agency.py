@@ -25,8 +25,9 @@ class Agency:
     # This is a list of the agency names for the disclaimers and credit
     # (There is typically one, but sometimes more.)
     _agency_names = []
-    # This is a list of the agency (ticketing/website) URLs, parellel to the list of agency names
-    _agency_urls = []
+    # This is a list of the agency (ticketing/website) websites, parellel to the list of agency names.
+    # These should omit the https:// and be formatted for print.
+    _agency_websites = []
     # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
     _agency_published_gtfs_urls = []
 
@@ -88,6 +89,27 @@ class Agency:
             )
         self._feed = feed
 
+    def always_check_disclaimer(self, doing_html: bool = True):
+        """Returns a string with a disclaimer about always checking agency websites for times"""
+        # Note that this doesn't do the boldfacing, that's done in the Jinja template.
+        if doing_html:
+            website_hrefs = [
+                href_wrap(website, "https://" + website)
+                for website in self._agency_websites
+            ]
+        else:
+            website_hrefs = self._agency_websites
+        if not website_hrefs:
+            # No actual agency website, so say something generic
+            website_hrefs = ["agency websites"]
+        return " ".join(
+            [
+                "Always check",
+                *or_clause(website_hrefs),
+                "for precise times for your exact date of travel.",
+            ]
+        )
+
     def unofficial_disclaimer(self, doing_html: bool = True):
         """Returns a string for a disclaimer about this not being an official product"""
         # Agency names in GTFS are a mess and basically unusable.
@@ -99,6 +121,16 @@ class Agency:
                 "product.",
             ]
         )
+
+    def gtfs_data_link(self, doing_html: bool = True):
+        """Returns the string "GTFS data", possibly with an appropriate link."""
+        if doing_html and len(self._agency_published_gtfs_urls) == 1:
+            return href_wrap(
+                "GTFS data", self._agency_published_gtfs_urls[0], doing_html
+            )
+        else:
+            # With 0 or 2+ GTFS urls or when not doing HTML, don't make a link.
+            return "GTFS data"
 
     def by_agency_with_gtfs_link(self, doing_html: bool = True):
         """Returns a string like "by Amtrak and by VIA Rail", with the "by Amtrak" being a link to the Amtrak GTFS and similarly for the "by VIA Rail"."""
@@ -116,16 +148,6 @@ class Agency:
         # We can't move this all into code because we need to be able to refer to
         # key_on_right to do line breaking in the Jinja template.
         return joined_clause
-
-    def gtfs_data_link(self, doing_html: bool = True):
-        """Returns the string "GTFS data", possibly with an appropriate link."""
-        if doing_html and len(self._agency_published_gtfs_urls) == 1:
-            return href_wrap(
-                "GTFS data", self._agency_published_gtfs_urls[0], doing_html
-            )
-        else:
-            # With 0 or 2+ GTFS urls or when not doing HTML, don't make a link.
-            return "GTFS data"
 
     def _prepare_dicts(self):
         """
@@ -286,7 +308,6 @@ class Agency:
         # For the default, we return false.
         return False
 
-    # Connecting bus service key
     def connecting_bus_key_sentence(self, doing_html=True) -> str:
         """
         Sentence to put in the symbol key for connecting bus services

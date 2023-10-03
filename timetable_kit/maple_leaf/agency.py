@@ -18,6 +18,10 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
     """Maple Leaf-specific code for interpreting specs and GTFS feeds"""
 
     _agency_names = ["Amtrak", "VIA Rail"]
+    _agency_websites = [
+        AgencyAmtrak._agency_websites[0],
+        AgencyVIA._agency_websites[0],
+    ]
     _agency_published_gtfs_urls = [
         AgencyAmtrak._agency_published_gtfs_urls[0],
         AgencyVIA._agency_published_gtfs_urls[0],

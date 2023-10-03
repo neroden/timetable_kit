@@ -22,6 +22,7 @@ class AgencyVIA(Agency):
     """VIA-specific code for interpreting specs and GTFS feeds"""
 
     _agency_names = ["VIA Rail"]
+    _agency_websites = ["ViaRail.ca"]
     _agency_published_gtfs_urls = [
         "https://www.transit.land/feeds/f-f-viarail~traindecharlevoix"
     ]

@@ -15,6 +15,7 @@ class AgencyHartfordLine(AgencyAmtrak):
     """Hartford Line-specific code for interpreting specs and GTFS feeds"""
 
     _agency_names = ["CTRail Hartford Line", "Amtrak"]
+    _agency_websites = ["HartfordLine.com", AgencyAmtrak._agency_websites[0]]
     _agency_published_gtfs_urls = [
         "https://www.cttransit.com/about/developers",
         AgencyAmtrak._agency_published_gtfs_urls[0],

@@ -15,10 +15,6 @@ from .agency import AgencyAmtrak
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-# Published agency website, for printing.
-# Does not include the https:// and should be capitalized for print.
-published_website = "Amtrak.com"
-
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services

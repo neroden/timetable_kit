@@ -11,13 +11,6 @@ This defines an interface; each agency needs to provide the same interface
 
 from .agency import get_singleton
 
-# Hartford Line leans on Amtrak functions, but this does not work
-# import timetable_kit.amtrak as amtrak
-
-# Published agency website, for printing.
-# Does not include the https:// and should be capitalized for print.
-published_website = "Amtrak.com"
-
 # Where to find the GTFS (merged GTFS)
 from .merge_gtfs import (
     gtfs_unzipped_local_path,
