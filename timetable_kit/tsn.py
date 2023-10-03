@@ -213,7 +213,7 @@ def stations_list_from_tsn(today_feed: FeedEnhanced, trip_short_name):
     # For VIA rail, the stop_id is not the same as the stop_code.
     # Add the stop_code.  (For Amtrak, this is a no-op)
     sorted_stop_times["stop_code"] = sorted_stop_times["stop_id"].apply(
-        agency().stop_id_to_stop_code
+        agency_singleton().stop_id_to_stop_code
     )
 
     debug_print(3, sorted_stop_times)

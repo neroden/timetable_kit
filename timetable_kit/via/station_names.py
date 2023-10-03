@@ -165,14 +165,3 @@ def get_station_name_pretty(
         )
 
     return cooked_station_name
-
-
-### TESTING
-if __name__ == "__main__":
-    import timetable_kit
-
-    set_debug_level(2)
-    print(
-        "Toronto stop id is:",
-        timetable_kit.via.stop_code_to_stop_id("TRTO"),
-    )

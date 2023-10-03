@@ -130,8 +130,8 @@ if __name__ == "__main__":
         for stop_one, stop_two in pairs:
             # print("Finding trips from", stop_one, "to", stop_two)
             # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
-            stop_one_id = agency().stop_code_to_stop_id(stop_one)
-            stop_two_id = agency().stop_code_to_stop_id(stop_two)
+            stop_one_id = agency_singleton().stop_code_to_stop_id(stop_one)
+            stop_two_id = agency_singleton().stop_code_to_stop_id(stop_two)
             this_pair_trip_ids = get_trips_between(
                 stop_one_id, stop_two_id, feed=today_feed
             )
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         # Remove duplicates.  (FIXME: do in non-sorting case too?)
         trip_ids = list(set(trip_ids))
         # Sort.
-        sync_stop_id = agency().stop_code_to_stop_id(sync_stop)
+        sync_stop_id = agency_singleton().stop_code_to_stop_id(sync_stop)
         sorted_trip_ids = sort_by_time_at_stop(trip_ids, sync_stop_id, feed=today_feed)
     else:
         sorted_trip_ids = trip_ids

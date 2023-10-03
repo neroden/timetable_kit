@@ -457,7 +457,7 @@ def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
                     "with trip id",
                     trip_id,
                     "stops at stop_code",
-                    agency().stop_id_to_stop_code(stop_id),
+                    agency_singleton().stop_id_to_stop_code(stop_id),
                     "more than once",
                 ]
             )
@@ -527,7 +527,7 @@ def make_stations_max_dwell_map(
     # Prepare the dict to return
     stations_dict = {}
     for station_code in stations_list:
-        stop_id = agency().stop_code_to_stop_id(station_code)
+        stop_id = agency_singleton().stop_code_to_stop_id(station_code)
         max_dwell_secs = 0
         for train_spec in flattened_train_spec_set:
             debug_print(3, "debug dwell map:", train_spec, station_code)
@@ -899,7 +899,7 @@ def fill_tt_spec(
                         )
                     )
                 case ["days" | "days-of-week", _, reference_stop_code]:
-                    reference_stop_id = agency().stop_code_to_stop_id(
+                    reference_stop_id = agency_singleton().stop_code_to_stop_id(
                         reference_stop_code
                     )
                     # Days of week -- best for a train which doesn't run across midnight
@@ -989,7 +989,7 @@ def fill_tt_spec(
                     tt.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
-                    stop_id = agency().stop_code_to_stop_id(station_code)
+                    stop_id = agency_singleton().stop_code_to_stop_id(station_code)
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
@@ -1006,7 +1006,7 @@ def fill_tt_spec(
                     # For connecting trains, use two different rows and use cell codes.
 
                     # Convert station_code to stop_id
-                    stop_id = agency().stop_code_to_stop_id(station_code)
+                    stop_id = agency_singleton().stop_code_to_stop_id(station_code)
 
                     # Pick out the stop timezone -- TODO, precache this as a dict
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
