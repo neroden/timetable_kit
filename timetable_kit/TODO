@@ -1,10 +1,8 @@
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Continue transition from module-level functions to singletons
+---- Priority is on merging the Amtrak pretty-printing routines
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
-
-For generalizing beyond Amtrak and VIA:
-0 -- Fix up templates for multi-agency timetables, by redesigning the interface to allow for a list
 
 For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
