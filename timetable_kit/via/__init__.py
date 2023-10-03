@@ -38,14 +38,9 @@ from .route_names import get_route_name
 # (including subtitles, connecting agency logos, etc.)
 from .station_names import get_station_name_pretty
 
-# Baggage
-from .special_data import station_has_checked_baggage
-from .special_data import train_has_checked_baggage
-
 # For colorizing columns
 from .special_data import (
     is_connecting_service,
-    is_sleeper_train,
     is_high_speed_train,
 )
 

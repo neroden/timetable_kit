@@ -24,8 +24,4 @@ from .implementation import gtfs_unzipped_local_path
 from .implementation import get_route_name
 from .implementation import get_station_name_pretty
 
-from .implementation import station_has_checked_baggage
-from .implementation import train_has_checked_baggage
-
 from .implementation import is_connecting_service
-from .implementation import is_sleeper_train

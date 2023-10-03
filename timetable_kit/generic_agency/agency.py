@@ -248,6 +248,27 @@ class Agency:
             self._prepare_dicts()
         return self._accessible_platform_dict[station_code]
 
+    def station_has_checked_baggage(self, station_code: str) -> bool:
+        """
+        Does this station have checked baggage service?
+        """
+        # For a generic agency, no, it doesn't.
+        return False
+
+    def train_has_checked_baggage(self, tsn: str) -> bool:
+        """
+        Does this train have checked baggage service?
+        """
+        # For a generic agency, no, it doesn't.
+        return False
+
+    def is_sleeper_train(self, tsn: str) -> bool:
+        """
+        Does this train have sleeper cars?
+        """
+        # For a generic agency, no, it doesn't.
+        return False
+
 
 # Establish the singleton
 _singleton = Agency()

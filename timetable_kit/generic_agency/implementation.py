@@ -24,19 +24,6 @@ def get_station_name_pretty(station_code: str) -> str:
     return station_code
 
 
-# Baggage -- trivial implementations
-def station_has_checked_baggage(station_code: str) -> bool:
-    return False
-
-
-def train_has_checked_baggage(trip_short_name: str) -> bool:
-    return False
-
-
 # Type of service on train
 def is_connecting_service():
-    return False
-
-
-def is_sleeper_train():
     return False

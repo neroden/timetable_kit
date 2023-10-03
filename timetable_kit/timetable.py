@@ -778,7 +778,9 @@ def fill_tt_spec(
                 use_baggage_icon_this_column = False
                 for train_spec in train_specs:
                     potential_baggage_tsn = train_spec_to_tsn(train_spec)
-                    if agency().train_has_checked_baggage(potential_baggage_tsn):
+                    if agency_singleton().train_has_checked_baggage(
+                        potential_baggage_tsn
+                    ):
                         use_baggage_icon_this_column = True
                         break
 
@@ -1080,10 +1082,12 @@ def fill_tt_spec(
                             ]
 
                         has_baggage = bool(
-                            agency().train_has_checked_baggage(
+                            agency_singleton().train_has_checked_baggage(
                                 train_spec_to_tsn(train_spec)
                             )
-                            and agency().station_has_checked_baggage(station_code)
+                            and agency_singleton().station_has_checked_baggage(
+                                station_code
+                            )
                         )
 
                         # Should we put the bus symbol on this cell?

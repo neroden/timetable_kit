@@ -43,15 +43,9 @@ from timetable_kit.amtrak.route_names import get_route_name
 # (Amtrak station DB DOES include Canadian stations)
 from .station_names import get_station_name_pretty
 
-# Baggage
-from timetable_kit.amtrak.baggage import station_has_checked_baggage
-from timetable_kit.amtrak.special_data import train_has_checked_baggage
-
-
 # For colorizing columns
 from timetable_kit.amtrak.special_data import (
     is_connecting_service,
-    is_sleeper_train,
     is_high_speed_train,
 )
 

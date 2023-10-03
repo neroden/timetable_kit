@@ -48,20 +48,8 @@ class Agency:
         """Is this a major station?  Default implementation: no major stations"""
         return False
 
-    def station_has_checked_baggage(self, stop_id: str) -> bool:
-        """Does this station have checked baggage?  Default implemention: no station does"""
-        return False
-
-    def train_has_checked_baggage(self, tsn: str) -> bool:
-        """Does this trip_short_name carry checked baggage?  Default implementation: no"""
-        return False
-
     def is_connecting_service(self, tsn: str) -> bool:
         """Is this trip_short_name a connecting service?  Default implementation: no"""
-        return False
-
-    def is_sleeper_train(self, tsn: str) -> bool:
-        """Is this trip_short_name a sleeper train?  Default implementation: no"""
         return False
 
 

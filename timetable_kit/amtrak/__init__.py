@@ -25,9 +25,6 @@ published_website = "Amtrak.com"
 # Currently only used to change the header bar color.
 css_class = "amtrak-special-css"
 
-# Baggage
-from .baggage import station_has_checked_baggage
-
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services
@@ -43,10 +40,8 @@ from .route_names import get_route_name
 # For colorizing columns
 from .special_data import (
     is_connecting_service,
-    is_sleeper_train,
     is_high_speed_train,
 )
-from .special_data import train_has_checked_baggage
 
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc.)

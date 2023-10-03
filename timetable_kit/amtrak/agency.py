@@ -9,8 +9,18 @@ This holds a class for "AgencyAmtrak" intended to be used as a singleton.
 from __future__ import annotations
 
 from timetable_kit.generic_agency import Agency
-import timetable_kit.amtrak.gtfs_patches as gtfs_patches  # for patch_feed
-import timetable_kit.amtrak.access as access  # for patch_add_wheelchair_boarding
+
+# for patch_feed
+import timetable_kit.amtrak.gtfs_patches as gtfs_patches
+
+# for patch_add_wheelchair_boarding
+import timetable_kit.amtrak.access as access
+
+# for sleeper trains, which trains have checked baggage, etc
+import timetable_kit.amtrak.special_data as special_data
+
+# for whether stations have checked baggage
+import timetable_kit.amtrak.baggage as baggage
 
 
 class AgencyAmtrak(Agency):
@@ -55,6 +65,24 @@ class AgencyAmtrak(Agency):
         new_feed = feed.copy()
         access.patch_add_wheelchair_boarding(new_feed)  # Alters in place
         return new_feed
+
+    def station_has_checked_baggage(self, station_code: str) -> bool:
+        """
+        Does this station have checked baggage service?
+        """
+        return baggage.station_has_checked_baggage(station_code)
+
+    def train_has_checked_baggage(self, tsn: str) -> bool:
+        """
+        Does this train have checked baggage service?
+        """
+        return special_data.train_has_checked_baggage(tsn)
+
+    def is_sleeper_train(self, tsn: str) -> bool:
+        """
+        Does this train have sleeper cars?
+        """
+        return special_data.is_sleeper_train(tsn)
 
 
 # Establish the singleton
