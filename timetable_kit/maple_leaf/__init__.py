@@ -18,10 +18,6 @@ from .agency import get_singleton
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"
 
-# CSS class for special modifications to the output.
-# Currently only used to change the header bar color.
-css_class = "amtrak-special-css"
-
 # Where to find the GTFS (merged GTFS)
 from .merge_gtfs import (
     gtfs_unzipped_local_path,

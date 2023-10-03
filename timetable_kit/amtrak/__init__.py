@@ -19,10 +19,6 @@ from .agency import get_singleton
 # Does not include the https:// and should be capitalized for print.
 published_website = "Amtrak.com"
 
-# CSS class for special modifications to the output.
-# Currently only used to change the header bar color.
-css_class = "amtrak-special-css"
-
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services

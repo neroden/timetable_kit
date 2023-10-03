@@ -81,6 +81,12 @@ class AgencyVIA(Agency):
         """
         return True
 
+    def agency_css_class(self) -> str:
+        """
+        Name of a CSS class for agency-specific styling
+        """
+        return "via-special-css"
+
 
 # Establish the singleton
 _singleton = AgencyVIA()

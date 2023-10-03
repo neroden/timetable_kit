@@ -302,6 +302,13 @@ class Agency:
         # There is probably a better way to do this.
         return False
 
+    def agency_css_class(self) -> str:
+        """
+        Name of a CSS class for agency-specific styling
+        """
+        # Default is blank.  This generates class="".
+        return ""
+
 
 # Establish the singleton
 _singleton = Agency()

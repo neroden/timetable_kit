@@ -106,6 +106,12 @@ class AgencyAmtrak(Agency):
         """
         return "Connecting Bus Service (can be booked through Amtrak)"
 
+    def agency_css_class(self) -> str:
+        """
+        Name of a CSS class for agency-specific styling
+        """
+        return "amtrak-special-css"
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()

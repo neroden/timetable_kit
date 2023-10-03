@@ -20,10 +20,6 @@ from .agency import get_singleton
 # Does not include the https:// and should be capitalized for print.
 published_website = "ViaRail.ca"
 
-# CSS class for special modifications to the output.
-# Currently only used to change the header bar color.
-css_class = "via-special-css"
-
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_unzipped_local_path,
