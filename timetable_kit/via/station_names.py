@@ -42,7 +42,6 @@ def get_station_name_pretty(
     # Several stations have (EXO) in parentheses: one has (exo).  Get rid of this.
     # Some have GO Bus or GO as suffixes.  Get rid of this.
     # Clarify the confusing Niagara Falls situation.
-    # This can be used to autogenerate connecting data, but isn't currently.  TODO
     if stop_name_raw.endswith(" (EXO)") or stop_name_raw.endswith(" (exo)"):
         stop_name_clean = stop_name_raw.removesuffix(" (EXO)").removesuffix(" (exo)")
         facility_name = "EXO station"
@@ -64,28 +63,29 @@ def get_station_name_pretty(
     else:
         stop_name_clean = stop_name_raw
 
-    if stop_name_clean == "Sainte-Foy":
-        # Explain where St. Foy station is
-        facility_name = "for Quebéc City"
-    elif stop_name_clean == "Quebéc":
-        # Distinguish from other Quebec City stations
-        facility_name = "Gare du Palais"
-    elif stop_name_clean in ["Montreal", "Montréal"]:  # remember accented e
-        # Two stations here too
-        facility_name = "Central Station"
-    elif stop_name_clean in ["Anjou", "Sauvé"]:  # remember accented e
-        # On the Senneterre timetable,
-        # "EXO station" blows out a line which we need for Montreal
-        facility_name = ""
-    elif stop_name_clean == "Ottawa":
-        # Make it clear which LRT station this goes with
-        facility_name = "Tremblay"
-    elif stop_name_clean == "Toronto":
-        # Just for clarity
-        facility_name = "Union Station"
-    elif stop_name_clean == "Vancouver":
-        # There ARE two train stations in Vancouver
-        facility_name = "Pacific Central Station"
+    match stop_name_clean:
+        case "Sainte-Foy":
+            # Explain where St. Foy station is
+            facility_name = "for Quebéc City"
+        case "Quebéc":
+            # Distinguish from other Quebec City stations
+            facility_name = "Gare du Palais"
+        case "Montreal" | "Montréal":  # remember accented e
+            # Two stations here too
+            facility_name = "Central Station"
+        case "Anjou" | "Sauvé":  # remember accented e
+            # On the Senneterre timetable,
+            # "EXO station" blows out a line which we need for Montreal
+            facility_name = ""
+        case "Ottawa":
+            # Make it clear which LRT station this goes with
+            facility_name = "Tremblay"
+        case "Toronto":
+            # Just for clarity
+            facility_name = "Union Station"
+        case "Vancouver":
+            # There ARE two train stations in Vancouver
+            facility_name = "Pacific Central Station"
 
     # We actually want to add the province to every station,
     # but VIA doesn't provide that info.  It's too much work.
