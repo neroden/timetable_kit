@@ -48,10 +48,6 @@ class Agency:
         """Is this a major station?  Default implementation: no major stations"""
         return False
 
-    def is_connecting_service(self, tsn: str) -> bool:
-        """Is this trip_short_name a connecting service?  Default implementation: no"""
-        return False
-
 
 if __name__ == "__main__":
     from timetable_kit.initialize import initialize_feed

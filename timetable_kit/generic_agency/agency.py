@@ -278,13 +278,14 @@ class Agency:
 
     def is_connecting_service(self, tsn: str) -> bool:
         """
-        Should this *train* be marked as a connecting service in the timetable?
+        Should this be marked as a connecting service in the timetable?
         """
         # This should be implemented by checking the agency file,
         # and seeing which trains are run by different agencies.
         # That's complicated.
         # For the default, we return false.
         return False
+
 
 # Establish the singleton
 _singleton = Agency()

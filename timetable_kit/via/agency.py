@@ -58,6 +58,15 @@ class AgencyVIA(Agency):
         """
         return special_data.is_sleeper_train(tsn)
 
+    def is_connecting_service(self, tsn: str) -> bool:
+        """
+        Should this be marked as a connecting service in the timetable?
+        """
+        # VIA has two connecting services in its GTFS, but
+        # *they don't have tsns* and so we'd need to patch the feed.
+        # FIXME later.  For now, return false.
+        return False
+
 
 # Establish the singleton
 _singleton = AgencyVIA()

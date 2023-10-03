@@ -11,17 +11,6 @@ which trains carry checked baggage,
 which trains have sleeper cars, etc.
 """
 
-
-def is_connecting_service(tsn):
-    """Is this a connecting, non-VIA service?"""
-
-    # VIA has two non-VIA services in their data, but they *don't have tsns*.
-    # This must be addressed by patching the feed.
-
-    # FIXME.
-    return False
-
-
 # Parentheses makes a TUPLE.
 sleeper_trains = set(
     (
@@ -107,6 +96,7 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
     This is based on crowdsourced data since Amtrak doesn't have a machine-readable way to get it.
     """
     return trip_short_name in checked_baggage_trains
+
 
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start

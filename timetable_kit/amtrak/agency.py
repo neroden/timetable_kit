@@ -90,6 +90,16 @@ class AgencyAmtrak(Agency):
         """
         return special_data.is_high_speed_train(tsn)
 
+    def is_connecting_service(self, tsn: str) -> bool:
+        """
+        Should this be marked as a connecting service in the timetable?
+        """
+        # This is not the ideal implementation.
+        # This should be implemented by checking the agency.txt file,
+        # and seeing which trains are run by different agencies.
+        # However, we have a working implementation based on tsns.
+        return special_data.is_connecting_service(tsn)
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()

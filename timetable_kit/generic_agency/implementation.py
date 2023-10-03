@@ -22,8 +22,3 @@ def get_route_name(today_feed, route_id) -> str:
 def get_station_name_pretty(station_code: str) -> str:
     # Unacceptable stub implementation
     return station_code
-
-
-# Type of service on train
-def is_connecting_service():
-    return False

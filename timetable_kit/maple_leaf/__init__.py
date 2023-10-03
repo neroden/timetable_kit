@@ -43,11 +43,6 @@ from timetable_kit.amtrak.route_names import get_route_name
 # (Amtrak station DB DOES include Canadian stations)
 from .station_names import get_station_name_pretty
 
-# For colorizing columns
-from timetable_kit.amtrak.special_data import (
-    is_connecting_service,
-)
-
 # For making the key for connecting services (including only those in this timetable)
 # This takes a list of stations as an argument
 from .connecting_services_data import get_all_connecting_services

@@ -23,5 +23,3 @@ from .implementation import gtfs_unzipped_local_path
 
 from .implementation import get_route_name
 from .implementation import get_station_name_pretty
-
-from .implementation import is_connecting_service
