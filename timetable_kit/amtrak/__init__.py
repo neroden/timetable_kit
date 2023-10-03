@@ -9,6 +9,9 @@ Amtrak-specific functions for timetable_kit.
 This defines an interface; VIA rail and others need to provide the same interface.
 """
 
+# For inheritance (e.g. by Maple Leaf or Hartford Line)
+from .agency import AgencyAmtrak
+
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
@@ -24,11 +27,27 @@ published_website = "Amtrak.com"
 # Currently only used to change the header bar color.
 css_class = "amtrak-special-css"
 
+
+# This is a temporary testing hack
+# Later we will call these directly from the singleton
+# These are do-nothings for Amtrak, but
+# quite significant for VIA Rail
+def stop_code_to_stop_id(stop_code: str):
+    return get_singleton().stop_code_to_stop_id(stop_code)
+
+
+def stop_id_to_stop_code(stop_id: str):
+    return get_singleton().stop_id_to_stop_code(stop_id)
+
+
 # Platform accessibility
-from .access import (
-    station_has_accessible_platform,
-    station_has_inaccessible_platform,
-)
+def station_has_accessible_platform(station_code: str):
+    return get_singleton().station_has_accessible_platform(station_code)
+
+
+def station_has_inaccessible_platform(station_code: str):
+    return get_singleton().station_has_inaccessible_platform(station_code)
+
 
 # Baggage
 from .baggage import station_has_checked_baggage
@@ -60,13 +79,3 @@ from .special_data import train_has_checked_baggage
 # Routine to pretty-print a station name
 # (including subtitles, connecting agency logos, etc.)
 from .station_names import get_station_name_pretty
-
-
-# These are do-nothings for Amtrak, but
-# quite significant for VIA Rail
-def stop_code_to_stop_id(stop_code: str) -> str:
-    return stop_code
-
-
-def stop_id_to_stop_code(stop_id: str) -> str:
-    return stop_id

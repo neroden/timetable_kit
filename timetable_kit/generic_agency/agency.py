@@ -70,7 +70,7 @@ class Agency:
         if "stop_code" not in self._feed.stops.columns:
             # Amtrak doesn't have stop_code, so don't make the translation dicts in this case.
             # Also don't make the stop name dict, as Amtrak has its own way of finding names.
-            # In this case, copy the stop_ids into the stop_codes for the wheelchair access later.
+            # In this case, copy the stop_ids into the stop_codes for the wheelchair access dicts later.
             stop_codes = stop_ids
             pass
         else:
@@ -82,36 +82,46 @@ class Agency:
             self._stop_code_to_stop_name_dict = dict(zip(stop_codes, stop_names))
 
         # OK.  Now wheelchair boarding.
+
         # First check for parent_station.
         # If this exists we need to do special stuff, which we have not implemented.
-        # VIA Rail does not have stops with parents.
-        # FIXME Warning! This depends on retaining the NaN blanks in the GTFS data.
-        stops_with_parents = self._feed.stops.dropna(subset=["parent_station"])
-        if not stops_with_parents.empty:
-            print(
-                "Warning: Stops with parents found -- this invalidates wheelchair access detection."
-            )
-            print(stops_with_parents)
-            # Default to no information
-            self._accessible_platform_dict = {}
-            self._inaccessible_platform_dict = {}
-        elif "wheelchair_boarding" not in self._feed.stops.columns:
+        # Amtrak does not even have the column; in which case, move right along.
+        if "parent_station" in self._feed.stops.columns:
+            # VIA Rail does not have stops with parents, but it does have the column.
+            # So continue to the normal case if the column is empty.
+            # FIXME Warning! This depends on retaining the NaN blanks in the GTFS data.
+            stops_with_parents = self._feed.stops.dropna(subset=["parent_station"])
+            if not stops_with_parents.empty:
+                # The column really exists.  This is a problem.
+                print(
+                    "Warning: Stops with parents found -- this invalidates wheelchair access detection."
+                )
+                print(stops_with_parents)
+                # Default to no wheelchair access information
+                self._accessible_platform_dict = {}
+                self._inaccessible_platform_dict = {}
+                # And bail out early
+                return
+
+        if "wheelchair_boarding" not in self._feed.stops.columns:
             # If the wheelchair_boarding column does not exist... bail
             debug_print(1, "Warning: wheelchair_boarding column not found in GTFS data")
             # Default to no information
             self._accessible_platform_dict = {}
             self._inaccessible_platform_dict = {}
-        else:
-            # We interpret wheelchair_boarding with strict accuracy.
-            # 0 or blank == unknown
-            # 1 == accessible, for at least some services
-            # 2 == inaccessible
-            # gtfs_type_cleanup.py will correctly turn blanks into 0s for us, so don't need to worry about blanks.
-            wheelchair_boarding_list = self._feed.stops["wheelchair_boarding"].to_list()
-            can_board_list = [bool(x == 1) for x in wheelchair_boarding_list]
-            cannot_board_list = [bool(x == 2) for x in wheelchair_boarding_list]
-            self._accessible_platform_dict = dict(zip(stop_codes, can_board_list))
-            self._inaccessible_platform_dict = dict(zip(stop_codes, cannot_board_list))
+            return
+
+        # OK, the normal case for wheelchair boarding.
+        # We interpret wheelchair_boarding with strict accuracy.
+        # 0 or blank == unknown
+        # 1 == accessible, for at least some services
+        # 2 == inaccessible
+        # gtfs_type_cleanup.py will correctly turn blanks into 0s for us, so don't need to worry about blanks.
+        wheelchair_boarding_list = self._feed.stops["wheelchair_boarding"].to_list()
+        can_board_list = [bool(x == 1) for x in wheelchair_boarding_list]
+        cannot_board_list = [bool(x == 2) for x in wheelchair_boarding_list]
+        self._accessible_platform_dict = dict(zip(stop_codes, can_board_list))
+        self._inaccessible_platform_dict = dict(zip(stop_codes, cannot_board_list))
         return
 
     def stop_code_to_stop_id(self, stop_code: str) -> str:

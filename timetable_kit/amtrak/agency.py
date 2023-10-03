@@ -19,6 +19,14 @@ class AgencyAmtrak(Agency):
     ) -> None:
         super().__init__()
 
+    def stop_code_to_stop_id(self, stop_code: str) -> str:
+        # Identity function for Amtrak
+        return stop_code
+
+    def stop_id_to_stop_code(self, stop_id: str) -> str:
+        # Identity function for Amtrak
+        return stop_id
+
 
 # Establish the singleton
 _singleton = AgencyAmtrak()
