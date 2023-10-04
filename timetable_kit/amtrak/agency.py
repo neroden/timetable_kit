@@ -26,7 +26,6 @@ import timetable_kit.amtrak.baggage as baggage
 import timetable_kit.amtrak.json_stations as json_stations
 
 # for get_station_name_pretty (subroutines)
-import timetable_kit.amtrak.station_names as station_names
 import timetable_kit.text_assembly as text_assembly
 
 # Map from station codes to connecting service names

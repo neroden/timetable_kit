@@ -1,7 +1,7 @@
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Continue transition from module-level functions to singletons
----- Priority is on merging the Amtrak pretty-printing routines
+---- Priority is now on Amtrak/VIA common functionality
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
 
 For making updates easier:
