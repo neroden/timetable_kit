@@ -40,25 +40,3 @@ connecting_services_dict = {
     "OKL": ["via_rail", "go_transit"],
     "TWO": ["via_rail", "go_transit", "union_pearson_express", "ttc"],
 }
-
-
-# This is only used for testing. The real version is in generic_agency
-def get_all_connecting_services(station_list: list[str]) -> list:
-    """
-    Given a list of station codes, return a list of services which connect
-    (with no duplicates)
-    """
-    all_services = []
-    for station in station_list:
-        new_services = connecting_services_dict.get(station, [])
-        for service in new_services:
-            if service not in all_services:
-                all_services.append(service)
-    return all_services
-
-
-if __name__ == "__main__":
-    print("File parsed.")
-    # This both lists all the services, and tests get_all_connecting_services at the same time
-    services = get_all_connecting_services(connecting_services_dict.keys())
-    print("All known connecting services:", services)

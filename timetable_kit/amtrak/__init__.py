@@ -15,10 +15,6 @@ from .agency import AgencyAmtrak
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-# For making the key for connecting services (including only those in this timetable)
-# This takes a list of stations as an argument
-from .connecting_services_data import get_all_connecting_services
-
 # Where to find the GTFS
 from .get_gtfs import (
     gtfs_unzipped_local_path,

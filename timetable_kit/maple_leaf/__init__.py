@@ -23,7 +23,3 @@ from .agency import get_singleton
 
 # How to title the routes at the top of the column
 from timetable_kit.amtrak.route_names import get_route_name
-
-# For making the key for connecting services (including only those in this timetable)
-# This takes a list of stations as an argument
-from .connecting_services_data import get_all_connecting_services
