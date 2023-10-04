@@ -20,9 +20,6 @@ import timetable_kit.via.special_data as special_data
 # All the rest are for get_station_name_pretty
 from timetable_kit.debug import set_debug_level, debug_print
 
-# For subroutines of get_station_name_pretty
-import timetable_kit.via.station_names as station_names
-
 # Map from station codes to connecting service names
 # This is stashed in a class variable
 from timetable_kit.via.connecting_services_data import connecting_services_dict
@@ -119,6 +116,75 @@ class AgencyVIA(Agency):
         """
         return special_data.is_standard_major_station(station_code)
 
+    def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, Optional[str]] :
+        """
+        Separates suffixes like "GO Station" from VIA station names,
+        as "facility name".
+
+        Returns the tuple (stop_name, facility name)
+
+        Also renames certain "troublemaker" stations (Niagara Falls).
+        """
+        # Default to no facility name.
+        facility_name = None
+        # Several stations have (EXO) in parentheses: one has (exo).  Get rid of this.
+        # Some have GO Bus or GO as suffixes.  Get rid of this.
+        # Clarify the confusing Niagara Falls situation.
+        if stop_name_raw.endswith(" (EXO)") or stop_name_raw.endswith(" (exo)"):
+            stop_name_clean = stop_name_raw.removesuffix(" (EXO)").removesuffix(" (exo)")
+            facility_name = "EXO station"
+        elif stop_name_raw.endswith(" GO Bus"):
+            stop_name_clean = stop_name_raw.removesuffix(" GO Bus")
+            facility_name = "GO Bus station"
+        elif stop_name_raw.endswith(" GO"):
+            stop_name_clean = stop_name_raw.removesuffix(" GO")
+            facility_name = "GO station"
+        elif stop_name_raw.endswith(" Bus"):
+            stop_name_clean = stop_name_raw.removesuffix(" Bus")
+            facility_name = "Bus station"
+        elif stop_name_raw == "Niagara Falls Station":
+            stop_name_clean = "Niagara Falls, NY"
+        elif stop_name_raw == "Niagara Falls":
+            stop_name_clean = "Niagara Falls, ON"
+        else:
+            stop_name_clean = stop_name_raw
+        return (stop_name_clean, facility_name)
+
+
+    def replace_facility_names(
+        self, station_code: str, facility_name: Optional[str]
+    ) -> str:
+        """
+        Remove or add certain facility names; leave others intact.
+        """
+        # Only called when generating HTML (consider fixing this?)
+        match station_code:
+            case "SFOY":
+                # Sainte-Foy: explain where the station is
+                facility_name = "for Quebéc City"
+            case "QBEC":
+                # Quebec: Distinguish from other Quebec City stations
+                facility_name = "Gare du Palais"
+            case "MTRL":
+                # Montreal: There are two train stations here (it's not Lucien L'Allier)
+                facility_name = "Central Station"
+            case "ANJO" | "SAUV":
+                # Anjou, Sauvé
+                # On the Senneterre timetable,
+                # "EXO station" blows out a line which we need for Montreal
+                facility_name = None
+            case "OTTW":
+                # Ottawa: Make it clear which LRT station this goes with
+                facility_name = "Tremblay"
+            case "TRTO":
+                # Toronto: Just for clarity
+                facility_name = "Union Station"
+            case "VCVR":
+                # Vancouver: There are two train stations here (it's not Waterfront)
+                facility_name = "Pacific Central Station"
+        return facility_name
+
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
@@ -131,15 +197,9 @@ class AgencyVIA(Agency):
         # Is it major?
         major = self.is_standard_major_station(station_code)
 
-        # Default to no facility name
-        facility_name = None
-
-        # Call a subroutine to handle all the special cases
-        # for specific named stations (Montreal, Vancouver, Niagara Falls, etc.)
-        # Consider refactoring this into the same structure as used in Amtrak & generic
-        # FIXME
-        (city_name, facility_name) = station_names._fix_name_and_facility(
-            stop_name_raw, facility_name
+        # Disassemble the station name into city_name and facility name.
+        (city_name, facility_name) = self.disassemble_station_name(
+            stop_name_raw
         )
 
         # We actually want to add the province to every station,
