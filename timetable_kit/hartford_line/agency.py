@@ -57,6 +57,7 @@ class AgencyHartfordLine(AgencyAmtrak):
                 # facility_name == "State Street Station"
                 # No room
                 facility_name="State Street"
+        return facility_name
 
     def stations_with_many_connections(self) -> list[str]:
         """
