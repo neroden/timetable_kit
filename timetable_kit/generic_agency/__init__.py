@@ -14,11 +14,6 @@ from .agency import Agency
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-
-# NOTE: the below will slowly be removed
-from . import implementation
-
-from .implementation import gtfs_zip_local_path
-from .implementation import gtfs_unzipped_local_path
-
-from .implementation import get_route_name
+# These may require special handling
+gtfs_zip_local_path = None
+gtfs_unzipped_local_path = None
