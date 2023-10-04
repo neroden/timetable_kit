@@ -33,13 +33,13 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         AgencyAmtrak._agency_published_gtfs_urls[0],
         AgencyVIA._agency_published_gtfs_urls[0],
     ]
-    # Initialized from connecting_services_data.py
-    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
+        # Initialized from connecting_services_data.py
+        self._connecting_services_dict = connecting_services_dict
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True

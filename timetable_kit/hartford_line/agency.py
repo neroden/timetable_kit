@@ -26,13 +26,13 @@ class AgencyHartfordLine(AgencyAmtrak):
         "https://www.cttransit.com/about/developers",
         AgencyAmtrak._agency_published_gtfs_urls[0],
     ]
-    # Initialized from connecting_services_data.py
-    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyHartfordLine,
     ) -> None:
         super().__init__()
+        # Initialized from connecting_services_data.py
+        self._connecting_services_dict = connecting_services_dict
 
     def break_long_city_state_name(self, raw_city_state_name: str) -> str:
         """

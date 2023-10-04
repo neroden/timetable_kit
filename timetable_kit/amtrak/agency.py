@@ -32,9 +32,6 @@ import timetable_kit.text_assembly as text_assembly
 # This is stashed in a class variable
 from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
 
-# Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_service_logo_html
-
 # for get_route_name
 import timetable_kit.amtrak.route_names as route_names
 
@@ -47,13 +44,13 @@ class AgencyAmtrak(Agency):
     _agency_published_gtfs_urls = [
         "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
     ]
-    # Initialized from connecting_services_data.py
-    _connecting_services_dict = connecting_services_dict
 
     def __init__(
         self: AgencyAmtrak,
     ) -> None:
         super().__init__()
+        # Initialized from connecting_services_data.py
+        self._connecting_services_dict = connecting_services_dict
 
     def stop_code_to_stop_id(self, stop_code: str) -> str:
         # Identity function for Amtrak
@@ -214,7 +211,9 @@ class AgencyAmtrak(Agency):
                 city_state_name = raw_city_state_name
         return city_state_name
 
-    def replace_facility_names(self, station_code: str, facility_name: str) -> str:
+    def replace_facility_names(
+        self, station_code: str, facility_name: Optional[str]
+    ) -> str:
         """
         Replace certain facility names; leave others intact.
         """
@@ -229,6 +228,18 @@ class AgencyAmtrak(Agency):
                 # We have the room for the long version
                 # because we're taking an extra line for connecting services
                 facility_name = "Moynihan Train Hall at Penn Station"
+
+        # It looks stupid to see "- Amtrak Station."
+        # I know it's there to distinguish from bus stops, but come on.
+        # Let's assume it's the Amtrak station unless otherwise specified.
+        # Also saves critical vertical space on Empire Builder timetable.
+        #
+        # Also eliminate Providence's "Amtrak/MBTA Station";
+        # saves critical space on NEC timetables, and we're indicating the MBTA connection
+        # in another way anyway.
+        if facility_name in ["Amtrak Station", "Amtrak/MBTA Station"]:
+            facility_name = None
+
         return facility_name
 
     def stations_to_put_facility_on_first_line(self) -> list[str]:
@@ -266,113 +277,6 @@ class AgencyAmtrak(Agency):
         # and it doesn't matter for the Coast Starlight timetable.
         return []
         # return ["ANA", "OLT"]
-
-    def disassembled_station_name_to_html(
-        self,
-        city_state_name: str,
-        facility_name: Optional[str],
-        station_code: str,
-        major=False,
-        show_connections=True,
-    ) -> str:
-        """
-        Given a disassembled station name, produce suitable HTML.
-
-        If "major", then make the station name bigger and bolder
-        If "show_connections" (default True) then add links for connecting services (complex!)
-        """
-
-        # Add <br> to certain extra-long city & state names
-        city_state_name = self.break_long_city_state_name(city_state_name)
-
-        # Add styling for major stations
-        if major:
-            enhanced_city_state_name = "".join(
-                ["<span class=major-station >", city_state_name, "</span>"]
-            )
-        else:
-            enhanced_city_state_name = "".join(
-                ["<span class=minor-station >", city_state_name, "</span>"]
-            )
-
-        # Add the station code in smaller print
-        enhanced_station_code = "".join(
-            ["<span class=station-footnotes>(", station_code, ")</span>"]
-        )
-
-        # Certain stations need special treatment on the facility names.
-        facility_name = self.replace_facility_names(station_code, facility_name)
-
-        # It looks stupid to see "- Amtrak Station."
-        # I know it's there to distinguish from bus stops, but come on.
-        # Let's assume it's the Amtrak station unless otherwise specified.
-        # Also saves critical vertical space on Empire Builder timetable.
-        #
-        # Also eliminate Providence's "Amtrak/MBTA Station";
-        # saves critical space on NEC timetables, and we're indicating the MBTA connection
-        # in another way anyway.
-        if facility_name and facility_name not in [
-            "Amtrak Station",
-            "Amtrak/MBTA Station",
-        ]:
-            # By default, put the facility name on its own line
-            br_for_facility_name = "<br>"
-            if station_code in self.stations_to_put_facility_on_first_line():
-                br_for_facility_name = " "
-            enhanced_facility_name = "".join(
-                [
-                    br_for_facility_name,
-                    "<span class=station-footnotes>",
-                    " - ",
-                    facility_name,
-                    "</span>",
-                ]
-            )
-        else:
-            enhanced_facility_name = ""
-
-        # Connections.  Hoo boy.  Default to nothing.
-        connection_logos_html = ""
-        if show_connections:
-            # Grab an extra line for certain stations with LOTS of connections
-            if station_code in self.stations_with_many_connections():
-                connection_logos_html += "<br>"
-            # station_code had better be correct, since we're going to look it up
-            # stations with no entry in the dict are treated the same as
-            # stations which have an empty list of connecting services
-            connecting_services = self._connecting_services_dict.get(station_code, [])
-            for connecting_service in connecting_services:
-                # Note, this is "" if the agency is not found (but a debug error will print)
-                # Otherwise it's a complete HTML code for the agency & its icon
-                this_logo_html = get_connecting_service_logo_html(connecting_service)
-                if this_logo_html:
-                    # Add a space before the logo... if it exists at all
-                    connection_logos_html += " "
-                    connection_logos_html += this_logo_html
-            # Initial implementation tucks all connecting services on the same line.
-            # This seems to be working.
-
-        fancy_name = "".join(
-            [
-                enhanced_city_state_name,
-                " ",
-                enhanced_station_code,
-                enhanced_facility_name,  # Has its own space or <br> before it
-                connection_logos_html,  # Has spaces or <br> before it as needed
-            ]
-        )
-        # For some stations, there's more room on the first line than the second for connections.
-        if station_code in self.stations_with_connections_on_first_line():
-            fancy_name = "".join(
-                [
-                    enhanced_city_state_name,
-                    " ",
-                    enhanced_station_code,
-                    connection_logos_html,  # Has spaces or <br> before it as needed
-                    enhanced_facility_name,  # Has its own space or <br> before it
-                ]
-            )
-        return fancy_name
 
 
 # Establish the singleton

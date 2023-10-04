@@ -16,6 +16,9 @@ from timetable_kit.debug import debug_print
 # For text twiddling
 from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
 
+# Find the HTML for a specific connecting agency's logo
+from timetable_kit.connecting_services import get_connecting_service_logo_html
+
 
 # Intended to be used both directly and by subclasses
 class Agency:
@@ -30,9 +33,6 @@ class Agency:
     _agency_websites = []
     # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
     _agency_published_gtfs_urls = []
-    # This is the dict of *all* the possible connecting services
-    # Generally initialized from a static file in the module
-    _connecting_services_dict = []
 
     def __init__(
         self: Agency,
@@ -49,6 +49,13 @@ class Agency:
         self._inaccessible_platform_dict = None
         # Used for the generic get_route_id (but not by Amtrak or VIA)
         self._route_name_dict = None
+        # This is the dict of *all* the possible connecting services
+        # Generally initialized from a static file in the module
+        # Defaults to {}
+        # Should be an instance variable: if a class variable, there's trouble and the
+        # wrong version can be grabbed by disassembled_station_name_to_html
+        # This also avoids loading unnecessary copies
+        self._connecting_services_dict = {}
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -372,6 +379,151 @@ class Agency:
         if self._route_name_dict is None:
             self._prepare_route_name_dict(feed)
         return self._route_name_dict[route_id]
+
+    def break_long_city_state_name(self, city_state_name: str) -> str:
+        """
+        Replace overly-long city/state names for stops with shorter ones, or ones with line breaks.
+        Return others unchanged.
+
+        Subroutine of disassembled_station_name_to_html.
+        For generic agency, returns all names unchanged.
+        """
+        return city_state_name
+
+    def replace_facility_names(
+        self, station_code: str, facility_name: Optional[str]
+    ) -> str:
+        """
+        Replace problematic facility names (also add or remove facility names as needed.
+        Return others unchanged.
+
+        Subroutine of disassembled_station_name_to_html.
+        For generic agency, returns all names unchanged.
+        """
+        return facility_name
+
+    def stations_to_put_facility_on_first_line(self) -> list[str]:
+        """
+        Stations where the facility name should be in the same line as the station.
+
+        Subroutine of disassembled_station_name_to_html.
+        For generic agency, none.
+        """
+        return []
+
+    def stations_with_many_connections(self) -> list[str]:
+        """
+        Return a list of station codes which should get an extra line for connections.
+
+        Subroutine of disassembled_station_name_to_html.
+        For generic agency, none.
+        """
+        return []
+
+    def stations_with_connections_on_first_line(self) -> list[str]:
+        """
+        List of station codes where the connections should be on the first line rather than the second.
+
+        Subroutine of disassembled_station_name_to_html.
+        For generic agency, none.
+        """
+        return []
+
+    def disassembled_station_name_to_html(
+        self,
+        city_state_name: str,
+        facility_name: Optional[str],
+        station_code: str,
+        major=False,
+        show_connections=True,
+    ) -> str:
+        """
+        Given a disassembled station name, produce suitable HTML.
+
+        If "major", then make the station name bigger and bolder
+        If "show_connections" (default True) then add links for connecting services (complex!)
+        """
+
+        # Add <br> to certain extra-long city & state names
+        city_state_name = self.break_long_city_state_name(city_state_name)
+
+        # Add styling for major stations
+        if major:
+            enhanced_city_state_name = "".join(
+                ["<span class=major-station >", city_state_name, "</span>"]
+            )
+        else:
+            enhanced_city_state_name = "".join(
+                ["<span class=minor-station >", city_state_name, "</span>"]
+            )
+
+        # Add the station code in smaller print
+        enhanced_station_code = "".join(
+            ["<span class=station-footnotes>(", station_code, ")</span>"]
+        )
+
+        # Certain stations need special treatment on the facility names.
+        facility_name = self.replace_facility_names(station_code, facility_name)
+
+        if facility_name:
+            # By default, put the facility name on its own line
+            br_for_facility_name = "<br>"
+            if station_code in self.stations_to_put_facility_on_first_line():
+                br_for_facility_name = " "
+            enhanced_facility_name = "".join(
+                [
+                    br_for_facility_name,
+                    "<span class=station-footnotes>",
+                    " - ",
+                    facility_name,
+                    "</span>",
+                ]
+            )
+        else:
+            enhanced_facility_name = ""
+
+        # Connections.  Hoo boy.  Default to nothing.
+        connection_logos_html = ""
+        if show_connections:
+            # Grab an extra line for certain stations with LOTS of connections
+            if station_code in self.stations_with_many_connections():
+                connection_logos_html += "<br>"
+            # station_code had better be correct, since we're going to look it up
+            # stations with no entry in the dict are treated the same as
+            # stations which have an empty list of connecting services
+            connecting_services = self._connecting_services_dict.get(station_code, [])
+            for connecting_service in connecting_services:
+                # Note, this is "" if the agency is not found (but a debug error will print)
+                # Otherwise it's a complete HTML code for the agency & its icon
+                this_logo_html = get_connecting_service_logo_html(connecting_service)
+                if this_logo_html:
+                    # Add a space before the logo... if it exists at all
+                    connection_logos_html += " "
+                    connection_logos_html += this_logo_html
+            # We should now have all connecting service logos on one line.
+
+        # Assemble the final name:
+        fancy_name = "".join(
+            [
+                enhanced_city_state_name,
+                " ",
+                enhanced_station_code,
+                enhanced_facility_name,  # Has its own space or <br> before it
+                connection_logos_html,  # Has spaces or <br> before it as needed
+            ]
+        )
+        # For some stations, there's more room on the first line than the second for connections.
+        if station_code in self.stations_with_connections_on_first_line():
+            fancy_name = "".join(
+                [
+                    enhanced_city_state_name,
+                    " ",
+                    enhanced_station_code,
+                    connection_logos_html,  # Has spaces or <br> before it as needed
+                    enhanced_facility_name,  # Has its own space or <br> before it
+                ]
+            )
+        return fancy_name
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True

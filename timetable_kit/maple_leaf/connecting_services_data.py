@@ -9,34 +9,37 @@ This module is a database of which stations connect to which other transit servi
 Sadly, it must be maintained by hand.
 """
 
+# In order to reuse the existing code, we have to key these by the *enhanced* station code,
+# which looks like NYP / NEWY
+
 # key: station code
 # value: list of services (strings matching the definitions in timetable_kit/connecting_services/*.py
 # Order matters: it's the order the logos will be printed in
 # Maple Leaf is the only timetable where we include both VIA and Amtrak connections
 # New York State Fair (NYF) shows up occasionally, but leave this out
 connecting_services_dict = {
-    "NYP": ["amtrak", "njt", "nyc_subway", "lirr"],
-    "YNY": ["amtrak"],
-    "CRT": ["amtrak", "metro_north"],
-    "POU": ["amtrak", "metro_north"],
-    "RHI": ["amtrak"],
-    "HUD": ["amtrak"],
-    "ALB": ["amtrak"],
-    "SDY": ["amtrak"],
-    "AMS": ["amtrak"],
-    "UCA": ["amtrak", "adirondack"],
-    "ROM": ["amtrak"],
-    "SYR": ["amtrak"],
-    "ROC": ["amtrak"],
-    "BUF": ["amtrak"],
-    "BFX": ["amtrak", "nfta_metro"],
-    "NFL": ["amtrak"],
-    "CBN": [],  # Canadian Border
+    "NYP / NEWY": ["amtrak", "njt", "nyc_subway", "lirr"],
+    "YNY / YONK": ["amtrak"],
+    "CRT / CROT": ["amtrak", "metro_north"],
+    "POU / POUG": ["amtrak", "metro_north"],
+    "RHI / RHIN": ["amtrak"],
+    "HUD / HUDS": ["amtrak"],
+    "ALB / ALBY": ["amtrak"],
+    "SDY / SCHE": ["amtrak"],
+    "AMS / AMST": ["amtrak"],
+    "UCA / UTIC": ["amtrak", "adirondack"],
+    "ROM / ROME": ["amtrak"],
+    "SYR / SYRA": ["amtrak"],
+    "ROC / ROCH": ["amtrak"],
+    "BUF / BUFF": ["amtrak"],
+    "BFX / BUFX": ["amtrak", "nfta_metro"],
+    "NFL / NFNY": ["amtrak"],
+    # "CBN": [],  # Canadian Border
     # Maple Leaf in Canada
-    "NFS": ["via_rail", "go_transit"],
-    "SCA": ["via_rail", "go_transit"],
-    "GMS": ["via_rail"],
-    "AST": ["via_rail", "go_transit"],
-    "OKL": ["via_rail", "go_transit"],
-    "TWO": ["via_rail", "go_transit", "union_pearson_express", "ttc"],
+    "NFS / NIAG": ["via_rail", "go_transit"],
+    "SCA / SCAT": ["via_rail", "go_transit"],
+    "GMS / GRIM": ["via_rail"],
+    "AST / ALDR": ["via_rail", "go_transit"],
+    "OKL / OAKV": ["via_rail", "go_transit"],
+    "TWO / TRTO": ["via_rail", "go_transit", "union_pearson_express", "ttc"],
 }
