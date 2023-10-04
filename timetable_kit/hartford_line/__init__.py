@@ -10,9 +10,10 @@ This defines an interface; each agency needs to provide the same interface
 """
 
 # Where to find the GTFS (merged GTFS)
-from .merge_gtfs import (
-    gtfs_unzipped_local_path,
-)
+from .merge_gtfs import gtfs_unzipped_local_path
+
+# Where to find the GTFS (raw gtfs) (used by merge_gtfs)
+import timetable_kit.hartford_line.get_gtfs as get_gtfs
 
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
