@@ -43,7 +43,7 @@ class AgencyHartfordLine(AgencyAmtrak):
         city_state_name = " ".join([city_name, state_name])
         return city_state_name
 
-    def replace_facility_names(self, station_code:str, facility_name:str) -> str:
+    def replace_facility_names(self, station_code: str, facility_name: str) -> str:
         """
         Replace certain facility names; leave others intact.
         """
@@ -56,7 +56,7 @@ class AgencyHartfordLine(AgencyAmtrak):
             case "STS":
                 # facility_name == "State Street Station"
                 # No room
-                facility_name="State Street"
+                facility_name = "State Street"
         return facility_name
 
     def stations_with_many_connections(self) -> list[str]:

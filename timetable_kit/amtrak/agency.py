@@ -32,6 +32,7 @@ import timetable_kit.text_assembly as text_assembly
 # Map from station codes to connecting service names
 # This is stashed in a class variable
 from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
+
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
 
@@ -144,6 +145,30 @@ class AgencyAmtrak(Agency):
         """
         return json_stations.get_station_name(stop_code)
 
+    def disassemble_station_name(self, station_name: str):
+        """
+        Disassemble an Amtrak station name in one of these two forms:
+        Champaign-Urbana, IL (CHM)
+        New Orleans, LA - Union Passenger Terminal (NOL)
+        into (city_state_name, facility_name, station_code).
+        Return a tuple.
+        """
+        if " - " in station_name:
+            (city_state_name, second_part) = station_name.split(" - ", 1)
+            (facility_name, suffix) = second_part.split(" (", 1)
+            (station_code, _) = suffix.split(")", 1)
+        else:
+            facility_name = None
+            (city_state_name, suffix) = station_name.split(" (", 1)
+            (station_code, _) = suffix.split(")", 1)
+        return (city_state_name, facility_name, station_code)
+
+    def is_standard_major_station(self, station_code: str) -> bool:
+        """
+        Is this a "major" station which should be boldfaced and capitalized?
+        """
+        return special_data.is_standard_major_station(station_code)
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
@@ -153,21 +178,18 @@ class AgencyAmtrak(Agency):
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
-        if " - " in station_name:
-            (city_state_name, second_part) = station_name.split(" - ", 1)
-            (facility_name, suffix) = second_part.split(" (", 1)
-            (station_code, _) = suffix.split(")", 1)
-        else:
-            facility_name = None
-            (city_state_name, suffix) = station_name.split(" (", 1)
-            (station_code, _) = suffix.split(")", 1)
+        (city_state_name, facility_name, station_code) = self.disassemble_station_name(
+            station_name
+        )
 
         # Get the major station information.
-        major = special_data.is_standard_major_station(station_code)
+        major = self.is_standard_major_station(station_code)
 
         # Call the appropriate reassembly routine.
         if doing_html:
-            return self.disassembled_station_name_to_html(city_state_name, facility_name, station_code, major)
+            return self.disassembled_station_name_to_html(
+                city_state_name, facility_name, station_code, major
+            )
         elif doing_multiline_text:
             reassemble = text_assembly.station_name_to_multiline_text
             return reassemble(city_state_name, facility_name, station_code, major)
@@ -193,7 +215,7 @@ class AgencyAmtrak(Agency):
                 city_state_name = raw_city_state_name
         return city_state_name
 
-    def replace_facility_names(self, station_code:str, facility_name:str) -> str:
+    def replace_facility_names(self, station_code: str, facility_name: str) -> str:
         """
         Replace certain facility names; leave others intact.
         """
@@ -201,7 +223,7 @@ class AgencyAmtrak(Agency):
             case "PHL":
                 # facility_name == "William H. Gray III 30th St. Station"
                 # Sorry, Mr. Gray, your name is too long
-                facility_name="30th St. Station"
+                facility_name = "30th St. Station"
             case "NYP":
                 # facility_name == "Moynihan Train Hall"
                 # Explain that this is Penn Station
@@ -209,7 +231,6 @@ class AgencyAmtrak(Agency):
                 # because we're taking an extra line for connecting services
                 facility_name = "Moynihan Train Hall at Penn Station"
         return facility_name
-
 
     def stations_to_put_facility_on_first_line(self) -> list[str]:
         """
@@ -219,7 +240,6 @@ class AgencyAmtrak(Agency):
         # This is needed at Boston for the Richmond timetable
         # Consider at Toronto for the sheer number of connecting services on the next line
         return ["BOS", "BBY"]
-
 
     def stations_with_many_connections(self) -> list[str]:
         """
@@ -234,7 +254,6 @@ class AgencyAmtrak(Agency):
         # TWO (Toronto) has a lot of connections,
         # but Empire Service timetables have more width than length available
         return ["NYP", "SLC", "SNC", "OSD"]
-
 
     def stations_with_connections_on_first_line(self) -> list[str]:
         """
@@ -282,7 +301,6 @@ class AgencyAmtrak(Agency):
             ["<span class=station-footnotes>(", station_code, ")</span>"]
         )
 
-
         # Certain stations need special treatment on the facility names.
         facility_name = self.replace_facility_names(station_code, facility_name)
 
@@ -294,7 +312,10 @@ class AgencyAmtrak(Agency):
         # Also eliminate Providence's "Amtrak/MBTA Station";
         # saves critical space on NEC timetables, and we're indicating the MBTA connection
         # in another way anyway.
-        if facility_name and facility_name not in ["Amtrak Station", "Amtrak/MBTA Station"]:
+        if facility_name and facility_name not in [
+            "Amtrak Station",
+            "Amtrak/MBTA Station",
+        ]:
             # By default, put the facility name on its own line
             br_for_facility_name = "<br>"
             if station_code in self.stations_to_put_facility_on_first_line():

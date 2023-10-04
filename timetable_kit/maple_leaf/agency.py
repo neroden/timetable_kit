@@ -11,12 +11,12 @@ from __future__ import annotations
 from timetable_kit.amtrak import AgencyAmtrak
 from timetable_kit.via import AgencyVIA
 
-# For get_station_name_pretty, our version
-import timetable_kit.maple_leaf.station_names as station_names
-
 # Map from station codes to connecting service names
 # This is stashed in a class variable
 from timetable_kit.maple_leaf.connecting_services_data import connecting_services_dict
+
+# For getting VIA station codes to print them
+from timetable_kit.maple_leaf.station_data import amtrak_code_to_via_code
 
 
 # This should mostly be based on Amtrak.
@@ -47,11 +47,35 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         """
         Pretty-print a station name.
         """
-        return station_names.get_station_name_pretty(
-            station_code,
-            doing_multiline_text=doing_multiline_text,
-            doing_html=doing_html,
+        # Get the raw station name (from JSON; Amtrak data contains the VIA stops, even the ones not in Amtrak GTFS)
+        station_name = self.stop_code_to_stop_name(station_code)
+        # Disassemble it.
+        (city_state_name, facility_name, station_code) = self.disassemble_station_name(
+            station_name
         )
+
+        # Special tweak for Maple Leaf: print Amtrak and VIA codes
+        via_code = amtrak_code_to_via_code[station_code]
+        enhanced_station_code = station_code + " / " + via_code
+
+        # Get the major station information.
+        major = self.is_standard_major_station(station_code)
+
+        # Call the appropriate reassembly routine.
+        if doing_html:
+            return self.disassembled_station_name_to_html(
+                city_state_name, facility_name, enhanced_station_code, major
+            )
+        elif doing_multiline_text:
+            reassemble = text_assembly.station_name_to_multiline_text
+            return reassemble(
+                city_state_name, facility_name, enhanced_station_code, major
+            )
+        else:
+            reassemble = text_assembly.station_name_to_single_line_text
+            return reassemble(
+                city_state_name, facility_name, enhanced_station_code, major
+            )
 
 
 # Establish the singleton
