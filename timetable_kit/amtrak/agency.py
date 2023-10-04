@@ -235,6 +235,20 @@ class AgencyAmtrak(Agency):
         # but Empire Service timetables have more width than length available
         return ["NYP", "SLC", "SNC", "OSD"]
 
+
+    def stations_with_connections_on_first_line(self) -> list[str]:
+        """
+        List of station codes where the connections should be on the first line rather than the second.
+        """
+        # San Diego Old Town has a short station name and a long facility name,
+        # but also several long connecting services.  So put connections on line one,
+        # before the facility name line.
+        # Same with Anaheim.
+        # Currently disabled because we aren't making the Pacific Surfliner timetable,
+        # and it doesn't matter for the Coast Starlight timetable.
+        return []
+        # return ["ANA", "OLT"]
+
     def disassembled_station_name_to_html(
         self,
         city_state_name: str,
@@ -327,19 +341,15 @@ class AgencyAmtrak(Agency):
                 connection_logos_html,  # Has spaces or <br> before it as needed
             ]
         )
-        if station_code in ["ANA", "OLT"]:
-            # San Diego Old Town has a short station name and a long facility name,
-            # but also several long connecting services.  So put connections on line one,
-            # before the facility name line.
-            # Same with Anaheim.
-            # Currently disabled.
+        # For some stations, there's more room on the first line than the second for connections.
+        if station_code in self.stations_with_connections_on_first_line():
             fancy_name = "".join(
                 [
                     enhanced_city_state_name,
                     " ",
                     enhanced_station_code,
-                    enhanced_facility_name,  # Has its own space or <br> before it
                     connection_logos_html,  # Has spaces or <br> before it as needed
+                    enhanced_facility_name,  # Has its own space or <br> before it
                 ]
             )
         return fancy_name
