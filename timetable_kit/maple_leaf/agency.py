@@ -50,9 +50,7 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         # Get the raw station name (from JSON; Amtrak data contains the VIA stops, even the ones not in Amtrak GTFS)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
-        (city_state_name, facility_name, station_code) = self.disassemble_station_name(
-            station_name
-        )
+        (city_state_name, facility_name) = self.disassemble_station_name(station_name)
 
         # Special tweak for Maple Leaf: print Amtrak and VIA codes
         via_code = amtrak_code_to_via_code[station_code]
