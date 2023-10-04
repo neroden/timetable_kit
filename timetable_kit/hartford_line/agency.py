@@ -10,9 +10,6 @@ from __future__ import annotations
 
 from timetable_kit.amtrak import AgencyAmtrak
 
-# For our version of get_station_name_pretty
-import timetable_kit.hartford_line.station_names as station_names
-
 # Map from station codes to connecting service names
 # This is stashed in a class variable
 from timetable_kit.hartford_line.connecting_services_data import (
@@ -37,17 +34,35 @@ class AgencyHartfordLine(AgencyAmtrak):
     ) -> None:
         super().__init__()
 
-    def get_station_name_pretty(
-        self, station_code: str, doing_multiline_text=False, doing_html=True
-    ) -> str:
+    def break_long_city_state_name(self, raw_city_state_name: str) -> str:
         """
-        Pretty-print a station name.
+        Hartford Line timetable has no spare width.  Remove the comma between city and state.
         """
-        return station_names.get_station_name_pretty(
-            station_code,
-            doing_multiline_text=doing_multiline_text,
-            doing_html=doing_html,
-        )
+        (city_name, state_name) = raw_city_state_name.split(", ", 1)
+        # Remove the comma, join with a space
+        city_state_name = " ".join([city_name, state_name])
+        return city_state_name
+
+    def replace_facility_names(self, station_code:str, facility_name:str) -> str:
+        """
+        Replace certain facility names; leave others intact.
+        """
+        match station_code:
+            case "NYP":
+                # facility_name == "Moynihan Train Hall"
+                # Explain that this is Penn Station
+                # No room for train hall reference
+                facility_name = "Penn Station"
+            case "STS":
+                # facility_name == "State Street Station"
+                # No room
+                facility_name="State Street"
+
+    def stations_with_many_connections(self) -> list[str]:
+        """
+        Stations with an extra line for connections.  None for Hartford Line.
+        """
+        return []
 
 
 # Establish the singleton
