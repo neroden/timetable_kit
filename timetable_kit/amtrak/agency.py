@@ -146,18 +146,19 @@ class AgencyAmtrak(Agency):
         Disassemble an Amtrak station name in one of these two forms:
         Champaign-Urbana, IL (CHM)
         New Orleans, LA - Union Passenger Terminal (NOL)
-        into (city_state_name, facility_name, station_code).
+        into (city_state_name, facility_name).
         Return a tuple.
+        We abandon the station code because we expect to already have it.
         """
         if " - " in station_name:
             (city_state_name, second_part) = station_name.split(" - ", 1)
             (facility_name, suffix) = second_part.split(" (", 1)
-            (station_code, _) = suffix.split(")", 1)
+            # (station_code, _) = suffix.split(")", 1)
         else:
             facility_name = None
             (city_state_name, suffix) = station_name.split(" (", 1)
-            (station_code, _) = suffix.split(")", 1)
-        return (city_state_name, facility_name, station_code)
+            # (station_code, _) = suffix.split(")", 1)
+        return (city_state_name, facility_name)
 
     def is_standard_major_station(self, station_code: str) -> bool:
         """
@@ -174,9 +175,7 @@ class AgencyAmtrak(Agency):
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
-        (city_state_name, facility_name, station_code) = self.disassemble_station_name(
-            station_name
-        )
+        (city_state_name, facility_name) = self.disassemble_station_name(station_name)
 
         # Get the major station information.
         major = self.is_standard_major_station(station_code)

@@ -116,7 +116,7 @@ class AgencyVIA(Agency):
         """
         return special_data.is_standard_major_station(station_code)
 
-    def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, Optional[str]] :
+    def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, Optional[str]]:
         """
         Separates suffixes like "GO Station" from VIA station names,
         as "facility name".
@@ -130,8 +130,11 @@ class AgencyVIA(Agency):
         # Several stations have (EXO) in parentheses: one has (exo).  Get rid of this.
         # Some have GO Bus or GO as suffixes.  Get rid of this.
         # Clarify the confusing Niagara Falls situation.
-        if stop_name_raw.endswith(" (EXO)") or stop_name_raw.endswith(" (exo)"):
-            stop_name_clean = stop_name_raw.removesuffix(" (EXO)").removesuffix(" (exo)")
+        if stop_name_raw.endswith(" (EXO)"):
+            stop_name_clean = stop_name_raw.removesuffix(" (EXO)")
+            facility_name = "EXO station"
+        elif stop_name_raw.endswith(" (exo)"):
+            stop_name_clean = stop_name_raw.removesuffix(" (exo)")
             facility_name = "EXO station"
         elif stop_name_raw.endswith(" GO Bus"):
             stop_name_clean = stop_name_raw.removesuffix(" GO Bus")
@@ -149,7 +152,6 @@ class AgencyVIA(Agency):
         else:
             stop_name_clean = stop_name_raw
         return (stop_name_clean, facility_name)
-
 
     def replace_facility_names(
         self, station_code: str, facility_name: Optional[str]
@@ -184,7 +186,6 @@ class AgencyVIA(Agency):
                 facility_name = "Pacific Central Station"
         return facility_name
 
-
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
@@ -198,9 +199,7 @@ class AgencyVIA(Agency):
         major = self.is_standard_major_station(station_code)
 
         # Disassemble the station name into city_name and facility name.
-        (city_name, facility_name) = self.disassemble_station_name(
-            stop_name_raw
-        )
+        (city_name, facility_name) = self.disassemble_station_name(stop_name_raw)
 
         # We actually want to add the province to every station,
         # but VIA doesn't provide that info.  It's too much work.
