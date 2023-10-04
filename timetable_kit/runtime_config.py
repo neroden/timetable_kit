@@ -43,7 +43,9 @@ def set_agency(agency: str):
 
     match agency:
         case "generic":
-            debug_print(1, "Using generic agency module (Note: does not work on all GTFS feeds)")
+            debug_print(
+                1, "Using generic agency module (Note: does not work on all GTFS feeds)"
+            )
             agency_name = "Generic"
             agency_package = timetable_kit.generic_agency
             agency_input_dir = "specs_generic"

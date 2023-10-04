@@ -11,6 +11,7 @@ from .agency import get_singleton
 # These probably belong in their own file
 # FIXME
 from pathlib import Path
+
 module_location = Path(__file__).parent
 gtfs_zip_local_path = module_location / "greyhound.zip"
 gtfs_unzipped_local_path = module_location / "gtfs"

@@ -52,10 +52,9 @@ from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 from timetable_kit.initialize import initialize_feed
 
 # We call these repeatedly, so give them shorthand names
-from timetable_kit.runtime_config import agency as agency
-from timetable_kit.runtime_config import agency_singleton as agency_singleton
+from timetable_kit.runtime_config import agency
+from timetable_kit.runtime_config import agency_singleton
 
-# If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
 
@@ -1542,19 +1541,7 @@ def produce_several_timetables(
     # The following are rather finicky in their ordering:
 
     # Acquire the feed, enhance it, do generic patching.
-    master_feed = initialize_feed(gtfs=gtfs_filename)
-
-    # Amtrak-specific patches.  Bleah!  FIXME
-    if patch_the_feed:
-        master_feed = agency_singleton().patch_feed(master_feed)
-        debug_print(1, "Feed patched, hopefully")
-    else:
-        # Have to patch in the wheelchair access info regardless
-        master_feed = agency_singleton().patch_feed_wheelchair_access_only(master_feed)
-        debug_print(1, "Feed patched for wheelchair access only")
-
-    # Initialize the agency singleton from the feed.
-    agency_singleton().init_from_feed(master_feed)
+    master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
 
     # Deal with ".list" files.
     list_file_list = sew_pages.get_only_list_files(spec_file_list)

@@ -22,8 +22,10 @@ def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
     new_feed = feed.copy()
 
     new_trips = new_feed.trips
+    debug_print(1, "Patching in trip_short_name values")
     # Fill in the trip short name from the trip_id to make this usable
     new_trips["trip_short_name"] = new_trips["trip_id"]
+    debug_print(1, new_trips)
     # And copy it back into the feed
     new_feed.trips = new_trips
 

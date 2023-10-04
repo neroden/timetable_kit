@@ -219,10 +219,8 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
-    # Initialize the feed.
+    # Initialize the feed & the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
-    # Initialize the agency singleton from the feed.
-    agency_singleton().init_from_feed(master_feed)
 
     today_feed = filter_feed_for_utilities(
         master_feed, reference_date=args.reference_date, day_of_week=args.day

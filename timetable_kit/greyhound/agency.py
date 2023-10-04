@@ -14,12 +14,14 @@ from timetable_kit.generic_agency import Agency
 # for patch_feed
 import timetable_kit.greyhound.gtfs_patches as gtfs_patches
 
+
 class AgencyGreyhound(Agency):
     """Greyhound-specific code for interpreting specs and GTFS feeds"""
 
-    _agency_names = ["Greyhound"] # Also FlixBus?
+    _agency_names = ["Greyhound"]  # Also FlixBus?
     _agency_websites = ["Greyhound.com"]
     _agency_published_gtfs_urls = ["https://www.transit.land/feeds/f-9-flixbus"]
+
     def __init__(
         self: AgencyGreyhound,
     ) -> None:
@@ -28,7 +30,6 @@ class AgencyGreyhound(Agency):
         # Initialized from connecting_services_data.py
         # self._connecting_services_dict = connecting_services_dict
 
-
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
         Apply Greyhound-specific patches to a feed.
@@ -36,6 +37,7 @@ class AgencyGreyhound(Agency):
         Does not alter data in the Agency object.
         """
         return gtfs_patches.patch_feed(feed)
+
 
 # Establish the singleton
 _singleton = AgencyGreyhound()
