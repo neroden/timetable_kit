@@ -21,11 +21,19 @@ def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
 
     new_feed = feed.copy()
 
+    # Greyhound has no trip_short_name.
     new_trips = new_feed.trips
     debug_print(1, "Patching in trip_short_name values")
     # Fill in the trip short name from the trip_id to make this usable
     new_trips["trip_short_name"] = new_trips["trip_id"]
     debug_print(1, new_trips)
+
+    # Unfortunately, the trip_id values are pretty hard to use too.
+    # Ideally we'd patch in a more user-friendly trip_short_name,
+    # probably based on the route_short_name with a distinguishing suffix
+    # based on first departure time?
+    # TODO.
+
     # And copy it back into the feed
     new_feed.trips = new_trips
 
