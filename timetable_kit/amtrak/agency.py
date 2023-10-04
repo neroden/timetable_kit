@@ -193,6 +193,48 @@ class AgencyAmtrak(Agency):
                 city_state_name = raw_city_state_name
         return city_state_name
 
+    def replace_facility_names(self, station_code:str, facility_name:str) -> str:
+        """
+        Replace certain facility names; leave others intact.
+        """
+        match station_code:
+            case "PHL":
+                # facility_name == "William H. Gray III 30th St. Station"
+                # Sorry, Mr. Gray, your name is too long
+                facility_name="30th St. Station"
+            case "NYP":
+                # facility_name == "Moynihan Train Hall"
+                # Explain that this is Penn Station
+                # We have the room for the long version
+                # because we're taking an extra line for connecting services
+                facility_name = "Moynihan Train Hall at Penn Station"
+        return facility_name
+
+
+    def stations_to_put_facility_on_first_line(self) -> list[str]:
+        """
+        Stations where the facility name should be in the same line as the station.
+        """
+        # Save lines on some timetables by putting the facility code on the same line as the station
+        # This is needed at Boston for the Richmond timetable
+        # Consider at Toronto for the sheer number of connecting services on the next line
+        return ["BOS", "BBY"]
+
+
+    def stations_with_many_connections(self) -> list[str]:
+        """
+        Return a list of station codes which should get an extra line for connections.
+        """
+        # NYP has a long facility name and a lot of connections
+        # SLC has connections with very long lines
+        # On the Pacific Surfliner:
+        # SNC (San Juan Capistrano), OSD (Oceanside)
+        # have excessively wide connection logos
+        # Grab an extra line in these cases
+        # TWO (Toronto) has a lot of connections,
+        # but Empire Service timetables have more width than length available
+        return ["NYP", "SLC", "SNC", "OSD"]
+
     def disassembled_station_name_to_html(
         self,
         city_state_name: str,
@@ -226,6 +268,10 @@ class AgencyAmtrak(Agency):
             ["<span class=station-footnotes>(", station_code, ")</span>"]
         )
 
+
+        # Certain stations need special treatment on the facility names.
+        facility_name = self.replace_facility_names(station_code, facility_name)
+
         # It looks stupid to see "- Amtrak Station."
         # I know it's there to distinguish from bus stops, but come on.
         # Let's assume it's the Amtrak station unless otherwise specified.
@@ -237,20 +283,8 @@ class AgencyAmtrak(Agency):
         if facility_name and facility_name not in ["Amtrak Station", "Amtrak/MBTA Station"]:
             # By default, put the facility name on its own line
             br_for_facility_name = "<br>"
-            if station_code in ["BOS", "BBY"]:
-                # Save lines on some timetables by putting the facility code on the same line as the station
-                # This is needed at Boston for the Richmond timetable
-                # Consider at Toronto for the sheer number of connecting services on the next line
+            if station_code in self.stations_to_put_facility_on_first_line():
                 br_for_facility_name = " "
-            if station_code == "PHL":
-                # facility_name == "William H. Gray III 30th St. Station"
-                # Sorry, Mr. Gray, your name is too long
-                facility_name = "30th St. Station"
-            if station_code == "NYP":
-                # facility_name == "Moynihan Train Hall"
-                # Explain that this is Penn Station
-                # We have the room because we're taking an extra line for connecting services
-                facility_name = "Moynihan Train Hall at Penn Station"
             enhanced_facility_name = "".join(
                 [
                     br_for_facility_name,
@@ -266,21 +300,13 @@ class AgencyAmtrak(Agency):
         # Connections.  Hoo boy.  Default to nothing.
         connection_logos_html = ""
         if show_connections:
-            # Special-casing for certain stations with LOTS of connections
-            if station_code in ["NYP", "SLC", "SNC", "OSD"]:
-                # NYP has a long facility name and a lot of connections
-                # SLC has connections with very long lines
-                # On the Pacific Surfliner:
-                # SNC (San Juan Capistrano), OSD (Oceanside)
-                # have excessively wide connection logos
-                # Grab an extra line in these cases
-                # TWO (Toronto) has a lot of connections,
-                # but Empire Service timetables have more width than length available
+            # Grab an extra line for certain stations with LOTS of connections
+            if station_code in self.stations_with_many_connections():
                 connection_logos_html += "<br>"
             # station_code had better be correct, since we're going to look it up
             # stations with no entry in the dict are treated the same as
             # stations which have an empty list of connecting services
-            connecting_services = connecting_services_dict.get(station_code, [])
+            connecting_services = self._connecting_services_dict.get(station_code, [])
             for connecting_service in connecting_services:
                 # Note, this is "" if the agency is not found (but a debug error will print)
                 # Otherwise it's a complete HTML code for the agency & its icon
@@ -317,7 +343,6 @@ class AgencyAmtrak(Agency):
                 ]
             )
         return fancy_name
-
 
 
 # Establish the singleton
