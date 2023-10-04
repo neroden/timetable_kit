@@ -15,7 +15,9 @@ import timetable_kit.hartford_line.station_names as station_names
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
-from timetable_kit.hartford_line.connecting_services_data import connecting_services_dict
+from timetable_kit.hartford_line.connecting_services_data import (
+    connecting_services_dict,
+)
 
 
 class AgencyHartfordLine(AgencyAmtrak):

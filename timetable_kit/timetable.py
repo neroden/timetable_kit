@@ -848,7 +848,9 @@ def fill_tt_spec(
                         my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
                         # Clean this interface up later.  FIXME
-                        route_name = agency().get_route_name(today_feed, route_id)
+                        route_name = agency_singleton().get_route_name(
+                            today_feed, route_id
+                        )
                         styled_route_name = (
                             text_presentation.style_route_name_for_column(
                                 route_name, doing_html=doing_html

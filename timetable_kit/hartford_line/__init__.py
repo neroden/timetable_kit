@@ -16,8 +16,3 @@ from .merge_gtfs import (
 
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
-
-# Most of the rest of this should be copied from Amtrak
-
-# How to title the routes at the top of the column
-from timetable_kit.amtrak.route_names import get_route_name

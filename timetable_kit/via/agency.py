@@ -33,6 +33,9 @@ from timetable_kit.via.connecting_services_data import connecting_services_dict
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
 
+# For get_route_name
+import timetable_kit.via.route_names as route_names
+
 
 class AgencyVIA(Agency):
     """VIA-specific code for interpreting specs and GTFS feeds"""
@@ -105,6 +108,13 @@ class AgencyVIA(Agency):
         Name of a CSS class for agency-specific styling
         """
         return "via-special-css"
+
+    def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
+        """
+        Given today_feed and a route_id, produce a suitalbe name for a column subheading.
+        The implementation is VIA-specific.
+        """
+        return route_names.get_route_name(today_feed, route_id)
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True

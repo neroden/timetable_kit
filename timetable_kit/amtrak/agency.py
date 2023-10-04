@@ -32,6 +32,7 @@ from timetable_kit.amtrak.connecting_services_data import connecting_services_di
 # for get_route_name
 import timetable_kit.amtrak.route_names as route_names
 
+
 class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
 
@@ -123,6 +124,13 @@ class AgencyAmtrak(Agency):
         Name of a CSS class for agency-specific styling
         """
         return "amtrak-special-css"
+
+    def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
+        """
+        Given today_feed and a route_id, produce a suitalbe name for a column subheading.
+        The implementation is Amtrak-specific.
+        """
+        return route_names.get_route_name(today_feed, route_id)
 
     def stop_code_to_stop_name(self, stop_code: str) -> str:
         """

@@ -19,6 +19,3 @@ from .agency import get_singleton
 from .get_gtfs import (
     gtfs_unzipped_local_path,
 )
-
-# How to title the routes at the top of the column
-from .route_names import get_route_name

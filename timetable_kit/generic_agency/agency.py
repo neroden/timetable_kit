@@ -47,6 +47,8 @@ class Agency:
         self._stop_code_to_stop_name_dict = None
         self._accessible_platform_dict = None
         self._inaccessible_platform_dict = None
+        # Used for the generic get_route_id (but not by Amtrak or VIA)
+        self._route_name_dict = None
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -347,6 +349,29 @@ class Agency:
                 if service not in all_services:
                     all_services.append(service)
         return all_services
+
+    def _prepare_route_name_dict(self, feed: FeedEnhanced):
+        """
+        Prepare and cache the route name dict.
+
+        Uses the route_long_name from GTFS.
+
+        Requires unique route_id values (no duplicates)
+        """
+        self._route_name_dict = dict(
+            zip(feed.routes["route_id"], feed.routes["route_long_name"])
+        )
+
+    def get_route_name(self, feed: FeedEnhanced, route_id: str) -> str:
+        """
+        Given feed and a route_id, produce a suitable name for a column subheading.
+        This is the generic implementation using GTFS data.
+        """
+        # Memoized.  None is a sentinel value meaning uninitalized
+        # This isn't used by subpackages, which won't even load this data.
+        if self._route_name_dict is None:
+            self._prepare_route_name_dict(feed)
+        return self._route_name_dict[route_id]
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
