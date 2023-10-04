@@ -16,14 +16,18 @@ import timetable_kit.amtrak.gtfs_patches as gtfs_patches
 # for patch_add_wheelchair_boarding
 import timetable_kit.amtrak.access as access
 
-# for sleeper trains, which trains have checked baggage, etc
+# for sleeper trains, which trains have checked baggage, major stations, etc
 import timetable_kit.amtrak.special_data as special_data
 
 # for whether stations have checked baggage
 import timetable_kit.amtrak.baggage as baggage
 
-# for get_station_name_pretty
+# for get_station_name
+import timetable_kit.amtrak.json_stations as json_stations
+
+# for get_station_name_pretty (subroutines)
 import timetable_kit.amtrak.station_names as station_names
+import timetable_kit.text_assembly as text_assembly
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
@@ -134,12 +138,9 @@ class AgencyAmtrak(Agency):
 
     def stop_code_to_stop_name(self, stop_code: str) -> str:
         """
-        This should not be called on Amtrak-derived GTFS.
-        Throw an error.
+        Use Amtrak JSON data.
         """
-        raise RuntimeError(
-            "stop_code_to_stop_name called on Amtrak-derived GTFS; should not happen"
-        )
+        return json_stations.get_station_name(stop_code)
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
@@ -147,11 +148,29 @@ class AgencyAmtrak(Agency):
         """
         Pretty-print a station name.
         """
-        return station_names.get_station_name_pretty(
-            station_code,
-            doing_multiline_text=doing_multiline_text,
-            doing_html=doing_html,
-        )
+        # Get the raw station name (from JSON)
+        station_name = self.stop_code_to_stop_name(station_code)
+        # Disassemble it.
+        if " - " in station_name:
+            (city_state_name, second_part) = station_name.split(" - ", 1)
+            (facility_name, suffix) = second_part.split(" (", 1)
+            (station_code, _) = suffix.split(")", 1)
+        else:
+            facility_name = None
+            (city_state_name, suffix) = station_name.split(" (", 1)
+            (station_code, _) = suffix.split(")", 1)
+
+        # Get the major station information.
+        major = special_data.is_standard_major_station(station_code)
+
+        # Call the appropriate reassembly routine.
+        if doing_html:
+            reassemble = station_names.station_name_to_html
+        elif doing_multiline_text:
+            reassemble = text_assembly.station_name_to_multiline_text
+        else:
+            reassemble = text_assembly.station_name_to_single_line_text
+        return reassemble(city_state_name, facility_name, station_code, major)
 
 
 # Establish the singleton

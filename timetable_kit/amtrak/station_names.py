@@ -14,39 +14,6 @@ from timetable_kit.amtrak.connecting_services_data import connecting_services_di
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
 
-# These are used to select how to do the prettyprinting
-from timetable_kit.amtrak.json_stations import get_station_name
-from timetable_kit.amtrak.special_data import is_standard_major_station
-
-# Text fiddling
-import timetable_kit.text_assembly as text_assembly
-
-
-def station_name_to_multiline_text(station_name: str, major=False) -> str:
-    """
-    Produce pretty Amtrak station name for plaintext -- multi-line.
-
-    Given an Amtrak station name in one of these two forms:
-    Champaign-Urbana, IL (CHM)
-    New Orleans, LA - Union Passenger Terminal (NOL)
-    Produce a pretty-printable text version (possibly multiple lines)
-    If "major", then make the station name bigger and bolder
-    We want to avoid very long lines as they mess up timetable formats
-    """
-
-
-def station_name_to_single_line_text(station_name: str, major=False) -> str:
-    """
-    Produce pretty Amtrak station name for plaintext -- single line.
-
-    The easy version.  Station name to single line text.
-    """
-    if major:
-        styled_station_name = station_name.upper()
-    else:
-        styled_station_name = station_name
-    return styled_station_name
-
 
 def station_name_to_html(
     city_state_name: str,
@@ -183,40 +150,3 @@ def station_name_to_html(
             ]
         )
     return fancy_name
-
-
-def get_station_name_pretty(
-    station_code: str, doing_multiline_text=False, doing_html=False
-) -> str:
-    # Get the raw station name.
-    station_name = get_station_name(station_code)
-    # Disassemble it.
-    if " - " in station_name:
-        (city_state_name, second_part) = station_name.split(" - ", 1)
-        (facility_name, suffix) = second_part.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-    else:
-        facility_name = None
-        (city_state_name, suffix) = station_name.split(" (", 1)
-        (station_code, _) = suffix.split(")", 1)
-
-    # Get the major station information.
-    major = is_standard_major_station(station_code)
-
-    if doing_html:
-        fancy_name = station_name_to_html(
-            city_state_name, facility_name, station_code, major
-        )
-        return fancy_name
-    elif doing_multiline_text:
-        # The reassembly code is common to multiple agencies
-        fancy_name = text_assembly.station_name_to_multiline_text(
-            city_state_name, facility_name, station_code, major
-        )
-        return fancy_name
-    else:
-        # The reassembly code is common to multiple agencies
-        fancy_name = text_assembly.station_name_to_single_line_text(
-            city_state_name, facility_name, station_code, major
-        )
-        return fancy_name
