@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 # text_assembly.py
 # Part of timetable_kit
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
@@ -9,6 +10,7 @@ Contains bits which don't require tsns, but which are loaded early,
 to avoid circular dependencies.
 
 """
+from __future__ import annotations  # for typechecking
 
 import html  # for html.escape
 
@@ -74,3 +76,69 @@ def or_clause(items: list[str]) -> list:
     # More than two items.  Use Oxford comma.
     comma_items = [item + "," for item in items[0:-1]]
     return [*comma_items, "or", items[-1]]
+
+
+def station_name_to_multiline_text(
+    city_state_name: str,
+    facility_name: Optional[str],
+    station_code: str,
+    major: bool = False,
+) -> str:
+    """
+    Take a disassembled station name and assemble it to multi-line text.
+
+    The format is:
+
+    Chicago, IL (CHI)
+    Union Station
+    """
+    # Major stations are in all uppercase.
+    # Other stations are not.
+    if major:
+        city_state_name = city_state_name.upper()
+
+    if facility_name:
+        fancy_name = f"{city_state_name} ({station_code})\n - {facility_name}"
+    else:
+        fancy_name = f"{city_state_name} ({station_code})"
+
+    return fancy_name
+
+
+def station_name_to_single_line_text(
+    city_state_name: str,
+    facility_name: Optional[str],
+    station_code: str,
+    major: bool = False,
+) -> str:
+    """
+    Take a disassembled station name and assemble it to single-line text.
+
+    The format is:
+
+    Chicago, IL - Union Station (CHI)
+
+    or
+    Chicago, IL (CHI)
+    """
+    # Major stations are in all uppercase.
+    # Other stations are not.
+    if major:
+        city_state_name = city_state_name.upper()
+
+    if facility_name:
+        fancy_name = f"{city_state_name} - {facility_name} ({station_code})"
+    else:
+        fancy_name = f"{city_state_name} ({station_code})"
+
+    return fancy_name
+
+
+# TESTING
+if __name__ == "__main__":
+    print(station_name_to_single_line_text("Chicago, IL", "Union Station", "CHI", True))
+    print(
+        station_name_to_single_line_text("Chicago, IL", "Union Station", "CHI", False)
+    )
+    print(station_name_to_multiline_text("Chicago, IL", "Union Station", "CHI", True))
+    print(station_name_to_multiline_text("Chicago, IL", "Union Station", "CHI", False))
