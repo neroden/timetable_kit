@@ -16,7 +16,7 @@ import timetable_kit.maple_leaf.station_names as station_names
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
-from timetable_kit.via.connecting_services_data import connecting_services_dict
+from timetable_kit.maple_leaf.connecting_services_data import connecting_services_dict
 
 
 # This should mostly be based on Amtrak.

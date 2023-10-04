@@ -27,8 +27,10 @@ import timetable_kit.amtrak.station_names as station_names
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
-from timetable_kit.via.connecting_services_data import connecting_services_dict
+from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
 
+# for get_route_name
+import timetable_kit.amtrak.route_names as route_names
 
 class AgencyAmtrak(Agency):
     """Amtrak-specific code for interpreting specs and GTFS feeds"""
