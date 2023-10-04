@@ -429,6 +429,14 @@ class Agency:
         """
         return []
 
+    def is_standard_major_station(self, station_code: str) -> bool:
+        """
+        Is this a "major" station which should be boldfaced and capitalized?
+
+        For generic agency, default to no.
+        """
+        return False
+
     def disassembled_station_name_to_html(
         self,
         city_state_name: str,
@@ -531,11 +539,30 @@ class Agency:
         """
         Pretty-print a station name.
 
-        The default implementation just prints the station name from GTFS.
+        The default implementation prints
+        Station name from GTFS (station code)
+        e.g.
+        New York (NYP)
         """
         # First, get the raw station name: Memoized
         stop_name_raw = self.stop_code_to_stop_name(station_code)
-        return stop_name_raw
+        # Is it major?
+        major = self.is_standard_major_station(station_code)
+
+        # Default to no facility name
+        facility_name = None
+
+        # Call the appropriate reassembly routine.
+        if doing_html:
+            return self.disassembled_station_name_to_html(
+                stop_name_raw, facility_name, station_code, major
+            )
+        elif doing_multiline_text:
+            reassemble = text_assembly.station_name_to_multiline_text
+            return reassemble(stop_name_raw, facility_name, station_code, major)
+        else:
+            reassemble = text_assembly.station_name_to_single_line_text
+            return reassemble(stop_name_raw, facility_name, station_code, major)
 
 
 # Establish the singleton
