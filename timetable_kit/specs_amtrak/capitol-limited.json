@@ -1,7 +1,7 @@
 {
     "title": "Capitol Limited Timetable",
     "heading": "Amtrak's Capitol Limited",
-    "reference_date": "20231002",
+    "reference_date": "20231101",
     "key_baggage": "true",
     "key_tz": true,
     "for_rpa": "true"
