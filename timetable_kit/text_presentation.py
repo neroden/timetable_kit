@@ -61,7 +61,7 @@ new_cell_substitution_map = {
 cell_substitution_map = new_cell_substitution_map
 
 
-def get_cell_substitution(cell_text: str) -> str:
+def get_cell_substitution(cell_text: str) -> Optional[str]:
     """
     Given special simple-substitution cell texts, provide the substitution.
 
@@ -356,6 +356,7 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
                 "</span>",
             ]
         )
+        time_str = html_time_str
     return time_str
 
 
