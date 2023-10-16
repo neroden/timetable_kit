@@ -388,14 +388,13 @@ def flatten_train_specs_list(train_specs_list):
 
     Removes "noheader" suffixes (we never want them in flattened form).
     """
-    flattened_ts_list = []
+    flattened_ts_set = {}
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
-        cleaned_train_specs = [
-            train_spec.removesuffix("noheader").strip() for train_spec in train_specs
-        ]
-        flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
-    flattened_ts_set = set(flattened_ts_list) - special_column_names
+        for train_spec in train_specs:
+            cleaned_train_spec = train_spec.removesuffix("noheader").strip()
+            flattened_ts_set.add(cleaned_train_spec)
+    flattened_ts_set = flattened_ts_set - special_column_names
     return flattened_ts_set
 
 
