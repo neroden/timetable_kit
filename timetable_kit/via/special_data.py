@@ -11,17 +11,15 @@ which trains carry checked baggage,
 which trains have sleeper cars, etc.
 """
 
-# Parentheses makes a TUPLE.
-sleeper_trains = set(
-    (
-        "1",  # Canadian
-        "2",  # Canadian
-        "3",  # Truncated Canadian Vancouver - Edmonton
-        "4",  # Truncated Canadian
-        "14",  # Ocean
-        "15",  # Ocean
-    )
-)
+# This is a set.
+sleeper_trains = {
+    "1",  # Canadian
+    "2",  # Canadian
+    "3",  # Truncated Canadian Vancouver - Edmonton
+    "4",  # Truncated Canadian
+    "14",  # Ocean
+    "15",  # Ocean
+}
 
 
 def is_sleeper_train(train_number):
@@ -46,38 +44,31 @@ and only at manned stations on these routes.
 If you have any further questions, please do not hesitate to contact us.
 
 Sincerely,
-
 Nathalie
 Customer Service
 Via Rail Canada
 """
 
-other_checked_baggage_day_trains = set(
-    (
-        "600",  # Jonquiere
-        "601",
-        "602",
-        "603",  # Senneterre
-        "604",
-        "606",
-        "185",  # Sudbury - White River
-        "186",
-        "690",  # Winnipeg - Churchill
-        "691",
-        "692",
-        "693",
-        "5",  # Jasper - Prince Rupert
-        "6",
-    )
-)
+# This is a set.
+other_checked_baggage_day_trains = {
+    "600",  # Jonquiere
+    "601",
+    "602",
+    "603",  # Senneterre
+    "604",
+    "606",
+    "185",  # Sudbury - White River
+    "186",
+    "690",  # Winnipeg - Churchill
+    "691",
+    "692",
+    "693",
+    "5",  # Jasper - Prince Rupert
+    "6",
+}
 
-# Assemble these trains as a set.  Ugly!
-checked_baggage_trains = set(
-    [
-        *sleeper_trains,
-        *other_checked_baggage_day_trains,
-    ]
-)
+# Assemble these trains as a set using Python's set operations.
+checked_baggage_trains = sleeper_trains | other_checked_baggage_day_trains
 
 
 def station_has_checked_baggage(station_code: str) -> bool:
@@ -106,7 +97,8 @@ def train_has_checked_baggage(trip_short_name: str) -> bool:
 # Station code reference: https://cptdb.ca/wiki/index.php/VIA_Rail_Canada_stations
 # This is missing US stations though, and Hamilton (!)
 
-major_stations_list = (
+# This is a set.  Order doesn't matter.
+major_stations = {
     # Atlantic Canada
     "HLFX",  # Halifax
     "MCTN",  # Moncton
@@ -164,12 +156,12 @@ major_stations_list = (
     "BUFX",  # Buffalo - Exchange
     "ALBY",  # Albany
     "NEWY",  # New York City
-)
+}
 
 
 def is_standard_major_station(station_code):
     """Is a station on the list of standard 'major stations' for VIA?"""
-    return station_code in major_stations_list
+    return station_code in major_stations
 
 
 # TESTING
