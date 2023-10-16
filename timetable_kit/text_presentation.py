@@ -11,6 +11,7 @@ Some routines have HTML variants and plaintext variants.
 All the "character twiddling" operations are in here.
 """
 
+from __future__ import annotations  # for Optional[] typing
 from collections import namedtuple
 from datetime import datetime, timedelta  # for time zones
 from zoneinfo import ZoneInfo  # still for time zones

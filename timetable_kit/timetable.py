@@ -388,7 +388,7 @@ def flatten_train_specs_list(train_specs_list):
 
     Removes "noheader" suffixes (we never want them in flattened form).
     """
-    flattened_ts_set = {}
+    flattened_ts_set = set()
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
         for train_spec in train_specs:
