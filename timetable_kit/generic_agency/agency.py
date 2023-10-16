@@ -349,6 +349,8 @@ class Agency:
         Given a list of station codes, return a list of services which connect
         (with no duplicates)
         """
+        # Note that order matters: the services will be listed in order of appearance
+        # from the station codes.
         all_services = []
         for station in station_list:
             new_services = self._connecting_services_dict.get(station, [])
