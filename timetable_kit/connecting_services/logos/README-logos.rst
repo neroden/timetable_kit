@@ -59,11 +59,11 @@ This is the list of services we want logos for:
 'texrail' - DONE - No longer using a logo on its website; use old logo variant used by Wikipedia.
 'okc_streetcar' - Use text. Logo isn't even a consistent color and is hard to find.
 'tucson_sunlink_streetcar' - Does not have a logo. Use text.
-'metrolink' - DONE - may need to be shortened, though.  FIXME
+'metrolink' - DONE - may need to be shortened, though.  Keep an eye on this; FIXME
 'denver_rtd' - DONE
 'frontrunner' - DONE
 'uta_trax' - DONE
-'nm_railrunner' - found - can't test because of Amtrak errors
+'nm_railrunner' - DONE
 'the_hop' - Logo is PNG and unreadable at small size.  Use text.
 'twin_cities_metro_transit'- Overly restrictive licensing text on webpage.  Use text.
 'sounder' - DONE
@@ -95,8 +95,8 @@ Toronto
 Ottawa
 'o_train' - DONE
 Montreal
-'exo' - DONE - can't be tested due to suspension of Adirondack
-'montreal_metro' - DONE - can't be tested due to suspension of Adirondack
+'exo' - DONE
+'montreal_metro' - DONE
 Vancouver
 'skytrain' - No logo in regular use.  Use text.
 
@@ -381,7 +381,6 @@ Reduced SVG file, usable.
 NMRX_logo.svg
 --------------
 Extracted from the PDF timetable from the RailRunner website, using Karbon and Inkscape.
-Untested due to problems with SW Chief timetable.  FIXME.
 
 Canadian Logos
 ==============
