@@ -63,20 +63,10 @@ def compare_stop_lists(base_trip, trips, *, feed):
         except:
             print("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
-            print(
-                " ".join(
-                    ["Identical:", str(base_trip.trip_id), "and", str(trip.trip_id)]
-                )
-                + "."
-            )
+            print(f"Identical: {base_trip.trip_id} and {str(trip.trip_id)}.")
         else:
             reduced_comparison = comparison.dropna(axis="index", how="all")
-            print(
-                " ".join(
-                    ["Comparing:", str(base_trip.trip_id), "vs.", str(trip.trip_id)]
-                )
-                + ":"
-            )
+            print(f"Comparing: {base_trip.trip_id} and {str(trip.trip_id)}:")
             # print( reduced_comparison )
             # Works up to here!
 
