@@ -143,10 +143,11 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
     Note that this tucks on the end of the tt_spec.  A "second row" for column-options
     will therefore be unaffected.  Other second rows may result in confusing results.
     """
-    if raw_tt_spec.iloc[0, 0] == "":
+    if (key_code := str(raw_tt_spec.iloc[0, 0])) == "":
+        print(raw_tt_spec)
         # No key code, nothing to do
         return raw_tt_spec
-    key_code = str(raw_tt_spec.iloc[0, 0])
+
     debug_print(3, "Key code: " + key_code)
     if key_code.startswith("stations of "):
         # Filter the feed down to a single date...
@@ -154,6 +155,8 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
 
         # Find the train name and possibly filter by day...
         key_train_name = key_code.removeprefix("stations of ")
+        debug_print(1, f"Using key tsn {key_train_name}")
+
         for day in GTFS_DAYS:
             if key_train_name.endswith(day):
                 key_train_name = key_train_name.removesuffix(day).strip()
@@ -164,7 +167,7 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.copy()  # Copy entire original spec
         new_tt_spec.iloc[0, 0] = ""  # Blank out key_code
-        newer_tt_spec = pd.concat([new_tt_spec, stations_df])  # Yes, this works
+        newer_tt_spec = pd.concat([new_tt_spec, stations_df]).fillna("")  # Yes, this works
         # The problem is that it leads to duplicate indices (ugh!)
         # So fully reset the index
         newest_tt_spec = newer_tt_spec.reset_index(drop=True)
