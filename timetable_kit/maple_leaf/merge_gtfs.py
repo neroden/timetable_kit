@@ -18,6 +18,7 @@ import gtfs_kit
 from timetable_kit import amtrak
 from timetable_kit import via
 from timetable_kit.merge_gtfs import merge_feed
+from timetable_kit.merge_gtfs import remove_stop_code_column
 
 from timetable_kit.maple_leaf.station_data import (
     amtrak_code_to_via_code,
@@ -33,7 +34,7 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 
 def filter_feed_by_route_names(feed, route_names: list[str]):
     """
-    Filteres a feed down to JUST the data for named routes.
+    Filters a feed down to JUST the data for named routes.
     Erase the shapes data for speed.
 
     Returs the filtered feed.
@@ -171,6 +172,8 @@ def run():
 
     print("Merging feeds")
     merged_feed = merge_feed(amtrak_ml_feed, via_ml_feed)
+    print("Eliminating stop_code column")
+    remove_stop_code_column(merged_feed)
 
     # Experimentally, writing the feed out is slow.  Unzipping it is fast.
     # Writing it out unzipped is just as slow.

@@ -15,16 +15,9 @@ from zipfile import ZipFile
 import requests
 
 # Found at transit.land.
-# Also at The Mobility Database on Github.  MobilityData/mobility-database
+# Also at The Mobility Database on GitHub.  MobilityData/mobility-database
 # This is the URL we should download the GTFS from.
 canonical_gtfs_url = "https://content.amtrak.com/content/gtfs/GTFS.zip"
-
-# This is the URL we should publish at the bottom of the timetable as the
-# source for GTFS data.  This should probably be a transit.land or similar
-# reference, in case the canonical url changes.
-published_gtfs_url = (
-    "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
-)
 
 module_location = Path(__file__).parent
 gtfs_zip_local_path = module_location / "GTFS.zip"
@@ -39,15 +32,7 @@ def download_gtfs():
     response = requests.get(canonical_gtfs_url)
     if response.status_code != requests.codes.ok:
         print(
-            "".join(
-                [
-                    "Download of ",
-                    canonical_gtfs_url,
-                    " failed with error ",
-                    str(response.status_code),
-                    ".",
-                ]
-            )
+            f"Download of {canonical_gtfs_url} failed with error {response.status_code}."
         )
         response.raise_for_status()  # Raise an error
     return response.content  # This is binary data

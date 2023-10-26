@@ -12,16 +12,14 @@ Used to see how many services with different dates are actually the same service
 # Other people's packages
 import argparse
 
-import pandas as pd
-import gtfs_kit
-
-# My packages: Local module imports
-from timetable_kit.debug import set_debug_level, debug_print
-
 # This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
 from timetable_kit import feed_enhanced
 
-# To intialize the feed -- does type changes
+# My packages: Local module imports
+from timetable_kit.debug import set_debug_level
+from timetable_kit.feed_enhanced import FeedEnhanced
+
+# To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
 # Common arguments for the command line
@@ -65,20 +63,10 @@ def compare_stop_lists(base_trip, trips, *, feed):
         except:
             print("Something wrong with trip ", trip)
         if not comparison.any(axis=None):
-            print(
-                " ".join(
-                    ["Identical:", str(base_trip.trip_id), "and", str(trip.trip_id)]
-                )
-                + "."
-            )
+            print(f"Identical: {base_trip.trip_id} and {str(trip.trip_id)}.")
         else:
             reduced_comparison = comparison.dropna(axis="index", how="all")
-            print(
-                " ".join(
-                    ["Comparing:", str(base_trip.trip_id), "vs.", str(trip.trip_id)]
-                )
-                + ":"
-            )
+            print(f"Comparing: {base_trip.trip_id} and {str(trip.trip_id)}:")
             # print( reduced_comparison )
             # Works up to here!
 
@@ -101,7 +89,7 @@ def compare_stop_lists(base_trip, trips, *, feed):
             print(enhanced_comparison)
 
 
-def compare_similar_services(route_id, *, feed):
+def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """
     Find timing differences on a route between similar services.
 
@@ -170,7 +158,6 @@ if __name__ == "__main__":
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name
-
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)

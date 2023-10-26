@@ -11,23 +11,25 @@ Some routines have HTML variants and plaintext variants.
 All the "character twiddling" operations are in here.
 """
 
-import pandas as pd
-import gtfs_kit
+from __future__ import annotations  # for Optional[] typing
 from collections import namedtuple
-
 from datetime import datetime, timedelta  # for time zones
 from zoneinfo import ZoneInfo  # still for time zones
 
-# These are mine
-from timetable_kit.errors import GTFSError, FutureCodeError
+import pandas as pd
+
+import html  # used for escaping with href_wrap
+
 from timetable_kit.debug import debug_print
-from timetable_kit.tsn import train_spec_to_tsn
+
+# These are mine
+from timetable_kit.errors import GTFSError, InputError
 from timetable_kit.icons import (
     get_baggage_icon_html,
     get_bus_icon_html,
     get_accessible_icon_html,
 )
-
+from timetable_kit.tsn import train_spec_to_tsn
 
 # These work, but only at 120%.
 thick_cell_substitution_map = {
@@ -60,7 +62,7 @@ new_cell_substitution_map = {
 cell_substitution_map = new_cell_substitution_map
 
 
-def get_cell_substitution(cell_text: str) -> str:
+def get_cell_substitution(cell_text: str) -> Optional[str]:
     """
     Given special simple-substitution cell texts, provide the substitution.
 
@@ -234,7 +236,7 @@ def day_string(calendar, offset: int = 0) -> str:
     # Use modulo to correct the offset to the range 0:6
     # Note timezone differences can lead to -1 offset.
     # Later stations on the route lead to positive offset.
-    offset = offset % 7
+    offset %= 7
 
     # OK.  Fast encoding version here as a list of 1s and 0s.
     days_of_service_vector = [
@@ -325,7 +327,7 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
     But do it in "military" format from 0:00 to 23:59.
-    doing_html: Box each character in an html span, to simulate tabular numbers with non-tabular fonts.
+    doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
     """
     # Note that this is very explicitly designed to be fixed width
     time_text = [
@@ -355,6 +357,7 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
                 "</span>",
             ]
         )
+        time_str = html_time_str
     return time_str
 
 
@@ -367,7 +370,7 @@ def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
     Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
 
     Do it with AM and PM.
-    doing_html: Box each character in an html span, to simulate tabular numbers with non-tabular fonts.
+    doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
     """
     # Note that this is very explicitly designed to be fixed width
     hour = time.hour
@@ -501,7 +504,7 @@ def get_baggage_str(doing_html=False):
     """
     Return a suitable string to indicate the presence of checked baggage.
 
-    Currently the HTML implementation references an external checked baggage icon.
+    Currently, the HTML implementation references an external checked baggage icon.
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
     if not doing_html:
@@ -536,7 +539,7 @@ def get_bus_str(doing_html=False):
     """
     Return a suitable string to indicate that this is a bus.
 
-    Currently the HTML implementation references an external bus icon.
+    Currently, the HTML implementation references an external bus icon.
     There are inline alternatives to this but Weasyprint isn't nice about them.
     """
     if not doing_html:
@@ -590,7 +593,7 @@ def timepoint_str(
     """
     Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
 
-    This is quite complex: I would have used tables-within-tables but they're screen-reader-unfriendly.
+    This is quite complex: I would have used tables-within-tables, but they're screen-reader-unfriendly.
     Trying to do it with fixed-width fonts was too ugly.
 
     So the the HTML version uses spans with inline-block layout.
@@ -615,7 +618,7 @@ def timepoint_str(
         For use with fonts which don't have tabular nums.  A nasty hack; best to use a font
         which does have tabular nums.
     -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
-    -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html
+    -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html)
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
     -- long_days_box: Extra-long space for days, for SuMoTuWeTh five-day calendars.
     -- short_days_box: Extra-short space for days, for "Mo" one-day across-midnight trains.
@@ -891,7 +894,7 @@ def timepoint_str(
                 is_first_stop=is_first_stop,
                 is_last_stop=is_last_stop,
                 is_first_line=(not reverse),  # arrival is first unless reversing
-                is_second_line=(reverse),
+                is_second_line=reverse,
                 is_arrival_line=True,
             )
             arrival_line_str = "".join(
@@ -927,7 +930,7 @@ def timepoint_str(
                 doing_html=doing_html,
                 is_first_stop=is_first_stop,
                 is_last_stop=is_last_stop,
-                is_second_line=(reverse),  # departure is second unless reversing
+                is_second_line=reverse,  # departure is second unless reversing
                 is_first_line=(not reverse),
                 is_departure_line=True,
             )
@@ -994,7 +997,6 @@ def get_time_column_header(
         if train_spec.endswith("noheader"):
             continue
         fewer_train_specs.append(train_spec)
-    fewer_train_specs
 
     # It's OK if stripping noheader train specs leads to no header.
     # In this case return blank.  Uniqueness of headers is handled later.

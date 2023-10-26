@@ -9,16 +9,13 @@ Routines for modifying Hartford Line GTFS and merging it with Amtrak's GTFS.
 from pathlib import Path
 from zipfile import ZipFile
 
-import pandas as pd
 import gtfs_kit
-
-# For sys.exit
-import sys
 
 # Mine
 from timetable_kit import amtrak
 from timetable_kit import hartford_line
 from timetable_kit.merge_gtfs import merge_feed
+from timetable_kit.merge_gtfs import remove_stop_code_column
 
 module_location = Path(__file__).parent
 
@@ -89,7 +86,7 @@ def run():
     print("Repaired trips")
 
     # Delete all Hartford Line stops rows.  This makes an invalid feed, but all the stops are
-    # listed in Amtrak's feed (after stop_id_conversion, so it'll be fine after merging.
+    # listed in Amtrak's feed (after stop_id_conversion), so it'll be fine after merging.
     new_stops = hl_feed.stops[0:0]
     hl_feed.stops = new_stops
 
@@ -104,6 +101,8 @@ def run():
 
     print("Merging feeds")
     merged_feed = merge_feed(amtrak_feed, hl_feed)
+    print("Eliminating stop code column")
+    remove_stop_code_column(merged_feed)
 
     # Experimentally, writing the feed out is slow.  Unzipping it is fast.
     # Writing it out unzipped is just as slow.

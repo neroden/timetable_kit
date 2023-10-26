@@ -61,9 +61,11 @@ Adirondack is missing but will likely come back in the future.
 
 import argparse
 import re
-
 from urllib.request import Request, urlopen  # for reading juckins webpage
 
+from timetable_kit.sew_pages import (
+    read_list_file,
+)
 from timetable_kit.timetable import (
     load_ttspec_csv,
     train_specs_list_from_tt_spec,
@@ -72,10 +74,6 @@ from timetable_kit.timetable import (
 from timetable_kit.tsn import (
     train_spec_to_tsn,
 )
-from timetable_kit.sew_pages import (
-    read_list_file,
-)
-
 
 # This only works on a specific list of preprogrammed services.
 # The keys are names of the services which can be given to this program

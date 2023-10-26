@@ -8,6 +8,7 @@ get_route_name()
 
 VIA is... kind of terrible about route names in their GTFS, so we use some hand-coding.
 """
+from timetable_kit.errors import GTFSError
 
 remote_service_route_names = [
     "Montréal - Senneterre",

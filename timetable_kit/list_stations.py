@@ -6,25 +6,16 @@
 List all the stations for a particular train number (trip_short_name), in order.
 """
 
-import sys  # For sys.exit
-import os  # For os.getenv
-
 import argparse
-import datetime
+import os  # For os.getenv
+import sys  # For sys.exit
 
-# import pandas as pd # we call pandas routines but only on dataframes
-
-# We may not actually need these directly?
-import gtfs_kit
-
-# Monkey-patch the feed class
-from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
-from timetable_kit.initialize import filter_feed_for_utilities
-
+from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
+from timetable_kit.initialize import filter_feed_for_utilities
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.runtime_config import agency  # for the agency()
+from timetable_kit.runtime_config import agency_singleton
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -35,13 +26,9 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_output_dirname_argument,
 )
-
 from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
 
 
 def make_argparser():
@@ -94,8 +81,6 @@ if __name__ == "__main__":
     if not output_dirname:
         output_dirname = "."
 
-    # Eventually this will be set from the command line -- FIXME
-    debug_print(2, "Agency found:", args.agency)
     runtime_config.set_agency(args.agency)
 
     if args.gtfs_filename:
@@ -104,6 +89,7 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
+    # Initialize the feed & the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     today_feed = filter_feed_for_utilities(
@@ -116,12 +102,11 @@ if __name__ == "__main__":
         case (None, None):
             raise ValueError("Can't generate a station list without a specific trip.")
         case (None, tsn) | (tsn, None):
-            pass
+            tsn = tsn.strip()  # Avoid whitespace problems
         case (_, _):
             raise ValueError(
                 "Specified trip_short_name two different ways.  Use only one."
             )
-    tsn = tsn.strip()  # Avoid whitespace problems
 
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
@@ -131,13 +116,13 @@ if __name__ == "__main__":
 
     # OK, this is the CSV specific path.
     station_list = station_list_df.to_list()
-    station_list_commaed = [x + ",,," for x in station_list]
+    station_list_with_commas = [x + ",,," for x in station_list]
     station_list_prefixed = [
         ",access,stations," + str(tsn),
         "column-options,,,ardp",
         "days,,," + station_list[0],
         "updown,,,",
-        *station_list_commaed,
+        *station_list_with_commas,
     ]
     station_list_csv = "\n".join(station_list_prefixed)
     print(station_list_csv)

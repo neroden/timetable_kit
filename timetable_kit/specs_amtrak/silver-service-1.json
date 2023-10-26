@@ -1,7 +1,7 @@
 {
     "title": "Silver Service/Palmetto Timetable page 1",
     "heading": "Amtrak's Silver Service & Palmetto - Carolinas & Georgia",
-    "reference_date": "20230722",
+    "reference_date": "20231101",
     "bottom_text": "<p class=\"top-text\"><b>See next page for services<br>south of Savannah, Georgia<br>to Florida.</p>",
     "former_top_text": "See next page for services south of Savannah, Georgia to Florida.",
     "programmers_note": "Using dwell_secs_cutoff of 6 minutes to shorten timetable",

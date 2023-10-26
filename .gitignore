@@ -7,6 +7,7 @@ gtfs/
 # & generated merged GTFS files
 GTFS.zip
 gtfs.zip
+greyhound.zip
 
 # Generated output files for timetable_kit
 bad_stations.csv
@@ -145,6 +146,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea/
 
 # libreoffice calc
 .~lock.*.csv

@@ -27,8 +27,9 @@ The @page directives are respected by Weasyprint.
     page-break-after: always; /* Modern browser version: break-after: page; not supported yet */
 }
 {# Primary heading on the page.  Copy old Amtrak style more or less. #}
+{# Default to black header for generic. #}
 h1 {
-    background-color: darkblue;
+    background-color: black;
     color: white;
     text-transform: uppercase;
     padding-top: 4px;

@@ -9,8 +9,6 @@ this is not always useful for later work.  These subroutines convert certain col
 """
 
 # Other people's packages
-import pandas as pd
-import gtfs_kit
 
 
 def type_corrected_agency(agency):
@@ -137,8 +135,12 @@ def type_corrected_trips(trips):
             "route_id": "str",
             "service_id": "str",
             "trip_id": "str",
-            "trip_short_name": "str",  # This is the Amtrak train number.  It is a number, but don't treat it as one.
-            "direction_id": "str",  # This is "0" for west, "1" for east on the LSL only, but can also be blank
+            "trip_short_name": (
+                "str"
+            ),  # This is the Amtrak train number.  It is a number, but don't treat it as one.
+            "direction_id": (
+                "str"
+            ),  # This is "0" for west, "1" for east on the LSL only, but can also be blank
         }
     )  # Note that shape_id does not exist in Amtrak data
     return new_trips

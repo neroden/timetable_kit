@@ -9,10 +9,11 @@ Wrappers around pdftk-java.  Takes individual one-page PDF timetable files and s
 Implements "empire-service.list" form of timetable meta-spec.
 """
 
-from pathlib import Path
 import os  # for os.system
+from pathlib import Path
 
-from timetable_kit.debug import set_debug_level, debug_print
+from timetable_kit.debug import debug_print
+from timetable_kit.errors import InputError
 
 
 def read_list_file(filename: str, *, input_dir) -> list[str]:

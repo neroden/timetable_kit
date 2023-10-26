@@ -34,50 +34,59 @@ def is_connecting_service(tsn):
     return False
 
 
-# Parentheses makes a TUPLE.
-sleeper_trains = set(
-    (
-        "1",
-        "2",  # SL
-        "21",
-        "22",
-        "421",
-        "422",  # TE -- also 321/322?
-        "3",
-        "4",  # SWC
-        "5",
-        "6",  # CZ
-        "7",
-        "8",
-        "27",
-        "28",  # EB
-        "11",
-        "14",  # CS
-        "19",
-        "20",  # Crescent
-        "29",
-        "30",  # CL
-        "48",
-        "49",
-        "448",
-        "449",  # LSL
-        "50",
-        "51",  # Cardinal
-        "52",
-        "53",  # Auto Train
-        "58",
-        "59",  # CONO
-        "91",
-        "92",  # Silver Star
-        "97",
-        "98",  # Silver Meteor
-    )
-)
+# This makes a set.
+sleeper_trains = {
+    "1",
+    "2",  # SL
+    "21",
+    "22",
+    "421",
+    "422",  # TE -- also 321/322?
+    "3",
+    "4",  # SWC
+    "5",
+    "6",  # CZ
+    "7",
+    "8",
+    "27",
+    "28",  # EB
+    "11",
+    "14",  # CS
+    "19",
+    "20",  # Crescent
+    "29",
+    "30",  # CL
+    "48",
+    "49",
+    "448",
+    "449",  # LSL
+    "50",
+    "51",  # Cardinal
+    "52",
+    "53",  # Auto Train
+    "58",
+    "59",  # CONO
+    "91",
+    "92",  # Silver Star
+    "97",
+    "98",  # Silver Meteor
+}
 
 
 def is_sleeper_train(train_number):
     """Does this train have sleeper cars?"""
     return train_number in sleeper_trains
+
+
+def train_number_range(*range_args) -> set[str]:
+    """
+    Given a low train number and a high train number,
+    produce a set of all train numbers
+    greater or equal to the low number,
+    and strictly less than the high number,
+    with the numbers converted to strings.
+    """
+    return set(map(str, range(*range_args)))
 
 
 # Trains with checked baggage cars.
@@ -88,28 +97,29 @@ def is_sleeper_train(train_number):
 # 561 through 595 (NB) or 562 through 596 (SB) for "short" trains south of LA
 # 761 through 795 (NB) or 762 through 796 (SB) for "long" trains north of LA
 # We do 560-599 and 760-799 for completeness.  Note that range excludes the last item.
-pacific_surfliner_trains = [str(item) for item in [*range(560, 600), *range(760, 800)]]
+pacific_surfliner_trains = train_number_range(560, 600) | train_number_range(760, 800)
 
 # Similar issue with San Joaquins.
 # Lowest numbered is #701.  Highest numbered is #719.
 # There is no #700, and #699 is a Downeaster.
 # While #720 is a Capitol Corridor to Sacramento.
-san_joaquins_trains = [str(item) for item in range(700, 720)]
+san_joaquins_trains = train_number_range(700, 720)
 
 # Similar issue with Cascades.
 # Lowest numbered Cascades is #500.  Highest is #519.
 # And #520 is a Sacramento Capitol Corridor train.
 # And #499 is a Springfield - New Haven train.
-cascades_trains = [str(item) for item in range(500, 520)]
+cascades_trains = train_number_range(500, 520)
 
 # Similar issue with Hiawatha.
 # Lowest numbered Hiawatha is 329; highest numbered is 343.
 # However, #311-316 are Kansas City to St Louis.
 # However, #350 is a Wolverine to Pontiac.
 # We do 320-349.
-hiawatha_trains = [str(item) for item in range(320, 350)]
+hiawatha_trains = train_number_range(320, 350)
 
-other_checked_baggage_day_trains = (
+# This produces a set.
+other_checked_baggage_day_trains = {
     "42",
     "43",  # Pennsylvanian
     "79",
@@ -122,20 +132,18 @@ other_checked_baggage_day_trains = (
     "78",
     "89",
     "90",  # Palmetto
-)
+}
 
-# Assemble these trains as a set.  Ugly!
-# Stupid technical issue with #448/449 not having a baggage car!
-checked_baggage_trains = set(
-    [
-        *sleeper_trains,
-        *pacific_surfliner_trains,
-        *san_joaquins_trains,
-        *cascades_trains,
-        *hiawatha_trains,
-        *other_checked_baggage_day_trains,
-    ]
-) - set(["448", "449"])
+# Assemble these trains as a set, using Python's set operations.
+# Unforunately, unlike all other sleeper trains, #448/449 do not have a baggage car.
+checked_baggage_trains = (
+    sleeper_trains
+    | pacific_surfliner_trains
+    | san_joaquins_trains
+    | cascades_trains
+    | hiawatha_trains
+    | other_checked_baggage_day_trains
+) - {"448", "449"}
 
 
 def train_has_checked_baggage(trip_short_name: str) -> bool:
@@ -167,7 +175,8 @@ def is_high_speed_train(trip_short_name: str) -> bool:
 # This should really be per-timetable but this is a start
 # (Empire doesn't call out NEC stations on connecting trains)
 # (Vermonter only calls out NY and DC on NEC)
-major_stations_list = (
+# This is a set (order doesn't matter)
+major_stations = {
     "BOS",  # NEC timetable stations first
     "NHV",
     "NYP",
@@ -251,12 +260,12 @@ major_stations_list = (
     "WMA",  # Grand Canyon Railway -- Williams is major
     "GCN",  # Grand Canyon Village station is too long for the timetable if boldfaced,
     # ...but we patch the station name in code, elsewhere.
-)
+}
 
 
 def is_standard_major_station(station_code):
     """Is a station on the list of standard 'major stations' for Amtrak?"""
-    return station_code in major_stations_list
+    return station_code in major_stations
 
 
 # TESTING

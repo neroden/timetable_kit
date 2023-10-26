@@ -13,7 +13,6 @@ The code is dead.  They are not called.
 """
 
 import pandas as pd
-import gtfs_kit
 
 # This one is mine
 from timetable_kit import gtfs_type_cleanup  # import the module name
@@ -81,7 +80,7 @@ def revised_amtrak_agencies(agency):
     agency_lookup_table[1217] = "Thruway Bus Operator 1217"
     agency_lookup_table[1220] = "Thruway Bus Operator 1220"
     # Convert to Series, before stuffing the Series back into the DataFrame.
-    # We have maintained alignment of revised_agency so it'll line up right.
+    # We have maintained alignment of revised_agency, so it'll line up right.
     ser = pd.Series(data=agency_lookup_table)
     # Drop the old column
     revised_indexed_agency.drop(columns=["agency_name"], inplace=True)

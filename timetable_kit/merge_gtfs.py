@@ -13,8 +13,25 @@ Deletes the shapes table, since we don't use it.
 import sys  # for argv
 from pathlib import Path
 
-import pandas as pd
 import gtfs_kit
+import pandas as pd
+
+
+def remove_stop_code_column(feed):
+    """
+    Remove the stop code column from the stops file in a feed.
+
+    Use with care.
+
+    For merged feeds where we're using Amtrak as the base, we don't want stop_code.
+    We want to use the Amtrak code where stop_code == stop_id.
+    Having this column confuses _prepare_dicts in generic_agency/agency.py,
+    screwing up the wheelchair boarding dicts, so we *have* to delete it.
+
+    Alter in place.
+    """
+    new_stops = feed.stops.drop(columns=["stop_code"])
+    feed.stops = new_stops
 
 
 def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
@@ -61,7 +78,7 @@ def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
 # This is the set of all genuine table names in the feed
 # Not including the internal ones.
 # FIXME -- this is fragile.  Make more robust.
-table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - set(["dist_units"])
+table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - {"dist_units"}
 
 
 def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:

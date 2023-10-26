@@ -9,26 +9,22 @@ Prepare a spec file -- MUST BE CHECKED MANUALLY !!!!
 Takes the same arguments as list_trains.py, PLUS --trip like list_stations.py
 """
 
-import sys  # for exit
 import argparse
-import datetime
+import sys  # for exit
 
 import pandas as pd
 
-import gtfs_kit
-
-# Monkey-patch the feed class
-from timetable_kit import feed_enhanced
-from feed_enhanced import gtfs_days
-
-from timetable_kit.initialize import initialize_feed
+from timetable_kit import runtime_config  # for the agency()
+from timetable_kit.debug import set_debug_level
 from timetable_kit.initialize import filter_feed_for_utilities
-
-from timetable_kit.debug import debug_print, set_debug_level
-from timetable_kit.tsn import (
-    make_trip_id_to_tsn_dict,
-    stations_list_from_tsn,
+from timetable_kit.initialize import initialize_feed
+from timetable_kit.list_trains import (
+    get_trips_between,
+    report_dupes,
+    sort_by_time_at_stop,
 )
+from timetable_kit.runtime_config import agency  # for the agency()
+from timetable_kit.runtime_config import agency_singleton
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -38,14 +34,9 @@ from timetable_kit.timetable_argparse import (
     add_agency_argument,
     add_gtfs_argument,
 )
-
-from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.runtime_config import agency  # for the agency()
-
-from timetable_kit.list_trains import (
-    get_trips_between,
-    report_dupes,
-    sort_by_time_at_stop,
+from timetable_kit.tsn import (
+    make_trip_id_to_tsn_dict,
+    stations_list_from_tsn,
 )
 
 
@@ -107,17 +98,18 @@ if __name__ == "__main__":
         # Default to agency
         gtfs_filename = agency().gtfs_unzipped_local_path
 
-    stops = args.stops
-    sync_stop = args.sync_stop
-
-    key_tsn = args.trip_short_name
-    key_tsn = key_tsn.strip()  # Avoid whitespace problems
-
+    # Initialize the feed and the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     today_feed = filter_feed_for_utilities(
         master_feed, reference_date=args.reference_date, day_of_week=args.day
     )
+
+    stops = args.stops
+    sync_stop = args.sync_stop
+
+    key_tsn = args.trip_short_name
+    key_tsn = key_tsn.strip()  # Avoid whitespace problems
 
     # Make the two interconverting dicts -- we only need one
     trip_id_to_tsn = make_trip_id_to_tsn_dict(today_feed)
@@ -136,15 +128,15 @@ if __name__ == "__main__":
         for stop_one, stop_two in pairs:
             # print("Finding trips from", stop_one, "to", stop_two)
             # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
-            stop_one_id = agency().stop_code_to_stop_id(stop_one)
-            stop_two_id = agency().stop_code_to_stop_id(stop_two)
+            stop_one_id = agency_singleton().stop_code_to_stop_id(stop_one)
+            stop_two_id = agency_singleton().stop_code_to_stop_id(stop_two)
             this_pair_trip_ids = get_trips_between(
                 stop_one_id, stop_two_id, feed=today_feed
             )
 
             # Report duplicates.  Important for catching GTFS weirdness.
             # We expect duplicates if we've entered multiple pairs, so only report dupes
-            # if they occured from a single pair.
+            # if they occurred from a single pair.
             this_pair_tsns = [trip_id_to_tsn[trip_id] for trip_id in trip_ids]
             report_dupes(this_pair_tsns)
 
@@ -156,7 +148,7 @@ if __name__ == "__main__":
         # Remove duplicates.  (FIXME: do in non-sorting case too?)
         trip_ids = list(set(trip_ids))
         # Sort.
-        sync_stop_id = agency().stop_code_to_stop_id(sync_stop)
+        sync_stop_id = agency_singleton().stop_code_to_stop_id(sync_stop)
         sorted_trip_ids = sort_by_time_at_stop(trip_ids, sync_stop_id, feed=today_feed)
     else:
         sorted_trip_ids = trip_ids

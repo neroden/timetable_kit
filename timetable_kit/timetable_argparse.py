@@ -12,18 +12,8 @@ Also includes routines for adding common arguments to parsers for other commands
 
 import argparse
 
-# Needed for defaulting the reference date to tomorrow:
-# import datetime
-
-# Needed to store data including the agency subpackage (e.g. amtrak, via)
-# from timetable_kit import runtime_config
-# Is this actually done here?  No, it's done in the caller.
-
-# Needed for defaulting the GTFS file:
-from timetable_kit import amtrak
-
 # For the GTFS day options:
-from timetable_kit.feed_enhanced import gtfs_days
+from timetable_kit.feed_enhanced import GTFS_DAYS
 
 # For the choice of the agency subpackage:
 from timetable_kit.runtime_config import agency_choices
@@ -85,7 +75,7 @@ def add_day_argument(parser: argparse.ArgumentParser):
                 Manually check if you have trains which run overnight or start in a different time zone.
                 """,
         type=str.lower,  # Automatically lowercases all input to this option
-        choices=[*gtfs_days, "weekday", "weekend"],
+        choices=[*GTFS_DAYS, "weekday", "weekend"],
     )
 
 
@@ -152,7 +142,7 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
     parser.add_argument(
         "positional_spec_files",
         help="""
-             Spec files may be specified wiwhout the --spec prefix for convenience.
+             Spec files may be specified without the --spec prefix for convenience.
              """,
         nargs="*",  # 1 or more filenames
         default=[],  # empty list
@@ -220,8 +210,8 @@ def make_tt_arg_parser():
 # Testing code
 if __name__ == "__main__":
     print("Testing argument parser:")
-    parser = make_tt_arg_parser()
-    args = parser.parse_args()
+    test_parser = make_tt_arg_parser()
+    args = test_parser.parse_args()
     print("GTFS Filename: " + str(args.gtfs_filename))
     print("Reference Date: " + str(args.reference_date))
     print("Output Dirname: " + str(args.output_dirname))

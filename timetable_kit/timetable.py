@@ -11,52 +11,50 @@ timetable.py --help gives documentation
 """
 
 # Other people's packages
-import argparse
 
-from pathlib import Path
+import json
 import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
-import sys  # Solely for sys.path and solely for debugging
 import shutil  # To copy files
-import json
+import sys  # Solely for sys.path and solely for debugging
+from pathlib import Path
 
-import pandas as pd
 import gtfs_kit
+import pandas as pd
 from weasyprint import HTML as weasyHTML
-from weasyprint import CSS as weasyCSS
+
+from timetable_kit import connecting_services
+
+
+from timetable_kit import icons
+
+# This stores critical data supplied at runtime such as the agency subpackage to use.
+from timetable_kit import runtime_config
+
+# For calling out to the system to sew individual PDF pages together to one PDF
+from timetable_kit import sew_pages
+from timetable_kit import text_presentation
+from timetable_kit.debug import set_debug_level, debug_print
 
 # My packages: Local module imports
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
 from timetable_kit.errors import (
     GTFSError,
-    NoStopError,
     TwoStopsError,
     NoTripError,
     TwoTripsError,
     InputError,
 )
-from timetable_kit.debug import set_debug_level, debug_print
-from timetable_kit.timetable_argparse import make_tt_arg_parser
+from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early
-from timetable_kit import feed_enhanced
-
-from timetable_kit.feed_enhanced import gtfs_days
-
-# To intialize the feed -- does type changes
+# To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
 
-# For reversing the type changes to output GTFS again
-from timetable_kit import gtfs_type_cleanup
+# We call these repeatedly, so give them shorthand names
+from timetable_kit.runtime_config import agency
+from timetable_kit.runtime_config import agency_singleton
 
-# This stores critical data supplied at runtime such as the agency subpackage to use.
-from timetable_kit import runtime_config
-
-# We call this repeatedly, so give it a shorthand name
-from timetable_kit.runtime_config import agency as agency
-
-# If we don't use the "as", calls to "agency()" rather than runtime_config.agency will "None" out
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
 
@@ -64,10 +62,9 @@ from timetable_kit.runtime_config import agency as agency
 # agency().special_data
 # agency().json_stations
 # And similarly for all other agency-specific callouts
+# Except for calls to the singleton, which use agency_singleton()
 
-from timetable_kit import text_presentation
-from timetable_kit import icons
-from timetable_kit import connecting_services
+from timetable_kit.timetable_argparse import make_tt_arg_parser
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
@@ -75,7 +72,6 @@ from timetable_kit.timetable_styling import (
     style_timetable_for_html,
     finish_html_timetable,
 )
-
 from timetable_kit.tsn import (
     train_spec_to_tsn,
     make_trip_id_to_tsn_dict,
@@ -85,13 +81,9 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
 )
 
-# For calling out to the system to sew individual PDF pages together to one PDF
-from timetable_kit import sew_pages
 
-### tt-spec loading and parsing code
-
-### Constant set for the special column names.
-### These should not be interpreted as trip_short_names or train numbers.
+# Constant set for the special column names.
+# These should not be interpreted as trip_short_names or train numbers.
 special_column_names = {
     "",
     "station",
@@ -101,8 +93,8 @@ special_column_names = {
     "timezone",
 }
 
-### Constant set for special row names.
-### These should not be intrepreted as stop_code or station codes
+# Constant set for special row names.
+# These should not be interpreted as stop_code or station codes
 special_row_names = {
     "",
     "route-name",
@@ -138,7 +130,7 @@ def load_ttspec_csv(filename):
     return ttspec_csv
 
 
-def augment_tt_spec(raw_tt_spec, *, feed, date):
+def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
     """
     Fill in the station list for a tt-spec if it has a key code.
 
@@ -162,7 +154,7 @@ def augment_tt_spec(raw_tt_spec, *, feed, date):
 
         # Find the train name and possibly filter by day...
         key_train_name = key_code.removeprefix("stations of ")
-        for day in gtfs_days:
+        for day in GTFS_DAYS:
             if key_train_name.endswith(day):
                 key_train_name = key_train_name.removesuffix(day).strip()
                 today_feed = today_feed.filter_by_day_of_week(day)
@@ -258,7 +250,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
 
     Returns None if there was no code in the cell (the usual case)
 
-    Otherwise returns a dict:
+    Otherwise, returns a dict:
     train_spec: the train_spec
     first: True or False
     last: True or False
@@ -396,22 +388,20 @@ def flatten_train_specs_list(train_specs_list):
 
     Removes "noheader" suffixes (we never want them in flattened form).
     """
-    flattened_ts_list = []
+    flattened_ts_set = set()
     for ts in train_specs_list:
         train_specs = split_trains_spec(ts)  # Separates at the "/"
-        cleaned_train_specs = [
-            train_spec.removesuffix("noheader").strip() for train_spec in train_specs
-        ]
-        flattened_ts_list = [*flattened_ts_list, *cleaned_train_specs]
-    flattened_ts_set = set(flattened_ts_list)
+        for train_spec in train_specs:
+            cleaned_train_spec = train_spec.removesuffix("noheader").strip()
+            flattened_ts_set.add(cleaned_train_spec)
     flattened_ts_set = flattened_ts_set - special_column_names
     return flattened_ts_set
 
 
-#### Subroutines for fill_tt_spec
+# Subroutines for fill_tt_spec
 
 
-def service_dates_from_trip_id(feed, trip_id):
+def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
     """
     Given a single trip_id, get the associated service dates by looking up the service_id in the calendar
 
@@ -423,13 +413,13 @@ def service_dates_from_trip_id(feed, trip_id):
 
     calendar_row = feed.calendar[feed.calendar.service_id == service_id]
 
-    start_date = (calendar_row.start_date).squeeze()
-    end_date = (calendar_row.end_date).squeeze()
+    start_date = calendar_row.start_date.squeeze()
+    end_date = calendar_row.end_date.squeeze()
 
     return [start_date, end_date]
 
 
-def get_timepoint_from_trip_id(feed, trip_id, stop_id):
+def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     """
     Given a single trip_id, stop_id, and a feed, extract a single timepoint.
 
@@ -465,7 +455,7 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
                     "with trip id",
                     trip_id,
                     "stops at stop_code",
-                    agency().stop_id_to_stop_code(stop_id),
+                    agency_singleton().stop_id_to_stop_code(stop_id),
                     "more than once",
                 ]
             )
@@ -474,7 +464,7 @@ def get_timepoint_from_trip_id(feed, trip_id, stop_id):
     return timepoint
 
 
-def get_dwell_secs(today_feed, trip_id, stop_id):
+def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
     """
     Gets dwell time in seconds for a specific trip_id at a specific station
 
@@ -489,7 +479,7 @@ def get_dwell_secs(today_feed, trip_id, stop_id):
 
     if timepoint is None:
         # If the train doesn't stop there, the dwell time is zero;
-        # and we need thie behavior for make_stations_max_dwell_map
+        # and we need this behavior for make_stations_max_dwell_map
         return 0
 
     # There's a catch!  If this station is "discharge only" or "receive only",
@@ -505,7 +495,7 @@ def get_dwell_secs(today_feed, trip_id, stop_id):
 
 
 def make_stations_max_dwell_map(
-    today_feed, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
+    today_feed: FeedEnhanced, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
 ):
     """
     Return a dict from station_code to True/False, based on the trains in the tt_spec.
@@ -535,7 +525,7 @@ def make_stations_max_dwell_map(
     # Prepare the dict to return
     stations_dict = {}
     for station_code in stations_list:
-        stop_id = agency().stop_code_to_stop_id(station_code)
+        stop_id = agency_singleton().stop_code_to_stop_id(station_code)
         max_dwell_secs = 0
         for train_spec in flattened_train_spec_set:
             debug_print(3, "debug dwell map:", train_spec, station_code)
@@ -552,13 +542,13 @@ def make_stations_max_dwell_map(
 
 def raise_error_if_not_one_row(trips):
     """
-    Given a PANDAS DataFrame, raise an error if it has either 0 or more than 1 rows.
+    Given a PANDAS DataFrame, raise an error if it has either 0 or more than 1 row.
 
     The error text is based on the assumption that this is a GTFS trips frame.
     This returns nothing if successful; it is solely sanity-check code.
 
-    For speed we have to work with trips directly rather than modifying the feed,
-    which is why this is needed for fill_tt_spec, rather than merely in feed_enhanced.
+    For speed, we have to work with trips directly rather than modifying the feed,
+    which is why this is needed for fill_tt_spec, rather than merely in FeedEnhanced.
     """
     num_rows = trips.shape[0]
     if num_rows == 0:
@@ -576,7 +566,7 @@ def raise_error_if_not_one_row(trips):
 def fill_tt_spec(
     tt_spec,
     *,
-    today_feed,
+    today_feed: FeedEnhanced,
     reference_date,
     doing_html=False,
     box_time_characters=False,
@@ -693,7 +683,7 @@ def fill_tt_spec(
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
     # FIXME.
 
-    # Base CSS for every data cell.  We probably shouldn't do this but it tests that the styler works.
+    # Base CSS for every data cell.  We probably shouldn't do this, but it tests that the styler works.
     base_cell_css = ""
 
     # NOTE, border variations not implemented yet FIXME
@@ -715,7 +705,7 @@ def fill_tt_spec(
     header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
         column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
-        # Create blank train_specs list so we can call get_cell_codes on a special column without crashing
+        # Create blank train_specs list, so we can call get_cell_codes on a special column without crashing
         train_specs = []
 
         column_header_styling = ""  # default
@@ -755,7 +745,7 @@ def fill_tt_spec(
                     train_numbers_side_by_side=train_numbers_side_by_side,
                 )
                 if doing_html:
-                    # Style the header with the color & stylings for the first tsn
+                    # Style the header with the color & styling for the first tsn
                     # ...which isn't "noheader"...
                     # ...because I don't know how to do multiples! FIXME
                     header_styling_train_spec = None
@@ -786,7 +776,9 @@ def fill_tt_spec(
                 use_baggage_icon_this_column = False
                 for train_spec in train_specs:
                     potential_baggage_tsn = train_spec_to_tsn(train_spec)
-                    if agency().train_has_checked_baggage(potential_baggage_tsn):
+                    if agency_singleton().train_has_checked_baggage(
+                        potential_baggage_tsn
+                    ):
                         use_baggage_icon_this_column = True
                         break
 
@@ -854,7 +846,9 @@ def fill_tt_spec(
                         my_trip = trip_from_train_spec_local(train_spec)
                         route_id = my_trip.route_id
                         # Clean this interface up later.  FIXME
-                        route_name = agency().get_route_name(today_feed, route_id)
+                        route_name = agency_singleton().get_route_name(
+                            today_feed, route_id
+                        )
                         styled_route_name = (
                             text_presentation.style_route_name_for_column(
                                 route_name, doing_html=doing_html
@@ -907,7 +901,7 @@ def fill_tt_spec(
                         )
                     )
                 case ["days" | "days-of-week", _, reference_stop_code]:
-                    reference_stop_id = agency().stop_code_to_stop_id(
+                    reference_stop_id = agency_singleton().stop_code_to_stop_id(
                         reference_stop_code
                     )
                     # Days of week -- best for a train which doesn't run across midnight
@@ -971,33 +965,34 @@ def fill_tt_spec(
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
                     # FIXME: no way to tell it to use connecting services or not to.
-                    station_name_str = agency().get_station_name_pretty(
+                    station_name_str = agency_singleton().get_station_name_pretty(
                         station_code,
                         doing_html=doing_html,
                         doing_multiline_text=doing_multiline_text,
                     )
                     tt.iloc[y, x] = station_name_str
                 case [_, "services", _]:
-                    # Column for station services codes.  Currently completely vacant.
+                    # Column for station services codes.  Currently, completely vacant.
                     cell_css_list.append("services-cell")
                     services_str = ""
                     tt.iloc[y, x] = services_str
                 case [_, "access", _]:
                     cell_css_list.append("access-cell")
                     access_str = ""
-                    # Currently Amtrak-specific.
-                    if agency().station_has_accessible_platform(station_code):
+                    if agency_singleton().station_has_accessible_platform(station_code):
                         access_str += icons.get_accessible_icon_html(
                             doing_html=doing_html
                         )
-                    elif agency().station_has_inaccessible_platform(station_code):
+                    elif agency_singleton().station_has_inaccessible_platform(
+                        station_code
+                    ):
                         access_str += icons.get_inaccessible_icon_html(
                             doing_html=doing_html
                         )
                     tt.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
-                    stop_id = agency().stop_code_to_stop_id(station_code)
+                    stop_id = agency_singleton().stop_code_to_stop_id(station_code)
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
@@ -1014,7 +1009,7 @@ def fill_tt_spec(
                     # For connecting trains, use two different rows and use cell codes.
 
                     # Convert station_code to stop_id
-                    stop_id = agency().stop_code_to_stop_id(station_code)
+                    stop_id = agency_singleton().stop_code_to_stop_id(station_code)
 
                     # Pick out the stop timezone -- TODO, precache this as a dict
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
@@ -1059,7 +1054,7 @@ def fill_tt_spec(
                         cell_css_list.append("blank-cell")
                         # For now, we style if we have a single train.
                         # Including if it's specified with a cell code like "94 blank".
-                        # Otherwise leave it white, because it's hard to know what color to use.
+                        # Otherwise, leave it white, because it's hard to know what color to use.
                         if len(train_specs_to_check) == 1:
                             cell_css_list.append(
                                 get_time_column_stylings(
@@ -1087,10 +1082,12 @@ def fill_tt_spec(
                             ]
 
                         has_baggage = bool(
-                            agency().train_has_checked_baggage(
+                            agency_singleton().train_has_checked_baggage(
                                 train_spec_to_tsn(train_spec)
                             )
-                            and agency().station_has_checked_baggage(station_code)
+                            and agency_singleton().station_has_checked_baggage(
+                                station_code
+                            )
                         )
 
                         # Should we put the bus symbol on this cell?
@@ -1173,17 +1170,17 @@ def fill_tt_spec(
     tt.columns = unique_header_replacement_list
     styler_t.columns = unique_header_replacement_list
 
-    return (tt, styler_t, header_styling_list)
+    return tt, styler_t, header_styling_list
 
 
 def produce_timetable(
     *,
     spec_file,
-    do_csv,
-    do_html,
-    do_pdf,
-    do_jpg,
-    master_feed,
+    do_csv: bool,
+    do_html: bool,
+    do_pdf: bool,
+    do_jpg: bool,
+    master_feed: FeedEnhanced,
     author,
     command_line_reference_date,
     input_dirname,
@@ -1251,7 +1248,7 @@ def produce_timetable(
         train_numbers_side_by_side = False
 
     # Copy the icons and fonts to the output dir.
-    # This is memoized so it won't duplicate work if you do multiple tables.
+    # This is memoized, so it won't duplicate work if you do multiple tables.
     copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
     if command_line_reference_date:
@@ -1308,7 +1305,8 @@ def produce_timetable(
     if find_tsn_dupes(reduced_feed):
         debug_print(
             1,
-            "Warning, tsn duplicates!  If you use one of these without a day disambiguator, a random trip will be picked!  Usually a bad idea!",
+            "Warning, tsn duplicates!  If you use one of these without a day"
+            " disambiguator, a random trip will be picked!  Usually a bad idea!",
         )
 
     # Print the calendar for debugging
@@ -1537,13 +1535,12 @@ def produce_several_timetables(
 
     if not gtfs_filename:
         print("produce_several_timetables: gtfs_filename is mandatory!")
-        sys_exit(1)
-    master_feed = initialize_feed(gtfs=gtfs_filename)
+        sys.exit(1)
 
-    # Amtrak-specific patches.  Bleah!  FIXME
-    if patch_the_feed:
-        master_feed = agency().patch_feed(master_feed)
-        debug_print(1, "Feed patched, hopefully")
+    # The following are rather finicky in their ordering:
+
+    # Acquire the feed, enhance it, do generic patching.
+    master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
 
     # Deal with ".list" files.
     list_file_list = sew_pages.get_only_list_files(spec_file_list)
@@ -1597,7 +1594,7 @@ def main():
         my_arg_parser.print_help()
         sys.exit(1)
 
-    spec_file_list = [*(args.tt_spec_files), *(args.positional_spec_files)]
+    spec_file_list = [*args.tt_spec_files, *args.positional_spec_files]
 
     if spec_file_list == []:
         print(
@@ -1643,8 +1640,7 @@ def main():
         print("--author is mandatory!")
         sys.exit(1)
 
-    # If nopatch, don't patch the feed.  Otherwise do patch it.
-    patch_the_feed = True
+    # If nopatch, don't patch the feed.  Otherwise, do patch it.
     patch_the_feed = not args.nopatch
 
     command_line_reference_date = args.reference_date  # Does not default, may be None

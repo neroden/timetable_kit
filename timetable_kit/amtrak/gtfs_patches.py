@@ -9,9 +9,11 @@ This should be reviewed every time Amtrak releases a new GTFS.
 
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
-from timetable_kit import feed_enhanced
 from timetable_kit.debug import debug_print
+from timetable_kit.feed_enhanced import FeedEnhanced
 
+# Add the wheelchair boarding information from JSON into the GTFS
+from timetable_kit.amtrak.access import patch_add_wheelchair_boarding
 
 arizona_stops_list = [
     # Sunset Limited
@@ -32,7 +34,13 @@ arizona_stops_list = [
 ]
 
 
-def patch_arizona(stops):
+def patch_arizona(new_feed: FeedEnhanced):
+    """
+    Patch for Arizona timezone problems.
+
+    Fix feed in place.
+    """
+    stops = new_feed.stops
     for index in stops.index:
         if stops.loc[index, "stop_id"] in arizona_stops_list:
             if stops.loc[index, "stop_timezone"] == "America/Denver":
@@ -41,7 +49,9 @@ def patch_arizona(stops):
                     1,
                     "Found Arizona station with wrong timezone: patched stop_timezone",
                 )
-    return stops
+    # Patch feed in place
+    new_feed.stops = stops
+    return
 
 
 train_agencies = [
@@ -54,7 +64,7 @@ train_agencies = [
 ]
 
 
-def patch_buses(feed):
+def patch_buses(feed: FeedEnhanced):
     """
     Bus services incorrectly listed as trains
 
@@ -80,10 +90,10 @@ def patch_buses(feed):
     feed.routes = routes
 
 
-def patch_coast_starlight(new_feed):
+def patch_coast_starlight(new_feed: FeedEnhanced):
     """
     Patch an old Coast Starlight bug.
-    The bug appears to be fixed as of July 7, 2023
+    The bug appears to be fixed as of July 7, 2023,
     So this is unused code now
     """
     # Coast Starlight fix
@@ -129,22 +139,12 @@ def patch_coast_starlight(new_feed):
     new_feed.calendar = new_calendar
 
 
-def patch_feed(feed):
+def patch_toronto(new_feed: FeedEnhanced):
     """
-    Take an Amtrak feed and patch it for known errors.
+    Toronto: has "no pickups" / "no dropoffs" mixed up.
 
-    Return another feed.
+    Patch feed in place.
     """
-
-    new_feed = feed.copy()
-
-    # The Arizona Problem
-    new_stops = patch_arizona(new_feed.stops)
-    new_feed.stops = new_stops
-
-    # Buses listed as trains fixes
-    patch_buses(new_feed)
-
     # Toronto: incorrectly listed as "no pickups" in stop one.
     new_stop_times = new_feed.stop_times
     for index in new_stop_times.index:
@@ -160,11 +160,33 @@ def patch_feed(feed):
     # Update with new stop times
     new_feed.stop_times = new_stop_times
 
+
+def patch_feed(feed: FeedEnhanced):
+    """
+    Take an Amtrak feed and patch it for known errors.
+
+    Return another feed.
+    """
+
+    new_feed = feed.copy()
+
+    # Arizona time zone problems
+    patch_arizona(new_feed)
+
+    # Buses listed as trains fixes
+    patch_buses(new_feed)
+
+    # Toronto pickup-only / dropoff-only problem
+    patch_toronto(new_feed)
+
     # Cardinal #1051 (DST switch date) with wrong direction ID
     my_trips = new_feed.trips
     debug_print(1, "Patching Cardinal #1051 direction")
     my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
     # Update with new trips data
     new_feed.trips = my_trips
+
+    # Patch accessibility information into GTFS
+    patch_add_wheelchair_boarding(new_feed)
 
     return new_feed
