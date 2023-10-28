@@ -5,7 +5,7 @@ omit,"calendar-days.txt #624, #34 suspended",,,,,,,,,,,,
 route-name,,,,,,,,,,,,,
 days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW
 updown,,,,,,,,,,,,,
-TRTO,,,blank,blank,first,first,first,first,blank,blank,first,first,blank
+TRTO,,,blank,blank,first two-row,first two-row,first two-row,first two-row,blank,blank,first two-row,first two-row,blank
 GUIL,,,blank,blank,,,,,blank,blank,,,blank
 OSHA,,,blank,blank,,,,,blank,blank,,,blank
 PHOP,,,blank,blank,,,,,blank,blank,,,blank

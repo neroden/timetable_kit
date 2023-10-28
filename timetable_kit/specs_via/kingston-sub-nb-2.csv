@@ -1,0 +1,26 @@
+,access,stations,42,644,38,44,66,46,646,68,54,668,48
+column-options,,,ardp,ardp,ardp,,,,,,,,
+omit,city pair (for checking against list_trains.py),,to,to,om,to,tm,to,to,tm,to,tm,to
+route-name,,,,,,,,,,,,,
+days,,,OTTW,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW
+updown,,,,,,,,,,,,,
+TRTO,,,first,first,blank,first,first,first,first,first,first,first,first
+GUIL,,,,,blank,,,,,,,,
+OSHA,,,,,blank,,,,,,,,
+PHOP,,,,,blank,,,,,,,,
+CBRG,,,,,blank,,,,,,,,
+TRNJ,,,,,blank,,,,,,,,
+BLVL,,,,,blank,,,,,,,,
+NAPN,,,,,blank,,,,,,,,
+KGON,,,,,blank,,,,,,,,
+GANA,,,,,blank,,,,,,,,
+BRKV,,,,,blank,,,,,,,,
+CWLL,,,,,blank,,,,,,,,
+SMTF,,,,,blank,,,,,,,,
+FALL,,,,,blank,,,,,,,,
+OTTW,,,last two-row,last two-row,first two-row,last two-row,,last two-row,last two-row,,last two-row,,last two-row
+CSLM,,,blank,blank,,blank,,blank,blank,,blank,,blank
+ALEX,,,blank,blank,,blank,,blank,blank,,blank,,blank
+COTO,,,blank,blank,,blank,,blank,blank,,blank,,blank
+DORV,,,blank,blank,,blank,,blank,blank,,blank,,blank
+MTRL,,,blank,blank,last,blank,last,blank,blank,last,blank,last,blank
