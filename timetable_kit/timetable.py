@@ -167,7 +167,9 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_tt_spec = raw_tt_spec.copy()  # Copy entire original spec
         new_tt_spec.iloc[0, 0] = ""  # Blank out key_code
-        newer_tt_spec = pd.concat([new_tt_spec, stations_df]).fillna("")  # Yes, this works
+        newer_tt_spec = pd.concat([new_tt_spec, stations_df]).fillna(
+            ""
+        )  # Yes, this works
         # The problem is that it leads to duplicate indices (ugh!)
         # So fully reset the index
         newest_tt_spec = newer_tt_spec.reset_index(drop=True)

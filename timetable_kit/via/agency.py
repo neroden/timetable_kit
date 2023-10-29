@@ -30,6 +30,9 @@ from timetable_kit.connecting_services import get_connecting_service_logo_html
 # For get_route_name
 import timetable_kit.via.route_names as route_names
 
+# For getting the province for a given stop code
+from timetable_kit.via.province_data import stop_code_to_province
+
 
 class AgencyVIA(Agency):
     """VIA-specific code for interpreting specs and GTFS feeds"""
@@ -146,12 +149,30 @@ class AgencyVIA(Agency):
             stop_name_clean = stop_name_raw.removesuffix(" Bus")
             facility_name = "Bus station"
         elif stop_name_raw == "Niagara Falls Station":
-            stop_name_clean = "Niagara Falls, NY"
+            # stop_name_clean = "Niagara Falls, NY"
+            # We patch in the state later
+            stop_name_clean = "Niagara Falls"
         elif stop_name_raw == "Niagara Falls":
-            stop_name_clean = "Niagara Falls, ON"
+            # stop_name_clean = "Niagara Falls, ON"
+            # We patch in the province later
+            stop_name_clean = "Niagara Falls"
         else:
             stop_name_clean = stop_name_raw
         return (stop_name_clean, facility_name)
+
+    def break_long_city_state_name(self, raw_city_state_name: str) -> str:
+        """
+        Add HTML <br> to certain city names which are too long.
+        """
+        match raw_city_state_name:
+            case "Thicket Portage, MB" | "Atikameg Lake, MB" | "The Pas, MB":
+                # Makes the Churchill timetable too wide.
+                # In the case of The Pas, it fits but looks ugly with the
+                # KRC connecting indicators.
+                city_state_name = raw_city_state_name + "<br>"
+            case _:
+                city_state_name = raw_city_state_name
+        return city_state_name
 
     def replace_facility_names(
         self, station_code: str, facility_name: Optional[str]
@@ -201,9 +222,11 @@ class AgencyVIA(Agency):
         # Disassemble the station name into city_name and facility name.
         (city_name, facility_name) = self.disassemble_station_name(stop_name_raw)
 
-        # We actually want to add the province to every station,
-        # but VIA doesn't provide that info.  It's too much work.
-        # FIXME
+        # We actually want to append the province to every station.
+        # VIA doesn't provide that information but we can supply it.
+        province = stop_code_to_province(station_code)
+        if province:
+            city_name = ", ".join([city_name, province])
 
         # Call the appropriate reassembly routine.
         if doing_html:
