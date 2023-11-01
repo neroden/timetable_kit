@@ -153,7 +153,6 @@ _stop_code_to_province = {
     "WNPG": "MB",
     "WNTB": "MB",
     "WVHO": "MB",
-    "": "MB",
     # NB stations
     "BATH": "NB",
     "CBTN": "NB",
