@@ -1,23 +1,23 @@
-,stations,261,63 monday,69,281 monday,233,283 monday,291,235 monday,1235 friday,49,237,239,241 monday,243
-column-options,,days short-days-box,ardp,ardp,,,,,,,ardp,,,,
-omit,Note that 261 shows in Sunday trains,,,,,,,,,,,,,,
-route-name,,,,,,,,,,,,,,,
-days,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
-NYP,,first,first,first,first,first,first,first,first,first,first,first,first,first,first
-YNY,,,,,,,,,,,,,,,
-CRT,,,,,,,,,,,,,,,
-POU,,,,,,,,,,,,,,,
-RHI,,,,,,,,,,,,,,,
-HUD,,,,,,,,,,,,,,,
-ALB,,last,,,,last,,,last,last,,last,last,last,last
-SDY,,blank,,,,blank,,,blank,blank,,blank,blank,blank,blank
-SAR,,blank,,,,blank,,,blank,blank,,blank,blank,blank,blank
-AMS,,blank,,"<span>Continues To<br>Montreal, QC</span>",,blank,,"<span>Continues To<br>Burlington, VT</span>",blank,blank,,blank,blank,blank,blank
-UCA,,blank,,blank,,blank,,blank,blank,blank,,blank,blank,blank,blank
-ROM,,blank,,blank,,blank,,blank,blank,blank,,blank,blank,blank,blank
-SYR,,blank,,blank,,blank,,blank,blank,blank,,blank,blank,blank,blank
-ROC,,blank,,blank,,blank,,blank,blank,blank,,blank,blank,blank,blank
-BUF,,blank,,blank,,blank,,blank,blank,blank,,blank,blank,blank,blank
-BFX,,blank,,blank,,blank,,blank,blank,blank,"<span>Continues To<br>Chicago, IL</span>",blank,blank,blank,blank
-NFL,,blank,,blank,last,blank,last,blank,blank,blank,blank,blank,blank,blank,blank
-,,,"<span>Continues To<br>Toronto, ON</span>",,,,,,,,,,,,
+,stations,63,69,281,233,283,291,235,49,237,239,241,243
+column-options,,ardp,ardp,,,,,,ardp,,,,
+omit,Note that 261 shows in Sunday trains,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,
+days,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+NYP,,first,first,first,first,first,first,first,first,first,first,first,first
+YNY,,,,,,,,,,,,,
+CRT,,,,,,,,,,,,,
+POU,,,,,,,,,,,,,
+RHI,,,,,,,,,,,,,
+HUD,,,,,,,,,,,,,
+ALB,,,,,last,,,last,,last,last,last,last
+SDY,,,,,blank,,,blank,,blank,blank,blank,blank
+SAR,,,,,blank,,,blank,,blank,blank,blank,blank
+AMS,,,"<span>Continues To<br>Montreal, QC</span>",,blank,,"<span>Continues To<br>Burlington, VT</span>",blank,,blank,blank,blank,blank
+UCA,,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+ROM,,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+SYR,,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+ROC,,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+BUF,,,blank,,blank,,blank,blank,,blank,blank,blank,blank
+BFX,,,blank,,blank,,blank,blank,"<span>Continues To<br>Chicago, IL</span>",blank,blank,blank,blank
+NFL,,,blank,last,blank,last,blank,blank,blank,blank,blank,blank,blank
+,,"<span>Continues To<br>Toronto, ON</span>",,,,,,,,,,,
