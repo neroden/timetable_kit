@@ -111,6 +111,10 @@ if __name__ == "__main__":
     # And pull the station list, in order
     station_list_df = stations_list_from_tsn(today_feed, tsn)
     if not args.csv:
+        # This is by way of demonstrating how to do this:
+        # print("First:", station_list_df.iat[0])
+        # print("Last:", station_list_df.iat[-1])
+        #
         print(station_list_df)
         sys.exit(0)
 
