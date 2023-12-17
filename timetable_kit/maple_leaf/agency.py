@@ -75,6 +75,20 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
                 city_state_name, facility_name, enhanced_station_code, major
             )
 
+    def get_all_connecting_services(self, station_list: list[str]) -> list[str]:
+        """
+        Given a list of station codes, return a list of services which connect
+        (with no duplicates)
+        """
+        # Special tweak for Maple Leaf: connecting services indexed by "Amtrak code / VIA code"
+        enhanced_station_list = [
+            station_code + " / " + amtrak_code_to_via_code[station_code]
+            for station_code in station_list
+            if station_code in amtrak_code_to_via_code
+        ]
+        print("Enhanced station list", enhanced_station_list)
+        return super().get_all_connecting_services(enhanced_station_list)
+
 
 # Establish the singleton
 _singleton = AgencyMapleLeaf()
