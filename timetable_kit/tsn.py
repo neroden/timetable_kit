@@ -197,6 +197,27 @@ def trip_from_tsn(today_feed: FeedEnhanced, trip_short_name):
     return this_trip_today
 
 
+def stations_list_from_trip_id(today_feed: FeedEnhanced, trip_id):
+    """
+    Given a trip_id, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
+
+    Produces a station list dataframe.
+    This variant is used to implement "origin" and "destination".
+    """
+    # Cannot be put into feed_enhanced due to the reliance on agency_singleton().  FIXME?
+
+    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)  # Sorted.
+    # For VIA rail, the stop_id is not the same as the stop_code.
+    # Add the stop_code.  (For Amtrak, this is a no-op)
+    sorted_stop_times["stop_code"] = sorted_stop_times["stop_id"].apply(
+        agency_singleton().stop_id_to_stop_code
+    )
+
+    debug_print(3, sorted_stop_times)
+    sorted_stop_codes = sorted_stop_times["stop_code"]
+    return sorted_stop_codes
+
+
 def stations_list_from_tsn(today_feed: FeedEnhanced, trip_short_name):
     """
     Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
@@ -210,13 +231,4 @@ def stations_list_from_tsn(today_feed: FeedEnhanced, trip_short_name):
 
     trip_id = trip_from_tsn(today_feed, trip_short_name).trip_id
 
-    sorted_stop_times = today_feed.get_single_trip_stop_times(trip_id)  # Sorted.
-    # For VIA rail, the stop_id is not the same as the stop_code.
-    # Add the stop_code.  (For Amtrak, this is a no-op)
-    sorted_stop_times["stop_code"] = sorted_stop_times["stop_id"].apply(
-        agency_singleton().stop_id_to_stop_code
-    )
-
-    debug_print(3, sorted_stop_times)
-    sorted_stop_codes = sorted_stop_times["stop_code"]
-    return sorted_stop_codes
+    return stations_list_from_trip_id(today_feed, trip_id)
