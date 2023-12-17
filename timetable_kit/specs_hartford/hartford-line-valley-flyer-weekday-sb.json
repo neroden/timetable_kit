@@ -1,7 +1,7 @@
 {
     "title": "Hartford Line & Valley Flyer: Weekday Southbound Timetable",
     "heading": "Hartford Line & Valley Flyer: Weekday Southbound",
-    "reference_date": "20231007",
+    "reference_date": "20240102",
     "programmers_notes": "Weasyprint won't make an italic version of the SpartanTT font, so don't bother to try to style CTrail the way Connecticut does",
     "top_text": "CTrail Hartford Line trains (<b>#44XX</b>) are <b>not ticketed or operated by Amtrak</b>; CTrail tickets must be bought at the station.  See notes at bottom.",
     "bottom_text": "CTrail tickets are valid for all CTRail trains, and for Amtrak trains from Springfield to New Haven <b>except for</b> the Vermonter and during holiday blackout periods on Northeast Regionals.<br>The <a href=\"https://www.hartfordline.com/\">CTrail Hartford Line website</a> has full schedules for services where CTrail tickets are valid, including additional Hartford-New Haven buses.<br>NOTE: Some southbound CTrail Hartford Line trains are <b>drop-off only (no pick-up)</b> at New Haven State Street Station.",
