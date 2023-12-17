@@ -1,0 +1,15 @@
+{
+    "title": "Keystone Weekend Westbound Timetable",
+    "heading": "Amtrak's Keystone Service & Pennsylvanian: Weekend Westbound",
+<<<<<<< HEAD
+    "reference_date": "20240108",
+=======
+    "reference_date": "20240102",
+>>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "landscape": "true",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "compress_credits": "true",
+    "for_rpa": "true"
+}

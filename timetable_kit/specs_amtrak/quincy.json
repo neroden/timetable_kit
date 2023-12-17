@@ -1,0 +1,14 @@
+{
+    "title": "Galesburg and Quincy Timetable",
+    "heading": "Amtrak services to Galesburg and Quincy",
+<<<<<<< HEAD
+    "reference_date": "20231230",
+=======
+    "reference_date": "20240102",
+>>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "bottom_text": "<b>Amtrak does not carry local passengers</b> between Chicago, La Grange Road, and Naperville unless connecting to other Amtrak trains.",
+    "key_baggage": "true",
+    "key_r": "true",
+    "key_d": "true",
+    "for_rpa": "true"
+}

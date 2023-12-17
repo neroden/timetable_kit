@@ -1,0 +1,13 @@
+{
+    "title": "Richmond & Hampton Roads Timetable - Saturday Northbound",
+    "heading": "Amtrak to Richmond & Hampton Roads - Saturday Northbound",
+<<<<<<< HEAD
+    "reference_date": "20240108",
+=======
+    "reference_date": "20240120",
+>>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "key_baggage": "true",
+    "key_d": "true",
+    "compress_credits": "true",
+    "for_rpa": "true"
+}

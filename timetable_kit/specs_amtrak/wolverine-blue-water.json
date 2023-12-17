@@ -1,0 +1,12 @@
+{
+    "title": "Wolverine & Blue Water Timetable",
+    "heading": "Amtrak's Wolverine & Blue Water",
+<<<<<<< HEAD
+    "reference_date": "20231203",
+=======
+    "reference_date": "20240102",
+>>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "programmers_warning": "Wolverine trains have identical M-F and SaSu timetables but are listed separately, so days column is overridden: recheck this when GTFS changes.",
+    "key_tz": "true",
+    "for_rpa": "true"
+}
