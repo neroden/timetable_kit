@@ -155,17 +155,32 @@ def style_timetable_for_html(
     return styled_timetable_html
 
 
-def make_header_styling_css(header_styling_list) -> str:
+def make_header_styling_css(header_styling_list, table_uuid=None) -> str:
     """
     Given a list of strings, which maps from column numbers (the index) to CSS attributes, return suitable CSS.
 
     Assumes PANDAS-standard classes col_heading, col0, col1, etc.  I see no other way to do it.  :-(
+
+    If table_uuid is supplied, only applies to the table with the id "T_" + table_uuid (conforming to the way PANDAS makes the ids).
     """
+    if table_uuid:
+        top_selector = "#T_" + table_uuid
+    else:
+        top_selector = ".tt_table"
+
     accumulated_css = ""
-    # The CSS selector is: a descendant of .tt_table which is both th, .col_heading, and .col0 (or whatever number)
+    # The CSS selector is: a descendant of .tt_table or specified ID
+    # which is both th, .col_heading, and .col0 (or whatever number)
     for col_num, attributes in enumerate(header_styling_list):
         this_css = "".join(
-            [".tt-table th.col_heading.col", str(col_num), " { ", attributes, " }\n"]
+            [
+                top_selector,
+                " th.col_heading.col",
+                str(col_num),
+                " { ",
+                attributes,
+                " }\n",
+            ]
         )
         accumulated_css += this_css
     return accumulated_css
