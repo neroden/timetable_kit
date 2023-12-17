@@ -1,7 +1,7 @@
 {
     "title": "Carolinian and Piedmont Southbound",
     "heading": "Amtrak's Carolinian and Piedmont Southbound",
-    "reference_date": "20231101",
+    "reference_date": "20240108",
     "programmers_warning": "Train 80, 19, and 20 have weird variations on incoming NEC timings.",
     "key_baggage": true,
     "key_d": true,
