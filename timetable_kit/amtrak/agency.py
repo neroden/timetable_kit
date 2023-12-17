@@ -166,20 +166,51 @@ class AgencyAmtrak(Agency):
         """
         return special_data.is_standard_major_station(station_code)
 
-    def get_station_name_short(
+    def get_station_name_from(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
         """
-        Get a short station name, for use in "From Portland" / "To Cleveland" lines.
+        Get a phrase like "from Portland" for the station.
         """
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
         (city_state_name, facility_name) = self.disassemble_station_name(station_name)
         # Break the city out.
-        (city_name, state_name) = city_state_name.split(" ,")
-        # Just return the city.  (Consider changing this.)
-        return city_name
+        (city_name, state_name) = city_state_name.split(", ")
+
+        # Exit early if not doing HTML
+        if not doing_html:
+            return "from " + city_name
+
+        # Special-case New Orleans
+        if city_name == "New Orleans":
+            return "from New<br>Orleans"
+        return "from<br>" + city_name
+
+    def get_station_name_to(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Get a phrase like "to Portland" for the station.
+        """
+        # Get the raw station name (from JSON)
+        station_name = self.stop_code_to_stop_name(station_code)
+        # Disassemble it.
+        (city_state_name, facility_name) = self.disassemble_station_name(station_name)
+        # Break the city out.
+        (city_name, state_name) = city_state_name.split(", ")
+
+        # Exit early if not doing HTML
+        if not doing_html:
+            return "to " + city_name
+
+        # Special-case New Orleans and Newport News
+        if city_name == "New Orleans":
+            return "to New<br>Orleans"
+        if city_name == "Newport News":
+            return "to Newport<br>News"
+        return "to<br>" + city_name
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
