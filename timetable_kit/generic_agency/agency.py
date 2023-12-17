@@ -535,6 +535,16 @@ class Agency:
             )
         return fancy_name
 
+    def get_station_name_short(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Get a short station name, for use in "From Portland" / "To Cleveland" lines.
+        """
+        # For a generic agency, just use the raw station name (from GTFS)
+        station_name = self.stop_code_to_stop_name(station_code)
+        return station_name
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:

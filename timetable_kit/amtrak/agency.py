@@ -166,6 +166,21 @@ class AgencyAmtrak(Agency):
         """
         return special_data.is_standard_major_station(station_code)
 
+    def get_station_name_short(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Get a short station name, for use in "From Portland" / "To Cleveland" lines.
+        """
+        # Get the raw station name (from JSON)
+        station_name = self.stop_code_to_stop_name(station_code)
+        # Disassemble it.
+        (city_state_name, facility_name) = self.disassemble_station_name(station_name)
+        # Break the city out.
+        (city_name, state_name) = city_state_name.split(" ,")
+        # Just return the city.  (Consider changing this.)
+        return city_name
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
