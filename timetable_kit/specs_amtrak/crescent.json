@@ -1,0 +1,10 @@
+{
+    "title": "Crescent Timetable",
+    "heading": "Amtrak's Crescent",
+    "reference_date": "20240102",
+    "key_baggage": "true",
+    "key_d": "true",
+    "key_r": "true",
+    "key_tz": "true",
+    "for_rpa": "true"
+}
