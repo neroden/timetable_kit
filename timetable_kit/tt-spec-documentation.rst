@@ -57,6 +57,9 @@ The special code "updown" will generate "Read Up" and "Read Down" notices.  See 
 
 The special code "omit" will omit the entire row from the final timetable -- this allows for comments in the CSV file, which are otherwise impossible.
 
+The special code "origin" will print a line like "From Portland" for trains where the train's first stop (origin) is not listed in this timetable.  This only works for columns with a single train (not multiple trains).  This can be overridden by free text writing.
+The special code "destination" will print a line like "To Portland" for trains where the train's final stop (destination) is not listed in this timetable.  This only works for columns with a single train (not multiple trains).  This can be overridden by free text writing.
+
 SHORTHAND SPEC
 --------------
 For a "shorthand" spec, the key cell contains the words "stations of XXX", 

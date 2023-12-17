@@ -26,16 +26,20 @@ cd ..
 # Amtrak timetables currently produceable (we think)
 LD_WEST="empire-builder california-zephyr southwest-chief sunset-limited texas-eagle coast-starlight"
 LOCAL_WEST="heartland-flyer grand-canyon"
-# Omits Winter Park Express due to lack of data
+# Omits winter-park-express due to seasonality
 # Omits capitol-corridor.list, san-joaquin.list, pacific-surfliner.list, cascades.list
 # due to official timetable existing (reconsider this)
 MIDWEST="hiawatha.list illinois-missouri-services.list city-of-new-orleans-illini-saluki michigan-services.list"
 LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list auto-train"
-LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express vermont-to-upstate-ny adirondack berkshire-flyer"
+LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express adirondack"
+# Omits berkshire-flyer due to seasonality
+# Omitted due to bugs: vermont-to-upstate-ny -- FIXME
 # Omits Downeaster because official timetable is MUCH better than mine (go Maine)
 # Amtrak timetables omit Maple Leaf (see below)
-LOCAL_NORTHEAST="empire-service.list keystone-service.list pennsylvanian"
-LOCAL_SOUTHEAST="virginia-services.list carolinian-piedmont"
+LOCAL_NORTHEAST="empire-service.list pennsylvanian carolinian-piedmont.list"
+# Omittted due to bugs: keystone-service.list (637) virginia-services.list (157) -- FIXME
+LOCAL_SOUTHEAST=""
+# Don't build NEC per default; it is too slow
 NEC="nec-bos-was.list"
 
 ALL_AMTRAK="$LD_WEST $LOCAL_WEST $MIDWEST $LD_EAST $LOCAL_NEW_ENGLAND $LOCAL_NORTHEAST $LOCAL_SOUTHEAST"
@@ -49,4 +53,5 @@ ALL_VIA="canadian.list ocean remote-services.list corridor.list"
 ./timetable.py --agency maple_leaf --spec maple-leaf
 
 # Hartford Line is an Amtrak/Hartford Line hybrid
-./timetable.py --agency hartford --spec hartford-line-valley-flyer.list
+# Currently broken
+# ./timetable.py --agency hartford --spec hartford-line-valley-flyer.list

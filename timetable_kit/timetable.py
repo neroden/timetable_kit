@@ -79,6 +79,7 @@ from timetable_kit.tsn import (
     make_tsn_to_trip_id_dict,
     make_tsn_and_day_to_trip_id_dict,
     stations_list_from_tsn,
+    stations_list_from_trip_id,
 )
 
 
@@ -102,6 +103,8 @@ special_row_names = {
     "days",
     "days-of-week",
     "omit",
+    "origin",
+    "destination",
 }
 
 
@@ -617,6 +620,9 @@ def fill_tt_spec(
     # Merger of both dictionaries:
     train_spec_to_trip_id = tsn_and_day_to_trip_id | tsn_to_trip_id
 
+    # The list of stations, occasionally useful:
+    station_codes_list = stations_list_from_tt_spec(tt_spec)
+
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
     def trip_from_train_spec_local(train_spec: str):
@@ -791,6 +797,13 @@ def fill_tt_spec(
         header_replacement_list.append(column_header)
         header_styling_list.append(column_header_styling)
 
+        # Cache this for use in "origin" and "destination";
+        # it only looks at the first tsn.
+        # It won't fill on special columns, which is OK
+        if train_specs:
+            col_trip_id = train_spec_to_trip_id[train_specs[0]]
+            stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
+
         for y in range(1, row_count):  # First (0) row is the header
             station_code = tt_spec.iloc[y, 0]  # row y, column 0
 
@@ -960,12 +973,44 @@ def fill_tt_spec(
                         )
                     )
                 case [_, _, raw_text] if raw_text != "" and not cell_codes:
-                    # Line led by a station code, but cell already has a value.
+                    # Line led by a station code,
+                    # Or "origin", "destination", but cell already has a value.
                     # and the value isn't one of the special codes we check later.
                     cell_css_list.append("special-cell")
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
                     tt.iloc[y, x] = raw_text
+                case ["origin" | "destination", ck, _] if ck in special_column_names:
+                    # Free-written text was checked earlier
+                    tt.iloc[y, x] = ""
+                case ["origin", _, _]:
+                    # Get the originating station for the train, and
+                    # IF it is not in this timetable, print something appropriate
+                    # Only looks at the first tsn.  (FIXME)
+                    # Free-written text was checked earlier
+                    first_station_code = stations_df_for_column.iat[0]
+                    if first_station_code not in station_codes_list:
+                        tt.iloc[y, x] = agency_singleton().get_station_name_from(
+                            first_station_code,
+                            doing_multiline_text=doing_multiline_text,
+                            doing_html=doing_html,
+                        )
+                    else:
+                        tt.iloc[y, x] = ""
+                case ["destination", _, _]:
+                    # Get the final (terminating) station for the train, and
+                    # IF it is not in this timetable, print something appropriate
+                    # Only looks at the first tsn. (FIXME)
+                    # Free-written text was checked earlier
+                    last_station_code = stations_df_for_column.iat[-1]
+                    if last_station_code not in station_codes_list:
+                        tt.iloc[y, x] = agency_singleton().get_station_name_to(
+                            last_station_code,
+                            doing_multiline_text=doing_multiline_text,
+                            doing_html=doing_html,
+                        )
+                    else:
+                        tt.iloc[y, x] = ""
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")

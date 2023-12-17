@@ -535,6 +535,32 @@ class Agency:
             )
         return fancy_name
 
+    def get_station_name_from(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Get a phrase like "from Montreal"
+        """
+        # For a generic agency, just use the raw station name (from GTFS)
+        station_name = self.stop_code_to_stop_name(station_code)
+        if not doing_html:
+            return "from " + station_name
+        # Use a line break per default in HTML
+        return "from<br>" + station_name
+
+    def get_station_name_to(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """
+        Get a phrase like "to Montreal"
+        """
+        # For a generic agency, just use the raw station name (from GTFS)
+        station_name = self.stop_code_to_stop_name(station_code)
+        if not doing_html:
+            return "to " + station_name
+        # Use a line break per default in HTML
+        return "to<br>" + station_name
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:

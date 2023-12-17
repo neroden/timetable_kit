@@ -12,4 +12,4 @@
 
 ./timetable.py --agency maple_leaf --spec maple-leaf
 
-./timetable.py --agency hartford --spec hartford-line-valley-flyer.list
+# ./timetable.py --agency hartford --spec hartford-line-valley-flyer.list
