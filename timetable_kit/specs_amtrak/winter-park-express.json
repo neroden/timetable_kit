@@ -1,11 +1,7 @@
 {
     "title": "Winter Park Express Timetable",
     "heading": "Amtrak's Winter Park Express",
-<<<<<<< HEAD
-    "reference_date": "20240112",
-=======
-    "reference_date": "20240113",
->>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "reference_date": "20231101",
     "for_rpa": "true",
     "top_text": "The Winter Park Express ski train will run each Friday, Saturday, and Sunday from January 12 to March 31 2024.<br>It will also run on Martin Luther King Jr. Day (Monday, January 15) and Presidents’ Day (Monday, February 19).<br>There will be 'extra' runs on Thursday, March 14 and Thursday, March 21."
 }
