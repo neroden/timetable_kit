@@ -2,11 +2,7 @@
     "programmers_warning": "Currently requires patching Amtrak GTFS to fix a problem with days of week.",
     "title": "Coast Starlight Timetable",
     "heading": "Amtrak's Coast Starlight",
-<<<<<<< HEAD
-    "reference_date": "20231230",
-=======
-    "reference_date": "20240102",
->>>>>>> ae01d01acb8c31526f88cddc8f9cc8e44a9c9c69
+    "reference_date": "20231101",
     "bottom_text": "<b>San Francisco</b> can be reached by Caltrain from San Jose,<br>or by Amtrak-ticketed connecting bus from Emeryville.",
     "key_on_right": "true",
     "key_bus": "true",
