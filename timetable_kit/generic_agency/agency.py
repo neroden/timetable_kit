@@ -154,7 +154,6 @@ class Agency:
         joined_clause = " ".join(and_clause(wrapped_by_names))
         if joined_clause:
             joined_clause += ", "
-        # The way this is used in the Jinja template, it's preceded by ", ".
         # If blank, leave blank.
         # If not blank, finish off with ", ".
         # We can't move this all into code because we need to be able to refer to
