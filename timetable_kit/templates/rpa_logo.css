@@ -4,10 +4,10 @@ Part of timetable_kit
 Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 CSS Jinja template file for displaying the RPA logo.
-This needs to be relative only to the page body.
+We want this to show up on every page when printed, so use "fixed".
 #}
 .logo-bottom-right {
-    position: absolute;
+    position: fixed;
     bottom: 2px;
     right: 2px;
 }
