@@ -16,19 +16,19 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
 #}{% if all_stations_accessible %}
     <tr>
       <td>{{accessible_icon}}</td>
-      <td><b>All stations on this timetable</b> have platforms and trains accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
+      <td><b>All stations on this timetable</b> have platforms and trains accessible to people in wheelchairs{#
 #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
 {% else %}{# not all stations accessible, the norm #}
     <tr>
       <td>{{accessible_icon}}</td>
-      <td>Platform and train are accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
+      <td>Platform and train are accessible to people in wheelchairs{#
 #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
 #}{% if wheelchair_advance_notice %}<br><b>48 hours advance notice required for{#
-#}{{ br_or_space(key_on_right) }}wheelchair lifts at some stations</b>{% endif %}</td>
+#} wheelchair lifts at some stations</b>{% endif %}</td>
     </tr>
     <tr>
       <td>{{inaccessible_icon}}</td>
-      <td>Platform and train are <b>not accessible</b>{{ br_or_space(key_on_right) }}to people in wheelchairs</td>
+      <td>Platform and train are <b>not accessible</b> to people in wheelchairs</td>
     </tr>{#
 #}{% endif %}{# station accessibility icons #}{#
 #}{% if key_baggage %}
@@ -49,7 +49,7 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
 #}{% endif %}{% if key_d %}
     <tr>
       <td><b>D</b></td>
-      <td>Stops only to discharge passengers{{ br_or_space(key_on_right) }}(may leave before time shown)</td>
+      <td>Stops only to discharge passengers (may leave before time shown)</td>
     </tr>{#
 #}{% endif %}{% if key_r %}
     <tr>
@@ -71,17 +71,18 @@ This says "can be booked through Amtrak" / "can be booked through VIA" etc.
 -- don't use for connecting buses which require separate booking.  FIXME #}
     <tr>
       <td><b>{{bus_icon}}</b></td>
-      <td>{{connecting_bus_key_sentence}}Connecting Bus Service</td>
+      <td>{{connecting_bus_key_sentence}}</td>
     </tr>{#
 #}{% endif %}{% if key_tz %}
     <tr>
       <td><b>TZ</b></td>
       <td>Time zone: {#
-#}{% if atlantic_time %}AT (Atlantic Time), {{ br_or_space(key_on_right) }}{% endif %}{#
-#}ET (Eastern Time), CT (Central Time),{{ br_or_space(key_on_right) }}{#
-#}{% if central_standard_time %}CST (Central Standard Time), {{ br_or_space(key_on_right) }}{% endif %}{#
+#}{% if atlantic_time %}AT (Atlantic Time), {% endif %}{#
+#}ET (Eastern Time), {#
+#}CT (Central Time), {#
+#}{% if central_standard_time %}CST (Central Standard Time), {% endif %}{#
 #}MT (Mountain Time), {#
-#}{% if mountain_standard_time %}MST (Mountain Standard Time), {{ br_or_space(key_on_right) }}{% endif %}{#
+#}{% if mountain_standard_time %}MST (Mountain Standard Time), {% endif %}{#
 #}or PT (Pacific Time)</td>
     </tr>{#
 #}{% endif %}{#
