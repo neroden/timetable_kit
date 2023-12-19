@@ -5,11 +5,9 @@
 
 {% include "licensing.txt" %}
 */{% endif %}{# external_stylesheet #}
-{{ font_faces }}
+{{ generally_applicable_css }}
 {% include "font_choice.css" %}
 {% include "font_size.css" %}
-{{ icons }}
-{{ logos }}
 {% include "rpa_logo.css" %}
 {% include "connecting_service_links.css" %}
 {% include "page_standard.css" %}

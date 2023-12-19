@@ -186,6 +186,52 @@ def make_header_styling_css(header_styling_list, table_uuid=None) -> str:
     return accumulated_css
 
 
+def get_generally_applicable_css(fonts: list[str] = ["SpartanTT"]) -> str:
+    """
+    Returns the CSS which is generally applicable to all timetables,
+    as opposed to CSS for styling an individual table & key.
+    """
+    # For producing multi-page timetables.
+    # These should not vary by table or page.
+
+    offset_comment = "/***************************************************/"
+    header_comment = "/* Start CSS applicable to all pages, tables, keys */"
+    footer_comment = "/*  End CSS applicable to all pages, tables, keys  */"
+
+    # For icons as imgs.
+    # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
+    # This is used every time an icon is inserted.
+    # This includes the CSS for all icons whether used in this timetable or not.
+    icons_css = icons.get_css_for_all_icons()
+
+    # For connecting service logos as imgs:
+    # This includes the CSS for all logos including those not used in this timetable.
+    logos_css = connecting_services.get_css_for_all_logos()
+
+    # The @font-face directives:
+    # It breaks Weasyprint to include references to nonexistent fonts,
+    # So we have to make sure it only includes used fonts.
+    # (Works OK for rendering in Firefox, though.)
+    fonts_css_list = []
+    for font in fonts:
+        fonts_css_list.append(get_font_css(font))
+    font_faces_css = "".join(fonts_css_list)
+
+    return "\n".join(
+        [
+            offset_comment,
+            header_comment,
+            offset_comment,
+            font_faces_css,
+            icons_css,
+            logos_css,
+            offset_comment,
+            footer_comment,
+            offset_comment,
+        ]
+    )
+
+
 def finish_html_timetable(
     styled_timetable_html,
     header_styling_list,
@@ -193,7 +239,6 @@ def finish_html_timetable(
     author,
     aux=None,
     for_weasyprint=False,
-    box_time_characters=False,
     start_date,
     end_date,
     station_codes_list,  # For connecting services key
@@ -207,6 +252,12 @@ def finish_html_timetable(
     The mandatory "author" argument gives the author of the timetable.
     """
 
+    # Stuff which is the same for all pages & tables
+    # @font-face directives
+    # Icon and logo styling
+    generally_applicable_css = get_generally_applicable_css(fonts=["SpartanTT"])
+
+    # The header stylings, totally different for each table
     header_styling_css = make_header_styling_css(header_styling_list)
 
     if aux is None:
@@ -240,21 +291,7 @@ def finish_html_timetable(
     else:
         backup_font_name = "sans-serif"
 
-    # The @font-face directives:
-    fonts_css_list = []
-    for font in [font_name]:
-        fonts_css_list.append(get_font_css(font))
-    font_faces_css = "".join(fonts_css_list)
-
     ### ICONS
-
-    # For icons as imgs.
-    # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
-    # This is used every time an icon is inserted...
-    icons_css = icons.get_css_for_all_icons()
-
-    # For connecting service logos as imgs:
-    logos_css = connecting_services.get_css_for_all_logos()
 
     # Key for connecting services:
     # First use the station codes list to get a list of all *relevant* services
@@ -270,15 +307,12 @@ def finish_html_timetable(
     ### Prepare Jinja template substitution:
 
     stylesheet_params = {
-        "font_faces": font_faces_css,
+        "generally_applicable_css": generally_applicable_css,
         "font_name": font_name,
         "backup_font_name": backup_font_name,
         "font_size": font_size,  # 6pt
         "font_is_tiny": font_is_tiny,  # True
-        "icons": icons_css,
-        "logos": logos_css,
         "header_styling": header_styling_css,
-        "box_time_characters": box_time_characters,
     }
 
     production_date_str = datetime.date.today().isoformat()
