@@ -32,7 +32,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% include "symbol_key.html" %}
 {% if central_standard_time %}{% include "central_standard_time.html" %}{% endif %}
 {% if mountain_standard_time %}{% include "mountain_standard_time.html" %}{% endif %}
-{% include "connecting_services_key.html" %}
+{% include "connecting_services_key.html" %}{# Depends on compressed-credits #}
 {% if montreal_airport_shuttle %}{% include "montreal_airport_shuttle.html" %}{% endif %}{# VIA-specific hack, FIXME #}
 {% if bottom_text %}<p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>{% endif %}
 {% include "unofficial_agency.html" %}

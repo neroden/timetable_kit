@@ -5,7 +5,8 @@
 
 {% include "licensing.txt" %}
 */{% endif %}{# external_stylesheet #}
-{{ generally_applicable_css }}
+{{ generally_applicable_css }}{# Icon, logo, font stuff applying to all pages #}
+{% include "symbol_key.css" %}{# Applies to all symbol keys on all pages #}
 {% include "font_choice.css" %}
 {% include "font_size.css" %}
 {% include "rpa_logo.css" %}
@@ -18,4 +19,3 @@
 {% include "time_boxes_characters.css" %}{# Used only if we're using a nontabular font. #}
 {% include "time_boxes_simple.css" %}
 {% include "time_boxes_extras.css" %}
-{% include "symbol_key.css" %}
