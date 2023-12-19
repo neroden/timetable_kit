@@ -10,6 +10,7 @@ Get Amtrak to fix GTFS days of operation:
 For making updates easier:
 -- Pass through table ID from the top, to allow multipage timetables
 -- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
+-- implement auto-search for valid reference dates
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Isolate the GTFS downloads
