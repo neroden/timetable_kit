@@ -1,8 +1,8 @@
-<!--
+{#
 symbol_key.html: HTML for symbol key for timetable
 Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
--->
+#}
 {%- from "macros.html" import br_or_space -%}
 {%- from "macros.html" import br_or_dash -%}
 <table id="{{ symbol_key_id }}" role="complementary" aria-label="Key for Symbols" class="symbol-key">
@@ -13,13 +13,13 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
     </tr>
   </thead>
   <tbody>{#
-#}{% if all_stations_accessible %}{#
-#}    <tr>
+#}{% if all_stations_accessible %}
+    <tr>
       <td>{{accessible_icon}}</td>
       <td><b>All stations on this timetable</b> have platforms and trains accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
 #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
-{% else %}{# not all stations accessible, the norm #}{#
-#}    <tr>
+{% else %}{# not all stations accessible, the norm #}
+    <tr>
       <td>{{accessible_icon}}</td>
       <td>Platform and train are accessible{{ br_or_space(key_on_right) }}to people in wheelchairs{#
 #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
@@ -31,50 +31,50 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
       <td>Platform and train are <b>not accessible</b>{{ br_or_space(key_on_right) }}to people in wheelchairs</td>
     </tr>{#
 #}{% endif %}{# station accessibility icons #}{#
-#}{% if key_baggage %}{#
-#}    <tr>
+#}{% if key_baggage %}
+    <tr>
       <td>{{baggage_icon}}</td>
       <td>Checked baggage service available</td>
     </tr>{#
-#}{% endif %}{% if key_sleeper %}{#
-#}    <tr>
+#}{% endif %}{% if key_sleeper %}
+    <tr>
       <td>{{sleeper_icon}}</td>
       <td>Sleeping car service available</td>
     </tr>{#
-#}{% endif %}{% if key_missing_times %}{#
-#}    <tr>
+#}{% endif %}{% if key_missing_times %}
+    <tr>
       <td><b>---</b></td>
       <td>Stops at this station, no specific time</td>
     </tr>{#
-#}{% endif %}{% if key_d %}{#
-#}    <tr>
+#}{% endif %}{% if key_d %}
+    <tr>
       <td><b>D</b></td>
       <td>Stops only to discharge passengers{{ br_or_space(key_on_right) }}(may leave before time shown)</td>
     </tr>{#
-#}{% endif %}{% if key_r %}{#
-#}    <tr>
+#}{% endif %}{% if key_r %}
+    <tr>
       <td><b>R</b></td>
       <td>Stops only to receive passengers</td>
     </tr>{#
-#}{% endif %}{% if key_l %}{#
-#}    <tr>
+#}{% endif %}{% if key_l %}
+    <tr>
       <td><b>L</b></td>
       <td>May leave before time shown</td>
     </tr>{#
-#}{% endif %}{% if key_f %}{#
-#}    <tr>
+#}{% endif %}{% if key_f %}
+    <tr>
       <td><b>F</b></td>
       <td>Flag stop (only stops by request)</td>
     </tr>{#
 #}{% endif %}{% if key_bus %}{#
 This says "can be booked through Amtrak" / "can be booked through VIA" etc.
--- don't use for connecting buses which require separate booking.  FIXME
-#}    <tr>
+-- don't use for connecting buses which require separate booking.  FIXME #}
+    <tr>
       <td><b>{{bus_icon}}</b></td>
       <td>{{connecting_bus_key_sentence}}Connecting Bus Service</td>
     </tr>{#
-#}{% endif %}{% if key_tz %}{#
-#}    <tr>
+#}{% endif %}{% if key_tz %}
+    <tr>
       <td><b>TZ</b></td>
       <td>Time zone: {#
 #}{% if atlantic_time %}AT (Atlantic Time), {{ br_or_space(key_on_right) }}{% endif %}{#
