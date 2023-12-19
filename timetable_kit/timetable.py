@@ -801,7 +801,9 @@ def fill_tt_spec(
         # it only looks at the first tsn.
         # It won't fill on special columns, which is OK
         if train_specs:
-            col_trip_id = train_spec_to_trip_id[train_specs[0]]
+            train_spec = train_specs[0] # Look only at the first train in the column
+            train_spec = train_spec.removesuffix("noheader").strip()
+            col_trip_id = train_spec_to_trip_id[train_spec]
             stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
 
         for y in range(1, row_count):  # First (0) row is the header
