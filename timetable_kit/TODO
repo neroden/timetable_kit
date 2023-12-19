@@ -1,6 +1,11 @@
-Layout cleanup:
--- Remove br_or_space calls where-ever possible now that I have flexbox layout working.
-(This means more CSS can be "generic" and less needs to be per-timetable.)
+For making updates easier:
+-- Pass through table ID from the top, to allow multipage timetables
+-- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
+-- implement auto-search for valid reference dates
+
+
+For prettiness:
+1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 Fix:
 -- Hartford Line Valley Flyer
@@ -10,11 +15,6 @@ Fix:
 Get Amtrak to fix GTFS days of operation:
 -- Sunset Limited, Hiawatha, Silver Service 
 
-For making updates easier:
--- Pass through table ID from the top, to allow multipage timetables
--- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
--- implement auto-search for valid reference dates
-
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Isolate the GTFS downloads
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
@@ -23,15 +23,10 @@ For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
 from the ./list_trains.py program (this is currently largely manual)
 
--- Auto-destination cell code to generate the words "to Charlotte" (etc) by looking at the train route?
-
 -- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
 
 For VIA and generic timetables:
 1 -- start reading calendar_dates.txt
-
-For prettiness:
-1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 For simplifying and making Amtrak & VIA work better:
 1 -- Add checked_baggage field to GTFS specification (stops.txt and trips.txt).
