@@ -1,3 +1,7 @@
+Layout cleanup:
+-- Remove br_or_space calls where-ever possible now that I have flexbox layout working.
+(This means more CSS can be "generic" and less needs to be per-timetable.)
+
 Fix:
 -- Hartford Line Valley Flyer
 -- Keystone Service
