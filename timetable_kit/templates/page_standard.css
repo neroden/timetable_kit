@@ -74,19 +74,26 @@ both are contained within ".bigbox-layout".
 
 Normally the symbol key / footnotes are at the bottom.
 With key_on_right, line these up side by side, somehow!
+
+The secret is to use flexbox layout
 #}
 .bigbox-layout-key-on-right {
-    display: block;
+    display: flex;
 }
 .bigbox-timetable-key-on-right {
-    float: left;
+    flex-shrink: 0; /* Never shrink the timetable, always shrink the key instead */
+    flex-grow: 0; /* Never grow the timetable, always grow the key instead */
 }
 .bigbox-keys-key-on-right {
-    float: right;
+    flex-shrink: 1; /* Always shrink the key */
+    flex-grow: 1; /* Grow the key if there's room */
+    margin-left: 4px; /* Keep space between timetable border and key */
 }
 {#
-Tried doing .bigbox-keys-key-on-right with display: inline-block,
-but it floats to the bottom
+Layout for "key below table" layouts; simpler
+
+TODO FIXME
+This could be done with display: flex; and flex-direction: column;
 #}
 .bigbox-layout {
     display: block;
