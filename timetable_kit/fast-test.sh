@@ -7,6 +7,7 @@
 # Test all four functional submodules
 
 ./timetable.py --agency amtrak --spec empire-builder
+./timetable.py --agency amtrak --spec vermont-to-upstate-ny
 
 ./timetable.py --agency via --spec ocean
 
