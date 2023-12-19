@@ -19,7 +19,7 @@ Standard page layout (as opposed to landscape page layout, etc.)
 </style>{% elif external_stylesheet %}<link rel="stylesheet" href="{{external_stylesheet}}"/>{% endif %}
 </head>
 <body>
-<div class="{% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
+<div id="{{ page_id }}" class="tt-page {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
 <h1 class="{{ agency_css_class }}">{{heading}}</h1>
 {% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
 {% include "check_agency.html" %}
@@ -39,6 +39,6 @@ Standard page layout (as opposed to landscape page layout, etc.)
 {% include "credit.html" %}
 </div><!-- bigbox-keys -->
 </div><!-- bigbox-layout -->
-</div><!-- {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size -->
+</div><!-- page_id tt-page etc. -->
 </body>
 </html>

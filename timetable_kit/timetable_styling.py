@@ -235,6 +235,7 @@ def get_generally_applicable_css(fonts: list[str] = ["SpartanTT"]) -> str:
 def finish_html_timetable(
     styled_timetable_html,
     header_styling_list,
+    tt_id,
     *,
     author,
     aux=None,
@@ -251,6 +252,8 @@ def finish_html_timetable(
 
     The mandatory "author" argument gives the author of the timetable.
     """
+    # ID for the <div> which brackets a whole timetable page
+    page_id = "P_" + tt_id
 
     # Stuff which is the same for all pages & tables
     # @font-face directives
@@ -313,6 +316,7 @@ def finish_html_timetable(
         "font_size": font_size,  # 6pt
         "font_is_tiny": font_is_tiny,  # True
         "header_styling": header_styling_css,
+        "page_id": page_id,
     }
 
     production_date_str = datetime.date.today().isoformat()

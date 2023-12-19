@@ -1377,8 +1377,6 @@ def produce_timetable(
 
     debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
 
-    # This will eventually get used, but for now just emit it as a debug message
-
     # Note that due to the inline images issue we may need to run
     # a completely separate HTML version for weasyprint.  We avoid this so far.
     # TODO
@@ -1414,6 +1412,14 @@ def produce_timetable(
         do_html = True
 
     if do_html:
+        # This is an ID to distinguish one timetable page from another
+        # in the CSS coding.  Prefixed versions will be used to tag the
+        # <div> for the page, and the table itself.
+        #  It will eventually be passed down to allow multiple
+        # timetables in a single HTML file.
+        # FIXME.
+        tt_id = "timetable_page_1"
+
         # Main timetable, same for HTML and PDF
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
             tt_spec,
@@ -1434,6 +1440,7 @@ def produce_timetable(
         timetable_finished_html = finish_html_timetable(
             timetable_styled_html,
             header_styling_list,
+            tt_id=tt_id,
             author=author,
             aux=aux,
             start_date=str(latest_start_date),

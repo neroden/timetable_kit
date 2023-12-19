@@ -8,23 +8,31 @@ CSS Jinja template file related to the full page layout, rather than to individu
 The @page directives are respected by Weasyprint.
 #}
 /* Printing: page layout directives */
+.tt-page {
+    /* This class is for a div which holds a whole page */
+    /* Don't put a page break inside a single page if possible. */
+    break-inside: avoid-page;
+    /* Do force a page break after and before each page. */
+    /* Modern style: */
+    break-before: page;
+    break-after: page;
+    /* Old style, since some browsers do not support modern style: */
+    page-break-before: always;
+    page-break-after: always;
+}
 @page portrait-mode {
     size: Letter portrait; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
 .portrait-page {
-    /* This class used for div to hold a whole page*/
     page: portrait-mode;
-    page-break-after: always; /* Modern browser version: break-after: page; not supported yet */
 }
 @page landscape-mode {
     size: Letter landscape; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
 .landscape-page {
-    /* This class used for div to hold a whole page*/
     page: landscape-mode;
-    page-break-after: always; /* Modern browser version: break-after: page; not supported yet */
 }
 {# Primary heading on the page.  Copy old Amtrak style more or less. #}
 {# Default to black header for generic. #}
