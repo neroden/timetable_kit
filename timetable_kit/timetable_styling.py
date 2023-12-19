@@ -102,7 +102,7 @@ def get_time_column_stylings(
 def style_timetable_for_html(
     timetable,
     styler_df,
-    table_uuid="single_timetable",
+    table_uuid,
     table_classes="",
 ):
     """
@@ -112,12 +112,10 @@ def style_timetable_for_html(
     table_uuid will have "T_" prefixed (by PANDAS) and be used as an id for the table.
     """
 
-    # There's an unpleasant issue here if we want to generate multipage timetables in HTML.  FIXME.
+    # There's an unpleasant issue here if we want to generate multipage timetables in HTML.
     # We have to attach the header codes by row & column (Jinja2 for PANDAS won't do mix-in classes).
-    # But that means each timetable needs a *unique* class so the CSS can catch it.
-    # Or the ID selector can be used (#table_id) but that still requires a unique ID,
-    # which is known to the header styling CSS generator.  FIXME!
-    # Possibly we need to pull this ID out of the JSON file?
+    # This means we have to use an ID selector with a unique ID, known to the header styling CSS generator.
+    # This is what table_uuid is for.
 
     table_classes += " tt-table"
     table_attributes = "".join(['class="', table_classes, '"'])
@@ -146,7 +144,7 @@ def style_timetable_for_html(
     # Produce HTML.
     # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
     table_attrs = 'class="tt-table" role="main" aria-label="Timetable" '  # FIXME: the aria label should be more specific
-    # Specify the ID to avoid it being randomly generated on each run
+    # Specify the ID to allow for multipage timetables.
     styled_timetable_html = s2.to_html(
         table_attributes=table_attrs, table_uuid=table_uuid
     )
@@ -159,18 +157,19 @@ def style_timetable_for_html(
     return styled_timetable_html
 
 
-def make_header_styling_css(header_styling_list, table_uuid=None) -> str:
+def make_header_styling_css(header_styling_list, table_uuid: str) -> str:
     """
     Given a list of strings, which maps from column numbers (the index) to CSS attributes, return suitable CSS.
 
     Assumes PANDAS-standard classes col_heading, col0, col1, etc.  I see no other way to do it.  :-(
 
-    If table_uuid is supplied, only applies to the table with the id "T_" + table_uuid (conforming to the way PANDAS makes the ids).
+    The string table_uuid must be supplied.
+    These styling columns apply to the table with the id "T_" + table_uuid (conforming to the way PANDAS makes the ids).
     """
-    if table_uuid:
-        top_selector = "#T_" + table_uuid
-    else:
-        top_selector = ".tt_table"
+    if not table_uuid:
+        raise ValueError("table_uuid must be a nonempty string")
+
+    top_selector = "#T_" + table_uuid
 
     accumulated_css = ""
     # The CSS selector is: a descendant of .tt_table or specified ID
