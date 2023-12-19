@@ -1432,7 +1432,9 @@ def produce_timetable(
             train_numbers_side_by_side=train_numbers_side_by_side,
             use_bus_icon_in_cells=use_bus_icon_in_cells,
         )
-        timetable_styled_html = style_timetable_for_html(timetable, styler_table)
+        timetable_styled_html = style_timetable_for_html(
+            timetable, styler_table, table_uuid=tt_id
+        )
         debug_print(1, "HTML styled")
 
         # Produce the final complete page...

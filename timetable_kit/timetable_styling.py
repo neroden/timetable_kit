@@ -100,12 +100,16 @@ def get_time_column_stylings(
 
 
 def style_timetable_for_html(
-    timetable, styler_df, table_classes="", table_uuid="main_timetable"
+    timetable,
+    styler_df,
+    table_uuid="single_timetable",
+    table_classes="",
 ):
     """
     Take a timetable DataFrame, with parallel styler DataFrame, and separate header styler map, and style it for output.
 
     table_classes is a string of extra CSS classes to add to the table; it will always have 'tt-table'.
+    table_uuid will have "T_" prefixed (by PANDAS) and be used as an id for the table.
     """
 
     # There's an unpleasant issue here if we want to generate multipage timetables in HTML.  FIXME.
@@ -254,6 +258,7 @@ def finish_html_timetable(
     """
     # ID for the <div> which brackets a whole timetable page
     page_id = "P_" + tt_id
+    # Note that "T_" + tt_id will be the ID for the table (the T_ is prefixed by PANDAS)
 
     # Stuff which is the same for all pages & tables
     # @font-face directives
@@ -261,7 +266,7 @@ def finish_html_timetable(
     generally_applicable_css = get_generally_applicable_css(fonts=["SpartanTT"])
 
     # The header stylings, totally different for each table
-    header_styling_css = make_header_styling_css(header_styling_list)
+    header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
 
     if aux is None:
         aux = {}  # Empty dict
