@@ -44,6 +44,8 @@ LEFT COLUMN
 The left column (except for the top left key cell) contains station codes (stop_id) in order,
 exactly the order the rows will appear in the timetable.
 
+Except for special rows, each row should start with a station code.
+
 SPECIAL ROWS
 ------------
 A blank cell can be left in the left column to use a line for something other than station times, free-form.
@@ -59,52 +61,6 @@ The special code "omit" will omit the entire row from the final timetable -- thi
 
 The special code "origin" will print a line like "From Portland" for trains where the train's first stop (origin) is not listed in this timetable.  This only works for columns with a single train (not multiple trains).  This can be overridden by free text writing.
 The special code "destination" will print a line like "To Portland" for trains where the train's final stop (destination) is not listed in this timetable.  This only works for columns with a single train (not multiple trains).  This can be overridden by free text writing.
-
-SHORTHAND SPEC
---------------
-For a "shorthand" spec, the key cell contains the words "stations of XXX", 
-where XXX is a train number (trip_short_name).  This will fill the left column with all the stations
-from train number XXX in the correct order.  This makes simple timetables simpler, but doesn't allow all layouts.
-
-If this is done, there should be only one row in the spec (the top row)
-Or the special second row "column-options" may be included (see below),
-or perhaps extra free-form decorative header rows.
-
-Since the left column will be appended to the spec, any actual station rows listed will come before
-the automatically generated stations, which could give strange results.
-
-TOP ROW
--------
-The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
-in exactly the order the columns will appear in the timetable.
-
-Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
-
-A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
-This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".  It uses the days as recorded in the GTFS file (so, it's the day at the first station, but with the timezone for the overall GTFS file, not for the first station); this can be confusing.  This is best used only if you absolutely have to.
-
-A train number may also be followed by a space and "noheader".  This must come after the optional weekday.  If this is the case, this train number will not be listed in the header, and its route name will not be listed, but it may have times in the column; this is used for short connecting buses.
-
-SPECIAL COLUMNS
----------------
-The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
-
-The special code "services" in the top row can be used to generate cells containing icons for the station services.  So far only accessibility is implemented.
-
-The special code "timezone" in the top row will generate a column with codes for the timezones of the stations.  Strongly
-recommended for any train which crosses two timezones.
-
-The special code "ardp" generates cells containing "Ar" and "Dp", or blank ***not implemented
-
-Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
-This will allow them to share a single column.  The time for the first train will be used, unless it doesn't
-stop at that station, in which case the second train will be checked, etc.
-
-Be careful about using this as it is fragile: it is intended for splitting trains like the Lake Shore Limited, or
-"designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
-This will give a complex stacked cell for "train name".
-You will want to do some manual cells (see below).
-
 
 COLUMN-OPTIONS IN SECOND ROW
 ----------------------------
@@ -133,7 +89,55 @@ tz -- include timezone in this column
 
 The "days" option is suitable for less-than-daily trains which run across midnight.
 Less-than-daily trains which only run on one day might better have a day listed in
-a column header (see above).
+a column header (see below).
+
+
+SHORTHAND SPEC
+--------------
+For a "shorthand" spec, the key cell contains the words "stations of XXX", 
+where XXX is a train number (trip_short_name).  This will fill the left column with all the stations
+from train number XXX in the correct order.  This makes simple timetables simpler, but doesn't allow all layouts.
+
+If this is done, there should be only one row in the spec (the top row)
+Or the special second row "column-options" may be included (see above),
+or perhaps extra free-form decorative header rows.
+
+Since the left column will be appended to the spec, any actual station rows listed will come before
+the automatically generated stations, which could give strange results.
+
+TOP ROW
+-------
+The top row (except for the leftmost Key cell) contains train numbers (trip_short_name) in order, 
+in exactly the order the columns will appear in the timetable.
+
+Several train numbers separated by slashes can be used to put several trains in one column, for connecting services, splitting/joining trains, etc.
+
+A train number followed by a space and a day of the week ("monday" for instance) extracts the schedule for that specific day of the week.  This is used when the same train number has different schedules on different days of the week: a bad and confusing practice, but one which is done by some transit agencies and allowed by GTFS.
+This is not well tested.  It must be exactly one space and the day of the week must be lowercase, so "91 monday".  It uses the days as recorded in the GTFS file (so, it's the day at the first station, but with the timezone for the overall GTFS file, not for the first station); this can be confusing.  This is best used only if you absolutely have to.
+
+A train number may also be followed by a space and "noheader".  This must come after the optional weekday.  If this is the case, this train number will not be listed in the header, and its route name will not be listed, but it may have times in the column; this is used for short connecting buses.
+
+Except for special columns, each column should be headed by a train spec.
+
+SPECIAL COLUMNS
+---------------
+The special code "station" or "stations in the top row can be used to generate cells containing the name and details of the station.  This is retrieved from the Amtrak station data on the Web which is on the web in json format; the json files for the station data must be downloaded in advance, using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.  This is to avoid beating too hard on Amtrak's website.
+
+The special code "services" in the top row can be used to generate cells containing icons for the station services.  So far only accessibility is implemented.
+
+The special code "timezone" in the top row will generate a column with codes for the timezones of the stations.  Strongly
+recommended for any train which crosses two timezones.
+
+The special code "ardp" generates cells containing "Ar" and "Dp", or blank ***not implemented
+
+Multiple trains can be listed in a single cell, separated by slashes, such as 314/304.
+This will allow them to share a single column.  The time for the first train will be used, unless it doesn't
+stop at that station, in which case the second train will be checked, etc.
+
+Be careful about using this as it is fragile: it is intended for splitting trains like the Lake Shore Limited, or
+"designed" connecting services such as Lincoln Service / Missouri River Runner at St Louis.
+This will give a complex stacked cell for "train name".
+You will want to do some manual cells (see below).
 
 
 REST OF SPEC
