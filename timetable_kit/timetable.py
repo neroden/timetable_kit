@@ -141,6 +141,7 @@ def load_tt_spec_csv(filename) -> pd.DataFrame:
 class TTSpec(TypedDict):
     """An entire TTSpec, both JSON aux file and CSV spec file"""
 
+    # Noticably faster than NamedTuple for this application
     json: dict
     csv: pd.DataFrame
 
