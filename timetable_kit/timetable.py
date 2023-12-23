@@ -1262,6 +1262,21 @@ def fill_tt_spec(
     return tt, styler_t, header_styling_list
 
 
+def set_aux_defaults(aux, reference_date=None):
+    """
+    Given a dict representing the tt_spec's aux / JSON file,
+    fill in some default values if they're not present.
+
+    Also overrides reference_date if one is passed.
+    """
+    aux.setdefault("for_rpa", False)
+    aux.setdefault("train_numbers_side_by_side", False)
+    aux.setdefault("dwell_secs_cutoff", 300)
+    aux.setdefault("use_bus_icon_in_cells", False)
+    if reference_date:
+        aux["reference_date"] = reference_date
+
+
 def produce_timetable(
     *,
     spec_file,
@@ -1302,40 +1317,25 @@ def produce_timetable(
     # The aux file may specify the output filename; otherwise use spec filename base
     output_filename_base = aux.get("output_filename", spec_filename_base)
 
-    if "for_rpa" in aux:
-        for_rpa = aux["for_rpa"]
-    else:
-        for_rpa = False
+    set_aux_defaults(
+        aux, reference_date=command_line_reference_date
+    )  # Fill in defaults if these aren't in the aux.
 
-    if "train_numbers_side_by_side" in aux:
-        train_numbers_side_by_side = aux["train_numbers_side_by_side"]
-    else:
-        train_numbers_side_by_side = False
-
-    # Copy the icons and fonts to the output dir.
-    # This is memoized, so it won't duplicate work if you do multiple tables.
-    copy_supporting_files_to_output_dir(output_dir, for_rpa)
-
-    if command_line_reference_date:
-        reference_date = str(command_line_reference_date)
-    elif "reference_date" in aux:
-        # We're currently converting GTFS dates to ints; FIXME
-        reference_date = str(aux["reference_date"])
-    else:
+    for_rpa = bool(aux["for_rpa"])
+    train_numbers_side_by_side = bool(aux["train_numbers_side_by_side"])
+    dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
+    use_bus_icon_in_cells = bool(aux["use_bus_icon_in_cells"])
+    reference_date = str(aux["reference_date"])
+    if not reference_date:
         raise InputError("No reference date in .json or at command line!")
-    debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+    debug_print(1, "Working with reference date ", reference_date)
 
     if "programmers_warning" in aux:
         print("WARNING: ", aux["programmers_warning"])
 
-    if "dwell_secs_cutoff" in aux:
-        dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
-    else:
-        dwell_secs_cutoff = 300
-
-    use_bus_icon_in_cells = False
-    if "use_bus_icon_in_cells" in aux:
-        use_bus_icon_in_cells = True
+    # Copy the icons and fonts to the output dir.
+    # This is memoized, so it won't duplicate work if you do multiple tables.
+    copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
     # Now we're ready to work with the .tt-spec file, finally
     tt_spec_stripped = strip_omits_from_tt_spec(tt_spec_raw)
