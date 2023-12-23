@@ -111,7 +111,7 @@ special_row_names = {
 }
 
 
-def load_ttspec_json(filename):
+def load_ttspec_json(filename) -> dict:
     """Load the JSON file for the tt-spec"""
     path = Path(filename)
     if path.is_file():
@@ -127,7 +127,7 @@ def load_ttspec_json(filename):
         return {}
 
 
-def load_ttspec_csv(filename):
+def load_ttspec_csv(filename) -> pd.DataFrame:
     """Load a tt-spec CSV file"""
     ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
     # PANDAS reads blank entries as NaN.
