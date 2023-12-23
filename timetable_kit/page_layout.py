@@ -173,7 +173,7 @@ def produce_html_page(
     font_size = "6pt"
     font_is_tiny = True
 
-    debugging_fonts = True
+    debugging_fonts = False
     if debugging_fonts:
         # This makes it obvious when a font doesn't load
         backup_font_name = "cursive"
