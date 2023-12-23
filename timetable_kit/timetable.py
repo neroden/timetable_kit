@@ -70,6 +70,8 @@ from timetable_kit.timetable_argparse import make_tt_arg_parser
 from timetable_kit.timetable_styling import (
     get_time_column_stylings,
     style_timetable_for_html,
+)
+from timetable_kit.page_layout import (
     finish_html_timetable,
 )
 from timetable_kit.tsn import (
@@ -801,7 +803,7 @@ def fill_tt_spec(
         # it only looks at the first tsn.
         # It won't fill on special columns, which is OK
         if train_specs:
-            train_spec = train_specs[0] # Look only at the first train in the column
+            train_spec = train_specs[0]  # Look only at the first train in the column
             train_spec = train_spec.removesuffix("noheader").strip()
             col_trip_id = train_spec_to_trip_id[train_spec]
             stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
