@@ -11,10 +11,7 @@ Some routines have HTML variants and plaintext variants.
 All the "character twiddling" operations are in here.
 """
 
-from collections import namedtuple
-
-# For TimeTuple.  This is faster than TypedDict or NamedTuple for this use case.
-# (I have no idea why.)
+from typing import NamedTuple  # for TimeTuple
 
 from datetime import datetime, timedelta  # for time zones
 from zoneinfo import ZoneInfo  # still for time zones
@@ -296,7 +293,15 @@ def day_string(calendar, offset: int = 0) -> str:
 
 
 # Timestr functions
-TimeTuple = namedtuple("TimeTuple", ["day", "pm", "hour", "hour24", "min", "sec"])
+class TimeTuple(NamedTuple):
+    """Class with time broken into pieces for printing"""
+
+    day: str
+    pm: str
+    hour: str
+    hour24: str
+    min: str
+    sec: str
 
 
 def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:

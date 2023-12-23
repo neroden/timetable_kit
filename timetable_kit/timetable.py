@@ -19,7 +19,8 @@ import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
 
-from typing import TypedDict  # For complex return values (TTSpec)
+# For complex return values (TTSpec)
+from typing import NamedTuple
 
 import gtfs_kit
 import pandas as pd
@@ -138,10 +139,9 @@ def load_tt_spec_csv(filename) -> pd.DataFrame:
     return ttspec_csv
 
 
-class TTSpec(TypedDict):
+class TTSpec(NamedTuple):
     """An entire TTSpec, both JSON aux file and CSV spec file"""
 
-    # Noticably faster than NamedTuple for this application
     json: dict
     csv: pd.DataFrame
 
@@ -164,9 +164,9 @@ def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
         1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
     )
 
-    result = {}
-    result["json"] = load_tt_spec_json(ttspec_json_path)
-    result["csv"] = load_tt_spec_csv(ttspec_csv_path)
+    result = TTSpec(
+        load_tt_spec_json(ttspec_json_path), load_tt_spec_csv(ttspec_csv_path)
+    )
     return result
 
 
@@ -1292,9 +1292,7 @@ def produce_timetable(
     # Accept the spec name with or without a suffix, for convenience
     spec_filename_base = spec_file.removesuffix(".csv").removesuffix(".json")
 
-    tt_spec = load_tt_spec(spec_filename_base, input_dirname=input_dirname)
-    aux = tt_spec["json"]
-    tt_spec_raw = tt_spec["csv"]
+    (aux, tt_spec_raw) = load_tt_spec(spec_filename_base, input_dirname=input_dirname)
 
     if output_dirname:
         output_dir = Path(output_dirname)

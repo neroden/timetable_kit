@@ -13,9 +13,7 @@ This uses Jinja2, via the load_resources module.
 """
 
 # for typed return value
-from typing import TypedDict
-
-# This is faster than NamedTuple for this use case.
+from typing import NamedTuple
 
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
@@ -45,7 +43,13 @@ from timetable_kit.load_resources import (
 )
 
 
-class PageDict(TypedDict):
+class _HtmlAndCss(NamedTuple):
+    """
+    Container for fragment of HTML and associated fragment of CSS.
+    The implementation of the container as dict vs. tuple is an implementation detail.
+    It may change.
+    """
+
     html_text: str
     css_text: str
 
@@ -60,10 +64,10 @@ def produce_html_page(
     start_date,
     end_date,
     station_codes_list,  # For connecting services key
-) -> PageDict:
+) -> _HtmlAndCss:
     """
     Take the output of style_timetable_for_html -- which is mostly a table --
-    and return a dict containing
+    and return a container containing
     html_text -- an HTML <div> section comprising a full page
     css_text -- a section of custom CSS for that HTML
 
@@ -192,17 +196,18 @@ def produce_html_page(
     # ...then render it.
     per_page_css = per_page_css_tpl.render(per_page_css_params)
 
-    result: PageDict = {"html_text": page_html, "css_text": per_page_css}
+    result = _HtmlAndCss(page_html, per_page_css)
+
     return result
 
 
 def produce_html_file(
-    pages: list[PageDict],
+    pages: list[_HtmlAndCss],
     *,
     title,
 ):
     """
-    Take a *list* of dicts output by calling produce_html_page, which are like this:
+    Take a *list* of containers output by calling produce_html_page, which are like this:
     html_text -- an HTML <div> section for a page
     css_text -- a section of custom CSS for that HTML
 
@@ -244,7 +249,10 @@ def produce_html_file(
         "internal_stylesheet": True,
         # "external_stylesheet": False,
         "title": title,
-        "pages": pages,  # Pass the whole dict through to Jinja so it can loop over it
+        # Pass the whole structure of pages through to Jinja so it can loop over it
+        # Jinja2 doesn't care whether each 'page' structure is a dict or a tuple;
+        # The Jinja code is the same either way.
+        "pages": pages,
     }
 
     full_file_params = html_file_params | stylesheet_params
