@@ -3,14 +3,29 @@
    Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 CSS file for the symbol key table (except fonts).
+
+It's actually a <dl> but we lay it out as a table.
 #}
 /* Rules for the whole symbol-key table: border-collapse with no borders eliminates margins */
 .symbol-key {
+    display: table-layout;
     border-collapse: collapse;
     margin-top: 2px;
 }
 
-/* This selects table data cells (td) descended from something (such as the table) of class symbol-key */
-.symbol-key td {
+/* The div inside the symbol-key */
+.symbol-key > div {
+    display: table-row;
+}
+/* The <dt> (term) inside the div inside the symbol key */
+.symbol-key > div > dt {
+    display: table-cell;
+    vertical-align: top;
+    text-align: right;
+    padding-right: 4px; /* Minimum space before definition */
+}
+/* The <dd> (definition) inside the div inside the symbol key */
+.symbol-key > div > dd {
+    display: table-cell;
     vertical-align: top;
 }
