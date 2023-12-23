@@ -19,6 +19,8 @@ import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
 
+from typing import TypedDict  # For complex return values (TTSpec)
+
 import gtfs_kit
 import pandas as pd
 from weasyprint import HTML as weasyHTML
@@ -111,7 +113,7 @@ special_row_names = {
 }
 
 
-def load_ttspec_json(filename) -> dict:
+def load_tt_spec_json(filename) -> dict:
     """Load the JSON file for the tt-spec"""
     path = Path(filename)
     if path.is_file():
@@ -127,13 +129,44 @@ def load_ttspec_json(filename) -> dict:
         return {}
 
 
-def load_ttspec_csv(filename) -> pd.DataFrame:
+def load_tt_spec_csv(filename) -> pd.DataFrame:
     """Load a tt-spec CSV file"""
     ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
     # PANDAS reads blank entries as NaN.
     # We really don't want NaNs in this file.  They should all be converted to "".
     ttspec_csv.fillna(value="", inplace=True)
     return ttspec_csv
+
+
+class TTSpec(TypedDict):
+    """An entire TTSpec, both JSON aux file and CSV spec file"""
+
+    json: dict
+    csv: pd.DataFrame
+
+
+def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
+    """Load a tt-spec from files, both the JSON and the CSV."""
+
+    ttspec_csv_filename = spec_filename_base + ".csv"
+    ttspec_json_filename = spec_filename_base + ".json"
+
+    if input_dirname:
+        input_dir = Path(input_dirname)
+        ttspec_csv_path = input_dir / ttspec_csv_filename
+        ttspec_json_path = input_dir / ttspec_json_filename
+    else:
+        # Might be None, if it wasn't passed at the command line
+        ttspec_csv_path = ttspec_csv_filename
+        ttspec_json_path = ttspec_json_filename
+    debug_print(
+        1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
+    )
+
+    result = {}
+    result["json"] = load_tt_spec_json(ttspec_json_path)
+    result["csv"] = load_tt_spec_csv(ttspec_csv_path)
+    return result
 
 
 def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
@@ -1257,23 +1290,10 @@ def produce_timetable(
     """
     # Accept the spec name with or without a suffix, for convenience
     spec_filename_base = spec_file.removesuffix(".csv").removesuffix(".json")
-    ttspec_csv_filename = spec_filename_base + ".csv"
-    ttspec_json_filename = spec_filename_base + ".json"
 
-    if input_dirname:
-        input_dir = Path(input_dirname)
-        ttspec_csv_path = input_dir / ttspec_csv_filename
-        ttspec_json_path = input_dir / ttspec_json_filename
-    else:
-        # Might be None, if it wasn't passed at the command line
-        ttspec_csv_path = ttspec_csv_filename
-        ttspec_json_path = ttspec_json_filename
-    debug_print(
-        1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
-    )
-
-    # Load the .json file first, as it determines high-level stuff
-    aux = load_ttspec_json(ttspec_json_path)
+    tt_spec = load_tt_spec(spec_filename_base, input_dirname=input_dirname)
+    aux = tt_spec["json"]
+    tt_spec_raw = tt_spec["csv"]
 
     if output_dirname:
         output_dir = Path(output_dirname)
@@ -1327,8 +1347,7 @@ def produce_timetable(
     if "use_bus_icon_in_cells" in aux:
         use_bus_icon_in_cells = True
 
-    # Now we're ready to load the .tt-spec file, finally
-    tt_spec_raw = load_ttspec_csv(ttspec_csv_path)
+    # Now we're ready to work with the .tt-spec file, finally
     tt_spec_stripped = strip_omits_from_tt_spec(tt_spec_raw)
     tt_spec = augment_tt_spec(tt_spec_stripped, feed=master_feed, date=reference_date)
     debug_print(1, "tt-spec", spec_filename_base, "loaded, augmented, and stripped")
