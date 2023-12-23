@@ -1299,12 +1299,8 @@ def produce_timetable(
     else:
         output_dir = Path(".")
 
-    if "output_filename" in aux:
-        # The aux file may specify the output filename
-        output_filename_base = aux["output_filename"]
-    else:
-        # Or, make it the same as the input filename
-        output_filename_base = spec_filename_base
+    # The aux file may specify the output filename; otherwise use spec filename base
+    output_filename_base = aux.get("output_filename", spec_filename_base)
 
     if "for_rpa" in aux:
         for_rpa = aux["for_rpa"]
