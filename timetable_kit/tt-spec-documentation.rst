@@ -217,7 +217,6 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "title": "This goes in the title bar of the HTML page",
     "heading": "This is the heading at the top of the page",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
-    "output_subdir": "after_20220528"
     "output_filename": "special",
     "reference_date": "20220528",
     "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains.",
@@ -250,10 +249,6 @@ reference_date can be overridden by the command line, and probably should be whe
 It is best to not use a reference date on which daylight savings change time happens; this may not be handled correctly.
 
 Timetable_kit currently does not check calendar_dates.txt at all, so if your GTFS feed has special dates in that table, don't use one of those dates.
-
-output_subdir is the name of a subdirectory of output_dir to put the output in; 
-this is useful if you are making one set of timetables for one time period,
-and one set for another time period, at the same time.
 
 output_filename is the base filename of the output files (so, "special.html", "special.pdf" will be produced).
 If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*

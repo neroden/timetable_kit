@@ -1299,11 +1299,6 @@ def produce_timetable(
     else:
         output_dir = Path(".")
 
-    if "output_subdir" in aux:
-        output_subdir = aux["output_subdir"]
-        output_dir = output_dir / output_subdir
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
     if "output_filename" in aux:
         # The aux file may specify the output filename
         output_filename_base = aux["output_filename"]
@@ -1516,8 +1511,8 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
 
     output_dir = Path(output_dirname)
 
-    # Note!  If we do multiple timetables with output_subdir,
-    # we would like to save trouble by caching the fact that we've done it.
+    # Memoize.
+    # We would like to save on copying by caching the fact that we've done this.
     # for_rpa adds an extra file (a superset of the other version)
     global prepared_output_dirs_for_rpa
     global prepared_output_dirs
