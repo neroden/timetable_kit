@@ -72,7 +72,8 @@ from timetable_kit.timetable_styling import (
     style_timetable_for_html,
 )
 from timetable_kit.page_layout import (
-    finish_html_timetable,
+    produce_html_page,
+    produce_html_file,
 )
 from timetable_kit.tsn import (
     train_spec_to_tsn,
@@ -1441,9 +1442,9 @@ def produce_timetable(
         )
         debug_print(1, "HTML styled")
 
-        # Produce the final complete page...
+        # Produce a final complete page, and associated page-specific CSS.
         # station_codes_list is used for connecting services key
-        timetable_finished_html = finish_html_timetable(
+        page_dict = produce_html_page(
             timetable_styled_html,
             header_styling_list,
             tt_id=tt_id,
@@ -1453,6 +1454,12 @@ def produce_timetable(
             end_date=str(earliest_end_date),
             station_codes_list=stations_list_from_tt_spec(tt_spec),
         )
+        # Produce complete HTML file.  This can take multiple pages.
+        # But it doesn't yet.  FIXME.
+        timetable_finished_html = produce_html_file(
+            [page_dict], title=aux.get("title", "A Timetable")
+        )
+
         path_for_html = output_dir / Path(output_filename_base + ".html")
         with open(path_for_html, "w") as outfile:
             print(timetable_finished_html, file=outfile)

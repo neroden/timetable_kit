@@ -3,7 +3,8 @@ font_size.css
 Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-This is the base font size. Since other stuff is relative to it, it should go *first*.
+This is the base font size. Since other stuff is relative to it, it should go *early*.
+(This is tricky since it's per page.)
 
 Amtrak timetables traditionally used very small fonts to fit in lots of data: 6 pt.
 Jinja2 template substitution fills in the actual font size, ("6pt").
@@ -14,25 +15,17 @@ These are eliminated from SpartanTT so we don't need this disabled for that font
 SpartanTT only has ff and ft ligatures, which are readable.  Consider whether to
 re-enable ligatures.
 
-services_header_text and timezone_header_text are both spans in a header, which usually has enlarged fonts,
-but should have the same tiny font as the rest of the timetable.
+services_header_text, access_header_text, and timezone_header_text are spans in a header.
+The header usually has enlarged fonts, but these should have the same tiny font as the rest of the timetable.
 
-Before setting the entire timetable, we did the following:
-.tt-table, .symbol-key, .timetable_kit_credit, .services-header-text {
-
-Then we tried this:
-body, .services-header-text, .access-header-text, .timezone-header-text {
-
-Multi-page timetables: this is a bit ugly because we may want to vary this *per timetable*.
-Attach the font size clause to a CSS class in a div which wraps the timetable.
-
-Still need special references to the three header texts which should not be enlarged.
-It is not clear how to change them for multi-page timetables with variations, since this would
-need to be done from Python code.  FIXME
-
-For now all timetables in a multi-page must use the same font size
+Check on CSS priority and specificity when it comes to font sizes; this can get ugly!
 #}
-.standard-font-size, .services-header-text, .access-header-text, .timezone-header-text {
+/* Font size for the page <div> itself, and for elements within that with the specified classes */
+#{{page_id}}, {# This gets the page div itself #}
+#{{page_id}} .services-header-text,{# A .services-header-text within the page #}
+#{{page_id}} .access-header-text,
+#{{page_id}} .timezone-header-text
+{
     font-size: {{font_size}};{% if font_is_tiny %}
     font-variant-ligatures: no-common-ligatures;{% endif %}
 }

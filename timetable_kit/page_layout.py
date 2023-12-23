@@ -12,6 +12,9 @@ This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder.
 This uses Jinja2, via the load_resources module.
 """
 
+# for typed return value
+from typing import TypedDict
+
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
 import pandas as pd
@@ -40,54 +43,13 @@ from timetable_kit.load_resources import (
 )
 
 
-def get_generally_applicable_css(fonts: list[str] = ["SpartanTT"]) -> str:
-    """
-    Returns the CSS which is generally applicable to all timetables,
-    as opposed to CSS for styling an individual table & key.
-    """
-    # For producing multi-page timetables.
-    # These should not vary by table or page.
-
-    offset_comment = "/***************************************************/"
-    header_comment = "/* Start CSS applicable to all pages, tables, keys */"
-    footer_comment = "/*  End CSS applicable to all pages, tables, keys  */"
-
-    # For icons as imgs.
-    # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
-    # This is used every time an icon is inserted.
-    # This includes the CSS for all icons whether used in this timetable or not.
-    icons_css = icons.get_css_for_all_icons()
-
-    # For connecting service logos as imgs:
-    # This includes the CSS for all logos including those not used in this timetable.
-    logos_css = connecting_services.get_css_for_all_logos()
-
-    # The @font-face directives:
-    # It breaks Weasyprint to include references to nonexistent fonts,
-    # So we have to make sure it only includes used fonts.
-    # (Works OK for rendering in Firefox, though.)
-    fonts_css_list = []
-    for font in fonts:
-        fonts_css_list.append(get_font_css(font))
-    font_faces_css = "".join(fonts_css_list)
-
-    return "\n".join(
-        [
-            offset_comment,
-            header_comment,
-            offset_comment,
-            font_faces_css,
-            icons_css,
-            logos_css,
-            offset_comment,
-            footer_comment,
-            offset_comment,
-        ]
-    )
+class PageDict(TypedDict):
+    html_text: str
+    css_text: str
 
 
-def finish_html_timetable(
-    styled_timetable_html,
+def produce_html_page(
+    timetable_styled_html,
     header_styling_list,
     tt_id,
     *,
@@ -96,9 +58,15 @@ def finish_html_timetable(
     start_date,
     end_date,
     station_codes_list,  # For connecting services key
-):
+) -> PageDict:
     """
     Take the output of style_timetable_for_html -- which is mostly a table --
+    and return a dict containing
+    html_text -- an HTML <div> section comprising a full page
+    css_text -- a section of custom CSS for that HTML
+
+    This will *not* include the CSS which should be shared between multiple pages.
+    It will also *not* include the final "wrapper" HTML tags like <html><head> etc.
     and make it a full HTML file with embedded CSS.
 
     The header_styling_list has CSS attributes (not classes) for each header column
@@ -113,22 +81,11 @@ def finish_html_timetable(
     # ID for the symbol key table
     symbol_key_id = "SK_" + tt_id
 
-    # Stuff which is the same for all pages & tables
-    # @font-face directives
-    # Icon and logo styling
-    generally_applicable_css = get_generally_applicable_css(fonts=["SpartanTT"])
-
-    # The header stylings, totally different for each table
-    header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
-
     if aux is None:
         aux = {}  # Empty dict
 
     # We need to add the extras to make this a full HTML & CSS file now.
     # We're going to feed the entire aux file through, but we need some defaults
-    if "title" not in aux:
-        aux["title"] = "A Timetable"
-
     if "heading" not in aux:
         aux["heading"] = "A Timetable"
 
@@ -140,20 +97,6 @@ def finish_html_timetable(
         debug_print(1, "Key on right")
         connecting_services_one_line = False
 
-    ### FONTS
-    font_name = "SpartanTT"
-    font_size = "6pt"
-    font_is_tiny = True
-
-    debugging_fonts = True
-    if debugging_fonts:
-        # This makes it obvious when a font doesn't load
-        backup_font_name = "cursive"
-    else:
-        backup_font_name = "sans-serif"
-
-    ### ICONS
-
     # Key for connecting services:
     # First use the station codes list to get a list of all *relevant* services
     services_list = agency_singleton().get_all_connecting_services(station_codes_list)
@@ -162,30 +105,15 @@ def finish_html_timetable(
         services_list=services_list, one_line=connecting_services_one_line
     )
 
-    # NOTE: We would like to try the alternative embedded SVG version.
-    # But Weasy can't handle SVG references within HTML.
-
     ### Prepare Jinja template substitution:
-
-    stylesheet_params = {
-        "generally_applicable_css": generally_applicable_css,
-        "font_name": font_name,
-        "backup_font_name": backup_font_name,
-        "font_size": font_size,  # 6pt
-        "font_is_tiny": font_is_tiny,  # True
-        "header_styling": header_styling_css,
-        "page_id": page_id,
-    }
 
     production_date_str = datetime.date.today().isoformat()
     start_date_str = text_presentation.gtfs_date_to_isoformat(start_date)
     end_date_str = text_presentation.gtfs_date_to_isoformat(end_date)
 
     html_params = {
-        "lang": "en-US",
-        "encoding": "utf-8",
-        "internal_stylesheet": True,
-        "timetable": styled_timetable_html,
+        "page_id": page_id,
+        "timetable": timetable_styled_html,
         "timetable_kit_url": "https://github.com/neroden/timetable_kit",
         "production_date": production_date_str,
         "start_date": start_date_str,
@@ -214,7 +142,7 @@ def finish_html_timetable(
     # Dictionary merge, html_params take priority, Python 3.9
     # Not sure about associativity, but we don't plan to have duplicates anyway
     # Throw the entire aux file in
-    full_page_params = aux | stylesheet_params | icon_params | html_params
+    full_page_params = aux | icon_params | html_params
 
     # debug_params = {i: full_page_params[i] for i in full_page_params if i != "timetable"}
     # debug_print(3, debug_params )
@@ -223,5 +151,102 @@ def finish_html_timetable(
     # and use it to retrieve the correct template (complete with many includes)...
     page_tpl = template_environment.get_template("page_standard.html")
     # ...then render it.
-    finished_timetable_html = page_tpl.render(full_page_params)
-    return finished_timetable_html
+    page_html = page_tpl.render(full_page_params)
+
+    ####################################
+    # And now the custom per-page CSS. #
+    ####################################
+
+    # The header stylings, totally different for each table
+    header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
+
+    ### FONTS
+    # FIXME: there should be a way to vary this per timetable when we finish.
+    font_name = "SpartanTT"
+    font_size = "6pt"
+    font_is_tiny = True
+
+    debugging_fonts = True
+    if debugging_fonts:
+        # This makes it obvious when a font doesn't load
+        backup_font_name = "cursive"
+    else:
+        backup_font_name = "sans-serif"
+
+    per_page_css_params = {
+        "page_id": page_id,
+        "header_styling_css": header_styling_css,
+        "font_name": font_name,
+        "backup_font_name": backup_font_name,
+        "font_size": font_size,  # 6pt
+        "font_is_tiny": font_is_tiny,  # True
+    }
+    # Get the Jinja2 template environment (set up in load_resources module)
+    # and use it to retrieve the correct template (complete with many includes)...
+    per_page_css_tpl = template_environment.get_template("per_page.css")
+    # ...then render it.
+    per_page_css = per_page_css_tpl.render(per_page_css_params)
+
+    result: PageDict = {"html_text": page_html, "css_text": per_page_css}
+    return result
+
+
+def produce_html_file(
+    pages: list[PageDict],
+    *,
+    title,
+):
+    """
+    Take a *list* of dicts output by calling produce_html_page, which are like this:
+    html_text -- an HTML <div> section for a page
+    css_text -- a section of custom CSS for that HTML
+
+    And produce a full HTML file, including <html></html> tags and internal stylesheet.
+    Also generates the CSS which should be shared between multiple pages.
+
+    The "title" parameter is mandatory because HTML requires it.
+    """
+    # For icons as imgs.
+    # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
+    # This is used every time an icon is inserted.
+    # This includes the CSS for all icons whether used in this timetable or not.
+    icons_css = icons.get_css_for_all_icons()
+
+    # For connecting service logos as imgs:
+    # This includes the CSS for all logos including those not used in this timetable.
+    logos_css = connecting_services.get_css_for_all_logos()
+
+    # The @font-face directives:
+    # Eventually the list of fonts should be passed in.  FIXME.
+    fonts = ["SpartanTT"]
+    # It breaks Weasyprint to include references to nonexistent fonts,
+    # So we have to make sure it only includes used fonts.
+    # (Including nonexistent fonts works OK for rendering in Firefox, though.)
+    fonts_css_list = []
+    for font in fonts:
+        fonts_css_list.append(get_font_css(font))
+    font_faces_css = "".join(fonts_css_list)
+
+    stylesheet_params = {
+        "icons_css": icons_css,
+        "logos_css": logos_css,
+        "font_faces_css": font_faces_css,
+    }
+
+    html_file_params = {
+        "lang": "en-US",
+        "encoding": "utf-8",
+        "internal_stylesheet": True,
+        # "external_stylesheet": False,
+        "title": title,
+        "pages": pages,  # Pass the whole dict through to Jinja so it can loop over it
+    }
+
+    full_file_params = html_file_params | stylesheet_params
+
+    # Get the Jinja2 template environment (set up in load_resources module)
+    # and use it to retrieve the correct template (complete with many includes)...
+    file_tpl = template_environment.get_template("full_file.html")
+    # ...then render it.
+    file_html = file_tpl.render(full_file_params)
+    return file_html
