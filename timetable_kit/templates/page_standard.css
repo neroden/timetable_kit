@@ -33,15 +33,17 @@ we should avoid overflowing the width of A4 (since 215.9 - 10 = 205.9 < 210).
     size: Letter portrait; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
-.portrait-page {
-    page: portrait-mode;
-}
 @page landscape-mode {
     size: Letter landscape; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */
 }
-.landscape-page {
-    page: landscape-mode;
+@media print {
+    .portrait-page {
+        page: portrait-mode;
+    }
+    .landscape-page {
+        page: landscape-mode;
+    }
 }
 {# Primary heading on the page.  Copy old Amtrak style more or less. #}
 {# Default to black header for generic. #}
