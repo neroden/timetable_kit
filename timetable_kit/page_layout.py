@@ -89,13 +89,11 @@ def produce_html_page(
     # ID for the symbol key table
     symbol_key_id = "SK_" + tt_id
 
-    if aux is None:
-        aux = {}  # Empty dict
-
     # We need to add the extras to make this a full HTML & CSS file now.
     # We're going to feed the entire aux file through, but we need some defaults
-    if "heading" not in aux:
-        aux["heading"] = "A Timetable"
+    if aux is None:
+        aux = {}  # Empty dict
+    aux.setdefault("heading", "A Timetable")
 
     if "landscape" in aux:
         debug_print(1, "Landscape orientation")
