@@ -78,6 +78,8 @@ def produce_html_page(
     """
     # ID for the <div> which brackets a whole timetable page
     page_id = "P_" + tt_id
+    # ID for the heading (H1) for this, for ARIA use
+    heading_id = "H_" + tt_id
     # Note that "T_" + tt_id will be the ID for the table (the T_ is prefixed by PANDAS)
     # table_id = "T_" + tt_id
     # ID for the symbol key table
@@ -115,6 +117,8 @@ def produce_html_page(
 
     html_params = {
         "page_id": page_id,
+        "heading_id": heading_id,
+        "symbol_key_id": symbol_key_id,
         "timetable": timetable_styled_html,
         "timetable_kit_url": "https://github.com/neroden/timetable_kit",
         "production_date": production_date_str,
@@ -129,7 +133,6 @@ def produce_html_page(
         "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
         "by_agency_with_gtfs_link": agency_singleton().by_agency_with_gtfs_link(),  # for GTFS released "by Amtrak"
         "add_via_disclaimer": agency_singleton().add_via_disclaimer(),  # True or False, should we add the VIA disclaimer
-        "symbol_key_id": symbol_key_id,
     }
 
     # Allows direct icon references in Jinja2

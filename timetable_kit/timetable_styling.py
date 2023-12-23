@@ -132,8 +132,13 @@ def style_timetable_for_html(
     s2 = s1.set_td_classes(styler_df)
 
     # Produce HTML.
-    # Need to add ARIA role to the table, which means we have to manually define the table class.  SIGH!
-    table_attrs = 'class="tt-table" role="main" aria-label="Timetable" '  # FIXME: the aria label should be more specific
+
+    # The ID for the heading, so that we can do an ARIA cross-reference
+    heading_id = "H_" + table_uuid
+    # Want to add ARIA labelling to the table, which means we have to manually define the table class.  SIGH!
+    # Note that aria labelling only works on an item with an explicit landmark role, so this must be "main".
+    # Who knows whether this works!
+    table_attrs = 'class="tt-table" role="main" aria-labelled-by="' + heading_id + '"'
     # Specify the ID to allow for multipage timetables.
     styled_timetable_html = s2.to_html(
         table_attributes=table_attrs, table_uuid=table_uuid
