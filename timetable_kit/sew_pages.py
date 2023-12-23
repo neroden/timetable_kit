@@ -18,8 +18,10 @@ from timetable_kit.errors import InputError
 
 def read_list_file(filename: str, *, input_dir) -> list[str]:
     """
-    Given a filename ending in .list, return a list of the names inside that file,
+    Given a filename ending in .list, return a list of the filenames inside that file,
     one filename per line, with exterior whitespace stripped.
+
+    The first line in a list file is actually a title for the output HTML, not a filename.
 
     filename: the file name
     input_dirname: where to find the list file
@@ -40,10 +42,11 @@ def read_list_file(filename: str, *, input_dir) -> list[str]:
 
 def expand_list_file_to_json_filenames(filename: str, *, input_dir) -> list[str]:
     """
-    Does the same as read_list_file, but appends ".json" to each filename.
+    Does the same as read_list_file, but (a) removes the first (title) line, and (b) appends ".json" to each filename.
     """
     raw_list = read_list_file(filename, input_dir=input_dir)
-    cooked_list = [item + ".json" for item in raw_list]
+    list_without_title = raw_list[1:]
+    cooked_list = [item + ".json" for item in list_without_title]
     return cooked_list
 
 
@@ -81,7 +84,9 @@ def assemble_pdf_from_list(filename: str, *, input_dir, output_dir):
 
     # Note, the following checks for the ".list" suffix
     # before reading the list file:
-    page_name_list = read_list_file(filename, input_dir=input_dir)
+    list_file_text = read_list_file(filename, input_dir=input_dir)
+    # Remove the first line, which is the title, not the name of a page
+    page_name_list = list_file_text[1:]
 
     infile_list = [page_name + ".pdf" for page_name in page_name_list]
     infile_path_list = [str(Path(output_dir) / infile) for infile in infile_list]

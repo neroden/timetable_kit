@@ -13,8 +13,8 @@
 # Test landscape, and coloring, and some other stuff
 ./timetable.py --agency amtrak --spec grand-canyon
 
-# Test VIA
-./timetable.py --agency via --spec ocean
+# Test VIA, and test a list.
+./timetable.py --agency via --spec canadian.list
 
 # Test Maple Leaf
 ./timetable.py --agency maple_leaf --spec maple-leaf

@@ -265,13 +265,13 @@ In addition, every key in the .json file is passed through to the Jinja2 templat
 MULTI-PAGE TIMETABLES
 =====================
 
-At the moment, the only way to make multi-page timetables is to make a bunch of single page timetables and then sew them together.
-
-The program can, however, do this automatically, if you install pdftk-java, by invoking pdftk.
-
 If timetable.py is given a spec file with a name ending in ".list", it interprets this as a list of specs.
-The list file should have one spec file name per line, with no suffixes.  timetable.py will then produce the individual timetable for each spec,
-and then patch them together with pdftk to a single PDF with the same base name as the original ".list" file.
+
+The first line of the list file should have a title for the whole timetable.  This is used by web browers as the title of the window.  It is thrown away in the PDF output.
+
+The rest of the list file should have one spec file name per line, with no suffixes.
+
+Timetable.py will then produce the individual timetable page for each spec, in order, and assemble them as a single HTML and then PDF file.
 
 
 ADDITIONAL TOOLS
