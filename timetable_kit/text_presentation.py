@@ -11,7 +11,6 @@ Some routines have HTML variants and plaintext variants.
 All the "character twiddling" operations are in here.
 """
 
-from __future__ import annotations  # for Optional[] typing
 from collections import namedtuple
 
 # For TimeTuple.  This is faster than TypedDict or NamedTuple for this use case.
@@ -66,7 +65,7 @@ new_cell_substitution_map = {
 cell_substitution_map = new_cell_substitution_map
 
 
-def get_cell_substitution(cell_text: str) -> Optional[str]:
+def get_cell_substitution(cell_text: str) -> str | None:
     """
     Given special simple-substitution cell texts, provide the substitution.
 

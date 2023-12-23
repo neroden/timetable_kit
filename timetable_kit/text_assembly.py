@@ -10,8 +10,6 @@ Contains bits which don't require tsns, but which are loaded early,
 to avoid circular dependencies.
 
 """
-from __future__ import annotations  # for typechecking
-
 import html  # for html.escape
 
 
@@ -80,7 +78,7 @@ def or_clause(items: list[str]) -> list:
 
 def station_name_to_multiline_text(
     city_state_name: str,
-    facility_name: Optional[str],
+    facility_name: str | None,
     station_code: str,
     major: bool = False,
 ) -> str:
@@ -107,7 +105,7 @@ def station_name_to_multiline_text(
 
 def station_name_to_single_line_text(
     city_state_name: str,
-    facility_name: Optional[str],
+    facility_name: str | None,
     station_code: str,
     major: bool = False,
 ) -> str:
