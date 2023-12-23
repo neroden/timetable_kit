@@ -13,6 +13,10 @@ All the "character twiddling" operations are in here.
 
 from __future__ import annotations  # for Optional[] typing
 from collections import namedtuple
+
+# For TimeTuple.  This is faster than TypedDict or NamedTuple for this use case.
+# (I have no idea why.)
+
 from datetime import datetime, timedelta  # for time zones
 from zoneinfo import ZoneInfo  # still for time zones
 

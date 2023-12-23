@@ -15,6 +15,8 @@ This uses Jinja2, via the load_resources module.
 # for typed return value
 from typing import TypedDict
 
+# This is faster than NamedTuple for this use case.
+
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
 import pandas as pd
