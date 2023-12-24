@@ -1,4 +1,8 @@
 For multipage timetables:
+-- continue breaking apart produce_timetable:
+---- keep removing common elements into subroutines
+---- write an entirely separate produce_csv_timetable procedure
+---- shove the csv/json spec loading up one level
 -- read font and font-size, plus key-font and key-font-size, from JSON (for now)?
 -- override font / font-size on a per-table basis using high-specificity CSS with IDs?
 
