@@ -1274,12 +1274,14 @@ def fill_tt_spec(
     return result
 
 
-def set_aux_defaults(aux, reference_date=None):
+def set_aux_defaults(aux: dict, reference_date=None):
     """
     Given a dict representing the tt_spec's aux / JSON file,
     fill in some default values if they're not present.
 
     Also overrides reference_date if one is passed.
+
+    This edits the dict in place.
     """
     aux.setdefault("for_rpa", False)
     aux.setdefault("train_numbers_side_by_side", False)
@@ -1287,6 +1289,64 @@ def set_aux_defaults(aux, reference_date=None):
     aux.setdefault("use_bus_icon_in_cells", False)
     if reference_date:
         aux["reference_date"] = reference_date
+
+
+def filter_and_reduce_feed(
+    master_feed: FeedEnhanced, reference_date: str, tt_spec: pd.DataFrame
+) -> FeedEnhanced:
+    """
+    Filter a master feed to trips relevant to reference_date only.
+
+    (This is essential to get accurate timetables for a given period.)
+
+    Then filter it to trip_short_names relevant to tt_spec only.
+
+    (This is necessary to get effective dates for the period, and also
+    vastly reduces computational load for the main program.)
+
+    Return the reduced feed.
+    """
+
+    # Filter the feed to the relevant day.  Required.
+    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+    debug_print(1, "Feed filtered by reference date.")
+
+    # Reduce the feed, by eliminating stuff from other trains.
+    # By reducing the stop_times table to be much smaller,
+    # this hopefully makes each subsequent search for a timepoint faster.
+    # This cuts a testcase runtime from 23 seconds to 20.
+    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
+    # Note still contains "/" items
+    flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
+
+    # Note still contains "91 monday" and similar specs: remove the day suffixes here
+    flattened_tsn_list = [
+        train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
+    ]
+
+    reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
+    debug_print(1, "Feed filtered by trip_short_name.")
+
+    # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
+    # This will make it impossible to map from tsn to trip_id.
+    # HOWEVER, Amtrak has some weird duplicates with duplicate trip_ids and identical timings,
+    # so this might not be a fatal error.
+    if find_tsn_dupes(reduced_feed):
+        debug_print(
+            1,
+            "Warning, tsn duplicates!  If you use one of these without a day"
+            " disambiguator, a random trip will be picked!  Usually a bad idea!",
+        )
+
+    # Print the calendar for debugging
+    debug_print(1, "Calendar:")
+    debug_print(1, reduced_feed.calendar)
+
+    # Debugging for the reduced feed.  Seems to be fine.
+    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
+    #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
+
+    return reduced_feed
 
 
 def produce_timetable(
@@ -1354,44 +1414,8 @@ def produce_timetable(
     tt_spec = augment_tt_spec(tt_spec_stripped, feed=master_feed, date=reference_date)
     debug_print(1, "tt-spec", spec_filename_base, "loaded, augmented, and stripped")
 
-    # Filter the feed to the relevant day.  Required.
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-    debug_print(1, "Feed filtered by reference date.")
-
-    # Reduce the feed, by eliminating stuff from other trains.
-    # By reducing the stop_times table to be much smaller,
-    # this hopefully makes each subsequent search for a timepoint faster.
-    # This cuts a testcase runtime from 23 seconds to 20.
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
-    # Note still contains "/" items
-    flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
-
-    # Note still contains "91 monday" and similar specs: remove the day suffixes here
-    flattened_tsn_list = [
-        train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
-    ]
-
-    reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
-    debug_print(1, "Feed filtered by trip_short_name.")
-
-    # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
-    # This will make it impossible to map from tsn to trip_id.
-    # HOWEVER, Amtrak has some weird duplicates with duplicate trip_ids and identical timings,
-    # so this might not be a fatal error.
-    if find_tsn_dupes(reduced_feed):
-        debug_print(
-            1,
-            "Warning, tsn duplicates!  If you use one of these without a day"
-            " disambiguator, a random trip will be picked!  Usually a bad idea!",
-        )
-
-    # Print the calendar for debugging
-    debug_print(1, "Calendar:")
-    debug_print(1, reduced_feed.calendar)
-
-    # Debugging for the reduced feed.  Seems to be fine.
-    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
-    #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
+    # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
+    reduced_feed = filter_and_reduce_feed(master_feed, reference_date, tt_spec)
 
     # Collect pairs of validity dates.
     # Note that the feed has been filtered by train_specs,
