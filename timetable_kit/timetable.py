@@ -1274,7 +1274,7 @@ def fill_tt_spec(
     return result
 
 
-def set_aux_defaults(aux: dict, reference_date=None):
+def set_aux_defaults(aux: dict, *, output_filename, reference_date):
     """
     Given a dict representing the tt_spec's aux / JSON file,
     fill in some default values if they're not present.
@@ -1289,6 +1289,9 @@ def set_aux_defaults(aux: dict, reference_date=None):
     aux.setdefault("use_bus_icon_in_cells", False)
     if reference_date:
         aux["reference_date"] = reference_date
+    # output_filename is usually based on the spec or list filename,
+    # but can be set in the aux file.  This is the base filename without extensions.
+    aux.setdefault("output_filename", output_filename)
 
 
 def filter_and_reduce_feed(
@@ -1386,13 +1389,16 @@ def produce_timetable(
     else:
         output_dir = Path(".")
 
-    # The aux file may specify the output filename; otherwise use spec filename base
-    output_filename_base = aux.get("output_filename", spec_filename_base)
-
+    # Fill in defaults if these aren't in the aux.
+    # We usually base output_filename on the spec file name, but it can be in the aux
+    # We override reference_Date with the command line one if it's present
     set_aux_defaults(
-        aux, reference_date=command_line_reference_date
-    )  # Fill in defaults if these aren't in the aux.
+        aux,
+        output_filename=spec_filename_base,
+        reference_date=command_line_reference_date,
+    )
 
+    output_filename_base = aux["output_filename"]
     for_rpa = bool(aux["for_rpa"])
     train_numbers_side_by_side = bool(aux["train_numbers_side_by_side"])
     dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
