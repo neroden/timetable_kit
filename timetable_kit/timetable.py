@@ -19,7 +19,7 @@ import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
 
-# For complex return values (TTSpec)
+# For complex return values (TTSpec, _FilledTimetable)
 from typing import NamedTuple
 
 import gtfs_kit
@@ -606,6 +606,16 @@ def raise_error_if_not_one_row(trips):
             "Expected single trip: too many trips in filtered trips table", trips
         )
     return
+
+
+class _FilledTimetable(NamedTuple):
+    """
+    Represents the output of fill_tt_spec.
+    """
+
+    timetable: pd.DataFrame
+    styler_table: pd.DataFrame
+    header_styling_list: list[str]
 
 
 def fill_tt_spec(
@@ -1259,7 +1269,9 @@ def fill_tt_spec(
     tt.columns = unique_header_replacement_list
     styler_t.columns = unique_header_replacement_list
 
-    return tt, styler_t, header_styling_list
+    result = _FilledTimetable(tt, styler_t, header_styling_list)
+
+    return result
 
 
 def set_aux_defaults(aux, reference_date=None):
