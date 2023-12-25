@@ -22,8 +22,8 @@ GTFSDay: TypeAlias = str
 class HtmlAndCss(NamedTuple):
     """Container for fragment of HTML and associated fragment of CSS.
 
-    The implementation of the container as dict vs. tuple is an
-    implementation detail. It may change.
+    The implementation of the container as dict vs. tuple is an implementation detail.
+    It may change.
     """
 
     html_text: str

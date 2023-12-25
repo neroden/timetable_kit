@@ -1,12 +1,11 @@
 # runtime_config.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""This file exists to hold data which is set at runtime, but is the same
-across a single run of timetable.py.  This data needs to be shared by multiple
-modules, so it needs to be "low-level".
+"""This file exists to hold data which is set at runtime, but is the same across a
+single run of timetable.py.  This data needs to be shared by multiple modules, so it
+needs to be "low-level".
 
-This data includes the critical choice of which agency's subpackage to
-use.
+This data includes the critical choice of which agency's subpackage to use.
 """
 
 from timetable_kit.debug import debug_print
@@ -32,8 +31,8 @@ agency_choices = ["generic", "amtrak", "via", "hartford", "maple_leaf", "greyhou
 
 
 def set_agency(agency: str):
-    """Set the agency subpackage to use to get agency-specific data (e.g.
-    generic, amtrak, via).
+    """Set the agency subpackage to use to get agency-specific data (e.g. generic,
+    amtrak, via).
 
     Called by initialization code
     """
@@ -81,8 +80,8 @@ def set_agency(agency: str):
 
 
 def agency():
-    """Get the agency subpackage to use to get agency-specific data (e.g.
-    generic, amtrak, via)."""
+    """Get the agency subpackage to use to get agency-specific data (e.g. generic,
+    amtrak, via)."""
     global agency_name
     global agency_package
 
@@ -91,11 +90,11 @@ def agency():
 
 
 def agency_singleton():
-    """Get the agency singleton to use to get agency-specific data (e.g.
-    generic, amtrak, via).
+    """Get the agency singleton to use to get agency-specific data (e.g. generic,
+    amtrak, via).
 
-    This is an instance of a class inside the agency subpackage.  We
-    would use the agency subpackage itself, but we want to use
-    inheritance with memoized stateful data.
+    This is an instance of a class inside the agency subpackage.  We would use the
+    agency subpackage itself, but we want to use inheritance with memoized stateful
+    data.
     """
     return agency().get_singleton()

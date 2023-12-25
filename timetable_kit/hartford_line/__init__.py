@@ -5,8 +5,7 @@
 
 Hartford-line-specific functions for timetable_kit.
 
-This defines an interface; each agency needs to provide the same
-interface
+This defines an interface; each agency needs to provide the same interface
 """
 
 # Where to find the GTFS (merged GTFS)

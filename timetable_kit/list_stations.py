@@ -2,8 +2,7 @@
 # list_stations.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""List all the stations for a particular train number (trip_short_name), in
-order."""
+"""List all the stations for a particular train number (trip_short_name), in order."""
 
 import argparse
 import os  # For os.getenv

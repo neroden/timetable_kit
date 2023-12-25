@@ -3,12 +3,11 @@
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Lay out the HTML page which goes around the timetable.
 
-The table itself is layed out in the module timetable_styling using
-Pandas's Styler to apply CSS classes. This fills in the symbol key and
-text around it to make a full page.
+The table itself is layed out in the module timetable_styling using Pandas's Styler to
+apply CSS classes. This fills in the symbol key and text around it to make a full page.
 
-This uses a bunch of CSS files, and a few HTML files, in the "fragments"
-folder. This uses Jinja2, via the load_resources module.
+This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder. This
+uses Jinja2, via the load_resources module.
 """
 
 # for typed return value

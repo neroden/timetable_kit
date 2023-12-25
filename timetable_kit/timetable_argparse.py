@@ -6,8 +6,7 @@
 
 The primary function for external use is make_tt_arg_parser.
 
-Also includes routines for adding common arguments to parsers for other
-commands.
+Also includes routines for adding common arguments to parsers for other commands.
 """
 
 import argparse

@@ -5,8 +5,7 @@
 
 Maple Leaf specific functions for timetable_kit.
 
-This defines an interface; each agency needs to provide the same
-interface
+This defines an interface; each agency needs to provide the same interface
 """
 
 from .agency import get_singleton

@@ -2,11 +2,10 @@
 # hartford_line/get_gtfs.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Retrieve CT Rail Hartford Line's static GTFS data from the canonical
-location.
+"""Retrieve CT Rail Hartford Line's static GTFS data from the canonical location.
 
-Severely duplicative of amtrak/get_gtfs.py.  Duplication should be
-removed, but I needed a working prototype
+Severely duplicative of amtrak/get_gtfs.py.  Duplication should be removed, but I needed
+a working prototype
 """
 
 import sys  # for sys.exit
@@ -28,8 +27,7 @@ gtfs_raw_unzipped_local_path = module_location / "gtfs_raw"
 
 
 def download_gtfs():
-    """Download Hartford Line's GTFS from its canonical location and return
-    it."""
+    """Download Hartford Line's GTFS from its canonical location and return it."""
     response = requests.get(canonical_gtfs_url)
     if response.status_code != requests.codes.ok:
         print(
@@ -54,11 +52,10 @@ def save_gtfs(gtfs_raw_zip):
 
 
 def unzip_gtfs():
-    """Extract Hartford Line's GTFS file from a canonical local location to a
-    canonical local location.
+    """Extract Hartford Line's GTFS file from a canonical local location to a canonical
+    local location.
 
-    This isn't used directly by the program; this is just for human
-    inspection.
+    This isn't used directly by the program; this is just for human inspection.
     """
     with ZipFile(gtfs_raw_zip_local_path, "r") as my_zip:
         if not gtfs_raw_unzipped_local_path.exists():

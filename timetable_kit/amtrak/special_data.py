@@ -4,11 +4,10 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """This module includes Amtrak *data* which isn't provided by Amtrak.
 
-This includes the list of which stations are major, which trains carry
-checked baggage, known problems with Amtrak's GTFS data, and similar.
+This includes the list of which stations are major, which trains carry checked baggage,
+known problems with Amtrak's GTFS data, and similar.
 
-(Functions for extracting data from Amtrak's JSON stations database are
-elsewhere.)
+(Functions for extracting data from Amtrak's JSON stations database are elsewhere.)
 """
 
 
@@ -77,9 +76,9 @@ def is_sleeper_train(train_number):
 
 
 def train_number_range(*range_args) -> set[str]:
-    """Given a low train number and a high train number, produce a set of all
-    train numbers greater or equal to the low number, and strictly less than
-    the high number, with the numbers converted to strings."""
+    """Given a low train number and a high train number, produce a set of all train
+    numbers greater or equal to the low number, and strictly less than the high number,
+    with the numbers converted to strings."""
     return set(map(str, range(*range_args)))
 
 
@@ -141,21 +140,20 @@ checked_baggage_trains = (
 
 
 def train_has_checked_baggage(trip_short_name: str) -> bool:
-    """Given a trip_short_name (train number), return "True" if it has checked
-    baggage and "False" if not.
+    """Given a trip_short_name (train number), return "True" if it has checked baggage
+    and "False" if not.
 
-    This is based on crowdsourced data since Amtrak doesn't have a
-    machine-readable way to get it.
+    This is based on crowdsourced data since Amtrak doesn't have a machine-readable way
+    to get it.
     """
     return trip_short_name in checked_baggage_trains
 
 
 def is_high_speed_train(trip_short_name: str) -> bool:
-    """Given a trip_short_name (train number) return "True" if we should color
-    it as a high speed train.
+    """Given a trip_short_name (train number) return "True" if we should color it as a
+    high speed train.
 
-    Basically we're just counting Acela for Amtrak, to copy the old
-    timetable style.
+    Basically we're just counting Acela for Amtrak, to copy the old timetable style.
     """
     # So this really should check the GTFS to see if it's an Acela... but we don't. FIXME
     # Anything from 2100 to 2299 is an Acela.

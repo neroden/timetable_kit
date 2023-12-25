@@ -4,11 +4,10 @@
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Routines for extracting Amtrak's JSON station data and working with it.
 
-Amtrak's entire station database is exposed as JSON, which is very
-useful. In order to download it, this must be run as a program.
+Amtrak's entire station database is exposed as JSON, which is very useful. In order to
+download it, this must be run as a program.
 
-A couple of key pieces of data are only exposed as HTML, so the HTML is
-downloaded too.
+A couple of key pieces of data are only exposed as HTML, so the HTML is downloaded too.
 
 The other routines here are for accessing it.
 
@@ -119,8 +118,8 @@ def station_details_filename(station_code: str) -> str:
 
 
 def station_details_url(station_code: str) -> str:
-    """Given an Amtrak station code, return the URL for the station details in
-    JSON form.
+    """Given an Amtrak station code, return the URL for the station details in JSON
+    form.
 
     Watch out for "403 forbidden" issues...
     """
@@ -177,8 +176,8 @@ def save_station_details(station_code: str, station_details: str):
 
 
 def load_station_details(station_code: str) -> str:
-    """Load station details for one station as json text from a suitable file;
-    return it."""
+    """Load station details for one station as json text from a suitable file; return
+    it."""
     with open(
         station_details_local_path(station_code), "r"
     ) as station_details_local_file:
@@ -270,8 +269,8 @@ def save_station_details_html(station_code: str, station_details: str):
 
 
 def load_station_details_html(station_code: str) -> str:
-    """Load station HTML for one station as json text from a suitable file;
-    return it."""
+    """Load station HTML for one station as json text from a suitable file; return
+    it."""
     with open(
         station_details_html_local_path(station_code), "r"
     ) as station_details_html_local_file:
@@ -286,8 +285,7 @@ def load_station_details_html(station_code: str) -> str:
 def download_one_station(station_code: str):
     """Download one of Amtrak's station details files.
 
-    Usually used directly when a hiccup has screwed up one of the
-    downloads.
+    Usually used directly when a hiccup has screwed up one of the downloads.
     """
     print(station_code)
     station_details = download_station_details(station_code)
@@ -349,11 +347,10 @@ def get_station_name(station_code: str) -> str:
 
 
 def make_station_name_dict():
-    """Return a dict which takes a station code and returns a suitable
-    printable station name.
+    """Return a dict which takes a station code and returns a suitable printable station
+    name.
 
-    Expects json stations to be downloaded already, in a suitable local
-    file
+    Expects json stations to be downloaded already, in a suitable local file
     """
     stations_json = load_stations_json()
 

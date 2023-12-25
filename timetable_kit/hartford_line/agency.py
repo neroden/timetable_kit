@@ -3,8 +3,7 @@
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """timetable_kit.maple_leaf.agency module.
 
-This holds a class for "AgencyHartfordLine" intended to be used as a
-singleton.
+This holds a class for "AgencyHartfordLine" intended to be used as a singleton.
 """
 from timetable_kit.amtrak import AgencyAmtrak
 

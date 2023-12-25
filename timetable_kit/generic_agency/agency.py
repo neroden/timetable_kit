@@ -3,9 +3,9 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """timetable_kit.generic_agency.agency module.
 
-This holds a class for "Agency" intended to be used as a singleton. It
-has an interface; Amtrak and others need to provide the same interface.
-This should be made easier by class inheritance.
+This holds a class for "Agency" intended to be used as a singleton. It has an interface;
+Amtrak and others need to provide the same interface. This should be made easier by
+class inheritance.
 """
 
 from timetable_kit.feed_enhanced import FeedEnhanced
@@ -56,24 +56,21 @@ class Agency:
         self._connecting_services_dict: dict[str, list[str]] = {}
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """Apply patches suitable for this agency to a feed; return a patched
-        feed.
+        """Apply patches suitable for this agency to a feed; return a patched feed.
 
         For a generic agency, this does nothing.
 
-        Does not alter the data in the agency object. Do this before
-        init_from_feed.
+        Does not alter the data in the agency object. Do this before init_from_feed.
         """
         return feed
 
     def patch_feed_wheelchair_access_only(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """Apply only the patches to add wheelchair boarding information for
-        this agency; return a patched feed.
+        """Apply only the patches to add wheelchair boarding information for this
+        agency; return a patched feed.
 
         For a generic agency, this does nothing.
 
-        Does not alter the data in the agency object. Do this before
-        init_from_feed.
+        Does not alter the data in the agency object. Do this before init_from_feed.
         """
         return feed
 
@@ -98,8 +95,8 @@ class Agency:
         self._feed = feed
 
     def always_check_disclaimer(self, doing_html: bool = True):
-        """Returns a string with a disclaimer about always checking agency
-        websites for times."""
+        """Returns a string with a disclaimer about always checking agency websites for
+        times."""
         # Note that this doesn't do the boldfacing, that's done in the Jinja template.
         if doing_html:
             website_hrefs = [
@@ -133,8 +130,7 @@ class Agency:
         )
 
     def gtfs_data_link(self, doing_html: bool = True):
-        """Returns the string "GTFS data", possibly with an appropriate
-        link."""
+        """Returns the string "GTFS data", possibly with an appropriate link."""
         if doing_html and len(self._agency_published_gtfs_urls) == 1:
             return href_wrap(
                 "GTFS data", self._agency_published_gtfs_urls[0], doing_html
@@ -144,9 +140,8 @@ class Agency:
             return "GTFS data"
 
     def by_agency_with_gtfs_link(self, doing_html: bool = True):
-        """Returns a string like "by Amtrak and by VIA Rail", with the "by
-        Amtrak" being a link to the Amtrak GTFS and similarly for the "by VIA
-        Rail"."""
+        """Returns a string like "by Amtrak and by VIA Rail", with the "by Amtrak" being
+        a link to the Amtrak GTFS and similarly for the "by VIA Rail"."""
         # Note that href_wrap has different behavior if doing_html is false
         wrapped_by_names = [
             href_wrap("by " + name, url, doing_html)
@@ -164,12 +159,10 @@ class Agency:
     def _prepare_dicts(self):
         """Prepare most of the memoized dicts.
 
-        Specifically, prepare: _stop_code_to_stop_id
-        _stop_id_to_stop_code _stop_code_to_stop_name
-        _accessible_platform_dict _inaccessible_platform_dict
+        Specifically, prepare: _stop_code_to_stop_id _stop_id_to_stop_code
+        _stop_code_to_stop_name _accessible_platform_dict _inaccessible_platform_dict
 
-        These depend on a previously established feed (set by
-        init_from_feed)
+        These depend on a previously established feed (set by init_from_feed)
         """
         debug_print(1, "Preparing stop_code / stop_id dicts")
         if self._feed is None:
@@ -324,8 +317,7 @@ class Agency:
     def add_via_disclaimer(self, doing_html=True) -> bool:
         """Should we add the VIA disclaimer?
 
-        This is boolean because the disclaimer is multiline and needs
-        Jinja macros.
+        This is boolean because the disclaimer is multiline and needs Jinja macros.
         """
         # There is probably a better way to do this.
         return False
@@ -336,8 +328,8 @@ class Agency:
         return ""
 
     def get_all_connecting_services(self, station_list: list[str]) -> list[str]:
-        """Given a list of station codes, return a list of services which
-        connect (with no duplicates)"""
+        """Given a list of station codes, return a list of services which connect (with
+        no duplicates)"""
         # Note that order matters: the services will be listed in order of appearance
         # from the station codes.
         all_services = []
@@ -361,8 +353,7 @@ class Agency:
         )
 
     def get_route_name(self, feed: FeedEnhanced, route_id: str) -> str:
-        """Given feed and a route_id, produce a suitable name for a column
-        subheading.
+        """Given feed and a route_id, produce a suitable name for a column subheading.
 
         This is the generic implementation using GTFS data.
         """
@@ -374,31 +365,29 @@ class Agency:
         return self._route_name_dict[route_id]
 
     def break_long_city_state_name(self, city_state_name: str) -> str:
-        """Replace overly-long city/state names for stops with shorter ones, or
-        ones with line breaks. Return others unchanged.
+        """Replace overly-long city/state names for stops with shorter ones, or ones
+        with line breaks. Return others unchanged.
 
-        Subroutine of disassembled_station_name_to_html. For generic
-        agency, returns all names unchanged.
+        Subroutine of disassembled_station_name_to_html. For generic agency, returns all
+        names unchanged.
         """
         return city_state_name
 
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
     ) -> str | None:
-        """Replace problematic facility names (also add or remove facility
-        names as needed. Return others unchanged.
+        """Replace problematic facility names (also add or remove facility names as
+        needed. Return others unchanged.
 
-        Subroutine of disassembled_station_name_to_html. For generic
-        agency, returns all names unchanged.
+        Subroutine of disassembled_station_name_to_html. For generic agency, returns all
+        names unchanged.
         """
         return facility_name
 
     def stations_to_put_facility_on_first_line(self) -> list[str]:
-        """Stations where the facility name should be in the same line as the
-        station.
+        """Stations where the facility name should be in the same line as the station.
 
-        Subroutine of disassembled_station_name_to_html. For generic
-        agency, none.
+        Subroutine of disassembled_station_name_to_html. For generic agency, none.
         """
         return []
 
@@ -406,17 +395,15 @@ class Agency:
         """Return a list of station codes which should get an extra line for
         connections.
 
-        Subroutine of disassembled_station_name_to_html. For generic
-        agency, none.
+        Subroutine of disassembled_station_name_to_html. For generic agency, none.
         """
         return []
 
     def stations_with_connections_on_first_line(self) -> list[str]:
-        """List of station codes where the connections should be on the first
-        line rather than the second.
+        """List of station codes where the connections should be on the first line
+        rather than the second.
 
-        Subroutine of disassembled_station_name_to_html. For generic
-        agency, none.
+        Subroutine of disassembled_station_name_to_html. For generic agency, none.
         """
         return []
 
@@ -437,9 +424,8 @@ class Agency:
     ) -> str:
         """Given a disassembled station name, produce suitable HTML.
 
-        If "major", then make the station name bigger and bolder If
-        "show_connections" (default True) then add links for connecting
-        services (complex!)
+        If "major", then make the station name bigger and bolder If "show_connections"
+        (default True) then add links for connecting services (complex!)
         """
 
         # Add <br> to certain extra-long city & state names
@@ -550,8 +536,8 @@ class Agency:
     ) -> str:
         """Pretty-print a station name.
 
-        The default implementation prints Station name from GTFS
-        (station code) e.g. New York (NYP)
+        The default implementation prints Station name from GTFS (station code) e.g. New
+        York (NYP)
         """
         # First, get the raw station name: Memoized
         stop_name_raw = self.stop_code_to_stop_name(station_code)

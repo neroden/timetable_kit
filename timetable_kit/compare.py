@@ -4,8 +4,7 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Find timing differences on a route between similar services.
 
-Used to see how many services with different dates are actually the same
-service.
+Used to see how many services with different dates are actually the same service.
 """
 
 # Other people's packages
@@ -36,16 +35,14 @@ from timetable_kit.timetable_argparse import (
 
 
 def compare_stop_lists(base_trip, trips, *, feed):
-    """Find the diff between one trip and a bunch of other (presumably similar)
-    trips.
+    """Find the diff between one trip and a bunch of other (presumably similar) trips.
 
-    Debugging routine used to identify upcoming changes in train
-    schedules. Given a stop_list DataFrame and a list of stop_list
-    DataFrames, all with the same shape, (we may expand this later
-    FIXME) print the diff of each later one with the first.
+    Debugging routine used to identify upcoming changes in train schedules. Given a
+    stop_list DataFrame and a list of stop_list DataFrames, all with the same shape, (we
+    may expand this later FIXME) print the diff of each later one with the first.
 
-    Prefers to start with stop_times tables with unique, but matching,
-    indexes. Using stop_sequence as the index can usually provide this.
+    Prefers to start with stop_times tables with unique, but matching, indexes. Using
+    stop_sequence as the index can usually provide this.
     """
     if len(trips) == 0:
         print("No trips, stopping.")
@@ -96,8 +93,7 @@ def compare_stop_lists(base_trip, trips, *, feed):
 def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """Find timing differences on a route between similar services.
 
-    Used to see how many services with different dates are actually the
-    same service
+    Used to see how many services with different dates are actually the same service
     """
     route_feed = feed.filter_by_route_ids([route_id])
 

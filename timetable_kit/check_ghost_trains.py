@@ -152,8 +152,7 @@ def get_trains_from_csv(filename):
 
 
 def get_trains_from_juckins(route_name):
-    """Get a list of trains actually running on a given route from
-    juckins.net."""
+    """Get a list of trains actually running on a given route from juckins.net."""
     # Get the webpage
     url_basename = "https://juckins.net/timetable_kit/trains_running"
     url_prefixfilename = "trains-actually-running"

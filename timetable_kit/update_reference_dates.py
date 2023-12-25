@@ -4,8 +4,7 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Update the reference dates in a whole bunch of .json spec files all at once.
 
-A bit of a hackish workaround for a known piece of tedium during
-timetable updates.
+A bit of a hackish workaround for a known piece of tedium during timetable updates.
 """
 
 import argparse
@@ -48,8 +47,8 @@ def make_argparser():
 
 
 def stream_edit_in_place(filename, pattern, repl):
-    """Perform the pure-Python equivalent of in-place `sed` substitution: e.g.,
-    `sed -i -e 's/'${pattern}'/'${repl}' "${filename}"`."""
+    """Perform the pure-Python equivalent of in-place `sed` substitution: e.g., `sed -i
+    -e 's/'${pattern}'/'${repl}' "${filename}"`."""
     # For efficiency, precompile the passed regular expression.
     pattern_compiled = re.compile(pattern)
 

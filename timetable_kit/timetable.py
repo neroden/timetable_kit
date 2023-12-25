@@ -4,8 +4,8 @@
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Generate timetables.
 
-timetable.py is the main program for generating timetables and related
-things timetable.py --help gives documentation
+timetable.py is the main program for generating timetables and related things
+timetable.py --help gives documentation
 """
 
 #########################
@@ -162,7 +162,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
 
 
 def reduce_for_html_id(input: str):
-    """Return string minus all characters not good for an HTML ID"""
+    """Return string minus all characters not good for an HTML ID."""
     # Technically a lot is valid, but:
     # we don't want non-ASCII
     # we don't want punctuation except underscore or hyphen
@@ -173,10 +173,11 @@ def reduce_for_html_id(input: str):
 
 
 def make_unique_page_id(spec_file, subspec_file):
-    """Return an ID suitable for use in HTML and CSS which will identify the page in the timetable uniquely.
+    """Return an ID suitable for use in HTML and CSS which will identify the page in the
+    timetable uniquely.
 
-    The only information we have available is the names of the spec_file and subspec_file.  These are the same
-    for a one-page timetable.
+    The only information we have available is the names of the spec_file and
+    subspec_file.  These are the same for a one-page timetable.
     """
     # Regular case.  Find the base filename, without suffix of directories.
     spec_file_basename = PurePath(spec_file).stem
@@ -205,9 +206,8 @@ def produce_several_timetables(
 ) -> None:
     """Main program to run from other Python programs.
 
-    Doesn't mess around with args or environment variables. Does not
-    take a default gtfs filename. DOES take filenames and directory
-    names.
+    Doesn't mess around with args or environment variables. Does not take a default gtfs
+    filename. DOES take filenames and directory names.
     """
 
     if not author:
@@ -372,8 +372,8 @@ def produce_several_timetables(
 def main():
     """Main program to run from the command line.
 
-    Contains everything involving processing command line arguments,
-    environment variables, etc.
+    Contains everything involving processing command line arguments, environment
+    variables, etc.
     """
 
     debug_print(3, "Dumping sys.path for clarity:", sys.path)

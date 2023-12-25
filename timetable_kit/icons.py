@@ -4,9 +4,8 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Stuff for dealing with icons.
 
-This is intended to be flexible in the future. Weasyprint can only
-handle icons referenced as img, or direct inline SVGs, but NOT
-referenced inline SVGs.
+This is intended to be flexible in the future. Weasyprint can only handle icons
+referenced as img, or direct inline SVGs, but NOT referenced inline SVGs.
 
 Referenced inline SVGs would be ideal for HTML-on-web output.
 
@@ -111,8 +110,8 @@ accessible_span_str = "".join(
 def get_accessible_icon_html(doing_html=True) -> str:
     """Return suitable HTML for displaying the "wheelchair access" icon.
 
-    Amtrak's data does not show full accessibility.  This is being used
-    for basic platform accessibility at this time.
+    Amtrak's data does not show full accessibility.  This is being used for basic
+    platform accessibility at this time.
     """
     if doing_html:
         return accessible_span_str

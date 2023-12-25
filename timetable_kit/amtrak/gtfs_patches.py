@@ -92,8 +92,7 @@ def patch_buses(feed: FeedEnhanced):
 def patch_coast_starlight(feed: FeedEnhanced):
     """Patch an old Coast Starlight bug.
 
-    The bug appears to be fixed as of July 7, 2023, So this is unused
-    code now
+    The bug appears to be fixed as of July 7, 2023, So this is unused code now
     """
     assert feed.routes is not None  # Silence MyPy
     assert feed.trips is not None  # Silence MyPy

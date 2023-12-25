@@ -3,8 +3,7 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """timetable_kit.amtrak.agency module.
 
-This holds a class for "AgencyAmtrak" intended to be used as a
-singleton.
+This holds a class for "AgencyAmtrak" intended to be used as a singleton.
 """
 from timetable_kit.feed_enhanced import FeedEnhanced  # Mostly for typechecking
 
@@ -61,18 +60,17 @@ class AgencyAmtrak(Agency):
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """Apply Amtrak-specific patches to a feed.
 
-        Returns the patched feed. Does not alter data in the Agency
-        object. Do this before init_from_feed.
+        Returns the patched feed. Does not alter data in the Agency object. Do this
+        before init_from_feed.
         """
         # This is defined in its own file in the Amtrak subpackage.
         return gtfs_patches.patch_feed(feed)
 
     def patch_feed_wheelchair_access_only(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """Apply only the patches to add wheelchair boarding information for
-        Amtrak; return a patched feed.
+        """Apply only the patches to add wheelchair boarding information for Amtrak;
+        return a patched feed.
 
-        Does not alter the data in the agency object. Do this before
-        init_from_feed.
+        Does not alter the data in the agency object. Do this before init_from_feed.
         """
         new_feed = feed.copy()
         access.patch_add_wheelchair_boarding(new_feed)  # Alters in place
@@ -111,8 +109,8 @@ class AgencyAmtrak(Agency):
         return "amtrak-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
-        """Given today_feed and a route_id, produce a suitalbe name for a
-        column subheading.
+        """Given today_feed and a route_id, produce a suitalbe name for a column
+        subheading.
 
         The implementation is Amtrak-specific.
         """
@@ -142,8 +140,7 @@ class AgencyAmtrak(Agency):
         return (city_state_name, facility_name)
 
     def is_standard_major_station(self, station_code: str) -> bool:
-        """Is this a "major" station which should be boldfaced and
-        capitalized?"""
+        """Is this a "major" station which should be boldfaced and capitalized?"""
         return special_data.is_standard_major_station(station_code)
 
     def get_station_name_from(
@@ -279,8 +276,8 @@ class AgencyAmtrak(Agency):
         return ["NYP", "SLC", "SNC", "OSD"]
 
     def stations_with_connections_on_first_line(self) -> list[str]:
-        """List of station codes where the connections should be on the first
-        line rather than the second."""
+        """List of station codes where the connections should be on the first line
+        rather than the second."""
         # San Diego Old Town has a short station name and a long facility name,
         # but also several long connecting services.  So put connections on line one,
         # before the facility name line.

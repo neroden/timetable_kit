@@ -3,8 +3,7 @@
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """timetable_kit.maple_leaf.agency module.
 
-This holds a class for "AgencyMapleLeaf" intended to be used as a
-singleton.
+This holds a class for "AgencyMapleLeaf" intended to be used as a singleton.
 """
 import timetable_kit.text_assembly as text_assembly
 
@@ -72,8 +71,8 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
             )
 
     def get_all_connecting_services(self, station_list: list[str]) -> list[str]:
-        """Given a list of station codes, return a list of services which
-        connect (with no duplicates)"""
+        """Given a list of station codes, return a list of services which connect (with
+        no duplicates)"""
         # Special tweak for Maple Leaf: connecting services indexed by "Amtrak code / VIA code"
         enhanced_station_list = [
             station_code + " / " + amtrak_code_to_via_code[station_code]

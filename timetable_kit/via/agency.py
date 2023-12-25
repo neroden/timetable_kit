@@ -53,8 +53,7 @@ class AgencyVIA(Agency):
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """Apply VIA-specific patches to a feed.
 
-        Returns the patched feed. Does not alter data in the Agency
-        object.
+        Returns the patched feed. Does not alter data in the Agency object.
         """
         # This is defined in its own file in the VIA subpackage.
         return gtfs_patches.patch_feed(feed)
@@ -85,8 +84,7 @@ class AgencyVIA(Agency):
     def add_via_disclaimer(self, doing_html=True) -> bool:
         """Should we add the VIA disclaimer?
 
-        This is boolean because the disclaimer is multiline and needs
-        Jinja macros.
+        This is boolean because the disclaimer is multiline and needs Jinja macros.
         """
         return True
 
@@ -95,21 +93,20 @@ class AgencyVIA(Agency):
         return "via-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
-        """Given today_feed and a route_id, produce a suitalbe name for a
-        column subheading.
+        """Given today_feed and a route_id, produce a suitalbe name for a column
+        subheading.
 
         The implementation is VIA-specific.
         """
         return route_names.get_route_name(today_feed, route_id)
 
     def is_standard_major_station(self, station_code: str) -> bool:
-        """Is this a "major" station which should be boldfaced and
-        capitalized?"""
+        """Is this a "major" station which should be boldfaced and capitalized?"""
         return special_data.is_standard_major_station(station_code)
 
     def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, str | None]:
-        """Separates suffixes like "GO Station" from VIA station names, as
-        "facility name".
+        """Separates suffixes like "GO Station" from VIA station names, as "facility
+        name".
 
         Returns the tuple (stop_name, facility name)
 
@@ -193,8 +190,8 @@ class AgencyVIA(Agency):
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """Given a VIA stop_code, return a suitable pretty-printed station name
-        for plaintext, multiline text, or HTML."""
+        """Given a VIA stop_code, return a suitable pretty-printed station name for
+        plaintext, multiline text, or HTML."""
         # First, get the raw station name: Memoized
         stop_name_raw = self.stop_code_to_stop_name(station_code)
         # Is it major?

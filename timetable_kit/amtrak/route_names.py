@@ -10,11 +10,10 @@ from timetable_kit.errors import GTFSError
 
 
 def get_route_name(today_feed, route_id):
-    """Given today_feed and a route_id, produce a suitable name for a column
-    subheading.
+    """Given today_feed and a route_id, produce a suitable name for a column subheading.
 
-    This is somewhat Amtrak-specific.  The route_long_names are mostly
-    fine but too long. The bus situation, however, is ugly.
+    This is somewhat Amtrak-specific.  The route_long_names are mostly fine but too
+    long. The bus situation, however, is ugly.
     """
     filtered_routes = today_feed.routes[today_feed.routes.route_id == route_id]
     num_rows = filtered_routes.shape[0]

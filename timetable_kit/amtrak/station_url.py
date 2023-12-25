@@ -2,8 +2,8 @@
 # amtrak/station_url.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Given an Amtrak three-letter station code, return the URL for that station's
-JSON details.
+"""Given an Amtrak three-letter station code, return the URL for that station's JSON
+details.
 
 Utility program for the user.  Not used by the timetable program.
 """

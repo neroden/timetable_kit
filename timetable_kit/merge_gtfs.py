@@ -4,8 +4,7 @@
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Merge two GTFS feeds.
 
-Currently does no validation. Deletes the shapes table, since we don't
-use it.
+Currently does no validation. Deletes the shapes table, since we don't use it.
 """
 
 import sys  # for argv
@@ -20,11 +19,10 @@ def remove_stop_code_column(feed):
 
     Use with care.
 
-    For merged feeds where we're using Amtrak as the base, we don't want
-    stop_code. We want to use the Amtrak code where stop_code ==
-    stop_id. Having this column confuses _prepare_dicts in
-    generic_agency/agency.py, screwing up the wheelchair boarding dicts,
-    so we *have* to delete it.
+    For merged feeds where we're using Amtrak as the base, we don't want stop_code. We
+    want to use the Amtrak code where stop_code == stop_id. Having this column confuses
+    _prepare_dicts in generic_agency/agency.py, screwing up the wheelchair boarding
+    dicts, so we *have* to delete it.
 
     Alter in place.
     """
@@ -33,11 +31,10 @@ def remove_stop_code_column(feed):
 
 
 def index_by_ids(old_feed: gtfs_kit.Feed, /) -> gtfs_kit.Feed:
-    """Return a copy of the feed, with all the tables which have unique IDs
-    indexed by them.
+    """Return a copy of the feed, with all the tables which have unique IDs indexed by
+    them.
 
-    This will be a slightly broken Feed, as gtfs_kit.Feed does not
-    expect the indexing.
+    This will be a slightly broken Feed, as gtfs_kit.Feed does not expect the indexing.
     """
     feed = old_feed.copy()
     # Required files.
@@ -83,9 +80,9 @@ table_names = set(gtfs_kit.constants.FEED_ATTRS_1) - {"dist_units"}
 def merge_feed(feed_a, feed_b) -> gtfs_kit.Feed:
     """Merge two feeds.  Return the merged feed.
 
-    Does not do ANY checking for uniqueness or duplicates. To get a
-    valid feed as a result, all the _id fields must be unique. Filter
-    your feeds first if you have duplicates.
+    Does not do ANY checking for uniqueness or duplicates. To get a valid feed as a
+    result, all the _id fields must be unique. Filter your feeds first if you have
+    duplicates.
     """
 
     # gtfs_kit.constants.FEED_ATTRS_1

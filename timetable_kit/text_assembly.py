@@ -4,15 +4,14 @@
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Module for assembling small bits of text, mostly for disclaimers.
 
-Contains bits which don't require tsns, but which are loaded early, to
-avoid circular dependencies.
+Contains bits which don't require tsns, but which are loaded early, to avoid circular
+dependencies.
 """
 import html  # for html.escape
 
 
 def href_wrap(text: str, url: str, doing_html: bool = True) -> str:
-    """Given text and a URL, wrap the text in an HREF anchor pointing to the
-    URL.
+    """Given text and a URL, wrap the text in an HREF anchor pointing to the URL.
 
     Escapes text and URL properly.
 
@@ -28,12 +27,11 @@ def href_wrap(text: str, url: str, doing_html: bool = True) -> str:
 
 
 def and_clause(items: list[str]) -> list[str]:
-    """Given a list of pieces of text, returns a new list of pieces of text,
-    with the appropriate words added to make it an "and" clause if spaces are
-    put in between.
+    """Given a list of pieces of text, returns a new list of pieces of text, with the
+    appropriate words added to make it an "and" clause if spaces are put in between.
 
-    With an empty list, returns an empty list.  The odd interface is
-    designed to make this work correctly if run through " ".join()
+    With an empty list, returns an empty list.  The odd interface is designed to make
+    this work correctly if run through " ".join()
     """
     if len(items) == 0:
         return []
@@ -50,12 +48,11 @@ def and_clause(items: list[str]) -> list[str]:
 
 
 def or_clause(items: list[str]) -> list:
-    """Given a list of pieces of text, returns a new list of pieces of text,
-    with the appropriate words added to make it an "or" clause if spaces are
-    put in between.
+    """Given a list of pieces of text, returns a new list of pieces of text, with the
+    appropriate words added to make it an "or" clause if spaces are put in between.
 
-    With an empty list, returns an empty list.  The odd interface is
-    designed to make this work correctly if run through " ".join()
+    With an empty list, returns an empty list.  The odd interface is designed to make
+    this work correctly if run through " ".join()
     """
     if len(items) == 0:
         return []

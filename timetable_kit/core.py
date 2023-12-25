@@ -176,7 +176,8 @@ class TTSpec(object):
         return (self.json, self.csv)[index]
 
     def strip_omits(self):
-        """Strip any rows in the CSV where the first column is "omit" (used for comments)."""
+        """Strip any rows in the CSV where the first column is "omit" (used for
+        comments)."""
         old_csv = self.csv
         # Note: assumes that the column names are 0,1,2,etc.
         # I couldn't figure out how to do this with iloc FIXME
@@ -187,15 +188,14 @@ class TTSpec(object):
     def augment_from_key_cell(self, *, feed: FeedEnhanced):
         """Fill in the station list for a tt-spec if it has a key code.
 
-        Cell 0,0 is normally blank. If it is "Stations of 59", then (a)
-        assume there is only one tt-spec row; (b) get the stations for 59
-        and fill the rows in from that
+        Cell 0,0 is normally blank. If it is "Stations of 59", then (a) assume there is
+        only one tt-spec row; (b) get the stations for 59 and fill the rows in from that
 
         Requires a feed.  Requires that reference_date be set.
 
-        Note that this tucks on the end of the tt_spec.  A "second row" for
-        column-options will therefore be unaffected.  Other second rows may
-        result in confusing results.
+        Note that this tucks on the end of the tt_spec.  A "second row" for column-
+        options will therefore be unaffected.  Other second rows may result in confusing
+        results.
 
         Prints the CSV.
         """
@@ -237,13 +237,13 @@ class TTSpec(object):
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
         """Filter a master feed to trips relevant to this spec only.
 
-        First we filter to the reference date in the TTSpec JSON.
-        (This is essential to get accurate timetables for a given period.)
+        First we filter to the reference date in the TTSpec JSON. (This is essential to
+        get accurate timetables for a given period.)
 
         Then we filter it to trip_short_names which are in the header of the TTSpec CSV.
 
-        (This is necessary to get effective dates for the period, and also
-        vastly reduces computational load for the main program.)
+        (This is necessary to get effective dates for the period, and also vastly
+        reduces computational load for the main program.)
 
         Return the reduced feed.
         """
@@ -309,16 +309,16 @@ class TTSpec(object):
         return train_specs_list
 
     def calculate_column_options(self: Self):
-        """If this TTSpec has column-options in row 2 of the CSV, remove that row and fill in the column_options structure.
+        """If this TTSpec has column-options in row 2 of the CSV, remove that row and
+        fill in the column_options structure.
 
-        This data structure is a list (indexed by column number) wherein
-        each element is a list. These inner lists are either empty, or a
-        list of options.
+        This data structure is a list (indexed by column number) wherein each element is
+        a list. These inner lists are either empty, or a list of options.
 
         Options are free-form, space-separated, and several are defined.
 
-        The column options are specified in row 2 of the CSV.  If they're
-        not there, don't call this.
+        The column options are specified in row 2 of the CSV.  If they're not there,
+        don't call this.
         """
         self.column_options: list[list[str]]
         # Consider generalizing to allow column-options in other rows
@@ -481,12 +481,12 @@ def split_trains_spec(trains_spec):
 
     [["59, "174", "22"], True]
 
-    Used to separate specs for multiple trains in the same timetable
-    column. A single "59" will simply give {"59"}.
+    Used to separate specs for multiple trains in the same timetable column. A single
+    "59" will simply give {"59"}.
 
-    This also processes specs like "59 monday".  And "59 noheader".  And
-    "59 monday noheader". These require exact spacing; this routine
-    should probably clean up the spacing, but does not.
+    This also processes specs like "59 monday".  And "59 noheader".  And "59 monday
+    noheader". These require exact spacing; this routine should probably clean up the
+    spacing, but does not.
     """
     # Remove leading whitespace and possible leading minus sign
     clean_trains_spec = trains_spec.lstrip()
@@ -500,9 +500,8 @@ def flatten_train_specs_list(train_specs_list):
     """Take a nested list of trains and make a flat list of trains.
 
     Take a list of trains as specified in a tt_spec such as ['','174
-    monday','178/21','stations','23/1482'] and make a flat list of all
-    trains involved ['174 monday','178','21','23','1482'] without the
-    special keywords like "station".
+    monday','178/21','stations','23/1482'] and make a flat list of all trains involved
+    ['174 monday','178','21','23','1482'] without the special keywords like "station".
 
     Leaves the '91 monday' type entries.
 
@@ -522,8 +521,8 @@ def flatten_train_specs_list(train_specs_list):
 
 
 def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
-    """Given a single trip_id, get the associated service dates by looking up
-    the service_id in the calendar.
+    """Given a single trip_id, get the associated service dates by looking up the
+    service_id in the calendar.
 
     Returns an ordered pair (start_date, end_date)
     """
@@ -544,13 +543,12 @@ def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
 def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     """Given a single trip_id, stop_id, and a feed, extract a single timepoint.
 
-    This returns the timepoint (as a Series) taken from the stop_times
-    GTFS feed.
+    This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
 
     Throw TwoStopsError if it stops here twice.
 
-    Return "None" if it doesn't stop here.  This is not an error. (Used
-    to throw NoStopError if it doesn't stop here.  Too common.)
+    Return "None" if it doesn't stop here.  This is not an error. (Used to throw
+    NoStopError if it doesn't stop here.  Too common.)
     """
     assert feed.stop_times is not None  # Silence MyPy
 
@@ -620,8 +618,8 @@ def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
 def make_stations_max_dwell_map(
     today_feed: FeedEnhanced, spec: TTSpec, trip_from_train_spec_fn
 ) -> dict[str, bool]:
-    """Return a dict from station_code to True/False, based on the trains in
-    the tt_spec.
+    """Return a dict from station_code to True/False, based on the trains in the
+    tt_spec.
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
@@ -667,16 +665,13 @@ def make_stations_max_dwell_map(
 
 
 def raise_error_if_not_one_row(trips):
-    """Given a PANDAS DataFrame, raise an error if it has either 0 or more than
-    1 row.
+    """Given a PANDAS DataFrame, raise an error if it has either 0 or more than 1 row.
 
-    The error text is based on the assumption that this is a GTFS trips
-    frame. This returns nothing if successful; it is solely sanity-check
-    code.
+    The error text is based on the assumption that this is a GTFS trips frame. This
+    returns nothing if successful; it is solely sanity-check code.
 
-    For speed, we have to work with trips directly rather than modifying
-    the feed, which is why this is needed for fill_tt_spec, rather than
-    merely in FeedEnhanced.
+    For speed, we have to work with trips directly rather than modifying the feed, which
+    is why this is needed for fill_tt_spec, rather than merely in FeedEnhanced.
     """
     num_rows = trips.shape[0]
     if num_rows == 0:

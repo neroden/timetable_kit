@@ -5,8 +5,7 @@
 
 VIA-specific functions for timetable_kit.
 
-This defines an interface; Amtrak and others need to provide the same
-interface.
+This defines an interface; Amtrak and others need to provide the same interface.
 """
 
 # The class for inheritance

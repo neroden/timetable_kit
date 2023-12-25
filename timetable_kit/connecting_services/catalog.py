@@ -2,11 +2,11 @@
 # Part of timetable_kit
 #
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""This module holds the list of known connecting services, with their icon
-files, CSS files, CSS class names, etc.
+"""This module holds the list of known connecting services, with their icon files, CSS
+files, CSS class names, etc.
 
-It is automatically extracted from a CSV file in this package, specified
-in connecting_services_csv_filename
+It is automatically extracted from a CSV file in this package, specified in
+connecting_services_csv_filename
 
 The exported data is connecting_services_df (as a DataFrame) and
 connecting_services_dict (as a dict)
@@ -46,9 +46,8 @@ _connecting_service_logo_key_tpl: str | None = None
 
 
 def _generate_logo_html(df_row):
-    """A clever routine to apply JINJA template to a row and get a value for a
-    new column, which will be the HTML to refer to the logo (in a station name
-    box)"""
+    """A clever routine to apply JINJA template to a row and get a value for a new
+    column, which will be the HTML to refer to the logo (in a station name box)"""
     # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
     output = _connecting_service_logo_tpl.render(params)
@@ -56,9 +55,9 @@ def _generate_logo_html(df_row):
 
 
 def _generate_logo_key_html(df_row):
-    """A clever routine to apply JINJA template to a row and get a value for a
-    new column, which will be the HTML to explain the logo in the symbol key
-    for the timetable."""
+    """A clever routine to apply JINJA template to a row and get a value for a new
+    column, which will be the HTML to explain the logo in the symbol key for the
+    timetable."""
     # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
     output = _connecting_service_logo_key_tpl.render(params)
@@ -66,24 +65,24 @@ def _generate_logo_key_html(df_row):
 
 
 def _generate_full_name_nbsp(df_row):
-    """Given a row, take the "full_name" entry and generate a version with
-    nonbreaking spaces."""
+    """Given a row, take the "full_name" entry and generate a version with nonbreaking
+    spaces."""
     full_name = df_row["full_name"]
     full_name_nbsp = full_name.replace(" ", "&nbsp;")
     return full_name_nbsp
 
 
 def _generate_alt_nbsp(df_row):
-    """Given a row, take the "alt" entry and generate a version with
-    nonbreaking spaces."""
+    """Given a row, take the "alt" entry and generate a version with nonbreaking
+    spaces."""
     alt = df_row["alt"]
     alt_nbsp = alt.replace(" ", "&nbsp;")
     return alt_nbsp
 
 
 def _generate_suffix_nbsp(df_row):
-    """Given a row, take the "suffix" entry and generate a version with
-    nonbreaking spaces."""
+    """Given a row, take the "suffix" entry and generate a version with nonbreaking
+    spaces."""
     # This is harder than the other two because this MIGHT be a blank row
     suffix = df_row["suffix"]
     if pd.isna(suffix):
@@ -95,8 +94,8 @@ def _generate_suffix_nbsp(df_row):
 
 ### FUNCTIONS ###
 def _initialize():
-    """Initialize the connecting services DataFrame and dict from a suitable
-    file in the package."""
+    """Initialize the connecting services DataFrame and dict from a suitable file in the
+    package."""
     # Don't print these, it interferes with output because debug_level isn't set yet.
     # Consider wrapping the dict in a function and memoizing.  TODO
     # debug_print(1, "Initializing connecting_services_df")
@@ -186,8 +185,8 @@ def _initialize():
 
 
 def get_filenames_for_all_logos() -> list[str]:
-    """Get the list of filenames for logos (without directories), for
-    installing with the HTML files."""
+    """Get the list of filenames for logos (without directories), for installing with
+    the HTML files."""
     # Pull the appropriate column, convert to a list
     assert connecting_services_df is not None  # Silence MyPy
     logo_svg_filenames = connecting_services_df["svg_filename"].tolist()

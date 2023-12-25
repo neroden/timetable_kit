@@ -4,8 +4,8 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Retrieve VIA Rail's static GTFS data from the canonical location.
 
-Severely duplicative of amtrak/get_gtfs.py.  Duplication should be
-removed, but I needed a working prototype
+Severely duplicative of amtrak/get_gtfs.py.  Duplication should be removed, but I needed
+a working prototype
 """
 
 import sys  # for sys.exit
@@ -45,8 +45,8 @@ def save_gtfs(gtfs_zip):
 
 
 def unzip_gtfs():
-    """Extract VIA Rail's GTFS file from a canonical local location to a
-    canonical local location.
+    """Extract VIA Rail's GTFS file from a canonical local location to a canonical local
+    location.
 
     This is used directly by the program.
     """

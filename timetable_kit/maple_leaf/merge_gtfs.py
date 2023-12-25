@@ -2,8 +2,7 @@
 # maple_leaf/merge_gtfs.py
 # Part of timetable_kit
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Routines for creating a Maple Leaf GTFS from Amtrak's GTFS and VIA's
-GTFS."""
+"""Routines for creating a Maple Leaf GTFS from Amtrak's GTFS and VIA's GTFS."""
 
 import sys  # for sys.exit
 
@@ -32,8 +31,8 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 
 
 def filter_feed_by_route_names(feed, route_names: list[str]):
-    """Filters a feed down to JUST the data for named routes. Erase the shapes
-    data for speed.
+    """Filters a feed down to JUST the data for named routes. Erase the shapes data for
+    speed.
 
     Returs the filtered feed.
     """
@@ -110,12 +109,11 @@ def translate_via_stations_to_amtrak(via_ml_feed):
 
 
 def eliminate_redundant_via_stations(via_ml_feed, amtrak_ml_feed):
-    """Trims down the stops.txt in a VIA Maple Leaf feed (translated to Amtrak
-    station codes) to only those stations which are not already in the Amtrak
-    stops.txt.
+    """Trims down the stops.txt in a VIA Maple Leaf feed (translated to Amtrak station
+    codes) to only those stations which are not already in the Amtrak stops.txt.
 
-    All the Canadian stations are in the Amtrak online database but not
-    all of them are in the GTFS.
+    All the Canadian stations are in the Amtrak online database but not all of them are
+    in the GTFS.
     """
     new_feed = via_ml_feed.copy()
 
@@ -136,8 +134,8 @@ def run():
     """timetable_kit.maple_leaf.merge_gtfs.run.
 
     Merge Amtrak and VIA data for the Maple Leaf only into a joint GTFS,
-    "maple_leaf/gtfs". Assumes that Amtrak and VIA data have already
-    been downloaded by amtrak/get_gtfs.py and via/get_gtfs.py.
+    "maple_leaf/gtfs". Assumes that Amtrak and VIA data have already been downloaded by
+    amtrak/get_gtfs.py and via/get_gtfs.py.
     """
     print("Loading Amtrak GTFS")
     amtrak_feed_path = Path(amtrak.gtfs_unzipped_local_path)

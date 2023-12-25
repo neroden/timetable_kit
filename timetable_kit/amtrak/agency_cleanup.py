@@ -3,11 +3,10 @@
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Subroutines to clean up Amtrak's names for agencies.
 
-These are obsolete since Amtrak's GTFS data now has correct agency
-names.
+These are obsolete since Amtrak's GTFS data now has correct agency names.
 
-They are retained merely as reference code for how to do this, should it
-be necessary in the future.
+They are retained merely as reference code for how to do this, should it be necessary in
+the future.
 
 The code is dead.  They are not called.
 """
@@ -21,8 +20,7 @@ from timetable_kit import gtfs_type_cleanup  # import the module name
 def indexed_agency(agency):
     """Take type-correted agency DataFrame.
 
-    Set agency ID (which must be an integer) as index. Sort by it.
-    Cannot be repeated.
+    Set agency ID (which must be an integer) as index. Sort by it. Cannot be repeated.
     """
     # Not as helpful as we first supposed.
     # NOTE that this eliminates the ability to refer to it by the agency_id name;

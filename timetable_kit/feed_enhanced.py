@@ -39,8 +39,8 @@ GTFS_DAYS = (
     "saturday",
     "sunday",
 )
-"""GTFS_DAYS is the list of all the days (Monday through Sunday) which form
-gtfs column headers, appropriately lowercase for the column headers."""
+"""GTFS_DAYS is the list of all the days (Monday through Sunday) which form gtfs column
+headers, appropriately lowercase for the column headers."""
 
 
 class DateRange(NamedTuple):
@@ -165,8 +165,7 @@ class FeedEnhanced(Feed):
         return new_feed
 
     def filter_by_days_of_week(self: Self, days: Iterable[GTFSDay]) -> Self:
-        """Filters the feed to trips which are running on one of the selected
-        days.
+        """Filters the feed to trips which are running on one of the selected days.
 
         - Filters calendar (direct)
         - Filters trips (by service_ids in calendar)
@@ -203,8 +202,7 @@ class FeedEnhanced(Feed):
         return new_feed
 
     def filter_by_route_ids(self: Self, route_ids: Iterable[str]) -> Self:
-        """Filter the entire feed to include only the specified route_ids (a
-        list)
+        """Filter the entire feed to include only the specified route_ids (a list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters routes and trips (direct)
@@ -228,8 +226,7 @@ class FeedEnhanced(Feed):
         return new_feed
 
     def filter_by_service_ids(self: Self, service_ids: Iterable[str]) -> Self:
-        """Filter the entire feed to include only the specified service_ids (a
-        list)
+        """Filter the entire feed to include only the specified service_ids (a list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters calendar and trips (direct)
@@ -291,8 +288,7 @@ class FeedEnhanced(Feed):
         return new_feed
 
     def filter_find_one_day_calendars(self: Self) -> Self:
-        """Filter to *only* find service_ids which are effective for only one
-        day.
+        """Filter to *only* find service_ids which are effective for only one day.
 
         Amtrak has a bad habit of listing one-day calendars in its GTFS.  While we're usually
         trying to get rid of them, we might also want to examine them.
@@ -346,8 +342,8 @@ class FeedEnhanced(Feed):
         return new_feed
 
     def filter_by_trip_ids(self: Self, trip_ids: Iterable[str]) -> Self:
-        """Filter the entire feed to include only services with the specified
-        trip_ids (a list)
+        """Filter the entire feed to include only services with the specified trip_ids
+        (a list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters trips and stop_times (direct)
@@ -397,11 +393,10 @@ class FeedEnhanced(Feed):
     def get_trip_short_name(self, trip_id: str) -> DataFrame:
         """Given a trip_id, recover the trip_short_name.
 
-        Since trip_ids are supposed to be unique, this should be an easy
-        process.
+        Since trip_ids are supposed to be unique, this should be an easy process.
 
-        Very useful for debugging since trip_short_name is human-
-        meaningful, and trip_id isn't.
+        Very useful for debugging since trip_short_name is human- meaningful, and
+        trip_id isn't.
         """
         my_trips = self.trips[self.trips["trip_id"] == trip_id]
         if my_trips.shape[0] == 0:
@@ -412,12 +407,12 @@ class FeedEnhanced(Feed):
         return my_trip.trip_short_name
 
     def get_valid_date_range(self) -> DateRange:
-        """Return the (latest_start_date, earliest_end_date) for a (filtered,
-        reduced) feed.
+        """Return the (latest_start_date, earliest_end_date) for a (filtered, reduced)
+        feed.
 
-        This is used after filtering the feed down to the trips which will
-        be shown in the final timetable. It therefore gives a validity
-        period for the timetable as a whole.
+        This is used after filtering the feed down to the trips which will be shown in
+        the final timetable. It therefore gives a validity period for the timetable as a
+        whole.
         """
         assert self.calendar is not None  # Silence MyPy
 

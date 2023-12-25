@@ -44,8 +44,8 @@ def save_gtfs(gtfs_zip):
 
 
 def unzip_gtfs():
-    """Extract Amtrak's GTFS file from a canonical local location to a
-    canonical local location.
+    """Extract Amtrak's GTFS file from a canonical local location to a canonical local
+    location.
 
     This is used directly by the program.
     """

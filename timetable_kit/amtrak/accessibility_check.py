@@ -2,8 +2,7 @@
 # amtrak/accessibility_check.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Take Amtrak's station database and process it to find deficits in
-accessibility.
+"""Take Amtrak's station database and process it to find deficits in accessibility.
 
 Output will go in the "station_stats" folder
 
