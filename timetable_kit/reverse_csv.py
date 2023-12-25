@@ -5,7 +5,7 @@
 
 import sys
 import pandas as pd
-
+from pandas import DataFrame
 
 """
 This simply reverses the rows in a CSV file
@@ -26,5 +26,5 @@ if __name__ == "__main__":
     tt_spec = pd.read_csv(filename, index_col=False, header=None, dtype=str)
     reversed_tt_spec = tt_spec[::-1]
 
-    reversed_tt_spec.to_csv(out_filename, index=False, header=None)
+    reversed_tt_spec.to_csv(out_filename, index=False, header=False)
     print("reversed.")
