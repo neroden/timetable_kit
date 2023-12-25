@@ -22,6 +22,7 @@ def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str
 
     If no icon, return suitable HTML for the connecting service's alt name.
     """
+    assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
     try:
         service_dict = connecting_services_dict[connecting_service]
@@ -42,6 +43,7 @@ def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
     """
     Return suitable HTML for a key for the connecting service.
     """
+    assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
     try:
         service_dict = connecting_services_dict[connecting_service]
@@ -67,6 +69,7 @@ def get_keys_html(services_list, one_line=True) -> str:
     DOES NOT do the surrounding decoration ("Connecting services:") --
     that is done over in the main Jinja templates
     """
+    assert connecting_services_dict is not None  # Silence MyPy
     # Bail out early if there are no connecting services
     if not services_list:
         return ""

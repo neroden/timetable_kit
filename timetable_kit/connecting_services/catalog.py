@@ -38,13 +38,13 @@ from timetable_kit.load_resources import (
 connecting_services_csv_filename = "connecting_services.csv"
 
 # This is the global -- it's a public interface.
-connecting_services_dict = None
+connecting_services_dict: dict | None = None
 # This is also a global -- useful sometimes.
-connecting_services_df = None
+connecting_services_df: dict | None = None
 
 # Internal use: Jinja templates after loading them
-_connecting_service_logo_tpl = None
-_connecting_service_logo_key_tpl = None
+_connecting_service_logo_tpl: str | None = None
+_connecting_service_logo_key_tpl: str | None = None
 
 
 def _generate_logo_html(df_row):
