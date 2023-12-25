@@ -54,10 +54,7 @@ def get_time_column_stylings(
     if output_type not in ["class", "attributes"]:
         raise InputError("expected class or attributes")
 
-    if agency() is None:
-        raise RuntimeError(
-            "Internal error, agency not set before calling get_time_column_stylings"
-        )
+    assert agency_singleton() is not None
 
     # Note that Amtrak GTFS data only has route_types:
     # 2 (is a train)
