@@ -212,7 +212,7 @@ if __name__ == "__main__":
         "heading": "Test Heading",
         "timetable": "<p>No timetable</p>",
         "symbol_key": "<p>No Symbol Key</p>",
-        "internal_stylesheet": True,
+        "internal_stylesheet": "Yes",  # MyPy wants a str here; we just need truthy
     }
     rendered_page = page_tpl.render(page_tpl_params)
     with open("test_results_2.html", "w") as outfile:
