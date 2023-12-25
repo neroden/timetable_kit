@@ -12,7 +12,8 @@ Used by multiple command-line programs
 from pathlib import Path
 import datetime
 
-import gtfs_kit
+import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
+
 
 # My packages: Local module imports
 
