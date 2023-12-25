@@ -1172,7 +1172,7 @@ def style_updown(reverse: bool, doing_html=False) -> str:
 
     # The added arrows are nice, but...
     # Silver Service doesn't have enough room for the arrows.
-    # Have to flag this off of the .json file.
+    # Have to flag this off of the aux / .json file.
     using_arrows = False
     if doing_html and using_arrows:
         if reverse:

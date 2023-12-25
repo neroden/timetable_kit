@@ -93,42 +93,42 @@ special_row_names = {
 
 
 class TTSpec(object):
-    """An entire TTSpec, both JSON aux file and CSV spec file."""
+    """An entire TTSpec, both aux file and CSV spec file."""
 
-    def __init__(self: Self, json: dict, csv: pd.DataFrame) -> None:
-        self.json: dict = json
+    def __init__(self: Self, aux: dict, csv: pd.DataFrame) -> None:
+        self.aux: dict = aux
         self.csv: pd.DataFrame = csv
-        self.__set_json_defaults()  # Set defaults for missing JSON
+        self.__set_aux_defaults()  # Set defaults for missing aux
 
-    def __set_json_defaults(self: Self):
-        """Fill in some default values for the JSON if they're not present.
+    def __set_aux_defaults(self: Self):
+        """Fill in some default values for the aux if they're not present.
 
         Subroutine of TTSpec.__init__()
 
         This edits the dict in place.
         """
-        self.json.setdefault("for_rpa", False)
+        self.aux.setdefault("for_rpa", False)
         # These are used when filling the timetable.
-        self.json.setdefault("train_numbers_side_by_side", False)
-        self.json.setdefault("dwell_secs_cutoff", 300)
-        self.json.setdefault("use_bus_icon_in_cells", False)
-        self.json.setdefault("box_time_characters", False)
+        self.aux.setdefault("train_numbers_side_by_side", False)
+        self.aux.setdefault("dwell_secs_cutoff", 300)
+        self.aux.setdefault("use_bus_icon_in_cells", False)
+        self.aux.setdefault("box_time_characters", False)
         # These are used later, setting up the CSS
-        self.json.setdefault("font_name", "SpartanTT")
-        self.json.setdefault("font_size", "8px")  # 8px = 6pt
-        self.json.setdefault("font_allow_ligatures", False)
+        self.aux.setdefault("font_name", "SpartanTT")
+        self.aux.setdefault("font_size", "8px")  # 8px = 6pt
+        self.aux.setdefault("font_allow_ligatures", False)
 
     def set_reference_date(self: Self, reference_date: GTFSDate | None):
-        """Set the reference_date in the JSON part of the TTSpec.
+        """Set the reference_date in the aux part of the TTSpec.
 
         If None is passed, does nothing (leaves it unchanged).
         """
         if reference_date:
-            self.json["reference_date"] = reference_date
+            self.aux["reference_date"] = reference_date
 
     @classmethod
     def from_files(cls: Type[Self], filename: str, input_dir: PathLike | str = "."):
-        """Load a tt-spec from files, both the JSON and the CSV."""
+        """Load a tt-spec from files, both the aux and the CSV."""
         input_dir = Path(input_dir)
 
         # Accept the spec name with or without a suffix, for convenience
@@ -140,7 +140,7 @@ class TTSpec(object):
 
         new_ttspec = cls(cls.read_json(json_path), cls.read_csv(csv_path))
         # Fill in output_filename if it isn't in the json. (Edit in place.)
-        new_ttspec.json.setdefault("output_filename", filename_base)
+        new_ttspec.aux.setdefault("output_filename", filename_base)
         return new_ttspec
 
     # These are here largely for namespacing purposes, to keep names short.
@@ -173,7 +173,7 @@ class TTSpec(object):
     def __getitem__(self: Self, index):
         """Return first the JSON, second the CSV."""
         # Allow unpacking
-        return (self.json, self.csv)[index]
+        return (self.aux, self.csv)[index]
 
     def strip_omits(self):
         """Strip any rows in the CSV where the first column is "omit" (used for
@@ -215,7 +215,7 @@ class TTSpec(object):
         debug_print(1, f"Using key tsn {key_train_name}")
 
         # Filter the feed down to a single date...
-        reference_date = self.json["reference_date"]
+        reference_date = self.aux["reference_date"]
         today_feed = feed.filter_by_dates(reference_date, reference_date)
 
         # And possibly filter by day as well
@@ -237,7 +237,7 @@ class TTSpec(object):
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
         """Filter a master feed to trips relevant to this spec only.
 
-        First we filter to the reference date in the TTSpec JSON. (This is essential to
+        First we filter to the reference date in the TTSpec aux. (This is essential to
         get accurate timetables for a given period.)
 
         Then we filter it to trip_short_names which are in the header of the TTSpec CSV.
@@ -249,7 +249,7 @@ class TTSpec(object):
         """
 
         # Filter the feed to the relevant day.  Required.
-        reference_date = self.json["reference_date"]
+        reference_date = self.aux["reference_date"]
         today_feed = master_feed.filter_by_dates(reference_date, reference_date)
         debug_print(1, "Feed filtered by reference date.")
 
@@ -624,10 +624,10 @@ def make_stations_max_dwell_map(
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
     today_feed: a feed filtered to a single date (so tsns are unique)
-    spec: the spec, CSV + JSON
+    spec: the spec, CSV + aux
     trip_from_train_spec_fn: a function which maps train_spec to trip_id and provides error raising
 
-    The spec's JSON section should contain
+    The spec's aux section should contain
     dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
 
     Expects a feed already filtered to a single date.
@@ -638,7 +638,7 @@ def make_stations_max_dwell_map(
     If any train in tsns has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
-    dwell_secs_cutoff = spec.json["dwell_secs_cutoff"]
+    dwell_secs_cutoff = spec.aux["dwell_secs_cutoff"]
     # First get stations and trains list from tt_spec.
     stations_list = spec.get_stations_list()
     train_specs_list = spec.get_train_specs_list()
@@ -726,8 +726,8 @@ def fill_tt_spec(
     The TTSpec must be complete (run .augment_from_key_cell first) and free of comments (run .strip_omits)
     It should already have column options separated out with .calculate_column_options
 
-    spec: a TTSpec containing both the CSV spec and the auxilliary JSON
-    Most components of the JSON are optional. The following are mandatory:
+    spec: a TTSpec containing both the CSV spec and the auxilliary aux
+    Most components of the aux are optional. The following are mandatory:
         reference_date
         train_numbers_side_by_side
         dwell_secs_cutoff
@@ -750,7 +750,7 @@ def fill_tt_spec(
         "False" means false for all.
         "True" means true for all.
 
-    JSON options:
+    aux options:
     box_time_characters: Box every character in the time in an HTML box to make them line up.
         For use with fonts which don't have tabular nums.
         Default is False.  Avoid if possible; fragile.
@@ -769,18 +769,18 @@ def fill_tt_spec(
     assert today_feed.routes is not None
     assert today_feed.trips is not None
 
-    # Extract vital information from the json (aux) dict.
-    if not spec.json.get("reference_date"):
+    # Extract vital information from the aux (aux) dict.
+    if not spec.aux.get("reference_date"):
         raise InputError("No reference date in .json or at command line!")
-    reference_date = str(spec.json["reference_date"])
+    reference_date = str(spec.aux["reference_date"])
     debug_print(1, "Working with reference date ", reference_date)
 
-    train_numbers_side_by_side = bool(spec.json["train_numbers_side_by_side"])
-    use_bus_icon_in_cells = bool(spec.json["use_bus_icon_in_cells"])
-    box_time_characters = bool(spec.json["box_time_characters"])
+    train_numbers_side_by_side = bool(spec.aux["train_numbers_side_by_side"])
+    use_bus_icon_in_cells = bool(spec.aux["use_bus_icon_in_cells"])
+    box_time_characters = bool(spec.aux["box_time_characters"])
 
-    if "programmers_warning" in spec.json:
-        print("WARNING: ", spec.json["programmers_warning"])
+    if "programmers_warning" in spec.aux:
+        print("WARNING: ", spec.aux["programmers_warning"])
 
     # Clean up the spec.
     spec.strip_omits()

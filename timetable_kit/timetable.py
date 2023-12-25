@@ -17,8 +17,6 @@ import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 from pathlib import Path, PurePath
 
-import json
-
 import pandas as pd
 
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
@@ -51,12 +49,6 @@ from timetable_kit.runtime_config import agency_singleton
 
 # The actual value of agency will be set up later, after reading the arguments
 # It is unsafe to do it here!
-
-# For anything where the code varies by agency, we always explicitly call:
-# agency().special_data
-# agency().json_stations
-# And similarly for all other agency-specific callouts
-# Except for calls to the singleton, which use agency_singleton()
 
 from timetable_kit.initialize import initialize_feed
 
@@ -260,7 +252,7 @@ def produce_several_timetables(
             # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
             reduced_feed = spec.filter_and_reduce_feed(master_feed)
 
-            subspec_filename_base = spec.json["output_filename"]
+            subspec_filename_base = spec.aux["output_filename"]
 
             if do_csv:
                 # CSV can only do one page at a time.  Use the subspec name.
@@ -275,7 +267,7 @@ def produce_several_timetables(
             if do_html:
                 # Copy the icons and fonts to the output dir.
                 # This is memoized, so it won't duplicate work if you do multiple tables.
-                for_rpa = bool(spec.json["for_rpa"])  # used when copying files
+                for_rpa = bool(spec.aux["for_rpa"])  # used when copying files
                 copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
                 # This is an ID to distinguish one timetable page from another
@@ -321,13 +313,13 @@ def produce_several_timetables(
                 if not output_filename_base:
                     output_filename_base = subspec_filename_base
                 if not title:
-                    title = spec.json["title"] or "A Timetable"
+                    title = spec.aux["title"] or "A Timetable"
 
                 if do_jpg:
                     # This is awful.  JPG can only handle single pages.
                     # So in this case run through all the steps...
                     timetable_finished_html = produce_html_file(
-                        [new_page], title=spec.json["title"] or "Timetable"
+                        [new_page], title=spec.aux["title"] or "Timetable"
                     )
                     path_for_html = output_dir / Path(subspec_filename_base + ".html")
                     with open(path_for_html, "w") as outfile:

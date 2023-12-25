@@ -138,7 +138,7 @@ def get_trains_from_csv(filename):
     """Given a CSV train spec file, get the list of trains in it."""
     # Get the CSV as a Pandas DataFrame
     tt_spec_csv = TTSpec.read_csv(filename)
-    # Make an incomplete TTSpec (no real JSON)
+    # Make an incomplete TTSpec (no real aux)
     mini_spec = TTSpec({}, tt_spec_csv)
     # Extract the train specs from the top row as a list
     train_specs_list = mini_spec.train_specs_list()

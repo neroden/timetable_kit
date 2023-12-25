@@ -50,7 +50,7 @@ def produce_html_page(
     header_styling_list,
     tt_id,
     *,
-    spec: TTSpec,  # for JSON content and list of station codes
+    spec: TTSpec,  # for aux content and list of station codes
     author,
     start_date,
     end_date,
@@ -80,10 +80,10 @@ def produce_html_page(
     symbol_key_id = "SK_" + tt_id
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    if spec.json.get("landscape"):
+    if spec.aux.get("landscape"):
         debug_print(1, "Landscape orientation")
 
-    if spec.json.get("key_on_right"):
+    if spec.aux.get("key_on_right"):
         debug_print(1, "Key on right")
 
     # Key for connecting services:
@@ -93,7 +93,7 @@ def produce_html_page(
     )
     # Then feed that through to get the full key html:
     connecting_services_keys_html = connecting_services.get_keys_html(
-        services_list=services_list, one_line=(not spec.json.get("key_on_right"))
+        services_list=services_list, one_line=(not spec.aux.get("key_on_right"))
     )
 
     ### Prepare Jinja template substitution:
@@ -134,7 +134,7 @@ def produce_html_page(
     # Dictionary merge, html_params take priority, Python 3.9
     # Not sure about associativity, but we don't plan to have duplicates anyway
     # Throw the entire aux file in
-    full_page_params = spec.json | icon_params | html_params
+    full_page_params = spec.aux | icon_params | html_params
 
     # debug_params = {i: full_page_params[i] for i in full_page_params if i != "timetable"}
     # debug_print(3, debug_params )
@@ -152,7 +152,7 @@ def produce_html_page(
     # The header stylings, totally different for each table
     header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
 
-    if spec.json.get("font_debugging"):
+    if spec.aux.get("font_debugging"):
         # This makes it obvious when a font doesn't load
         backup_font_name = "cursive"
     else:
@@ -163,10 +163,10 @@ def produce_html_page(
     per_page_css_params = {
         "page_id": page_id,
         "header_styling_css": header_styling_css,
-        "font_name": spec.json["font_name"],
+        "font_name": spec.aux["font_name"],
         "backup_font_name": backup_font_name,
-        "font_size": spec.json["font_size"],
-        "font_allow_ligatures": spec.json["font_allow_ligatures"],  # False
+        "font_size": spec.aux["font_size"],
+        "font_allow_ligatures": spec.aux["font_allow_ligatures"],  # False
     }
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...
