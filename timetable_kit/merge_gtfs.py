@@ -13,7 +13,7 @@ Deletes the shapes table, since we don't use it.
 import sys  # for argv
 from pathlib import Path
 
-import gtfs_kit
+import gtfs_kit # type: ignore # Tell MyPy this has no type stubs
 import pandas as pd
 
 

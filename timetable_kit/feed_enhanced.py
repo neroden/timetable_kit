@@ -24,7 +24,7 @@ from typing import Type, Self
 from pandas import DataFrame, Series
 from operator import not_  # Needed for bad_service_id filter
 
-import gtfs_kit
+import gtfs_kit # type: ignore # Tell MyPy this has no type stubs
 
 # These are used to distinguish str types with special restrictions.
 from timetable_kit.convenience_types import GTFSDate, GTFSDay
