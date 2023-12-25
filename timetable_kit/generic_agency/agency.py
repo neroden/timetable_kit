@@ -9,9 +9,6 @@ It has an interface; Amtrak and others need to provide the same interface.
 This should be made easier by class inheritance.
 """
 
-from typing import Any
-from pandas import DataFrame  # Mostly for type hints
-
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.debug import debug_print
 
@@ -43,20 +40,20 @@ class Agency:
         self._feed: FeedEnhanced | None = None
         # These are built from the GTFS feed.
         # They start "None" and are filled in by initialization code on first use (memoized)
-        self._stop_code_to_stop_id_dict: dict[Any, Any] | None = None
-        self._stop_id_to_stop_code_dict: dict[Any, Any] | None = None
-        self._stop_code_to_stop_name_dict: dict[Any, Any] | None = None
-        self._accessible_platform_dict: dict[Any, Any] | None = None
-        self._inaccessible_platform_dict: dict[Any, Any] | None = None
+        self._stop_code_to_stop_id_dict: dict[str, str] | None = None
+        self._stop_id_to_stop_code_dict: dict[str, str] | None = None
+        self._stop_code_to_stop_name_dict: dict[str, str] | None = None
+        self._accessible_platform_dict: dict[str, bool] | None = None
+        self._inaccessible_platform_dict: dict[str, bool] | None = None
         # Used for the generic get_route_id (but not by Amtrak or VIA)
-        self._route_name_dict: dict[Any, Any] | None = None
+        self._route_name_dict: dict[str, str] | None = None
         # This is the dict of *all* the possible connecting services
         # Generally initialized from a static file in the module
         # Defaults to {}
         # Should be an instance variable: if a class variable, there's trouble and the
         # wrong version can be grabbed by disassembled_station_name_to_html
         # This also avoids loading unnecessary copies
-        self._connecting_services_dict: dict[Any, Any] = {}
+        self._connecting_services_dict: dict[str, list[str]] = {}
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -163,7 +160,9 @@ class Agency:
 
     def _prepare_dicts(self):
         """
-        Prepare the dicts for:
+        Prepare most of the memoized dicts
+
+        Specifically, prepare:
         _stop_code_to_stop_id
         _stop_id_to_stop_code
         _stop_code_to_stop_name
@@ -178,8 +177,8 @@ class Agency:
                 "in Agency class: init_from_feed must be run before preparing dicts"
             )
 
-        assert isinstance(self._feed, FeedEnhanced)  # Silence MyPy
-        assert isinstance(self._feed.stops, DataFrame)  # Silence MyPy
+        # assert self._feed is not None  # Silence MyPy
+        assert self._feed.stops is not None  # Silence MyPy
 
         # Create the conversion dicts from the feed
         stop_ids = self._feed.stops["stop_id"].to_list()
@@ -375,7 +374,7 @@ class Agency:
 
         Requires unique route_id values (no duplicates)
         """
-        assert isinstance(feed.routes, DataFrame)  # Silence MyPy
+        assert feed.routes is not None  # Silence MyPy
         self._route_name_dict = dict(
             zip(feed.routes["route_id"], feed.routes["route_long_name"])
         )
