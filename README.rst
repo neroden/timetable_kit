@@ -27,12 +27,14 @@ this time.  This may change.
 
 Dependencies
 ============
-Timetable Kit requires Python 3.10, because it uses the match/case statement.
+Timetable Kit requires Python 3.11, because it uses "Self."
+Even if you removed those, it requires Python 3.10, because it uses the match/case statement,
+and it uses it very, very intensively.
 
 It relies on `GTFS Kit <https://github.com/mrcagney/gtfs_kit>` to parse GTFS.
 
 Like GTFS Kit, it uses `PANDAS <https://pandas.pydata.org>` to do the heavy lifting.
-It was tested with PANDAS 1.4.
+It was most recently tested with PANDAS 2.1.4.
 
 Timetable Kit also requires the jinja2 package.  PANDAS depends on jinja2, but also
 timetable_kit uses the Jinja2 template system directly.
