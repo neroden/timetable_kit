@@ -1,6 +1,13 @@
+For my Amish friend:
+-- verify that CSVs are working and using multiline text per default
+
 For making updates easier:
+
 -- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
+---- Make id for the page live in the TTSpec object; rearrange interfaces to fit.
+---- Splitter routine takes one TTSpec, returns a list of TTSpecs
 -- implement auto-search for valid reference dates
+---- catch breakage on a per-page basis or a per-file basis?
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
