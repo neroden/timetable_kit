@@ -89,18 +89,3 @@ def get_keys_html(services_list, one_line=True) -> str:
         ]
     )
     return all_keys
-
-
-### TESTING CODE ###
-if __name__ == "__main__":
-    print("Testing plaintext:")
-    print(get_connecting_service_icon_html("marc", doing_html=False))
-    print(get_connecting_service_icon_html("baltimore_lrt", doing_html=False))
-    print("Testing HTML:")
-    print(get_connecting_service_icon_html("marc"))
-    print(get_connecting_service_icon_html("baltimore_lrt"))
-    print("Testing key:")
-    print(get_connecting_service_key_html("marc"))
-    print(get_connecting_service_key_html("baltimore_lrt"))
-    print("Testing CSS:")
-    print(get_css_for_all_logos())
