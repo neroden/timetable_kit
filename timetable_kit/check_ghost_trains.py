@@ -66,8 +66,7 @@ from timetable_kit.sew_pages import (
     read_list_file,
 )
 from timetable_kit.timetable import (
-    load_tt_spec_csv,
-    train_specs_list_from_tt_spec,
+    TTSpec,
     flatten_train_specs_list,
 )
 from timetable_kit.tsn import (
@@ -138,9 +137,11 @@ def get_csvs_from_list(filename, input_dir):
 def get_trains_from_csv(filename):
     """Given a CSV train spec file, get the list of trains in it."""
     # Get the CSV as a Pandas DataFrame
-    tt_spec_csv = load_tt_spec_csv(filename)
+    tt_spec_csv = TTSpec.read_csv(filename)
+    # Make an incomplete TTSpec (no real JSON)
+    mini_spec = TTSpec({}, tt_spec_csv)
     # Extract the train specs from the top row as a list
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec_csv)
+    train_specs_list = mini_spec.train_specs_list()
     # Flatten 48/448 notations, eliminate "noheader" suffixes
     flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
     # Eliminate "monday", "tuesday" etc suffixes

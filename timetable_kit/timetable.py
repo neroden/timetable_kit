@@ -109,11 +109,13 @@ special_column_names = {
 # These should not be interpreted as stop_code or station codes
 special_row_names = {
     "",
+    "omit",
+    "column-options",
+    "column_options",
     "route-name",
     "updown",
     "days",
     "days-of-week",
-    "omit",
     "origin",
     "destination",
 }
@@ -125,7 +127,7 @@ class TTSpec(object):
     def __init__(self: Self, json: dict, csv: pd.DataFrame) -> None:
         self.json: dict = json
         self.csv: pd.DataFrame = csv
-        self.__set_json_defaults()
+        self.__set_json_defaults()  # Set defaults for missing JSON
 
     def __set_json_defaults(self: Self):
         """Fill in some default values for the JSON if they're not present.
@@ -135,9 +137,15 @@ class TTSpec(object):
         This edits the dict in place.
         """
         self.json.setdefault("for_rpa", False)
+        # These are used when filling the timetable.
         self.json.setdefault("train_numbers_side_by_side", False)
         self.json.setdefault("dwell_secs_cutoff", 300)
         self.json.setdefault("use_bus_icon_in_cells", False)
+        self.json.setdefault("box_time_characters", False)
+        # These are used later, setting up the CSS
+        self.json.setdefault("font_name", "SpartanTT")
+        self.json.setdefault("font_size", "8px")  # 8px = 6pt
+        self.json.setdefault("font_allow_ligatures", False)
 
     def set_reference_date(self: Self, reference_date: GTFSDate | None):
         """Set the reference_date in the JSON part of the TTSpec.
@@ -281,11 +289,11 @@ class TTSpec(object):
         # By reducing the stop_times table to be much smaller,
         # this hopefully makes each subsequent search for a timepoint faster.
         # This cuts a testcase runtime from 23 seconds to 20.
-        train_specs_list = train_specs_list_from_tt_spec(self.csv)
-        # Note still contains "/" items
+        train_specs_list = self.get_train_specs_list()
+        # Contains "/" items; must flatten
         flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
 
-        # Note still contains "91 monday" and similar specs: remove the day suffixes here
+        # Contains "91 monday" and similar specs: remove the day suffixes here
         flattened_tsn_list = [
             train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
         ]
@@ -314,52 +322,55 @@ class TTSpec(object):
 
         return reduced_feed
 
+    def get_stations_list(self: Self) -> list[str]:
+        """Return list of station codes in the spec."""
+        stations_df = self.csv.iloc[1:, 0]
+        stations_list_raw = stations_df.to_list()
+        stations_list_strings = [str(i).strip() for i in stations_list_raw]
+        stations_list = [i for i in stations_list_strings if i not in special_row_names]
+        return stations_list
 
-def stations_list_from_tt_spec(tt_spec):
-    """Given a tt_spec dataframe, return the station list as a list of
-    strings."""
-    stations_df = tt_spec.iloc[1:, 0]
-    stations_list_raw = stations_df.to_list()
-    stations_list_strings = [str(i).strip() for i in stations_list_raw]
-    stations_list = [i for i in stations_list_strings if i not in special_row_names]
-    return stations_list
+    def get_train_specs_list(self: Self) -> list[str]:
+        """Return list of train specs in the spec."""
+        train_specs_df = self.csv.iloc[0, 1:]
+        train_specs_list_raw = train_specs_df.to_list()
+        train_specs_list_strings = [str(i).strip() for i in train_specs_list_raw]
+        train_specs_list = [
+            i for i in train_specs_list_strings if i not in special_column_names
+        ]
+        return train_specs_list
 
+    def calculate_column_options(self: Self):
+        """If this TTSpec has column-options in row 2 of the CSV, remove that row and fill in the column_options structure.
 
-def train_specs_list_from_tt_spec(tt_spec):
-    """Given a tt_spec dataframe, return the trains list as a list of
-    strings."""
-    train_specs_df = tt_spec.iloc[0, 1:]
-    train_specs_list_raw = train_specs_df.to_list()
-    train_specs_list = [str(i).strip() for i in train_specs_list_raw]
-    return train_specs_list
+        This data structure is a list (indexed by column number) wherein
+        each element is a list. These inner lists are either empty, or a
+        list of options.
 
+        Options are free-form, space-separated, and several are defined.
 
-def get_column_options(tt_spec):
-    """Given a tt_spec dataframe with column-options in row 2, return a data
-    structure for the column options.
-
-    This data structure is a list (indexed by column number) wherein
-    each element is a list. These inner lists are either empty, or a
-    list of options.
-
-    Options are free-form; currently only "reverse" is defined.  More
-    will be defined later.
-
-    The column options are specified in row 2 of the table.  If they're
-    not there, don't call this.
-    """
-
-    if str(tt_spec.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
-        column_count = tt_spec.shape[1]
-        # What, there weren't any?  Make a list containing blank lists:
-        column_options = [[]] * column_count
-        return column_options
-    # Now for the main version
-    column_options_df = tt_spec.iloc[1, 0:]  # second row, all of it
-    column_options_raw_list = column_options_df.to_list()
-    column_options_nested_list = [str(i).split() for i in column_options_raw_list]
-    debug_print(1, column_options_nested_list)
-    return column_options_nested_list
+        The column options are specified in row 2 of the CSV.  If they're
+        not there, don't call this.
+        """
+        self.column_options: list[list[str]]
+        # Consider generalizing to allow column-options in other rows
+        if str(self.csv.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
+            column_count = self.csv.shape[1]
+            # What, there weren't any?  Make a list containing blank lists:
+            self.column_options = [[]] * column_count
+            # No column-options row, so don't delete it
+            return
+        # Now for the main version
+        column_options_df = self.csv.iloc[1, 0:]  # second row, all of it
+        column_options_raw_list = column_options_df.to_list()
+        column_options_nested_list = [str(i).split() for i in column_options_raw_list]
+        debug_print(1, column_options_nested_list)
+        self.column_options = column_options_nested_list
+        # Now delete row 2.
+        # This drops by index and not by actual row number, FIXME
+        # Thankfully they're currently the same
+        self.csv = self.csv.drop(1, axis="index")
+        debug_print(1, "Column options separated from CSV.")
 
 
 class _CellCodes(TypedDict, total=False):
@@ -639,17 +650,19 @@ def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
 
 
 def make_stations_max_dwell_map(
-    today_feed: FeedEnhanced, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
-):
+    today_feed: FeedEnhanced, spec: TTSpec, trip_from_train_spec_fn
+) -> dict[str, bool]:
     """Return a dict from station_code to True/False, based on the trains in
     the tt_spec.
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
     today_feed: a feed filtered to a single date (so tsns are unique)
-    tt_spec: the tt_spec
-    dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
+    spec: the spec, CSV + JSON
     trip_from_train_spec_fn: a function which maps train_spec to trip_id and provides error raising
+
+    The spec's JSON section should contain
+    dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
 
     Expects a feed already filtered to a single date.
     The feed *may* be restricted to the relevant trains (but must contain all relevant trains).
@@ -659,9 +672,10 @@ def make_stations_max_dwell_map(
     If any train in tsns has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
+    dwell_secs_cutoff = spec.json["dwell_secs_cutoff"]
     # First get stations and trains list from tt_spec.
-    stations_list = stations_list_from_tt_spec(tt_spec)
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
+    stations_list = spec.get_stations_list()
+    train_specs_list = spec.get_train_specs_list()
     # Note train_specs_list still contains "/" items
     flattened_train_spec_set = flatten_train_specs_list(train_specs_list)
     # Note that "91 monday" is a perfectly valid spec here
@@ -712,50 +726,68 @@ def raise_error_if_not_one_row(trips):
 class _FilledTimetable(NamedTuple):
     """Represents the output of fill_tt_spec."""
 
+    # fill_html(self: Self, spec: TTSpec, today_feed: FeedEnhanced):
+    #    """Produce a filled timetable from given spec and feed"""
     timetable: pd.DataFrame
     styler_table: pd.DataFrame
     header_styling_list: list[str]
 
 
 def fill_tt_spec(
-    tt_spec,
+    spec: TTSpec,
     *,
     today_feed: FeedEnhanced,
-    reference_date,
     doing_html=False,
-    box_time_characters=False,
     doing_multiline_text=True,
-    train_numbers_side_by_side=False,
     is_ardp_station="dwell",
-    dwell_secs_cutoff=300,
-    use_bus_icon_in_cells=False,
-):
-    """Fill a timetable from a tt-spec template using GTFS data.
+) -> _FilledTimetable:
+    """Fill a timetable from a TTSpec template using GTFS data.
 
-    The tt-spec must be complete (run .augment_from_key_cell first) and free of comments (run .strip_omits)
+    The TTSpec must be complete (run .augment_from_key_cell first) and free of comments (run .strip_omits)
+    It should already have column options separated out with .calculate_column_options
+
+    spec: a TTSpec containing both the CSV spec and the auxilliary JSON
+    Most components of the JSON are optional. The following are mandatory:
+        reference_date
+        train_numbers_side_by_side
+        dwell_secs_cutoff
+        use_bus_icon_in_cells
+        box_time_characters
+    (These will all be given good default values when creating a TTSpec.)
+
     today_feed: GTFS feed to work with.  Mandatory.
-        This should be filtered to a single representative date.  This is not checked.
+        This should already be filtered to a single representative date.  This is not checked.
         This *may* be filtered to relevant trains only.  It must contain all relevant trains.
     reference_date: Reference date to get timetable for.  Also used for Arizona timezone conversion.
 
     doing_html: Produce HTML timetable.  Default is false (produce plaintext timetable).
-    box_time_characters: Box every character in the time in an HTML box to make them line up.
-        For use with fonts which don't have tabular nums.
-        Default is False.  Avoid if possible; fragile.
     doing_multiline_text: Produce multiline text in cells.  Ignored if doing_html.
         Default is True.
         If False, stick with single-line text (and never print arrival times FIXME)
+    is_ardp_station: pass a function which says whether a station should have arrival times;
+        Default is "dwell" (case sensitive), which uses dwell_secs_cutoff.
+        "major" uses only "major" stations.
+        "False" means false for all.
+        "True" means true for all.
+
+    JSON options:
+    box_time_characters: Box every character in the time in an HTML box to make them line up.
+        For use with fonts which don't have tabular nums.
+        Default is False.  Avoid if possible; fragile.
     train_numbers_side_by_side: For column headers for a column with multiple trains, put train numbers side by side.
         Default is to stack them top to bottom.
-    is_ardp_station: pass a function which says whether a station should have arrival times;
-        "False" means false for all; "True" means true for all
-        Default is "dwell" (case sensitive), which uses dwell_secs_cutoff.
     dwell_secs_cutoff: Show arrival & departure times if dwell time is this many seconds
         or higher for some train in the tt_spec
         Defaults to 300, meaning 5 minutes.
         Probably don't want to ever make it less than 1 minute.
     use_bus_icon_in_cells: Put a bus icon next to timetable cells which are a bus.
     """
+    # Extract vital information from the json (aux) dict.
+    reference_date = str(spec.json["reference_date"])
+    train_numbers_side_by_side = bool(spec.json["train_numbers_side_by_side"])
+    use_bus_icon_in_cells = bool(spec.json["use_bus_icon_in_cells"])
+    box_time_characters = bool(spec.json["box_time_characters"])
+
     # MyPy throws a fit over the tables in the feed.  Assert them all.
     assert today_feed.agency is not None
     assert today_feed.calendar is not None
@@ -771,9 +803,6 @@ def fill_tt_spec(
     tsn_and_day_to_trip_id = make_tsn_and_day_to_trip_id_dict(today_feed)
     # Merger of both dictionaries:
     train_spec_to_trip_id = tsn_and_day_to_trip_id | tsn_to_trip_id
-
-    # The list of stations, occasionally useful:
-    station_codes_list = stations_list_from_tt_spec(tt_spec)
 
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
@@ -802,28 +831,23 @@ def fill_tt_spec(
         my_route = my_routes.iloc[0]
         return my_route
 
-    # Extract a list of column options, if provided in the spec
-    # This must be in the second row (row 1) and first column (column 0)
-    # It ends up as a list (indexed by column number) of lists of options.
-    column_options = get_column_options(tt_spec)
-    if str(tt_spec.iloc[1, 0]).lower() in ["column-options", "column_options"]:
-        # Delete the problem line before further work.
-        # This drops by index and not by actual row number, irritatingly
-        # Thankfully they're currently the same
-        tt_spec = tt_spec.drop(1, axis="index")
-
     # Load variable functions for is_ardp_station
     match is_ardp_station:
         case False:
             is_ardp_station = lambda station_code: False
         case True:
             is_ardp_station = lambda station_code: True
+        case "major":
+            is_ardp_station = (
+                lambda station_code: agency_singleton().is_standard_major_station(
+                    station_code
+                )
+            )
         case "dwell":
             # Prep max dwell map.  This is the second-slowest part of the program.
             stations_max_dwell_map = make_stations_max_dwell_map(
                 today_feed=today_feed,
-                tt_spec=tt_spec,
-                dwell_secs_cutoff=dwell_secs_cutoff,
+                spec=spec,
                 trip_from_train_spec_fn=trip_from_train_spec_local,
             )
             is_ardp_station = lambda station_code: stations_max_dwell_map[station_code]
@@ -832,6 +856,16 @@ def fill_tt_spec(
         raise TypeError(
             "Received is_ardp_station which is not callable: ", is_ardp_station
         )
+
+    # We aren't really object oriented yet.  Take out the CSV DataFrame and work directly with it.
+    # FIXME.
+    tt_spec = spec.csv
+
+    # Get the column options row (previously calculated)
+    column_options = spec.column_options
+
+    # The list of stations, occasionally useful:
+    station_codes_list = spec.get_stations_list()
 
     # We used to do deep copies here.  Really we just want to copy the STRUCTURE.
     # tt = tt_spec.copy()  # "deep" copy
@@ -961,17 +995,17 @@ def fill_tt_spec(
             stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
 
         for y in range(1, row_count):  # First (0) row is the header
-            station_code = tt_spec.iloc[y, 0]  # row y, column 0
+            station_code = str(tt_spec.iloc[y, 0])  # row y, column 0
 
             # Reset the styler string:
             cell_css_list = [base_cell_css]
             # Check for cell_codes like "28 last".  This *usually* returns None.
-            cell_codes = get_cell_codes(tt_spec.iloc[y, x], train_specs)
+            cell_codes = get_cell_codes(str(tt_spec.iloc[y, x]), train_specs)
 
             # Check for simple cell substitutions like "blank" and "downarrow".
             # Returns None or a string.
             cell_substitution = text_presentation.get_cell_substitution(
-                tt_spec.iloc[y, x]
+                str(tt_spec.iloc[y, x])
             )
             if cell_substitution:
                 tt_spec.iloc[y, x] = cell_substitution
@@ -1442,48 +1476,32 @@ def produce_timetable(
     """
 
     # Load the tt-spec, both aux and csv
-    my_ttspec = TTSpec.from_files(spec_file, input_dir=input_dirname)
+    spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
     # Set reference date override -- does nothing if passed "None"
-    my_ttspec.set_reference_date(command_line_reference_date)
-    # Strip omit lines
-    my_ttspec.strip_omits()
-    # Must augment from the master feed, not the filtered feed
-    my_ttspec.augment_from_key_cell(feed=master_feed)
-    # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
-    reduced_feed = my_ttspec.filter_and_reduce_feed(master_feed)
-
-    # This is in a halfway state towards object-orientation.  FIXME.
-    # For now, exit the object-oriented part of the code...
-    (aux, tt_spec) = my_ttspec
-
-    output_filename_base = aux["output_filename"]
-    for_rpa = bool(aux["for_rpa"])
-    train_numbers_side_by_side = bool(aux["train_numbers_side_by_side"])
-    dwell_secs_cutoff = int(aux["dwell_secs_cutoff"])
-    use_bus_icon_in_cells = bool(aux["use_bus_icon_in_cells"])
-    reference_date = str(aux["reference_date"])
-    if not reference_date:
+    spec.set_reference_date(command_line_reference_date)
+    if not spec.json.get("reference_date"):
         raise InputError("No reference date in .json or at command line!")
-    debug_print(1, "Working with reference date ", reference_date)
+    debug_print(1, "Working with reference date ", spec.json["reference_date"])
+    if "programmers_warning" in spec.json:
+        print("WARNING: ", spec.json["programmers_warning"])
+    # Strip omit lines
+    spec.strip_omits()
+    # Must augment from the master feed, not the filtered feed
+    spec.augment_from_key_cell(feed=master_feed)
+    # Must calculate column options and remove from main CSV
+    spec.calculate_column_options()
 
-    if "programmers_warning" in aux:
-        print("WARNING: ", aux["programmers_warning"])
+    # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
+    reduced_feed = spec.filter_and_reduce_feed(master_feed)
 
+    output_filename_base = spec.json["output_filename"]
     output_dir = Path(output_dirname)
-
-    # Find the date range on which the entire reduced feed is valid
-    (latest_start_date, earliest_end_date) = get_valid_date_range(reduced_feed)
 
     if do_csv:
         # Note that there is a real danger of overwriting the source file.
         # Avoid this by adding an extra suffix to the timetable name.
         (timetable, styler_table, header_styling) = fill_tt_spec(
-            tt_spec,
-            today_feed=reduced_feed,
-            reference_date=reference_date,
-            is_ardp_station="dwell",
-            dwell_secs_cutoff=dwell_secs_cutoff,
-            use_bus_icon_in_cells=use_bus_icon_in_cells,
+            spec, today_feed=reduced_feed, doing_html=False
         )
         # We need to strip the HTML comments used to distinguish the header columns
         list_of_columns = timetable.columns
@@ -1491,7 +1509,10 @@ def produce_timetable(
             unique_header[unique_header.find("-->") :].removeprefix("-->")
             for unique_header in list_of_columns
         ]
-        timetable.columns = non_unique_header_replacement_list
+        non_unique_header_index: pd.Index = pd.Index(
+            non_unique_header_replacement_list, dtype="object"
+        )
+        timetable.columns = non_unique_header_index
         # NOTE, need to include the header
         path_for_csv = output_dir / Path(output_filename_base + "-out.csv")
         timetable.to_csv(path_for_csv, index=False, header=True)
@@ -1505,6 +1526,7 @@ def produce_timetable(
     if do_html:
         # Copy the icons and fonts to the output dir.
         # This is memoized, so it won't duplicate work if you do multiple tables.
+        for_rpa = bool(spec.json["for_rpa"])  # used when copying files
         copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
         # This is an ID to distinguish one timetable page from another
@@ -1517,20 +1539,15 @@ def produce_timetable(
 
         # Main timetable, same for HTML and PDF
         (timetable, styler_table, header_styling_list) = fill_tt_spec(
-            tt_spec,
-            today_feed=reduced_feed,
-            reference_date=reference_date,
-            is_ardp_station="dwell",
-            dwell_secs_cutoff=dwell_secs_cutoff,
-            doing_html=True,
-            box_time_characters=False,
-            train_numbers_side_by_side=train_numbers_side_by_side,
-            use_bus_icon_in_cells=use_bus_icon_in_cells,
+            spec, today_feed=reduced_feed, doing_html=True
         )
         timetable_styled_html = style_timetable_for_html(
             timetable, styler_table, table_uuid=tt_id
         )
         debug_print(1, "HTML styled")
+
+        # Find the date range on which the entire reduced feed is valid
+        (latest_start_date, earliest_end_date) = get_valid_date_range(reduced_feed)
 
         # Produce a final complete page, and associated page-specific CSS.
         # station_codes_list is used for connecting services key
@@ -1539,15 +1556,15 @@ def produce_timetable(
             header_styling_list,
             tt_id=tt_id,
             author=author,
-            aux=aux,
+            aux=spec.json,
             start_date=str(latest_start_date),
             end_date=str(earliest_end_date),
-            station_codes_list=stations_list_from_tt_spec(tt_spec),
+            station_codes_list=spec.get_stations_list(),
         )
         # Produce complete HTML file.  This can take multiple pages.
         # But it doesn't yet.  FIXME.
         timetable_finished_html = produce_html_file(
-            [page_dict], title=aux.get("title", "A Timetable")
+            [page_dict], title=spec.json.get("title", "A Timetable")
         )
 
         path_for_html = output_dir / Path(output_filename_base + ".html")

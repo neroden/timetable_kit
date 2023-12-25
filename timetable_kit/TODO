@@ -1,4 +1,6 @@
 For multipage timetables:
+-- Make TTSpec into a proper class.  This is to eliminate duplicate code between CSV and HTML output.
+
 -- continue breaking apart produce_timetable:
 ---- keep removing common elements into subroutines
 ---- write an entirely separate produce_csv_timetable procedure

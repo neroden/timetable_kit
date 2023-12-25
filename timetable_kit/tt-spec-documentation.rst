@@ -237,6 +237,11 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
     "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
     "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable."
+    "font_name": "If set, use a nonstandard font (in CSS -- should be a CSS font name)",
+    "font_size": "If set, use a nonstandard base font size (in CSS -- should be a CSS font size)",
+    "font_allow_ligatures": "Defaults false because ligatures are hard to read in the tiny fonts which allow for compact timetables.  Set to True if the font size is big enough to use ligatures",
+    "box_time_characters": "If set, use CSS boxes to try to line up the times.  For fonts which lack tabular-nums.",
+    "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load."
  }
 
 reference_date is critically important and is required unless passed at the command line.

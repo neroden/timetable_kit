@@ -26,6 +26,6 @@ Check on CSS priority and specificity when it comes to font sizes; this can get 
 #{{page_id}} .access-header-text,
 #{{page_id}} .timezone-header-text
 {
-    font-size: {{font_size}};{% if font_is_tiny %}
+    font-size: {{font_size}};{% if not font_allow_ligatures %}
     font-variant-ligatures: no-common-ligatures;{% endif %}
 }

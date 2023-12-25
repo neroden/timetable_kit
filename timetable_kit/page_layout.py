@@ -166,26 +166,22 @@ def produce_html_page(
     # The header stylings, totally different for each table
     header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
 
-    ### FONTS
-    # FIXME: there should be a way to vary this per timetable when we finish.
-    font_name = "SpartanTT"
-    font_size = "6pt"
-    font_is_tiny = True
-
-    debugging_fonts = False
+    debugging_fonts = aux.get("font_debugging", False)
     if debugging_fonts:
         # This makes it obvious when a font doesn't load
         backup_font_name = "cursive"
     else:
         backup_font_name = "sans-serif"
 
+    # Default fonts are now set elsewhere, way up in timetable.py in the TTSpec class.
+
     per_page_css_params = {
         "page_id": page_id,
         "header_styling_css": header_styling_css,
-        "font_name": font_name,
+        "font_name": aux["font_name"],
         "backup_font_name": backup_font_name,
-        "font_size": font_size,  # 6pt
-        "font_is_tiny": font_is_tiny,  # True
+        "font_size": aux["font_size"],
+        "font_allow_ligatures": aux["font_allow_ligatures"],  # False
     }
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...
