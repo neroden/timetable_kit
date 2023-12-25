@@ -258,13 +258,10 @@ class TTSpec(object):
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
         new_csv = self.csv.copy()  # Copy entire original spec
         new_csv.iloc[0, 0] = ""  # Blank out key_code
-        # The following will add the stations as desired:
-        newer_csv = pd.concat([new_csv, stations_df]).fillna("")
-        # The problem is that it leads to duplicate indices (ugh!)
-        # So we must fully reset the index.
-        newest_csv = newer_csv.reset_index(drop=True)
-        debug_print(1, newest_csv)
-        return newest_csv
+        # The following will add the stations as desired.
+        # It creates duplicate indexes, so we must reset the index.
+        self.csv = pd.concat([new_csv, stations_df]).fillna("").reset_index(drop=True)
+        debug_print(1, self.csv)
 
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
         """Filter a master feed to trips relevant to this spec only.
@@ -1486,11 +1483,11 @@ def produce_timetable(
         print("WARNING: ", spec.json["programmers_warning"])
     # Strip omit lines
     spec.strip_omits()
-    # Must augment from the master feed, not the filtered feed
-    spec.augment_from_key_cell(feed=master_feed)
     # Must calculate column options and remove from main CSV
     spec.calculate_column_options()
 
+    # Must augment from the master feed, not the filtered feed... or not?
+    spec.augment_from_key_cell(feed=master_feed)
     # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
     reduced_feed = spec.filter_and_reduce_feed(master_feed)
 
