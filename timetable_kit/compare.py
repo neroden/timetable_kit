@@ -109,7 +109,7 @@ def compare_similar_services(route_id, *, feed: FeedEnhanced):
     print(route_feed.calendar)
 
     # Direction 0 is W for LSL
-    downbound_trips: DataFrame = route_feed.trips[route_feed.trips.direction_id == "0"]
+    downbound_trips = route_feed.trips[route_feed.trips.direction_id == "0"]
     if not downbound_trips.empty:
         print("Downbound:")
         print(downbound_trips)
@@ -117,7 +117,7 @@ def compare_similar_services(route_id, *, feed: FeedEnhanced):
         compare_stop_lists(base_trip, downbound_trips, feed=route_feed)
 
     # Direction 1 is E for LSL
-    upbound_trips: DataFrame = route_feed.trips[route_feed.trips.direction_id == "1"]
+    upbound_trips = route_feed.trips[route_feed.trips.direction_id == "1"]
     if not upbound_trips.empty:
         print("Upbound:")
         print(upbound_trips)
