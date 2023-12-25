@@ -1,8 +1,7 @@
-For converting a *single-page* PDF file to a JPG, 
-
-vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
-
-is most effective.  This is no longer implemented as part of the program, so just remember it.
+Code cleaning:
+-- run black *.py */*.py
+-- run docformatter -r -i --black .
+-- run mypy .
 
 I am currently using WeasyPrint for HTML->PDF conversion because it is also a Python package.
 -- Weasyprint can't handle inline SVGs.
@@ -12,9 +11,11 @@ I am currently using WeasyPrint for HTML->PDF conversion because it is also a Py
 --- Okular needs to be set at 90% zoom to show it real size.
 --- Evince needs to be set at 50% zoom to show it real size.
 
-We can convert the PDF to a JPEG as follows (and it is readable!):
+We can convert a SINGLE PAGE PDF to a JPEG as follows:
+(this is implemented in the current program):
+vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
+A much slower alternative (it is readable) is:
 pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
-A tested and MUCH faster option is VIPS (this is implemented in the current program):
 
 Merging individual PDF pages can be done an external program.  One which works is
 pdftk empire-service-wb.pdf empire-service-eb.pdf output empire-service.pdf
