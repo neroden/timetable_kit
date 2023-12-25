@@ -2,11 +2,10 @@
 # update_reference_dates.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Update the reference dates in a whole bunch of .json spec files all at once.
 
-"""
-Update the reference dates in a whole bunch of .json spec files all at once.
-
-A bit of a hackish workaround for a known piece of tedium during timetable updates.
+A bit of a hackish workaround for a known piece of tedium during
+timetable updates.
 """
 
 import argparse
@@ -18,9 +17,7 @@ from pathlib import Path
 
 
 def make_argparser():
-    """
-    Generate argument parser for the update_reference_dates miniprogram
-    """
+    """Generate argument parser for the update_reference_dates miniprogram."""
     parser = argparse.ArgumentParser(
         description="""Update reference dates for all .json files in a given directory""",
     )
@@ -51,10 +48,8 @@ def make_argparser():
 
 
 def stream_edit_in_place(filename, pattern, repl):
-    """
-    Perform the pure-Python equivalent of in-place `sed` substitution: e.g.,
-    `sed -i -e 's/'${pattern}'/'${repl}' "${filename}"`.
-    """
+    """Perform the pure-Python equivalent of in-place `sed` substitution: e.g.,
+    `sed -i -e 's/'${pattern}'/'${repl}' "${filename}"`."""
     # For efficiency, precompile the passed regular expression.
     pattern_compiled = re.compile(pattern)
 

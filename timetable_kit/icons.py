@@ -2,13 +2,11 @@
 # icons.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Stuff for dealing with icons.
 
-"""
-Stuff for dealing with icons.
-
-This is intended to be flexible in the future.
-Weasyprint can only handle icons referenced as img,
-or direct inline SVGs, but NOT referenced inline SVGs.
+This is intended to be flexible in the future. Weasyprint can only
+handle icons referenced as img, or direct inline SVGs, but NOT
+referenced inline SVGs.
 
 Referenced inline SVGs would be ideal for HTML-on-web output.
 
@@ -19,9 +17,7 @@ from timetable_kit.load_resources import get_icon_css
 
 
 def get_filenames_for_all_icons() -> list[str]:
-    """
-    Determine the list of icon filenames which must be copied
-    """
+    """Determine the list of icon filenames which must be copied."""
     icon_filenames = [
         "accessible.svg",
         "inaccessible-ncn.svg",
@@ -33,9 +29,7 @@ def get_filenames_for_all_icons() -> list[str]:
 
 
 def get_css_for_all_icons() -> str:
-    """
-    Get the CSS code to style all the icons we're using.
-    """
+    """Get the CSS code to style all the icons we're using."""
     full_css = "\n".join(
         [
             get_baggage_icon_css(),
@@ -76,8 +70,7 @@ baggage_span_str = "".join(
 
 
 def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
-    """
-    Return suitable HTML for displaying the baggage icon.
+    """Return suitable HTML for displaying the baggage icon.
 
     If doing_html=False, return a suitable capital letter
     """
@@ -88,9 +81,7 @@ def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
 
 
 def get_baggage_icon_css():
-    """
-    Return suitable CSS for the baggage icon (loaded from a file)
-    """
+    """Return suitable CSS for the baggage icon (loaded from a file)"""
     return get_icon_css("baggage-ncn.css")
 
 
@@ -118,11 +109,10 @@ accessible_span_str = "".join(
 
 
 def get_accessible_icon_html(doing_html=True) -> str:
-    """
-    Return suitable HTML for displaying the "wheelchair access" icon.
+    """Return suitable HTML for displaying the "wheelchair access" icon.
 
-    Amtrak's data does not show full accessibility.  This is being used for basic
-    platform accessibility at this time.
+    Amtrak's data does not show full accessibility.  This is being used
+    for basic platform accessibility at this time.
     """
     if doing_html:
         return accessible_span_str
@@ -131,9 +121,7 @@ def get_accessible_icon_html(doing_html=True) -> str:
 
 
 def get_accessible_icon_css():
-    """
-    Return suitable CSS for the wheelchair icon (loaded from a file)
-    """
+    """Return suitable CSS for the wheelchair icon (loaded from a file)"""
     return get_icon_css("accessible.css")
 
 
@@ -160,9 +148,7 @@ inaccessible_span_str = "".join(
 
 
 def get_inaccessible_icon_html(doing_html=True) -> str:
-    """
-    Return suitable HTML for displaying the "no wheelchair access" icon.
-    """
+    """Return suitable HTML for displaying the "no wheelchair access" icon."""
     if doing_html:
         return inaccessible_span_str
     else:
@@ -170,9 +156,7 @@ def get_inaccessible_icon_html(doing_html=True) -> str:
 
 
 def get_inaccessible_icon_css():
-    """
-    Return suitable CSS for the no-wheelchair icon (loaded from a file)
-    """
+    """Return suitable CSS for the no-wheelchair icon (loaded from a file)"""
     return get_icon_css("inaccessible-ncn.css")
 
 
@@ -199,9 +183,7 @@ bus_span_str = "".join(
 
 
 def get_bus_icon_html(doing_html=True) -> str:
-    """
-    Return suitable HTML for displaying the bus icon.
-    """
+    """Return suitable HTML for displaying the bus icon."""
     if doing_html:
         return bus_span_str
     else:
@@ -209,9 +191,7 @@ def get_bus_icon_html(doing_html=True) -> str:
 
 
 def get_bus_icon_css():
-    """
-    Return suitable CSS for the no-wheelchair icon (loaded from a file)
-    """
+    """Return suitable CSS for the no-wheelchair icon (loaded from a file)"""
     return get_icon_css("bus-ncn.css")
 
 
@@ -238,9 +218,7 @@ sleeper_span_str = "".join(
 
 
 def get_sleeper_icon_html(doing_html=True) -> str:
-    """
-    Return suitable HTML for displaying the sleeper icon.
-    """
+    """Return suitable HTML for displaying the sleeper icon."""
     if doing_html:
         return sleeper_span_str
     else:
@@ -248,7 +226,5 @@ def get_sleeper_icon_html(doing_html=True) -> str:
 
 
 def get_sleeper_icon_css():
-    """
-    Return suitable CSS for the sleeper icon (loaded from a file)
-    """
+    """Return suitable CSS for the sleeper icon (loaded from a file)"""
     return get_icon_css("bed-solid.css")

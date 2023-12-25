@@ -1,8 +1,7 @@
 # amtrak/gtfs_patches.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Patch known errors in Amtrak GTFS.
+"""Patch known errors in Amtrak GTFS.
 
 This should be reviewed every time Amtrak releases a new GTFS.
 """
@@ -34,8 +33,7 @@ arizona_stops_list = [
 
 
 def patch_arizona(feed: FeedEnhanced):
-    """
-    Patch for Arizona timezone problems.
+    """Patch for Arizona timezone problems.
 
     Fix feed in place.
     """
@@ -65,8 +63,7 @@ train_agencies = [
 
 
 def patch_buses(feed: FeedEnhanced):
-    """
-    Bus services incorrectly listed as trains
+    """Bus services incorrectly listed as trains.
 
     Fix feed in place
     """
@@ -93,10 +90,10 @@ def patch_buses(feed: FeedEnhanced):
 
 
 def patch_coast_starlight(feed: FeedEnhanced):
-    """
-    Patch an old Coast Starlight bug.
-    The bug appears to be fixed as of July 7, 2023,
-    So this is unused code now
+    """Patch an old Coast Starlight bug.
+
+    The bug appears to be fixed as of July 7, 2023, So this is unused
+    code now
     """
     assert feed.routes is not None  # Silence MyPy
     assert feed.trips is not None  # Silence MyPy
@@ -168,11 +165,9 @@ def patch_toronto(feed: FeedEnhanced):
 
 
 def patch_cardinal_direction(feed: FeedEnhanced):
-    """
-    Patch Cardinal #1051 (DST switch date) with wrong direction ID
+    """Patch Cardinal #1051 (DST switch date) with wrong direction ID.
 
-    Patch feed in place.
-    Unused since we don't care about direction.
+    Patch feed in place. Unused since we don't care about direction.
     """
     assert feed.trips is not None  # Silence MyPy
     my_trips = feed.trips
@@ -183,8 +178,7 @@ def patch_cardinal_direction(feed: FeedEnhanced):
 
 
 def patch_feed(feed: FeedEnhanced):
-    """
-    Take an Amtrak feed and patch it for known errors.
+    """Take an Amtrak feed and patch it for known errors.
 
     Return another feed.
     """

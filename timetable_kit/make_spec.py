@@ -2,11 +2,10 @@
 # make_spec.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Prepare a spec file -- MUST BE CHECKED MANUALLY !!!!
 
-"""
-Prepare a spec file -- MUST BE CHECKED MANUALLY !!!!
-
-Takes the same arguments as list_trains.py, PLUS --trip like list_stations.py
+Takes the same arguments as list_trains.py, PLUS --trip like
+list_stations.py
 """
 
 import argparse

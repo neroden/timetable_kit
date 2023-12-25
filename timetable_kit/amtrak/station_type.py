@@ -2,9 +2,8 @@
 # amtrak/station_type.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Make various dicts from station code to whether the station is a train station or a bus stop.
+"""Make various dicts from station code to whether the station is a train
+station or a bus stop.
 
 Also, runnable as a script to get the same information.
 
@@ -79,11 +78,10 @@ shelter_dict: dict[str, bool] | None = None
 
 
 def is_train_station(station_code: str) -> bool:
-    """
-    Is this a train station (not a bus station)?
+    """Is this a train station (not a bus station)?
 
-    Constructs and caches the data on first call.
-    Requires that the JSON stations database already be downloaded.
+    Constructs and caches the data on first call. Requires that the JSON
+    stations database already be downloaded.
     """
     if train_or_bus_dict is None:
         make_station_type_dicts()
@@ -92,11 +90,11 @@ def is_train_station(station_code: str) -> bool:
 
 
 def has_shelter(station_code: str) -> bool:
-    """
-    Does this train station have a building, or does this bus stop have a building?
+    """Does this train station have a building, or does this bus stop have a
+    building?
 
-    Constructs and caches the data on first call.
-    Requires that the JSON stations database already be downloaded.
+    Constructs and caches the data on first call. Requires that the JSON
+    stations database already be downloaded.
     """
     if shelter_dict is None:
         make_station_type_dicts()
@@ -105,8 +103,8 @@ def has_shelter(station_code: str) -> bool:
 
 
 def make_station_type_dicts() -> None:
-    """
-    Make dicts which map from station code to train or bus, and shelter or not.
+    """Make dicts which map from station code to train or bus, and shelter or
+    not.
 
     These are globals within this module.
     """

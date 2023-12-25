@@ -1,8 +1,7 @@
 # via/agency.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.via.agency module
+"""timetable_kit.via.agency module.
 
 This holds a class for "AgencyVIA" intended to be used as a singleton.
 """
@@ -38,7 +37,7 @@ from timetable_kit.via.province_data import stop_code_to_province
 
 
 class AgencyVIA(Agency):
-    """VIA-specific code for interpreting specs and GTFS feeds"""
+    """VIA-specific code for interpreting specs and GTFS feeds."""
 
     _agency_names = ["VIA Rail"]
     _agency_websites = ["ViaRail.ca"]
@@ -52,78 +51,65 @@ class AgencyVIA(Agency):
         self._connecting_services_dict = connecting_services_dict
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """
-        Apply VIA-specific patches to a feed.
-        Returns the patched feed.
-        Does not alter data in the Agency object.
+        """Apply VIA-specific patches to a feed.
+
+        Returns the patched feed. Does not alter data in the Agency
+        object.
         """
         # This is defined in its own file in the VIA subpackage.
         return gtfs_patches.patch_feed(feed)
 
     def station_has_checked_baggage(self, station_code: str) -> bool:
-        """
-        Does this station have checked baggage service?
-        """
+        """Does this station have checked baggage service?"""
         return special_data.station_has_checked_baggage(station_code)
 
     def train_has_checked_baggage(self, tsn: str) -> bool:
-        """
-        Does this train have checked baggage service?
-        """
+        """Does this train have checked baggage service?"""
         return special_data.train_has_checked_baggage(tsn)
 
     def is_sleeper_train(self, tsn: str) -> bool:
-        """
-        Does this train have sleeper cars?
-        """
+        """Does this train have sleeper cars?"""
         return special_data.is_sleeper_train(tsn)
 
     def is_connecting_service(self, tsn: str) -> bool:
-        """
-        Should this be marked as a connecting service in the timetable?
-        """
+        """Should this be marked as a connecting service in the timetable?"""
         # VIA has two connecting services in its GTFS, but
         # *they don't have tsns* and so we'd need to patch the feed.
         # FIXME later.  For now, return false.
         return False
 
     def connecting_bus_key_sentence(self, doing_html=True) -> str:
-        """
-        Sentence to put in the symbol key for connecting bus services
-        """
+        """Sentence to put in the symbol key for connecting bus services."""
         return "Connecting Bus Service (can be booked through VIA Rail)"
 
     def add_via_disclaimer(self, doing_html=True) -> bool:
-        """
-        Should we add the VIA disclaimer?
+        """Should we add the VIA disclaimer?
 
-        This is boolean because the disclaimer is multiline and needs Jinja macros.
+        This is boolean because the disclaimer is multiline and needs
+        Jinja macros.
         """
         return True
 
     def agency_css_class(self) -> str:
-        """
-        Name of a CSS class for agency-specific styling
-        """
+        """Name of a CSS class for agency-specific styling."""
         return "via-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
-        """
-        Given today_feed and a route_id, produce a suitalbe name for a column subheading.
+        """Given today_feed and a route_id, produce a suitalbe name for a
+        column subheading.
+
         The implementation is VIA-specific.
         """
         return route_names.get_route_name(today_feed, route_id)
 
     def is_standard_major_station(self, station_code: str) -> bool:
-        """
-        Is this a "major" station which should be boldfaced and capitalized?
-        """
+        """Is this a "major" station which should be boldfaced and
+        capitalized?"""
         return special_data.is_standard_major_station(station_code)
 
     def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, str | None]:
-        """
-        Separates suffixes like "GO Station" from VIA station names,
-        as "facility name".
+        """Separates suffixes like "GO Station" from VIA station names, as
+        "facility name".
 
         Returns the tuple (stop_name, facility name)
 
@@ -162,9 +148,7 @@ class AgencyVIA(Agency):
         return (stop_name_clean, facility_name)
 
     def break_long_city_state_name(self, raw_city_state_name: str) -> str:
-        """
-        Add HTML <br> to certain city names which are too long.
-        """
+        """Add HTML <br> to certain city names which are too long."""
         match raw_city_state_name:
             case "Thicket Portage, MB" | "Atikameg Lake, MB" | "The Pas, MB":
                 # Makes the Churchill timetable too wide.
@@ -178,9 +162,7 @@ class AgencyVIA(Agency):
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
     ) -> str | None:
-        """
-        Remove or add certain facility names; leave others intact.
-        """
+        """Remove or add certain facility names; leave others intact."""
         # Only called when generating HTML (consider fixing this?)
         match station_code:
             case "SFOY":
@@ -211,10 +193,8 @@ class AgencyVIA(Agency):
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """
-        Given a VIA stop_code, return a suitable pretty-printed station name
-        for plaintext, multiline text, or HTML
-        """
+        """Given a VIA stop_code, return a suitable pretty-printed station name
+        for plaintext, multiline text, or HTML."""
         # First, get the raw station name: Memoized
         stop_name_raw = self.stop_code_to_stop_name(station_code)
         # Is it major?
@@ -247,6 +227,6 @@ _singleton = AgencyVIA()
 
 
 def get_singleton():
-    """Get singleton for VIA"""
+    """Get singleton for VIA."""
     global _singleton
     return _singleton

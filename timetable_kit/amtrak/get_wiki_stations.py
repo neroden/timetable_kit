@@ -2,14 +2,13 @@
 # get_wiki_stations.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""This pulls the Amtrak station data from Wikipedia.
 
-"""
-This pulls the Amtrak station data from Wikipedia.
+This is only used by accessibility_check.py, which uses it to ignore bus
+stops and only analyze train stations.
 
-This is only used by accessibility_check.py, which uses it to ignore bus stops
-and only analyze train stations.
-
-Amtrak's JSON station data does not distinguish between train stations and bus stops.
+Amtrak's JSON station data does not distinguish between train stations
+and bus stops.
 """
 
 import argparse
@@ -89,8 +88,7 @@ if True:
 
 
 def split_bus_stop_name(name):
-    """
-    Splits a name like "Place (PLC)" into two columns, ("Place","PLC")
+    """Splits a name like "Place (PLC)" into two columns, ("Place","PLC")
 
     If formatted wrong like "Name", returns ("Name", "")
     """

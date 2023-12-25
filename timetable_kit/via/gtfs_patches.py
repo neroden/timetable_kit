@@ -1,8 +1,7 @@
 # via/gtfs_patches.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Patch known errors in VIA GTFS.
+"""Patch known errors in VIA GTFS.
 
 This should be reviewed every time VIA releases a new GTFS.
 """
@@ -12,8 +11,7 @@ from timetable_kit.feed_enhanced import FeedEnhanced
 
 
 def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
-    """
-    Take an VIA feed and patch it for known errors.
+    """Take an VIA feed and patch it for known errors.
 
     Return another feed.
     """

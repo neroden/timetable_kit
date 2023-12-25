@@ -1,16 +1,16 @@
 # tsn.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Routines to convert between trip_id and trip_short_name.
 
-"""
-Routines to convert between trip_id and trip_short_name.
+In GTFS, trip_id is unique.  So a trip_id to trip_short_name map should
+be, too. However, trip_short_name isn't unique.  But it is usually
+unique on a given calendar day, so it should be possible to make a map
+from a restricted feed.
 
-In GTFS, trip_id is unique.  So a trip_id to trip_short_name map should be, too.
-However, trip_short_name isn't unique.  But it is usually unique on a given calendar day,
-so it should be possible to make a map from a restricted feed.
-
-Unfortunately, the same trip_short_name can have different schedules on different days of
-the week.  So we may need to map for days of the week as well.
+Unfortunately, the same trip_short_name can have different schedules on
+different days of the week.  So we may need to map for days of the week
+as well.
 
 Also contains other routines which look up trips by tsn.
 """
@@ -26,11 +26,10 @@ from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
 
 def train_spec_to_tsn(train_spec: str) -> str:
-    """
-    Takes a train_spec, and returns the tsn alone.
+    """Takes a train_spec, and returns the tsn alone.
 
-    A train_spec is either a tsn or a tsn followed by a space and a day of the week,
-    possibly followed by "noheader".
+    A train_spec is either a tsn or a tsn followed by a space and a day
+    of the week, possibly followed by "noheader".
     """
     train_spec = train_spec.removesuffix("noheader").strip()
     for day in GTFS_DAYS:
@@ -43,9 +42,7 @@ def train_spec_to_tsn(train_spec: str) -> str:
 
 
 def make_trip_id_to_tsn_dict(feed: FeedEnhanced) -> dict[str, str]:
-    """
-    Make and return a dict mapping from trip_id to trip_short_name.
-    """
+    """Make and return a dict mapping from trip_id to trip_short_name."""
     assert feed.trips is not None  # Silence MyPy
     trip_ids = feed.trips["trip_id"].array
 
@@ -60,16 +57,15 @@ def make_trip_id_to_tsn_dict(feed: FeedEnhanced) -> dict[str, str]:
 
 
 def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
-    """
-    Make and return a dict mapping from trip_short_name to trip_id.
+    """Make and return a dict mapping from trip_short_name to trip_id.
 
     The feed should be filtered down to where this is unique.
 
     If there are duplicates, the *last* one will be chosen.
 
     This isn't ideal but deals with an Amtrak data problem where
-    multiple completely-identical entries are present in GTFS.
-    (So it doesn't matter which one we pick.)
+    multiple completely-identical entries are present in GTFS. (So it
+    doesn't matter which one we pick.)
     """
     assert feed.trips is not None  # Silence MyPy
     tsns = feed.trips["trip_short_name"].array
@@ -92,13 +88,14 @@ def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
 
 
 def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
-    """
-    Make and return a dict mapping from trip_short_name + " " + day_of_week to trip_id.
+    """Make and return a dict mapping from trip_short_name + " " + day_of_week
+    to trip_id.
 
     The feed should be filtered down to where this is unique.
 
-    This is designed for situations where a single tsn has different schedules on different
-    days of the week.  Annoying, and bad practice, but allowed by GTFS.
+    This is designed for situations where a single tsn has different
+    schedules on different days of the week.  Annoying, and bad
+    practice, but allowed by GTFS.
     """
     total_dict = dict()
     # tsns = feed.trips["trip_short_name"].array
@@ -133,24 +130,22 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
 
 
 def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
-    """
-    Find trip_short_names which have multiple trip_ids.  Returns the set of duplicate tsns.
+    """Find trip_short_names which have multiple trip_ids.  Returns the set of
+    duplicate tsns.
 
-    The calendar means that on a master feed this will happen with almost everything.
-    Once you filter to a single day, there's a lot fewer.
+    The calendar means that on a master feed this will happen with
+    almost everything. Once you filter to a single day, there's a lot
+    fewer.
 
-    There's a fairly short list where the same train number has different trips on different days:
-    ( Currently:
-    79, 80, 1079, 20, 662, 88, 162, 89, 719,
-    350, 351, 352, 353, 354, 355,
-    6048, 6049, 6089, 6093, 6189, 6193,
-    8721, 8722, 8821, 8822, 8748, 8205,
-    8010, 8011, 8012, 8013, 8014, 8015, 8033,
-    8042, 7203, )
+    There's a fairly short list where the same train number has
+    different trips on different days: ( Currently: 79, 80, 1079, 20,
+    662, 88, 162, 89, 719, 350, 351, 352, 353, 354, 355, 6048, 6049,
+    6089, 6093, 6189, 6193, 8721, 8722, 8821, 8822, 8748, 8205, 8010,
+    8011, 8012, 8013, 8014, 8015, 8033, 8042, 7203, )
 
-    Then there's a list of Amtrak trains with GTFS errors, meaning actual duplicates.
-    ( Currently:
-    364, 365, 3911, 3915, 8040, 8041, 8671, )
+    Then there's a list of Amtrak trains with GTFS errors, meaning
+    actual duplicates. ( Currently: 364, 365, 3911, 3915, 8040, 8041,
+    8671, )
 
     This will probably change in future GTFS feeds, so this finds these.
     """
@@ -179,14 +174,15 @@ def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
 
 
 def trip_from_tsn(today_feed: FeedEnhanced, trip_short_name):
-    """
-    Given a single train number (trip_short_name), and a feed containing only one day, produces the trip record.
+    """Given a single train number (trip_short_name), and a feed containing
+    only one day, produces the trip record.
 
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)
 
-    The naive (i.e. current) implementation of this takes nearly the entire program runtime.
-    Avoid using this.  Do the work another way.  See trip_from_tsn_local in timetable.py
+    The naive (i.e. current) implementation of this takes nearly the
+    entire program runtime. Avoid using this.  Do the work another way.
+    See trip_from_tsn_local in timetable.py
 
     This is still used in stations_list_from_tsn, however.
     """
@@ -202,11 +198,11 @@ def trip_from_tsn(today_feed: FeedEnhanced, trip_short_name):
 
 
 def stations_list_from_trip_id(today_feed: FeedEnhanced, trip_id):
-    """
-    Given a trip_id, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
+    """Given a trip_id, produces a dataframe with a stations list -- IN THE
+    RIGHT ORDER.
 
-    Produces a station list dataframe.
-    This variant is used to implement "origin" and "destination".
+    Produces a station list dataframe. This variant is used to implement
+    "origin" and "destination".
     """
     # Cannot be put into feed_enhanced due to the reliance on agency_singleton().  FIXME?
 
@@ -223,11 +219,12 @@ def stations_list_from_trip_id(today_feed: FeedEnhanced, trip_id):
 
 
 def stations_list_from_tsn(today_feed: FeedEnhanced, trip_short_name):
-    """
-    Given a single train number (trip_short_name), and a feed containing only one day, produces a dataframe with a stations list -- IN THE RIGHT ORDER.
+    """Given a single train number (trip_short_name), and a feed containing
+    only one day, produces a dataframe with a stations list -- IN THE RIGHT
+    ORDER.
 
-    Produces a station list dataframe.
-    This is used in augment_tt_spec, and via the "stations" command.
+    Produces a station list dataframe. This is used in augment_tt_spec,
+    and via the "stations" command.
 
     Raises an error if trip_short_name generates more than one trip
     (probably because the feed has multiple dates in it)

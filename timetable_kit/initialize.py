@@ -1,9 +1,7 @@
 # initialize.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Initialize the GTFS feed and related stuff
+"""Initialize the GTFS feed and related stuff.
 
 Used by multiple command-line programs
 """
@@ -28,8 +26,7 @@ from timetable_kit.runtime_config import agency_singleton as agency_singleton
 
 # INITIALIZATION CODE
 def initialize_feed(gtfs, patch_the_feed: bool = True) -> FeedEnhanced:
-    """
-    Initialize the master_feed and related variables.
+    """Initialize the master_feed and related variables.
 
     Does some cleaning, and removal of the large shapes table which we don't use.
 
@@ -82,9 +79,8 @@ def initialize_feed(gtfs, patch_the_feed: bool = True) -> FeedEnhanced:
 def filter_feed_for_utilities(
     feed: FeedEnhanced, reference_date=None, day_of_week=None
 ):
-    """
-    Filter the feed down based on command line arguments, for the auxiliary utility programs
-    such as list_trains.py and list_stations.py
+    """Filter the feed down based on command line arguments, for the auxiliary
+    utility programs such as list_trains.py and list_stations.py.
 
     Returns a new, filtered feed.
 

@@ -2,18 +2,14 @@
 # list_trains.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Two modes of invocation ./list_trains STATION: Find all the trains (& buses,
+etc.) which stop at STATION.
 
-"""
-Two modes of invocation
-./list_trains STATION:
-Find all the trains (& buses, etc.) which stop at STATION.
+./list_trains STATION_A STATION_B: Find all the trains (& buses, etc.)
+from station A to station B (by all routes).
 
-./list_trains STATION_A STATION_B:
-Find all the trains (& buses, etc.) from station A to station B (by all routes).
-
-Sort by departure time.
-Filter by reference date.
-Optionally filter by day of week.
+Sort by departure time. Filter by reference date. Optionally filter by
+day of week.
 """
 
 import argparse
@@ -40,10 +36,10 @@ from timetable_kit.tsn import stations_list_from_tsn
 
 
 def get_trips_at(stop_id: str, *, feed: FeedEnhanced) -> list[str]:
-    """
-    Returns a list of trip_ids which stop at the chosen stop.
+    """Returns a list of trip_ids which stop at the chosen stop.
 
-    Preferably, use a feed restricted to a single day (today_feed).  Not required though.
+    Preferably, use a feed restricted to a single day (today_feed).  Not
+    required though.
 
     Must be passed a feed, and one stop_id.
     """
@@ -59,10 +55,10 @@ def get_trips_at(stop_id: str, *, feed: FeedEnhanced) -> list[str]:
 def get_trips_between(
     stop_one_id: str, stop_two_id: str, *, feed: FeedEnhanced
 ) -> list[str]:
-    """
-    Returns a list of trip_ids which stop at both stops, in that order.
+    """Returns a list of trip_ids which stop at both stops, in that order.
 
-    Preferably, use a feed restricted to a single day (today_feed).  Not required though.
+    Preferably, use a feed restricted to a single day (today_feed).  Not
+    required though.
 
     Must be passed a feed, and two stop_ids.
     """
@@ -118,8 +114,7 @@ def sort_by_time_at_stop(
     *,
     feed: FeedEnhanced,
 ) -> list[str]:
-    """
-    Sort a list of trip_ids by departure time at a particular stop.
+    """Sort a list of trip_ids by departure time at a particular stop.
 
     Any trip_ids which do not stop at that stop are put last.
     """

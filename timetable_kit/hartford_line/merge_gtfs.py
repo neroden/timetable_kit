@@ -2,9 +2,8 @@
 # hartford_line/merge_gtfs.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Routines for modifying Hartford Line GTFS and merging it with Amtrak's GTFS.
-"""
+"""Routines for modifying Hartford Line GTFS and merging it with Amtrak's
+GTFS."""
 
 from pathlib import Path
 from zipfile import ZipFile
@@ -41,11 +40,12 @@ stop_id_conversion = {
 
 
 def run():
-    """
-    timetable_kit.hartford_line.merge_gtfs.run
+    """timetable_kit.hartford_line.merge_gtfs.run.
 
-    Merge Amtrak and Hartford Line data into a joint GTFS, "hartford_line/merged-gtfs.zip".
-    Assumes that Hartford Line and Amtrak data have already been downloaded by amtrak/get_gtfs.py and hartford_line/get_gtfs.py.
+    Merge Amtrak and Hartford Line data into a joint GTFS,
+    "hartford_line/merged-gtfs.zip". Assumes that Hartford Line and
+    Amtrak data have already been downloaded by amtrak/get_gtfs.py and
+    hartford_line/get_gtfs.py.
     """
     print("Loading Amtrak and Hartford Line GTFS")
     amtrak_feed_path = Path(amtrak.gtfs_unzipped_local_path)

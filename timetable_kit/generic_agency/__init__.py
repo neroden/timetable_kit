@@ -1,8 +1,7 @@
 # generic_agency/__init__.py
 # Init file for generic agency subpackage of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.generic_agency subpackage
+"""timetable_kit.generic_agency subpackage.
 
 Functions for a generic agency.
 """

@@ -1,9 +1,7 @@
 # greyhound/__init__.py
 # Init file for greyhound subpackage of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.greyhound subpackage
-"""
+"""timetable_kit.greyhound subpackage."""
 
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton

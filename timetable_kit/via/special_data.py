@@ -2,13 +2,11 @@
 # Part of timetable_kit
 #
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""This module includes VIA *data* which can't be found automatically in VIA
+GTFS.
 
-"""
-This module includes VIA *data* which can't be found automatically in VIA GTFS.
-
-This includes the list of which stations are major,
-which trains carry checked baggage,
-which trains have sleeper cars, etc.
+This includes the list of which stations are major, which trains carry
+checked baggage, which trains have sleeper cars, etc.
 """
 
 # This is a set.
@@ -72,8 +70,7 @@ checked_baggage_trains = sleeper_trains | other_checked_baggage_day_trains
 
 
 def station_has_checked_baggage(station_code: str) -> bool:
-    """
-    Does this VIA rail station handle checked baggage?
+    """Does this VIA rail station handle checked baggage?
 
     Currently, we have no data, so must assume not
     """
@@ -81,10 +78,11 @@ def station_has_checked_baggage(station_code: str) -> bool:
 
 
 def train_has_checked_baggage(trip_short_name: str) -> bool:
-    """
-    Given a trip_short_name (train number), return "True" if it has checked baggage and "False" if not.
+    """Given a trip_short_name (train number), return "True" if it has checked
+    baggage and "False" if not.
 
-    This is based on crowdsourced data since Amtrak doesn't have a machine-readable way to get it.
+    This is based on crowdsourced data since Amtrak doesn't have a
+    machine-readable way to get it.
     """
     return trip_short_name in checked_baggage_trains
 

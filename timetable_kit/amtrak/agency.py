@@ -1,10 +1,10 @@
 # amtrak/agency.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.amtrak.agency module
+"""timetable_kit.amtrak.agency module.
 
-This holds a class for "AgencyAmtrak" intended to be used as a singleton.
+This holds a class for "AgencyAmtrak" intended to be used as a
+singleton.
 """
 from timetable_kit.feed_enhanced import FeedEnhanced  # Mostly for typechecking
 
@@ -37,7 +37,7 @@ import timetable_kit.amtrak.route_names as route_names
 
 
 class AgencyAmtrak(Agency):
-    """Amtrak-specific code for interpreting specs and GTFS feeds"""
+    """Amtrak-specific code for interpreting specs and GTFS feeds."""
 
     _agency_names = ["Amtrak"]
     _agency_websites = ["Amtrak.com"]
@@ -59,55 +59,43 @@ class AgencyAmtrak(Agency):
         return stop_id
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """
-        Apply Amtrak-specific patches to a feed.
-        Returns the patched feed.
-        Does not alter data in the Agency object.
-        Do this before init_from_feed.
+        """Apply Amtrak-specific patches to a feed.
+
+        Returns the patched feed. Does not alter data in the Agency
+        object. Do this before init_from_feed.
         """
         # This is defined in its own file in the Amtrak subpackage.
         return gtfs_patches.patch_feed(feed)
 
     def patch_feed_wheelchair_access_only(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """
-        Apply only the patches to add wheelchair boarding information for Amtrak;
-        return a patched feed.
+        """Apply only the patches to add wheelchair boarding information for
+        Amtrak; return a patched feed.
 
-        Does not alter the data in the agency object.
-        Do this before init_from_feed.
+        Does not alter the data in the agency object. Do this before
+        init_from_feed.
         """
         new_feed = feed.copy()
         access.patch_add_wheelchair_boarding(new_feed)  # Alters in place
         return new_feed
 
     def station_has_checked_baggage(self, station_code: str) -> bool:
-        """
-        Does this station have checked baggage service?
-        """
+        """Does this station have checked baggage service?"""
         return baggage.station_has_checked_baggage(station_code)
 
     def train_has_checked_baggage(self, tsn: str) -> bool:
-        """
-        Does this train have checked baggage service?
-        """
+        """Does this train have checked baggage service?"""
         return special_data.train_has_checked_baggage(tsn)
 
     def is_sleeper_train(self, tsn: str) -> bool:
-        """
-        Does this train have sleeper cars?
-        """
+        """Does this train have sleeper cars?"""
         return special_data.is_sleeper_train(tsn)
 
     def is_high_speed_train(self, tsn: str) -> bool:
-        """
-        Should this train be marked as high-speed in the timetable?
-        """
+        """Should this train be marked as high-speed in the timetable?"""
         return special_data.is_high_speed_train(tsn)
 
     def is_connecting_service(self, tsn: str) -> bool:
-        """
-        Should this be marked as a connecting service in the timetable?
-        """
+        """Should this be marked as a connecting service in the timetable?"""
         # This is not the ideal implementation.
         # This should be implemented by checking the agency.txt file,
         # and seeing which trains are run by different agencies.
@@ -115,28 +103,23 @@ class AgencyAmtrak(Agency):
         return special_data.is_connecting_service(tsn)
 
     def connecting_bus_key_sentence(self, doing_html=True) -> str:
-        """
-        Sentence to put in the symbol key for connecting bus services
-        """
+        """Sentence to put in the symbol key for connecting bus services."""
         return "Connecting Bus Service (can be booked through Amtrak)"
 
     def agency_css_class(self) -> str:
-        """
-        Name of a CSS class for agency-specific styling
-        """
+        """Name of a CSS class for agency-specific styling."""
         return "amtrak-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
-        """
-        Given today_feed and a route_id, produce a suitalbe name for a column subheading.
+        """Given today_feed and a route_id, produce a suitalbe name for a
+        column subheading.
+
         The implementation is Amtrak-specific.
         """
         return route_names.get_route_name(today_feed, route_id)
 
     def stop_code_to_stop_name(self, stop_code: str) -> str:
-        """
-        Use Amtrak JSON data.
-        """
+        """Use Amtrak JSON data."""
         return json_stations.get_station_name(stop_code)
 
     def disassemble_station_name(self, station_name: str):
@@ -159,17 +142,14 @@ class AgencyAmtrak(Agency):
         return (city_state_name, facility_name)
 
     def is_standard_major_station(self, station_code: str) -> bool:
-        """
-        Is this a "major" station which should be boldfaced and capitalized?
-        """
+        """Is this a "major" station which should be boldfaced and
+        capitalized?"""
         return special_data.is_standard_major_station(station_code)
 
     def get_station_name_from(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """
-        Get a phrase like "from Portland" for the station.
-        """
+        """Get a phrase like "from Portland" for the station."""
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
@@ -189,9 +169,7 @@ class AgencyAmtrak(Agency):
     def get_station_name_to(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """
-        Get a phrase like "to Portland" for the station.
-        """
+        """Get a phrase like "to Portland" for the station."""
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
@@ -213,9 +191,7 @@ class AgencyAmtrak(Agency):
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """
-        Pretty-print a station name.
-        """
+        """Pretty-print a station name."""
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
@@ -237,9 +213,7 @@ class AgencyAmtrak(Agency):
             return reassemble(city_state_name, facility_name, station_code, major)
 
     def break_long_city_state_name(self, raw_city_state_name: str) -> str:
-        """
-        Add HTML <br> to certain city names which are too long.
-        """
+        """Add HTML <br> to certain city names which are too long."""
         match raw_city_state_name:
             case "Grand Canyon Village, AZ":
                 city_state_name = "Grand Canyon<br>Village, AZ"
@@ -257,9 +231,7 @@ class AgencyAmtrak(Agency):
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
     ) -> str | None:
-        """
-        Replace certain facility names; leave others intact.
-        """
+        """Replace certain facility names; leave others intact."""
         match station_code:
             case "PHL":
                 # facility_name == "William H. Gray III 30th St. Station"
@@ -286,18 +258,16 @@ class AgencyAmtrak(Agency):
         return facility_name
 
     def stations_to_put_facility_on_first_line(self) -> list[str]:
-        """
-        Stations where the facility name should be in the same line as the station.
-        """
+        """Stations where the facility name should be in the same line as the
+        station."""
         # Save lines on some timetables by putting the facility code on the same line as the station
         # This is needed at Boston for the Richmond timetable
         # Consider at Toronto for the sheer number of connecting services on the next line
         return ["BOS", "BBY"]
 
     def stations_with_many_connections(self) -> list[str]:
-        """
-        Return a list of station codes which should get an extra line for connections.
-        """
+        """Return a list of station codes which should get an extra line for
+        connections."""
         # NYP has a long facility name and a lot of connections
         # SLC has connections with very long lines
         # On the Pacific Surfliner:
@@ -309,9 +279,8 @@ class AgencyAmtrak(Agency):
         return ["NYP", "SLC", "SNC", "OSD"]
 
     def stations_with_connections_on_first_line(self) -> list[str]:
-        """
-        List of station codes where the connections should be on the first line rather than the second.
-        """
+        """List of station codes where the connections should be on the first
+        line rather than the second."""
         # San Diego Old Town has a short station name and a long facility name,
         # but also several long connecting services.  So put connections on line one,
         # before the facility name line.
@@ -327,6 +296,6 @@ _singleton = AgencyAmtrak()
 
 
 def get_singleton():
-    """Get singleton for Amtrak"""
+    """Get singleton for Amtrak."""
     global _singleton
     return _singleton

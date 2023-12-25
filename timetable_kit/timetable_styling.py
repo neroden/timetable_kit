@@ -1,19 +1,16 @@
 # timetable_styling.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Style a timetable.
+"""Style a timetable.
 
 This module uses Pandas's Styler to apply CSS classes to a timetable;
 then renders HTML, including complicated extra bits.
 
-This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder.
-This uses Jinja2, via the load_resources module.
+This uses a bunch of CSS files, and a few HTML files, in the "fragments"
+folder. This uses Jinja2, via the load_resources module.
 
-This module handles the actual *table*.
-For the text which goes around it and the key, see the page_layout module.
-
+This module handles the actual *table*. For the text which goes around
+it and the key, see the page_layout module.
 """
 
 # Other people's packages
@@ -37,8 +34,8 @@ from timetable_kit.tsn import train_spec_to_tsn
 def get_time_column_stylings(
     train_spec, route_from_train_spec, output_type="attributes"
 ):
-    """
-    Return a set of CSS attributes or classes to style the header of this column, based on the trains_spec.
+    """Return a set of CSS attributes or classes to style the header of this
+    column, based on the trains_spec.
 
     train_spec: trip_short_name / train number, maybe with day suffix
     route_from_train_spec: route which takes a tsn and gives the row from the GTFS routes table corresponding to the tsn
@@ -92,11 +89,12 @@ def style_timetable_for_html(
     table_uuid,
     table_classes="",
 ):
-    """
-    Take a timetable DataFrame, with parallel styler DataFrame, and separate header styler map, and style it for output.
+    """Take a timetable DataFrame, with parallel styler DataFrame, and separate
+    header styler map, and style it for output.
 
-    table_classes is a string of extra CSS classes to add to the table; it will always have 'tt-table'.
-    table_uuid will have "T_" prefixed (by PANDAS) and be used as an id for the table.
+    table_classes is a string of extra CSS classes to add to the table;
+    it will always have 'tt-table'. table_uuid will have "T_" prefixed
+    (by PANDAS) and be used as an id for the table.
     """
 
     # There's an unpleasant issue here if we want to generate multipage timetables in HTML.
@@ -150,13 +148,15 @@ def style_timetable_for_html(
 
 
 def make_header_styling_css(header_styling_list, table_uuid: str) -> str:
-    """
-    Given a list of strings, which maps from column numbers (the index) to CSS attributes, return suitable CSS.
+    """Given a list of strings, which maps from column numbers (the index) to
+    CSS attributes, return suitable CSS.
 
-    Assumes PANDAS-standard classes col_heading, col0, col1, etc.  I see no other way to do it.  :-(
+    Assumes PANDAS-standard classes col_heading, col0, col1, etc.  I see
+    no other way to do it.  :-(
 
-    The string table_uuid must be supplied.
-    These styling columns apply to the table with the id "T_" + table_uuid (conforming to the way PANDAS makes the ids).
+    The string table_uuid must be supplied. These styling columns apply
+    to the table with the id "T_" + table_uuid (conforming to the way
+    PANDAS makes the ids).
     """
     if not table_uuid:
         raise ValueError("table_uuid must be a nonempty string")

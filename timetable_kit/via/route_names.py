@@ -1,8 +1,7 @@
 # via/route_names.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Get the name for a route.
+"""Get the name for a route.
 
 get_route_name()
 
@@ -35,10 +34,11 @@ corridor_service_route_names = [
 
 
 def get_route_name(today_feed, route_id):
-    """
-    Given today_feed and a route_id, produce a suitable name for a column subheading.
+    """Given today_feed and a route_id, produce a suitable name for a column
+    subheading.
 
-    This is very VIA-specific.  The route_long_names are mostly a pair of cities.
+    This is very VIA-specific.  The route_long_names are mostly a pair
+    of cities.
     """
     filtered_routes = today_feed.routes[today_feed.routes.route_id == route_id]
     num_rows = filtered_routes.shape[0]

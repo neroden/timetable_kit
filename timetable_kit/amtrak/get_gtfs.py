@@ -2,8 +2,7 @@
 # amtrak/get_gtfs.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Retrieve Amtrak's static GTFS data from the canonical location.
+"""Retrieve Amtrak's static GTFS data from the canonical location.
 
 Common code needs to be pulled out to the upper level.
 """
@@ -28,7 +27,7 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 
 
 def download_gtfs():
-    """Download Amtrak's GTFS from its canonical location and return it"""
+    """Download Amtrak's GTFS from its canonical location and return it."""
     response = requests.get(canonical_gtfs_url)
     if response.status_code != requests.codes.ok:
         print(
@@ -45,8 +44,8 @@ def save_gtfs(gtfs_zip):
 
 
 def unzip_gtfs():
-    """
-    Extract Amtrak's GTFS file from a canonical local location to a canonical local location.
+    """Extract Amtrak's GTFS file from a canonical local location to a
+    canonical local location.
 
     This is used directly by the program.
     """

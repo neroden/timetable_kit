@@ -1,10 +1,10 @@
 # greyhound/agency.py
 # Part of timetable_kit
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.greyhound.agency module
+"""timetable_kit.greyhound.agency module.
 
-This holds a class for "AgencyGreyhound" intended to be used as a singleton.
+This holds a class for "AgencyGreyhound" intended to be used as a
+singleton.
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ import timetable_kit.greyhound.gtfs_patches as gtfs_patches
 
 
 class AgencyGreyhound(Agency):
-    """Greyhound-specific code for interpreting specs and GTFS feeds"""
+    """Greyhound-specific code for interpreting specs and GTFS feeds."""
 
     _agency_names = ["Greyhound"]  # Also FlixBus?
     _agency_websites = ["Greyhound.com"]
@@ -31,10 +31,10 @@ class AgencyGreyhound(Agency):
         # self._connecting_services_dict = connecting_services_dict
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
-        """
-        Apply Greyhound-specific patches to a feed.
-        Returns the patched feed.
-        Does not alter data in the Agency object.
+        """Apply Greyhound-specific patches to a feed.
+
+        Returns the patched feed. Does not alter data in the Agency
+        object.
         """
         return gtfs_patches.patch_feed(feed)
 
@@ -44,6 +44,6 @@ _singleton = AgencyGreyhound()
 
 
 def get_singleton():
-    """Get singleton for Greyhound"""
+    """Get singleton for Greyhound."""
     global _singleton
     return _singleton

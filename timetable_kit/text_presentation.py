@@ -1,12 +1,10 @@
 # text_presentation.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Module for presenting small bits of text for the timetable.
 
-"""
-Module for presenting small bits of text for the timetable.
-
-This produces strings like "MoWeFr" and "Ar D11:49P".
-Some routines have HTML variants and plaintext variants.
+This produces strings like "MoWeFr" and "Ar D11:49P". Some routines have
+HTML variants and plaintext variants.
 
 All the "character twiddling" operations are in here.
 """
@@ -63,17 +61,17 @@ cell_substitution_map = new_cell_substitution_map
 
 
 def get_cell_substitution(cell_text: str) -> str | None:
-    """
-    Given special simple-substitution cell texts, provide the substitution.
+    """Given special simple-substitution cell texts, provide the substitution.
 
     "blank" -> becomes a single space, for a white blank cell
     "downarrow" -> suitable downwards pointing arrow in HTML/Unicode
     "uparrow" -> suitable upwards pointing arrow in HTML/Unicode
-    "downrightarrow" -> suitable downwards-then-right pointing arrow in HTML/Unicode
-    "rightdownarrow" -> suitable right-then-down pointing arrow in HTML/Unicode
-    "uprightarrow" -> suitable upwards-then-right pointing arrow in HTML/Unicode
-    "rightuparrow" -> suitable right-then-up pointing arrow in HTML/Unicode
-    "rightarrow" -> suitable right pointing arrow in HTML/Unicode
+    "downrightarrow" -> suitable downwards-then-right pointing arrow in
+    HTML/Unicode "rightdownarrow" -> suitable right-then-down pointing
+    arrow in HTML/Unicode "uprightarrow" -> suitable upwards-then-right
+    pointing arrow in HTML/Unicode "rightuparrow" -> suitable right-
+    then-up pointing arrow in HTML/Unicode "rightarrow" -> suitable
+    right pointing arrow in HTML/Unicode
 
     Otherwise, return None.
     """
@@ -84,8 +82,7 @@ def get_cell_substitution(cell_text: str) -> str | None:
 
 
 def gtfs_date_to_isoformat(gtfs_date: str) -> str:
-    """
-    Given a GTFS date string, return an ISO format date string.
+    """Given a GTFS date string, return an ISO format date string.
 
     This is a triviality: it converts 20220310 to 2022-03-10.
     """
@@ -98,8 +95,8 @@ def gtfs_date_to_isoformat(gtfs_date: str) -> str:
 
 
 def get_zonediff(local_zone, base_zone, reference_date):
-    """
-    Get the hour difference which must be applied to a time in base_zone to get a time in local_zone
+    """Get the hour difference which must be applied to a time in base_zone to
+    get a time in local_zone.
 
     While I hate to reimplement time calculations, GTFS time data is really wacky.
     It may be easiest to hard code this, but this is the "clean" implementation...
@@ -144,7 +141,8 @@ tz_letter_dict = {
 
 
 def get_zone_str(zone_name, doing_html=False):
-    """Return a two-letter abbreviation for an IANA time zone, possibly with HTML wrap"""
+    """Return a two-letter abbreviation for an IANA time zone, possibly with
+    HTML wrap."""
     letter = tz_letter_dict[zone_name]
     if doing_html:
         return "".join(['<span class="box-tz">', letter, "</span>"])
@@ -211,16 +209,17 @@ daystring_special_cases = {
 
 
 def day_string(calendar, offset: int = 0) -> str:
-    """
-    Return "MoWeFr" style string for days of week.
+    """Return "MoWeFr" style string for days of week.
 
-    Given a calendar DataTable which contains only a single row for a single service, this
-    returns a string like "Daily" or "MoWeFr" for the serviced days of the week.
+    Given a calendar DataTable which contains only a single row for a
+    single service, this returns a string like "Daily" or "MoWeFr" for
+    the serviced days of the week.
 
-    Use offset to get the string for stops which are more than 24 hours after initial depature.
-    Beware of time zone changes!
+    Use offset to get the string for stops which are more than 24 hours
+    after initial depature. Beware of time zone changes!
 
-    I have had more requests for tweaks to this format than anything else!
+    I have had more requests for tweaks to this format than anything
+    else!
     """
     days_of_service_list = calendar.to_dict("records")
     # if there are zero or duplicate service records, we error out.
@@ -294,7 +293,7 @@ def day_string(calendar, offset: int = 0) -> str:
 
 # Timestr functions
 class TimeTuple(NamedTuple):
-    """Class with time broken into pieces for printing"""
+    """Class with time broken into pieces for printing."""
 
     day: int
     pm: int
@@ -305,12 +304,13 @@ class TimeTuple(NamedTuple):
 
 
 def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
-    """
-    Given a GTFS timestr, return a TimeTuple.
+    """Given a GTFS timestr, return a TimeTuple.
 
-    TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour), 'hour24' ,'min', 'sec'.
+    TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour),
+    'hour24' ,'min', 'sec'.
 
-    zonediff is the number of hours to adjust to convert to local time before exploding.
+    zonediff is the number of hours to adjust to convert to local time
+    before exploding.
     """
     try:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
@@ -331,8 +331,8 @@ def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
 
 
 def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
-    """
-    Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
+    """Given an exploded TimeTuple, give a short version of the time suitable
+    for a timetable.
 
     But do it in "military" format from 0:00 to 23:59.
     doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
@@ -374,8 +374,8 @@ ampm_str = ["A", "P"]  # index into this to get the am or pm string
 
 
 def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
-    """
-    Given an exploded TimeTuple, give a short version of the time suitable for a timetable.
+    """Given an exploded TimeTuple, give a short version of the time suitable
+    for a timetable.
 
     Do it with AM and PM.
     doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
@@ -429,28 +429,21 @@ def get_rd_str(
     is_arrival_line=False,
     is_departure_line=False,
 ):
-    """
-    Return a single character (default " ") with receive-only / discharge-only annotation.
-    "R" = Receive-only
-    "D" = Discharge-only
-    "L" = May leave early (unimplemented)
-    "F" = Flag stop
-    "*" = Not a regular passenger stop
-    " " = Anything else
+    """Return a single character (default " ") with receive-only / discharge-
+    only annotation. "R" = Receive-only "D" = Discharge-only "L" = May leave
+    early (unimplemented) "F" = Flag stop "*" = Not a regular passenger stop "
+    " = Anything else.
 
     Subroutine of timepoint_str.
 
-    doing_html determines whether to produce this letter as HTML (boldfaced) or not.
-    is_first_stop suppresses the R for "receive only"
-    is_last_stop suppresses the D for "discharge only"
+    doing_html determines whether to produce this letter as HTML
+    (boldfaced) or not. is_first_stop suppresses the R for "receive
+    only" is_last_stop suppresses the D for "discharge only"
 
-    If you are producing a two-line string,
-    is_first_line,
-    is_second_line,
-    is_arrival_line, and
-    is_departure_line
-    determine which line gets the letter (it looks ugly for both to get it).
-    These should all be false when producing a one-line string.
+    If you are producing a two-line string, is_first_line,
+    is_second_line, is_arrival_line, and is_departure_line determine
+    which line gets the letter (it looks ugly for both to get it). These
+    should all be false when producing a one-line string.
     """
     # Important note: there's currently no way to identify the infamous "L",
     # which means the train or bus is allowed to depart ahead of time
@@ -509,11 +502,11 @@ baggage_box_postfix = "</span>"
 
 
 def get_baggage_str(doing_html=False):
-    """
-    Return a suitable string to indicate the presence of checked baggage.
+    """Return a suitable string to indicate the presence of checked baggage.
 
-    Currently, the HTML implementation references an external checked baggage icon.
-    There are inline alternatives to this but Weasyprint isn't nice about them.
+    Currently, the HTML implementation references an external checked
+    baggage icon. There are inline alternatives to this but Weasyprint
+    isn't nice about them.
     """
     if not doing_html:
         return get_baggage_icon_html(doing_html=False)
@@ -529,8 +522,7 @@ def get_baggage_str(doing_html=False):
 
 
 def get_blank_baggage_str(doing_html=False):
-    """
-    Return a suitable string to indicate the absence of checked baggage.
+    """Return a suitable string to indicate the absence of checked baggage.
 
     The HTML implementation boxes it to line things up properly.
     """
@@ -544,11 +536,11 @@ bus_box_postfix = "</span>"
 
 
 def get_bus_str(doing_html=False):
-    """
-    Return a suitable string to indicate that this is a bus.
+    """Return a suitable string to indicate that this is a bus.
 
     Currently, the HTML implementation references an external bus icon.
-    There are inline alternatives to this but Weasyprint isn't nice about them.
+    There are inline alternatives to this but Weasyprint isn't nice
+    about them.
     """
     if not doing_html:
         return get_bus_icon_html(doing_html=False)
@@ -564,8 +556,7 @@ def get_bus_str(doing_html=False):
 
 
 def get_blank_bus_str(doing_html=False):
-    """
-    Return a suitable string to indicate that this is not a bus.
+    """Return a suitable string to indicate that this is not a bus.
 
     The HTML implementation boxes it to line things up properly.
     """
@@ -598,8 +589,8 @@ def timepoint_str(
     is_bus=False,
     no_rd=False,
 ):
-    """
-    Produces a text or HTML string for display in a timetable, showing the time of departure, arrival, and extra symbols.
+    """Produces a text or HTML string for display in a timetable, showing the
+    time of departure, arrival, and extra symbols.
 
     This is quite complex: I would have used tables-within-tables, but they're screen-reader-unfriendly.
     Trying to do it with fixed-width fonts was too ugly.
@@ -988,8 +979,7 @@ def get_time_column_header(
     doing_html=False,
     train_numbers_side_by_side=False,
 ) -> str:
-    """
-    Return the header for a column of times.
+    """Return the header for a column of times.
 
     train_specs: should be a list of train_specs (ordered).
 
@@ -1093,8 +1083,7 @@ def get_time_column_header(
 
 
 def get_station_column_header(doing_html=False):
-    """
-    Return the header for a column of station names.
+    """Return the header for a column of station names.
 
     Currently just the word "Station".
     """
@@ -1102,11 +1091,10 @@ def get_station_column_header(doing_html=False):
 
 
 def get_services_column_header(doing_html=False):
-    """
-    Return the header for a column of station services icons.
+    """Return the header for a column of station services icons.
 
-    Tricky because the column should be very narrow.
-    Wraps with a special CSS div, so it can be rotated.
+    Tricky because the column should be very narrow. Wraps with a
+    special CSS div, so it can be rotated.
     """
     if doing_html:
         return '<div class="services-header-text">Station<br>Services</div>'
@@ -1115,13 +1103,12 @@ def get_services_column_header(doing_html=False):
 
 
 def get_access_column_header(doing_html=False):
-    """
-    Return the header for a column of accessibility icons.
+    """Return the header for a column of accessibility icons.
 
     Tricky because the column should be very narrow.
 
-    Use the wheelchair icon.
-    Wraps with a special CSS div, so it can be rotated.
+    Use the wheelchair icon. Wraps with a special CSS div, so it can be
+    rotated.
     """
     if doing_html:
         accessible_icon_html = get_accessible_icon_html(doing_html=doing_html)
@@ -1134,11 +1121,10 @@ def get_access_column_header(doing_html=False):
 
 
 def get_timezone_column_header(doing_html=False):
-    """
-    Return the header for a column of station time zones.
+    """Return the header for a column of station time zones.
 
-    Tricky because the column should be very narrow.
-    Wraps with a special CSS div, so it can be rotated.
+    Tricky because the column should be very narrow. Wraps with a
+    special CSS div, so it can be rotated.
     """
     if doing_html:
         # return '<div class="timezone-header-text">Time<br>Zone</div>'
@@ -1149,8 +1135,7 @@ def get_timezone_column_header(doing_html=False):
 
 
 def style_route_name_for_column(route_name, doing_html=False):
-    """
-    Style a route name for HTML (or not) for a column header
+    """Style a route name for HTML (or not) for a column header.
 
     This is largely a matter of whitespace.  And quite tricky.
     """
@@ -1182,9 +1167,7 @@ def style_route_name_for_column(route_name, doing_html=False):
 
 
 def style_updown(reverse: bool, doing_html=False) -> str:
-    """
-    Style "Read Up" or "Read Down" column subheader
-    """
+    """Style "Read Up" or "Read Down" column subheader."""
     if reverse:
         text = "Read Up"
     else:

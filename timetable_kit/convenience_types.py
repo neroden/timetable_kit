@@ -1,10 +1,7 @@
 # convenience_types.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Types used for extra type-checking
-"""
+"""Types used for extra type-checking."""
 
 # Do this after working our way through the codebase to fix all calls
 # from typing import NewType

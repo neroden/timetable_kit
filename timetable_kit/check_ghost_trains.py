@@ -2,7 +2,6 @@
 # check_ghost_trains.py
 # Part of timetable_kit
 # Copyright 2023 Christopher Juckins & Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
 """
 This program essentially compares two lists:
 
@@ -117,9 +116,7 @@ prepared_timetables = {
 
 
 def make_argparser():
-    """
-    Generate argument parser for check_ghost_trains.py
-    """
+    """Generate argument parser for check_ghost_trains.py."""
     parser = argparse.ArgumentParser(
         description="""Check CSV spec files for Amtrak routes against lists of trains actually running from juckins.net""",
     )
@@ -132,14 +129,14 @@ def make_argparser():
 
 
 def get_csvs_from_list(filename, input_dir):
-    """Given a .list file, get the list of CSV train spec filepaths"""
+    """Given a .list file, get the list of CSV train spec filepaths."""
     raw_list = read_list_file(filename, input_dir=input_dir)
     cooked_list = [input_dir + "/" + item + ".csv" for item in raw_list]
     return cooked_list
 
 
 def get_trains_from_csv(filename):
-    """Given a CSV train spec file, get the list of trains in it"""
+    """Given a CSV train spec file, get the list of trains in it."""
     # Get the CSV as a Pandas DataFrame
     tt_spec_csv = load_tt_spec_csv(filename)
     # Extract the train specs from the top row as a list
@@ -154,7 +151,8 @@ def get_trains_from_csv(filename):
 
 
 def get_trains_from_juckins(route_name):
-    """Get a list of trains actually running on a given route from juckins.net"""
+    """Get a list of trains actually running on a given route from
+    juckins.net."""
     # Get the webpage
     url_basename = "https://juckins.net/timetable_kit/trains_running"
     url_prefixfilename = "trains-actually-running"

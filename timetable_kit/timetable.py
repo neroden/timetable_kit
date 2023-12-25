@@ -2,12 +2,10 @@
 # timetable.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Generate timetables.
 
-"""
-Generate timetables
-
-timetable.py is the main program for generating timetables and related things
-timetable.py --help gives documentation
+timetable.py is the main program for generating timetables and related
+things timetable.py --help gives documentation
 """
 
 #########################
@@ -119,7 +117,7 @@ special_row_names = {
 
 
 def load_tt_spec_json(filename) -> dict:
-    """Load the JSON file for the tt-spec"""
+    """Load the JSON file for the tt-spec."""
     path = Path(filename)
     if path.is_file():
         with open(path, "r") as f:
@@ -135,7 +133,7 @@ def load_tt_spec_json(filename) -> dict:
 
 
 def load_tt_spec_csv(filename) -> pd.DataFrame:
-    """Load a tt-spec CSV file"""
+    """Load a tt-spec CSV file."""
     ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
     # PANDAS reads blank entries as NaN.
     # We really don't want NaNs in this file.  They should all be converted to "".
@@ -144,7 +142,7 @@ def load_tt_spec_csv(filename) -> pd.DataFrame:
 
 
 class TTSpec(NamedTuple):
-    """An entire TTSpec, both JSON aux file and CSV spec file"""
+    """An entire TTSpec, both JSON aux file and CSV spec file."""
 
     json: dict
     csv: pd.DataFrame
@@ -175,17 +173,18 @@ def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
 
 
 def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date: str):
-    """
-    Fill in the station list for a tt-spec if it has a key code.
+    """Fill in the station list for a tt-spec if it has a key code.
 
-    Cell 0,0 is normally blank.
-    If it is "Stations of 59", then (a) assume there is only one tt-spec row;
-    (b) get the stations for 59 and fill the rows in from that
+    Cell 0,0 is normally blank. If it is "Stations of 59", then (a)
+    assume there is only one tt-spec row; (b) get the stations for 59
+    and fill the rows in from that
 
-    Requires a feed and a date (the reference date; the train may change by date).
+    Requires a feed and a date (the reference date; the train may change
+    by date).
 
-    Note that this tucks on the end of the tt_spec.  A "second row" for column-options
-    will therefore be unaffected.  Other second rows may result in confusing results.
+    Note that this tucks on the end of the tt_spec.  A "second row" for
+    column-options will therefore be unaffected.  Other second rows may
+    result in confusing results.
     """
     if (key_code := str(raw_tt_spec.iloc[0, 0])) == "":
         print(raw_tt_spec)
@@ -224,8 +223,8 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date: str):
 
 
 def strip_omits_from_tt_spec(raw_tt_spec):
-    """
-    Given a tt_spec dataframe, strip any rows where the first column is "omit"; used for comments.
+    """Given a tt_spec dataframe, strip any rows where the first column is
+    "omit"; used for comments.
 
     Modifies in place.
     """
@@ -238,7 +237,8 @@ def strip_omits_from_tt_spec(raw_tt_spec):
 
 
 def stations_list_from_tt_spec(tt_spec):
-    """Given a tt_spec dataframe, return the station list as a list of strings"""
+    """Given a tt_spec dataframe, return the station list as a list of
+    strings."""
     stations_df = tt_spec.iloc[1:, 0]
     stations_list_raw = stations_df.to_list()
     stations_list_strings = [str(i).strip() for i in stations_list_raw]
@@ -247,7 +247,8 @@ def stations_list_from_tt_spec(tt_spec):
 
 
 def train_specs_list_from_tt_spec(tt_spec):
-    """Given a tt_spec dataframe, return the trains list as a list of strings"""
+    """Given a tt_spec dataframe, return the trains list as a list of
+    strings."""
     train_specs_df = tt_spec.iloc[0, 1:]
     train_specs_list_raw = train_specs_df.to_list()
     train_specs_list = [str(i).strip() for i in train_specs_list_raw]
@@ -255,15 +256,18 @@ def train_specs_list_from_tt_spec(tt_spec):
 
 
 def get_column_options(tt_spec):
-    """
-    Given a tt_spec dataframe with column-options in row 2, return a data structure for the column options.
+    """Given a tt_spec dataframe with column-options in row 2, return a data
+    structure for the column options.
 
-    This data structure is a list (indexed by column number) wherein each element is a list.
-    These inner lists are either empty, or a list of options.
+    This data structure is a list (indexed by column number) wherein
+    each element is a list. These inner lists are either empty, or a
+    list of options.
 
-    Options are free-form; currently only "reverse" is defined.  More will be defined later.
+    Options are free-form; currently only "reverse" is defined.  More
+    will be defined later.
 
-    The column options are specified in row 2 of the table.  If they're not there, don't call this.
+    The column options are specified in row 2 of the table.  If they're
+    not there, don't call this.
     """
 
     if str(tt_spec.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
@@ -280,7 +284,7 @@ def get_column_options(tt_spec):
 
 
 class _CellCodes(TypedDict, total=False):
-    """Represents codes which might be in a cell in a timetable spec"""
+    """Represents codes which might be in a cell in a timetable spec."""
 
     train_spec: str | None
     first: bool
@@ -290,8 +294,7 @@ class _CellCodes(TypedDict, total=False):
 
 
 def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes | None:
-    """
-    Given special code text in a cell, decipher it
+    """Given special code text in a cell, decipher it.
 
     The code leads with a train_spec (train number or train number + day of week), followed by a space,
     followed by zero or more of the following (space-separated):
@@ -416,17 +419,16 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes | None:
 
 
 def split_trains_spec(trains_spec):
-    """
-    Given a string like "59 / 174 / 22", return a structured list:
+    """Given a string like "59 / 174 / 22", return a structured list:
 
     [["59, "174", "22"], True]
 
-    Used to separate specs for multiple trains in the same timetable column.
-    A single "59" will simply give {"59"}.
+    Used to separate specs for multiple trains in the same timetable
+    column. A single "59" will simply give {"59"}.
 
-    This also processes specs like "59 monday".  And "59 noheader".  And "59 monday noheader".
-    These require exact spacing; this routine should probably clean up the spacing, but does not.
-
+    This also processes specs like "59 monday".  And "59 noheader".  And
+    "59 monday noheader". These require exact spacing; this routine
+    should probably clean up the spacing, but does not.
     """
     # Remove leading whitespace and possible leading minus sign
     clean_trains_spec = trains_spec.lstrip()
@@ -437,12 +439,12 @@ def split_trains_spec(trains_spec):
 
 
 def flatten_train_specs_list(train_specs_list):
-    """
-    Take a nested list of trains and make a flat list of trains.
+    """Take a nested list of trains and make a flat list of trains.
 
-    Take a list of trains as specified in a tt_spec such as ['','174 monday','178/21','stations','23/1482']
-    and make a flat list of all trains involved ['174 monday','178','21','23','1482']
-    without the special keywords like "station".
+    Take a list of trains as specified in a tt_spec such as ['','174
+    monday','178/21','stations','23/1482'] and make a flat list of all
+    trains involved ['174 monday','178','21','23','1482'] without the
+    special keywords like "station".
 
     Leaves the '91 monday' type entries.
 
@@ -462,8 +464,8 @@ def flatten_train_specs_list(train_specs_list):
 
 
 def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
-    """
-    Given a single trip_id, get the associated service dates by looking up the service_id in the calendar
+    """Given a single trip_id, get the associated service dates by looking up
+    the service_id in the calendar.
 
     Returns an ordered pair (start_date, end_date)
     """
@@ -482,15 +484,15 @@ def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
 
 
 def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
-    """
-    Given a single trip_id, stop_id, and a feed, extract a single timepoint.
+    """Given a single trip_id, stop_id, and a feed, extract a single timepoint.
 
-    This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
+    This returns the timepoint (as a Series) taken from the stop_times
+    GTFS feed.
 
     Throw TwoStopsError if it stops here twice.
 
-    Return "None" if it doesn't stop here.  This is not an error.
-    (Used to throw NoStopError if it doesn't stop here.  Too common.)
+    Return "None" if it doesn't stop here.  This is not an error. (Used
+    to throw NoStopError if it doesn't stop here.  Too common.)
     """
     assert feed.stop_times is not None  # Silence MyPy
 
@@ -529,8 +531,7 @@ def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
 
 
 def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
-    """
-    Gets dwell time in seconds for a specific trip_id at a specific station
+    """Gets dwell time in seconds for a specific trip_id at a specific station.
 
     today_feed: a feed
     trip_id: relevant trip_id
@@ -561,8 +562,8 @@ def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
 def make_stations_max_dwell_map(
     today_feed: FeedEnhanced, tt_spec, dwell_secs_cutoff, trip_from_train_spec_fn
 ):
-    """
-    Return a dict from station_code to True/False, based on the trains in the tt_spec.
+    """Return a dict from station_code to True/False, based on the trains in
+    the tt_spec.
 
     This is used to decide whether a station should get a "double line" or "single line" format in the timetable.
 
@@ -605,14 +606,16 @@ def make_stations_max_dwell_map(
 
 
 def raise_error_if_not_one_row(trips):
-    """
-    Given a PANDAS DataFrame, raise an error if it has either 0 or more than 1 row.
+    """Given a PANDAS DataFrame, raise an error if it has either 0 or more than
+    1 row.
 
-    The error text is based on the assumption that this is a GTFS trips frame.
-    This returns nothing if successful; it is solely sanity-check code.
+    The error text is based on the assumption that this is a GTFS trips
+    frame. This returns nothing if successful; it is solely sanity-check
+    code.
 
-    For speed, we have to work with trips directly rather than modifying the feed,
-    which is why this is needed for fill_tt_spec, rather than merely in FeedEnhanced.
+    For speed, we have to work with trips directly rather than modifying
+    the feed, which is why this is needed for fill_tt_spec, rather than
+    merely in FeedEnhanced.
     """
     num_rows = trips.shape[0]
     if num_rows == 0:
@@ -628,9 +631,7 @@ def raise_error_if_not_one_row(trips):
 
 
 class _FilledTimetable(NamedTuple):
-    """
-    Represents the output of fill_tt_spec.
-    """
+    """Represents the output of fill_tt_spec."""
 
     timetable: pd.DataFrame
     styler_table: pd.DataFrame
@@ -650,8 +651,7 @@ def fill_tt_spec(
     dwell_secs_cutoff=300,
     use_bus_icon_in_cells=False,
 ):
-    """
-    Fill a timetable from a tt-spec template using GTFS data
+    """Fill a timetable from a tt-spec template using GTFS data.
 
     The tt-spec must be complete (run augment_tt_spec first) and free of comments (run strip_omits_from_tt_spec)
     today_feed: GTFS feed to work with.  Mandatory.
@@ -1311,9 +1311,8 @@ def fill_tt_spec(
 
 
 def set_aux_defaults(aux: dict, *, output_filename, reference_date):
-    """
-    Given a dict representing the tt_spec's aux / JSON file,
-    fill in some default values if they're not present.
+    """Given a dict representing the tt_spec's aux / JSON file, fill in some
+    default values if they're not present.
 
     Also overrides reference_date if one is passed.
 
@@ -1333,8 +1332,7 @@ def set_aux_defaults(aux: dict, *, output_filename, reference_date):
 def filter_and_reduce_feed(
     master_feed: FeedEnhanced, reference_date: str, tt_spec: pd.DataFrame
 ) -> FeedEnhanced:
-    """
-    Filter a master feed to trips relevant to reference_date only.
+    """Filter a master feed to trips relevant to reference_date only.
 
     (This is essential to get accurate timetables for a given period.)
 
@@ -1389,17 +1387,19 @@ def filter_and_reduce_feed(
 
 
 class _DateRange(NamedTuple):
-    """Used to track what dates a timetable is valid for"""
+    """Used to track what dates a timetable is valid for."""
 
     latest_start_date: str
     earliest_end_date: str
 
 
 def get_valid_date_range(reduced_feed: FeedEnhanced) -> _DateRange:
-    """Return the (latest_start_date, earliest_end_date) for a (filtered, reduced) feed.
+    """Return the (latest_start_date, earliest_end_date) for a (filtered,
+    reduced) feed.
 
-    This is used after filtering the feed down to the trips which will be shown in the final timetable.
-    It therefore gives a validity period for the timetable as a whole.
+    This is used after filtering the feed down to the trips which will
+    be shown in the final timetable. It therefore gives a validity
+    period for the timetable as a whole.
     """
     assert reduced_feed.calendar is not None  # Silence MyPy
     start_dates = reduced_feed.calendar["start_date"]
@@ -1424,8 +1424,7 @@ def produce_timetable(
     input_dirname,
     output_dirname,
 ):
-    """
-    Produce a single timetable HTML file.  Assumes setup has been done.
+    """Produce a single timetable HTML file.  Assumes setup has been done.
 
     Intended to allow multiple timetables to be processed at once.
     do_csv: produce a CSV timetable
@@ -1584,8 +1583,7 @@ prepared_output_dirs_for_rpa = []
 
 
 def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
-    """
-    Copy supporting files (icons, fonts) to the output directory.
+    """Copy supporting files (icons, fonts) to the output directory.
 
     Necessary for Weasyprint, and for the HTML to display right.
     """
@@ -1676,12 +1674,11 @@ def produce_several_timetables(
     output_dirname=None,
     patch_the_feed=True,
 ):
-    """
-    Main program to run from other Python programs.
+    """Main program to run from other Python programs.
 
-    Doesn't mess around with args or environment variables.
-    Does not take a default gtfs filename.
-    DOES take filenames and directory names.
+    Doesn't mess around with args or environment variables. Does not
+    take a default gtfs filename. DOES take filenames and directory
+    names.
     """
 
     if not author:
@@ -1741,8 +1738,7 @@ def produce_several_timetables(
 
 
 def main():
-    """
-    Main program to run from the command line.
+    """Main program to run from the command line.
 
     Contains everything involving processing command line arguments,
     environment variables, etc.

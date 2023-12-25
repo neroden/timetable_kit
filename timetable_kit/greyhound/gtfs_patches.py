@@ -1,19 +1,17 @@
 # greyhound/gtfs_patches.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Patch known issues with Greyhound GTFS.
+"""Patch known issues with Greyhound GTFS.
 
-The big problem is that Greyhound doesn't have trip_short_name set -- at all.
-This breaks the entire architecture of timetable_kit, so we set it.
+The big problem is that Greyhound doesn't have trip_short_name set -- at
+all. This breaks the entire architecture of timetable_kit, so we set it.
 """
 from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
 
 
 def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
-    """
-    Take an Greyhound feed and patch it to be usable by timetable_kit.
+    """Take an Greyhound feed and patch it to be usable by timetable_kit.
 
     Return the new patched feed.
     """

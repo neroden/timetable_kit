@@ -1,10 +1,10 @@
 # hartford_line/agency.py
 # Part of timetable_kit
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.maple_leaf.agency module
+"""timetable_kit.maple_leaf.agency module.
 
-This holds a class for "AgencyHartfordLine" intended to be used as a singleton.
+This holds a class for "AgencyHartfordLine" intended to be used as a
+singleton.
 """
 from timetable_kit.amtrak import AgencyAmtrak
 
@@ -16,7 +16,7 @@ from timetable_kit.hartford_line.connecting_services_data import (
 
 
 class AgencyHartfordLine(AgencyAmtrak):
-    """Hartford Line-specific code for interpreting specs and GTFS feeds"""
+    """Hartford Line-specific code for interpreting specs and GTFS feeds."""
 
     _agency_names = ["CTRail Hartford Line", "Amtrak"]
     _agency_websites = ["HartfordLine.com", AgencyAmtrak._agency_websites[0]]
@@ -31,8 +31,9 @@ class AgencyHartfordLine(AgencyAmtrak):
         self._connecting_services_dict = connecting_services_dict
 
     def break_long_city_state_name(self, raw_city_state_name: str) -> str:
-        """
-        Hartford Line timetable has no spare width.  Remove the comma between city and state.
+        """Hartford Line timetable has no spare width.
+
+        Remove the comma between city and state.
         """
         (city_name, state_name) = raw_city_state_name.split(", ", 1)
         # Remove the comma, join with a space
@@ -42,9 +43,7 @@ class AgencyHartfordLine(AgencyAmtrak):
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
     ) -> str | None:
-        """
-        Replace certain facility names; leave others intact.
-        """
+        """Replace certain facility names; leave others intact."""
         match station_code:
             case "NYP":
                 # facility_name == "Moynihan Train Hall"
@@ -58,8 +57,9 @@ class AgencyHartfordLine(AgencyAmtrak):
         return facility_name
 
     def stations_with_many_connections(self) -> list[str]:
-        """
-        Stations with an extra line for connections.  None for Hartford Line.
+        """Stations with an extra line for connections.
+
+        None for Hartford Line.
         """
         return []
 
@@ -69,6 +69,6 @@ _singleton = AgencyHartfordLine()
 
 
 def get_singleton():
-    """Get singleton for Hartford Line"""
+    """Get singleton for Hartford Line."""
     global _singleton
     return _singleton

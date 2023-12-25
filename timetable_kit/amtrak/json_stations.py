@@ -2,14 +2,13 @@
 # amtrak_json_stations.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Routines for extracting Amtrak's JSON station data and working with it.
 
-"""
-Routines for extracting Amtrak's JSON station data and working with it.
+Amtrak's entire station database is exposed as JSON, which is very
+useful. In order to download it, this must be run as a program.
 
-Amtrak's entire station database is exposed as JSON, which is very useful.
-In order to download it, this must be run as a program.
-
-A couple of key pieces of data are only exposed as HTML, so the HTML is downloaded too.
+A couple of key pieces of data are only exposed as HTML, so the HTML is
+downloaded too.
 
 The other routines here are for accessing it.
 
@@ -66,7 +65,7 @@ station_details_dir = stations_under_module
 
 
 def stations_json_local_path():
-    """Return local path for the data.stations.json file as a Path"""
+    """Return local path for the data.stations.json file as a Path."""
     return station_details_dir / "data.stations.json"
 
 
@@ -84,7 +83,10 @@ def save_stations_json(stations_json: str):
 
 
 def load_stations_json():
-    """Load Amtrak's basic stations database (json text) from a suitable file.  Return it."""
+    """Load Amtrak's basic stations database (json text) from a suitable file.
+
+    Return it.
+    """
     with open(stations_json_local_path(), "r") as stations_json_local_file:
         stations_json = stations_json_local_file.read()
     return stations_json
@@ -95,8 +97,7 @@ def load_stations_json():
 
 
 def station_details_filename(station_code: str) -> str:
-    """
-    Return filename for an Amtrak station details JSON file
+    """Return filename for an Amtrak station details JSON file.
 
     This does uppercase/lowercase correction.
     """
@@ -118,8 +119,8 @@ def station_details_filename(station_code: str) -> str:
 
 
 def station_details_url(station_code: str) -> str:
-    """
-    Given an Amtrak station code, return the URL for the station details in JSON form.
+    """Given an Amtrak station code, return the URL for the station details in
+    JSON form.
 
     Watch out for "403 forbidden" issues...
     """
@@ -137,7 +138,7 @@ def station_details_url(station_code: str) -> str:
 
 
 def station_details_local_path(station_code: str) -> Path:
-    """Return local pathname for an Amtrak station details JSON file"""
+    """Return local pathname for an Amtrak station details JSON file."""
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
@@ -176,7 +177,8 @@ def save_station_details(station_code: str, station_details: str):
 
 
 def load_station_details(station_code: str) -> str:
-    """Load station details for one station as json text from a suitable file; return it."""
+    """Load station details for one station as json text from a suitable file;
+    return it."""
     with open(
         station_details_local_path(station_code), "r"
     ) as station_details_local_file:
@@ -189,8 +191,7 @@ def load_station_details(station_code: str) -> str:
 
 
 def station_details_html_filename(station_code: str) -> str:
-    """
-    Return filename for an Amtrak station details HTML file
+    """Return filename for an Amtrak station details HTML file.
 
     This does uppercase/lowercase correction.
     """
@@ -208,8 +209,7 @@ def station_details_html_filename(station_code: str) -> str:
 
 
 def station_details_html_url(station_code: str) -> str:
-    """
-    Given an Amtrak station code, return the URL for the station HTML page.
+    """Given an Amtrak station code, return the URL for the station HTML page.
 
     Watch out for "403 forbidden" issues...
     """
@@ -227,7 +227,7 @@ def station_details_html_url(station_code: str) -> str:
 
 
 def station_details_html_local_path(station_code: str) -> Path:
-    """Return local pathname for an Amtrak station details HTML file"""
+    """Return local pathname for an Amtrak station details HTML file."""
     # Step one: validate the station code
     if len(station_code) != 3:
         raise ValueError("Station code not of length 3")
@@ -270,7 +270,8 @@ def save_station_details_html(station_code: str, station_details: str):
 
 
 def load_station_details_html(station_code: str) -> str:
-    """Load station HTML for one station as json text from a suitable file; return it."""
+    """Load station HTML for one station as json text from a suitable file;
+    return it."""
     with open(
         station_details_html_local_path(station_code), "r"
     ) as station_details_html_local_file:
@@ -283,10 +284,10 @@ def load_station_details_html(station_code: str) -> str:
 
 
 def download_one_station(station_code: str):
-    """
-    Download one of Amtrak's station details files.
+    """Download one of Amtrak's station details files.
 
-    Usually used directly when a hiccup has screwed up one of the downloads.
+    Usually used directly when a hiccup has screwed up one of the
+    downloads.
     """
     print(station_code)
     station_details = download_station_details(station_code)
@@ -296,8 +297,7 @@ def download_one_station(station_code: str):
 
 
 def download_all_stations(sleep_secs: float = 120.0):
-    """
-    Download all of Amtrak's station details files.
+    """Download all of Amtrak's station details files.
 
     By pre-downloading, avoids hammering Amtrak's website
 
@@ -338,8 +338,7 @@ station_name_dict = None
 
 
 def get_station_name(station_code: str) -> str:
-    """
-    Given an Amtrak station code, return the long station name.
+    """Given an Amtrak station code, return the long station name.
 
     Creates a dict on first invocation, uses the dict subsequently.
     """
@@ -350,10 +349,11 @@ def get_station_name(station_code: str) -> str:
 
 
 def make_station_name_dict():
-    """
-    Return a dict which takes a station code and returns a suitable printable station name.
+    """Return a dict which takes a station code and returns a suitable
+    printable station name.
 
-    Expects json stations to be downloaded already, in a suitable local file
+    Expects json stations to be downloaded already, in a suitable local
+    file
     """
     stations_json = load_stations_json()
 
@@ -439,7 +439,7 @@ def do_station_processing():
 
 
 def make_arg_parser():
-    """Make argument parser for amtrak/json_stations.py"""
+    """Make argument parser for amtrak/json_stations.py."""
     arg_parser = argparse.ArgumentParser(
         description="""Download and/or run tests on Amtrak's JSON stations data.  With no arguments, does nothing."""
     )

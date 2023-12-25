@@ -2,10 +2,8 @@
 # Part of timetable_kit
 #
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3>
-
-"""
-This module assembles suitable HTML or text strings for connecting services.
-"""
+"""This module assembles suitable HTML or text strings for connecting
+services."""
 
 from timetable_kit.debug import debug_print
 
@@ -17,10 +15,10 @@ from timetable_kit.connecting_services.catalog import get_css_for_all_logos
 
 
 def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str:
-    """
-    Return suitable HTML for the connecting service's logo.
+    """Return suitable HTML for the connecting service's logo.
 
-    If no icon, return suitable HTML for the connecting service's alt name.
+    If no icon, return suitable HTML for the connecting service's alt
+    name.
     """
     assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
@@ -40,9 +38,7 @@ def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str
 
 
 def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
-    """
-    Return suitable HTML for a key for the connecting service.
-    """
+    """Return suitable HTML for a key for the connecting service."""
     assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
     try:
@@ -61,10 +57,9 @@ def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
 
 
 def get_keys_html(services_list, one_line=True) -> str:
-    """
-    Return suitable HTML for the full key for all connecting services.
-    one_line=True (default) means one line for all services
-    one_line=False means several lines, one line per service
+    """Return suitable HTML for the full key for all connecting services.
+    one_line=True (default) means one line for all services one_line=False
+    means several lines, one line per service.
 
     DOES NOT do the surrounding decoration ("Connecting services:") --
     that is done over in the main Jinja templates

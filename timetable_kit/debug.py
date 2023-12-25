@@ -1,9 +1,7 @@
 # debug.py
 # Part of timetable_kit
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Debugging routines
+"""Debugging routines.
 
 debug_print()
 """
@@ -16,16 +14,12 @@ debug = 1
 
 
 def set_debug_level(level: int):
-    """
-    Set debug level for timetable_kit to a number (1 is default)
-    """
+    """Set debug level for timetable_kit to a number (1 is default)"""
     global debug
     debug = level
 
 
 def debug_print(level: int, *args, **kwargs):
-    """
-    Print debugging output for timetable_kit
-    """
+    """Print debugging output for timetable_kit."""
     if debug >= level:
         print(*args, **kwargs)

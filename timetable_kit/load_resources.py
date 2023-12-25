@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
 # load_resources.py
 # Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-Load resources, mostly jinja2 templates
+"""Load resources, mostly jinja2 templates.
 
 This module has helpers for loading jinja2 templates.
 
@@ -112,8 +110,8 @@ connecting_services_csv_environment = Environment(
 
 
 def get_font_css(fontname: str) -> str:
-    """
-    Load a font CSS file (the ".css" will be appended -- don't include it) and return it as a string.
+    """Load a font CSS file (the ".css" will be appended -- don't include it)
+    and return it as a string.
 
     This uses Jinja2, font_loader, and font_environment.
     """
@@ -124,8 +122,8 @@ def get_font_css(fontname: str) -> str:
 
 
 def get_icon_css(filename: str) -> str:
-    """
-    Load an icon CSS file (specify full filename including .css) and return it as a string.
+    """Load an icon CSS file (specify full filename including .css) and return
+    it as a string.
 
     This uses Jinja2, icon_loader, and icon_environment.
     """
@@ -136,11 +134,11 @@ def get_icon_css(filename: str) -> str:
 
 
 def get_icon_svg(filename: str) -> str:
-    """
-    Load an icon SVG file (specify full filename including .svg) and return it as a string.
+    """Load an icon SVG file (specify full filename including .svg) and return
+    it as a string.
 
-    This uses Jinja2, icon_loader, and icon_environment.
-    Technically this is the same code as get_icon_css right now.
+    This uses Jinja2, icon_loader, and icon_environment. Technically
+    this is the same code as get_icon_css right now.
     """
     (icon_svg_str, returned_filename, uptodate) = icon_loader.get_source(
         icon_environment, filename
@@ -149,8 +147,8 @@ def get_icon_svg(filename: str) -> str:
 
 
 def get_logo_css(filename: str) -> str:
-    """
-    Load a logo CSS file (specify full filename including .css) and return it as a string.
+    """Load a logo CSS file (specify full filename including .css) and return
+    it as a string.
 
     This uses Jinja2, logo_loader, and logo_environment.
     """
@@ -161,11 +159,11 @@ def get_logo_css(filename: str) -> str:
 
 
 def get_logo_svg(filename: str) -> str:
-    """
-    Load a logo SVG file (specify full filename including .svg) and return it as a string.
+    """Load a logo SVG file (specify full filename including .svg) and return
+    it as a string.
 
-    This uses Jinja2, logo_loader, and logo_environment.
-    Technically this is the same code as get_logo_css right now.
+    This uses Jinja2, logo_loader, and logo_environment. Technically
+    this is the same code as get_logo_css right now.
     """
     (logo_svg_str, returned_filename, uptodate) = logo_loader.get_source(
         logo_environment, filename
@@ -174,8 +172,9 @@ def get_logo_svg(filename: str) -> str:
 
 
 def get_connecting_services_csv(filename: str) -> str:
-    """
-    Load a file (specify full filename) from the connecting_services subpackage and return it as a string.
+    """Load a file (specify full filename) from the connecting_services
+    subpackage and return it as a string.
+
     This uses Jinja2, logo_loader, and logo_environment.
     """
     (

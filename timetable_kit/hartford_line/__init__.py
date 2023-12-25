@@ -1,12 +1,12 @@
 # hartford_line/__init.py__
 # Init file for hartford_line subpackage of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-timetable_kit.hartford_line module
+"""timetable_kit.hartford_line module.
 
 Hartford-line-specific functions for timetable_kit.
 
-This defines an interface; each agency needs to provide the same interface
+This defines an interface; each agency needs to provide the same
+interface
 """
 
 # Where to find the GTFS (merged GTFS)

@@ -2,9 +2,7 @@
 # feed_enhanced.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
-"""
-This module extends the Feed class from gtfs_kit to add methods.
+"""This module extends the Feed class from gtfs_kit to add methods.
 
 The additions are primarily filter methods: designed to take a feed and filter
 a bunch of data out to make a *smaller* feed which is quicker to do future processing on.
@@ -34,7 +32,6 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError,
 )
-
 
 """
 GTFS_DAYS is the list of all the days (Monday through Sunday) which form gtfs column headers,
@@ -101,8 +98,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return FeedEnhanced.enhance(super().copy())
 
     def filter_by_dates(self: Self, first_date: GTFSDate, last_date: GTFSDate) -> Self:
-        """
-        Filter the entire feed to remove anything before first_date or after last_date
+        """Filter the entire feed to remove anything before first_date or after
+        last_date.
 
         Returns a new filtered feed (original feed unchanged)
         Must be in GTFS date format (string of YYYYMMDD)
@@ -131,8 +128,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_day_of_week(self: Self, day: GTFSDay) -> Self:
-        """
-        Filters the feed to trips which are running on the selected day.
+        """Filters the feed to trips which are running on the selected day.
+
         - Filters calendar (direct)
         - Filters trips (by service_ids in calendar)
         - Filters stop_times (by trip_ids in trips)
@@ -166,8 +163,9 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_days_of_week(self: Self, days: Iterable[GTFSDay]) -> Self:
-        """
-        Filters the feed to trips which are running on one of the selected days.
+        """Filters the feed to trips which are running on one of the selected
+        days.
+
         - Filters calendar (direct)
         - Filters trips (by service_ids in calendar)
         - Filters stop_times (by trip_ids in trips)
@@ -203,8 +201,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_route_ids(self: Self, route_ids: Iterable[str]) -> Self:
-        """
-        Filter the entire feed to include only the specified route_ids (a list)
+        """Filter the entire feed to include only the specified route_ids (a
+        list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters routes and trips (direct)
@@ -228,8 +226,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_service_ids(self: Self, service_ids: Iterable[str]) -> Self:
-        """
-        Filter the entire feed to include only the specified service_ids (a list)
+        """Filter the entire feed to include only the specified service_ids (a
+        list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters calendar and trips (direct)
@@ -247,8 +245,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_bad_service_ids(self: Self, bad_service_ids: Iterable[str]) -> Self:
-        """
-        Filter the entire feed to remove specified bad service_ids (a list)
+        """Filter the entire feed to remove specified bad service_ids (a list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters calendar and trips (direct)
@@ -267,8 +264,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_remove_one_day_calendars(self: Self) -> Self:
-        """
-        Remove all service_ids which are effective for only one day.
+        """Remove all service_ids which are effective for only one day.
 
         Amtrak has a bad habit of listing one-day calendars in its GTFS.  This isn't really
         what we want for a printed timetable.  Worse, some of them actually overlap with the
@@ -293,8 +289,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_find_one_day_calendars(self: Self) -> Self:
-        """
-        Filter to *only* find service_ids which are effective for only one day.
+        """Filter to *only* find service_ids which are effective for only one
+        day.
 
         Amtrak has a bad habit of listing one-day calendars in its GTFS.  While we're usually
         trying to get rid of them, we might also want to examine them.
@@ -320,8 +316,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_trip_short_names(self: Self, trip_short_names: Iterable[str]) -> Self:
-        """
-        Filter the entire feed to include only services with the specified trip_short_names (a list)
+        """Filter the entire feed to include only services with the specified
+        trip_short_names (a list)
 
         Amtrak "trip short name" is in fact an Amtrak train or bus number
         Returns a new filtered feed (original feed unchanged)
@@ -348,8 +344,8 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def filter_by_trip_ids(self: Self, trip_ids: Iterable[str]) -> Self:
-        """
-        Filter the entire feed to include only services with the specified trip_ids (a list)
+        """Filter the entire feed to include only services with the specified
+        trip_ids (a list)
 
         Returns a new filtered feed (original feed unchanged)
         - filters trips and stop_times (direct)
@@ -364,8 +360,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         return new_feed
 
     def get_single_trip(self: Self) -> Series:
-        """
-        If this feed contains only one trip, return the trip.
+        """If this feed contains only one trip, return the trip.
 
         -- If there's only one trip, return it.
         -- Otherwise throw a suitable error.
@@ -387,8 +382,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         return this_trip_today
 
     def get_single_trip_stop_times(self, trip_id: str) -> DataFrame:
-        """
-        Get stop times for a single trip -- sorted into the correct order
+        """Get stop times for a single trip -- sorted into the correct order.
 
         May need improved interface... not clear
         """
@@ -399,13 +393,13 @@ class FeedEnhanced(gtfs_kit.Feed):
         return stop_times_3
 
     def get_trip_short_name(self, trip_id: str) -> DataFrame:
-        """
-        Given a trip_id, recover the trip_short_name
+        """Given a trip_id, recover the trip_short_name.
 
-        Since trip_ids are supposed to be unique, this should be an easy process.
+        Since trip_ids are supposed to be unique, this should be an easy
+        process.
 
-        Very useful for debugging since trip_short_name is human-meaningful,
-        and trip_id isn't.
+        Very useful for debugging since trip_short_name is human-
+        meaningful, and trip_id isn't.
         """
         my_trips = self.trips[self.trips["trip_id"] == trip_id]
         if my_trips.shape[0] == 0:

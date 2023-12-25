@@ -2,11 +2,10 @@
 # via/get_gtfs.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Retrieve VIA Rail's static GTFS data from the canonical location.
+"""Retrieve VIA Rail's static GTFS data from the canonical location.
 
-Severely duplicative of amtrak/get_gtfs.py.  Duplication should be removed,
-but I needed a working prototype
+Severely duplicative of amtrak/get_gtfs.py.  Duplication should be
+removed, but I needed a working prototype
 """
 
 import sys  # for sys.exit
@@ -29,7 +28,7 @@ gtfs_unzipped_local_path = module_location / "gtfs"
 
 
 def download_gtfs():
-    """Download VIA rail's GTFS from its canonical location and return it"""
+    """Download VIA rail's GTFS from its canonical location and return it."""
     response = requests.get(canonical_gtfs_url)
     if response.status_code != requests.codes.ok:
         print(
@@ -46,8 +45,8 @@ def save_gtfs(gtfs_zip):
 
 
 def unzip_gtfs():
-    """
-    Extract VIA Rail's GTFS file from a canonical local location to a canonical local location.
+    """Extract VIA Rail's GTFS file from a canonical local location to a
+    canonical local location.
 
     This is used directly by the program.
     """

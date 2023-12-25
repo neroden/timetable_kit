@@ -2,12 +2,12 @@
 # timetable_argparse.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""
-Argument parser for timetable.py
+"""Argument parser for timetable.py.
 
 The primary function for external use is make_tt_arg_parser.
 
-Also includes routines for adding common arguments to parsers for other commands.
+Also includes routines for adding common arguments to parsers for other
+commands.
 """
 
 import argparse
@@ -33,7 +33,7 @@ def add_agency_argument(parser: argparse.ArgumentParser):
 
 
 def add_gtfs_argument(parser: argparse.ArgumentParser):
-    """Add the common --gtfs argument to a parser"""
+    """Add the common --gtfs argument to a parser."""
     parser.add_argument(
         "--gtfs",
         "-g",
@@ -47,7 +47,7 @@ def add_gtfs_argument(parser: argparse.ArgumentParser):
 
 
 def add_date_argument(parser: argparse.ArgumentParser):
-    """Add the common --date argument to a parser"""
+    """Add the common --date argument to a parser."""
     parser.add_argument(
         "--reference-date",
         "--date",
@@ -64,9 +64,7 @@ def add_date_argument(parser: argparse.ArgumentParser):
 
 
 def add_day_argument(parser: argparse.ArgumentParser):
-    """
-    Add the --day argument to a parser.
-    """
+    """Add the --day argument to a parser."""
     parser.add_argument(
         "--day",
         help="""Restrict to trains/buses operating on a particular day of the week, or weekdays, or weekend.
@@ -80,7 +78,7 @@ def add_day_argument(parser: argparse.ArgumentParser):
 
 
 def add_debug_argument(parser: argparse.ArgumentParser):
-    """Add the common --debug argument to a parser"""
+    """Add the common --debug argument to a parser."""
     parser.add_argument(
         "--debug",
         dest="debug",
@@ -150,7 +148,7 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
 
 
 def make_tt_arg_parser():
-    """Make argument parser for timetable.py"""
+    """Make argument parser for timetable.py."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.json files).""",

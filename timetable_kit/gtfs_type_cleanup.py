@@ -2,20 +2,21 @@
 # gtfs_type_cleanup.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+"""Gtfs_kit is an excellent tool, but it puts practically everything into
+string types; this is not always useful for later work.
 
-"""
-Gtfs_kit is an excellent tool, but it puts practically everything into string types;
-this is not always useful for later work.  These subroutines convert certain columns to integers.
+These subroutines convert certain columns to integers.
 """
 
 # Other people's packages
 
 
 def type_corrected_agency(agency):
-    """
-    Return copy of agency DataFrame with integer types in appropriate columns.
+    """Return copy of agency DataFrame with integer types in appropriate
+    columns.
 
-    Take raw agency DataFrame, type-correct the agency ID.  Can be repeated.
+    Take raw agency DataFrame, type-correct the agency ID.  Can be
+    repeated.
     """
     new_agency = agency.astype({"agency_id": "str"})
     # new_agency_2 = new_agency.sort_values(by=['agency_id'])
@@ -23,7 +24,8 @@ def type_corrected_agency(agency):
 
 
 def type_corrected_calendar(calendar):
-    """Return copy of calendar DataFrame with integer types in appropriate columns."""
+    """Return copy of calendar DataFrame with integer types in appropriate
+    columns."""
     new_calendar = calendar.astype(
         {
             "service_id": "str",
@@ -62,7 +64,8 @@ def type_uncorrected_calendar(calendar):
 
 
 def type_corrected_routes(routes):
-    """Return copy of routes DataFrame with integer types in appropriate columns."""
+    """Return copy of routes DataFrame with integer types in appropriate
+    columns."""
     new_routes = routes.astype(
         {
             "route_id": "str",
@@ -124,8 +127,9 @@ def type_corrected_stop_times(stop_times):
 
 
 def type_corrected_trips(trips):
-    """
-    Return copy of trips with integer types in appropriate columns.  Do not sort.
+    """Return copy of trips with integer types in appropriate columns.
+
+    Do not sort.
     """
     # Blank direction_id must be processes, and we don't want NaNs.
     column_replacement_dict = {"direction_id": ""}
