@@ -14,7 +14,7 @@ Sadly, it must be maintained by hand.
 # Order matters: it's the order the logos will be printed in
 # Hartford Line timetables are very short on space,
 # So we leave out connecting services at NYP and WAS
-connecting_services_dict: dict[str,list[str]] = {
+connecting_services_dict: dict[str, list[str]] = {
     # Hartford Line
     "SPG": ["amtrak"],
     "WNL": [],

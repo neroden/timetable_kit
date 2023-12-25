@@ -12,7 +12,7 @@ Sadly, it must be maintained by hand.
 # key: VIA rail station code (not stop id)
 # value: list of services (strings matching the definitions in timetable_kit/connecting_services/*.py
 # Order matters within a single station: it's the order the logos will be printed in
-connecting_services_dict: dict[str,list[str]] = {
+connecting_services_dict: dict[str, list[str]] = {
     # Maple Leaf stations in NY
     "NEWY": ["amtrak", "njt", "nyc_subway", "lirr"],
     "YONK": ["amtrak", "metro_north"],
