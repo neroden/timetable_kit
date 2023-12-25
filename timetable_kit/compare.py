@@ -11,11 +11,17 @@ Used to see how many services with different dates are actually the same service
 
 # Other people's packages
 import argparse
+import pandas as pd
+from pandas import DataFrame
 
-# This one monkey-patches gtfs_kit.Feed (sneaky) so must be imported early.  This IS used.
-from timetable_kit import feed_enhanced
+# Mostly for agency defaulting
+from timetable_kit import runtime_config
+from timetable_kit.runtime_config import agency
+from timetable_kit.runtime_config import agency_singleton
+
 
 # My packages: Local module imports
+from timetable_kit import feed_enhanced
 from timetable_kit.debug import set_debug_level
 from timetable_kit.feed_enhanced import FeedEnhanced
 
@@ -24,6 +30,7 @@ from timetable_kit.initialize import initialize_feed
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
+    add_agency_argument,
     add_gtfs_argument,
     add_debug_argument,
 )
@@ -97,20 +104,23 @@ def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """
     route_feed = feed.filter_by_route_ids([route_id])
 
+    assert isinstance(route_feed.calendar, DataFrame)  # Silence MyPy
+    assert isinstance(route_feed.trips, DataFrame)  # Silence MyPy
+
     print("Calendar:")
     print(route_feed.calendar)
 
-    downbound_trips = route_feed.trips[
-        route_feed.trips.direction_id == "0"
-    ]  # W for LSL
-    if not downbound_trips.empty():
+    # Direction 0 is W for LSL
+    downbound_trips: DataFrame = route_feed.trips[route_feed.trips.direction_id == "0"]
+    if not downbound_trips.empty:
         print("Downbound:")
         print(downbound_trips)
         base_trip = downbound_trips.iloc[0, :]  # row 0, all columns
         compare_stop_lists(base_trip, downbound_trips, feed=route_feed)
 
-    upbound_trips = route_feed.trips[route_feed.trips.direction_id == "1"]  # E for LSL
-    if not upbound_trips.empty():
+    # Direction 1 is E for LSL
+    upbound_trips: DataFrame = route_feed.trips[route_feed.trips.direction_id == "1"]
+    if not upbound_trips.empty:
         print("Upbound:")
         print(upbound_trips)
         base_trip = upbound_trips.iloc[0, :]  # row 0, all columns
@@ -119,7 +129,7 @@ def compare_similar_services(route_id, *, feed: FeedEnhanced):
     mysterybound_trips = route_feed.trips[
         route_feed.trips.direction_id == ""
     ]  # Some trips don't list this
-    if not mysterybound_trips.empty():
+    if not mysterybound_trips.empty:
         print("Mysterybound:")
         print(mysterybound_trips)
         base_trip = mysterybound_trips.iloc[0, :]  # row 0, all columns
@@ -135,6 +145,7 @@ def make_argparser():
                        Used to spot schedule changes for making tt-specs.
                     """,
     )
+    add_agency_argument(parser)
     add_gtfs_argument(parser)
     add_debug_argument(parser)
     parser.add_argument(
@@ -153,11 +164,14 @@ if __name__ == "__main__":
     args = my_arg_parser.parse_args()
 
     set_debug_level(args.debug)
+    runtime_config.set_agency(args.agency)
 
-    gtfs_filename = args.gtfs_filename
+    gtfs_filename = args.gtfs_filename or agency().gtfs_unzipped_local_path
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name
+
+    assert isinstance(master_feed.routes, DataFrame)  # Silence MyPy
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)
