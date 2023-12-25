@@ -9,7 +9,7 @@ If we use "absolute", it only shows up on one page.
 Have to be very careful about this.
 #}
 .logo-bottom-right {
-    position: fixed;
+    position: absolute;
     bottom: 2px;
     right: 2px;
 }
