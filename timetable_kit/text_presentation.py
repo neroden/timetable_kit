@@ -296,12 +296,12 @@ def day_string(calendar, offset: int = 0) -> str:
 class TimeTuple(NamedTuple):
     """Class with time broken into pieces for printing"""
 
-    day: str
-    pm: str
-    hour: str
-    hour24: str
-    min: str
-    sec: str
+    day: int
+    pm: int
+    hour: int
+    hour24: int
+    min: int
+    sec: int
 
 
 def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
@@ -652,9 +652,9 @@ def timepoint_str(
 
     # Pick function for the actual time printing
     if use_24:
-        time_str = time_short_str_24
+        time_str_func = time_short_str_24
     else:
-        time_str = time_short_str_12
+        time_str_func = time_short_str_12
 
     zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
@@ -666,7 +666,7 @@ def timepoint_str(
         is_pm = 0
     else:
         departure = explode_timestr(timepoint.departure_time, zonediff)
-        departure_time_str = time_str(
+        departure_time_str = time_str_func(
             departure, box_time_characters=box_time_characters
         )
         is_pm = departure.pm
@@ -690,7 +690,9 @@ def timepoint_str(
         is_pm = 0
     else:
         arrival = explode_timestr(timepoint.arrival_time, zonediff)
-        arrival_time_str = time_str(arrival, box_time_characters=box_time_characters)
+        arrival_time_str = time_str_func(
+            arrival, box_time_characters=box_time_characters
+        )
         is_pm = arrival.pm
     if doing_html:
         if bold_pm and is_pm == 1:
