@@ -24,6 +24,7 @@ be installed INSIDE the venv, and it needs some extra packages to do type checki
 pip install mypy
 pip install pandas-stubs
 pip install types-requests
+pip install lxml-stubs
 
 3B. It's probably wise to install Black, though a system version of Black is fine too.
 

@@ -5,7 +5,7 @@
 
 from typing import Type, Self
 
-from gtfs_kit import Feed
+from gtfs_kit import Feed  # type: ignore # Tell MyPy this has no type stubs
 from pandas import DataFrame, Series
 
 GTFS_DAYS: tuple[str, str, str, str, str, str, str]
