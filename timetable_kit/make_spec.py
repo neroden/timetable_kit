@@ -13,6 +13,7 @@ import argparse
 import sys  # for exit
 
 import pandas as pd
+from pandas import DataFrame, Series
 
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import set_debug_level
@@ -124,7 +125,7 @@ if __name__ == "__main__":
         # Turn list of stops into list of pairs of stops
         pairs = zip(stops[::2], stops[1::2])
         # Start with a blank list of tsns
-        trip_ids = []
+        trip_ids: list[str] = []
         for stop_one, stop_two in pairs:
             # print("Finding trips from", stop_one, "to", stop_two)
             # Have to convert from stop_code to stop_id for VIA (no-op for Amtrak)
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     my_df = pd.DataFrame(index=left_column_df.index, columns=range(num_cols))
 
     # This replaces the top *row*
-    my_df.iloc[0] = tsn_column_headers
+    my_df.iloc[0] = Series(tsn_column_headers)
     # This replaces the left *column*
     my_df[0] = left_column_df[0]
     # This puts the first ardp in place: row 2, column 4
@@ -179,7 +180,7 @@ if __name__ == "__main__":
     # This fills the days column with the reference station
     days_list = [sync_stop] * len(sorted_tsns)
     days_list = ["days", "", "", *days_list]
-    my_df.iloc[2] = days_list
+    my_df.iloc[2] = Series(days_list)
     # Replace NaNs with blank strings
     my_df.fillna("", inplace=True)
 
