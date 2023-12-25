@@ -18,11 +18,12 @@
 # The list of stations does not change often so it was not worth
 # fully automating this.
 
-provinces = ["AB","BC","MB","NB","NS","ON","QC","SK","NY"]
-outfile = open("province_data.py","w")
+provinces = ["AB", "BC", "MB", "NB", "NS", "ON", "QC", "SK", "NY"]
+outfile = open("province_data.py", "w")
 
 # Preamble
-outfile.write("""# via/province_data.py
+outfile.write(
+    """# via/province_data.py
 # Part of timetable_kit
 #
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
@@ -40,14 +41,15 @@ def stop_code_to_province(stop_code: str) -> Optional[str]:
     return _stop_code_to_province.get(stop_code)
 
 
-""")
+"""
+)
 
 # Write out the dict
 outfile.write("_stop_code_to_province = {\n")
 for province in provinces:
-    province_filename = province.lower()+".txt"
+    province_filename = province.lower() + ".txt"
     outfile.write(f"    # {province} stations\n")
-    file = open(province_filename,"r")
+    file = open(province_filename, "r")
     station_codes = file.readlines()
     db_lines = [f'    "{x.strip()}": "{province}",\n' for x in station_codes]
     for line in db_lines:
