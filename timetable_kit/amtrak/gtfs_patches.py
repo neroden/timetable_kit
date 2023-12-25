@@ -7,6 +7,8 @@ Patch known errors in Amtrak GTFS.
 This should be reviewed every time Amtrak releases a new GTFS.
 """
 
+from pandas import DataFrame  # Mostly for type-checking
+
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
 from timetable_kit.debug import debug_print
@@ -34,13 +36,14 @@ arizona_stops_list = [
 ]
 
 
-def patch_arizona(new_feed: FeedEnhanced):
+def patch_arizona(feed: FeedEnhanced):
     """
     Patch for Arizona timezone problems.
 
     Fix feed in place.
     """
-    stops = new_feed.stops
+    assert isinstance(feed.stops, DataFrame)  # Silence MyPy
+    stops = feed.stops
     for index in stops.index:
         if stops.loc[index, "stop_id"] in arizona_stops_list:
             if stops.loc[index, "stop_timezone"] == "America/Denver":
@@ -50,7 +53,7 @@ def patch_arizona(new_feed: FeedEnhanced):
                     "Found Arizona station with wrong timezone: patched stop_timezone",
                 )
     # Patch feed in place
-    new_feed.stops = stops
+    feed.stops = stops
     return
 
 
@@ -70,6 +73,8 @@ def patch_buses(feed: FeedEnhanced):
 
     Fix feed in place
     """
+    assert isinstance(feed.routes, DataFrame)  # Silence MyPy
+    assert isinstance(feed.agency, DataFrame)  # Silence MyPy
     routes = feed.routes
     for index in routes.index:
         if routes.loc[index, "route_long_name"] == "Amtrak Thruway Connecting Service":
@@ -90,29 +95,32 @@ def patch_buses(feed: FeedEnhanced):
     feed.routes = routes
 
 
-def patch_coast_starlight(new_feed: FeedEnhanced):
+def patch_coast_starlight(feed: FeedEnhanced):
     """
     Patch an old Coast Starlight bug.
     The bug appears to be fixed as of July 7, 2023,
     So this is unused code now
     """
+    assert isinstance(feed.routes, DataFrame)  # Silence MyPy
+    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
+    assert isinstance(feed.calendar, DataFrame)  # Silence MyPy
     # Coast Starlight fix
-    new_calendar = new_feed.calendar
+    new_calendar = feed.calendar
     # Coast Starlight: two bogus errors!
     # 11 is missing Saturday and has two other identical calendars;
     # 14 has three identical calendars
 
     # First find the route id:
-    for index in new_feed.routes.index:
-        if new_feed.routes.loc[index, "route_long_name"] == "Coast Starlight":
-            cs_route_id = new_feed.routes.loc[index, "route_id"]
+    for index in feed.routes.index:
+        if feed.routes.loc[index, "route_long_name"] == "Coast Starlight":
+            cs_route_id = feed.routes.loc[index, "route_id"]
             break
     debug_print(1, "Coast Starlight route_id: ", cs_route_id)
     # Then find the service ids:
     service_ids = set()
-    for index in new_feed.trips.index:
-        if new_feed.trips.loc[index, "route_id"] == cs_route_id:
-            service_ids.add(new_feed.trips.loc[index, "service_id"])
+    for index in feed.trips.index:
+        if feed.trips.loc[index, "route_id"] == cs_route_id:
+            service_ids.add(feed.trips.loc[index, "service_id"])
     # Now cycle through the calendars.
     # First find and drop the bogus calendars:
     for index in new_calendar.index:
@@ -136,17 +144,18 @@ def patch_coast_starlight(new_feed: FeedEnhanced):
             debug_print(1, "Patched full week into Coast Starlight calendar")
 
     # And update with the new calendar, just in case it hadn't
-    new_feed.calendar = new_calendar
+    feed.calendar = new_calendar
 
 
-def patch_toronto(new_feed: FeedEnhanced):
+def patch_toronto(feed: FeedEnhanced):
     """
     Toronto: has "no pickups" / "no dropoffs" mixed up.
 
     Patch feed in place.
     """
+    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
     # Toronto: incorrectly listed as "no pickups" in stop one.
-    new_stop_times = new_feed.stop_times
+    new_stop_times = feed.stop_times
     for index in new_stop_times.index:
         if new_stop_times.loc[index, "stop_id"] == "TWO":
             if new_stop_times.loc[index, "stop_sequence"] == 1:
@@ -158,7 +167,22 @@ def patch_toronto(new_feed: FeedEnhanced):
                     1, "Found Toronto in position 19 or 20: patched drop_off_type"
                 )
     # Update with new stop times
-    new_feed.stop_times = new_stop_times
+    feed.stop_times = new_stop_times
+
+
+def patch_cardinal_direction(feed: FeedEnhanced):
+    """
+    Patch Cardinal #1051 (DST switch date) with wrong direction ID
+
+    Patch feed in place.
+    Unused since we don't care about direction.
+    """
+    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
+    my_trips = feed.trips
+    debug_print(1, "Patching Cardinal #1051 direction")
+    my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
+    # Update with new trips data
+    feed.trips = my_trips
 
 
 def patch_feed(feed: FeedEnhanced):
@@ -178,13 +202,6 @@ def patch_feed(feed: FeedEnhanced):
 
     # Toronto pickup-only / dropoff-only problem
     patch_toronto(new_feed)
-
-    # Cardinal #1051 (DST switch date) with wrong direction ID
-    my_trips = new_feed.trips
-    debug_print(1, "Patching Cardinal #1051 direction")
-    my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0
-    # Update with new trips data
-    new_feed.trips = my_trips
 
     # Patch accessibility information into GTFS
     patch_add_wheelchair_boarding(new_feed)
