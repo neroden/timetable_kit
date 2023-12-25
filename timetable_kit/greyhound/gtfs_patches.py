@@ -7,9 +7,6 @@ Patch known issues with Greyhound GTFS.
 The big problem is that Greyhound doesn't have trip_short_name set -- at all.
 This breaks the entire architecture of timetable_kit, so we set it.
 """
-
-from pandas import DataFrame  # Mostly for type hints
-
 from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
 

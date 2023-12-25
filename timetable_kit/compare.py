@@ -11,8 +11,6 @@ Used to see how many services with different dates are actually the same service
 
 # Other people's packages
 import argparse
-import pandas as pd
-from pandas import DataFrame
 
 # Mostly for agency defaulting
 from timetable_kit import runtime_config
@@ -104,8 +102,8 @@ def compare_similar_services(route_id, *, feed: FeedEnhanced):
     """
     route_feed = feed.filter_by_route_ids([route_id])
 
-    assert isinstance(route_feed.calendar, DataFrame)  # Silence MyPy
-    assert isinstance(route_feed.trips, DataFrame)  # Silence MyPy
+    assert route_feed.calendar is not None  # Silence MyPy
+    assert route_feed.trips is not None  # Silence MyPy
 
     print("Calendar:")
     print(route_feed.calendar)
@@ -171,7 +169,7 @@ if __name__ == "__main__":
 
     route_long_name = args.route_long_name
 
-    assert isinstance(master_feed.routes, DataFrame)  # Silence MyPy
+    assert master_feed.routes is not None  # Silence MyPy
     # Create lookup table from route name to route id. Amtrak only has long names, not short names.
     lookup_route_id = dict(
         zip(master_feed.routes.route_long_name, master_feed.routes.route_id)

@@ -19,8 +19,6 @@ Optionally filter by day of week.
 import argparse
 import sys  # for exit
 
-from pandas import DataFrame  # for type hints
-
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.feed_enhanced import FeedEnhanced
