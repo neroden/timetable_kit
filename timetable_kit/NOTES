@@ -17,9 +17,12 @@ vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
 A much slower alternative (it is readable) is:
 pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
 
-Merging individual PDF pages can be done an external program.  One which works is
+Merging individual PDF pages can be done in an external program.
+We do not currently need to do this, but incase it's necessary:
+One which works is
 pdftk empire-service-wb.pdf empire-service-eb.pdf output empire-service.pdf
 The program is actually in the package "pdftk-java".
+
 
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data
 Amtrak station codes are in the "stop_id" field of GTFS static data.
