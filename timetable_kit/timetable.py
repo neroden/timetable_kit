@@ -26,9 +26,9 @@ from typing import NamedTuple, TypedDict
 import pandas as pd
 from pandas import DataFrame, Series
 
-import gtfs_kit # type: ignore # Tell MyPy this has no type stubs
+import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
-from weasyprint import HTML as weasyHTML # type: ignore # Tell MyPy this has no type stubs
+from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
 ############
 # My modules
@@ -467,8 +467,8 @@ def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
 
     Returns an ordered pair (start_date, end_date)
     """
-    assert isinstance(feed.calendar, DataFrame) # Silence MyPy
-    assert isinstance(feed.trips, DataFrame) # Silence MyPy
+    assert isinstance(feed.calendar, DataFrame)  # Silence MyPy
+    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
     # FIXME: The goal is to get the latest start date and earliest end date
     # for all trains in a list.  Do this in a more "pandas" fashion.
     service_id = feed.trips[feed.trips.trip_id == trip_id]["service_id"].squeeze()
@@ -492,7 +492,7 @@ def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     Return "None" if it doesn't stop here.  This is not an error.
     (Used to throw NoStopError if it doesn't stop here.  Too common.)
     """
-    assert isinstance(feed.stop_times, DataFrame) # Silence MyPy
+    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
 
     # Old, slower code:
     # stop_times = feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
@@ -1295,8 +1295,12 @@ def fill_tt_spec(
     # We have to do the styler and the tt at the same time,
     # or the styler will fail.
     # Alter in place.
-    new_tt_header_index: pd.Index = pd.Index(unique_header_replacement_list, dtype="object")
-    new_styler_t_header_index: pd.Index = pd.Index(unique_header_replacement_list, dtype="object")
+    new_tt_header_index: pd.Index = pd.Index(
+        unique_header_replacement_list, dtype="object"
+    )
+    new_styler_t_header_index: pd.Index = pd.Index(
+        unique_header_replacement_list, dtype="object"
+    )
     tt.columns = new_tt_header_index
     styler_t.columns = new_styler_t_header_index
     # This is marvellously finicky code.  Yuck.
