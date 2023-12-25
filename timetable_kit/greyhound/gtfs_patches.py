@@ -22,7 +22,7 @@ def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
     """
 
     new_feed = feed.copy()
-    assert isinstance(new_feed.trips, DataFrame)  # Silence MyPy
+    assert new_feed.trips is not None  # Silence MyPy
 
     # Greyhound has no trip_short_name.
     new_trips = new_feed.trips
