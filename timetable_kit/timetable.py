@@ -11,15 +11,16 @@ things timetable.py --help gives documentation
 #########################
 # Other people's packages
 
-import json
 import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
+from os import PathLike  # For passing paths around
 import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
 
-# For complex return values (TTSpec, _FilledTimetable, _CellCodes)
-from typing import NamedTuple, TypedDict
+from typing import Type, Self, NamedTuple, TypedDict
+
+import json
 
 import pandas as pd
 from pandas import DataFrame, Series
@@ -51,6 +52,8 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError,
 )
+from timetable_kit.convenience_types import GTFSDate, GTFSDay
+
 from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
 # To initialize the feed -- does type changes
@@ -116,90 +119,127 @@ special_row_names = {
 }
 
 
-def load_tt_spec_json(filename) -> dict:
-    """Load the JSON file for the tt-spec."""
-    path = Path(filename)
-    if path.is_file():
-        with open(path, "r") as f:
-            auxfile_str = f.read()
-            aux = json.loads(auxfile_str)
-            debug_print(1, "tt-spec JSON file loaded")
-            return aux
-        print("Shouldn't get here, file load failed.")
-    else:
-        # Make it blank, basically
-        debug_print(1, "No tt-spec JSON file.")
-        return {}
-
-
-def load_tt_spec_csv(filename) -> pd.DataFrame:
-    """Load a tt-spec CSV file."""
-    ttspec_csv = pd.read_csv(filename, index_col=False, header=None, dtype=str)
-    # PANDAS reads blank entries as NaN.
-    # We really don't want NaNs in this file.  They should all be converted to "".
-    ttspec_csv.fillna(value="", inplace=True)
-    return ttspec_csv
-
-
-class TTSpec(NamedTuple):
+class TTSpec(object):
     """An entire TTSpec, both JSON aux file and CSV spec file."""
 
-    json: dict
-    csv: pd.DataFrame
+    def __init__(self: Self, json: dict, csv: pd.DataFrame) -> None:
+        self.json: dict = json
+        self.csv: pd.DataFrame = csv
+        self.__set_json_defaults()
 
+    def __set_json_defaults(self: Self):
+        """Fill in some default values for the JSON if they're not present.
 
-def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
-    """Load a tt-spec from files, both the JSON and the CSV."""
+        Subroutine of TTSpec.__init__()
 
-    ttspec_csv_filename = spec_filename_base + ".csv"
-    ttspec_json_filename = spec_filename_base + ".json"
+        This edits the dict in place.
+        """
+        self.json.setdefault("for_rpa", False)
+        self.json.setdefault("train_numbers_side_by_side", False)
+        self.json.setdefault("dwell_secs_cutoff", 300)
+        self.json.setdefault("use_bus_icon_in_cells", False)
 
-    if input_dirname:
-        input_dir = Path(input_dirname)
-        ttspec_csv_path = input_dir / ttspec_csv_filename
-        ttspec_json_path = input_dir / ttspec_json_filename
-    else:
-        # Might be None, if it wasn't passed at the command line
-        ttspec_csv_path = Path(ttspec_csv_filename)
-        ttspec_json_path = Path(ttspec_json_filename)
-    debug_print(
-        1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
-    )
+    def set_reference_date(self: Self, reference_date: GTFSDate | None):
+        """Set the reference_date in the JSON part of the TTSpec.
 
-    result = TTSpec(
-        load_tt_spec_json(ttspec_json_path), load_tt_spec_csv(ttspec_csv_path)
-    )
-    return result
+        If None is passed, does nothing (leaves it unchanged).
+        """
+        if reference_date:
+            self.json["reference_date"] = reference_date
 
+    @classmethod
+    def from_files(cls: Type[Self], filename: str, input_dir: PathLike | str = "."):
+        """Load a tt-spec from files, both the JSON and the CSV."""
+        input_dir = Path(input_dir)
 
-def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date: str):
-    """Fill in the station list for a tt-spec if it has a key code.
+        # Accept the spec name with or without a suffix, for convenience
+        filename_base = filename.removesuffix(".csv").removesuffix(".json")
 
-    Cell 0,0 is normally blank. If it is "Stations of 59", then (a)
-    assume there is only one tt-spec row; (b) get the stations for 59
-    and fill the rows in from that
+        csv_path = input_dir / (filename_base + ".csv")
+        json_path = input_dir / (filename_base + ".json")
+        debug_print(1, "TTSpec csv_path", csv_path, "/ json_path", json_path)
 
-    Requires a feed and a date (the reference date; the train may change
-    by date).
+        new_ttspec = cls(cls.read_json(json_path), cls.read_csv(csv_path))
+        # Fill in output_filename if it isn't in the json. (Edit in place.)
+        new_ttspec.json.setdefault("output_filename", filename_base)
+        return new_ttspec
 
-    Note that this tucks on the end of the tt_spec.  A "second row" for
-    column-options will therefore be unaffected.  Other second rows may
-    result in confusing results.
-    """
-    if (key_code := str(raw_tt_spec.iloc[0, 0])) == "":
-        print(raw_tt_spec)
-        # No key code, nothing to do
-        return raw_tt_spec
+    # These are here largely for namespacing purposes, to keep names short.
+    @staticmethod
+    def read_json(file: PathLike | str) -> dict:
+        """Load the JSON file for the tt-spec."""
+        path = Path(file)
+        if path.is_file():
+            with open(path, "r") as f:
+                auxfile_str = f.read()
+                aux = json.loads(auxfile_str)
+                debug_print(1, "tt-spec JSON file loaded")
+                return aux
+            print("Shouldn't get here, file load failed.")
+        else:
+            # Make it blank, basically
+            debug_print(1, "No tt-spec JSON file.")
+            return {}
 
-    debug_print(3, "Key code: " + key_code)
-    if key_code.startswith("stations of "):
-        # Filter the feed down to a single date...
-        today_feed = feed.filter_by_dates(date, date)
+    @staticmethod
+    def read_csv(file: PathLike | str) -> pd.DataFrame:
+        """Read a tt-spec CSV file."""
+        ttspec_csv = pd.read_csv(file, index_col=False, header=None, dtype=str)
+        debug_print(1, "tt-spec CSV file loaded")
+        # PANDAS reads blank entries as NaN.
+        # We really don't want NaNs in this file.  They should all be converted to "".
+        ttspec_csv.fillna(value="", inplace=True)
+        return ttspec_csv
 
-        # Find the train name and possibly filter by day...
+    def __getitem__(self: Self, index):
+        """Return first the JSON, second the CSV."""
+        # Allow unpacking
+        return (self.json, self.csv)[index]
+
+    def strip_omits(self):
+        """Strip any rows in the CSV where the first column is "omit" (used for comments)."""
+        old_csv = self.csv
+        # Note: assumes that the column names are 0,1,2,etc.
+        # I couldn't figure out how to do this with iloc FIXME
+        new_csv = old_csv[old_csv[0] != "omit"].reset_index(drop=True)
+        debug_print(6, "STRIPPED: ", new_csv)
+        self.csv = new_csv
+
+    def augment_from_key_cell(self, *, feed: FeedEnhanced):
+        """Fill in the station list for a tt-spec if it has a key code.
+
+        Cell 0,0 is normally blank. If it is "Stations of 59", then (a)
+        assume there is only one tt-spec row; (b) get the stations for 59
+        and fill the rows in from that
+
+        Requires a feed.  Requires that reference_date be set.
+
+        Note that this tucks on the end of the tt_spec.  A "second row" for
+        column-options will therefore be unaffected.  Other second rows may
+        result in confusing results.
+
+        Prints the CSV.
+        """
+        key_code = str(self.csv.iloc[0, 0])
+        if key_code == "":
+            # No key code, nothing to do
+            debug_print(1, self.csv)
+            return
+
+        if not key_code.startswith("stations of "):
+            raise InputError(
+                "Key cell must be blank or 'stations of xxx', was ", key_code
+            )
+
+        # Find the train name:
         key_train_name = key_code.removeprefix("stations of ")
         debug_print(1, f"Using key tsn {key_train_name}")
 
+        # Filter the feed down to a single date...
+        reference_date = self.json["reference_date"]
+        today_feed = feed.filter_by_dates(reference_date, reference_date)
+
+        # And possibly filter by day as well
         for day in GTFS_DAYS:
             if key_train_name.endswith(day):
                 key_train_name = key_train_name.removesuffix(day).strip()
@@ -208,32 +248,71 @@ def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date: str):
 
         # And pull the stations list
         stations_df = stations_list_from_tsn(today_feed, key_train_name)
-        new_tt_spec = raw_tt_spec.copy()  # Copy entire original spec
-        new_tt_spec.iloc[0, 0] = ""  # Blank out key_code
-        newer_tt_spec = pd.concat([new_tt_spec, stations_df]).fillna(
-            ""
-        )  # Yes, this works
+        new_csv = self.csv.copy()  # Copy entire original spec
+        new_csv.iloc[0, 0] = ""  # Blank out key_code
+        # The following will add the stations as desired:
+        newer_csv = pd.concat([new_csv, stations_df]).fillna("")
         # The problem is that it leads to duplicate indices (ugh!)
-        # So fully reset the index
-        newest_tt_spec = newer_tt_spec.reset_index(drop=True)
-        debug_print(1, newest_tt_spec)
-        return newest_tt_spec
+        # So we must fully reset the index.
+        newest_csv = newer_csv.reset_index(drop=True)
+        debug_print(1, newest_csv)
+        return newest_csv
 
-    raise InputError("Key cell must be blank or 'stations of xxx', was ", key_code)
+    def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
+        """Filter a master feed to trips relevant to this spec only.
 
+        First we filter to the reference date in the TTSpec JSON.
+        (This is essential to get accurate timetables for a given period.)
 
-def strip_omits_from_tt_spec(raw_tt_spec):
-    """Given a tt_spec dataframe, strip any rows where the first column is
-    "omit"; used for comments.
+        Then we filter it to trip_short_names which are in the header of the TTSpec CSV.
 
-    Modifies in place.
-    """
-    # Note: assumes that the column names are 0,1,2,etc.
-    # I couldn't figure out how to do this with iloc FIXME
-    stripped_tt_spec = raw_tt_spec[raw_tt_spec[0] != "omit"].reset_index(drop=True)
-    debug_print(6, "STRIPPED:")
-    debug_print(6, stripped_tt_spec)
-    return stripped_tt_spec
+        (This is necessary to get effective dates for the period, and also
+        vastly reduces computational load for the main program.)
+
+        Return the reduced feed.
+        """
+
+        # Filter the feed to the relevant day.  Required.
+        reference_date = self.json["reference_date"]
+        today_feed = master_feed.filter_by_dates(reference_date, reference_date)
+        debug_print(1, "Feed filtered by reference date.")
+
+        # Reduce the feed, by eliminating stuff from other trains.
+        # By reducing the stop_times table to be much smaller,
+        # this hopefully makes each subsequent search for a timepoint faster.
+        # This cuts a testcase runtime from 23 seconds to 20.
+        train_specs_list = train_specs_list_from_tt_spec(self.csv)
+        # Note still contains "/" items
+        flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
+
+        # Note still contains "91 monday" and similar specs: remove the day suffixes here
+        flattened_tsn_list = [
+            train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
+        ]
+
+        reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
+        debug_print(1, "Feed filtered by trip_short_name.")
+
+        # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
+        # This will make it impossible to map from tsn to trip_id.
+        # HOWEVER, Amtrak has some weird duplicates with duplicate trip_ids and identical timings,
+        # so this might not be a fatal error.
+        if find_tsn_dupes(reduced_feed):
+            debug_print(
+                1,
+                "Warning, tsn duplicates!  If you use one of these without a day"
+                " disambiguator, a random trip will be picked!  Usually a bad idea!",
+            )
+
+        # Print the calendar for debugging
+        debug_print(1, "Calendar:")
+        debug_print(1, reduced_feed.calendar)
+
+        # Debugging for the reduced feed.  Seems to be fine.
+        # with open( Path("./dump-stop-times.csv"),'w') as outfile:
+        #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
+
+        return reduced_feed
 
 
 def stations_list_from_tt_spec(tt_spec):
@@ -653,7 +732,7 @@ def fill_tt_spec(
 ):
     """Fill a timetable from a tt-spec template using GTFS data.
 
-    The tt-spec must be complete (run augment_tt_spec first) and free of comments (run strip_omits_from_tt_spec)
+    The tt-spec must be complete (run .augment_from_key_cell first) and free of comments (run .strip_omits)
     today_feed: GTFS feed to work with.  Mandatory.
         This should be filtered to a single representative date.  This is not checked.
         This *may* be filtered to relevant trains only.  It must contain all relevant trains.
@@ -1310,82 +1389,6 @@ def fill_tt_spec(
     return result
 
 
-def set_aux_defaults(aux: dict, *, output_filename, reference_date):
-    """Given a dict representing the tt_spec's aux / JSON file, fill in some
-    default values if they're not present.
-
-    Also overrides reference_date if one is passed.
-
-    This edits the dict in place.
-    """
-    aux.setdefault("for_rpa", False)
-    aux.setdefault("train_numbers_side_by_side", False)
-    aux.setdefault("dwell_secs_cutoff", 300)
-    aux.setdefault("use_bus_icon_in_cells", False)
-    if reference_date:
-        aux["reference_date"] = reference_date
-    # output_filename is usually based on the spec or list filename,
-    # but can be set in the aux file.  This is the base filename without extensions.
-    aux.setdefault("output_filename", output_filename)
-
-
-def filter_and_reduce_feed(
-    master_feed: FeedEnhanced, reference_date: str, tt_spec: pd.DataFrame
-) -> FeedEnhanced:
-    """Filter a master feed to trips relevant to reference_date only.
-
-    (This is essential to get accurate timetables for a given period.)
-
-    Then filter it to trip_short_names relevant to tt_spec only.
-
-    (This is necessary to get effective dates for the period, and also
-    vastly reduces computational load for the main program.)
-
-    Return the reduced feed.
-    """
-
-    # Filter the feed to the relevant day.  Required.
-    today_feed = master_feed.filter_by_dates(reference_date, reference_date)
-    debug_print(1, "Feed filtered by reference date.")
-
-    # Reduce the feed, by eliminating stuff from other trains.
-    # By reducing the stop_times table to be much smaller,
-    # this hopefully makes each subsequent search for a timepoint faster.
-    # This cuts a testcase runtime from 23 seconds to 20.
-    train_specs_list = train_specs_list_from_tt_spec(tt_spec)
-    # Note still contains "/" items
-    flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
-
-    # Note still contains "91 monday" and similar specs: remove the day suffixes here
-    flattened_tsn_list = [
-        train_spec_to_tsn(train_spec) for train_spec in flattened_train_specs_set
-    ]
-
-    reduced_feed = today_feed.filter_by_trip_short_names(flattened_tsn_list)
-    debug_print(1, "Feed filtered by trip_short_name.")
-
-    # Uniqueness sanity check -- check for two rows in reduced_feed.trips with the same tsn.
-    # This will make it impossible to map from tsn to trip_id.
-    # HOWEVER, Amtrak has some weird duplicates with duplicate trip_ids and identical timings,
-    # so this might not be a fatal error.
-    if find_tsn_dupes(reduced_feed):
-        debug_print(
-            1,
-            "Warning, tsn duplicates!  If you use one of these without a day"
-            " disambiguator, a random trip will be picked!  Usually a bad idea!",
-        )
-
-    # Print the calendar for debugging
-    debug_print(1, "Calendar:")
-    debug_print(1, reduced_feed.calendar)
-
-    # Debugging for the reduced feed.  Seems to be fine.
-    # with open( Path("./dump-stop-times.csv"),'w') as outfile:
-    #    print(reduced_feed.stop_times.to_csv(index=False), file=outfile)
-
-    return reduced_feed
-
-
 class _DateRange(NamedTuple):
     """Used to track what dates a timetable is valid for."""
 
@@ -1437,24 +1440,21 @@ def produce_timetable(
     spec_file: root of filename for the .csv and .json files specifying the timetable
     output_dirname: Put the output timetables here
     """
-    # Accept the spec name with or without a suffix, for convenience
-    spec_filename_base = spec_file.removesuffix(".csv").removesuffix(".json")
 
-    (aux, tt_spec_raw) = load_tt_spec(spec_filename_base, input_dirname=input_dirname)
+    # Load the tt-spec, both aux and csv
+    my_ttspec = TTSpec.from_files(spec_file, input_dir=input_dirname)
+    # Set reference date override -- does nothing if passed "None"
+    my_ttspec.set_reference_date(command_line_reference_date)
+    # Strip omit lines
+    my_ttspec.strip_omits()
+    # Must augment from the master feed, not the filtered feed
+    my_ttspec.augment_from_key_cell(feed=master_feed)
+    # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
+    reduced_feed = my_ttspec.filter_and_reduce_feed(master_feed)
 
-    if output_dirname:
-        output_dir = Path(output_dirname)
-    else:
-        output_dir = Path(".")
-
-    # Fill in defaults if these aren't in the aux.
-    # We usually base output_filename on the spec file name, but it can be in the aux
-    # We override reference_Date with the command line one if it's present
-    set_aux_defaults(
-        aux,
-        output_filename=spec_filename_base,
-        reference_date=command_line_reference_date,
-    )
+    # This is in a halfway state towards object-orientation.  FIXME.
+    # For now, exit the object-oriented part of the code...
+    (aux, tt_spec) = my_ttspec
 
     output_filename_base = aux["output_filename"]
     for_rpa = bool(aux["for_rpa"])
@@ -1469,17 +1469,8 @@ def produce_timetable(
     if "programmers_warning" in aux:
         print("WARNING: ", aux["programmers_warning"])
 
-    # Copy the icons and fonts to the output dir.
-    # This is memoized, so it won't duplicate work if you do multiple tables.
-    copy_supporting_files_to_output_dir(output_dir, for_rpa)
+    output_dir = Path(output_dirname)
 
-    # Now we're ready to work with the .tt-spec file, finally
-    tt_spec_stripped = strip_omits_from_tt_spec(tt_spec_raw)
-    tt_spec = augment_tt_spec(tt_spec_stripped, feed=master_feed, date=reference_date)
-    debug_print(1, "tt-spec", spec_filename_base, "loaded, augmented, and stripped")
-
-    # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
-    reduced_feed = filter_and_reduce_feed(master_feed, reference_date, tt_spec)
     # Find the date range on which the entire reduced feed is valid
     (latest_start_date, earliest_end_date) = get_valid_date_range(reduced_feed)
 
@@ -1512,6 +1503,10 @@ def produce_timetable(
         do_html = True
 
     if do_html:
+        # Copy the icons and fonts to the output dir.
+        # This is memoized, so it won't duplicate work if you do multiple tables.
+        copy_supporting_files_to_output_dir(output_dir, for_rpa)
+
         # This is an ID to distinguish one timetable page from another
         # in the CSS coding.  Prefixed versions will be used to tag the
         # <div> for the page, and the table itself.
