@@ -74,8 +74,8 @@ station_types_decoding_map = {
 
 
 # This is a global filled on first use
-train_or_bus_dict = None
-shelter_dict = None
+train_or_bus_dict: dict[str, bool] | None = None
+shelter_dict: dict[str, bool] | None = None
 
 
 def is_train_station(station_code: str) -> bool:
@@ -87,6 +87,7 @@ def is_train_station(station_code: str) -> bool:
     """
     if train_or_bus_dict is None:
         make_station_type_dicts()
+    assert train_or_bus_dict is not None  # Silence MyPy
     return train_or_bus_dict[station_code]
 
 
@@ -99,6 +100,7 @@ def has_shelter(station_code: str) -> bool:
     """
     if shelter_dict is None:
         make_station_type_dicts()
+    assert shelter_dict is not None  # Silence MyPy
     return shelter_dict[station_code]
 
 
@@ -131,6 +133,7 @@ def make_station_type_dicts() -> None:
         # For exotic reasons, the description is returned in a list.
         # This is usually a one-item list, but occasionally it comes out
         # as a multiple item list with duplicates.
+        assert isinstance(description_list, list)  # Silence MyPy
         if not description_list:
             debug_print(1, "no description for", station_code)
             continue
@@ -143,6 +146,7 @@ def make_station_type_dicts() -> None:
         if description not in station_types_decoding_map:
             debug_print(1, "unexpected description for", station_code, ":", description)
         else:
+            assert isinstance(description, str)  # Silence MyPy
             [train_or_bus, shelter] = station_types_decoding_map[description]
             train_or_bus_dict[station_code] = bool(train_or_bus)
             shelter_dict[station_code] = bool(shelter_dict)
