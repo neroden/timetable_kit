@@ -1775,32 +1775,24 @@ def main():
     debug_print(2, "Agency found:", args.agency)
     runtime_config.set_agency(args.agency)
 
-    input_dirname = args.input_dirname
-    if not input_dirname:
-        # Pull the selected input_dir from the agency, if the directory exists
-        input_dirname = runtime_config.agency_input_dir
-    if not input_dirname or not os.path.isdir(input_dirname):
-        input_dirname = os.getenv("TIMETABLE_KIT_INPUT_DIR")
-    if not input_dirname:
-        input_dirname = "."
+    input_dirname = (
+        args.input_dirname
+        or runtime_config.agency_input_dir
+        or os.getenv("TIMETABLE_KIT_INPUT_DIR")
+        or "."
+    )
+    if not os.path.isdir(input_dirname):
+        print("Input dir", input_dirname, "does not exist.  Aborting.")
+        sys.exit(1)
 
-    output_dirname = args.output_dirname
-    if not output_dirname:
-        output_dirname = os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
-    if not output_dirname:
-        output_dirname = "."
+    output_dirname = args.output_dirname or os.getenv("TIMETABLE_KIT_OUTPUT_DIR") or "."
+    if not os.path.isdir(output_dirname):
+        print("Output dir", output_dirname, "does not exist.  Aborting.")
+        sys.exit(1)
 
-    if args.gtfs_filename:
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to agency
-        gtfs_filename = agency().gtfs_unzipped_local_path
+    gtfs_filename = args.gtfs_filename or agency().gtfs_unzipped_local_path
 
-    author = args.author
-    if not author:
-        author = os.getenv("TIMETABLE_KIT_AUTHOR")
-    if not author:
-        author = os.getenv("AUTHOR")
+    author = args.author or os.getenv("TIMETABLE_KIT_AUTHOR") or os.getenv("AUTHOR")
     if not author:
         print("--author is mandatory!")
         sys.exit(1)
