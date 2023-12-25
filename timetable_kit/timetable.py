@@ -779,18 +779,30 @@ def fill_tt_spec(
         Probably don't want to ever make it less than 1 minute.
     use_bus_icon_in_cells: Put a bus icon next to timetable cells which are a bus.
     """
-    # Extract vital information from the json (aux) dict.
-    reference_date = str(spec.json["reference_date"])
-    train_numbers_side_by_side = bool(spec.json["train_numbers_side_by_side"])
-    use_bus_icon_in_cells = bool(spec.json["use_bus_icon_in_cells"])
-    box_time_characters = bool(spec.json["box_time_characters"])
-
     # MyPy throws a fit over the tables in the feed.  Assert them all.
     assert today_feed.agency is not None
     assert today_feed.calendar is not None
     assert today_feed.stops is not None
     assert today_feed.routes is not None
     assert today_feed.trips is not None
+
+    # Extract vital information from the json (aux) dict.
+    if not spec.json.get("reference_date"):
+        raise InputError("No reference date in .json or at command line!")
+    reference_date = str(spec.json["reference_date"])
+    debug_print(1, "Working with reference date ", reference_date)
+
+    train_numbers_side_by_side = bool(spec.json["train_numbers_side_by_side"])
+    use_bus_icon_in_cells = bool(spec.json["use_bus_icon_in_cells"])
+    box_time_characters = bool(spec.json["box_time_characters"])
+
+    if "programmers_warning" in spec.json:
+        print("WARNING: ", spec.json["programmers_warning"])
+
+    # Clean up the spec.
+    spec.strip_omits()
+    spec.calculate_column_options()  # Also removes column_options from main CSV dataframe
+    spec.augment_from_key_cell(feed=today_feed)  # Expand "shorthand" specs
 
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
@@ -1476,18 +1488,7 @@ def produce_timetable(
     spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
     # Set reference date override -- does nothing if passed "None"
     spec.set_reference_date(command_line_reference_date)
-    if not spec.json.get("reference_date"):
-        raise InputError("No reference date in .json or at command line!")
-    debug_print(1, "Working with reference date ", spec.json["reference_date"])
-    if "programmers_warning" in spec.json:
-        print("WARNING: ", spec.json["programmers_warning"])
-    # Strip omit lines
-    spec.strip_omits()
-    # Must calculate column options and remove from main CSV
-    spec.calculate_column_options()
 
-    # Must augment from the master feed, not the filtered feed... or not?
-    spec.augment_from_key_cell(feed=master_feed)
     # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
     reduced_feed = spec.filter_and_reduce_feed(master_feed)
 
