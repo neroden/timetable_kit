@@ -93,11 +93,7 @@ if __name__ == "__main__":
 
     runtime_config.set_agency(args.agency)
 
-    if args.gtfs_filename:
-        gtfs_filename = args.gtfs_filename
-    else:
-        # Default to agency
-        gtfs_filename = agency().gtfs_unzipped_local_path
+    gtfs_filename = args.gtfs_filename or agency().gtfs_unzipped_local_path
 
     # Initialize the feed and the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
