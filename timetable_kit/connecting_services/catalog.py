@@ -190,7 +190,7 @@ def get_filenames_for_all_logos() -> list[str]:
     # Pull the appropriate column, convert to a list
     assert connecting_services_df is not None  # Silence MyPy
     logo_svg_filenames = connecting_services_df["svg_filename"].tolist()
-    debug_print(1, logo_svg_filenames)
+    # debug_print(1, logo_svg_filenames)
     filtered_logo_svg_filenames = [
         filename
         for filename in logo_svg_filenames

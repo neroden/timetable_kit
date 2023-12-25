@@ -220,7 +220,6 @@ class TTSpec(object):
         key_code = str(self.csv.iloc[0, 0])
         if key_code == "":
             # No key code, nothing to do
-            debug_print(1, self.csv)
             return
 
         if not key_code.startswith("stations of "):
@@ -250,6 +249,7 @@ class TTSpec(object):
         # The following will add the stations as desired.
         # It creates duplicate indexes, so we must reset the index.
         self.csv = pd.concat([new_csv, stations_df]).fillna("").reset_index(drop=True)
+        debug_print("Augmented TTSpec:")
         debug_print(1, self.csv)
 
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
@@ -350,13 +350,13 @@ class TTSpec(object):
         column_options_df = self.csv.iloc[1, 0:]  # second row, all of it
         column_options_raw_list = column_options_df.to_list()
         column_options_nested_list = [str(i).split() for i in column_options_raw_list]
-        debug_print(1, column_options_nested_list)
         self.column_options = column_options_nested_list
         # Now delete row 2.
         # This drops by index and not by actual row number, FIXME
         # Thankfully they're currently the same
         self.csv = self.csv.drop(1, axis="index")
         debug_print(1, "Column options separated from CSV.")
+        debug_print(1, self.column_options)
 
 
 class _CellCodes(TypedDict, total=False):
@@ -741,9 +741,6 @@ def fill_tt_spec(
 ) -> _FilledTimetable:
     """Fill a timetable from a TTSpec template using GTFS data.
 
-    The TTSpec must be complete (run .augment_from_key_cell first) and free of comments (run .strip_omits)
-    It should already have column options separated out with .calculate_column_options
-
     spec: a TTSpec containing both the CSV spec and the auxilliary aux
     Most components of the aux are optional. The following are mandatory:
         reference_date
@@ -800,6 +797,8 @@ def fill_tt_spec(
     if "programmers_warning" in spec.aux:
         print("WARNING: ", spec.aux["programmers_warning"])
 
+    # Debug-print the spec
+    debug_print(1, spec.csv)
     # Clean up the spec.
     spec.strip_omits()
     spec.calculate_column_options()  # Also removes column_options from main CSV dataframe
