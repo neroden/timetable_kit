@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import NamedTuple, TypedDict
 
 import pandas as pd
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 import gtfs_kit
 
@@ -37,6 +37,7 @@ from timetable_kit import runtime_config
 from timetable_kit import text_presentation
 from timetable_kit import connecting_services
 from timetable_kit import icons
+
 # For calling out to the system to sew individual PDF pages together to one PDF
 from timetable_kit import sew_pages
 
@@ -280,12 +281,15 @@ def get_column_options(tt_spec):
 
 class _CellCodes(TypedDict, total=False):
     """Represents codes which might be in a cell in a timetable spec"""
+
     train_spec: str
     first: bool
     last: bool
     blank: bool
+    two_row: bool
 
-def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes:
+
+def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes | None:
     """
     Given special code text in a cell, decipher it
 
@@ -310,6 +314,7 @@ def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes:
     first: True or False
     last: True or False
     blank: True or False
+    two_row: True or False
     """
     # TODO: unify this so we can have colored backgrounds for arrows?
 
@@ -668,6 +673,13 @@ def fill_tt_spec(
         Probably don't want to ever make it less than 1 minute.
     use_bus_icon_in_cells: Put a bus icon next to timetable cells which are a bus.
     """
+    # MyPy throws a fit over the tables in the feed.  Assert them all.
+    assert isinstance(today_feed.agency, DataFrame)
+    assert isinstance(today_feed.calendar, DataFrame)
+    assert isinstance(today_feed.stops, DataFrame)
+    assert isinstance(today_feed.routes, DataFrame)
+    assert isinstance(today_feed.trips, DataFrame)
+
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
     # So we generate a dict for it.
@@ -682,7 +694,8 @@ def fill_tt_spec(
 
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
-    def trip_from_train_spec_local(train_spec: str):
+    def trip_from_train_spec_local(train_spec: str) -> Series:
+        assert isinstance(today_feed.trips, DataFrame)  # Silence MyPy
         try:
             my_trip_id = train_spec_to_trip_id[train_spec]
         except KeyError as e:
@@ -697,7 +710,8 @@ def fill_tt_spec(
     # of trip_from_train_spec_local, *and* should use the local reduced feed, so it has to be
     # subordinate to this particular run of the timetable generator!
     # So create another inner function to pull the line from the route table.
-    def route_from_train_spec_local(train_spec: str):
+    def route_from_train_spec_local(train_spec: str) -> Series:
+        assert isinstance(today_feed.routes, DataFrame)  # Silence MyPy
         my_trip = trip_from_train_spec_local(train_spec)
         my_routes = today_feed.routes[today_feed.routes.route_id == my_trip.route_id]
         if my_routes.shape[0] == 0:
@@ -914,8 +928,8 @@ def fill_tt_spec(
                 case ["route-name", _, _]:
                     # Line for route names.
                     cell_css_list.append("route-name-cell")
-                    route_names = []
-                    styled_route_names = []
+                    route_names: list[str] = []
+                    styled_route_names: list[str] = []
                     styled_already = False
                     for train_spec in train_specs:
                         if train_spec.endswith("noheader"):
@@ -1011,7 +1025,7 @@ def fill_tt_spec(
                         departure = text_presentation.explode_timestr(
                             timepoint.departure_time, zonediff
                         )
-                        offset = departure.day
+                        offset = int(departure.day)
                         # Finally, get the calendar (must be unique)
                         calendar = today_feed.calendar[
                             today_feed.calendar.service_id == my_trip.service_id
@@ -1375,7 +1389,7 @@ def get_valid_date_range(reduced_feed: FeedEnhanced) -> _DateRange:
     This is used after filtering the feed down to the trips which will be shown in the final timetable.
     It therefore gives a validity period for the timetable as a whole.
     """
-    assert isinstance(reduced_feed.calendar, DataFrame) # Silence MyPy
+    assert isinstance(reduced_feed.calendar, DataFrame)  # Silence MyPy
     start_dates = reduced_feed.calendar["start_date"]
     latest_start_date = start_dates.max()
     end_dates = reduced_feed.calendar["end_date"]
