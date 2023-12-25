@@ -43,10 +43,6 @@ It's packaged as a package with Poetry, so presumably requires Poetry to install
 
 One of the tools uses the LXML module to parse Amtrak's station web pages.
 
-It uses pdftk-java (command-line tool must be installed and in path) to sew single-page PDF timetables together into multi-page timetables.
-You don't need pdftk-java unless you want to make multi-page PDFs.  You can also sew the pages together yourself
-using your preferred tool.
-
 It uses VIPS (libvips) (command-line tool must be installed and in path) so convert single-page PDF timetables to JPG.
 You don't need vips unless you want to make JPG output.  You can also do this conversion yourself using your
 preferred tool.
