@@ -1290,8 +1290,12 @@ def fill_tt_spec(
     #
     # We have to do the styler and the tt at the same time,
     # or the styler will fail.
-    tt.columns = unique_header_replacement_list
-    styler_t.columns = unique_header_replacement_list
+    # Alter in place.
+    new_tt_header_index = pd.Index(unique_header_replacement_list, dtype="object")
+    new_styler_t_header_index = pd.Index(unique_header_replacement_list, dtype="object")
+    tt.columns = new_tt_header_index
+    styler_t.columns = new_styler_t_header_index
+    # This is marvellously finicky code.  Yuck.
 
     result = _FilledTimetable(tt, styler_t, header_styling_list)
 
