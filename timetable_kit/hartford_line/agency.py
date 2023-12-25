@@ -6,8 +6,6 @@ timetable_kit.maple_leaf.agency module
 
 This holds a class for "AgencyHartfordLine" intended to be used as a singleton.
 """
-from __future__ import annotations
-
 from timetable_kit.amtrak import AgencyAmtrak
 
 # Map from station codes to connecting service names
@@ -27,9 +25,7 @@ class AgencyHartfordLine(AgencyAmtrak):
         AgencyAmtrak._agency_published_gtfs_urls[0],
     ]
 
-    def __init__(
-        self: AgencyHartfordLine,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Initialized from connecting_services_data.py
         self._connecting_services_dict = connecting_services_dict
@@ -43,7 +39,9 @@ class AgencyHartfordLine(AgencyAmtrak):
         city_state_name = " ".join([city_name, state_name])
         return city_state_name
 
-    def replace_facility_names(self, station_code: str, facility_name: str | None) -> str | None:
+    def replace_facility_names(
+        self, station_code: str, facility_name: str | None
+    ) -> str | None:
         """
         Replace certain facility names; leave others intact.
         """

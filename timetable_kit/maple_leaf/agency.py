@@ -6,7 +6,7 @@ timetable_kit.maple_leaf.agency module
 
 This holds a class for "AgencyMapleLeaf" intended to be used as a singleton.
 """
-from __future__ import annotations
+import timetable_kit.text_assembly as text_assembly
 
 from timetable_kit.amtrak import AgencyAmtrak
 from timetable_kit.via import AgencyVIA
@@ -34,9 +34,7 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         AgencyVIA._agency_published_gtfs_urls[0],
     ]
 
-    def __init__(
-        self: AgencyAmtrak,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Initialized from connecting_services_data.py
         self._connecting_services_dict = connecting_services_dict
