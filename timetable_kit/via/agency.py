@@ -177,7 +177,7 @@ class AgencyVIA(Agency):
 
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
-    ) -> str:
+    ) -> str | None:
         """
         Remove or add certain facility names; leave others intact.
         """

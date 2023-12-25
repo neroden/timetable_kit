@@ -390,7 +390,7 @@ class Agency:
 
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
-    ) -> str:
+    ) -> str | None:
         """
         Replace problematic facility names (also add or remove facility names as needed.
         Return others unchanged.

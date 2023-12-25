@@ -256,7 +256,7 @@ class AgencyAmtrak(Agency):
 
     def replace_facility_names(
         self, station_code: str, facility_name: str | None
-    ) -> str:
+    ) -> str | None:
         """
         Replace certain facility names; leave others intact.
         """
