@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-from typing import Optional, Type, Any
+from typing import Type, Any
 
 from gtfs_kit import Feed
 from pandas import DataFrame, Series
@@ -14,20 +14,20 @@ GTFS_DAYS: tuple[str, str, str, str, str, str, str]
 
 class FeedEnhanced(Feed):
     dist_units: str
-    agency: Optional[DataFrame] = None
-    stops: Optional[DataFrame] = None
-    routes: Optional[DataFrame] = None
-    trips: Optional[DataFrame] = None
-    stop_times: Optional[DataFrame] = None
-    calendar: Optional[DataFrame] = None
-    calendar_dates: Optional[DataFrame] = None
-    fare_attributes: Optional[DataFrame] = None
-    fare_rules: Optional[DataFrame] = None
-    shapes: Optional[DataFrame] = None
-    frequencies: Optional[DataFrame] = None
-    transfers: Optional[DataFrame] = None
-    feed_info: Optional[DataFrame] = None
-    attributions: Optional[DataFrame] = None
+    agency: DataFrame | None = None
+    stops: DataFrame | None = None
+    routes: DataFrame | None = None
+    trips: DataFrame | None = None
+    stop_times: DataFrame | None = None
+    calendar: DataFrame | None = None
+    calendar_dates: DataFrame | None = None
+    fare_attributes: DataFrame | None = None
+    fare_rules: DataFrame | None = None
+    shapes: DataFrame | None = None
+    frequencies: DataFrame | None = None
+    transfers: DataFrame | None = None
+    feed_info: DataFrame | None = None
+    attributions: DataFrame | None = None
 
     @classmethod
     def enhance(cls: Type[FeedEnhanced], regular_feed: Feed) -> FeedEnhanced: ...
@@ -44,7 +44,6 @@ class FeedEnhanced(Feed):
         self: FeedEnhanced, trip_short_names
     ) -> FeedEnhanced: ...
     def filter_by_trip_ids(self: FeedEnhanced, trip_ids) -> FeedEnhanced: ...
-
     def get_single_trip(self: FeedEnhanced) -> Series: ...
     def get_single_trip_stop_times(self: FeedEnhanced, trip_id) -> DataFrame: ...
     def get_trip_short_name(self: FeedEnhanced, trip_id) -> str: ...
