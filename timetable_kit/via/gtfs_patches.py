@@ -7,7 +7,7 @@ Patch known errors in VIA GTFS.
 This should be reviewed every time VIA releases a new GTFS.
 """
 
-from pandas import DataFrame # Mostly for mypy
+from pandas import DataFrame  # Mostly for mypy
 
 from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
@@ -25,7 +25,7 @@ def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
     # Wheelchair access for VIA:
     # VIA uses "0" way too often: consider changing it to "2" (no access)
     new_stops = new_feed.stops
-    assert isinstance(new_stops, DataFrame) # Silence MyPy
+    assert isinstance(new_stops, DataFrame)  # Silence MyPy
     for index in new_stops.index:
         # PARE has been fixed on 2023-01-19 !
         # if new_stops.loc[index, "stop_code"] == "PARE":
