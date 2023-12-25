@@ -12,7 +12,7 @@ Sadly, it must be maintained by hand.
 # key: amtrak station code
 # value: list of services (strings matching the definitions in timetable_kit/connecting_services/*.py
 # Order matters: it's the order the logos will be printed in
-connecting_services_dict = {
+connecting_services_dict: dict[str,list[str]] = {
     # Downeaster
     "HHL": ["mbta"],  # Haverhill
     "WOB": ["mbta"],  # Woburn on Lowell Line
