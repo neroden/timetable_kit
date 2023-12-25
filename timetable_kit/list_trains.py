@@ -19,6 +19,8 @@ Optionally filter by day of week.
 import argparse
 import sys  # for exit
 
+from pandas import DataFrame  # for type hints
+
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.feed_enhanced import FeedEnhanced
@@ -47,11 +49,12 @@ def get_trips_at(stop_id: str, *, feed: FeedEnhanced) -> list[str]:
 
     Must be passed a feed, and one stop_id.
     """
+    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
     # Start by filtering the stop_times for this stop.
     filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_id]
     # FIXME -- do we need to sort here?
     sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
-    trip_ids = sorted_filtered_stop_times["trip_id"].array
+    trip_ids = sorted_filtered_stop_times["trip_id"].to_list()
     return trip_ids
 
 
@@ -65,6 +68,7 @@ def get_trips_between(
 
     Must be passed a feed, and two stop_ids.
     """
+    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
     # Start by filtering the stop_times for stop one.
     filtered_stop_times_one = feed.stop_times[feed.stop_times.stop_id == stop_one_id]
     # FIXME -- do we need to sort here?
@@ -121,6 +125,7 @@ def sort_by_time_at_stop(
 
     Any trip_ids which do not stop at that stop are put last.
     """
+    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
     # Start by filtering the stop_times for the specified stop.
     filtered_stop_times = feed.stop_times[feed.stop_times.stop_id == stop_id]
     # Filter again for the trip_ids.
