@@ -6,7 +6,7 @@ timetable_kit.amtrak.agency module
 
 This holds a class for "AgencyAmtrak" intended to be used as a singleton.
 """
-from __future__ import annotations
+from timetable_kit.feed_enhanced import FeedEnhanced  # Mostly for typechecking
 
 from timetable_kit.generic_agency import Agency
 
@@ -45,9 +45,7 @@ class AgencyAmtrak(Agency):
         "https://www.transit.land/feeds/f-9-amtrak~amtrakcalifornia~amtrakcharteredvehicle"
     ]
 
-    def __init__(
-        self: AgencyAmtrak,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Initialized from connecting_services_data.py
         self._connecting_services_dict = connecting_services_dict
@@ -257,7 +255,7 @@ class AgencyAmtrak(Agency):
         return city_state_name
 
     def replace_facility_names(
-        self, station_code: str, facility_name: Optional[str]
+        self, station_code: str, facility_name: str | None
     ) -> str:
         """
         Replace certain facility names; leave others intact.
