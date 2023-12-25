@@ -1352,6 +1352,28 @@ def filter_and_reduce_feed(
     return reduced_feed
 
 
+class _DateRange(NamedTuple):
+    """Used to track what dates a timetable is valid for"""
+
+    latest_start_date: str
+    earliest_end_date: str
+
+
+def get_valid_date_range(reduced_feed: FeedEnhanced) -> _DateRange:
+    """Return the (latest_start_date, earliest_end_date) for a (filtered, reduced) feed.
+
+    This is used after filtering the feed down to the trips which will be shown in the final timetable.
+    It therefore gives a validity period for the timetable as a whole.
+    """
+    start_dates = reduced_feed.calendar["start_date"]
+    latest_start_date = start_dates.max()
+    end_dates = reduced_feed.calendar["end_date"]
+    earliest_end_date = end_dates.min()
+
+    debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
+    return (latest_start_date, earliest_end_date)
+
+
 def produce_timetable(
     *,
     spec_file,
@@ -1422,22 +1444,8 @@ def produce_timetable(
 
     # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
     reduced_feed = filter_and_reduce_feed(master_feed, reference_date, tt_spec)
-
-    # Collect pairs of validity dates.
-    # Note that the feed has been filtered by train_specs,
-    # so will *only* include relevant train_specs in the calendar!
-    start_dates = reduced_feed.calendar["start_date"]
-    latest_start_date = start_dates.max()
-    end_dates = reduced_feed.calendar["end_date"]
-    earliest_end_date = end_dates.min()
-
-    debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
-
-    # Note that due to the inline images issue we may need to run
-    # a completely separate HTML version for weasyprint.  We avoid this so far.
-    # TODO
-    # Consider using the SpartanTT font to handle this.  We can make the font
-    # quasi-legit for screen readers by using correct Unicode code points.
+    # Find the date range on which the entire reduced feed is valid
+    (latest_start_date, earliest_end_date) = get_valid_date_range(reduced_feed)
 
     if do_csv:
         # Note that there is a real danger of overwriting the source file.
