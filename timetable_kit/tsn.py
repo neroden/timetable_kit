@@ -46,6 +46,7 @@ def make_trip_id_to_tsn_dict(feed: FeedEnhanced) -> dict[str, str]:
     """
     Make and return a dict mapping from trip_id to trip_short_name.
     """
+    assert feed.trips is not None  # Silence MyPy
     trip_ids = feed.trips["trip_id"].array
 
     # the following should be used only when debugging; it's slow:
@@ -70,6 +71,7 @@ def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     multiple completely-identical entries are present in GTFS.
     (So it doesn't matter which one we pick.)
     """
+    assert feed.trips is not None  # Silence MyPy
     tsns = feed.trips["trip_short_name"].array
 
     # Here, duplicates are likely, so we should check every time.
@@ -106,6 +108,7 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
         # This filters stop_times too, which is overkill;
         # if it's slow, try not doing that.
         day_feed = feed.filter_by_day_of_week(day)
+        assert day_feed.trips is not None  # Silence MyPy
 
         # Collect the tsns (eg "91")...
         tsns = day_feed.trips["trip_short_name"].array
@@ -151,6 +154,7 @@ def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
 
     This will probably change in future GTFS feeds, so this finds these.
     """
+    assert feed.trips is not None  # Silence MyPy
     tsns = feed.trips["trip_short_name"].array
 
     # Here, duplicates are likely, so we should check every time.
