@@ -1,12 +1,14 @@
-For my Amish friend:
--- verify that CSVs are working and using multiline text per default
-
 For making updates easier:
-
 -- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
 ---- Splitter routine takes one TTSpec, returns a list of TTSpecs
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
+
+For my Amish friend:
+-- verify that CSVs are working and prep some
+
+For packaging:
+-- Figure out how to locate cached data (for GTFS) and persistent data (for templates etc)
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
@@ -16,8 +18,10 @@ Fix:
 -- Keystone Service
 -- Virginia Services
 
-Get Amtrak to fix GTFS days of operation:
--- Sunset Limited, Hiawatha, Silver Service 
+Known Amtrak GTFS bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+-- Get Amtrak to fix GTFS days of operation:
+---- Sunset Limited, Hiawatha, Silver Service 
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Isolate the GTFS downloads
@@ -85,13 +89,6 @@ Wishlist:
 10 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
 (OK.  It would be AWESOME.)
 
-CSS Paged Media project:
-- Unique table IDs.
-Allows header styling to work on multiple timetables in same HTML document.
-- Move font selection out of CSS jinja substitutions (somehow).
-This allows two unrelated HTML timetable pages to share the same CSS,
-which is needed to generate multipage HTML directly.
-
 Long term (?):
 - Patch PANDAS to allow insertion of classes in header rows.
 - This seems straightforward.
@@ -101,11 +98,6 @@ Long term (?):
 
 Timetable update stuff:
 -----------------------
-Known Amtrak GTFS bugs:
-- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
-- Maple Leaf Canadian data wrong in Amtrak (VIA is correct)
-- Maple Leaf American data wrong in VIA (Amtrak is probably correct)
-- One "missing train" in NEC (assume this is real and has been discontinued)
 
 VIA Rail stuff:
 - Check for which stations are "manned" for checked baggage info
