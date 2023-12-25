@@ -10,19 +10,31 @@ The additions are primarily filter methods: designed to take a feed and filter
 a bunch of data out to make a *smaller* feed which is quicker to do future processing on.
 There is also an extraction method to pull out a single trip record from a reduced feed,
 with error checking to make sure there's exactly one trip.
+
+It also gets rid of the shapes table, because it's huge and we don't use it.
 """
 from __future__ import annotations  # Forward references to FeedEnhanced
 
+# For function signatures
+from collections.abc import Iterable
+
+# For return values and parameters
+from typing import Type, Self
+
+from pandas import DataFrame, Series
 from operator import not_  # Needed for bad_service_id filter
 
 import gtfs_kit
-from pandas import DataFrame
+
+# These are used to distinguish str types with special restrictions.
+from timetable_kit.convenience_types import GTFSDate, GTFSDay
 
 from timetable_kit.errors import (
     NoTripError,
     TwoTripsError,
     InputError,
 )
+
 
 """
 GTFS_DAYS is the list of all the days (Monday through Sunday) which form gtfs column headers,
@@ -41,7 +53,7 @@ GTFS_DAYS = (
 
 class FeedEnhanced(gtfs_kit.Feed):
     def __init__(
-        self: FeedEnhanced,
+        self,
         dist_units: str,
         agency: DataFrame | None = None,
         stops: DataFrame | None = None,
@@ -78,16 +90,17 @@ class FeedEnhanced(gtfs_kit.Feed):
         )
 
     @classmethod
-    def enhance(cls, regular_feed):
+    def enhance(cls: Type[Self], regular_feed: Feed) -> Self:
         enhanced = cls.__new__(cls)
         enhanced.__dict__ |= vars(regular_feed)
         setattr(enhanced, "shapes", None)
         return enhanced
 
-    def copy(self) -> FeedEnhanced:
+    def copy(self) -> Self:
+        """Return a (deep) copy of this enhanced feed."""
         return FeedEnhanced.enhance(super().copy())
 
-    def filter_by_dates(self: FeedEnhanced, first_date, last_date) -> FeedEnhanced:
+    def filter_by_dates(self: Self, first_date: GTFSDate, last_date: GTFSDate) -> Self:
         """
         Filter the entire feed to remove anything before first_date or after last_date
 
@@ -117,10 +130,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def filter_by_day_of_week(
-        self: FeedEnhanced,
-        day: str,
-    ) -> FeedEnhanced:
+    def filter_by_day_of_week(self: Self, day: GTFSDay) -> Self:
         """
         Filters the feed to trips which are running on the selected day.
         - Filters calendar (direct)
@@ -155,10 +165,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def filter_by_days_of_week(
-        self: FeedEnhanced,
-        days: list[str],
-    ) -> FeedEnhanced:
+    def filter_by_days_of_week(self: Self, days: Iterable[GTFSDay]) -> Self:
         """
         Filters the feed to trips which are running on one of the selected days.
         - Filters calendar (direct)
@@ -195,7 +202,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def filter_by_route_ids(self, route_ids):
+    def filter_by_route_ids(self: Self, route_ids: Iterable[str]) -> Self:
         """
         Filter the entire feed to include only the specified route_ids (a list)
 
@@ -220,7 +227,7 @@ class FeedEnhanced(gtfs_kit.Feed):
 
         return new_feed
 
-    def filter_by_service_ids(self, service_ids):
+    def filter_by_service_ids(self: Self, service_ids: Iterable[str]) -> Self:
         """
         Filter the entire feed to include only the specified service_ids (a list)
 
@@ -239,7 +246,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         return new_feed
 
-    def filter_bad_service_ids(self, bad_service_ids):
+    def filter_bad_service_ids(self: Self, bad_service_ids: Iterable[str]) -> Self:
         """
         Filter the entire feed to remove specified bad service_ids (a list)
 
@@ -259,7 +266,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         ]
         return new_feed
 
-    def filter_remove_one_day_calendars(self):
+    def filter_remove_one_day_calendars(self: Self) -> Self:
         """
         Remove all service_ids which are effective for only one day.
 
@@ -285,7 +292,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def filter_find_one_day_calendars(self):
+    def filter_find_one_day_calendars(self: Self) -> Self:
         """
         Filter to *only* find service_ids which are effective for only one day.
 
@@ -312,9 +319,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def filter_by_trip_short_names(
-        self: FeedEnhanced, trip_short_names
-    ) -> FeedEnhanced:
+    def filter_by_trip_short_names(self: Self, trip_short_names: Iterable[str]) -> Self:
         """
         Filter the entire feed to include only services with the specified trip_short_names (a list)
 
@@ -342,7 +347,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
         return new_feed
 
-    def filter_by_trip_ids(self, trip_ids):
+    def filter_by_trip_ids(self: Self, trip_ids: Iterable[str]) -> Self:
         """
         Filter the entire feed to include only services with the specified trip_ids (a list)
 
@@ -358,7 +363,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
-    def get_single_trip(self):
+    def get_single_trip(self: Self) -> Series:
         """
         If this feed contains only one trip, return the trip.
 
@@ -381,7 +386,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         this_trip_today = self.trips.iloc[0]
         return this_trip_today
 
-    def get_single_trip_stop_times(self, trip_id):
+    def get_single_trip_stop_times(self, trip_id: str) -> DataFrame:
         """
         Get stop times for a single trip -- sorted into the correct order
 
@@ -393,7 +398,7 @@ class FeedEnhanced(gtfs_kit.Feed):
         stop_times_3 = stop_times_2.sort_index()
         return stop_times_3
 
-    def get_trip_short_name(self, trip_id):
+    def get_trip_short_name(self, trip_id: str) -> DataFrame:
         """
         Given a trip_id, recover the trip_short_name
 
