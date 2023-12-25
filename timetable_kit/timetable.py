@@ -467,8 +467,8 @@ def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
 
     Returns an ordered pair (start_date, end_date)
     """
-    assert isinstance(feed.calendar, DataFrame)  # Silence MyPy
-    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
+    assert feed.calendar is not None  # Silence MyPy
+    assert feed.trips is not None  # Silence MyPy
     # FIXME: The goal is to get the latest start date and earliest end date
     # for all trains in a list.  Do this in a more "pandas" fashion.
     service_id = feed.trips[feed.trips.trip_id == trip_id]["service_id"].squeeze()
@@ -492,7 +492,7 @@ def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     Return "None" if it doesn't stop here.  This is not an error.
     (Used to throw NoStopError if it doesn't stop here.  Too common.)
     """
-    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
+    assert feed.stop_times is not None  # Silence MyPy
 
     # Old, slower code:
     # stop_times = feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
@@ -678,11 +678,11 @@ def fill_tt_spec(
     use_bus_icon_in_cells: Put a bus icon next to timetable cells which are a bus.
     """
     # MyPy throws a fit over the tables in the feed.  Assert them all.
-    assert isinstance(today_feed.agency, DataFrame)
-    assert isinstance(today_feed.calendar, DataFrame)
-    assert isinstance(today_feed.stops, DataFrame)
-    assert isinstance(today_feed.routes, DataFrame)
-    assert isinstance(today_feed.trips, DataFrame)
+    assert today_feed.agency is not None
+    assert today_feed.calendar is not None
+    assert today_feed.stops is not None
+    assert today_feed.routes is not None
+    assert today_feed.trips is not None
 
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
@@ -699,7 +699,7 @@ def fill_tt_spec(
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
     def trip_from_train_spec_local(train_spec: str) -> Series:
-        assert isinstance(today_feed.trips, DataFrame)  # Silence MyPy
+        assert today_feed.trips is not None  # Silence MyPy
         try:
             my_trip_id = train_spec_to_trip_id[train_spec]
         except KeyError as e:
@@ -715,7 +715,7 @@ def fill_tt_spec(
     # subordinate to this particular run of the timetable generator!
     # So create another inner function to pull the line from the route table.
     def route_from_train_spec_local(train_spec: str) -> Series:
-        assert isinstance(today_feed.routes, DataFrame)  # Silence MyPy
+        assert today_feed.routes is not None  # Silence MyPy
         my_trip = trip_from_train_spec_local(train_spec)
         my_routes = today_feed.routes[today_feed.routes.route_id == my_trip.route_id]
         if my_routes.shape[0] == 0:
@@ -1401,7 +1401,7 @@ def get_valid_date_range(reduced_feed: FeedEnhanced) -> _DateRange:
     This is used after filtering the feed down to the trips which will be shown in the final timetable.
     It therefore gives a validity period for the timetable as a whole.
     """
-    assert isinstance(reduced_feed.calendar, DataFrame)  # Silence MyPy
+    assert reduced_feed.calendar is not None  # Silence MyPy
     start_dates = reduced_feed.calendar["start_date"]
     latest_start_date = start_dates.max()
     end_dates = reduced_feed.calendar["end_date"]
