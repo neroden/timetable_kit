@@ -1,13 +1,12 @@
-The HTML file can (and sometimes should) be converted to PDF.  
-I am currently using WeasyPrint for this because it is also a Python package.
+For converting a *single-page* PDF file to a JPG, 
 
--- Weasyprint can't handle inline SVGs.  AAARGH!
--- OK, Weasyprint is the best option, but the SVGs have to be done as images.
+vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
 
-This means we really want two different HTML files: one for Weasy with image files,
-and one with embedded SVGs.  This means a major fork in all the code.  Most annoying!
+is most effective.  This is no longer implemented as part of the program, so just remember it.
 
-Weasyprint also can't handle variable-weight fonts.  Oh Well.
+I am currently using WeasyPrint for HTML->PDF conversion because it is also a Python package.
+-- Weasyprint can't handle inline SVGs.
+-- Weasyprint also can't handle variable-weight fonts.  Oh Well.
 
 -- It is hard to test PDFs.  At least on my monitor...
 --- Okular needs to be set at 90% zoom to show it real size.
@@ -16,13 +15,10 @@ Weasyprint also can't handle variable-weight fonts.  Oh Well.
 We can convert the PDF to a JPEG as follows (and it is readable!):
 pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
 A tested and MUCH faster option is VIPS (this is implemented in the current program):
-vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
 
-Merging individual PDF pages needs an external program.  One which works is
+Merging individual PDF pages can be done an external program.  One which works is
 pdftk empire-service-wb.pdf empire-service-eb.pdf output empire-service.pdf
-
 The program is actually in the package "pdftk-java".
-
 
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data
 Amtrak station codes are in the "stop_id" field of GTFS static data.
