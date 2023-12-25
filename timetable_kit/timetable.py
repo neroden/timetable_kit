@@ -26,9 +26,9 @@ from typing import NamedTuple, TypedDict
 import pandas as pd
 from pandas import DataFrame, Series
 
-import gtfs_kit
+import gtfs_kit # type: ignore # Tell MyPy this has no type stubs
 
-from weasyprint import HTML as weasyHTML
+from weasyprint import HTML as weasyHTML # type: ignore # Tell MyPy this has no type stubs
 
 ############
 # My modules
@@ -162,8 +162,8 @@ def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
         ttspec_json_path = input_dir / ttspec_json_filename
     else:
         # Might be None, if it wasn't passed at the command line
-        ttspec_csv_path = ttspec_csv_filename
-        ttspec_json_path = ttspec_json_filename
+        ttspec_csv_path = Path(ttspec_csv_filename)
+        ttspec_json_path = Path(ttspec_json_filename)
     debug_print(
         1, "ttspec_csv_path", ttspec_csv_path, "/ ttspec_json_path", ttspec_json_path
     )
@@ -282,7 +282,7 @@ def get_column_options(tt_spec):
 class _CellCodes(TypedDict, total=False):
     """Represents codes which might be in a cell in a timetable spec"""
 
-    train_spec: str
+    train_spec: str | None
     first: bool
     last: bool
     blank: bool
@@ -467,6 +467,7 @@ def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
 
     Returns an ordered pair (start_date, end_date)
     """
+    assert isinstance(feed.calendar, DataFrame) # Silence MyPy
     # FIXME: The goal is to get the latest start date and earliest end date
     # for all trains in a list.  Do this in a more "pandas" fashion.
     service_id = feed.trips[feed.trips.trip_id == trip_id]["service_id"].squeeze()
@@ -490,6 +491,8 @@ def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
     Return "None" if it doesn't stop here.  This is not an error.
     (Used to throw NoStopError if it doesn't stop here.  Too common.)
     """
+    assert isinstance(feed.stop_times, DataFrame) # Silence MyPy
+
     # Old, slower code:
     # stop_times = feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
     # timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
@@ -1291,8 +1294,8 @@ def fill_tt_spec(
     # We have to do the styler and the tt at the same time,
     # or the styler will fail.
     # Alter in place.
-    new_tt_header_index = pd.Index(unique_header_replacement_list, dtype="object")
-    new_styler_t_header_index = pd.Index(unique_header_replacement_list, dtype="object")
+    new_tt_header_index: pd.Index = pd.Index(unique_header_replacement_list, dtype="object")
+    new_styler_t_header_index: pd.Index = pd.Index(unique_header_replacement_list, dtype="object")
     tt.columns = new_tt_header_index
     styler_t.columns = new_styler_t_header_index
     # This is marvellously finicky code.  Yuck.
