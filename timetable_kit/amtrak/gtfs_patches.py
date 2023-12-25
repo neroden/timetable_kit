@@ -6,9 +6,6 @@ Patch known errors in Amtrak GTFS.
 
 This should be reviewed every time Amtrak releases a new GTFS.
 """
-
-from pandas import DataFrame  # Mostly for type-checking
-
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
 from timetable_kit.debug import debug_print
@@ -42,7 +39,7 @@ def patch_arizona(feed: FeedEnhanced):
 
     Fix feed in place.
     """
-    assert isinstance(feed.stops, DataFrame)  # Silence MyPy
+    assert feed.stops is not None  # Silence MyPy
     stops = feed.stops
     for index in stops.index:
         if stops.loc[index, "stop_id"] in arizona_stops_list:
@@ -73,8 +70,8 @@ def patch_buses(feed: FeedEnhanced):
 
     Fix feed in place
     """
-    assert isinstance(feed.routes, DataFrame)  # Silence MyPy
-    assert isinstance(feed.agency, DataFrame)  # Silence MyPy
+    assert feed.routes is not None  # Silence MyPy
+    assert feed.agency is not None  # Silence MyPy
     routes = feed.routes
     for index in routes.index:
         if routes.loc[index, "route_long_name"] == "Amtrak Thruway Connecting Service":
@@ -101,9 +98,9 @@ def patch_coast_starlight(feed: FeedEnhanced):
     The bug appears to be fixed as of July 7, 2023,
     So this is unused code now
     """
-    assert isinstance(feed.routes, DataFrame)  # Silence MyPy
-    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
-    assert isinstance(feed.calendar, DataFrame)  # Silence MyPy
+    assert feed.routes is not None  # Silence MyPy
+    assert feed.trips is not None  # Silence MyPy
+    assert feed.calendar is not None  # Silence MyPy
     # Coast Starlight fix
     new_calendar = feed.calendar
     # Coast Starlight: two bogus errors!
@@ -153,7 +150,7 @@ def patch_toronto(feed: FeedEnhanced):
 
     Patch feed in place.
     """
-    assert isinstance(feed.stop_times, DataFrame)  # Silence MyPy
+    assert feed.stop_times is not None  # Silence MyPy
     # Toronto: incorrectly listed as "no pickups" in stop one.
     new_stop_times = feed.stop_times
     for index in new_stop_times.index:
@@ -177,7 +174,7 @@ def patch_cardinal_direction(feed: FeedEnhanced):
     Patch feed in place.
     Unused since we don't care about direction.
     """
-    assert isinstance(feed.trips, DataFrame)  # Silence MyPy
+    assert feed.trips is not None  # Silence MyPy
     my_trips = feed.trips
     debug_print(1, "Patching Cardinal #1051 direction")
     my_trips.loc[my_trips["trip_short_name"] == "1051", "direction_id"] = 0

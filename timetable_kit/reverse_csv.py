@@ -5,7 +5,6 @@
 
 import sys
 import pandas as pd
-from pandas import DataFrame
 
 """
 This simply reverses the rows in a CSV file
