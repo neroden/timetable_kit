@@ -20,6 +20,7 @@ from io import StringIO
 
 # We need PANDAS for this
 import pandas as pd
+from pandas import DataFrame
 
 # Mine
 from timetable_kit.debug import debug_print
@@ -198,6 +199,7 @@ def get_filenames_for_all_logos() -> list[str]:
     Get the list of filenames for logos (without directories), for installing with the HTML files
     """
     # Pull the appropriate column, convert to a list
+    assert isinstance(connecting_services_df, DataFrame)  # Silence MyPy
     logo_svg_filenames = connecting_services_df["svg_filename"].tolist()
     debug_print(1, logo_svg_filenames)
     filtered_logo_svg_filenames = [
@@ -212,6 +214,7 @@ def get_css_for_all_logos() -> str:
     """
     Get the CSS code to style all the icons we're using.
     """
+    assert isinstance(connecting_services_df, DataFrame)  # Silence MyPy
     logo_css_filenames = connecting_services_df["css_filename"].tolist()
     logo_css_list = [
         get_logo_css(filename)

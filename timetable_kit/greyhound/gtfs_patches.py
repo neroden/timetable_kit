@@ -8,6 +8,8 @@ The big problem is that Greyhound doesn't have trip_short_name set -- at all.
 This breaks the entire architecture of timetable_kit, so we set it.
 """
 
+from pandas import DataFrame  # Mostly for type hints
+
 from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
 
@@ -20,6 +22,7 @@ def patch_feed(feed: FeedEnhanced) -> FeedEnhanced:
     """
 
     new_feed = feed.copy()
+    assert isinstance(new_feed.trips, DataFrame)  # Silence MyPy
 
     # Greyhound has no trip_short_name.
     new_trips = new_feed.trips

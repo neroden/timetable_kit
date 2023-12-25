@@ -12,7 +12,7 @@ It is better to get station names from Amtrak's JSON data.
 """
 
 import pandas as pd
-import gtfs_kit
+import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
 
 # Cities with multiple stations in the same city, requiring disambiguation

@@ -136,7 +136,7 @@ def station_details_url(station_code: str) -> str:
     return url
 
 
-def station_details_local_path(station_code: str) -> str:
+def station_details_local_path(station_code: str) -> Path:
     """Return local pathname for an Amtrak station details JSON file"""
     # Step one: validate the station code
     if len(station_code) != 3:
@@ -226,7 +226,7 @@ def station_details_html_url(station_code: str) -> str:
     return url
 
 
-def station_details_html_local_path(station_code: str) -> str:
+def station_details_html_local_path(station_code: str) -> Path:
     """Return local pathname for an Amtrak station details HTML file"""
     # Step one: validate the station code
     if len(station_code) != 3:
