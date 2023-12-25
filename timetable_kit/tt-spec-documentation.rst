@@ -241,7 +241,8 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "font_size": "If set, use a nonstandard base font size (in CSS -- should be a CSS font size)",
     "font_allow_ligatures": "Defaults false because ligatures are hard to read in the tiny fonts which allow for compact timetables.  Set to True if the font size is big enough to use ligatures",
     "box_time_characters": "If set, use CSS boxes to try to line up the times.  For fonts which lack tabular-nums.",
-    "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load."
+    "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load.",
+    "tt_id": "If present, this will have some prefixes added (P_, T_, etc) and be used to generate unique IDs for the HTML page.  Normally you should let the program determine these.",
  }
 
 reference_date is critically important and is required unless passed at the command line.

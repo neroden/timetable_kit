@@ -11,7 +11,7 @@ specs.py contains the core code for handling specs and filling in timetables.
 # Other people's packages
 
 from os import PathLike  # For passing paths around
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Type, Self, NamedTuple, TypedDict
 
 import json
@@ -99,6 +99,7 @@ class TTSpec(object):
         self.aux: dict = aux
         self.csv: pd.DataFrame = csv
         self.__set_aux_defaults()  # Set defaults for missing aux
+        # Warning, this doesn't set crucial things like tt_id.
 
     def __set_aux_defaults(self: Self):
         """Fill in some default values for the aux if they're not present.
@@ -141,6 +142,9 @@ class TTSpec(object):
         new_ttspec = cls(cls.read_json(json_path), cls.read_csv(csv_path))
         # Fill in output_filename if it isn't in the json. (Edit in place.)
         new_ttspec.aux.setdefault("output_filename", filename_base)
+        # Fill in a reasonable value for the unique HTML ID.
+        # TODO: do better with this.
+        new_ttspec.aux.setdefault("tt_id", cls._make_tt_id(filename_base))
         return new_ttspec
 
     # These are here largely for namespacing purposes, to keep names short.
@@ -169,6 +173,20 @@ class TTSpec(object):
         # We really don't want NaNs in this file.  They should all be converted to "".
         ttspec_csv.fillna(value="", inplace=True)
         return ttspec_csv
+
+    # A subroutine of a class method, nothing more.  Could be freestanding.
+    @staticmethod
+    def _make_tt_id(filename: str) -> str:
+        """Given a filename, sanitize and prefix it to make a good HTML ID."""
+        # First remove directories and suffixes
+        input = PurePath(filename).stem
+        # Technically a lot is valid, but:
+        # we want only ASCII numbers, letters, underscore, hyphen
+        cleaned = "".join(
+            [c for c in input if c.isascii() and (c.isalnum() or c == "-" or c == "_")]
+        )
+        # Finally add the prefix
+        return "tt_" + cleaned
 
     def __getitem__(self: Self, index):
         """Return first the JSON, second the CSV."""

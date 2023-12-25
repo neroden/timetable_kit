@@ -15,7 +15,7 @@ import sys  # sys.exit(1) and sys.path
 import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
-from pathlib import Path, PurePath
+from pathlib import Path
 
 import pandas as pd
 
@@ -153,35 +153,6 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     return
 
 
-def reduce_for_html_id(input: str):
-    """Return string minus all characters not good for an HTML ID."""
-    # Technically a lot is valid, but:
-    # we don't want non-ASCII
-    # we don't want punctuation except underscore or hyphen
-    # we don't want whitespace or control characters, just numbers and letters plus _ and -
-    return "".join(
-        [c for c in input if c.isascii() and (c.isalnum() or c == "-" or c == "_")]
-    )
-
-
-def make_unique_page_id(spec_file, subspec_file):
-    """Return an ID suitable for use in HTML and CSS which will identify the page in the
-    timetable uniquely.
-
-    The only information we have available is the names of the spec_file and
-    subspec_file.  These are the same for a one-page timetable.
-    """
-    # Regular case.  Find the base filename, without suffix of directories.
-    spec_file_basename = PurePath(spec_file).stem
-    subspec_file_basename = PurePath(subspec_file).stem
-    spec_file_component = reduce_for_html_id(spec_file_basename)
-    subspec_file_component = reduce_for_html_id(subspec_file_basename)
-    if spec_file_component == subspec_file_component:
-        return "_".join(["tt", spec_file_component])
-    else:
-        return "_".join(["tt", spec_file_component, subspec_file_component])
-
-
 def produce_several_timetables(
     spec_file_list,
     *,
@@ -246,6 +217,7 @@ def produce_several_timetables(
         page_list: list[HtmlAndCss] = []
         for subspec_file in subspec_files:
             # Load the tt-spec, both aux and csv
+            # Also sets tt_id value in the aux
             spec = TTSpec.from_files(subspec_file, input_dir=input_dirname)
             # Set reference date override -- does nothing if passed "None"
             spec.set_reference_date(command_line_reference_date)
@@ -270,18 +242,12 @@ def produce_several_timetables(
                 for_rpa = bool(spec.aux["for_rpa"])  # used when copying files
                 copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
-                # This is an ID to distinguish one timetable page from another
-                # in the CSS coding.  Prefixed versions will be used to tag the
-                # <div> for the page, and the table itself.
-                # This should be unique per page.
-                tt_id = make_unique_page_id(spec_file, subspec_file)
-
                 # Main timetable, same for HTML and PDF
                 (timetable, styler_table, header_styling_list) = fill_tt_spec(
                     spec, today_feed=reduced_feed, doing_html=True
                 )
                 timetable_styled_html = style_timetable_for_html(
-                    timetable, styler_table, table_uuid=tt_id
+                    timetable, styler_table, table_uuid=spec.aux["tt_id"]
                 )
                 debug_print(1, "HTML styled")
 
@@ -296,11 +262,9 @@ def produce_several_timetables(
 
                 # Produce a final complete page, and associated page-specific CSS.
                 # Add it to the list of pages.
-
                 new_page = produce_html_page(
                     timetable_styled_html,
                     header_styling_list,
-                    tt_id=tt_id,
                     spec=spec,
                     author=author,
                     start_date=str(latest_start_date),

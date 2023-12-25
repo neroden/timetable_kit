@@ -48,9 +48,8 @@ from timetable_kit.load_resources import (
 def produce_html_page(
     timetable_styled_html,
     header_styling_list,
-    tt_id,
     *,
-    spec: TTSpec,  # for aux content and list of station codes
+    spec: TTSpec,  # for aux content (including page_id)  and list of station codes
     author,
     start_date,
     end_date,
@@ -68,8 +67,12 @@ def produce_html_page(
     The header_styling_list has CSS attributes (not classes) for each header column
     (indexed by zero-based column number).  This is due to inefficiencies in PANDAS.
 
+    The aux part of the spec MUST have a tt_id.
+
     The mandatory "author" argument gives the author of the timetable.
     """
+
+    tt_id = spec.aux["tt_id"]
     # ID for the <div> which brackets a whole timetable page
     page_id = "P_" + tt_id
     # ID for the heading (H1) for this, for ARIA use
