@@ -33,10 +33,6 @@ from timetable_kit.errors import (
     InputError,
 )
 
-"""
-GTFS_DAYS is the list of all the days (Monday through Sunday) which form gtfs column headers,
-appropriately lowercase for the column headers.
-"""
 GTFS_DAYS = (
     "monday",
     "tuesday",
@@ -46,6 +42,8 @@ GTFS_DAYS = (
     "saturday",
     "sunday",
 )
+"""GTFS_DAYS is the list of all the days (Monday through Sunday) which form
+gtfs column headers, appropriately lowercase for the column headers."""
 
 
 class FeedEnhanced(gtfs_kit.Feed):
