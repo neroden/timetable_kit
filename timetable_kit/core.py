@@ -249,7 +249,7 @@ class TTSpec(object):
         # The following will add the stations as desired.
         # It creates duplicate indexes, so we must reset the index.
         self.csv = pd.concat([new_csv, stations_df]).fillna("").reset_index(drop=True)
-        debug_print("Augmented TTSpec:")
+        debug_print(1, "Augmented TTSpec:")
         debug_print(1, self.csv)
 
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:

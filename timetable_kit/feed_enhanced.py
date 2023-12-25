@@ -11,8 +11,6 @@ with error checking to make sure there's exactly one trip.
 
 It also gets rid of the shapes table, because it's huge and we don't use it.
 """
-from __future__ import annotations  # Forward references to FeedEnhanced
-
 from collections.abc import Iterable
 from typing import Type, Self, NamedTuple
 
@@ -97,7 +95,7 @@ class FeedEnhanced(Feed):
 
     def copy(self) -> Self:
         """Return a (deep) copy of this enhanced feed."""
-        return FeedEnhanced.enhance(super().copy())
+        return self.enhance(super().copy())
 
     def filter_by_dates(self: Self, first_date: GTFSDate, last_date: GTFSDate) -> Self:
         """Filter the entire feed to remove anything before first_date or after
