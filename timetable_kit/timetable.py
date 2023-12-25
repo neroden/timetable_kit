@@ -10,6 +10,7 @@ timetable.py is the main program for generating timetables and related things
 timetable.py --help gives documentation
 """
 
+#########################
 # Other people's packages
 
 import json
@@ -19,29 +20,31 @@ import shutil  # To copy files
 import sys  # Solely for sys.path and solely for debugging
 from pathlib import Path
 
-# For complex return values (TTSpec, _FilledTimetable)
-from typing import NamedTuple
+# For complex return values (TTSpec, _FilledTimetable, _CellCodes)
+from typing import NamedTuple, TypedDict
+
+import pandas as pd
+from pandas import DataFrame
 
 import gtfs_kit
-import pandas as pd
+
 from weasyprint import HTML as weasyHTML
 
-from timetable_kit import connecting_services
-
-
-from timetable_kit import icons
-
-# This stores critical data supplied at runtime such as the agency subpackage to use.
+############
+# My modules
+# This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
 from timetable_kit import runtime_config
-
+from timetable_kit import text_presentation
+from timetable_kit import connecting_services
+from timetable_kit import icons
 # For calling out to the system to sew individual PDF pages together to one PDF
 from timetable_kit import sew_pages
-from timetable_kit import text_presentation
-from timetable_kit.debug import set_debug_level, debug_print
 
-# My packages: Local module imports
+####################################
+# Specific functions from my modules
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
+from timetable_kit.debug import set_debug_level, debug_print
 from timetable_kit.errors import (
     GTFSError,
     TwoStopsError,
@@ -170,7 +173,7 @@ def load_tt_spec(spec_filename_base: str, input_dirname: str | None) -> TTSpec:
     return result
 
 
-def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date):
+def augment_tt_spec(raw_tt_spec, *, feed: FeedEnhanced, date: str):
     """
     Fill in the station list for a tt-spec if it has a key code.
 
@@ -275,7 +278,14 @@ def get_column_options(tt_spec):
     return column_options_nested_list
 
 
-def get_cell_codes(code_text: str, train_specs: list[str]) -> dict[str, str]:
+class _CellCodes(TypedDict, total=False):
+    """Represents codes which might be in a cell in a timetable spec"""
+    train_spec: str
+    first: bool
+    last: bool
+    blank: bool
+
+def get_cell_codes(code_text: str, train_specs: list[str]) -> _CellCodes:
     """
     Given special code text in a cell, decipher it
 
@@ -1365,13 +1375,14 @@ def get_valid_date_range(reduced_feed: FeedEnhanced) -> _DateRange:
     This is used after filtering the feed down to the trips which will be shown in the final timetable.
     It therefore gives a validity period for the timetable as a whole.
     """
+    assert isinstance(reduced_feed.calendar, DataFrame) # Silence MyPy
     start_dates = reduced_feed.calendar["start_date"]
     latest_start_date = start_dates.max()
     end_dates = reduced_feed.calendar["end_date"]
     earliest_end_date = end_dates.min()
 
     debug_print(1, "Believed valid from", latest_start_date, "to", earliest_end_date)
-    return (latest_start_date, earliest_end_date)
+    return _DateRange(latest_start_date, earliest_end_date)
 
 
 def produce_timetable(
