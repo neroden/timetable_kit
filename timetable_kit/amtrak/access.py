@@ -31,8 +31,8 @@ from timetable_kit.feed_enhanced import FeedEnhanced
 # bad_stations_path = base_dir / "bad_stations.csv"
 
 # This is a global filled on first use
-accessible_platform_dict = None
-inaccessible_platform_dict = None
+accessible_platform_dict: dict[str, bool] | None = None
+inaccessible_platform_dict: dict[str, bool] | None = None
 
 
 def station_has_inaccessible_platform(station_code: str) -> bool:
@@ -46,6 +46,7 @@ def station_has_inaccessible_platform(station_code: str) -> bool:
     """
     if inaccessible_platform_dict is None:
         make_accessibility_dicts()
+    assert inaccessible_platform_dict is not None  # Silence MyPy
     return inaccessible_platform_dict[station_code]
 
 
@@ -60,6 +61,7 @@ def station_has_accessible_platform(station_code: str) -> bool:
     """
     if accessible_platform_dict is None:
         make_accessibility_dicts()
+    assert accessible_platform_dict is not None  # Silence MyPy
     return accessible_platform_dict[station_code]
 
 
@@ -133,6 +135,8 @@ def station_wheelchair_boarding_gtfs_code(station_code: str) -> int:
     """
     if accessible_platform_dict is None or inaccessible_platform_dict is None:
         make_accessibility_dicts()
+    assert accessible_platform_dict is not None  # Silence MyPy
+    assert inaccessible_platform_dict is not None  # Silence MyPy
 
     # There's some weirdness with station codes which aren't in the JSON database,
     # notably CBN (Canadian border).  These should be treated as "unknown".
@@ -163,15 +167,19 @@ def patch_add_wheelchair_boarding(feed: FeedEnhanced):
 
     Fix feed in place.
     """
+    assert feed.stops is not None  # Silence MyPy
     new_stops = feed.stops
     if "wheelchair_boarding" in feed.stops.columns:
         # This happens in the Frankenfeed for the Maple Leaf
         debug_print(1, "Wheelchair boarding already present in GTFS")
         # Rename the old wheelchair_boarding column to wb_old
-        new_stops.columns = [
-            "wb_old" if name == "wheelchair_boarding" else name
-            for name in new_stops.columns
-        ]
+        new_stops.columns = pd.Index(
+            [
+                "wb_old" if name == "wheelchair_boarding" else name
+                for name in new_stops.columns
+            ],
+            dtype="object",
+        )
         debug_print(3, new_stops)
         # Assign a new column by applying the test function to the stop_id column
         new_stops["wb_json"] = new_stops["stop_id"].map(
