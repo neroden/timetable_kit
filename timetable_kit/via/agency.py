@@ -6,10 +6,13 @@ timetable_kit.via.agency module
 
 This holds a class for "AgencyVIA" intended to be used as a singleton.
 """
-from __future__ import annotations
+from typing import Tuple
 
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.generic_agency import Agency
+
+# For generic reassembly functions
+import timetable_kit.text_assembly as text_assembly
 
 # for patch_feed
 import timetable_kit.via.gtfs_patches as gtfs_patches
@@ -43,9 +46,7 @@ class AgencyVIA(Agency):
         "https://www.transit.land/feeds/f-f-viarail~traindecharlevoix"
     ]
 
-    def __init__(
-        self: AgencyVIA,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Initialized from connecting_services_data.py
         self._connecting_services_dict = connecting_services_dict
@@ -119,7 +120,7 @@ class AgencyVIA(Agency):
         """
         return special_data.is_standard_major_station(station_code)
 
-    def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, Optional[str]]:
+    def disassemble_station_name(self, stop_name_raw: str) -> Tuple[str, str | None]:
         """
         Separates suffixes like "GO Station" from VIA station names,
         as "facility name".
@@ -175,7 +176,7 @@ class AgencyVIA(Agency):
         return city_state_name
 
     def replace_facility_names(
-        self, station_code: str, facility_name: Optional[str]
+        self, station_code: str, facility_name: str | None
     ) -> str:
         """
         Remove or add certain facility names; leave others intact.

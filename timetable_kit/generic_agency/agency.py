@@ -8,7 +8,6 @@ This holds a class for "Agency" intended to be used as a singleton.
 It has an interface; Amtrak and others need to provide the same interface.
 This should be made easier by class inheritance.
 """
-from __future__ import annotations
 
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.debug import debug_print
@@ -34,9 +33,7 @@ class Agency:
     # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
     _agency_published_gtfs_urls = []
 
-    def __init__(
-        self: Agency,
-    ) -> None:
+    def __init__(self) -> None:
         # This is the GTFS feed.
         # It is filled in by init_from_feed, due to complex initialization ordering requirements.
         self._feed = None
@@ -392,7 +389,7 @@ class Agency:
         return city_state_name
 
     def replace_facility_names(
-        self, station_code: str, facility_name: Optional[str]
+        self, station_code: str, facility_name: str | None
     ) -> str:
         """
         Replace problematic facility names (also add or remove facility names as needed.
@@ -441,7 +438,7 @@ class Agency:
     def disassembled_station_name_to_html(
         self,
         city_state_name: str,
-        facility_name: Optional[str],
+        facility_name: str | None,
         station_code: str,
         major=False,
         show_connections=True,
