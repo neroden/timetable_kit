@@ -18,6 +18,17 @@ source venv/bin/activate
 
 pip install -e .
 
+3A. It's probably wise to install MyPy for type checking.  MyPy must
+be installed INSIDE the venv, and it needs some extra packages to do type checking:
+
+pip install mypy
+pip install pandas-stubs
+pip install types-requests
+
+3B. It's probably wise to install Black, though a system version of Black is fine too.
+
+pip install black
+
 4. Get out of the venv:
 
 deactivate
