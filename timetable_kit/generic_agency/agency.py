@@ -9,10 +9,14 @@ It has an interface; Amtrak and others need to provide the same interface.
 This should be made easier by class inheritance.
 """
 
+from typing import Any
+from pandas import DataFrame  # Mostly for type hints
+
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.debug import debug_print
 
 # For text twiddling
+from timetable_kit import text_assembly
 from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
 
 # Find the HTML for a specific connecting agency's logo
@@ -26,33 +30,33 @@ class Agency:
     # The following class variables are overridden in subclasses.
     # This is a list of the agency names for the disclaimers and credit
     # (There is typically one, but sometimes more.)
-    _agency_names = []
+    _agency_names: list[str] = []
     # This is a list of the agency (ticketing/website) websites, parellel to the list of agency names.
     # These should omit the https:// and be formatted for print.
-    _agency_websites = []
+    _agency_websites: list[str] = []
     # This is a list of the agency GTFS URLs to publish, parallel to the list of agency names
-    _agency_published_gtfs_urls = []
+    _agency_published_gtfs_urls: list[str] = []
 
     def __init__(self) -> None:
         # This is the GTFS feed.
         # It is filled in by init_from_feed, due to complex initialization ordering requirements.
-        self._feed = None
+        self._feed: FeedEnhanced | None = None
         # These are built from the GTFS feed.
         # They start "None" and are filled in by initialization code on first use (memoized)
-        self._stop_code_to_stop_id_dict = None
-        self._stop_id_to_stop_code_dict = None
-        self._stop_code_to_stop_name_dict = None
-        self._accessible_platform_dict = None
-        self._inaccessible_platform_dict = None
+        self._stop_code_to_stop_id_dict: dict[Any, Any] | None = None
+        self._stop_id_to_stop_code_dict: dict[Any, Any] | None = None
+        self._stop_code_to_stop_name_dict: dict[Any, Any] | None = None
+        self._accessible_platform_dict: dict[Any, Any] | None = None
+        self._inaccessible_platform_dict: dict[Any, Any] | None = None
         # Used for the generic get_route_id (but not by Amtrak or VIA)
-        self._route_name_dict = None
+        self._route_name_dict: dict[Any, Any] | None = None
         # This is the dict of *all* the possible connecting services
         # Generally initialized from a static file in the module
         # Defaults to {}
         # Should be an instance variable: if a class variable, there's trouble and the
         # wrong version can be grabbed by disassembled_station_name_to_html
         # This also avoids loading unnecessary copies
-        self._connecting_services_dict = {}
+        self._connecting_services_dict: dict[Any, Any] = {}
 
     def patch_feed(self, feed: FeedEnhanced) -> FeedEnhanced:
         """
@@ -174,6 +178,9 @@ class Agency:
                 "in Agency class: init_from_feed must be run before preparing dicts"
             )
 
+        assert isinstance(self._feed, FeedEnhanced)  # Silence MyPy
+        assert isinstance(self._feed.stops, DataFrame)  # Silence MyPy
+
         # Create the conversion dicts from the feed
         stop_ids = self._feed.stops["stop_id"].to_list()
         stop_names = self._feed.stops["stop_name"].to_list()
@@ -242,6 +249,7 @@ class Agency:
         # Memoized.  None is a sentinel value meaning uninitalized
         if self._stop_code_to_stop_id_dict is None:
             self._prepare_dicts()
+        assert self._stop_code_to_stop_id_dict is not None  # Silence MyPy
         return self._stop_code_to_stop_id_dict[stop_code]
 
     def stop_id_to_stop_code(self, stop_id: str) -> str:
@@ -249,6 +257,7 @@ class Agency:
         # Memoized.  None is a sentinel value meaning uninitalized
         if self._stop_id_to_stop_code_dict is None:
             self._prepare_dicts()
+        assert self._stop_id_to_stop_code_dict is not None  # Silence MyPy
         return self._stop_id_to_stop_code_dict[stop_id]
 
     def stop_code_to_stop_name(self, stop_code: str) -> str:
@@ -256,6 +265,7 @@ class Agency:
         # Memoized.  None is a sentinel value meaning uninitalized
         if self._stop_code_to_stop_name_dict is None:
             self._prepare_dicts()
+        assert self._stop_code_to_stop_name_dict is not None  # Silence MyPy
         return self._stop_code_to_stop_name_dict[stop_code]
 
     def station_has_inaccessible_platform(self, station_code: str) -> bool:
@@ -267,6 +277,7 @@ class Agency:
         # Memoized.  None is a sentinel value meaning uninitalized
         if self._inaccessible_platform_dict is None:
             self._prepare_dicts()
+        assert self._inaccessible_platform_dict is not None  # Silence MyPy
         return self._inaccessible_platform_dict[station_code]
 
     def station_has_accessible_platform(self, station_code: str) -> bool:
@@ -278,6 +289,7 @@ class Agency:
         # Memoized.  None is a sentinel value meaning uninitalized
         if self._accessible_platform_dict is None:
             self._prepare_dicts()
+        assert self._accessible_platform_dict is not None  # Silence MyPy
         return self._accessible_platform_dict[station_code]
 
     def station_has_checked_baggage(self, station_code: str) -> bool:
@@ -363,6 +375,7 @@ class Agency:
 
         Requires unique route_id values (no duplicates)
         """
+        assert isinstance(feed.routes, DataFrame)  # Silence MyPy
         self._route_name_dict = dict(
             zip(feed.routes["route_id"], feed.routes["route_long_name"])
         )
@@ -376,6 +389,7 @@ class Agency:
         # This isn't used by subpackages, which won't even load this data.
         if self._route_name_dict is None:
             self._prepare_route_name_dict(feed)
+        assert self._route_name_dict is not None  # Silence MyPy
         return self._route_name_dict[route_id]
 
     def break_long_city_state_name(self, city_state_name: str) -> str:
