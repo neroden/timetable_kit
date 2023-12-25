@@ -65,7 +65,7 @@ from urllib.request import Request, urlopen  # for reading juckins webpage
 from timetable_kit.sew_pages import (
     read_list_file,
 )
-from timetable_kit.timetable import (
+from timetable_kit.core import (
     TTSpec,
     flatten_train_specs_list,
 )

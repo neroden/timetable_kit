@@ -13,16 +13,13 @@ It also gets rid of the shapes table, because it's huge and we don't use it.
 """
 from __future__ import annotations  # Forward references to FeedEnhanced
 
-# For function signatures
 from collections.abc import Iterable
+from typing import Type, Self, NamedTuple
 
-# For return values and parameters
-from typing import Type, Self
-
-from pandas import DataFrame, Series
 from operator import not_  # Needed for bad_service_id filter
 
-import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
+from pandas import DataFrame, Series
+from gtfs_kit import Feed  # type: ignore # Tell MyPy this has no type stubs
 
 # These are used to distinguish str types with special restrictions.
 from timetable_kit.convenience_types import GTFSDate, GTFSDay
@@ -46,7 +43,14 @@ GTFS_DAYS = (
 gtfs column headers, appropriately lowercase for the column headers."""
 
 
-class FeedEnhanced(gtfs_kit.Feed):
+class DateRange(NamedTuple):
+    """Used to track what dates a timetable is valid for."""
+
+    latest_start_date: str
+    earliest_end_date: str
+
+
+class FeedEnhanced(Feed):
     def __init__(
         self,
         dist_units: str,
@@ -407,6 +411,24 @@ class FeedEnhanced(gtfs_kit.Feed):
         my_trip = my_trips.iloc[0]
         return my_trip.trip_short_name
 
+    def get_valid_date_range(self) -> DateRange:
+        """Return the (latest_start_date, earliest_end_date) for a (filtered,
+        reduced) feed.
+
+        This is used after filtering the feed down to the trips which will
+        be shown in the final timetable. It therefore gives a validity
+        period for the timetable as a whole.
+        """
+        assert self.calendar is not None  # Silence MyPy
+
+        start_dates = self.calendar["start_date"]
+        latest_start_date = start_dates.max()
+
+        end_dates = self.calendar["end_date"]
+        earliest_end_date = end_dates.min()
+
+        return DateRange(latest_start_date, earliest_end_date)
+
 
 # TESTING CODE
 if __name__ == "__main__":
@@ -414,7 +436,9 @@ if __name__ == "__main__":
 
     gtfs_filename = "./amtrak/GTFS.zip"
     gtfs_path = Path(gtfs_filename)
-    feed = FeedEnhanced.enhance(gtfs_kit.read_feed(gtfs_path, dist_units="mi"))
+    from gtfs_kit import read_feed
+
+    feed = FeedEnhanced.enhance(read_feed(gtfs_path, dist_units="mi"))
     print(feed.calendar)
     date_filtered_feed = feed.filter_by_dates("20220224", "20220224")
     print(date_filtered_feed.calendar)

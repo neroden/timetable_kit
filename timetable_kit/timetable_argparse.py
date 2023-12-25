@@ -174,14 +174,14 @@ def make_tt_arg_parser():
     parser.add_argument(
         "--csv",
         dest="do_csv",
-        help="""Produce a CSV output file (default is not to).""",
+        help="""Produce CSV output files (default is not to).""",
         action="store_true",
     )
     parser.add_argument(
-        "--html",
+        "--no-html",
         dest="do_html",
-        help="""Produce HTML output file. (Default is not to produce HTML unless needed for PDF; HTML is needed to produce PDF.)""",
-        action="store_true",
+        help="""Produce HTML output file. (Default is to produce HTML. HTML is needed to produce PDF.)""",
+        action="store_false",
     )
     parser.add_argument(
         "--no-pdf",
@@ -194,7 +194,7 @@ def make_tt_arg_parser():
         "--jpg",
         "-j",
         dest="do_jpg",
-        help="""Produce a JPG output file (default is not to).  Requires that VIPS be installed.  Might only work on Linux.""",
+        help="""Produce JPG output files (default is not to).  Requires that VIPS be installed.  Might only work on Linux.""",
         action="store_true",
     )
     parser.add_argument(

@@ -27,6 +27,10 @@ import timetable_kit.runtime_config
 from timetable_kit.runtime_config import agency
 from timetable_kit.runtime_config import agency_singleton
 
+# The type, used for argument passing
+from timetable_kit.convenience_types import HtmlAndCss
+from timetable_kit.core import TTSpec
+
 # The header styling for each table has to be done in an ugly way with special CSS.
 from timetable_kit.timetable_styling import make_header_styling_css
 
@@ -42,28 +46,16 @@ from timetable_kit.load_resources import (
 )
 
 
-class _HtmlAndCss(NamedTuple):
-    """Container for fragment of HTML and associated fragment of CSS.
-
-    The implementation of the container as dict vs. tuple is an
-    implementation detail. It may change.
-    """
-
-    html_text: str
-    css_text: str
-
-
 def produce_html_page(
     timetable_styled_html,
     header_styling_list,
     tt_id,
     *,
+    spec: TTSpec,  # for JSON content and list of station codes
     author,
-    aux=None,
     start_date,
     end_date,
-    station_codes_list,  # For connecting services key
-) -> _HtmlAndCss:
+) -> HtmlAndCss:
     """
     Take the output of style_timetable_for_html -- which is mostly a table --
     and return a container containing
@@ -89,25 +81,20 @@ def produce_html_page(
     symbol_key_id = "SK_" + tt_id
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    # We're going to feed the entire aux file through, but we need some defaults
-    if aux is None:
-        aux = {}  # Empty dict
-    aux.setdefault("heading", "A Timetable")
-
-    if "landscape" in aux:
+    if spec.json.get("landscape"):
         debug_print(1, "Landscape orientation")
 
-    connecting_services_one_line = True
-    if "key_on_right" in aux:
+    if spec.json.get("key_on_right"):
         debug_print(1, "Key on right")
-        connecting_services_one_line = False
 
     # Key for connecting services:
     # First use the station codes list to get a list of all *relevant* services
-    services_list = agency_singleton().get_all_connecting_services(station_codes_list)
+    services_list = agency_singleton().get_all_connecting_services(
+        spec.get_stations_list()
+    )
     # Then feed that through to get the full key html:
     connecting_services_keys_html = connecting_services.get_keys_html(
-        services_list=services_list, one_line=connecting_services_one_line
+        services_list=services_list, one_line=(not spec.json.get("key_on_right"))
     )
 
     ### Prepare Jinja template substitution:
@@ -148,7 +135,7 @@ def produce_html_page(
     # Dictionary merge, html_params take priority, Python 3.9
     # Not sure about associativity, but we don't plan to have duplicates anyway
     # Throw the entire aux file in
-    full_page_params = aux | icon_params | html_params
+    full_page_params = spec.json | icon_params | html_params
 
     # debug_params = {i: full_page_params[i] for i in full_page_params if i != "timetable"}
     # debug_print(3, debug_params )
@@ -166,8 +153,7 @@ def produce_html_page(
     # The header stylings, totally different for each table
     header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
 
-    debugging_fonts = aux.get("font_debugging", False)
-    if debugging_fonts:
+    if spec.json.get("font_debugging"):
         # This makes it obvious when a font doesn't load
         backup_font_name = "cursive"
     else:
@@ -178,10 +164,10 @@ def produce_html_page(
     per_page_css_params = {
         "page_id": page_id,
         "header_styling_css": header_styling_css,
-        "font_name": aux["font_name"],
+        "font_name": spec.json["font_name"],
         "backup_font_name": backup_font_name,
-        "font_size": aux["font_size"],
-        "font_allow_ligatures": aux["font_allow_ligatures"],  # False
+        "font_size": spec.json["font_size"],
+        "font_allow_ligatures": spec.json["font_allow_ligatures"],  # False
     }
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...
@@ -189,13 +175,13 @@ def produce_html_page(
     # ...then render it.
     per_page_css = per_page_css_tpl.render(per_page_css_params)
 
-    result = _HtmlAndCss(page_html, per_page_css)
+    result = HtmlAndCss(page_html, per_page_css)
 
     return result
 
 
 def produce_html_file(
-    pages: list[_HtmlAndCss],
+    pages: list[HtmlAndCss],
     *,
     title,
 ):
