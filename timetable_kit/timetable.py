@@ -1273,8 +1273,8 @@ def fill_tt_spec(
     styler_t = styler_t.drop(labels=0, axis="columns")
 
     # And the placeholder top row
-    tt = tt.drop(labels=0, axis="rows")
-    styler_t = styler_t.drop(labels=0, axis="rows")
+    tt = tt.drop(labels=0, axis="index")
+    styler_t = styler_t.drop(labels=0, axis="index")
 
     # And now we have to rename the headers.  This is kind of ugly!
     # This is quite fragile and should be checked regularly.
