@@ -14,6 +14,7 @@ see the page_layout module.
 """
 
 # Other people's packages
+import html  # for html.escape
 import pandas as pd
 from pandas.io.formats.style import Styler
 
@@ -84,9 +85,10 @@ def get_time_column_stylings(
 
 
 def style_timetable_for_html(
+    spec,  # Will become TTSpec, but we have to unravel some other code first FIXME
     timetable,
     styler_df,
-    table_uuid,
+    header_styling_list,
     table_classes="",
 ):
     """Take a timetable DataFrame, with parallel styler DataFrame, and separate header
@@ -128,13 +130,18 @@ def style_timetable_for_html(
 
     # Produce HTML.
 
-    # The ID for the heading, so that we can do an ARIA cross-reference
-    heading_id = "H_" + table_uuid
-    # Want to add ARIA labelling to the table, which means we have to manually define the table class.  SIGH!
-    # Note that aria labelling only works on an item with an explicit landmark role, so this must be "main".
-    # Who knows whether this works!
-    table_attrs = 'class="tt-table" role="main" aria-labelled-by="' + heading_id + '"'
+    # Table cannot have a changed ARIA role (won't be recognized as a table).
+    # Table can have an ARIA label.
+    # aria-labelled-by does not work at all.
+    # This needs HTML escaping, including quotes.
+    table_aria_label = html.escape(spec.aux["table_aria_label"])
+    # WARNING.  Uses f-string.  FIXME
+    table_attrs = f'class="tt-table" aria-label="{ table_aria_label }"'
+
     # Specify the ID to allow for multipage timetables.
+    # PANDAS will prepend the T_
+    table_uuid = spec.aux["tt_id"]
+
     styled_timetable_html = s2.to_html(
         table_attributes=table_attrs, table_uuid=table_uuid
     )

@@ -8,10 +8,6 @@ A full HTML file is assembled elsewhere (in full_file.html)
 
 ARIA recommends using <section> for the whole page.
 role="document" is needed for each page to allow for multiple uses of role="main".
-ARIA recommends using <main> for the main content.  You can have multiples of this.
-But we want to label the <table> itself; we can only label it if it's a landmark; the only
-reasonable sort of landmark is "main"; so we don't use <main>.
-ARIA also recommends using <header>, <footer>, and <aside>, so we do.
 #}
 <section id="{{ page_id }}" role="document"{#
 #} class="tt-page {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
@@ -21,7 +17,7 @@ ARIA also recommends using <header>, <footer>, and <aside>, so we do.
 {% if top_text %}<p class="top-text">{{top_text}}</p>{% endif %}
 </header>
 <div class="{% if key_on_right %}bigbox-layout-key-on-right{% else %}bigbox-layout{% endif %}">
-<div class="{% if key_on_right %}bigbox-timetable-key-on-right{% else %}bigbox-timetable{% endif %}">
+<div role="main" class="{% if key_on_right %}bigbox-timetable-key-on-right{% else %}bigbox-timetable{% endif %}">
 {{timetable}}
 </div><!-- bigbox-timetable -->
 <div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">

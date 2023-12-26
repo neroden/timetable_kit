@@ -116,6 +116,9 @@ class TTSpec(object):
         self.aux.setdefault("dwell_secs_cutoff", 300)
         self.aux.setdefault("use_bus_icon_in_cells", False)
         self.aux.setdefault("box_time_characters", False)
+        # This really should be set in spec files, but for now...
+        # At least this makes it clear that this is the timetable table
+        self.aux.setdefault("table_aria_label", "Timetable")
         # These are used later, setting up the CSS
         self.aux.setdefault("font_name", "SpartanTT")
         self.aux.setdefault("font_size", "8px")  # 8px = 6pt

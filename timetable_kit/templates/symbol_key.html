@@ -2,8 +2,12 @@
 symbol_key.html: HTML for symbol key for timetable
 Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+ARIA dislikes giving tables a different role, so for landmarking, wrap it in a span.
+(Span so it's displayed inline.)
 #}
-<table id="{{ symbol_key_id }}" role="complementary" aria-label="Key for Symbols" class="symbol-key">
+<span role="complementary">
+<table id="{{ symbol_key_id }}" aria-label="Key for Symbols" class="symbol-key">
   <thead>
     <tr style="display: none;">
       <th>Symbol</th>
@@ -86,3 +90,4 @@ This says "can be booked through Amtrak" / "can be booked through VIA" etc.
 #}{% endif %}{#
 #}  </tbody>
 </table>
+</span>

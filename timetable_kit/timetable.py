@@ -247,7 +247,7 @@ def produce_several_timetables(
                     spec, today_feed=reduced_feed, doing_html=True
                 )
                 timetable_styled_html = style_timetable_for_html(
-                    timetable, styler_table, table_uuid=spec.aux["tt_id"]
+                    spec, timetable, styler_table, header_styling_list
                 )
                 debug_print(1, "HTML styled")
 
