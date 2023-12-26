@@ -8,6 +8,7 @@ A full HTML file is assembled elsewhere (in full_file.html)
 
 ARIA recommends using <section> for the whole page.
 role="document" is needed for each page to allow for multiple uses of role="main".
+(Which is why we can't use <main>, for which only one is allowed.)
 #}
 <section id="{{ page_id }}" role="document"{#
 #} class="tt-page {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
@@ -21,7 +22,7 @@ role="document" is needed for each page to allow for multiple uses of role="main
 {{timetable}}
 </div><!-- bigbox-timetable -->
 <div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">
-<aside>
+<aside>{# This will be marked as "complementary content" by screenreaders #}
 {% include "symbol_key.html" %}
 {% if central_standard_time %}{% include "central_standard_time.html" %}{% endif %}
 {% if mountain_standard_time %}{% include "mountain_standard_time.html" %}{% endif %}
