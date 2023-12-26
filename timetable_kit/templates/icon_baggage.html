@@ -1,0 +1,18 @@
+{#
+icon_baggage.html
+Part of timetable_kit
+Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This is the HTML fragment to refer to the baggage icon, 
+for use in the station name boxes in a timetable.  It's actually quite complicated.
+
+This is referenced from icons.py
+
+aria-label will be read by a screenreader,
+while aria-hidden hides the entire thing and its interior.
+#}{#
+#}<span class="baggage-symbol" aria-label="Checked Baggage">{#
+#}<img class="baggage-icon-img" src="icons/baggage-ncn.svg"{#
+#} alt="{ baggage_letter }" title="Checked Baggage" aria-hidden="true">{#
+#}</span>{# Jinja is supposed to be smart enough to remove the last trailing newline in the file
+#}

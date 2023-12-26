@@ -12,7 +12,14 @@ Referenced inline SVGs would be ideal for HTML-on-web output.
 For now, we do strictly icons referenced as img.
 """
 
-from timetable_kit.load_resources import get_icon_css
+# TODO: consider trying to eliminate the code duplication here
+
+from timetable_kit.load_resources import (
+    # For retrieving CSS files which go with the SVG files
+    get_icon_css,
+    # For templates for producing HTML fragments
+    template_environment,
+)
 
 
 def get_filenames_for_all_icons() -> list[str]:
@@ -31,80 +38,20 @@ def get_css_for_all_icons() -> str:
     """Get the CSS code to style all the icons we're using."""
     full_css = "\n".join(
         [
-            get_baggage_icon_css(),
             get_accessible_icon_css(),
             get_inaccessible_icon_css(),
-            get_sleeper_icon_css(),
+            get_baggage_icon_css(),
             get_bus_icon_css(),
+            get_sleeper_icon_css(),
         ]
     )
     return full_css
 
 
-# Unicode has a "baggage claim" symbol :baggage_claim:
-# ... but it's not appropriate and not supported by
-# the fonts in Weasyprint.  :-(
-# U+1F6C4
-
-# Use if icon is not available
-baggage_letter = "G"
-
-baggage_img_str = " ".join(
-    [
-        "<img",
-        'class="baggage-icon-img"',
-        'src="icons/baggage-ncn.svg"',
-        'alt="' + baggage_letter + '"',
-        'title="Checked Baggage">',
-    ]
-)
-
-baggage_span_str = "".join(
-    [
-        '<span class="baggage-symbol">',
-        baggage_img_str,
-        "</span>",
-    ]
-)
-
-
-def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
-    """Return suitable HTML for displaying the baggage icon.
-
-    If doing_html=False, return a suitable capital letter
-    """
-    if doing_html:
-        return baggage_span_str
-    else:
-        return baggage_letter
-
-
-def get_baggage_icon_css():
-    """Return suitable CSS for the baggage icon (loaded from a file)"""
-    return get_icon_css("baggage-ncn.css")
-
-
 # Use if icon is not available
 accessible_letter = "W"
-
-accessible_img_str = " ".join(
-    [
-        "<img",
-        'class="accessible-icon-img"',
-        'src="icons/accessible.svg"',
-        'alt="' + accessible_letter + '"',
-        'title="Wheelchair accessible">',
-    ]
-)
-
-
-accessible_span_str = "".join(
-    [
-        '<span class="accessible-symbol">',
-        accessible_img_str,
-        "</span>",
-    ]
-)
+# Memoized global
+accessible_icon_html: str | None = None
 
 
 def get_accessible_icon_html(doing_html=True) -> str:
@@ -113,10 +60,17 @@ def get_accessible_icon_html(doing_html=True) -> str:
     Amtrak's data does not show full accessibility.  This is being used for basic
     platform accessibility at this time.
     """
-    if doing_html:
-        return accessible_span_str
-    else:
+    if not doing_html:
         return accessible_letter
+
+    global accessible_icon_html
+    if accessible_icon_html is None:
+        # Compute and memoize
+        accessible_icon_tpl = template_environment.get_template("icon_accessible.html")
+        params = {"accessible_letter": accessible_letter}
+        accessible_icon_html = accessible_icon_tpl.render(params)
+
+    return accessible_icon_html
 
 
 def get_accessible_icon_css():
@@ -126,32 +80,25 @@ def get_accessible_icon_css():
 
 # Use if icon is not available
 inaccessible_letter = "N"
-
-inaccessible_img_str = " ".join(
-    [
-        "<img",
-        'class="inaccessible-icon-img"',
-        'src="icons/inaccessible-ncn.svg"',
-        'alt="' + inaccessible_letter + '"',
-        'title="Not wheelchair accessible">',
-    ]
-)
-
-inaccessible_span_str = "".join(
-    [
-        '<span class="inaccessible-symbol">',
-        inaccessible_img_str,
-        "</span>",
-    ]
-)
+# Memoized global
+inaccessible_icon_html: str | None = None
 
 
 def get_inaccessible_icon_html(doing_html=True) -> str:
     """Return suitable HTML for displaying the "no wheelchair access" icon."""
-    if doing_html:
-        return inaccessible_span_str
-    else:
+    if not doing_html:
         return inaccessible_letter
+
+    global inaccessible_icon_html
+    if inaccessible_icon_html is None:
+        # Compute and memoize
+        inaccessible_icon_tpl = template_environment.get_template(
+            "icon_inaccessible.html"
+        )
+        params = {"inaccessible_letter": inaccessible_letter}
+        inaccessible_icon_html = inaccessible_icon_tpl.render(params)
+
+    return inaccessible_icon_html
 
 
 def get_inaccessible_icon_css():
@@ -159,34 +106,59 @@ def get_inaccessible_icon_css():
     return get_icon_css("inaccessible-ncn.css")
 
 
+# Unicode has a "baggage claim" symbol :baggage_claim:
+# ... but it's not appropriate and not supported by
+# the fonts in Weasyprint.  :-(
+# U+1F6C4
+
+# Use if icon is not available
+baggage_letter = "G"
+# Memoized global
+baggage_icon_html: str | None = None
+
+
+def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
+    """Return suitable HTML for displaying the baggage icon.
+
+    If doing_html=False, return a suitable capital letter
+    """
+    if not doing_html:
+        return baggage_letter
+
+    global baggage_icon_html
+    if baggage_icon_html is None:
+        # Compute and memoize
+        baggage_icon_tpl = template_environment.get_template("icon_baggage.html")
+        params = {"baggage_letter": baggage_letter}
+        baggage_icon_html = baggage_icon_tpl.render(params)
+
+    return baggage_icon_html
+
+
+def get_baggage_icon_css():
+    """Return suitable CSS for the baggage icon (loaded from a file)"""
+    return get_icon_css("baggage-ncn.css")
+
+
 # Use if icon is not available
 bus_letter = "B"
-
-bus_img_str = " ".join(
-    [
-        "<img",
-        'class="bus-icon-img"',
-        'src="icons/bus-ncn.svg"',
-        'alt="' + bus_letter + '"',
-        'title="Bus">',
-    ]
-)
-
-bus_span_str = "".join(
-    [
-        '<span class="bus-symbol">',
-        bus_img_str,
-        "</span>",
-    ]
-)
+# Memoized global
+bus_icon_html: str | None = None
 
 
 def get_bus_icon_html(doing_html=True) -> str:
     """Return suitable HTML for displaying the bus icon."""
-    if doing_html:
-        return bus_span_str
-    else:
+    if not doing_html:
         return bus_letter
+
+    global bus_icon_html
+    if bus_icon_html is None:
+        # Compute and memoize
+        bus_icon_tpl = template_environment.get_template("icon_bus.html")
+        params = {"bus_letter": bus_letter}
+        bus_icon_html = bus_icon_tpl.render(params)
+
+    return bus_icon_html
 
 
 def get_bus_icon_css():
@@ -196,32 +168,23 @@ def get_bus_icon_css():
 
 # Use if icon is not available
 sleeper_letter = "S"
-
-sleeper_img_str = " ".join(
-    [
-        "<img",
-        'class="sleeper-icon-img"',
-        'src="icons/bed-solid.svg"',
-        'alt="Sleeper"',
-        'title="Sleeping Car Service">',
-    ]
-)
-
-sleeper_span_str = "".join(
-    [
-        '<span class="sleeper-symbol">',
-        sleeper_img_str,
-        "</span>",
-    ]
-)
+# Memoized global
+sleeper_icon_html: str | None = None
 
 
 def get_sleeper_icon_html(doing_html=True) -> str:
     """Return suitable HTML for displaying the sleeper icon."""
-    if doing_html:
-        return sleeper_span_str
-    else:
+    if not doing_html:
         return sleeper_letter
+
+    global sleeper_icon_html
+    if sleeper_icon_html is None:
+        # Compute and memoize
+        sleeper_icon_tpl = template_environment.get_template("icon_sleeper.html")
+        params = {"sleeper_letter": sleeper_letter}
+        sleeper_icon_html = sleeper_icon_tpl.render(params)
+
+    return sleeper_icon_html
 
 
 def get_sleeper_icon_css():
