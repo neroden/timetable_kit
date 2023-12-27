@@ -991,11 +991,7 @@ def get_time_column_header(
         raise InputError("No train_specs?")
 
     # Strip the "noheader" train specs; we don't mention them.
-    fewer_train_specs = []
-    for train_spec in train_specs:
-        if train_spec.endswith("noheader"):
-            continue
-        fewer_train_specs.append(train_spec)
+    fewer_train_specs = [ts for ts in train_specs if not ts.endswith("noheader")]
 
     # It's OK if stripping noheader train specs leads to no header.
     # In this case return blank.  Uniqueness of headers is handled later.
