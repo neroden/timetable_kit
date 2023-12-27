@@ -1,6 +1,7 @@
 {
     "title": "Grand Canyon Timetable",
     "heading": "To the Grand Canyon by train",
+    "aria_label": "Grand Canyon",
     "top_text": "From Amtrak's Flagstaff station, served by Amtrak's <b>Southwest Chief</b>, you can take a short bus trip to Williams, Arizona,<br>from where <b>the <a href=\"https://www.thetrain.com/\">Grand Canyon Railway</a> runs trains to the Grand Canyon.</b><br><a href=\"https://www.thetrain.com/\">Grand Canyon Railway</a> trains can be booked through Amtrak, but booking directly gives options for additional classes of service.<br>There are also direct buses to the Grand Canyon from Flagstaff.<br><br>By default, buses stop at the Williams Holiday Inn, which is a few blocks away on foot from the Grand Canyon Railway Depot and Hotel.<br>If you are ticketed to the Williams Holiday Inn, buses will stop at the Grand Canyon Railway Depot <b>by request</b>.  To be dropped off, ask the bus driver.<br><a href=\"https://www.facebook.com/Route-66-Express-101038708484158/\">Route 66 Express</a> shuttle vans will wait for late trains at Flagstaff.<br>To be picked up from the Grand Canyon Railway Depot by <a href=\"https://groometransportation.com/grand-canyon/\">Groome Transportation</a>, you must call in advance.",
     "bottom_text": "This timetable is not an offical Grand Canyon Railway, Groome Transportation, or Route 66 Express product.",
     "reference_date": "20240101",

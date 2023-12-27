@@ -1,6 +1,7 @@
 {
     "title": "Crescent Timetable",
     "heading": "Amtrak's Crescent",
+    "aria_label": "Crescent",
     "reference_date": "20240104",
     "key_baggage": "true",
     "key_d": "true",

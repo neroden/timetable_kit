@@ -1,6 +1,7 @@
 {
     "title": "Southwest Chief Timetable",
     "heading": "Amtrak's Southwest Chief",
+    "aria_label": "Southwest Chief",
     "reference_date": "20231230",
     "key_on_right": "true",
     "key_baggage": "true",

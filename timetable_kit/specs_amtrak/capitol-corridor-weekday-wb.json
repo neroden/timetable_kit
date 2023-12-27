@@ -1,6 +1,7 @@
 {
     "title": "Capitol Corridor Weekday Westbound",
     "heading": "Amtrak's Capitol Corridor: Weekday Westbound",
+    "aria_label": "Capitol Corridor Weekday Westbound",
     "landscape": "true",
     "reference_date": "20240102",
     "bottom_text": "Trains <b>may leave 5 minutes early</b> at Santa Clara/Great America and Santa Clara Transit Center",

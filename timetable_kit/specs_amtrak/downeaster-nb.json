@@ -1,6 +1,7 @@
 {
     "title": "Downeaster NB",
     "heading": "Amtrak's Downeaster Northbound",
+    "aria_label": "Downeaster Northbound",
     "landscape": "true",
     "reference_date": "20240102",
     "for_rpa": "true"

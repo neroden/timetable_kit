@@ -1,6 +1,7 @@
 {
     "title": "Lincoln Service & Missouri River Runner Timetable",
     "heading": "Amtrak's Lincoln Service & Missouri River Runner",
+    "aria_label": "Lincoln Service River Runner",
     "reference_date": "20231230",
     "landscape": "true",
     "key_baggage": "true",

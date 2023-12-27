@@ -1,6 +1,7 @@
 {
     "title": "Vermonter Timetable",
     "heading": "Amtrak's Vermonter",
+    "aria_label": "Vermonter",
     "reference_date": "20240116",
     "for_rpa": "true"
 }

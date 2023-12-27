@@ -1,6 +1,7 @@
 {
     "title": "Vermonter & Valley Flyer",
     "heading": "Amtrak's Vermonter & Valley Flyer",
+    "aria_label": "Vermonter Valley Flyer",
     "reference_date": "20240102",
     "for_rpa": "true"
 }
