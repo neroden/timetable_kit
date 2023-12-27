@@ -53,7 +53,6 @@ from timetable_kit.runtime_config import agency_singleton
 from timetable_kit.initialize import initialize_feed
 
 from timetable_kit.timetable_argparse import make_tt_arg_parser
-from timetable_kit import sew_pages  # For understanding list files
 from timetable_kit.core import (
     TTSpec,
     fill_tt_spec,
@@ -153,6 +152,30 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     return
 
 
+def read_list_file(filename: str, *, input_dir) -> list[str]:
+    """Given a filename ending in .list, return a list of the lines inside that
+    file, with exterior whitespace stripped.
+
+    The first line in a .list file is actually a title for the output HTML, not a filename.
+    The rest are filenames.
+
+    filename: the file name
+    input_dirname: where to find the list file
+    """
+    if not filename.endswith(".list"):
+        raise InputError("Not a list file:", filename)
+    input_dir = Path(input_dir)
+
+    list_filename_path = input_dir / Path(filename)
+    with open(list_filename_path, "r") as list_file:
+        raw_list = list_file.readlines()
+    # Remove stray whitespace from either side of each line
+    cooked_list = [item.strip() for item in raw_list]
+    # Filter out lines which are empty after that
+    twice_cooked_list = list(filter(bool, cooked_list))
+    return twice_cooked_list
+
+
 def produce_several_timetables(
     spec_file_list,
     *,
@@ -204,9 +227,7 @@ def produce_several_timetables(
     for spec_file in spec_file_list:
         debug_print(1, "Producing timetable for", spec_file)
         if spec_file.endswith(".list"):
-            (title, *subspec_files) = sew_pages.read_list_file(
-                spec_file, input_dir=input_dirname
-            )
+            (title, *subspec_files) = read_list_file(spec_file, input_dir=input_dirname)
             output_filename_base = spec_file.removesuffix(".list")
         else:
             # Single file.  Treat as list...
