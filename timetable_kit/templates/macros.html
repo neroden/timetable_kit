@@ -8,9 +8,11 @@
 
     Usually used with key_on_right.
 
+    For screen readers, put in a zero-width space and note that the linebreak is purely presentational.
+
 #}{% macro br_or_space(value) %}{#
 #}{% if value %}{#
-#}<br>{#
+#}<wbr><br role="presentation">{#
 #}{% else %}{#
 #} {#
 #}{% endif %}{#
