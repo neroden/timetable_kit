@@ -52,17 +52,17 @@ def make_station_stats():
     cleaned_station_set = station_set - bad_station_set
 
     # These are sets, so the "add only if not present" logic is automatic
-    possible_features = set(())
-    possible_baggage = set(())
-    possible_parking = set(())
-    possible_accessibility = set(())
+    possible_features = set()
+    possible_baggage = set()
+    possible_parking = set()
+    possible_accessibility = set()
     # Hours are different, don't try the same trick
-    # possible_hours = set(())
+    # possible_hours = set()
 
     # Simultaneously accumulate certain lists of stations...
-    inaccessible_platforms = set(())
-    no_wheelchair_lifts = set(())
-    high_platforms = set(())
+    inaccessible_platforms = set()
+    no_wheelchair_lifts = set()
+    high_platforms = set()
 
     for code in cleaned_station_set:
         print("Analyzing " + code)
