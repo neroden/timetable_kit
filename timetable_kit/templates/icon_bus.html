@@ -8,11 +8,13 @@ for use in the station name boxes in a timetable.
 
 This is referenced from icons.py
 
-aria-label will be read by a screenreader,
-while aria-hidden hides the entire thing and its interior.
+- We want alt to be a single letter for printing when icons are missing
+- We want aria-label, which will be read by a screenreader, to be like title
+
+We don't want to clutter up the screen reader with the single letter if possible.
 #}{#
-#}<span class="bus-symbol" aria-label="Bus">{#
+#}<span class="bus-symbol">{#
 #}<img class="bus-icon-img" src="icons/bus-ncn.svg"{#
-#} alt="{ bus_letter }" title="Bus" aria-hidden="true">{#
+#} alt="{ bus_letter }" title="Bus" aria-label="Bus">{#
 #}</span>{# Jinja is supposed to be smart enough to remove the last trailing newline in the file
 #}
