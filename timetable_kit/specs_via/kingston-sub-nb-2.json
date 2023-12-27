@@ -1,7 +1,7 @@
 {
     "title": "Corridor Toronto-Ottawa-Montréal North & Eastbound 2/2",
     "heading": "VIA Rail's Toronto-Ottawa-Montréal services North & Eastbound Page 2/2",
-    "page_aria_label": "Toronto Ottawa Montréal Eastbound page 2",
+    "aria-label": "Toronto Ottawa Montréal Eastbound page 2",
     "reference_date": "20240102",
     "landscape": "true",
     "key_r": "true",
