@@ -41,18 +41,15 @@ def make_station_stats():
     print(str(stations_csv_path) + " dumped.")
     # Note: 'country' is blank or CA for Canada (nothing else); stationAlias is of little value
 
-    station_list = stations["code"].array
+    station_set = set(stations["code"].to_list())
 
     # Amtrak has stations with defective and missing JSON records.
     # We detect these in json_stations.py process
     # Then put them in a file (one station per line), which we read here
     bad_station_df = pd.read_csv(bad_stations_path, header=None)
-    bad_station_list = bad_station_df[0].array
-    print("Omitting bad stations:")
-    print(bad_station_list)
-    cleaned_station_list = list(
-        filter(lambda x: not x in bad_station_list, station_list)
-    )
+    bad_station_set = set(bad_station_df[0].to_list())
+    print("Omitting bad stations:", bad_station_set)
+    cleaned_station_set = station_set - bad_station_set
 
     # These are sets, so the "add only if not present" logic is automatic
     possible_features = set(())
@@ -67,7 +64,7 @@ def make_station_stats():
     no_wheelchair_lifts = set(())
     high_platforms = set(())
 
-    for code in cleaned_station_list:
+    for code in cleaned_station_set:
         print("Analyzing " + code)
         station_details_json = None
         station_details_json = load_station_details(code)
