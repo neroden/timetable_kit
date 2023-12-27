@@ -10,6 +10,9 @@ I am currently using WeasyPrint for HTML->PDF conversion because it is also a Py
 -- It is hard to test PDFs.  At least on my monitor...
 --- Okular needs to be set at 90% zoom to show it real size.
 --- Evince needs to be set at 50% zoom to show it real size.
+--- mupdf will display *correctly*. Install mupdf!
+
+Use gucharmap to find unicode characters.
 
 We can convert a SINGLE PAGE PDF to a JPEG as follows:
 (this is implemented in the current program):
