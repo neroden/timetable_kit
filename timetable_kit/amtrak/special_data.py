@@ -75,11 +75,12 @@ def is_sleeper_train(train_number):
     return train_number in sleeper_trains
 
 
-def train_number_range(*range_args) -> set[str]:
+def train_number_range(start: int, stop: int) -> set[str]:
     """Given a low train number and a high train number, produce a set of all train
     numbers greater or equal to the low number, and strictly less than the high number,
     with the numbers converted to strings."""
-    return set(map(str, range(*range_args)))
+    # Set comprehension here:
+    return { str(num) for num in range(start, stop) }
 
 
 # Trains with checked baggage cars.
