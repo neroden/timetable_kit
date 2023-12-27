@@ -14,9 +14,12 @@ from timetable_kit.debug import debug_print
 # For text twiddling
 from timetable_kit import text_assembly
 from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
+from timetable_kit.text_assembly import SAFE_BR
 
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
+
+
 
 
 # Intended to be used both directly and by subclasses
@@ -451,7 +454,7 @@ class Agency:
 
         if facility_name:
             # By default, put the facility name on its own line
-            br_for_facility_name = "<br>"
+            br_for_facility_name = SAFE_BR
             if station_code in self.stations_to_put_facility_on_first_line():
                 br_for_facility_name = " "
             enhanced_facility_name = "".join(
@@ -471,7 +474,7 @@ class Agency:
         if show_connections:
             # Grab an extra line for certain stations with LOTS of connections
             if station_code in self.stations_with_many_connections():
-                connection_logos_html += "<br>"
+                connection_logos_html += SAFE_BR
             # station_code had better be correct, since we're going to look it up
             # stations with no entry in the dict are treated the same as
             # stations which have an empty list of connecting services
@@ -518,7 +521,7 @@ class Agency:
         if not doing_html:
             return "from " + station_name
         # Use a line break per default in HTML
-        return "from<br>" + station_name
+        return "from" + SAFE_BR + station_name
 
     def get_station_name_to(
         self, station_code: str, doing_multiline_text=False, doing_html=True
@@ -529,7 +532,7 @@ class Agency:
         if not doing_html:
             return "to " + station_name
         # Use a line break per default in HTML
-        return "to<br>" + station_name
+        return "to" + SAFE_BR + station_name
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True

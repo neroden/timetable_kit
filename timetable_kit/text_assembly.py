@@ -9,6 +9,12 @@ dependencies.
 """
 import html  # for html.escape
 
+# This is a zero width space followed by a br which is invisible to screen readers
+# because it's used solely for layout purposes
+# Used by agency code for station cell layout
+# Used all over text_presentation.py
+SAFE_BR = '<wbr><br role="presentation">'
+
 
 def href_wrap(text: str, url: str, doing_html: bool = True) -> str:
     """Given text and a URL, wrap the text in an HREF anchor pointing to the URL.

@@ -26,6 +26,7 @@ import timetable_kit.amtrak.json_stations as json_stations
 
 # for get_station_name_pretty (subroutines)
 import timetable_kit.text_assembly as text_assembly
+from timetable_kit.text_assembly import SAFE_BR
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
@@ -160,8 +161,8 @@ class AgencyAmtrak(Agency):
 
         # Special-case New Orleans
         if city_name == "New Orleans":
-            return "from New<br>Orleans"
-        return "from<br>" + city_name
+            return "from New" + SAFE_BR + "Orleans"
+        return "from" + SAFE_BR + city_name
 
     def get_station_name_to(
         self, station_code: str, doing_multiline_text=False, doing_html=True
@@ -180,10 +181,10 @@ class AgencyAmtrak(Agency):
 
         # Special-case New Orleans and Newport News
         if city_name == "New Orleans":
-            return "to New<br>Orleans"
+            return "to New" + SAFE_BR + "Orleans"
         if city_name == "Newport News":
-            return "to Newport<br>News"
-        return "to<br>" + city_name
+            return "to Newport" + SAFE_BR + "News"
+        return "to" + SAFE_BR + city_name
 
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
@@ -213,9 +214,9 @@ class AgencyAmtrak(Agency):
         """Add HTML <br> to certain city names which are too long."""
         match raw_city_state_name:
             case "Grand Canyon Village, AZ":
-                city_state_name = "Grand Canyon<br>Village, AZ"
+                city_state_name = "Grand Canyon" + SAFE_BR + "Village, AZ"
             case "Essex Junction-Burlington, VT":
-                city_state_name = "Essex Junction<br>-Burlington, VT"
+                city_state_name = "Essex Junction" + SAFE_BR + "-Burlington, VT"
             case "Lompoc-Surf, CA -Amtrak Station":
                 city_state_name = "Lompoc-Surf, CA"
             # You would think you'd want to do St. Paul-Minneapolis,...

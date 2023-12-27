@@ -12,6 +12,7 @@ from timetable_kit.generic_agency import Agency
 
 # For generic reassembly functions
 import timetable_kit.text_assembly as text_assembly
+from timetable_kit.text_assembly import SAFE_BR
 
 # for patch_feed
 import timetable_kit.via.gtfs_patches as gtfs_patches
@@ -151,7 +152,7 @@ class AgencyVIA(Agency):
                 # Makes the Churchill timetable too wide.
                 # In the case of The Pas, it fits but looks ugly with the
                 # KRC connecting indicators.
-                city_state_name = raw_city_state_name + "<br>"
+                city_state_name = raw_city_state_name + SAFE_BR
             case _:
                 city_state_name = raw_city_state_name
         return city_state_name

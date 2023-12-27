@@ -12,6 +12,9 @@ from timetable_kit.connecting_services.catalog import connecting_services_dict
 # This snags the CSS
 from timetable_kit.connecting_services.catalog import get_css_for_all_logos
 
+# For a safe version of <br>
+from timetable_kit.text_assembly import SAFE_BR
+
 
 def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str:
     """Return suitable HTML for the connecting service's logo.
@@ -62,6 +65,8 @@ def get_keys_html(services_list, one_line=True) -> str:
     DOES NOT do the surrounding decoration ("Connecting services:") -- that is done over
     in the main Jinja templates
     """
+    # TODO: this should probably be a table for screen reader purposes
+
     assert connecting_services_dict is not None  # Silence MyPy
     # Bail out early if there are no connecting services
     if not services_list:
@@ -76,7 +81,7 @@ def get_keys_html(services_list, one_line=True) -> str:
     if one_line:
         space_or_br = " "
     else:
-        space_or_br = "<br>"
+        space_or_br = SAFE_BR
 
     all_keys = space_or_br.join(
         [

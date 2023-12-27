@@ -29,6 +29,10 @@ from timetable_kit.icons import (
 )
 from timetable_kit.tsn import train_spec_to_tsn
 
+# Safe version of <br>
+from timetable_kit.text_assembly import SAFE_BR
+
+
 # These work, but only at 120%.
 thick_cell_substitution_map = {
     "blank": " ",
@@ -558,6 +562,20 @@ def get_blank_bus_str(doing_html=False):
     return "".join([bus_box_prefix, bus_box_postfix])
 
 
+def get_html_ar_str():
+    """Return a suitable string for HTML to say "arrival time" ("Ar").
+
+    There is no clean way to improve screen reader output
+    """
+
+def get_html_dp_str():
+    """Return a suitable string for HTML to say "departure time" ("Dp").
+
+    There is no clean way to improve screen reader output
+    """
+
+
+
 def timepoint_str(
     timepoint,
     stop_tz,
@@ -627,7 +645,7 @@ def timepoint_str(
     """
 
     if doing_html:
-        linebreak = "<br>"
+        linebreak = SAFE_BR
     else:
         linebreak = "\n"
 
@@ -743,6 +761,8 @@ def timepoint_str(
     dp_str = ""  # Again, if we are not adding the "Ar/Dp" at all
     if use_ar_dp_str:
         if doing_html:
+            # I'd like to make this read better in screen readers,
+            # but there is no clean way to do it.  FIXME.
             ar_str = '<span class="box-ardp">Ar</span>'
             dp_str = '<span class="box-ardp">Dp</span>'
         else:
@@ -1039,7 +1059,7 @@ def get_time_column_header(
                 "<small>",
                 time_column_prefix,
                 "</small>",
-                "<br>",
+                SAFE_BR,
                 "<strong>",
                 " / ".join(tsns),  # Note! Works cleanly for single-element case
                 "</strong>",
@@ -1060,7 +1080,7 @@ def get_time_column_header(
                     int(route_from_train_spec(train_spec).route_type)
                 ],
                 "</small>",
-                "<br>",
+                SAFE_BR,
                 "<strong>",
                 # Strip the " monday" type suffix
                 # Special for CTrail: clean off the "CTrail" prefix
@@ -1090,7 +1110,7 @@ def get_services_column_header(doing_html=False):
     can be rotated.
     """
     if doing_html:
-        return '<div class="services-header-text">Station<br>Services</div>'
+        return '<div class="services-header-text">Station' + SAFE_BR + 'Services</div>'
     else:
         return "Services"
 
@@ -1119,7 +1139,7 @@ def get_timezone_column_header(doing_html=False):
     can be rotated.
     """
     if doing_html:
-        # return '<div class="timezone-header-text">Time<br>Zone</div>'
+        # return '<div class="timezone-header-text">Time' + SAFE_BR + 'Zone</div>'
         # Keep it one line, space is at a premium
         return '<div class="timezone-header-text">TZ</div>'
     else:
@@ -1153,7 +1173,7 @@ def style_route_name_for_column(route_name, doing_html=False):
         if len(rnw[0]) <= 3 or len(rnw[1]) <= 3:
             rnw = ["".join([rnw[0], " ", rnw[1]]), *rnw[2:]]
 
-    linebroken_str = "<br>".join(rnw)
+    linebroken_str = SAFE_BR.join(rnw)
     final_str = "".join(['<div class="box-route-name">', linebroken_str, "</div>"])
     return final_str
 
