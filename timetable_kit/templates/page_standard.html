@@ -10,9 +10,9 @@ ARIA recommends using <section> for the whole page.
 role="document" is needed for each page to allow for multiple uses of role="main".
 (Which is why we can't use <main>, for which only one is allowed.)
 #}
-<section id="{{ page_id }}" role="document"{#
+<section id="{{ page_id }}" role="document" aria-labelled-by="{{ heading_id }}"{#
 #} class="tt-page {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
-<header>
+<header role="banner">{# ORCA screenreader won't automatically assign the role #}
 <h1 id="{{ heading_id }}" class="{{ agency_css_class }}">{{heading}}</h1>
 {% include "check_agency.html" %}
 {% if top_text %}<p class="top-text">{{top_text}}</p>{% endif %}
@@ -22,7 +22,7 @@ role="document" is needed for each page to allow for multiple uses of role="main
 {{timetable}}
 </div><!-- bigbox-timetable -->
 <div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">
-<aside>{# This will be marked as "complementary content" by screenreaders #}
+<aside>{# This will be marked as "complementary content" by the ORCA screenreader #}
 {% include "symbol_key.html" %}
 {% if central_standard_time %}{% include "central_standard_time.html" %}{% endif %}
 {% if mountain_standard_time %}{% include "mountain_standard_time.html" %}{% endif %}
@@ -30,7 +30,7 @@ role="document" is needed for each page to allow for multiple uses of role="main
 {% if montreal_airport_shuttle %}{% include "montreal_airport_shuttle.html" %}{% endif %}{# VIA-specific hack, FIXME #}
 {% if bottom_text %}<p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>{% endif %}
 </aside>
-<footer>
+<footer role="contentinfo">{# ORCA screenreader won't automatically assign the role #}
 {% include "unofficial_agency.html" %}
 {% include "credit.html" %}
 </footer>
