@@ -1,6 +1,7 @@
 {
     "title": "Richmond & Hampton Roads Timetable - Weekend Southbound",
-    "heading": "Amtrak to Richmond & Hampton Roads - Weekend Southbound",
+    "heading": "Richmond & Hampton Roads - Weekend Southbound",
+    "amtrak_css_class": "amtrak-to-css",
     "aria_label": "Richmond Weekend Southbound",
     "reference_date": "20240108",
     "key_baggage": "true",

@@ -215,7 +215,8 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
 ::
  {
     "title": "This goes in the title bar of the HTML page",
-    "heading": "This is the heading at the top of the page",
+    "heading": "This is the heading at the top of the page.  Will be prefixed by 'Amtrak's' or 'VIA Rail:' for those agencies.",
+    "agency_css_class": "Override the special agency CSS classes used for the timetable. Used to eliminate the automatic prefixing of 'Amtrak's' or to change the heading color.",
     "aria_label": "This is a short name for the page, like 'Maple Leaf'; will be used to generate aria-label values for page landmarks for screenreaders.  You SHOULD include this.  Note underscore, not hyphen.",
     "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"

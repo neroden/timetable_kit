@@ -1,6 +1,6 @@
 {
     "title": "Wolverine & Blue Water Timetable",
-    "heading": "Amtrak's Wolverine & Blue Water Weekday TESTING",
+    "heading": "Wolverine & Blue Water Weekday TESTING",
     "aria_label": "Wolverine Blue Water Weekday TESTING",
     "reference_date": "20240102",
     "programmers_warning": "For TESTING, not for publication: Wolverine trains have identical M-F and SaSu timetables but are listed separately, so days column is overridden: recheck this when GTFS changes.",

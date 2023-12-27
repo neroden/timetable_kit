@@ -1,6 +1,6 @@
 {
     "title": "Capitol Corridor Weekend Westbound",
-    "heading": "Amtrak's Capitol Corridor: Weekend Westbound",
+    "heading": "Capitol Corridor: Weekend Westbound",
     "aria_label": "Capitol Corridor Weekend Westbound",
     "programmers_warning": "Not revised because of ghost buses and real buses which aren't in GTFS.",
     "landscape": "true",

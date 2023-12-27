@@ -1,0 +1,15 @@
+{# 
+agency_maple_leaf.css
+Part of timetable_kit
+Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Maple Leaf specific CSS.
+#}
+{# Vary the color of the h1 heading from Amtrak to VIA #}
+h1.maple-leaf-special-css {
+    background-image: linear-gradient(to right, darkblue, crimson);
+}
+/* Put this before the printed heading, but not in index lists of headings */
+h1.maple-leaf-special-css::before {
+    content: "Amtrak's and Via Rail's ";
+}

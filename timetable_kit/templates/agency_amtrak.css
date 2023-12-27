@@ -1,0 +1,26 @@
+{# 
+agency_amtrak.css
+Part of timetable_kit
+Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Amtrak-specific CSS.
+#}
+{# Vary the color of the h1 heading. #}
+h1.amtrak-special-css h1.amtrak-to-css h1.amtrak-colon-css {
+    background-color: darkblue;
+}
+/* Put this before the printed heading, but not in index lists of headings */
+h1.amtrak-special-css::before {
+    content: "Amtrak's ";
+}
+/* Used where "Amtrak's" doesn't look right */
+h1.amtrak-to-css::before {
+    content: "Amtrak to "
+}
+/* Used where "Amtrak's" and "Amtrak to" don't look right */
+h1.amtrak-to-css::before {
+    content: "Amtrak: "
+}
+h1.grand-canyon-special-css {
+    background-color: DarkGoldenRod;
+}

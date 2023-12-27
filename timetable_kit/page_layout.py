@@ -117,7 +117,9 @@ def produce_html_page(
         "author": author,
         "connecting_services_keys_html": connecting_services_keys_html,
         "connecting_bus_key_sentence": agency_singleton().connecting_bus_key_sentence(),  # "Connecting Bus Service (can be booked through Amtrak)"
-        "agency_css_class": agency_singleton().agency_css_class(),  # Used to change color of top heading (possibly other stuff later)
+        "agency_css_class": spec.aux.get(
+            "agency_css_class", agency_singleton().agency_css_class()
+        ),  # Used to change color of top heading & prefix with agency name
         "unofficial_disclaimer": agency_singleton().unofficial_disclaimer(),  # "This is unofficial" disclaimer
         "always_check_disclaimer": agency_singleton().always_check_disclaimer(),  # "Always check agency website"
         "gtfs_data_link": agency_singleton().gtfs_data_link(),  # "GTFS data"
