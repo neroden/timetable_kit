@@ -120,10 +120,10 @@ class FeedEnhanced(Feed):
         ]
         new_feed.calendar = double_filtered_calendar
         # Now filter trips by the service_ids in the calendar
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         # Now filter stop_times by the trip_ids in trips
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
@@ -155,10 +155,10 @@ class FeedEnhanced(Feed):
         # This is where we filter the calendar by the value in the day column:
         new_feed.calendar = self.calendar[self.calendar[day] == 1]
         # Now filter trips by the service_ids in the calendar
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         # Now filter stop_times by the trip_ids in trips
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
@@ -192,10 +192,10 @@ class FeedEnhanced(Feed):
         new_feed.calendar = tmp2_calendar.drop("interesting", axis="columns")
 
         # Now filter trips by the service_ids in the calendar
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         # Now filter stop_times by the trip_ids in trips
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
@@ -214,11 +214,11 @@ class FeedEnhanced(Feed):
         new_feed = self.copy()
         new_feed.trips = self.trips[self.trips.route_id.isin(route_ids)]
         new_feed.routes = self.routes[self.routes.route_id.isin(route_ids)]
-        # Now filter the calendar by the service_ids in the trips array
-        service_ids = new_feed.trips["service_id"].array
+        # Now filter the calendar by the service_ids in the trips list
+        service_ids = new_feed.trips["service_id"].to_list()
         new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
-        # Now filter the stop_times by the trip_ids in the trips array
-        trip_ids = new_feed.trips["trip_id"].array
+        # Now filter the stop_times by the trip_ids in the trips list
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
 
         return new_feed
@@ -236,7 +236,7 @@ class FeedEnhanced(Feed):
         # First the calendar
         new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
         # Kill any service_ids not in the (new) calendar.
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         # Then filter the trips.
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         return new_feed
@@ -278,10 +278,10 @@ class FeedEnhanced(Feed):
             self.calendar.start_date != self.calendar.end_date
         ]
         # Now filter trips by the service_ids in the calendar
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         # Now filter stop_times by the trip_ids in trips
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
@@ -304,10 +304,10 @@ class FeedEnhanced(Feed):
             self.calendar.start_date == self.calendar.end_date
         ]
         # Now filter trips by the service_ids in the calendar
-        service_ids = new_feed.calendar["service_id"].array
+        service_ids = new_feed.calendar["service_id"].to_list()
         new_feed.trips = self.trips[self.trips.service_id.isin(service_ids)]
         # Now filter stop_times by the trip_ids in trips
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
@@ -333,9 +333,9 @@ class FeedEnhanced(Feed):
         # First filter the trips
         new_feed.trips = self.trips[self.trips.trip_short_name.isin(trip_short_names)]
         # Then filter the stop_times
-        trip_ids = new_feed.trips["trip_id"].array
+        trip_ids = new_feed.trips["trip_id"].to_list()
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
-        service_ids = new_feed.trips["service_id"].array
+        service_ids = new_feed.trips["service_id"].to_list()
         new_feed.calendar = self.calendar[self.calendar.service_id.isin(service_ids)]
         return new_feed
 

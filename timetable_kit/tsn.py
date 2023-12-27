@@ -42,14 +42,14 @@ def train_spec_to_tsn(train_spec: str) -> str:
 def make_trip_id_to_tsn_dict(feed: FeedEnhanced) -> dict[str, str]:
     """Make and return a dict mapping from trip_id to trip_short_name."""
     assert feed.trips is not None  # Silence MyPy
-    trip_ids = feed.trips["trip_id"].array
+    trip_ids = feed.trips["trip_id"].to_list()
 
     # the following should be used only when debugging; it's slow:
     # if len(trip_ids) != len(set(trip_ids)):
     #    # There's a duplicate!  Run away screaming!
     #    raise GTFSError("Duplicate trip_id found!")
 
-    tsns = feed.trips["trip_short_name"].array
+    tsns = feed.trips["trip_short_name"].to_list()
     trip_id_to_tsn = dict(zip(trip_ids, tsns))
     return trip_id_to_tsn
 
@@ -65,7 +65,7 @@ def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     identical entries are present in GTFS. (So it doesn't matter which one we pick.)
     """
     assert feed.trips is not None  # Silence MyPy
-    tsns = feed.trips["trip_short_name"].array
+    tsns = feed.trips["trip_short_name"].to_list()
 
     # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
@@ -77,7 +77,7 @@ def make_tsn_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
         else:
             tsn_set.add(x)
 
-    trip_ids = feed.trips["trip_id"].array
+    trip_ids = feed.trips["trip_id"].to_list()
     # We have duplicates and will take the last one.
     # but hopefully they're total duplicates, so it doesn't matter...
     tsn_to_trip_id = dict(zip(tsns, trip_ids))
@@ -94,7 +94,6 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     different days of the week.  Annoying, and bad practice, but allowed by GTFS.
     """
     total_dict = dict()
-    # tsns = feed.trips["trip_short_name"].array
     for day in GTFS_DAYS:
         day_suffix = " " + day
         # We need to filter calendar and trips for the day of the week.
@@ -104,7 +103,7 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
         assert day_feed.trips is not None  # Silence MyPy
 
         # Collect the tsns (eg "91")...
-        tsns = day_feed.trips["trip_short_name"].array
+        tsns = day_feed.trips["trip_short_name"].to_list()
         # This is slow-ish, but tells us which train gave us the dupe.
         tsn_set = set()
         for x in tsns:
@@ -117,7 +116,7 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
         # Now, preserving order, prep the indices (eg "91 monday"):
         suffixed_tsns = [tsn + day_suffix for tsn in tsns]
         # And prep the trip_ids:
-        trip_ids = day_feed.trips["trip_id"].array
+        trip_ids = day_feed.trips["trip_id"].to_list()
         # And zip it up:
         tsn_to_trip_id = dict(zip(suffixed_tsns, trip_ids))
         # Then add to the larger dict:
@@ -146,15 +145,15 @@ def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
     This will probably change in future GTFS feeds, so this finds these.
     """
     assert feed.trips is not None  # Silence MyPy
-    tsns = feed.trips["trip_short_name"].array
+    tsns = feed.trips["trip_short_name"].to_list()
 
     # Here, duplicates are likely, so we should check every time.
     # This is slow-ish, but tells us which train gave us the dupe.
     debug_print(1, "Finding duplicate tsns, if any:")
 
-    # Accumulate tsns which are found in the tsns array
+    # Accumulate tsns which are found in the tsns list
     tsn_set = set()
-    # Accumulate tsns which are found in the tsns array *twice*
+    # Accumulate tsns which are found in the tsns list *twice*
     tsn_dupes_set = set()
     for x in tsns:
         if x in tsn_set:

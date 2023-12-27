@@ -73,15 +73,15 @@ def get_trips_between(
 
     # Now make a dict from trip_id to stop_sequence.
     # Since we've filtered by stop_id, this should be unique.
-    trip_ids_one = sorted_filtered_stop_times_one["trip_id"].array
-    stop_sequences_one = sorted_filtered_stop_times_one["stop_sequence"].array
+    trip_ids_one = sorted_filtered_stop_times_one["trip_id"].to_list()
+    stop_sequences_one = sorted_filtered_stop_times_one["stop_sequence"].to_list()
     trip_id_to_stop_sequence_one = dict(zip(trip_ids_one, stop_sequences_one))
 
     # Now for stop two.
     filtered_stop_times_two = feed.stop_times[feed.stop_times.stop_id == stop_two_id]
     # And make another dict.
-    trip_ids_two = filtered_stop_times_two["trip_id"].array
-    stop_sequences_two = filtered_stop_times_two["stop_sequence"].array
+    trip_ids_two = filtered_stop_times_two["trip_id"].to_list()
+    stop_sequences_two = filtered_stop_times_two["stop_sequence"].to_list()
     trip_id_to_stop_sequence_two = dict(zip(trip_ids_two, stop_sequences_two))
 
     # Since we're using this for intersection, a set is faster

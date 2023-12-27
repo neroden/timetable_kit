@@ -316,7 +316,7 @@ def download_all_stations(sleep_secs: float = 120.0):
     stations_json_as_file = StringIO(stations_json)
     # This line just works!
     stations = pd.io.json.read_json(stations_json_as_file, orient="records")
-    for code in stations["code"].array:
+    for code in stations["code"].to_list():
         download_one_station(code)
         if sleep_secs != 0.0:
             rand_secs = random.random() * 60
@@ -414,7 +414,7 @@ def do_station_processing():
     # BAT has a webpage.  The others are just blank.
     # Originally on this list but fixed: MOH
 
-    station_list = stations["code"].array
+    station_list = stations["code"].to_list()
     bad_station_list = []
     for code in station_list:
         station_details_json = load_station_details(code)

@@ -110,7 +110,7 @@ def make_station_type_dicts() -> None:
 
     # Believe it or not, this line JUST WORKS!!!!  Wow!
     stations = pd.io.json.read_json(stations_json, orient="records")
-    station_list = stations["code"].array
+    station_list = stations["code"].to_list()
 
     global train_or_bus_dict
     global shelter_dict

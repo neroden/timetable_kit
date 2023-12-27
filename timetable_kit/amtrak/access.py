@@ -72,7 +72,7 @@ def make_accessibility_dicts() -> None:
     stations_json_as_file = StringIO(stations_json)
     # This line just works!
     stations = pd.io.json.read_json(stations_json_as_file, orient="records")
-    station_list = stations["code"].array
+    station_list = stations["code"].to_list()
 
     global accessible_platform_dict
     global inaccessible_platform_dict

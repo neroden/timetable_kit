@@ -89,7 +89,9 @@ if __name__ == "__main__":
 
     stops_in_feed = feed.stops["stop_id"]
     stops_in_wiki = wiki_stations["stop_id"]
-    long_stops_not_in_wiki = stops_in_feed.mask(stops_in_feed.isin(stops_in_wiki.array))
+    long_stops_not_in_wiki = stops_in_feed.mask(
+        stops_in_feed.isin(stops_in_wiki.to_list())
+    )
     stops_not_in_wiki = long_stops_not_in_wiki.dropna()
     print("Stops in feed but not in Wikipedia list:")
     print(stops_not_in_wiki)

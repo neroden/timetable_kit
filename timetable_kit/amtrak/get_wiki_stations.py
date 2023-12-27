@@ -159,7 +159,7 @@ def get_wiki_stations(wiki_page_filename, csv_filename, train_station_list_filen
     bus_stop_name_tuple = bus_stop_long_names.apply(split_bus_stop_name)
     # Now we have a series of 2-tuples.  Reconstruct a dataframe
     new_columns = pd.DataFrame.from_records(
-        bus_stop_name_tuple.array, columns=["stop_name", "stop_id"]
+        bus_stop_name_tuple.to_list(), columns=["stop_name", "stop_id"]
     )
     # Now append the new DataFrame to the old
     bus_stops_2 = pd.concat([bus_stops, new_columns], axis="columns")
