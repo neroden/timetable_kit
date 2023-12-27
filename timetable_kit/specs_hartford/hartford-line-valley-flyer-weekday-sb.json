@@ -1,6 +1,7 @@
 {
     "title": "Hartford Line & Valley Flyer: Weekday Southbound Timetable",
     "heading": "Hartford Line & Valley Flyer: Weekday Southbound",
+    "aria-label": "Hartford Line Weekday Southbound",
     "reference_date": "20240102",
     "programmers_notes": "Weasyprint won't make an italic version of the SpartanTT font, so don't bother to try to style CTrail the way Connecticut does",
     "top_text": "CTrail Hartford Line trains (<b>#44XX</b>) are <b>not ticketed or operated by Amtrak</b>; CTrail tickets must be bought at the station.  See notes at bottom.",
