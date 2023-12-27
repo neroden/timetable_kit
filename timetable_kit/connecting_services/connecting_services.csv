@@ -1,62 +1,62 @@
-service_code,logo_filename,suffix,alt,title,full_name,url
-mbta,MBTA,,MBTA,MBTA,MBTA,https://www.mbta.com/
-shore_line_east,CT_Rail_icon_only,SLE,SLE,CT rail Shore Line East,CT rail Shore Line East,https://shorelineeast.com/
-hartford_line,CT_Rail_icon_only,HL,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
-metro_north,MTA logo,MN,MN,Metro-North,Metro-North Railroad,https://new.mta.info/agency/metro-north-railroad
-lirr,MTA logo,LIRR,LIRR,Long Island Rail Road,Long Island Rail Road,https://new.mta.info/agency/long-island-rail-road
-njt,NJT_logo_cleaned,,NJT,NJ Transit,NJ Transit,https://www.njtransit.com/
-nyc_subway,MTA logo,NYCT,NYCT,NYC Transit (Subway),NYC Transit (Subway),https://new.mta.info/maps
-path,PATH_logo_cleaned,,PATH,PATH,PATH,https://www.panynj.gov/path/en/index.html
-septa,SEPTA,,SEPTA,SEPTA,SEPTA,https://septa.org/
-marc,MARC_train,,MARC,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
-baltimore_lrt,,,LRT,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
-wmata,WMATA_Metro_Logo_small,,WMATA,WMATA,WMATA,https://www.wmata.com/
-vre,Virginia_Railway_Express_cleaned,,VRE,Virginia Railway Express,Virginia Railway Express,https://www.vre.org/
-dc_streetcar,dc_street_logo_reduced,,Streetcar,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
-sunrail,,,SunRail,SunRail,SunRail,https://sunrail.com/
-tri_rail,Tri-Rail,,TriRail,TriRail,TriRail,https://www.tri-rail.com/
-miami_metrorail,MDTMetro,,Metrorail,Miami-Dade Metrorail,Miami-Dade Transit Metrorail,https://www.miamidade.gov/global/transportation/metrorail.page
-norta,NORTA,,NORTA,New Orleans RTA Streetcars,New Orleans RTA Streetcars,https://www.norta.com/ride-with-us/system-overview?type=streetcar
-adirondack,,,Adirondack RR,Adirondack Railroad,Adirondack Railroad (seasonal scenic service),https://adirondackrr.com/
-nfta_metro,,,NFTA,NFTA Metro Rail,NFTA Metro Rail,https://metro.nfta.com/schedules/route/145
-metra,Metra_Logo_no_slogan,,Metra,Metra,Metra,https://metra.com/
-qline,qline-logo-red-no-detroit,,QLine,QLine Detroit,QLine Detroit (streetcar),https://www.qlinedetroit.com/
-stl_metrolink,St_Louis_MetroLink_Logo,,MetroLink,St Louis MetroLink,St. Louis MetroLink,https://www.metrostlouis.org/metrolink/
-kc_streetcar,RideKC_Streetcar_short,,KC Streetcar,KC Streetcar,KC Streetcar,https://kcstreetcar.org/
-dart,Dallas_Area_Rapid_Transit_logo,,DART,DART,DART,https://www.dart.org/
-tre,TRE_logo_reduced,,TRE,Trinity Railway Express,Trinity Railway Express,https://trinityrailwayexpress.org/
-texrail,TEX partial logo,,TEXRail,TEXRail,TEXRail,https://ridetrinitymetro.org/texrail-schedule/
-okc_streetcar,,,OKC,Oklahoma City Streetcar,Oklahoma City Streetcar,https://okcstreetcar.com/
-tucson_sunlink_streetcar,,,SunLink,Tucson Sun Lnk,Tucson Sun Link (streetcar),https://www.suntran.com/routes-services/sunlink/
-metrolink,2022_Metrolink_Logo,,Metrolink,Metrolink,Metrolink,https://metrolinktrains.com/
-la_metro,Los Angeles Metro M logo,,Metro,LA Metro,Los Angeles Metro,https://www.metro.net/
-denver_rtd,Regional_Transportation_District_logo,,RTD,RTD Denver,RTD Denver,https://www.rtd-denver.com/
-frontrunner,UTA_icon,FrontRunner,FrontRunner,UTA FrontRunner,Utah Transit Authority FrontRunner,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
-uta_trax,UTA_icon,TRAX,TRAX,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
-nm_railrunner,NMRX_logo,,NMRX,NM RailRunner Express,NM RailRunner Express,https://www.riometro.org/395/New-Mexico-Rail-Runner-Express
-the_hop,,,HOP,The Hop streetcar,The Hop streetcar,https://thehopmke.com/
-twin_cities_metro_transit,,,METRO,Metro Transit light rail,Metro Transit light rail,https://www.metrotransit.org/metro
-sounder,Sound_Transit_Sounder_logo,,Sounder,Sounder,Sound Transit: Sounder Commuter Rail,https://www.soundtransit.org/get-to-know-us/maps
-seattle_link,Sound_Transit_Link_Light_Rail_logo,,Link,Link (Seattle),Sound Transit: Link Light Rail (Seattle),https://www.soundtransit.org/get-to-know-us/maps
-tacoma_link,Sound_Transit_Link_Light_Rail_logo,,Link,Link (Tacoma),Sound Transit: Link Light Rail (Tacoma streetcar),https://www.soundtransit.org/get-to-know-us/maps
-trimet,TriMet_icon,,MAX,TriMet MAX,TriMet MAX Light Rail,https://trimet.org/max/
-portland_streetcar,Portland_Streetcar_symbol,,Streetcar,Portland Streetcar,Portland Streetcar,https://portlandstreetcar.org/
-sacramento_rt,Sacramento_Regional_Transit,,RT,Sacramento RT,Sacramento RT,http://www.sacrt.com/
-bart,Bart-logo,,BART,BART,BART,https://www.bart.gov/
-caltrain,Caltrain_logo,,Caltrain,Caltrain,Caltrain,https://www.caltrain.com/
-ace,Altamont_Corridor_Express_logo,,ACE,Altamont Corridor Express,Altamont Corridor Express,https://acerail.com/
-vta,BSicon_LOGO_SCvta,,VTA,VTA,VTA light rail,https://www.vta.org/
-sprinter,SPRINTER_logo,,SPRINTER,SPRINTER,SPRINTER to Escondido,https://gonctd.com/services/sprinter-hybrid-rail/
-coaster,COASTER_logo,,COASTER,COASTER,COASTER,https://gonctd.com/services/coaster-commuter-rail/
-san_diego_trolley,MTS_Trolley_icon,,Trolley,San Diego Trolley,San Diego Trolley,https://www.sdmts.com/transit-services/trolley
-amtrak,Amtrak_logo_2,,Amtrak,Amtrak,Amtrak,https://www.amtrak.com/
-via_rail,VIA_Rail_icon,,VIA,VIA Rail Canada,VIA Rail Canada,https://www.viarail.ca/
-go_transit,GO Transit logo,,GO,GO Transit,GO Transit,https://www.gotransit.com/
-ttc,TTC logo,,TTC,TTC,TTC,https://www.ttc.ca/
-union_pearson_express,,,UP,Union Pearson Express,Union Pearson Express,https://www.upexpress.com/
-waterloo_ion,Waterloo_ION_logo,,Ion,Ion Light Rail,Ion Light Rail,https://www.grt.ca/en/ion-light-rail.aspx
-o_train,O-Train_logo,,O-Train,O-Train,OC Transpo O-Train,https://www.octranspo.com/en/our-services/bus-o-train-network/service-types/o-train-line-1
-montreal_metro,Montreal_Metro_nomask,,Metro,Montreal Metro,Montreal Metro,https://www.stm.info/en/info/networks/metro
-exo,Exo,,Exo,Exo,Exo,https://exo.quebec/
-skytrain,,,SkyTrain,Vancouver SkyTrain,Vancouver SkyTrain,https://www.translink.ca/schedules-and-maps/skytrain?page=1
-keewatin_railway,,,KRC,Keewatin Railway,Keewatin Railway Pas-Pukatawagan service,https://www.krcrail.ca/passenger-service
+service_code,logo_filename,alt,suffix,title,full_name,url
+mbta,MBTA,MBTA,,MBTA,MBTA,https://www.mbta.com/
+shore_line_east,CT_Rail_icon_only,CTRail,SLE,CT rail Shore Line East,CT rail Shore Line East,https://shorelineeast.com/
+hartford_line,CT_Rail_icon_only,CTRail,HL,CT rail Hartford Line,CT rail Hartford Line,https://www.hartfordline.com/
+metro_north,MTA logo,MTA,MN,Metro-North,Metro-North Railroad,https://new.mta.info/agency/metro-north-railroad
+lirr,MTA logo,MTA,LIRR,Long Island Rail Road,Long Island Rail Road,https://new.mta.info/agency/long-island-rail-road
+njt,NJT_logo_cleaned,NJT,,NJ Transit,NJ Transit,https://www.njtransit.com/
+nyc_subway,MTA logo,MTA,NYCT,NYC Transit (Subway),NYC Transit (Subway),https://new.mta.info/maps
+path,PATH_logo_cleaned,PATH,,PATH,PATH,https://www.panynj.gov/path/en/index.html
+septa,SEPTA,SEPTA,,SEPTA,SEPTA,https://septa.org/
+marc,MARC_train,MARC,,MARC Train,MARC Train,https://www.mta.maryland.gov/schedule?type=marc-train
+baltimore_lrt,,LRT,,Baltimore LRT,Baltimore LRT,https://www.mta.maryland.gov/schedule/lightrail
+wmata,WMATA_Metro_Logo_small,WMATA,,WMATA,WMATA,https://www.wmata.com/
+vre,Virginia_Railway_Express_cleaned,VRE,,Virginia Railway Express,Virginia Railway Express,https://www.vre.org/
+dc_streetcar,dc_street_logo_reduced,Streetcar,,DC Streetcar,DC Streetcar,https://dcstreetcar.com/
+sunrail,,SunRail,,SunRail,SunRail,https://sunrail.com/
+tri_rail,Tri-Rail,TriRail,,TriRail,TriRail,https://www.tri-rail.com/
+miami_metrorail,MDTMetro,Metrorail,,Miami-Dade Metrorail,Miami-Dade Transit Metrorail,https://www.miamidade.gov/global/transportation/metrorail.page
+norta,NORTA,NORTA,,New Orleans RTA Streetcars,New Orleans RTA Streetcars,https://www.norta.com/ride-with-us/system-overview?type=streetcar
+adirondack,,Adirondack RR,,Adirondack Railroad,Adirondack Railroad (seasonal scenic service),https://adirondackrr.com/
+nfta_metro,,NFTA,,NFTA Metro Rail,NFTA Metro Rail,https://metro.nfta.com/schedules/route/145
+metra,Metra_Logo_no_slogan,Metra,,Metra,Metra,https://metra.com/
+qline,qline-logo-red-no-detroit,QLine,,QLine Detroit,QLine Detroit (streetcar),https://www.qlinedetroit.com/
+stl_metrolink,St_Louis_MetroLink_Logo,MetroLink,,St Louis MetroLink,St. Louis MetroLink,https://www.metrostlouis.org/metrolink/
+kc_streetcar,RideKC_Streetcar_short,KC Streetcar,,KC Streetcar,KC Streetcar,https://kcstreetcar.org/
+dart,Dallas_Area_Rapid_Transit_logo,DART,,DART,DART,https://www.dart.org/
+tre,TRE_logo_reduced,TRE,,Trinity Railway Express,Trinity Railway Express,https://trinityrailwayexpress.org/
+texrail,TEX partial logo,TEXRail,,TEXRail,TEXRail,https://ridetrinitymetro.org/texrail-schedule/
+okc_streetcar,,OKC,,Oklahoma City Streetcar,Oklahoma City Streetcar,https://okcstreetcar.com/
+tucson_sunlink_streetcar,,SunLink,,Tucson Sun Lnk,Tucson Sun Link (streetcar),https://www.suntran.com/routes-services/sunlink/
+metrolink,2022_Metrolink_Logo,Metrolink,,Metrolink,Metrolink,https://metrolinktrains.com/
+la_metro,Los Angeles Metro M logo,Metro,,LA Metro,Los Angeles Metro,https://www.metro.net/
+denver_rtd,Regional_Transportation_District_logo,RTD,,RTD Denver,RTD Denver,https://www.rtd-denver.com/
+frontrunner,UTA_icon,UTA,FrontRunner,UTA FrontRunner,Utah Transit Authority FrontRunner,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+uta_trax,UTA_icon,UTA,TRAX,UTA TRAX,Utah Transit Authority TRAX,https://www.rideuta.com/Rider-Tools/Schedules-and-Maps
+nm_railrunner,NMRX_logo,NMRX,,NM RailRunner Express,NM RailRunner Express,https://www.riometro.org/395/New-Mexico-Rail-Runner-Express
+the_hop,,HOP,,The Hop streetcar,The Hop streetcar,https://thehopmke.com/
+twin_cities_metro_transit,,METRO,,Metro Transit light rail,Metro Transit light rail,https://www.metrotransit.org/metro
+sounder,Sound_Transit_Sounder_logo,Sounder,,Sounder,Sound Transit: Sounder Commuter Rail,https://www.soundtransit.org/get-to-know-us/maps
+seattle_link,Sound_Transit_Link_Light_Rail_logo,Link,,Link (Seattle),Sound Transit: Link Light Rail (Seattle),https://www.soundtransit.org/get-to-know-us/maps
+tacoma_link,Sound_Transit_Link_Light_Rail_logo,Link,,Link (Tacoma),Sound Transit: Link Light Rail (Tacoma streetcar),https://www.soundtransit.org/get-to-know-us/maps
+trimet,TriMet_icon,MAX,,TriMet MAX,TriMet MAX Light Rail,https://trimet.org/max/
+portland_streetcar,Portland_Streetcar_symbol,Streetcar,,Portland Streetcar,Portland Streetcar,https://portlandstreetcar.org/
+sacramento_rt,Sacramento_Regional_Transit,RT,,Sacramento RT,Sacramento RT,http://www.sacrt.com/
+bart,Bart-logo,BART,,BART,BART,https://www.bart.gov/
+caltrain,Caltrain_logo,Caltrain,,Caltrain,Caltrain,https://www.caltrain.com/
+ace,Altamont_Corridor_Express_logo,ACE,,Altamont Corridor Express,Altamont Corridor Express,https://acerail.com/
+vta,BSicon_LOGO_SCvta,VTA,,VTA,VTA light rail,https://www.vta.org/
+sprinter,SPRINTER_logo,SPRINTER,,SPRINTER,SPRINTER to Escondido,https://gonctd.com/services/sprinter-hybrid-rail/
+coaster,COASTER_logo,COASTER,,COASTER,COASTER,https://gonctd.com/services/coaster-commuter-rail/
+san_diego_trolley,MTS_Trolley_icon,Trolley,,San Diego Trolley,San Diego Trolley,https://www.sdmts.com/transit-services/trolley
+amtrak,Amtrak_logo_2,Amtrak,,Amtrak,Amtrak,https://www.amtrak.com/
+via_rail,VIA_Rail_icon,VIA,,VIA Rail Canada,VIA Rail Canada,https://www.viarail.ca/
+go_transit,GO Transit logo,GO,,GO Transit,GO Transit,https://www.gotransit.com/
+ttc,TTC logo,TTC,,TTC,TTC,https://www.ttc.ca/
+union_pearson_express,,UP,,Union Pearson Express,Union Pearson Express,https://www.upexpress.com/
+waterloo_ion,Waterloo_ION_logo,Ion,,Ion Light Rail,Ion Light Rail,https://www.grt.ca/en/ion-light-rail.aspx
+o_train,O-Train_logo,O-Train,,O-Train,OC Transpo O-Train,https://www.octranspo.com/en/our-services/bus-o-train-network/service-types/o-train-line-1
+montreal_metro,Montreal_Metro_nomask,Metro,,Montreal Metro,Montreal Metro,https://www.stm.info/en/info/networks/metro
+exo,Exo,Exo,,Exo,Exo,https://exo.quebec/
+skytrain,,SkyTrain,,Vancouver SkyTrain,Vancouver SkyTrain,https://www.translink.ca/schedules-and-maps/skytrain?page=1
+keewatin_railway,,KRC,,Keewatin Railway,Keewatin Railway Pas-Pukatawagan service,https://www.krcrail.ca/passenger-service
