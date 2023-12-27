@@ -168,12 +168,11 @@ def read_list_file(filename: str, *, input_dir) -> list[str]:
 
     list_filename_path = input_dir / Path(filename)
     with open(list_filename_path, "r") as list_file:
-        raw_list = list_file.readlines()
-    # Remove stray whitespace from either side of each line
-    cooked_list = [item.strip() for item in raw_list]
-    # Filter out lines which are empty after that
-    twice_cooked_list = list(filter(bool, cooked_list))
-    return twice_cooked_list
+        lines = list_file.readlines()
+    # Remove stray whitespace from either side of each line,
+    # and drop lines which are blank after that
+    stripped_list = [stripped for line in lines if (stripped := line.strip())]
+    return stripped_list
 
 
 def produce_several_timetables(
