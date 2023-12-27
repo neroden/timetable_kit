@@ -20,15 +20,19 @@ we should avoid overflowing the width of A4 (since 215.9 - 10 = 205.9 < 210).
 .tt-page {
     /* This class is for a div which holds a whole page */
     /* Don't put a page break inside a single page if possible. */
+    /* This will typically create appropriate page breaks with no further actions needed. */
     break-inside: avoid-page;
-    /* Do force a page break after and before each page. */
-    /* Modern style: */
-    break-before: page;
-    break-after: page;
-    /* Old style, since some browsers do not support modern style: */
+    /* Force absolutely-positioned items -- like RPA logo -- to be relative to the page */
+    position: relative;
+}
+{# Sooo.  We would like to do these in .tt-page, but we can't:
+    break-before: page; -- Firefox will stuff a blank page before it, on printing
+    break-after: page; -- Firefox will stuff a blank page after it, on printing
+   Thankfully avoiding page breaks inside is Good Enough.
+   We don't need to use old style either: weasyprint, firefox, and chrome all handle new style.
     page-break-before: always;
     page-break-after: always;
-}
+#}
 @page portrait-mode {
     size: Letter portrait; /* change from default A4, for US timetables */
     margin: 1cm; /* Default margins vary in PDF generators.  This is safe for printing. */

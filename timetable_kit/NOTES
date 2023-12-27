@@ -41,3 +41,11 @@ weasyprint and non-weasyprint varieties.
 
 PANDAS also relies on Jinja2 templates located in /usr/lib/python3/dist-packages/pandas/io/formats/templates
 And it would make a lot of sense to pass a custom template to the Styler to overcome certain problems.
+
+Color printing direct from HTML:
+Chrome -- needs "More Settings -> Background Graphics" to print color
+Chrome -- needs "Margins: None" to avoid putting extra crud around the printout
+
+Firefox -- needs "Print backgrounds" to print color
+Firefox -- needs to uncheck "Print Headers and Footers" to avoid putting extra crud around the printout.
+Firefox -- print previews are missing cell borders but they WILL print.
