@@ -1,3 +1,6 @@
+-- clean up amtrak/json_stations.py: do_station_processing
+-- consider breaking out a text_time.py from text_presentation.py
+
 Wishlist:
 10 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
 (OK.  It would be AWESOME.)
