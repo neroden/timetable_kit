@@ -31,14 +31,12 @@ LOCAL_WEST="heartland-flyer grand-canyon"
 # due to official timetable existing (reconsider this)
 MIDWEST="hiawatha.list illinois-missouri-services.list city-of-new-orleans-illini-saluki michigan-services.list"
 LD_EAST="lake-shore-limited capitol-limited cardinal crescent silver-service.list auto-train"
-LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express adirondack"
+LOCAL_NEW_ENGLAND="vermonter vermonter-valley-flyer ethan-allen-express adirondack vermont-to-upstate-ny"
 # Omits berkshire-flyer due to seasonality
-# Omitted due to bugs: vermont-to-upstate-ny -- FIXME
 # Omits Downeaster because official timetable is MUCH better than mine (go Maine)
 # Amtrak timetables omit Maple Leaf (see below)
-LOCAL_NORTHEAST="empire-service.list pennsylvanian carolinian-piedmont.list"
-# Omittted due to bugs: keystone-service.list (637) virginia-services.list (157) -- FIXME
-LOCAL_SOUTHEAST=""
+LOCAL_NORTHEAST="empire-service.list pennsylvanian keystone-service.list"
+LOCAL_SOUTHEAST="carolinian-piedmont.list virginia-services.list"
 # Don't build NEC per default; it is too slow
 NEC="nec-bos-was.list"
 
