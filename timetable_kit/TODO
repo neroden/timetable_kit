@@ -1,4 +1,4 @@
--- clean up amtrak/json_stations.py: do_station_processing
+-- clean up amtrak/json_stations.py: do_station_processing; eliminate non-PANDAS references to map() and filter()
 -- consider breaking out a text_time.py from text_presentation.py
 
 Wishlist:
