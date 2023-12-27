@@ -16,3 +16,9 @@ a.connecting-service-link, .connecting-service-link {
     font-weight: bold;
     color: black;
 }
+
+/* This makes sure that there are no line breaks between the logo
+and its definition (a single key item) or between a logo and its suffix. */
+.connecting-service-logo-key .connecting-service-span {
+    white-space: nowrap;
+}

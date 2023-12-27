@@ -12,21 +12,26 @@ Note that title does not show on an img inside an <a> link,
 and also doesn't show on the <a> link.
 
 Therefore we don't make the logo into a link here, so the title will show
+
+connecting-service-logo-key will:
+-- suppress internal linebreaks in the span
+connecting-service-link will:
+-- suppress blue/underlinked anchor, and boldface instead
 #}{#
-#}<span class="connecting-service-logo-key">{#
+#}<span class="connecting-service-logo-key">{# Forces no linebreaks within this span
 #}<span class="connecting-service-link">{# Print this exactly the same way as in the link (boldface)
 #}{% if logo_filename %}{#
 #}<img class="{{ class }}" src="logos/{{ svg_filename }}" alt="{{ alt }}" title="{{ title }}">{#
 #}{% else %}{# No logo_filename available; use alt text; format same way as in link above
-#}{{ alt_nbsp }}{# Note, non-breaking-space variant of alt text
+#}{{ alt }}{#
 #}{% endif %}{#
 #}{% if suffix %}{# Perhaps this is a logo *plus* a text suffix
-#}{{ suffix_nbsp }}{# Note, non-breaking-space variant of suffix
+#}{{ suffix }}{#
 #}{% endif %}{#
 #}</span>{# Close the connecting-service-link span
-#}&nbsp;{# *Non-breaking* space, separating logo and definition
+#} {# Single space, separating logo and definition -- CSS will enforce no linebreaks
 #}<a href="{{ url }}">{# Normal URL, blue color and underline is OK
-#}{{full_name_nbsp}}{# Note, non-breaking-space variant of full name
+#}{{full_name}}{#
 #}</a>{#
 #}</span>{# Jinja is supposed to be smart enough to remove the last trailing newline in the file
 #}
