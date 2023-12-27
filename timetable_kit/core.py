@@ -120,7 +120,7 @@ class TTSpec(object):
         # Derive table_aria_label from it by appending "Timetable"
         # If it wasn't set, just use "Timetable".
         self.aux.setdefault(
-            "table_aria_label", self.aux.get(["aria_label"], "") + " Timetable"
+            "table_aria_label", self.aux.get("aria_label", "") + " Timetable"
         )
         # These are used later, setting up the CSS
         self.aux.setdefault("font_name", "SpartanTT")
