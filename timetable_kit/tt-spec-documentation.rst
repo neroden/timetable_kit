@@ -216,7 +216,8 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
  {
     "title": "This goes in the title bar of the HTML page",
     "heading": "This is the heading at the top of the page",
-    "table_aria_label": "This is a caption for the main table, used by screenreaders only: should be something like Maple Leaf Timetable",
+    "aria_label": "This is a short name for the page, like 'Maple Leaf'; will be used to generate aria-label values for page landmarks for screenreaders.  You SHOULD include this.  Note underscore, not hyphen.",
+    "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "output_filename": "special",
     "reference_date": "20220528",

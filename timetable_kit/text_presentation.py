@@ -562,20 +562,6 @@ def get_blank_bus_str(doing_html=False):
     return "".join([bus_box_prefix, bus_box_postfix])
 
 
-def get_html_ar_str():
-    """Return a suitable string for HTML to say "arrival time" ("Ar").
-
-    There is no clean way to improve screen reader output
-    """
-
-def get_html_dp_str():
-    """Return a suitable string for HTML to say "departure time" ("Dp").
-
-    There is no clean way to improve screen reader output
-    """
-
-
-
 def timepoint_str(
     timepoint,
     stop_tz,
@@ -1110,7 +1096,7 @@ def get_services_column_header(doing_html=False):
     can be rotated.
     """
     if doing_html:
-        return '<div class="services-header-text">Station' + SAFE_BR + 'Services</div>'
+        return '<div class="services-header-text">Station' + SAFE_BR + "Services</div>"
     else:
         return "Services"
 
