@@ -2,7 +2,8 @@
    Part of timetable_kit
    Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 #}{% from "macros.html" import br_or_space %}{#
-#}<div class="timetable_kit_credit"><p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
+#}<div class="timetable_kit_credit">{#
+#}<p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}">{#
 #}Timetable generated on <b>{{ production_date }}</b> by timetable_kit{#
 #} <span style="white-space: nowrap">( <a href="{{timetable_kit_url}}">{{timetable_kit_url}}</a> ).</span>{#
 #}{{ br_or_space(key_on_right or not landscape) }}{#
@@ -11,8 +12,9 @@
 #}<p class="credit-paragraph {% if compress_credits %}compressed-credits{% endif %}" {#
 #}style="font-size: 120%; font-weight: bold">{#
 #}Timetable_kit was written by Nathanael&nbsp;Nerode.{#
-#}<br>{#
-#}If you appreciate this timetable, please wear an N95 or P100 mask on the train.{#
-#}<br>{#
+#}{{ br_or_space( not key_on_right and not landscape) }}{# Stay left of logo if at bottom in portrait
+#}If you appreciate this timetable, please wear an N95&nbsp;or&nbsp;P100 mask on the train.{#
+#}{{ br_or_space( not key_on_right ) }}{# Stay left of logo if at bottom in landscape or portrait
 #}Nathanael's family is immunocompromised and can't take the train unless you wear masks.{#
-#}</b></p></div>
+#}</p>{#
+#}</div>

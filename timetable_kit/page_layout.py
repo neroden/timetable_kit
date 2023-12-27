@@ -184,11 +184,7 @@ def produce_html_page(
     return result
 
 
-def produce_html_file(
-    pages: list[HtmlAndCss],
-    *,
-    title,
-):
+def produce_html_file(pages: list[HtmlAndCss], *, title, for_rpa=False):
     """
     Take a *list* of containers output by calling produce_html_page, which are like this:
     html_text -- an HTML <div> section for a page
@@ -198,6 +194,7 @@ def produce_html_file(
     Also generates the CSS which should be shared between multiple pages.
 
     The "title" parameter is mandatory because HTML requires it.
+    for_rpa: stamp the RPA logo in the lower right of every page.
     """
     # For icons as imgs.
     # Get the CSS for styling icons (contains vertical alignment and 1em height/width)
@@ -232,6 +229,7 @@ def produce_html_file(
         "internal_stylesheet": True,
         # "external_stylesheet": False,
         "title": title,
+        "for_rpa": for_rpa,
         # Pass the whole structure of pages through to Jinja so it can loop over it
         # Jinja2 doesn't care whether each 'page' structure is a dict or a tuple;
         # The Jinja code is the same either way.

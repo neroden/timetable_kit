@@ -20,8 +20,6 @@ from timetable_kit.text_assembly import SAFE_BR
 from timetable_kit.connecting_services import get_connecting_service_logo_html
 
 
-
-
 # Intended to be used both directly and by subclasses
 class Agency:
     """Agency-specific code for interpreting specs and GTFS feeds for a generic

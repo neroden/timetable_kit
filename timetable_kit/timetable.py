@@ -236,6 +236,8 @@ def produce_several_timetables(
             title = None
             output_filename_base = None
         page_list: list[HtmlAndCss] = []
+
+        for_rpa = False  # Will be set true if true for any subspec file
         for subspec_file in subspec_files:
             # Load the tt-spec, both aux and csv
             # Also sets tt_id value in the aux
@@ -260,7 +262,9 @@ def produce_several_timetables(
             if do_html:
                 # Copy the icons and fonts to the output dir.
                 # This is memoized, so it won't duplicate work if you do multiple tables.
-                for_rpa = bool(spec.aux["for_rpa"])  # used when copying files
+                for_rpa = for_rpa or bool(
+                    spec.aux["for_rpa"]
+                )  # Set true if true on any spec
                 copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
                 # Main timetable, same for HTML and PDF
@@ -304,7 +308,9 @@ def produce_several_timetables(
                     # This is awful.  JPG can only handle single pages.
                     # So in this case run through all the steps...
                     timetable_finished_html = produce_html_file(
-                        [new_page], title=spec.aux["title"] or "Timetable"
+                        [new_page],
+                        title=spec.aux["title"] or "Timetable",
+                        for_rpa=for_rpa,
                     )
                     path_for_html = output_dir / Path(subspec_filename_base + ".html")
                     with open(path_for_html, "w") as outfile:
@@ -331,7 +337,9 @@ def produce_several_timetables(
         if do_html:
             # Out of the (inner) loop.
             # Produce complete multi-page HTML file.
-            timetable_finished_html = produce_html_file(page_list, title=title)
+            timetable_finished_html = produce_html_file(
+                page_list, title=title, for_rpa=for_rpa
+            )
             path_for_html = output_dir / Path(output_filename_base + ".html")
             with open(path_for_html, "w") as outfile:
                 print(timetable_finished_html, file=outfile)

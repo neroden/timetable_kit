@@ -17,9 +17,10 @@ A full HTML file containing multiple pages (compiled previously).
 {% include "stylesheet.css" %}{# loaded through same loader as this, templates loader #}
 </style>{% elif external_stylesheet %}<link rel="stylesheet" href="{{external_stylesheet}}"/>{% endif %}
 </head>
-<body>
-{% for page in pages %}
-{{ page.html_text }}{# This contains the <div> for an entire page #}
-{% endfor %}
-</body>
+<body>{#
+#}{% for page in pages %}{#
+#}{{ page.html_text }}{# This contains the <div> for an entire page #}{#
+#}{% endfor %}{#
+#}{% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}{#
+#}</body>
 </html>

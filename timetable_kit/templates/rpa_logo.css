@@ -5,12 +5,17 @@ Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 CSS Jinja template file for displaying the RPA logo.
 If we use "fixed", this will show up on every page when printed.
+
 If we use "absolute", it only shows up on one page.
 But it won't locate right unless the div containing it is "relative".
+But then it locates inside the page's layout box, not the overall 8.5x11 box!
 Have to be very careful about this.
+
+Trying to do it with float requires putting it inside the credits,
+and triggers an error in weasyprint which loses the main timetable sometimes.
 #}
 .logo-bottom-right {
-    position: absolute;
+    position: fixed;
     bottom: 2px;
     right: 2px;
 }
