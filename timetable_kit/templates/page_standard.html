@@ -20,6 +20,7 @@ ORCA screenreader will not automatically assign role="contentinfo" to a <footer>
 <header role="banner" aria-label="{{ aria_label }}">
 <h1 id="{{ heading_id }}" class="{{ agency_css_class }}">{{heading}}</h1>
 {% include "check_agency.html" %}
+
 {% if top_text %}
   <p class="top-text">{{top_text}}</p>
 {% endif %}

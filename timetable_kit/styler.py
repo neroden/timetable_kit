@@ -36,7 +36,7 @@ def get_table_tpl():
     return _table_tpl
 
 
-def render(t: Timetable):
+def render(t: Timetable) -> str:
     """Render a timetable to HTML, using Jinja"""
     # Recall that Python dataframe data can be accessed as:
     # df[col][row]

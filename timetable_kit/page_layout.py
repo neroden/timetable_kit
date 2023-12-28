@@ -30,9 +30,6 @@ from timetable_kit.runtime_config import agency_singleton
 from timetable_kit.convenience_types import HtmlAndCss
 from timetable_kit.core import TTSpec
 
-# The header styling for each table has to be done in an ugly way with special CSS.
-from timetable_kit.timetable_styling import make_header_styling_css
-
 from timetable_kit import text_presentation
 from timetable_kit import icons
 from timetable_kit import connecting_services
@@ -47,7 +44,6 @@ from timetable_kit.load_resources import (
 
 def produce_html_page(
     timetable_styled_html,
-    header_styling_list,
     *,
     spec: TTSpec,  # for aux content (including page_id)  and list of station codes
     author,
@@ -63,9 +59,6 @@ def produce_html_page(
     This will *not* include the CSS which should be shared between multiple pages.
     It will also *not* include the final "wrapper" HTML tags like <html><head> etc.
     and make it a full HTML file with embedded CSS.
-
-    The header_styling_list has CSS attributes (not classes) for each header column
-    (indexed by zero-based column number).  This is due to inefficiencies in PANDAS.
 
     The aux part of the spec MUST have a tt_id.
 
@@ -154,9 +147,6 @@ def produce_html_page(
     # And now the custom per-page CSS. #
     ####################################
 
-    # The header stylings, totally different for each table
-    header_styling_css = make_header_styling_css(header_styling_list, table_uuid=tt_id)
-
     if spec.aux.get("font_debugging"):
         # This makes it obvious when a font doesn't load
         backup_font_name = "cursive"
@@ -167,7 +157,6 @@ def produce_html_page(
 
     per_page_css_params = {
         "page_id": page_id,
-        "header_styling_css": header_styling_css,
         "font_name": spec.aux["font_name"],
         "backup_font_name": backup_font_name,
         "font_size": spec.aux["font_size"],

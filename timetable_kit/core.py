@@ -10,7 +10,7 @@ specs.py contains the core code for handling specs and filling in timetables.
 #########################
 # Other people's packages
 
-from os import PathLike  # For passing paths around
+import os  # For os.PathLike, for passing paths around
 from pathlib import Path, PurePath
 from typing import Type, Self, NamedTuple, TypedDict
 
@@ -63,6 +63,10 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
     stations_list_from_trip_id,
 )
+
+# For the new HTML layout engine
+from timetable_kit.timetable_class import Timetable
+from timetable_kit.styler import render
 
 
 # Constant set for the special column names.
@@ -136,7 +140,7 @@ class TTSpec(object):
             self.aux["reference_date"] = reference_date
 
     @classmethod
-    def from_files(cls: Type[Self], filename: str, input_dir: PathLike | str = "."):
+    def from_files(cls: Type[Self], filename: str, input_dir: os.PathLike | str = "."):
         """Load a tt-spec from files, both the aux and the CSV."""
         input_dir = Path(input_dir)
 
@@ -157,7 +161,7 @@ class TTSpec(object):
 
     # These are here largely for namespacing purposes, to keep names short.
     @staticmethod
-    def read_json(file: PathLike | str) -> dict:
+    def read_json(file: os.PathLike | str) -> dict:
         """Load the JSON file for the tt-spec."""
         path = Path(file)
         if path.is_file():
@@ -173,7 +177,7 @@ class TTSpec(object):
             return {}
 
     @staticmethod
-    def read_csv(file: PathLike | str) -> pd.DataFrame:
+    def read_csv(file: os.PathLike | str) -> pd.DataFrame:
         """Read a tt-spec CSV file."""
         ttspec_csv = pd.read_csv(file, index_col=False, header=None, dtype=str)
         debug_print(1, "tt-spec CSV file loaded")
@@ -334,7 +338,7 @@ class TTSpec(object):
         ]
         return train_specs_list
 
-    def calculate_column_options(self: Self):
+    def extract_column_options(self: Self):
         """If this TTSpec has column-options in row 2 of the CSV, remove that row and
         fill in the column_options structure.
 
@@ -345,6 +349,8 @@ class TTSpec(object):
 
         The column options are specified in row 2 of the CSV.  If they're not there,
         don't call this.
+
+        We HAVE to reindex after removing the column_options from the CSV.
         """
         self.column_options: list[list[str]]
         # Consider generalizing to allow column-options in other rows
@@ -362,9 +368,13 @@ class TTSpec(object):
         # Now delete row 2.
         # This drops by index and not by actual row number, FIXME
         # Thankfully they're currently the same
-        self.csv = self.csv.drop(1, axis="index")
-        debug_print(1, "Column options separated from CSV.")
-        debug_print(1, self.column_options)
+        # Operate in place
+        self.csv.drop(1, axis="index", inplace=True)
+        # We MUST reset the index so rows are numbered 0 to end without breaks
+        # Drop old index, operate in place
+        self.csv.reset_index(drop=True, inplace=True)
+        debug_print(1, "Column options separated from CSV:", self.column_options)
+        debug_print(6, "New CSV:", self.csv)
 
 
 class _CellCodes(TypedDict, total=False):
@@ -712,33 +722,6 @@ def raise_error_if_not_one_row(trips):
     return
 
 
-class _FilledTimetable(NamedTuple):
-    """Represents the output of fill_tt_spec."""
-
-    # fill_html(self: Self, spec: TTSpec, today_feed: FeedEnhanced):
-    #    """Produce a filled timetable from given spec and feed"""
-    timetable: pd.DataFrame
-    styler_table: pd.DataFrame
-    header_styling_list: list[str]
-
-    def write_csv_file(self, file: PathLike | str) -> None:
-        """Write this out as a CSV file at the given path."""
-        # Make a copy because we do destructive changes
-        timetable = self.timetable.copy()
-        # We need to strip the HTML comments used to distinguish the header columns
-        non_unique_header_replacement_list = [
-            unique_header[unique_header.find("-->") :].removeprefix("-->")
-            for unique_header in timetable.columns
-        ]
-        non_unique_header_index: pd.Index = pd.Index(
-            non_unique_header_replacement_list, dtype="object"
-        )
-        timetable.columns = non_unique_header_index
-        # NOTE, need to include the header
-        timetable.to_csv(file, index=False, header=True)
-        debug_print(1, "CSV written to", file)
-
-
 def fill_tt_spec(
     spec: TTSpec,
     *,
@@ -746,7 +729,7 @@ def fill_tt_spec(
     doing_html=False,
     doing_multiline_text=True,
     is_ardp_station="dwell",
-) -> _FilledTimetable:
+) -> Timetable:
     """Fill a timetable from a TTSpec template using GTFS data.
 
     spec: a TTSpec containing both the CSV spec and the auxilliary aux
@@ -806,11 +789,9 @@ def fill_tt_spec(
     if "programmers_warning" in spec.aux:
         print("WARNING: ", spec.aux["programmers_warning"])
 
-    # Debug-print the spec
-    debug_print(1, spec.csv)
     # Clean up the spec.
     spec.strip_omits()
-    spec.calculate_column_options()  # Also removes column_options from main CSV dataframe
+    spec.extract_column_options()  # Also removes column_options from main CSV dataframe
     spec.augment_from_key_cell(feed=today_feed)  # Expand "shorthand" specs
 
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
@@ -875,33 +856,34 @@ def fill_tt_spec(
             "Received is_ardp_station which is not callable: ", is_ardp_station
         )
 
-    # We aren't really object oriented yet.  Take out the CSV DataFrame and work directly with it.
-    # FIXME.
-    tt_spec = spec.csv
-
     # Get the column options row (previously calculated)
     column_options = spec.column_options
 
     # The list of stations, occasionally useful:
     station_codes_list = spec.get_stations_list()
 
-    # We used to do deep copies here.  Really we just want to copy the STRUCTURE.
-    # tt = tt_spec.copy()  # "deep" copy
-    [row_index, column_index] = tt_spec.axes
-    tt = pd.DataFrame(
-        index=row_index.copy(deep=True), columns=column_index.copy(deep=True)
-    )
-    # styler_t = tt_spec.copy()  # another "deep" copy, parallel
-    styler_t = pd.DataFrame(
-        index=row_index.copy(deep=True), columns=column_index.copy(deep=True)
-    )
-    debug_print(1, "Copied tt-spec.")
+    #######################
+    # Object containing the DataFrame tables to fill in for the timetable.
+    # Initialized to have the same STRUCTURE as the spec, but no content.
+    # DataFrame Elements:
+    # text -- to be printed in each cell
+    # th -- boolean table, is this a <th> cell?  Default False
+    # classes -- string of CSS classes for each cell
+    # attributes -- extra attribute definitions string for each cell
+    t = Timetable(spec.csv)
+    debug_print(1, "Prepped timetable structure.")
+
+    # Debug-print the spec in its "final" form
+    debug_print(1, "Spec CSV immediately before filling timetable: ", spec.csv)
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
     # FIXME.
 
-    # Base CSS for every data cell.  We probably shouldn't do this, but it tests that the styler works.
-    base_cell_css = ""
+    # Base CSS classes for every data cell.  Currently an empty list.
+    base_cell_css_list = []
+    # Base CSS for column headers.
+    # This is necessary to apply base column header behavior.
+    base_column_header_css_list = ["col_heading"]
 
     # NOTE, border variations not implemented yet FIXME
     # borders_final_css="border-bottom-heavy"
@@ -916,35 +898,34 @@ def fill_tt_spec(
     debug_print(1, "Agency time zone", agency_tz)
 
     # Now for the main routine, which is a giant double loop, and therefore quite slow.
-    [row_count, column_count] = tt_spec.shape
+    (row_count, column_count) = spec.csv.shape
 
-    header_replacement_list = []  # list, will fill in as we go
-    header_styling_list = []  # list, to match column numbers.  Will fill in as we go
     for x in range(1, column_count):  # First (0) column is the station code
-        column_key_str = str(tt_spec.iloc[0, x]).strip()  # row 0, column x
+        column_key_str = str(spec.csv.iloc[0, x]).strip()  # row 0, column x
         # Create blank train_specs list, so we can call get_cell_codes on a special column without crashing
         train_specs = []
 
-        column_header_styling = ""  # default
+        # First do the stuff for the column headers.
+        column_header_css_list = base_column_header_css_list
         match column_key_str.lower():
             case "station" | "stations":
                 # in a span
-                column_header = text_presentation.get_station_column_header(
+                t.text.iloc[0, x] = text_presentation.get_station_column_header(
                     doing_html=doing_html
                 )
             case "services":
                 # in a span
-                column_header = text_presentation.get_services_column_header(
+                t.text.iloc[0, x] = text_presentation.get_services_column_header(
                     doing_html=doing_html
                 )
             case "access":
                 # in a span
-                column_header = text_presentation.get_access_column_header(
+                t.text.iloc[0, x] = text_presentation.get_access_column_header(
                     doing_html=doing_html
                 )
             case "timezone":
                 # in a span
-                column_header = text_presentation.get_timezone_column_header(
+                t.text.iloc[0, x] = text_presentation.get_timezone_column_header(
                     doing_html=doing_html
                 )
             case _:
@@ -959,7 +940,7 @@ def fill_tt_spec(
 
                 # Separate train numbers by "/", and create the train_spec list
                 train_specs = split_trains_spec(column_key_str)
-                column_header = text_presentation.get_time_column_header(
+                t.text.iloc[0, x] = text_presentation.get_time_column_header(
                     train_specs,
                     route_from_train_spec_local,
                     doing_html=doing_html,
@@ -977,10 +958,12 @@ def fill_tt_spec(
                             header_styling_train_spec = potential_train_spec
                             break
                     if header_styling_train_spec:
-                        column_header_styling = get_time_column_stylings(
-                            header_styling_train_spec,
-                            route_from_train_spec_local,
-                            output_type="attributes",
+                        column_header_css_list.append(
+                            get_time_column_stylings(
+                                header_styling_train_spec,
+                                route_from_train_spec_local,
+                                output_type="class",
+                            )
                         )
                 # Check whether this column has any buses which should be marked
                 use_bus_icon_this_column = False
@@ -1003,9 +986,8 @@ def fill_tt_spec(
                         use_baggage_icon_this_column = True
                         break
 
-        # Now fill in the column header, as chosen earlier
-        header_replacement_list.append(column_header)
-        header_styling_list.append(column_header_styling)
+        # Fill in CSS styles for this column header
+        t.classes.iloc[0, x] = " ".join(column_header_css_list)
 
         # Cache this for use in "origin" and "destination";
         # it only looks at the first tsn.
@@ -1017,32 +999,32 @@ def fill_tt_spec(
             stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
 
         for y in range(1, row_count):  # First (0) row is the header
-            station_code = str(tt_spec.iloc[y, 0])  # row y, column 0
+            station_code = str(spec.csv.iloc[y, 0])  # row y, column 0
 
             # Reset the styler string:
-            cell_css_list = [base_cell_css]
+            cell_css_list = [*base_cell_css_list]
             # Check for cell_codes like "28 last".  This *usually* returns None.
-            cell_codes = get_cell_codes(str(tt_spec.iloc[y, x]), train_specs)
+            cell_codes = get_cell_codes(str(spec.csv.iloc[y, x]), train_specs)
 
             # Check for simple cell substitutions like "blank" and "downarrow".
             # Returns None or a string.
             cell_substitution = text_presentation.get_cell_substitution(
-                str(tt_spec.iloc[y, x])
+                str(spec.csv.iloc[y, x])
             )
             if cell_substitution:
-                tt_spec.iloc[y, x] = cell_substitution
+                spec.csv.iloc[y, x] = cell_substitution
 
             # This is effectively matching row, column, cell contents in spec
-            match [station_code.lower(), column_key_str.lower(), tt_spec.iloc[y, x]]:
+            match [station_code.lower(), column_key_str.lower(), spec.csv.iloc[y, x]]:
                 case ["", _, ""]:
                     # Make sure blanks become *string* blanks in this line.
-                    tt.iloc[y, x] = ""
+                    t.text.iloc[y, x] = ""
                 case ["", _, raw_text]:
                     # This is probably raw text like "To Chicago".
                     # But it might be a cell code.  We only accept "91 blank".
                     # Note that the simple substitutions were processed earlier.
                     if cell_codes and cell_codes["blank"]:
-                        tt.iloc[y, x] = ""
+                        t.text.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
                         blank_train_spec = cell_codes["train_spec"]
                         cell_css_list.append(
@@ -1056,14 +1038,14 @@ def fill_tt_spec(
                         # This is probably special text like "to Chicago".
                         cell_css_list.append("special-cell")
                         # Copy the handwritten text over.
-                        tt.iloc[y, x] = raw_text
+                        t.text.iloc[y, x] = raw_text
                 case ["route-name", ck, raw_text] if ck in special_column_names:
                     # Usually blank for special columns, but could be free-written text
                     cell_css_list.append("route-name-cell")
                     if raw_text:
-                        tt.iloc[y, x] = raw_text
+                        t.text.iloc[y, x] = raw_text
                     else:
-                        tt.iloc[y, x] = ""
+                        t.text.iloc[y, x] = ""
                 case ["route-name", _, _]:
                     # Line for route names.
                     cell_css_list.append("route-name-cell")
@@ -1103,24 +1085,24 @@ def fill_tt_spec(
                     else:
                         separator = "\n"
                     full_styled_route_names = separator.join(styled_route_names)
-                    tt.iloc[y, x] = full_styled_route_names
+                    t.text.iloc[y, x] = full_styled_route_names
                 case ["updown", ck, _] if ck in special_column_names:
                     cell_css_list.append("updown-cell")
-                    tt.iloc[y, x] = ""
+                    t.text.iloc[y, x] = ""
                 case ["updown", _, _]:
                     # Special line just to say "Read Up" or "Read Down"
                     cell_css_list.append("updown-cell")
-                    tt.iloc[y, x] = text_presentation.style_updown(
+                    t.text.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
                 case ["days" | "days-of-week", ck, _] if ck in special_column_names:
                     cell_css_list.append("days-of-week-cell")
-                    tt.iloc[y, x] = ""
+                    t.text.iloc[y, x] = ""
                 case ["days" | "days-of-week", _, ""]:
                     cell_css_list.append("days-of-week-cell")
                     # No reference stop?  Maybe this should be blank.
                     # Useful if one train runs across midnight.
-                    tt.iloc[y, x] = ""
+                    t.text.iloc[y, x] = ""
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
@@ -1149,7 +1131,7 @@ def fill_tt_spec(
                     if timepoint is None:
                         # Manual override?  Pass the raw text through.
                         raw_text = reference_stop_code
-                        tt.iloc[y, x] = raw_text
+                        t.text.iloc[y, x] = raw_text
                     else:
                         # Automatically calculated day string.
                         # Pull out the timezone for the reference_stop_id (should precache as dict, TODO)
@@ -1174,7 +1156,7 @@ def fill_tt_spec(
                             calendar, offset=offset
                         )
                         # TODO: add some HTML styling here
-                        tt.iloc[y, x] = daystring
+                        t.text.iloc[y, x] = daystring
                     # Color this cell
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
@@ -1191,10 +1173,10 @@ def fill_tt_spec(
                     cell_css_list.append("special-cell")
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
-                    tt.iloc[y, x] = raw_text
+                    t.text.iloc[y, x] = raw_text
                 case ["origin" | "destination", ck, _] if ck in special_column_names:
                     # Free-written text was checked earlier
-                    tt.iloc[y, x] = ""
+                    t.text.iloc[y, x] = ""
                 case ["origin", _, _]:
                     # Get the originating station for the train, and
                     # IF it is not in this timetable, print something appropriate
@@ -1202,13 +1184,13 @@ def fill_tt_spec(
                     # Free-written text was checked earlier
                     first_station_code = stations_df_for_column.iat[0]
                     if first_station_code not in station_codes_list:
-                        tt.iloc[y, x] = agency_singleton().get_station_name_from(
+                        t.text.iloc[y, x] = agency_singleton().get_station_name_from(
                             first_station_code,
                             doing_multiline_text=doing_multiline_text,
                             doing_html=doing_html,
                         )
                     else:
-                        tt.iloc[y, x] = ""
+                        t.text.iloc[y, x] = ""
                 case ["destination", _, _]:
                     # Get the final (terminating) station for the train, and
                     # IF it is not in this timetable, print something appropriate
@@ -1216,13 +1198,13 @@ def fill_tt_spec(
                     # Free-written text was checked earlier
                     last_station_code = stations_df_for_column.iat[-1]
                     if last_station_code not in station_codes_list:
-                        tt.iloc[y, x] = agency_singleton().get_station_name_to(
+                        t.text.iloc[y, x] = agency_singleton().get_station_name_to(
                             last_station_code,
                             doing_multiline_text=doing_multiline_text,
                             doing_html=doing_html,
                         )
                     else:
-                        tt.iloc[y, x] = ""
+                        t.text.iloc[y, x] = ""
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
@@ -1232,12 +1214,12 @@ def fill_tt_spec(
                         doing_html=doing_html,
                         doing_multiline_text=doing_multiline_text,
                     )
-                    tt.iloc[y, x] = station_name_str
+                    t.text.iloc[y, x] = station_name_str
                 case [_, "services", _]:
                     # Column for station services codes.  Currently, completely vacant.
                     cell_css_list.append("services-cell")
                     services_str = ""
-                    tt.iloc[y, x] = services_str
+                    t.text.iloc[y, x] = services_str
                 case [_, "access", _]:
                     cell_css_list.append("access-cell")
                     access_str = ""
@@ -1251,14 +1233,14 @@ def fill_tt_spec(
                         access_str += icons.get_inaccessible_icon_html(
                             doing_html=doing_html
                         )
-                    tt.iloc[y, x] = access_str
+                    t.text.iloc[y, x] = access_str
                 case [_, "timezone", _]:
                     # Pick out the stop timezone -- TODO, precache this as a dict
                     stop_id = agency_singleton().stop_code_to_stop_id(station_code)
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
-                    tt.iloc[y, x] = text_presentation.get_zone_str(
+                    t.text.iloc[y, x] = text_presentation.get_zone_str(
                         stop_tz, doing_html=doing_html
                     )
                 case [_, _, _]:
@@ -1312,7 +1294,7 @@ def fill_tt_spec(
                     if (timepoint is None) or (cell_codes and cell_codes["blank"]):
                         # This train does not stop at this station
                         # *** Or we've been told to make a colored blank cell ***
-                        tt.iloc[y, x] = ""
+                        t.text.iloc[y, x] = ""
                         cell_css_list.append("blank-cell")
                         # For now, we style if we have a single train.
                         # Including if it's specified with a cell code like "94 blank".
@@ -1403,43 +1385,20 @@ def fill_tt_spec(
                             is_bus=is_bus,
                             no_rd=no_rd,
                         )
-                        tt.iloc[y, x] = cell_text
+                        t.text.iloc[y, x] = cell_text
             # Fill the styler.  We MUST overwrite every single cell of the styler.
-            styler_t.iloc[y, x] = " ".join(cell_css_list)
+            t.classes.iloc[y, x] = " ".join(cell_css_list)
 
-    # Now we have to delete the placeholder left column
-    tt = tt.drop(labels=0, axis="columns")
-    styler_t = styler_t.drop(labels=0, axis="columns")
+    # Row 0 and column 0 might not have been filled.
+    t.text.fillna(value="", inplace=True)
+    # debug_print(1, "Text table:", t.text)
+    t.classes.fillna(value="", inplace=True)
+    # debug_print(1, "Classes table:", t.classes)
+    # Set the top row to be "th". (FIXME, this is simplistic)
+    t.th.iloc[0] = True
+    # This is only set if it's "True"; fill in the "False" states.
+    t.th.fillna(value=False, inplace=True)
+    # This is only set if it's not empty; fill in the "" states.
+    t.attributes.fillna(value="", inplace=True)  # Correct default
 
-    # And the placeholder top row
-    tt = tt.drop(labels=0, axis="index")
-    styler_t = styler_t.drop(labels=0, axis="index")
-
-    # And now we have to rename the headers.  This is kind of ugly!
-    # This is quite fragile and should be checked regularly.
-    # It depends on having removed the placeholder column already.
-
-    # The header replacement list has a potential duplicates problem.
-    # Eliminate this by prefixing the column number in an HTML comment.
-    unique_header_replacement_list = [
-        "".join(["<!-- ", str(i), " -->", header])
-        for (i, header) in enumerate(header_replacement_list)
-    ]
-
-    #
-    # We have to do the styler and the tt at the same time,
-    # or the styler will fail.
-    # Alter in place.
-    new_tt_header_index: pd.Index = pd.Index(
-        unique_header_replacement_list, dtype="object"
-    )
-    new_styler_t_header_index: pd.Index = pd.Index(
-        unique_header_replacement_list, dtype="object"
-    )
-    tt.columns = new_tt_header_index
-    styler_t.columns = new_styler_t_header_index
-    # This is marvellously finicky code.  Yuck.
-
-    result = _FilledTimetable(tt, styler_t, header_styling_list)
-
-    return result
+    return t

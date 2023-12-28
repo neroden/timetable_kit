@@ -14,7 +14,6 @@ see the page_layout module.
 """
 
 # Other people's packages
-import html  # for html.escape
 import pandas as pd
 from pandas.io.formats.style import Styler
 
@@ -84,6 +83,7 @@ def get_time_column_stylings(
         return color_css
 
 
+# Obsolete, to remove  FIXME
 def style_timetable_for_html(
     spec,  # Will become TTSpec, but we have to unravel some other code first FIXME
     timetable,
@@ -134,7 +134,7 @@ def style_timetable_for_html(
     # Table can have an ARIA label.
     # aria-labelled-by does not work at all.
     # This needs HTML escaping, including quotes.
-    table_aria_label = html.escape(spec.aux["table_aria_label"])
+    table_aria_label = spec.aux["table_aria_label"]
     # WARNING.  Uses f-string.  FIXME
     table_attrs = f'class="tt-table" aria-label="{ table_aria_label }"'
 

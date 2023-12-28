@@ -6,8 +6,9 @@
 Created when PANDAS's Styler wasn't doing what I wanted.
 """
 
+import os  # for os.PathLike
+
 import pandas as pd
-from pandas import DataFrame
 
 from timetable_kit.debug import debug_print
 
@@ -65,7 +66,7 @@ class Timetable:
         # We can get these from the TTSpec.  Fix after rearranging modules. FIXME
         self.table_attributes = ""
 
-    def write_csv_file(self, file: PathLike | str) -> None:
+    def write_csv_file(self, file: os.PathLike | str) -> None:
         """Write this out as a CSV file at the given path.
 
         Should run after fill_tt_spec.

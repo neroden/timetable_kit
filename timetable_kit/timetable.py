@@ -16,6 +16,7 @@ import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 from pathlib import Path
+import html  # for html.escape
 
 import pandas as pd
 
@@ -57,8 +58,11 @@ from timetable_kit.core import (
     TTSpec,
     fill_tt_spec,
 )
-from timetable_kit.timetable_styling import (
-    style_timetable_for_html,
+from timetable_kit.timetable_class import (
+    Timetable,
+)
+from timetable_kit.styler import (
+    render,
 )
 from timetable_kit.page_layout import (
     produce_html_page,
@@ -250,13 +254,13 @@ def produce_several_timetables(
 
             if do_csv:
                 # CSV can only do one page at a time.  Use the subspec name.
-                filled_tt_plaintext = fill_tt_spec(
+                t_plaintext: Timetable = fill_tt_spec(
                     spec, today_feed=reduced_feed, doing_html=False
                 )
                 # Note that there is a real danger of overwriting the source file.
                 # Avoid this by adding an extra suffix to the timetable name.
                 path_for_csv = output_dir / Path(subspec_filename_base + "-out.csv")
-                filled_tt_plaintext.write_csv_file(path_for_csv)
+                t_plaintext.write_csv_file(path_for_csv)
 
             if do_html:
                 # Copy the icons and fonts to the output dir.
@@ -267,12 +271,18 @@ def produce_several_timetables(
                 copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
                 # Main timetable, same for HTML and PDF
-                (timetable, styler_table, header_styling_list) = fill_tt_spec(
+                t: Timetable = fill_tt_spec(
                     spec, today_feed=reduced_feed, doing_html=True
                 )
-                timetable_styled_html = style_timetable_for_html(
-                    spec, timetable, styler_table, header_styling_list
+                # Set table-level attributes
+                # TO DO: move these into Timetable init FIXME TODO
+                table_id = "T_" + spec.aux["tt_id"]
+                table_aria_label = html.escape(spec.aux["table_aria_label"])
+                t.table_attributes = (
+                    'id="{table_id}" class="tt-table" aria-label="{table_aria_label}"'
                 )
+                # Render to HTML
+                timetable_styled_html = render(t)
                 debug_print(1, "HTML styled")
 
                 # Find the date range on which the entire reduced feed is valid
@@ -288,7 +298,6 @@ def produce_several_timetables(
                 # Add it to the list of pages.
                 new_page = produce_html_page(
                     timetable_styled_html,
-                    header_styling_list,
                     spec=spec,
                     author=author,
                     start_date=str(latest_start_date),

@@ -9,16 +9,4 @@ CSS specific to individual timetables.  It must use ID selectors.
 /* Page specific CSS for page {{ page_id }} */
 {% include "font_choice.css" %}{# Picks the font. #}
 {% include "font_size.css" %}{# Picks the font sizes. #}
-{#
-The following deals with an *extremely annoying* problem with PANDAS table styling.
-While the rest of the table can be styled using custom classes, the headers can't.
-
-The only way to style the header sections is through specific CSS selectors using
-PANDAS's standard column names.
-
-With multi-page timetables these MUST also be indexed by a table ID.  This is complicated enough
-that we produce it in Python and just pass it through.
-#}
-
-{{ header_styling_css }}
 /* End page specific CSS for page {{ page_id }} */

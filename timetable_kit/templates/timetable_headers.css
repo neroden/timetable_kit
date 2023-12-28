@@ -1,32 +1,25 @@
 {#
 timetable_headers.css
 Part of timetable_kit
-Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-This CSS is for styling the header cells of the timetable. It includes the logic
-related to cells with the .col_heading class.
+This CSS is for styling the header cells of the timetable.
 
-Unfortunately, PANDAS is unable to add custom classes to the header cells.
-Very annoying!  This means we cannot use the same techniques used in the rest of the
-timetable styling.
-
-The header cells have class .col_heading and are cells of type <th>.
-
-They also have a "colN" class (such as col0, col1), which is our only index into
-them from the main program.  (Unless we rewrite the Jinja2 template.)
-
-The program will generate additional code for bits which differ from one header
-column to the next (notably, background color)
+Since we abandoned PANDAS's styler, we can do this directly.
 #}
 
 .tt-table .col_heading {
     /* This selects a .col_heading within the .tt_table.
 
-       When PANDAS styles a table,
-       most unfortunately we cannot set custom CSS clases on the headers.
-       The "col_heading" class is pre-chosen for us, and we're stuck with it.
+       We are using col_heading as our class for header cells,
+       really for historical reasons (PANDAS uses this)
+
+       Consider breaking apart into additional classes.
+{#
        This is necessary to get the left-to-right borders between headings right.
-       Specifying the background color per-header requires multiple selectors...
+       We should be sneakier about the vertical borders now that we have our own
+       HTML renderer.
+#}
      */
     border-top-style: solid;
     border-top-width: 2px;
@@ -41,11 +34,9 @@ column to the next (notably, background color)
     border-right-width: 2px;
     border-right-color: black;
 
-    /* And again, we can't apply these as classes, so they have to come in here. */
     vertical-align: middle;
     text-align: center;
 
-    /* And again, can't apply as classes. */
     font-weight: bold;
 
     /* Enlarge from underlying font */
