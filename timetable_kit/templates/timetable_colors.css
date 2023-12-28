@@ -4,12 +4,6 @@ Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This CSS fragment colors cells according to the type of train they go with.
-
-It depends heavily on Pandas adding custom classes to the cells.
-
-The headers have to be set elsewhere, in timetable_styling.py.
-We should fix this.  ***sigh*** FIXME
-
 #}
 
 .color-bus {

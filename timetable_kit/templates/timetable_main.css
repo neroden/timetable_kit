@@ -1,15 +1,12 @@
 {#
 timetable_main.css
 Part of timetable_kit
-Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This CSS fragment is the majority of the CSS code for styling the actual timetable.
 
-It depends heavily on Pandas adding custom classes to the cells.
-
 Fonts and font sizes are separated into their own files.
 Colors have their own file.
-
 #}
 
 .tt-table {
@@ -31,8 +28,11 @@ Colors have their own file.
     border-right-color: black;
 }
 
-.tt-table td {
-    /* Defaults for every data cell in the tt_table */
+/**** GENERAL AND DATA TYPE CELLS ****/
+.tt-table td,
+.tt-table th
+{
+    /* Defaults for every cell (th or td) in the tt_table which is not a col_heading */
     /* There is a problem: this has higher specificity than the custom classes! */
     /* This is solved by using td.custom_class for those selectors */
     border-top-style: solid;
@@ -61,7 +61,9 @@ Colors have their own file.
 }
 
 /* Align station names to the left of their cell... */
-td.station-cell {
+td.station-cell,
+th.station-cell
+{
     text-align: left;
 }
 /* ...and times to the right of their cell. */
@@ -82,9 +84,48 @@ td.timezone-cell {
     text-align: center;
 }
 
+/**** HEADER TYPE CELLS ****/
+.tt-table .col_heading {
+    /* This selects a .col_heading within the .tt_table.
+
+       We are using col_heading as our class for header cells,
+       really for historical reasons (PANDAS uses this)
+
+       This is higher specificity than the .tt-table th above
+       But we don't need to repeat stuff which is there
+
+       Consider breaking apart into additional classes.
+     */
+
+    border-top-width: 2px;
+    border-top-color: black;
+    border-bottom-width: 2px;
+    border-bottom-color: black;
+
+    /* Center in both axes */
+    text-align: center;
+    vertical-align: middle;
+
+    /* Enlarge from underlying font and boldface */
+    font-size: 140%;
+    font-weight: bold;
+
+    /* No right padding, override general rule below */
+    padding-right: 0;
+    /* We do actually want a little top padding (not much) */
+    padding-top: 1px;
+}
+
+/* Meaning of "<strong>" when inside a .col_heading element */
+.col_heading strong {
+    font-size: 140%;
+    font-weight: bold;
+}
 
 /* Route name cell.  Must override vertical-align! */
-td.route-name-cell {
+td.route-name-cell,
+th.route-name-cell
+{
     vertical-align: middle;
     text-align: center;
     border-bottom-style: solid;
@@ -97,7 +138,9 @@ td.route-name-cell {
 }
 
 /* Days of week header cell.  Should split font stuff out. */
-td.days-of-week-cell {
+td.days-of-week-cell,
+th.days-of-week-cell
+{
     vertical-align: middle;
     text-align: center;
     border-bottom-style: solid;
@@ -108,13 +151,16 @@ td.days-of-week-cell {
 }
 
 /* Read Up / Read Down cell. */
-td.updown-cell {
+td.updown-cell,
+th.updown-cell
+{
     text-align: center;
     border-bottom-style: solid;
     border-bottom-width: 2px;
     border-bottom-color: black;
 }
 
+/**** TEXT TRICKS ****/
 
 /* Text transforms for station text spans: */
 .major-station {
@@ -135,7 +181,6 @@ td.updown-cell {
 .services-header-text {
     transform: rotate(-45deg);
 }
-
 
 {#
 We don't do this since we say "TZ" instead of "Time Zone"

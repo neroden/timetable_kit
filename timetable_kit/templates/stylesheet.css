@@ -21,16 +21,11 @@
 {% include "agency_maple_leaf.css" %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
-{% include "timetable_headers.css" %}
 {% include "time_boxes_characters.css" %}{# Used only if we're using a nontabular font. #}
 {% include "time_boxes_simple.css" %}
 {% include "time_boxes_extras.css" %}
 {% for page in pages %}
-{{ page.css_text }}{# This variable has page-specific CSS. #}
-{# In particular, the header stylings have to be produced by the main program due to PANDAS limitations,
-   and have to be done with CSS clauses which are table-ID-specific.  So they go here. Ugly.
+{{ page.css_text }}{# This variable has page-specific CSS; mostly font choice and font size #}
 
-   This also contains font choice and size.
-#}
 {% endfor %}
 
