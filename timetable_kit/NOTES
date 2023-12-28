@@ -52,3 +52,11 @@ Chrome -- needs "Margins: None" to avoid putting extra crud around the printout
 Firefox -- needs "Print backgrounds" to print color
 Firefox -- needs to uncheck "Print Headers and Footers" to avoid putting extra crud around the printout.
 Firefox -- print previews are missing cell borders but they WILL print.
+
+File storage:
+https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+
+$XDG_CACHE_HOME (~/.cache) for the various GTFS auto-downloads, Amtrak station DB download (cached)
+$XDG_DATA_HOME:$XDG_DATA_DIRS (~/.local/share,/usr/local/share,/usr/share) for overrideable portable data (specs, templates)
+$XDG_CONFIG_HOME:$XDG_CONFIG_DIRS (~/.config,/etc,/etc/xdg,/usr/share) for config files
+https://xdgbasedirectoryspecification.com/
