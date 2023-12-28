@@ -5,17 +5,13 @@
 Looping Jinja2 file to generate a table.
 
 Used by styler.py.
-
-trim_blocks should be enabled.
-This strips a newline occuring *immediately* after a Jinja directive,
-unless the directive is closed with a "+".
 #}
 <table {{ table_attributes }} >
   <tbody>
 {% for row_num in row_nums %}
     <tr>
 {%   for col_num in col_nums %}
-{#    This typically looks like: <td class="foo" role="foo">content</td> #}
+{#    This typically looks like: <td class="foo" role="bar">text</td> #}
       <{% if th[col_num][row_num] %}th{% else %}td{% endif %}{#
         #} class="row{{row_num}} col{{col_num}}{#
         #} {{ classes[col_num][row_num] }}"{#
