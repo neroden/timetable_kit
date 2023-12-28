@@ -4,6 +4,7 @@
 
 CSS file for the symbol key table (except fonts).
 #}
+
 /* Rules for the whole symbol-key table: border-collapse with no borders eliminates margins */
 .symbol-key {
     border-collapse: collapse;

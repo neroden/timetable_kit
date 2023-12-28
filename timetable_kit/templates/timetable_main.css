@@ -11,6 +11,7 @@ Fonts and font sizes are separated into their own files.
 Colors have their own file.
 
 #}
+
 .tt-table {
     /* Stuff for the table as a whole */
     border-collapse: collapse;

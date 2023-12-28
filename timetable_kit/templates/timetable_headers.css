@@ -18,6 +18,7 @@ them from the main program.  (Unless we rewrite the Jinja2 template.)
 The program will generate additional code for bits which differ from one header
 column to the next (notably, background color)
 #}
+
 .tt-table .col_heading {
     /* This selects a .col_heading within the .tt_table.
 

@@ -11,6 +11,7 @@ This must be specific to a. in order to override normal link coloring.
 The second definition is for use when we don't want this to be a link,
 but we still want it to look exactly the same
 #}
+
 a.connecting-service-link, .connecting-service-link {
     text-decoration: none;
     font-weight: bold;

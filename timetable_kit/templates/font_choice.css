@@ -15,6 +15,7 @@ SpartanTT is my hacked version of Spartan 1.004 with:
 
 We set the font for the entire page at once, by applying to the <div> with the page in it.
 #}
+
 /* Applies to the <div> for the page */
 #{{page_id}} {
     font-family: "{{ font_name }}", {{ backup_font_name }};

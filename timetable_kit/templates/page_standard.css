@@ -16,6 +16,7 @@ A4 is 210mm x 297mm; longer but narrower.
 If we use letter with 10 mm (1 cm) margin on each side,
 we should avoid overflowing the width of A4 (since 215.9 - 10 = 205.9 < 210).
 #}
+
 /* Printing: page layout directives */
 .tt-page {
     /* This class is for a div which holds a whole page */

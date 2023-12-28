@@ -14,6 +14,7 @@ Have to be very careful about this.
 Trying to do it with float requires putting it inside the credits,
 and triggers an error in weasyprint which loses the main timetable sometimes.
 #}
+
 .logo-bottom-right {
     position: fixed;
     bottom: 2px;

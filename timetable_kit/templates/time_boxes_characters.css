@@ -14,6 +14,7 @@ Aaargh!  Also, Weasyprint fails on relative measurements.
 
 Designed for very small text.  Requires extensive fiddling to change.
 #}
+
 /* These are only used with non-tabular fonts (not default). */
 .box-1 {
     /* For forcing non-tabular fonts to act tabular: leading 1 */

@@ -11,6 +11,7 @@ The headers have to be set elsewhere, in timetable_styling.py.
 We should fix this.  ***sigh*** FIXME
 
 #}
+
 .color-bus {
     background-color: honeydew;
 }

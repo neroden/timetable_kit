@@ -20,6 +20,7 @@ The header usually has enlarged fonts, but these should have the same tiny font 
 
 Check on CSS priority and specificity when it comes to font sizes; this can get ugly!
 #}
+
 /* Font size for the page <div> itself, and for elements within that with the specified classes */
 {# This gets the page div itself #}
 #{{page_id}},
