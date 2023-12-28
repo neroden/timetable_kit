@@ -80,7 +80,7 @@ def train_number_range(start: int, stop: int) -> set[str]:
     numbers greater or equal to the low number, and strictly less than the high number,
     with the numbers converted to strings."""
     # Set comprehension here:
-    return { str(num) for num in range(start, stop) }
+    return {str(num) for num in range(start, stop)}
 
 
 # Trains with checked baggage cars.
