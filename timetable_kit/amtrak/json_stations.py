@@ -416,22 +416,20 @@ def do_station_processing():
 
     station_list = stations["code"].to_list()
     bad_station_list = []
+    cleaned_station_list = []
     for code in station_list:
         station_details_json = load_station_details(code)
-        if station_details_json in ["{}", "{}\n"]:  # Quick and dirty; FIXME
+        if station_details_json in ["{}", "{}\n"]:  # Quick and dirty, works
             bad_station_list.append(code)
-        parsed_json = json.loads(station_details_json)
-    # bad_station_list = ["BAT","BNN","DTR","PDT","AVC","TAP","WBT"]
-    bad_station_list_path = Path("./bad_stations.csv")
+        else:
+            cleaned_station_list.append(code)
 
+    bad_station_list_path = Path("./bad_stations.csv")
     # Use PANDAS to dump to file, one per line
     df = pd.DataFrame(bad_station_list)
     df.to_csv(bad_station_list_path, index=False, header=False)
     print("bad_stations.csv dumped")
 
-    cleaned_station_list = list(
-        filter(lambda x: not x in bad_station_list, station_list)
-    )
     return cleaned_station_list
 
 
