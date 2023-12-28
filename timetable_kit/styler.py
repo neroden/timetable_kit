@@ -43,10 +43,11 @@ def render(t: Timetable):
         "table_attributes": t.table_attributes,
         "row_nums": t.row_nums,
         "col_nums": t.col_nums,
-        "tt": t.tt,
-        "classes_t": t.classes_t,
-        "th_t": t.th_t,
-        "attributes_t": t.attributes_t,
+        # These four are DataFrames
+        "text": t.text,
+        "classes": t.classes,
+        "th": t.th,
+        "attributes": t.attributes,
     }
     output = table_tpl.render(params)
     print(output)

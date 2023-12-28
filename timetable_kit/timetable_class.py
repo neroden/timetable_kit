@@ -17,27 +17,27 @@ class Timetable:
         """Pass in the CSV part of a spec as a dataframe, which is used only for its shape"""
         (row_index, col_index) = spec_df.axes
         # Timetable (text)
-        tt = pd.DataFrame(
+        self.text = pd.DataFrame(
             index=row_index.copy(deep=True), columns=col_index.copy(deep=True)
         )
         # Classes (for CSS)
-        classes_t = pd.DataFrame(
+        self.classes = pd.DataFrame(
             index=row_index.copy(deep=True), columns=col_index.copy(deep=True)
         )
         # Boolean specifying whether to use th instead of td
-        th_t = pd.DataFrame(
+        self.th = pd.DataFrame(
             index=row_index.copy(deep=True), columns=col_index.copy(deep=True)
         )
         # Attributes (for CSS) -- includes "rowheader" type stuff
-        attributes_t = pd.DataFrame(
+        self.attributes = pd.DataFrame(
             index=row_index.copy(deep=True), columns=col_index.copy(deep=True)
         )
         # We will use the row_count and col_count later.
-        (row_count, col_count) = spec_df.shape
+        (self.row_count, self.col_count) = spec_df.shape
         # These are needed by Jinja.
         # Later, we'll split the rows into "head" and "body".  TODO
-        row_nums = range(0, row_count)
-        col_nums = range(0, col_count)
+        self.row_nums = range(0, self.row_count)
+        self.col_nums = range(0, self.col_count)
         debug_print(1, "Copied shape of spec.")
         # Things which go on the <table> tag
-        table_attributes = ""
+        self.table_attributes = ""
