@@ -13,4 +13,4 @@
 
 #}
 {% macro br() %}<wbr><br role="presentation">{% endmacro %}
-{% macro br_or_space(value) %}{% if value %}{{ br }}{% else %} {% endif %}{% endmacro %}
+{% macro br_or_space(value) %}{% if value %}{{ br() }}{% else %} {% endif %}{% endmacro %}
