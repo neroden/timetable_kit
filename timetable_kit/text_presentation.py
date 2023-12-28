@@ -511,9 +511,7 @@ def get_baggage_str(doing_html=False):
     return "".join(
         [
             baggage_box_prefix,
-            '<span class="baggage-symbol">',
             get_baggage_icon_html(doing_html=True),
-            "</span>",
             baggage_box_postfix,
         ]
     )
@@ -544,9 +542,7 @@ def get_bus_str(doing_html=False):
     return "".join(
         [
             bus_box_prefix,
-            '<span class="bus-symbol">',
             get_bus_icon_html(doing_html=True),
-            "</span>",
             bus_box_postfix,
         ]
     )
