@@ -435,16 +435,16 @@ class Agency:
         # Add styling for major stations
         if major:
             enhanced_city_state_name = "".join(
-                ["<span class=major-station >", city_state_name, "</span>"]
+                ['<span class="major-station">', city_state_name, "</span>"]
             )
         else:
             enhanced_city_state_name = "".join(
-                ["<span class=minor-station >", city_state_name, "</span>"]
+                ['<span class="minor-station">', city_state_name, "</span>"]
             )
 
         # Add the station code in smaller print
         enhanced_station_code = "".join(
-            ["<span class=station-footnotes>(", station_code, ")</span>"]
+            ['<span class="station-footnotes">(', station_code, ")</span>"]
         )
 
         # Certain stations need special treatment on the facility names.
