@@ -35,14 +35,14 @@ def get_table_tpl():
 def render(t: Timetable):
     """Render a timetable to HTML, using Jinja"""
     # Recall that Python dataframe data can be accessed as:
-    # df[column][row]
+    # df[col][row]
     # Do this in Jinja
 
     table_tpl = get_table_tpl()
     params = {
         "table_attributes": t.table_attributes,
         "row_nums": t.row_nums,
-        "column_nums": t.column_nums,
+        "col_nums": t.col_nums,
         "tt": t.tt,
         "classes_t": t.classes_t,
         "th_t": t.th_t,
