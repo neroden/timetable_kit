@@ -39,11 +39,7 @@ the json files for the station data must be downloaded in advance,
 using './amtrak/json_stations.py download' into the ./amtrak/stations/ directory.
 This is to avoid beating too hard on Amtrak's website.
 
-Jinja2 templates are probably a good idea for forking the code into
-weasyprint and non-weasyprint varieties.
-
-PANDAS also relies on Jinja2 templates located in /usr/lib/python3/dist-packages/pandas/io/formats/templates
-And it would make a lot of sense to pass a custom template to the Styler to overcome certain problems.
+Everything is done with Jinja2 templates.  We built our own styler.
 
 Color printing direct from HTML:
 Chrome -- needs "More Settings -> Background Graphics" to print color
