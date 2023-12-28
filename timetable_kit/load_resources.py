@@ -57,7 +57,12 @@ template_loader = ChoiceLoader(
 )
 template_environment = Environment(
     loader=template_loader,
+    # Must configure autoescape and turn it OFF.  We're writing HTML here!
     autoescape=lambda x: False,
+    # trim_blocks: makes templates look nicer,
+    # by stripping newline-immediately-after-block.
+    # We have to watch for intended-newline-after-block.
+    trim_blocks=True,
 )
 
 font_loader = ChoiceLoader(

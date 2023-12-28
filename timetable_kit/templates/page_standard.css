@@ -22,7 +22,8 @@ we should avoid overflowing the width of A4 (since 215.9 - 10 = 205.9 < 210).
     /* Don't put a page break inside a single page if possible. */
     /* This will typically create appropriate page breaks with no further actions needed. */
     break-inside: avoid-page;
-}{#
+}
+{#
    Sooo.  We would like to do these in .tt-page, but we can't:
     break-before: page; -- Firefox will stuff a blank page before it, on printing
     break-after: page; -- Firefox will stuff a blank page after it, on printing

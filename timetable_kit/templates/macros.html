@@ -4,16 +4,13 @@
 
     These are Jinja2 macros.
 
+    br produces a <br>.
+    But for screen readers, put in a zero-width space and note that the linebreak is purely presentational.
+
     br_or_space produces <br> if value (need shorter lines), or space if not (need longer lines).
+    Usually used with key_on_right or landscape.
+    Same trick for screen readers.
 
-    Usually used with key_on_right.
-
-    For screen readers, put in a zero-width space and note that the linebreak is purely presentational.
-
-#}{% macro br_or_space(value) %}{#
-#}{% if value %}{#
-#}<wbr><br role="presentation">{#
-#}{% else %}{#
-#} {#
-#}{% endif %}{#
-#}{% endmacro %}
+#}
+{% macro br() %}<wbr><br role="presentation">{% endmacro %}
+{% macro br_or_space(value) %}{% if value %}{{ br }}{% else %} {% endif %}{% endmacro %}

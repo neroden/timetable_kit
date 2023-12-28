@@ -10,79 +10,87 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
       <th>Meaning</th>
     </tr>
   </thead>
-  <tbody>{#
-#}{% if all_stations_accessible %}
+  <tbody>
+{% if all_stations_accessible %}
     <tr>
       <td>{{accessible_icon}}</td>
       <td><b>All stations on this timetable</b> have platforms and trains accessible to people in wheelchairs{#
-#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
+          #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
 {% else %}{# not all stations accessible, the norm #}
     <tr>
       <td>{{accessible_icon}}</td>
       <td>Platform and train are accessible to people in wheelchairs{#
-#}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
-#}{% if wheelchair_advance_notice %}<br><b>48 hours advance notice required for{#
-#} wheelchair lifts at some stations</b>{% endif %}</td>
+          #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
+          #}{% if wheelchair_advance_notice %}<br><b>48 hours advance notice required for{#
+          #} wheelchair lifts at some stations</b>{% endif %}</td>
     </tr>
     <tr>
       <td>{{inaccessible_icon}}</td>
       <td>Platform and train are <b>not accessible</b> to people in wheelchairs</td>
-    </tr>{#
-#}{% endif %}{# station accessibility icons #}{#
-#}{% if key_baggage %}
+    </tr>
+{% endif %}{# station accessibility icons #}
+{% if key_baggage %}
     <tr>
       <td>{{baggage_icon}}</td>
       <td>Checked baggage service available</td>
-    </tr>{#
-#}{% endif %}{% if key_sleeper %}
+    </tr>
+{% endif %}
+{% if key_sleeper %}
     <tr>
       <td>{{sleeper_icon}}</td>
       <td>Sleeping car service available</td>
-    </tr>{#
-#}{% endif %}{% if key_missing_times %}
+    </tr>
+{% endif %}
+{% if key_missing_times %}
     <tr>
       <td><b>---</b></td>
       <td>Stops at this station, no specific time</td>
-    </tr>{#
-#}{% endif %}{% if key_d %}
+    </tr>
+{% endif %}
+{% if key_d %}
     <tr>
       <td><b>D</b></td>
       <td>Stops only to discharge passengers (may leave before time shown)</td>
-    </tr>{#
-#}{% endif %}{% if key_r %}
+    </tr>
+{% endif %}
+{% if key_r %}
     <tr>
       <td><b>R</b></td>
       <td>Stops only to receive passengers</td>
-    </tr>{#
-#}{% endif %}{% if key_l %}
+    </tr>
+{% endif %}
+{% if key_l %}
     <tr>
       <td><b>L</b></td>
       <td>May leave before time shown</td>
-    </tr>{#
-#}{% endif %}{% if key_f %}
+    </tr>
+{% endif %}
+{% if key_f %}
     <tr>
       <td><b>F</b></td>
       <td>Flag stop (only stops by request)</td>
-    </tr>{#
-#}{% endif %}{% if key_bus %}{#
-This says "can be booked through Amtrak" / "can be booked through VIA" etc.
--- don't use for connecting buses which require separate booking.  FIXME #}
+    </tr>
+{% endif %}
+{% if key_bus %}
+{#  This says "can be booked through Amtrak" / "can be booked through VIA" etc.
+    -- don't use for connecting buses which require separate booking.  FIXME #}
     <tr>
       <td><b>{{bus_icon}}</b></td>
       <td>{{connecting_bus_key_sentence}}</td>
-    </tr>{#
-#}{% endif %}{% if key_tz %}
+    </tr>
+{% endif %}
+{% if key_tz %}
     <tr>
       <td><b>TZ</b></td>
       <td>Time zone: {#
-#}{% if atlantic_time %}AT (Atlantic Time), {% endif %}{#
-#}ET (Eastern Time), {#
-#}CT (Central Time), {#
-#}{% if central_standard_time %}CST (Central Standard Time), {% endif %}{#
-#}MT (Mountain Time), {#
-#}{% if mountain_standard_time %}MST (Mountain Standard Time), {% endif %}{#
-#}or PT (Pacific Time)</td>
-    </tr>{#
-#}{% endif %}{#
-#}  </tbody>
+            #}{% if atlantic_time %}AT (Atlantic Time), {% endif %}{#
+            #}ET (Eastern Time), {#
+            #}CT (Central Time), {#
+            #}{% if central_standard_time %}CST (Central Standard Time), {% endif %}{#
+            #}MT (Mountain Time), {#
+            #}{% if mountain_standard_time %}MST (Mountain Standard Time), {% endif %}{#
+            #}or PT (Pacific Time)</td>
+    </tr>
+{% endif %}
+  </tbody>
 </table>

@@ -4,7 +4,8 @@ Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 A full HTML file containing multiple pages (compiled previously).
-#}<!DOCTYPE html>
+#}
+<!DOCTYPE html>
 <html lang="{{lang}}">
 <head>
 <meta charset="{{encoding}}">
@@ -13,9 +14,14 @@ A full HTML file containing multiple pages (compiled previously).
 
 {% include "licensing.txt" %}
 -->
-{% if internal_stylesheet %}<style>
+{% if internal_stylesheet %}
+<style>
 {% include "stylesheet.css" %}{# loaded through same loader as this, templates loader #}
-</style>{% elif external_stylesheet %}<link rel="stylesheet" href="{{external_stylesheet}}"/>{% endif %}
+
+</style>
+{% elif external_stylesheet %}
+<link rel="stylesheet" href="{{external_stylesheet}}"/>
+{% endif %}
 </head>
 <body>{#
 #}{% for page in pages %}{#

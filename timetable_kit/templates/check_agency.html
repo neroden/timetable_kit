@@ -2,10 +2,12 @@
    Part of timetable_kit
    Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
-#}{%- from "macros.html" import br_or_space -%}{#
+#}
+{%- from "macros.html" import br -%}
+{%- from "macros.html" import br_or_space -%}{#
 #}<div class="check-agency">{#
 #}<p>According to the {{ gtfs_data_link }}, {#
-#}this was intended to be valid from <b>{{start_date}}</b> through <b>{{end_date}}</b>.<br>{#
+#}this was intended to be valid from <b>{{start_date}}</b> through <b>{{end_date}}</b>.{{ br() }}{#
 #}<b>{{ always_check_disclaimer }}</b>{#
 #}{{ br_or_space(not landscape) }}{#
 #}Timetables may change for holidays, special events, construction projects, and other reasons.{#
