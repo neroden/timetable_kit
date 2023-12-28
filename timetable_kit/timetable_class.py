@@ -13,7 +13,7 @@ from timetable_kit.debug import debug_print
 
 class Timetable:
     """Represents a laid-out timetable with styling"""
-    __init__(self, spec_df: DataFrame) -> None:
+    def __init__(self, spec_df: pd.DataFrame) -> None:
         """Pass in the CSV part of a spec as a dataframe, which is used only for its shape"""
         (row_index, col_index) = spec_df.axes
         # Timetable (text)
