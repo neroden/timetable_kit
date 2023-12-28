@@ -23,10 +23,12 @@ A full HTML file containing multiple pages (compiled previously).
 <link rel="stylesheet" href="{{external_stylesheet}}"/>
 {% endif %}
 </head>
-<body>{#
-#}{% for page in pages %}{#
-#}{{ page.html_text }}{# This contains the <div> for an entire page #}{#
-#}{% endfor %}{#
-#}{% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}{#
-#}</body>
+<body>
+{% for page in pages %}
+{#   The following contains the <div> for an entire page #}
+{{   page.html_text }}
+{% endfor %}
+{% if for_rpa %}{% include "rpa_logo.html" %}{% endif %}
+
+</body>
 </html>

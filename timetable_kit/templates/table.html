@@ -7,18 +7,16 @@ Looping Jinja2 file to generate a table.
 Used by styler.py.
 #}
 <table {{ table_attributes }} >
+  <thead>
+{% for row_num in thead_row_nums %}
+{%   include "table_row.html" %}
+
+{% endfor %}{# thead_row_nums #}
+  </thead>
   <tbody>
-{% for row_num in row_nums %}
-    <tr>
-{%   for col_num in col_nums %}
-{#    This typically looks like: <td class="foo" role="bar">text</td> #}
-      <{% if th[col_num][row_num] %}th{% else %}td{% endif %}{#
-        #} class="row{{row_num}} col{{col_num}}{#
-        #} {{ classes[col_num][row_num] }}"{#
-        #} {{ attributes[col_num][row_num] }}>{{ text[col_num][row_num] }}{#
-        #}</{% if th[col_num][row_num] %}th{% else %}td{% endif %}>
-{%   endfor %}{# col_num #}
-    </tr>
-{% endfor %}{# row_num #}
+{% for row_num in tbody_row_nums %}
+{%   include "table_row.html" %}
+
+{% endfor %}{# tbody_row_nums #}
   </tbody>
 </table>
