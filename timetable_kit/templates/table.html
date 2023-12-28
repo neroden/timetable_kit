@@ -1,0 +1,22 @@
+{# table.html
+   Part of timetable_kit
+   Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+Looping Jinja2 file to generate a table.
+
+Used by styler.py.
+#}
+<table {{ table_attributes }} >
+  <tbody>
+{% for row_num in row_nums %}{#
+#}    <tr>
+{% for col_num in col_nums %}{#
+#}{% if th[col_num][row_num] %}<th{% else %}<td{% endif %}{#
+#} class="row{{row_num}} col{{col_num}} {{ classes_t[col_num][row_num] }}"{#
+#} {{ attributes_t[col_num][row_num] }}>{{ tt[col_num][row_num] }}{#
+#}{% if th[col_num][row_num] %}</th>{% else %}</td>{% endif %}
+#}{% endfor %}{# col_num #}{#
+#}    </tr>
+{% endfor %}{# row_num #}{#
+#}  </tbody>
+</table>
