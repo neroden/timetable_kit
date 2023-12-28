@@ -874,7 +874,8 @@ def fill_tt_spec(
     debug_print(1, "Prepped timetable structure.")
 
     # Debug-print the spec in its "final" form
-    debug_print(1, "Spec CSV immediately before filling timetable: ", spec.csv)
+    debug_print(1, "Spec CSV immediately before filling timetable:")
+    debug_print(1, spec.csv)
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
     # FIXME.
@@ -906,7 +907,13 @@ def fill_tt_spec(
         train_specs = []
 
         # First do the stuff for the column headers.
-        column_header_css_list = base_column_header_css_list
+
+        # reset the CSS list each time through the loop.
+        # Note!  Mustn't use this, it won't work becuase it creates an object alias:
+        # column_header_css_list = base_column_header_css_list
+        # Do not do that!
+        column_header_css_list = [*base_column_header_css_list]
+
         match column_key_str.lower():
             case "station" | "stations":
                 # in a span
@@ -960,9 +967,7 @@ def fill_tt_spec(
                     if header_styling_train_spec:
                         column_header_css_list.append(
                             get_time_column_stylings(
-                                header_styling_train_spec,
-                                route_from_train_spec_local,
-                                output_type="class",
+                                header_styling_train_spec, route_from_train_spec_local
                             )
                         )
                 # Check whether this column has any buses which should be marked
@@ -1029,9 +1034,7 @@ def fill_tt_spec(
                         blank_train_spec = cell_codes["train_spec"]
                         cell_css_list.append(
                             get_time_column_stylings(
-                                blank_train_spec,
-                                route_from_train_spec_local,
-                                output_type="class",
+                                blank_train_spec, route_from_train_spec_local
                             )
                         )
                     else:
@@ -1074,9 +1077,7 @@ def fill_tt_spec(
                             # Color based on the first one which isn't noheader.
                             cell_css_list.append(
                                 get_time_column_stylings(
-                                    train_spec,
-                                    route_from_train_spec_local,
-                                    output_type="class",
+                                    train_spec, route_from_train_spec_local
                                 )
                             )
                             styled_already = True
@@ -1107,9 +1108,7 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0],
-                            route_from_train_spec_local,
-                            output_type="class",
+                            train_specs[0], route_from_train_spec_local
                         )
                     )
                 case ["days" | "days-of-week", _, reference_stop_code]:
@@ -1161,9 +1160,7 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0],
-                            route_from_train_spec_local,
-                            output_type="class",
+                            train_specs[0], route_from_train_spec_local
                         )
                     )
                 case [_, _, raw_text] if raw_text != "" and not cell_codes:
@@ -1302,9 +1299,7 @@ def fill_tt_spec(
                         if len(train_specs_to_check) == 1:
                             cell_css_list.append(
                                 get_time_column_stylings(
-                                    train_specs_to_check[0],
-                                    route_from_train_spec_local,
-                                    output_type="class",
+                                    train_specs_to_check[0], route_from_train_spec_local
                                 )
                             )
                     else:
@@ -1313,9 +1308,7 @@ def fill_tt_spec(
                         cell_css_list.append("time-cell")
                         cell_css_list.append(
                             get_time_column_stylings(
-                                train_spec,
-                                route_from_train_spec_local,
-                                output_type="class",
+                                train_spec, route_from_train_spec_local
                             )
                         )
 
