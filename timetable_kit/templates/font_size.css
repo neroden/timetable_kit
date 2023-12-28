@@ -21,11 +21,15 @@ The header usually has enlarged fonts, but these should have the same tiny font 
 Check on CSS priority and specificity when it comes to font sizes; this can get ugly!
 #}
 /* Font size for the page <div> itself, and for elements within that with the specified classes */
-#{{page_id}}, {# This gets the page div itself #}
-#{{page_id}} .services-header-text,{# A .services-header-text within the page #}
+{# This gets the page div itself #}
+#{{page_id}},
+{# A .services-header-text within the page #}
+#{{page_id}} .services-header-text,
 #{{page_id}} .access-header-text,
 #{{page_id}} .timezone-header-text
 {
-    font-size: {{font_size}};{% if not font_allow_ligatures %}
-    font-variant-ligatures: no-common-ligatures;{% endif %}
+    font-size: {{font_size}};
+{% if not font_allow_ligatures %}
+    font-variant-ligatures: no-common-ligatures;
+{% endif %}
 }
