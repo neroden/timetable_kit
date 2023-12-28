@@ -3,6 +3,7 @@ symbol_key.html: HTML for symbol key for timetable
 Part of timetable_kit
 Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 #}
+{% from "macros.html" import br %}
 <table id="{{ symbol_key_id }}" aria-label="Key for Symbols" class="symbol-key">
   <thead>
     <tr style="display: none;">
@@ -15,18 +16,18 @@ Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or lat
     <tr>
       <td>{{accessible_icon}}</td>
       <td><b>All stations on this timetable</b> have platforms and trains accessible to people in wheelchairs{#
-          #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible</td>
+          #}{% if key_on_right %}.{{ br() }}Some{% else %} &mdash; some{% endif %} station services may not be accessible.</td>
 {% else %}{# not all stations accessible, the norm #}
     <tr>
       <td>{{accessible_icon}}</td>
       <td>Platform and train are accessible to people in wheelchairs{#
-          #}{% if key_on_right %}<br>Some{% else %} &mdash; some{% endif %} station services may not be accessible{#
-          #}{% if wheelchair_advance_notice %}<br><b>48 hours advance notice required for{#
+          #}{% if key_on_right %}.{{ br() }}Some{% else %} &mdash; some{% endif %} station services may not be accessible.{#
+          #}{% if wheelchair_advance_notice %}{{ br() }}<b>48 hours advance notice required for{#
           #} wheelchair lifts at some stations</b>{% endif %}</td>
     </tr>
     <tr>
       <td>{{inaccessible_icon}}</td>
-      <td>Platform and train are <b>not accessible</b> to people in wheelchairs</td>
+      <td>Platform and train are <b>not accessible</b> to people in wheelchairs.</td>
     </tr>
 {% endif %}{# station accessibility icons #}
 {% if key_baggage %}
