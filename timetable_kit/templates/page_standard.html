@@ -17,7 +17,7 @@ ORCA screenreader will not automatically assign role="contentinfo" to a <footer>
 #}
 <section id="{{ page_id }}" role="document" aria-label="{{ aria_label }}"{#
 #} class="tt-page {% if landscape %}landscape-page{% else %}portrait-page{% endif %} standard-font-size">
-<header role="banner" aria-label="{{ aria_label }}">
+<header role="banner" aria-label="{{ aria_label }} header">
 <h1 id="{{ heading_id }}" class="{{ agency_css_class }}">{{heading}}</h1>
 {% include "check_agency.html" %}
 
@@ -26,12 +26,12 @@ ORCA screenreader will not automatically assign role="contentinfo" to a <footer>
 {% endif %}
 </header>
 <div class="{% if key_on_right %}bigbox-layout-key-on-right{% else %}bigbox-layout{% endif %}">
-<div role="main" aria-label="{{ aria_label }}"{#
+<div role="main" aria-label="{{ aria_label }} timetable"{#
 #} class="{% if key_on_right %}bigbox-timetable-key-on-right{% else %}bigbox-timetable{% endif %}">
 {{timetable}}
 </div><!-- bigbox-timetable -->
 <div class="{% if key_on_right %}bigbox-keys-key-on-right{% else %}bigbox-keys{% endif %}">
-<aside role="complementary" aria-label="{{ aria_label }}">
+<aside role="complementary" aria-label="{{ aria_label }} key">
 {% include "symbol_key.html" %}
 {% if central_standard_time %}
 {%   include "central_standard_time.html" %}
@@ -48,7 +48,7 @@ ORCA screenreader will not automatically assign role="contentinfo" to a <footer>
 <p class="bottom-text {% if compress_credits %}compressed-credits{% endif %}">{{bottom_text}}</p>
 {% endif %}
 </aside>
-<footer role="contentinfo" aria-label="{{ aria_label }}">
+<footer role="contentinfo" aria-label="{{ aria_label }} credits">
 {% include "unofficial_agency.html" %}
 {% include "credit.html" %}
 </footer>

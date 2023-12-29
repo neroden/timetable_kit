@@ -826,6 +826,13 @@ def fill_tt_spec(
                 t.text.iloc[0, x] = text_presentation.get_station_column_header(
                     doing_html=doing_html
                 )
+                # Mark the entire column as "rowheader"...
+                # This is intended for screenreaders.  It ALMOST works.
+                # Unfortunately a bug in ORCA will read "Via, Go" instead of reading "Oakville"
+                # when recapitulating the row header.  This is confusing so don't activate.
+                # for y in range(1, row_count):
+                #    t.attributes.iloc[y,x] = 'role="rowheader"'
+
             case "services":
                 # in a span
                 t.text.iloc[0, x] = text_presentation.get_services_column_header(
@@ -955,10 +962,7 @@ def fill_tt_spec(
                 case ["route-name", ck, raw_text] if ck in special_column_names:
                     # Usually blank for special columns, but could be free-written text
                     cell_css_list.append("route-name-cell")
-                    if raw_text:
-                        t.text.iloc[y, x] = raw_text
-                    else:
-                        t.text.iloc[y, x] = ""
+                    t.text.iloc[y, x] = raw_text or ""
                 case ["route-name", _, _]:
                     # Line for route names.
                     cell_css_list.append("route-name-cell")
@@ -997,18 +1001,22 @@ def fill_tt_spec(
                         separator = "\n"
                     full_styled_route_names = separator.join(styled_route_names)
                     t.text.iloc[y, x] = full_styled_route_names
-                case ["updown", ck, _] if ck in special_column_names:
+                case ["updown", ck, raw_text] if ck in special_column_names:
                     cell_css_list.append("updown-cell")
-                    t.text.iloc[y, x] = ""
+                    t.text.iloc[y, x] = raw_text or ""
                 case ["updown", _, _]:
                     # Special line just to say "Read Up" or "Read Down"
                     cell_css_list.append("updown-cell")
                     t.text.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
-                case ["days" | "days-of-week", ck, _] if ck in special_column_names:
+                case [
+                    "days" | "days-of-week",
+                    ck,
+                    raw_text,
+                ] if ck in special_column_names:
                     cell_css_list.append("days-of-week-cell")
-                    t.text.iloc[y, x] = ""
+                    t.text.iloc[y, x] = raw_text or ""
                 case ["days" | "days-of-week", _, ""]:
                     cell_css_list.append("days-of-week-cell")
                     # No reference stop?  Maybe this should be blank.
@@ -1081,9 +1089,13 @@ def fill_tt_spec(
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
                     t.text.iloc[y, x] = raw_text
-                case ["origin" | "destination", ck, _] if ck in special_column_names:
+                case [
+                    "origin" | "destination",
+                    ck,
+                    raw_text,
+                ] if ck in special_column_names:
                     # Free-written text was checked earlier
-                    t.text.iloc[y, x] = ""
+                    t.text.iloc[y, x] = raw_text or ""
                 case ["origin", _, _]:
                     # Get the originating station for the train, and
                     # IF it is not in this timetable, print something appropriate
@@ -1127,11 +1139,11 @@ def fill_tt_spec(
                     # t.th.iloc[y, x] = True
                     # t.attributes.iloc[y, x] = 'scope="row"'
                     # So it's not OK.
-
                     # Try this instead:
                     # t.attributes.iloc[y,x] = 'role="rowheader"'
                     # This works better.  But it goes weird when transitioning from
                     # a header colum into the row.  FIXME
+                    # We instead run through the whole column earlier (processing the headers).
 
                     # Now for screen readers we don't want to read that WHOLE thing
                     # every time we're looking at a cell, but we do want to read the city.
