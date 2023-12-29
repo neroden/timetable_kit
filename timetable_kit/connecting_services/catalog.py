@@ -11,10 +11,10 @@ connecting_services_csv_filename
 The exported data is connecting_services_df (as a DataFrame) and
 connecting_services_dict (as a dict)
 """
-
-
 # For reading a string as a CSV
 from io import StringIO
+
+from jinja2 import Template  # for typehints
 
 # We need PANDAS for this
 import pandas as pd
@@ -41,13 +41,17 @@ connecting_services_dict: dict | None = None
 connecting_services_df: dict | None = None
 
 # Internal use: Jinja templates after loading them
-_connecting_service_logo_tpl: str | None = None
-_connecting_service_logo_key_tpl: str | None = None
+_connecting_service_logo_tpl: Template | None = None
+_connecting_service_logo_key_tpl: Template | None = None
 
 
 def _generate_logo_html(df_row):
     """A clever routine to apply JINJA template to a row and get a value for a new
     column, which will be the HTML to refer to the logo (in a station name box)"""
+    # Retrieve memoized Template, or build if necessary
+    if _connecting_service_logo_tpl is None:
+        initialize()
+    assert _connecting_service_logo_tpl is not None  # Silence MyPy
     # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
     output = _connecting_service_logo_tpl.render(params)
@@ -58,14 +62,17 @@ def _generate_logo_key_html(df_row):
     """A clever routine to apply JINJA template to a row and get a value for a new
     column, which will be the HTML to explain the logo in the symbol key for the
     timetable."""
+    # Retrieve memoized Template, or build if necessary
+    if _connecting_service_logo_key_tpl is None:
+        initialize()
+    assert _connecting_service_logo_key_tpl is not None  # Silence MyPy
     # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
     output = _connecting_service_logo_key_tpl.render(params)
     return output
 
 
-### FUNCTIONS ###
-def _initialize():
+def initialize():
     """Initialize the connecting services DataFrame and dict from a suitable file in the
     package."""
     # Don't print these, it interferes with output because debug_level isn't set yet.
@@ -142,9 +149,12 @@ def _initialize():
 def get_filenames_for_all_logos() -> list[str]:
     """Get the list of filenames for logos (without directories), for installing with
     the HTML files."""
-    # Pull the appropriate column, convert to a list
+    # Retrieve memoized DataFrame, or build if necessary
+    if connecting_services_df is None:
+        initialize()
     assert connecting_services_df is not None  # Silence MyPy
     logo_svg_filenames = connecting_services_df["svg_filename"].tolist()
+    # Pull the appropriate column, convert to a list
     # debug_print(1, logo_svg_filenames)
     filtered_logo_svg_filenames = [
         filename
@@ -156,6 +166,9 @@ def get_filenames_for_all_logos() -> list[str]:
 
 def get_css_for_all_logos() -> str:
     """Get the CSS code to style all the icons we're using."""
+    # Retrieve memoized DataFrame, or build if necessary
+    if connecting_services_df is None:
+        initialize()
     assert connecting_services_df is not None  # Silence MyPy
     logo_css_filenames = connecting_services_df["css_filename"].tolist()
     logo_css_list = [
@@ -167,11 +180,9 @@ def get_css_for_all_logos() -> str:
     return logo_css_all
 
 
-###### INITIALIZATION CODE ######
-# Initialize the globals when this file is loaded.
-# Three stages.
-_initialize()
-
 ##### TESTING CODE ######
 if __name__ == "__main__":
+    # Retrieve memoized DataFrame, or build if necessary
+    if connecting_services_df is None:
+        initialize()
     print(connecting_services_dict)

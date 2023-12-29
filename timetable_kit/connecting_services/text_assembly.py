@@ -6,11 +6,16 @@
 
 from timetable_kit.debug import debug_print
 
+# Needed to initialize the catalog if it hasn't been initialized yet
+import timetable_kit.connecting_services.catalog as catalog  # For catalog.initialize()
+
 # This contains the actual data
+# We bind it locally in each function after calling catalog.initalize.
 from timetable_kit.connecting_services.catalog import connecting_services_dict
 
-# This snags the CSS
+# This snags the CSS (it's a function)
 from timetable_kit.connecting_services.catalog import get_css_for_all_logos
+
 
 # For a safe version of <br>
 from timetable_kit.text_assembly import SAFE_BR
@@ -21,6 +26,12 @@ def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str
 
     If no icon, return suitable HTML for the connecting service's alt name.
     """
+    # Initialize memoized dicts if not done yet
+    global connecting_services_dict
+    if connecting_services_dict is None:
+        catalog.initialize()
+        # Have to rebind the name (the version from "import" is still None!)
+        connecting_services_dict = catalog.connecting_services_dict
     assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
     try:
@@ -40,6 +51,12 @@ def get_connecting_service_logo_html(connecting_service, doing_html=True) -> str
 
 def get_connecting_service_key_html(connecting_service, doing_html=True) -> str:
     """Return suitable HTML for a key for the connecting service."""
+    # Initialize memoized dicts if not done yet
+    global connecting_services_dict
+    if connecting_services_dict is None:
+        catalog.initialize()
+        # Have to rebind the name (the version from "import" is still None!)
+        connecting_services_dict = catalog.connecting_services_dict
     assert connecting_services_dict is not None  # Silence MyPy
     # Fish out the data for the correct service
     try:
@@ -67,6 +84,12 @@ def get_keys_html(services_list, one_line=True) -> str:
     """
     # TODO: this should probably be a table for screen reader purposes
 
+    # Initialize memoized dicts if not done yet
+    global connecting_services_dict
+    if connecting_services_dict is None:
+        catalog.initialize()
+        # Have to rebind the name (the version from "import" is still None!)
+        connecting_services_dict = catalog.connecting_services_dict
     assert connecting_services_dict is not None  # Silence MyPy
     # Bail out early if there are no connecting services
     if not services_list:

@@ -27,9 +27,6 @@ from timetable_kit.debug import set_debug_level, debug_print
 # This is stashed in a class variable
 from timetable_kit.via.connecting_services_data import connecting_services_dict
 
-# Find the HTML for a specific connecting agency's logo
-from timetable_kit.connecting_services import get_connecting_service_logo_html
-
 # For get_route_name
 import timetable_kit.via.route_names as route_names
 
