@@ -51,7 +51,14 @@ Firefox -- print previews are missing cell borders but they WILL print.
 File storage:
 https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
+Don't use cache, it's for locally generated "throwaway" files.
 $XDG_CACHE_HOME (~/.cache) for the various GTFS auto-downloads, Amtrak station DB download (cached)
+FHS location: /var/cache.
+
+Use this.
 $XDG_DATA_HOME:$XDG_DATA_DIRS (~/.local/share,/usr/local/share,/usr/share) for overrideable portable data (specs, templates)
+FHS location: in practice, /var/lib (/<program>) is used.
+
+So far the program is really configuration-free.
 $XDG_CONFIG_HOME:$XDG_CONFIG_DIRS (~/.config,/etc,/etc/xdg,/usr/share) for config files
 https://xdgbasedirectoryspecification.com/
