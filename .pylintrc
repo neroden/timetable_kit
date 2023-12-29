@@ -16,8 +16,9 @@ disable=
     unnecessary-lambda-assignment,
     # The ones below here are always bad ideas
     unspecified-encoding,
-    no-else-return,
     useless-return,
+    no-else-return,
+    no-else-continue,
     line-too-long,
     too-many-lines,
     too-many-instance-attributes,
