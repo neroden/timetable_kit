@@ -10,21 +10,12 @@ This fills in the symbol key and text around it to make a full page.
 This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder. This
 uses Jinja2, via the load_resources module.
 """
-
-# for typed return value
-from typing import NamedTuple
-
 # Other people's packages
 import datetime  # for getting today's date for credit on the timetable
-import pandas as pd
 
 # My packages
-# This is tricky.
 # We need runtime data such as the subpackage for the agency (amtrak, via, etc.)
-import timetable_kit.runtime_config
-
 # And we need a shorthand way to refer to it
-from timetable_kit.runtime_config import agency
 from timetable_kit.runtime_config import agency_singleton
 
 # The type, used for argument passing

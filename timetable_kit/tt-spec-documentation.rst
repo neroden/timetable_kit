@@ -218,12 +218,15 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "heading": "This is the heading at the top of the page.  Will be prefixed by 'Amtrak's' or 'VIA Rail:' for those agencies.",
     "agency_css_class": "Override the special agency CSS classes used for the timetable. Used to eliminate the automatic prefixing of 'Amtrak's' or to change the heading color.",
     "aria_label": "This is a short name for the page, like 'Maple Leaf'; will be used to generate aria-label values for page landmarks for screenreaders.  You SHOULD include this.  Note underscore, not hyphen.",
-    "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
-    "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "output_filename": "special",
     "reference_date": "20220528",
     "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains.",
     "bottom_text": "This will be printed less prominently underneath the symbol key.  Useful for noting seasonal stations, ticketing restrictions (no Homewood to Chicago tickets except for connecting passengers), or other oddities.",
+    "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
+    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
+    "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable."
+    "times_24h": "Display times in 24-hour time, as 22:01 rather than the default 10:01P"
+    "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)",
     "key_baggage": "If present, include the key for checked baggage",
     "key_d": "If present, include the key for 'discharge passengers only' (D) ",
@@ -232,20 +235,19 @@ This is a JSON file with a list of key-value pairs.  So far the defined keys are
     "key_f": "If present, include the key for flag stops",
     "key_tz": "If present, include the key for time zones",
     "mountain_standard_time": "include information about Arizona not using Daylight Savings Time",
+    "central_standard_time": "include information about Saskatchewan not using Daylight Savings Time",
     "atlantic_time": "include the Atlantic time zone for Halifax",
     "key_bus": "If present, include the key for the bus icon",
     "use_bus_icon_in_cells": "If present, use the bus icon in time cells for buses.  Otherwise, don't.",
     "all_stations_accessible": "The key should say that all stations are accessible, rather than putting the icons for accessible and inaccessible.  Used to save the space of the access column; please don't do this unless you need the space."
     "compress_credits": "Save a little bit of space by removing spacing between lines in the credits",
-    "train_numbers_side_by_side": "If present and truthy, put train numbers at the top of a column side by side like 7/27, desired for trains which split; the default is to stack them one over another like 280 over 6280, desired for connecting trains.",
-    "programmers_warning": "If present, will be displayed when generating timetable.  A warning for timetable which require manual editing of the GTFS files or something similar.",
-    "dwell_secs_cutoff": "When dwell is shorter than this number of seconds, no arrival time will be displayed, just departure.  Default is 300 seconds (5 minutes) but it can be made longer to squeeze more lines into the timetable."
     "font_name": "If set, use a nonstandard font (in CSS -- should be a CSS font name)",
     "font_size": "If set, use a nonstandard base font size (in CSS -- should be a CSS font size)",
     "font_allow_ligatures": "Defaults false because ligatures are hard to read in the tiny fonts which allow for compact timetables.  Set to True if the font size is big enough to use ligatures",
     "box_time_characters": "If set, use CSS boxes to try to line up the times.  For fonts which lack tabular-nums.",
     "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load.",
     "tt_id": "If present, this will have some prefixes added (P_, T_, etc) and be used to generate unique IDs for the HTML page.  Normally you should let the program determine these.",
+    "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
  }
 
 reference_date is critically important and is required unless passed at the command line.

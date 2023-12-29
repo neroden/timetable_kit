@@ -19,6 +19,7 @@ from timetable_kit.runtime_config import agency_choices
 
 
 def add_agency_argument(parser: argparse.ArgumentParser):
+    """Add the common --agency argument to a parser."""
     parser.add_argument(
         "--agency",
         "-a",
@@ -89,6 +90,7 @@ def add_debug_argument(parser: argparse.ArgumentParser):
 
 
 def add_output_dirname_argument(parser: argparse.ArgumentParser):
+    """Add the common --output-dir argument to a parser."""
     parser.add_argument(
         "--output-directory",
         "--output-dir",
@@ -102,6 +104,7 @@ def add_output_dirname_argument(parser: argparse.ArgumentParser):
 
 
 def add_input_dirname_argument(parser: argparse.ArgumentParser):
+    """Add the common --input-dir argument to a parser."""
     parser.add_argument(
         "--input-directory",
         "--input-dir",
@@ -115,6 +118,7 @@ def add_input_dirname_argument(parser: argparse.ArgumentParser):
 
 
 def add_spec_files_argument(parser: argparse.ArgumentParser):
+    """Add the --specs argument to a parser."""
     parser.add_argument(
         "--spec",
         "--specs",
@@ -136,6 +140,7 @@ def add_spec_files_argument(parser: argparse.ArgumentParser):
 
 
 def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
+    """Add the positional specs argument to a parser."""
     parser.add_argument(
         "positional_spec_files",
         help="""

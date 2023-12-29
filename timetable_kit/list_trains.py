@@ -17,7 +17,6 @@ import sys  # for exit
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
 from timetable_kit.feed_enhanced import FeedEnhanced
-from timetable_kit.initialize import filter_feed_for_utilities
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
 from timetable_kit.runtime_config import agency_singleton
@@ -154,6 +153,7 @@ def report_dupes(tsn_list: list[str]):
 
 
 def make_argparser():
+    """Argument parser for list_trains"""
     parser = argparse.ArgumentParser(
         description="""
                     With ONE argument, produce list of trains/buses (trip_short_name) which stop at that stop.
@@ -219,8 +219,8 @@ if __name__ == "__main__":
     # Initialize the feed & the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    today_feed = filter_feed_for_utilities(
-        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    today_feed = master_feed.filter_for_utilities(
+        reference_date=args.reference_date, day_of_week=args.day
     )
 
     stops = args.stops

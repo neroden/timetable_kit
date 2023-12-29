@@ -13,10 +13,10 @@ from typing import NamedTuple  # for TimeTuple
 
 from datetime import datetime, timedelta  # for time zones
 from zoneinfo import ZoneInfo  # still for time zones
+import html  # used for html.escape and escaping with href_wrap
 
 import pandas as pd
 
-import html  # used for escaping with href_wrap
 
 from timetable_kit.debug import debug_print
 
@@ -314,9 +314,9 @@ def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
     try:
         longhours, mins, secs = [int(x) for x in timestr.split(":")]
         longhours += zonediff  # this is the timezone adjustment
-    except:
+    except Exception as exc:
         # Winnipeg-Churchill timetable has NaNs -- don't let it get here!
-        raise GTFSError("Timestr didn't parse right", timestr)
+        raise GTFSError("Timestr didn't parse right", timestr) from exc
         # Return all-zeroes to identify where it happened
         # return TimeTuple(day=0,pm=0,hour=0,hour24=0,min=0,sec=0)
     # Note: the following does the right thing for negative hours
@@ -338,9 +338,9 @@ def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
     """
     # Note that this is very explicitly designed to be fixed width
     time_text = [
-        "{: >2}".format(time.hour24),
+        f"{time.hour24 : >2}",
         ":",
-        "{:0>2}".format(time.min),
+        f"{time.min    :0>2}",
     ]
     time_str = "".join(time_text)  # String suitable for plaintext
     if box_time_characters:
@@ -384,9 +384,9 @@ def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
     if hour == 0:
         hour = 12
     time_text = [
-        "{: >2}".format(hour),
+        f"{hour     : >2}",
         ":",
-        "{:0>2}".format(time.min),
+        f"{time.min :0>2}",
         ampm_str[time.pm],
     ]
     time_str = "".join(time_text)  # String suitable for plaintext
@@ -569,7 +569,7 @@ def timepoint_str(
     two_row=False,
     use_ar_dp_str=False,
     bold_pm=True,
-    use_24=False,
+    times_24h=False,
     use_daystring=False,
     long_days_box=False,
     short_days_box=False,
@@ -609,7 +609,7 @@ def timepoint_str(
     -- box_time_characters: put each character in the time in an HTML box; default is False.
         For use with fonts which don't have tabular nums.  A nasty hack; best to use a font
         which does have tabular nums.
-    -- use_24: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
+    -- times_24h: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
     -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html)
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
     -- long_days_box: Extra-long space for days, for SuMoTuWeTh five-day calendars.
@@ -635,7 +635,7 @@ def timepoint_str(
         box_time_characters = False
 
     # Pick function for the actual time printing
-    if use_24:
+    if times_24h:
         time_str_func = time_short_str_24
     else:
         time_str_func = time_short_str_12
@@ -657,7 +657,7 @@ def timepoint_str(
     if doing_html:
         if bold_pm and is_pm == 1:
             departure_time_str = "".join(["<b>", departure_time_str, "</b>"])
-        if use_24:
+        if times_24h:
             departure_time_str = "".join(
                 ['<span class="box-time24">', departure_time_str, "</span>"]
             )
@@ -681,7 +681,7 @@ def timepoint_str(
     if doing_html:
         if bold_pm and is_pm == 1:
             arrival_time_str = "".join(["<b>", arrival_time_str, "</b>"])
-        if use_24:
+        if times_24h:
             arrival_time_str = "".join(
                 ['<span class="box-time24">', arrival_time_str, "</span>"]
             )
@@ -695,7 +695,7 @@ def timepoint_str(
     blank_time_str = ""
     if doing_html:
         blank_rd_str = "".join(['<span class="box-rd">', "", "</span>"])
-        if use_24:
+        if times_24h:
             blank_time_str = "".join(['<span class="box-time24">', "", "</span>"])
         else:
             blank_time_str = "".join(['<span class="box-time12">', "", "</span>"])

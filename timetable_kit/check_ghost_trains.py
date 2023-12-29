@@ -141,7 +141,7 @@ def get_trains_from_csv(filename):
     # Make an incomplete TTSpec (no real aux)
     mini_spec = TTSpec({}, tt_spec_csv)
     # Extract the train specs from the top row as a list
-    train_specs_list = mini_spec.train_specs_list()
+    train_specs_list = mini_spec.get_train_specs_list()
     # Flatten 48/448 notations, eliminate "noheader" suffixes
     flattened_train_specs_set = flatten_train_specs_list(train_specs_list)
     # Eliminate "monday", "tuesday" etc suffixes

@@ -18,10 +18,6 @@ import shutil  # To copy files
 from pathlib import Path
 import html  # for html.escape
 
-import pandas as pd
-
-import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
-
 from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
 ############
@@ -34,17 +30,9 @@ from timetable_kit import runtime_config
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
 from timetable_kit.debug import set_debug_level, debug_print
-from timetable_kit.errors import (
-    GTFSError,
-    TwoStopsError,
-    NoTripError,
-    TwoTripsError,
-    InputError,
-)
 from timetable_kit.file_handling import read_list_file
 
 from timetable_kit.convenience_types import HtmlAndCss
-from timetable_kit.feed_enhanced import FeedEnhanced
 
 # We call these repeatedly, so give them shorthand names
 from timetable_kit.runtime_config import agency

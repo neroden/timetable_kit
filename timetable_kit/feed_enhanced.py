@@ -16,6 +16,8 @@ from typing import Type, Self, NamedTuple
 
 from operator import not_  # Needed for bad_service_id filter
 
+import datetime  # for filter_for_utilities, to get current date if necessary
+
 from pandas import DataFrame, Series
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
@@ -25,8 +27,10 @@ from timetable_kit.convenience_types import GTFSDate, GTFSDay
 from timetable_kit.errors import (
     NoTripError,
     TwoTripsError,
+    TwoStopsError,
     InputError,
 )
+from timetable_kit.debug import debug_print
 
 GTFS_DAYS = (
     "monday",
@@ -49,6 +53,8 @@ class DateRange(NamedTuple):
 
 
 class FeedEnhanced(gtfs_kit.Feed):
+    """GTFS feed class enhanced for timetable_kit use"""
+
     def __init__(
         self,
         dist_units: str,
@@ -355,6 +361,43 @@ class FeedEnhanced(gtfs_kit.Feed):
         new_feed.stop_times = self.stop_times[self.stop_times.trip_id.isin(trip_ids)]
         return new_feed
 
+    def filter_for_utilities(self: Self, reference_date=None, day_of_week=None):
+        """Filter the feed down based on command line arguments, for the auxiliary utility
+        programs such as list_trains.py and list_stations.py.
+
+        Returns a new, filtered feed.
+
+        reference_date is from the command line argument --date.
+        It will default to the present day if not specified.
+
+        day_of_week is as given in command line argument --day: either a GTFS day,
+        "weekend", or "weekday"
+        """
+        if reference_date is None:
+            reference_date = datetime.date.today().strftime("%Y%m%d")
+        debug_print(1, "Working with reference date ", reference_date, ".", sep="")
+        today_feed = self.filter_by_dates(reference_date, reference_date)
+
+        # Restrict by day(s) of week if specified.
+        match day_of_week:
+            case "weekday":
+                days_list = ["monday", "tuesday", "wednesday", "thursday", "friday"]
+                debug_print(1, "Restricting to weekdays.")
+                today_feed = today_feed.filter_by_days_of_week(days_list)
+            case "weekend":
+                days_list = ["saturday", "sunday"]
+                debug_print(1, "Restricting to weekends.")
+                today_feed = today_feed.filter_by_days_of_week(days_list)
+            case None:
+                # No filtering necessary
+                pass
+            case _:
+                if day_of_week not in GTFS_DAYS:
+                    raise (InputError, "Specified day of week not understood.")
+                debug_print(1, "Restricting to ", day_of_week, ".", sep="")
+                today_feed = today_feed.filter_by_day_of_week(day_of_week)
+        return today_feed
+
     def get_single_trip(self: Self) -> Series:
         """If this feed contains only one trip, return the trip.
 
@@ -445,9 +488,7 @@ class FeedEnhanced(gtfs_kit.Feed):
             # This error doesn't happen in practice.
             # We used to decode the trip_id and stop_id to a tsn and stop_code,
             # but this is so rare it's OK to force the user to do that.
-            raise TwoStopsError(
-                f"Trip id", trip_id, "stops at stop id", stop_id, "twice."
-            )
+            raise TwoStopsError(f"Trip id {trip_id} stops at stop id {stop_id} twice.")
         timepoint = timepoint_df.iloc[0]  # Pull out the one remaining row
         return timepoint
 

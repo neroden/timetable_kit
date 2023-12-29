@@ -10,15 +10,11 @@ This module handles the actual *table*. For the text which goes around it and th
 see the page_layout module.
 """
 
-import pandas as pd
-
 # My packages
 from timetable_kit.debug import debug_print
 from timetable_kit.tsn import train_spec_to_tsn
 
 # We need the agency singleton (amtrak, via, etc.)
-import timetable_kit.runtime_config
-from timetable_kit.runtime_config import agency
 from timetable_kit.runtime_config import agency_singleton
 
 

@@ -97,7 +97,7 @@ special_row_names = {
 }
 
 
-class TTSpec(object):
+class TTSpec:
     """An entire TTSpec, both aux file and CSV spec file."""
 
     def __init__(self: Self, aux: dict, csv: pd.DataFrame) -> None:
@@ -121,6 +121,7 @@ class TTSpec(object):
         self.aux.setdefault("dwell_secs_cutoff", 300)
         self.aux.setdefault("use_bus_icon_in_cells", False)
         self.aux.setdefault("box_time_characters", False)
+        self.aux.setdefault("times_24h", False)
         # aria_label should be set in spec files.
         # Derive table_aria_label from it by appending "Timetable"
         # If it wasn't set, just use "Timetable".
@@ -192,11 +193,15 @@ class TTSpec(object):
     def _make_tt_id(filename: str) -> str:
         """Given a filename, sanitize and prefix it to make a good HTML ID."""
         # First remove directories and suffixes
-        input = PurePath(filename).stem
+        in_file = PurePath(filename).stem
         # Technically a lot is valid, but:
         # we want only ASCII numbers, letters, underscore, hyphen
         cleaned = "".join(
-            [c for c in input if c.isascii() and (c.isalnum() or c == "-" or c == "_")]
+            [
+                c
+                for c in in_file
+                if c.isascii() and (c.isalnum() or c == "-" or c == "_")
+            ]
         )
         # Finally add the prefix
         return "tt_" + cleaned
@@ -687,6 +692,7 @@ def fill_tt_spec(
     reference_date = str(spec.aux["reference_date"])
     debug_print(1, "Working with reference date ", reference_date)
 
+    times_24h = bool(spec.aux["times_24h"])
     train_numbers_side_by_side = bool(spec.aux["train_numbers_side_by_side"])
     use_bus_icon_in_cells = bool(spec.aux["use_bus_icon_in_cells"])
     box_time_characters = bool(spec.aux["box_time_characters"])
@@ -1311,6 +1317,7 @@ def fill_tt_spec(
                             reverse=reverse,
                             two_row=two_row,
                             use_ar_dp_str=this_column_gets_ardp,
+                            times_24h=times_24h,
                             use_daystring=use_daystring,
                             calendar=calendar,
                             long_days_box=long_days_box,

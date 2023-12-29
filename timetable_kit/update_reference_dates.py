@@ -14,6 +14,8 @@ import shutil
 import tempfile
 from pathlib import Path
 
+from timetable_kit.errors import InputError
+
 
 def make_argparser():
     """Generate argument parser for the update_reference_dates miniprogram."""
@@ -72,7 +74,7 @@ def update_reference_date_for_file(file: str | os.PathLike, new_date: str) -> No
     # Sanity check.  Date must be 8 digits (YYYYMMDD).
     test_pattern = r"[0-9]{8}"
     if not re.fullmatch(test_pattern, new_date):
-        raise Exception("Date is not in correct format: ", new_date)
+        raise InputError("Date is not in correct format: ", new_date)
 
     # Search and replace.
     search_pattern = r'"reference_date":\s*"([0-9]{8})"'

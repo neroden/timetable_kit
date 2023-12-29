@@ -93,7 +93,7 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     This is designed for situations where a single tsn has different schedules on
     different days of the week.  Annoying, and bad practice, but allowed by GTFS.
     """
-    total_dict = dict()
+    total_dict: dict = {}
     for day in GTFS_DAYS:
         day_suffix = " " + day
         # We need to filter calendar and trips for the day of the week.

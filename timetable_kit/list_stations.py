@@ -10,10 +10,8 @@ import sys  # For sys.exit
 
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import debug_print, set_debug_level
-from timetable_kit.initialize import filter_feed_for_utilities
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
-from timetable_kit.runtime_config import agency_singleton
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -30,6 +28,7 @@ from timetable_kit.tsn import (
 
 
 def make_argparser():
+    """Argument parser for list_stations"""
     parser = argparse.ArgumentParser(
         description="""Get list of stations visited, in order, for a single train number (trip_short_name).
                        Useful when making tt-specs.
@@ -90,8 +89,8 @@ if __name__ == "__main__":
     # Initialize the feed & the singleton.
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
-    today_feed = filter_feed_for_utilities(
-        master_feed, reference_date=args.reference_date, day_of_week=args.day
+    today_feed = master_feed.filter_for_utilities(
+        reference_date=args.reference_date, day_of_week=args.day
     )
 
     optional_tsn = args.trip_short_name

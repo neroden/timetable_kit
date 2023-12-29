@@ -2,13 +2,11 @@
 # reverse_csv.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-
+"""This simply reverses the rows in a CSV file
+"""
 import sys
 import pandas as pd
 
-"""
-This simply reverses the rows in a CSV file
-"""
 
 # TO DO: do a smarter parse of this.
 # Keep header rows at the top,
