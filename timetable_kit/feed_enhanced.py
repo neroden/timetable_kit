@@ -2,7 +2,7 @@
 # feed_enhanced.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""This module extends the Feed class from gtfs_kit to add methods.
+"""This module extends the gtfs_kit.Feed class to add methods.
 
 The additions are primarily filter methods: designed to take a feed and filter
 a bunch of data out to make a *smaller* feed which is quicker to do future processing on.
@@ -17,7 +17,7 @@ from typing import Type, Self, NamedTuple
 from operator import not_  # Needed for bad_service_id filter
 
 from pandas import DataFrame, Series
-from gtfs_kit import Feed  # type: ignore # Tell MyPy this has no type stubs
+import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
 # These are used to distinguish str types with special restrictions.
 from timetable_kit.convenience_types import GTFSDate, GTFSDay
@@ -48,7 +48,7 @@ class DateRange(NamedTuple):
     earliest_end_date: str
 
 
-class FeedEnhanced(Feed):
+class FeedEnhanced(gtfs_kit.Feed):
     def __init__(
         self,
         dist_units: str,
@@ -87,7 +87,7 @@ class FeedEnhanced(Feed):
         )
 
     @classmethod
-    def enhance(cls: Type[Self], regular_feed: Feed) -> Self:
+    def enhance(cls: Type[Self], regular_feed: gtfs_kit.Feed) -> Self:
         enhanced = cls.__new__(cls)
         enhanced.__dict__ |= vars(regular_feed)
         setattr(enhanced, "shapes", None)
@@ -421,6 +421,64 @@ class FeedEnhanced(Feed):
         earliest_end_date = end_dates.min()
 
         return DateRange(latest_start_date, earliest_end_date)
+
+    def get_timepoint_from_trip_id(self: Self, trip_id: str, stop_id: str) -> Series:
+        """Given a single trip_id, stop_id, and a feed, extract a single timepoint.
+
+        This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
+
+        Throw TwoStopsError if it stops here twice.
+
+        Return "None" if it doesn't stop here.  This is not an error. (Used to throw
+        NoStopError if it doesn't stop here.  Too common.)
+        """
+        assert self.stop_times is not None  # Silence MyPy
+
+        # The following is fast:
+        timepoint_df = self.stop_times[
+            (self.stop_times["trip_id"] == trip_id)
+            & (self.stop_times["stop_id"] == stop_id)
+        ]
+        if timepoint_df.shape[0] == 0:
+            return None
+        if timepoint_df.shape[0] > 1:
+            # This error doesn't happen in practice.
+            # We used to decode the trip_id and stop_id to a tsn and stop_code,
+            # but this is so rare it's OK to force the user to do that.
+            raise TwoStopsError(
+                f"Trip id", trip_id, "stops at stop id", stop_id, "twice."
+            )
+        timepoint = timepoint_df.iloc[0]  # Pull out the one remaining row
+        return timepoint
+
+    def get_dwell_secs(self: Self, trip_id: str, stop_id: str) -> int:
+        """Gets dwell time in seconds for a specific trip_id at a specific station.
+
+        Should be used on a single-day feed (today_feed) to avoid TwoStopsErrors.
+
+        trip_id: relevant trip_id
+        stop_id: relevant stop_id
+
+        Used primarily to determine whether to put both arrival and departure times
+        in the timetable for this station.
+        """
+        timepoint = self.get_timepoint_from_trip_id(trip_id, stop_id)
+
+        if timepoint is None:
+            # If the train doesn't stop there, the dwell time is zero;
+            # and we need this behavior for make_stations_max_dwell_map
+            return 0
+
+        # There's a catch!  If this station is "discharge only" or "receive only",
+        # it effectively has no official dwell time, and should not get two lines
+        if timepoint.drop_off_type == 1 or timepoint.pickup_type == 1:
+            return 0
+
+        # Normal case:
+        departure_secs = gtfs_kit.timestr_to_seconds(timepoint.departure_time)
+        arrival_secs = gtfs_kit.timestr_to_seconds(timepoint.arrival_time)
+        dwell_secs = departure_secs - arrival_secs
+        return dwell_secs
 
 
 # TESTING CODE

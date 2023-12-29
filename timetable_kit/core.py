@@ -4,7 +4,8 @@
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Handle tt-specs and generate timetables.
 
-specs.py contains the core code for handling specs and filling in timetables.
+core.py contains the core code for handling specs and filling in timetables.
+Includes the TTSpec type.
 """
 
 #########################
@@ -555,101 +556,6 @@ def flatten_train_specs_list(train_specs_list):
 # Subroutines for fill_tt_spec
 
 
-def service_dates_from_trip_id(feed: FeedEnhanced, trip_id):
-    """Given a single trip_id, get the associated service dates by looking up the
-    service_id in the calendar.
-
-    Returns an ordered pair (start_date, end_date)
-    """
-    assert feed.calendar is not None  # Silence MyPy
-    assert feed.trips is not None  # Silence MyPy
-    # FIXME: The goal is to get the latest start date and earliest end date
-    # for all trains in a list.  Do this in a more "pandas" fashion.
-    service_id = feed.trips[feed.trips.trip_id == trip_id]["service_id"].squeeze()
-
-    calendar_row = feed.calendar[feed.calendar.service_id == service_id]
-
-    start_date = calendar_row.start_date.squeeze()
-    end_date = calendar_row.end_date.squeeze()
-
-    return [start_date, end_date]
-
-
-def get_timepoint_from_trip_id(feed: FeedEnhanced, trip_id, stop_id):
-    """Given a single trip_id, stop_id, and a feed, extract a single timepoint.
-
-    This returns the timepoint (as a Series) taken from the stop_times GTFS feed.
-
-    Throw TwoStopsError if it stops here twice.
-
-    Return "None" if it doesn't stop here.  This is not an error. (Used to throw
-    NoStopError if it doesn't stop here.  Too common.)
-    """
-    assert feed.stop_times is not None  # Silence MyPy
-
-    # Old, slower code:
-    # stop_times = feed.filter_by_trip_ids([trip_id]).stop_times # Unsorted
-    # timepoint_df = stop_times.loc[stop_times['stop_id'] == station_code]
-    # The following is MUCH faster -- cuts test case from 35 secs to 20 secs:
-    timepoint_df = feed.stop_times[
-        (feed.stop_times["trip_id"] == trip_id)
-        & (feed.stop_times["stop_id"] == stop_id)
-    ]
-    if timepoint_df.shape[0] == 0:
-        return None
-    if timepoint_df.shape[0] > 1:
-        # This is a bail-out error, it can afford to be slow:
-        # Note: the train number lookup only works if the feed is limited to one day,
-        # thus making the reverse lookup unique.
-        # It will throw an error otherwise.
-        trip_id_to_tsn_dict = make_trip_id_to_tsn_dict(feed)
-        tsn = trip_id_to_tsn_dict[trip_id]
-        raise TwoStopsError(
-            " ".join(
-                [
-                    "Train number",
-                    tsn,
-                    "with trip id",
-                    trip_id,
-                    "stops at stop_code",
-                    agency_singleton().stop_id_to_stop_code(stop_id),
-                    "more than once",
-                ]
-            )
-        )
-    timepoint = timepoint_df.iloc[0]  # Pull out the one remaining row
-    return timepoint
-
-
-def get_dwell_secs(today_feed: FeedEnhanced, trip_id, stop_id):
-    """Gets dwell time in seconds for a specific trip_id at a specific station.
-
-    today_feed: a feed
-    trip_id: relevant trip_id
-    stop_id: relevant stop_id
-
-    Used primarily to determine whether to put both arrival and departure times
-    in the timetable for this station.
-    """
-    timepoint = get_timepoint_from_trip_id(today_feed, trip_id, stop_id)
-
-    if timepoint is None:
-        # If the train doesn't stop there, the dwell time is zero;
-        # and we need this behavior for make_stations_max_dwell_map
-        return 0
-
-    # There's a catch!  If this station is "discharge only" or "receive only",
-    # it effectively has no official dwell time, and should not get two lines
-    if timepoint.drop_off_type == 1 or timepoint.pickup_type == 1:
-        return 0
-
-    # Normal case:
-    departure_secs = gtfs_kit.timestr_to_seconds(timepoint.departure_time)
-    arrival_secs = gtfs_kit.timestr_to_seconds(timepoint.arrival_time)
-    dwell_secs = departure_secs - arrival_secs
-    return dwell_secs
-
-
 def make_stations_max_dwell_map(
     today_feed: FeedEnhanced, spec: TTSpec, trip_from_train_spec_fn
 ) -> dict[str, bool]:
@@ -690,7 +596,7 @@ def make_stations_max_dwell_map(
             debug_print(3, "debug dwell map:", train_spec, station_code)
             trip_id = trip_from_train_spec_fn(train_spec).trip_id
             max_dwell_secs = max(
-                max_dwell_secs, get_dwell_secs(today_feed, trip_id, stop_id)
+                max_dwell_secs, today_feed.get_dwell_secs(trip_id, stop_id)
             )
         if max_dwell_secs >= dwell_secs_cutoff:
             stations_dict[station_code] = True
@@ -1123,8 +1029,8 @@ def fill_tt_spec(
                             "Warning: using only ", train_specs[0], " for days header"
                         )
                     my_trip = trip_from_train_spec_local(train_specs[0])
-                    timepoint = get_timepoint_from_trip_id(
-                        today_feed, my_trip.trip_id, reference_stop_id
+                    timepoint = today_feed.get_timepoint_from_trip_id(
+                        my_trip.trip_id, reference_stop_id
                     )
                     if timepoint is None:
                         # Manual override?  Pass the raw text through.
@@ -1280,8 +1186,8 @@ def fill_tt_spec(
                     for train_spec in train_specs_to_check:
                         my_trip = trip_from_train_spec_local(train_spec)
                         debug_print(2, "debug trip_id:", train_spec, my_trip.trip_id)
-                        timepoint = get_timepoint_from_trip_id(
-                            today_feed, my_trip.trip_id, stop_id
+                        timepoint = today_feed.get_timepoint_from_trip_id(
+                            my_trip.trip_id, stop_id
                         )
                         if timepoint is not None:
                             # Use the FIRST one which returns a timepoint
