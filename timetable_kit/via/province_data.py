@@ -192,7 +192,6 @@ _stop_code_to_province = {
     "COLL": "ON",
     "COPE": "ON",
     "CWLL": "ON",
-    "COTO": "ON",
     "DALT": "ON",
     "DEVN": "ON",
     "ELSA": "ON",
