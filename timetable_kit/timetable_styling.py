@@ -1,13 +1,10 @@
 # timetable_styling.py
 # Part of timetable_kit
 # Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Style a timetable.
+"""Support for applying CSS classes to a timetable.
 
-This module uses Pandas's Styler to apply CSS classes to a timetable; then renders HTML,
-including complicated extra bits.
-
-This uses a bunch of CSS files, and a few HTML files, in the "fragments" folder. This
-uses Jinja2, via the load_resources module.
+The main work is done in fill_tt_spec.
+This has support routines for finding class types to apply.
 
 This module handles the actual *table*. For the text which goes around it and the key,
 see the page_layout module.
