@@ -1,0 +1,30 @@
+[MESSAGES CONTROL]
+disable=
+    # I know how to find these
+    fixme,
+    # This is not fixable
+    cyclic-import,
+    duplicate-code,
+    # The ones here fire too often
+    invalid-name,
+    redefined-outer-name,
+    # The ones below here fire on too many intentional cases
+    unused-argument,
+    unused-variable,
+    # The ones below here fire in error
+    global-variable-not-assigned,
+    unnecessary-lambda-assignment,
+    # The ones below here are always bad ideas
+    unspecified-encoding,
+    no-else-return,
+    useless-return,
+    line-too-long,
+    too-many-lines,
+    too-many-instance-attributes,
+    too-many-arguments,
+    too-many-public-methods,
+    too-many-branches,
+    too-many-statements,
+    too-many-locals,
+    too-many-return-statements,
+    global-statement
