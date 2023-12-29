@@ -58,8 +58,9 @@ def compare_stop_lists(base_trip, trips, *, feed):
             comparison = base_stop_times.compare(
                 stop_times, align_axis="columns", keep_shape=True
             )
-        except:
+        except Exception as exc:
             print("Something wrong with trip ", trip)
+            raise exc
         if not comparison.any(axis=None):
             print(f"Identical: {base_trip.trip_id} and {str(trip.trip_id)}.")
         else:
