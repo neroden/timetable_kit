@@ -510,6 +510,16 @@ class Agency:
             )
         return fancy_name
 
+    def get_station_name_short(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """Get a short version of the station name.
+
+        This is used as an abbr for screenreaders.
+        """
+        station_name = self.stop_code_to_stop_name(station_code)
+        return station_name
+
     def get_station_name_from(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:

@@ -144,16 +144,30 @@ class AgencyAmtrak(Agency):
         """Is this a "major" station which should be boldfaced and capitalized?"""
         return special_data.is_standard_major_station(station_code)
 
-    def get_station_name_from(
+    def get_station_name_short(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
-        """Get a phrase like "from Portland" for the station."""
+        """Get a short name like "Portland" for the station.
+
+        Used as an abbr for screenreaders, and by get_station_name_from and get_station_name_to.
+        """
         # Get the raw station name (from JSON)
         station_name = self.stop_code_to_stop_name(station_code)
         # Disassemble it.
         (city_state_name, facility_name) = self.disassemble_station_name(station_name)
         # Break the city out.
         (city_name, state_name) = city_state_name.split(", ")
+        return city_name
+
+    def get_station_name_from(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """Get a phrase like "from Portland" for the station."""
+        city_name = self.get_station_name_short(
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
 
         # Exit early if not doing HTML
         if not doing_html:
@@ -168,12 +182,11 @@ class AgencyAmtrak(Agency):
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:
         """Get a phrase like "to Portland" for the station."""
-        # Get the raw station name (from JSON)
-        station_name = self.stop_code_to_stop_name(station_code)
-        # Disassemble it.
-        (city_state_name, facility_name) = self.disassemble_station_name(station_name)
-        # Break the city out.
-        (city_name, state_name) = city_state_name.split(", ")
+        city_name = self.get_station_name_short(
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
 
         # Exit early if not doing HTML
         if not doing_html:

@@ -14,6 +14,7 @@ Includes the TTSpec type.
 import os  # For os.PathLike, for passing paths around
 from pathlib import Path, PurePath
 from typing import Type, Self, NamedTuple, TypedDict
+import html  # For html.escape
 
 import json
 import pandas as pd
@@ -1114,9 +1115,6 @@ def fill_tt_spec(
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
-                    # This oughta be a th.  And this works!
-                    t.th.iloc[y, x] = True
-                    t.attributes.iloc[y, x] = 'scope="row" role="rowheader"'
                     # FIXME: no way to tell it to use connecting services or not to.
                     station_name_str = agency_singleton().get_station_name_pretty(
                         station_code,
@@ -1124,6 +1122,29 @@ def fill_tt_spec(
                         doing_multiline_text=doing_multiline_text,
                     )
                     t.text.iloc[y, x] = station_name_str
+                    # This oughta be a th.  But this will make ORCA think it's on the left.
+                    # (in Chromium and partially in Firefox)
+                    # t.th.iloc[y, x] = True
+                    # t.attributes.iloc[y, x] = 'scope="row"'
+                    # So it's not OK.
+
+                    # Try this instead:
+                    # t.attributes.iloc[y,x] = 'role="rowheader"'
+                    # This works better.  But it goes weird when transitioning from
+                    # a header colum into the row.  FIXME
+
+                    # Now for screen readers we don't want to read that WHOLE thing
+                    # every time we're looking at a cell, but we do want to read the city.
+                    # So we add the city as an abbr attribute
+                    # Does not work in ORCA on Firefox or Chromium.
+                    # station_name_short = agency_singleton().get_station_name_short(
+                    #    station_code,
+                    #    doing_multiline_text=doing_multiline_text,
+                    #    doing_html=doing_html,
+                    # )
+                    # station_name_short_escaped = html.escape(station_name_short)
+                    # t.th.iloc[y, x] = True
+                    # t.attributes.iloc[y, x] += f'abbr="{station_name_short_escaped}"'
                 case [_, "services", _]:
                     # Column for station services codes.  Currently, completely vacant.
                     cell_css_list.append("services-cell")
