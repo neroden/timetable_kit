@@ -23,19 +23,10 @@ For my Amish friend:
 
 For packaging:
 -- Figure out how to locate cached data (for GTFS) and persistent data (for templates etc)
+-- see the XDG standard
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
-
-Fix:
--- Hartford Line Valley Flyer
--- Keystone Service
--- Virginia Services
-
-Known Amtrak GTFS bugs:
-- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
--- Get Amtrak to fix GTFS days of operation:
----- Sunset Limited, Hiawatha, Silver Service 
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- Isolate the GTFS downloads
@@ -60,9 +51,6 @@ Internal cleanup:
     Possoble plan for this: pass the agency through to produce_timetable instead of the feed.
     Initialize the feed in the initialization of the agency (possibly with commandline override).
     The feed is then available and present within the agency object.
-
-0 -- memoize connecting services initialization (& wrapperize the dict)
-     so that it doesn't run from auxillary progs like list_trains.py.
 
 1 -- consider adding "Route name" notation based on location of Station column (see Hartford Line)
 
@@ -99,15 +87,18 @@ Fine for never:
 9 -- implement prototype spec generator using toposort to merge station lists.
      This is really a many-step process.
 
-Long term (?):
-- Patch PANDAS to allow insertion of classes in header rows.
-- This seems straightforward.
-- tests/io/format is where the test is.
-- need a parallel to cell_context (header_context).
-- Have to set up another project contributor profile etc so OMG.  Not this month.
-
 Timetable update stuff:
 -----------------------
+
+Fix:
+-- Hartford Line Valley Flyer
+-- Keystone Service
+-- Virginia Services
+
+Known Amtrak GTFS bugs:
+- Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+-- Get Amtrak to fix GTFS days of operation:
+---- Sunset Limited, Hiawatha, Silver Service 
 
 VIA Rail stuff:
 - Check for which stations are "manned" for checked baggage info

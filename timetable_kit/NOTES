@@ -26,7 +26,6 @@ One which works is
 pdftk empire-service-wb.pdf empire-service-eb.pdf output empire-service.pdf
 The program is actually in the package "pdftk-java".
 
-
 Amtrak train numbers are in the "trip_short_name" field of GTFS static data
 Amtrak station codes are in the "stop_id" field of GTFS static data.
 Amtrak trip_ids currently consist of the trip_short_name with the service_id concatenated after it.  This might change.

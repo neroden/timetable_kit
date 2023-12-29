@@ -36,8 +36,7 @@ It relies on `GTFS Kit <https://github.com/mrcagney/gtfs_kit>` to parse GTFS.
 Like GTFS Kit, it uses `PANDAS <https://pandas.pydata.org>` to do the heavy lifting.
 It was most recently tested with PANDAS 2.1.4.
 
-Timetable Kit also requires the jinja2 package.  PANDAS depends on jinja2, but also
-timetable_kit uses the Jinja2 template system directly.
+Timetable Kit also requires the jinja2 package.  Jinja2 templates are used extensively.
 
 It uses Weasyprint to convert HTML timetables to PDF timetables.
 
