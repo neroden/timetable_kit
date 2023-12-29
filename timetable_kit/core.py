@@ -898,6 +898,10 @@ def fill_tt_spec(
 
         # Fill in CSS styles for this column header
         t.classes.iloc[0, x] = " ".join(column_header_css_list)
+        # Set this column header to be a header
+        t.th.iloc[0, x] = True
+        # ...with column scope (although that's usually automatic)
+        t.attributes.iloc[0, x] = 'scope="col" role="columnheader"'
 
         # Cache this for use in "origin" and "destination";
         # it only looks at the first tsn.
@@ -1110,6 +1114,9 @@ def fill_tt_spec(
                 case [_, "station" | "stations", _]:
                     # Line led by a station code, column for station names
                     cell_css_list.append("station-cell")
+                    # This oughta be a th.  And this works!
+                    t.th.iloc[y, x] = True
+                    t.attributes.iloc[y, x] = 'scope="row" role="rowheader"'
                     # FIXME: no way to tell it to use connecting services or not to.
                     station_name_str = agency_singleton().get_station_name_pretty(
                         station_code,
@@ -1292,8 +1299,6 @@ def fill_tt_spec(
     # debug_print(1, "Text table:", t.text)
     t.classes.fillna(value="", inplace=True)
     # debug_print(1, "Classes table:", t.classes)
-    # Set the top row to be "th". (FIXME, this is simplistic)
-    t.th.iloc[0] = True
     # This is only set if it's "True"; fill in the "False" states.
     t.th.fillna(value=False, inplace=True)
     # This is only set if it's not empty; fill in the "" states.
