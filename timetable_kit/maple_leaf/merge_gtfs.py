@@ -94,8 +94,8 @@ def translate_via_stations_to_amtrak(via_ml_feed):
     stop_id_to_via_code = dict(zip(stops["stop_id"], stops["stop_code"]))
     # Now make a map from stop_id to Amtrak station code.
     stop_id_to_amtrak_code = {
-        stop_id: via_code_to_amtrak_code[stop_id_to_via_code[stop_id]]
-        for stop_id in stop_id_to_via_code.keys()
+        stop_id: via_code_to_amtrak_code[via_code]
+        for (stop_id, via_code) in stop_id_to_via_code.items()
     }
     # print(stop_id_to_amtrak_code)
     # Create a dict suitable for DataFrame.replace

@@ -183,7 +183,6 @@ class Agency:
             # Also won't need the stop name dict, as Amtrak has its own way of finding names.
             # In this case, copy the stop_ids into the stop_codes for the wheelchair access dicts later.
             stop_codes = stop_ids
-            pass
         else:
             # stop_code exists (as in VIA and Greyhound); make the back-and-forth dicts
             stop_codes = self._feed.stops["stop_code"].to_list()

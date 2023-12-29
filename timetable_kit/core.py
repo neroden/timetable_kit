@@ -13,19 +13,14 @@ Includes the TTSpec type.
 
 import os  # For os.PathLike, for passing paths around
 from pathlib import Path, PurePath
-from typing import Type, Self, NamedTuple, TypedDict
-import html  # For html.escape
+from typing import Type, Self, TypedDict
 
 import json
 import pandas as pd
-from pandas import DataFrame, Series
-
-import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
 ############
 # My modules
 # This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
-from timetable_kit import runtime_config
 from timetable_kit import text_presentation
 from timetable_kit import icons
 
@@ -33,20 +28,16 @@ from timetable_kit import icons
 # Specific functions from my modules
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
-from timetable_kit.debug import set_debug_level, debug_print
+from timetable_kit.debug import debug_print
 from timetable_kit.errors import (
     GTFSError,
-    TwoStopsError,
     NoTripError,
     TwoTripsError,
     InputError,
 )
-from timetable_kit.convenience_types import GTFSDate, GTFSDay
+from timetable_kit.convenience_types import GTFSDate
 
 from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
-
-# To initialize the feed -- does type changes
-from timetable_kit.initialize import initialize_feed
 
 # We call these repeatedly, so give them shorthand names
 from timetable_kit.runtime_config import agency
@@ -58,7 +49,6 @@ from timetable_kit.timetable_styling import (
 )
 from timetable_kit.tsn import (
     train_spec_to_tsn,
-    make_trip_id_to_tsn_dict,
     find_tsn_dupes,
     make_tsn_to_trip_id_dict,
     make_tsn_and_day_to_trip_id_dict,
@@ -717,7 +707,7 @@ def fill_tt_spec(
 
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
-    def trip_from_train_spec_local(train_spec: str) -> Series:
+    def trip_from_train_spec_local(train_spec: str) -> pd.Series:
         assert today_feed.trips is not None  # Silence MyPy
         try:
             my_trip_id = train_spec_to_trip_id[train_spec]
@@ -733,7 +723,7 @@ def fill_tt_spec(
     # of trip_from_train_spec_local, *and* should use the local reduced feed, so it has to be
     # subordinate to this particular run of the timetable generator!
     # So create another inner function to pull the line from the route table.
-    def route_from_train_spec_local(train_spec: str) -> Series:
+    def route_from_train_spec_local(train_spec: str) -> pd.Series:
         assert today_feed.routes is not None  # Silence MyPy
         my_trip = trip_from_train_spec_local(train_spec)
         my_routes = today_feed.routes[today_feed.routes.route_id == my_trip.route_id]

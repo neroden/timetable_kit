@@ -161,7 +161,7 @@ def is_high_speed_train(trip_short_name: str) -> bool:
     if not trip_short_name.isdigit():
         return False
     tsn_as_number = int(trip_short_name)
-    if tsn_as_number >= 2100 and tsn_as_number <= 2299:
+    if 2100 <= tsn_as_number <= 2299:
         return True
     return False
 

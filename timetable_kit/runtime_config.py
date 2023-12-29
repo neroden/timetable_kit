@@ -7,11 +7,10 @@ needs to be "low-level".
 
 This data includes the critical choice of which agency's subpackage to use.
 """
-
-from timetable_kit.debug import debug_print
-
 # For sys.exit
 import sys
+
+from timetable_kit.debug import debug_print
 
 # The agencies we might need to import
 import timetable_kit.generic_agency

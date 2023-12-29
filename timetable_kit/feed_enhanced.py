@@ -393,7 +393,7 @@ class FeedEnhanced(gtfs_kit.Feed):
                 pass
             case _:
                 if day_of_week not in GTFS_DAYS:
-                    raise (InputError, "Specified day of week not understood.")
+                    raise InputError("Specified day of week not understood.")
                 debug_print(1, "Restricting to ", day_of_week, ".", sep="")
                 today_feed = today_feed.filter_by_day_of_week(day_of_week)
         return today_feed

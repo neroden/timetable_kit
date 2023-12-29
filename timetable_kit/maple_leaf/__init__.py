@@ -8,12 +8,10 @@ Maple Leaf specific functions for timetable_kit.
 This defines an interface; each agency needs to provide the same interface
 """
 
+# The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
 # Where to find the GTFS (merged GTFS)
 from .merge_gtfs import (
     gtfs_unzipped_local_path,
 )
-
-# The singleton instance of a class, for stateful memoization
-from .agency import get_singleton

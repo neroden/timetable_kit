@@ -13,11 +13,8 @@ import argparse
 # Mostly for agency defaulting
 from timetable_kit import runtime_config
 from timetable_kit.runtime_config import agency
-from timetable_kit.runtime_config import agency_singleton
-
 
 # My packages: Local module imports
-from timetable_kit import feed_enhanced
 from timetable_kit.debug import set_debug_level
 from timetable_kit.feed_enhanced import FeedEnhanced
 
