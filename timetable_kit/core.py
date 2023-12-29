@@ -787,7 +787,7 @@ def fill_tt_spec(
     # FIXME.
 
     # Base CSS classes for every data cell.  Currently an empty list.
-    base_cell_css_list = []
+    base_cell_css_list: list[str] = []
     # Base CSS for column headers.
     # This is necessary to apply base column header behavior.
     base_column_header_css_list = ["col_heading"]

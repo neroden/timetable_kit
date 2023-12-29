@@ -9,6 +9,7 @@ used by multiple tools.
 """
 
 from pathlib import Path
+from timetable_kit.errors import InputError
 
 
 def read_list_file(filename: str, *, input_dir) -> list[str]:
