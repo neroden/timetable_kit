@@ -1,4 +1,5 @@
--- consider breaking out a text_time.py from text_presentation.py
+For prettiness:
+1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 
 Wishlist:
 10 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
@@ -17,10 +18,8 @@ For packaging:
 -- Figure out how to locate cached data (for GTFS) and persistent data (for templates etc)
 -- see the XDG standard
 
-For prettiness:
-1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
-
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
+-- consider breaking out a text_time.py from text_presentation.py
 -- Isolate the GTFS downloads
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
 
