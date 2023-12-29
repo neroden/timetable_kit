@@ -41,6 +41,8 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError,
 )
+from timetable_kit.file_handling import read_list_file
+
 from timetable_kit.convenience_types import HtmlAndCss
 from timetable_kit.feed_enhanced import FeedEnhanced
 
@@ -60,9 +62,6 @@ from timetable_kit.core import (
 )
 from timetable_kit.timetable_class import (
     Timetable,
-)
-from timetable_kit.styler import (
-    render,
 )
 from timetable_kit.page_layout import (
     produce_html_page,
@@ -154,29 +153,6 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
         prepared_output_dirs_for_rpa.append(str(output_dir))
     prepared_output_dirs.append(str(output_dir))
     return
-
-
-def read_list_file(filename: str, *, input_dir) -> list[str]:
-    """Given a filename ending in .list, return a list of the lines inside that
-    file, with exterior whitespace stripped.
-
-    The first line in a .list file is actually a title for the output HTML, not a filename.
-    The rest are filenames.
-
-    filename: the file name
-    input_dirname: where to find the list file
-    """
-    if not filename.endswith(".list"):
-        raise InputError("Not a list file:", filename)
-    input_dir = Path(input_dir)
-
-    list_filename_path = input_dir / Path(filename)
-    with open(list_filename_path, "r") as list_file:
-        lines = list_file.readlines()
-    # Remove stray whitespace from either side of each line,
-    # and drop lines which are blank after that
-    stripped_list = [stripped for line in lines if (stripped := line.strip())]
-    return stripped_list
 
 
 def produce_several_timetables(
@@ -282,7 +258,7 @@ def produce_several_timetables(
                     'id="{table_id}" class="tt-table" aria-label="{table_aria_label}"'
                 )
                 # Render to HTML
-                timetable_styled_html = render(t)
+                timetable_styled_html = t.render()
                 debug_print(1, "HTML styled")
 
                 # Find the date range on which the entire reduced feed is valid

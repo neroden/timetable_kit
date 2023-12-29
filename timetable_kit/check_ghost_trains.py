@@ -62,7 +62,7 @@ import argparse
 import re
 from urllib.request import Request, urlopen  # for reading juckins webpage
 
-from timetable_kit.sew_pages import (
+from timetable_kit.file_handling import (
     read_list_file,
 )
 from timetable_kit.core import (
