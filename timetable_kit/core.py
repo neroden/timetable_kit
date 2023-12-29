@@ -66,7 +66,6 @@ from timetable_kit.tsn import (
 
 # For the new HTML layout engine
 from timetable_kit.timetable_class import Timetable
-from timetable_kit.styler import render
 
 
 # Constant set for the special column names.

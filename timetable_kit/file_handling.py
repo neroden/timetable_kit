@@ -10,6 +10,7 @@ used by multiple tools.
 
 from pathlib import Path
 
+
 def read_list_file(filename: str, *, input_dir) -> list[str]:
     """Given a filename ending in .list, return a list of the lines inside that
     file, with exterior whitespace stripped.

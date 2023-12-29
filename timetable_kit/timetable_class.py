@@ -9,8 +9,15 @@ Created when PANDAS's Styler wasn't doing what I wanted.
 import os  # for os.PathLike
 
 import pandas as pd
+from pandas import DataFrame
 
+from jinja2 import Template  # for typehints
+
+# My packages
 from timetable_kit.debug import debug_print
+
+# For the Jinja templates
+from timetable_kit.load_resources import template_environment
 
 
 class Timetable:
@@ -19,6 +26,9 @@ class Timetable:
     This is used both before and after layout.
     It is filled in by fill_tt_spec in an encapsulation-breaking way.
     """
+
+    # Internal use: Jinja templates after loading
+    _table_tpl: Template | None = None
 
     def __init__(self, spec_df: pd.DataFrame) -> None:
         """Pass in the CSV part of a spec as a dataframe, which is used only for its shape"""
@@ -71,6 +81,42 @@ class Timetable:
 
         Should run after fill_tt_spec.
         """
+        # Lean on DataFrame.
         # NOTE, need to include the header
-        selftext.to_csv(file, index=False, header=True)
+        self.text.to_csv(file, index=False, header=True)
         debug_print(1, "CSV written to", file)
+
+    @classmethod
+    def get_table_tpl(cls) -> Template:
+        """Get the Jinja template for a whole table.
+
+        Memoized
+        """
+        if cls._table_tpl is None:
+            cls._table_tpl = template_environment.get_template("table.html")
+        assert cls._table_tpl is not None
+        return cls._table_tpl
+
+    def render(self) -> str:
+        """Render a timetable to HTML, using Jinja"""
+        # Recall that Python dataframe data can be accessed as:
+        # df[col][row]
+        # Do this in Jinja
+
+        # Retrieve with memoization
+        table_tpl = self.get_table_tpl()
+
+        t = self  # Make the dict shorter...
+        params = {
+            "table_attributes": t.table_attributes,
+            "thead_row_nums": t.thead_row_nums,
+            "tbody_row_nums": t.tbody_row_nums,
+            "printable_col_nums": t.printable_col_nums,
+            # These four are DataFrames
+            "text": t.text,
+            "classes": t.classes,
+            "th": t.th,
+            "attributes": t.attributes,
+        }
+        output = table_tpl.render(params)
+        return output
