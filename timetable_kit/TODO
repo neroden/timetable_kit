@@ -1,3 +1,6 @@
+-- Switch to TOML
+-- Move the Amtrak stations data into the XDG dir (this is a sloooow dataset)
+
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 2 -- implement alternating-line grey background style
@@ -15,13 +18,8 @@ For making updates easier:
 For my Amish friend:
 -- verify that CSVs are working and prep some
 
-For packaging:
--- Figure out how to locate cached data (for GTFS) and persistent data (for templates etc)
--- see the XDG standard
-
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
 -- consider breaking out a text_time.py from text_presentation.py
--- Isolate the GTFS downloads
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
 
 For making updates easier:
@@ -37,6 +35,7 @@ For simplifying and making Amtrak & VIA work better:
 1 -- Add checked_baggage field to GTFS specification (stops.txt and trips.txt).
      This is way too SOCIAL for me to want to actually do it!
      But it would massively simplify a large hunk of code
+     Consider using private enhancement to the GTFS, as we did for Amtrak wheelchair access
 
 Internal cleanup:
     Deal with the convoluted interactions between the agency object and the feed object.
@@ -71,6 +70,7 @@ Internal cleanup:
 
 7 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
       Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
+    Easier after TOML conversion, methinks.
 
 8 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
 
