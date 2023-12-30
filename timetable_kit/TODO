@@ -1,7 +1,7 @@
 Cleanup:
--- Moving GTFS file download to sane place.  Mostly done, but we have to do the two special cases:
----- Hartford Line
+-- Moving GTFS file download to sane place.  Mostly done, but we have to do the last special case:
 ---- Maple Leaf
+-- and then rewrite a bunch of the documentation.
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
