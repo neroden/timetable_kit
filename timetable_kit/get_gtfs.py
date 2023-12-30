@@ -10,10 +10,15 @@ Should not depend on anything else in timetable_kit,
 since it's used during initalization of every <agency>/get_gtfs.py file.
 """
 
+from typing import Self
+
 import sys  # for sys.exit
 from os import PathLike
 from pathlib import Path
 import shutil  # for rmtree
+
+
+
 from xdg_base_dirs import xdg_data_home  # for where to put the files
 
 from zipfile import ZipFile
@@ -42,16 +47,16 @@ class AgencyGTFSFiles:
         else:
             _data_home = xdg_data_home()
         _ttkit_data_home = _data_home / "timetable_kit"
-        self._agency_dir: Path = (
+        self.agency_dir: Path = (
             _ttkit_data_home / agency_subdir
         )  # ~/.local/share/timetable_kit/amtrak
 
-        self._file: Path = self._agency_dir / "gtfs.zip"  # File for zipped GTFS
-        self._dir: Path = self._agency_dir / "gtfs"  # Directory for unzipped GTFS
+        self._file: Path = self.agency_dir / "gtfs.zip"  # File for zipped GTFS
+        self._dir: Path = self.agency_dir / "gtfs"  # Directory for unzipped GTFS
 
         self._url: str = url  # URL to download zipped GTFS file from
 
-    def download() -> bytes:
+    def download(self: Self) -> bytes:
         """Download GTFS from specified URL and return it as bytes."""
         # We probably should have a timeout here but make it long: a whole minute
         response = requests.get(self._url, timeout=60)
@@ -60,9 +65,9 @@ class AgencyGTFSFiles:
             response.raise_for_status()  # Raise an error
         return response.content
 
-    def save(gtfs_zipped_data: bytes):
+    def save(self: Self, gtfs_zipped_data: bytes):
         """Save zipped GTFS file in a canonical local location."""
-        self._agency_dir.mkdir(parents=True, exist_ok=True)
+        self.agency_dir.mkdir(parents=True, exist_ok=True)
         if self._file.exists():
             # Move the file out of the way as file.old
             file_old = Path(str(self._file) + ".old")
@@ -79,7 +84,7 @@ class AgencyGTFSFiles:
             binary_zip_file.write(gtfs_zipped_data)
             print(f"Wrote GTFS data to {self._file}")
 
-    def unzip():
+    def unzip(self: Self):
         """Unzip GTFS file from a canonical local location to a canonical local location.
 
         This is used directly by the program.
@@ -100,17 +105,24 @@ class AgencyGTFSFiles:
             my_zip.extractall(path=self._dir)
             print(f"Extracted {self._file} to {self._dir}")
 
-    def download_and_save():
+    def download_and_save(self: Self):
         """Download, save, and extract GTFS."""
         binary_data = self.download_gtfs()
         self.save_gtfs(binary_data)
         self.unzip_gtfs()
 
-    def get_path():
+    def is_downloaded(self: Self) -> bool:
+        """Return true if there is a GTFS file in the appropriate location
+
+        Used to avoid redundant downloading
+        """
+        return self._file.exists()
+
+    def get_path(self: Self):
         """Return the path to the GTFS file (file or dir)
 
         For use by all the tools
         """
         # Let's keep it an implementation detail whether to get the
         # zipped or unzipped version
-        return _dir
+        return self._dir
