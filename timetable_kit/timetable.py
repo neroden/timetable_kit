@@ -11,12 +11,14 @@ timetable.py --help gives documentation
 #########################
 # Other people's packages
 
-import sys  # sys.exit(1) and sys.path
+import sys  # sys.exit(0), sys.exit(1), and sys.path
 import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 from pathlib import Path
 import html  # for html.escape
+
+import xdg_base_dirs  # for storing information like GTFS
 
 from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
@@ -344,21 +346,41 @@ def main():
         my_arg_parser.print_help()
         sys.exit(1)
 
+    set_debug_level(args.debug)
+    debug_print(2, f"Successfully set debug level to {args.debug}.")
+
+    # Check for the --get_gtfs flag
+    must_get_gtfs: bool = bool(args.get_gtfs)
+
+    # Get the selected agency (will default to Amtrak)
+    debug_print(2, "Agency found:", args.agency)
+    runtime_config.set_agency(args.agency)
+    if must_get_gtfs and args.agency == "generic":
+        print(
+            "Can't automatically get GTFS for generic agency; use --gtfs argument instead"
+        )
+        sys.exit(1)
+
+    # Retrieve the GTFS according to agency-specific methods
+    if must_get_gtfs:
+        agency().get_gtfs_files().download_and_save_gtfs()
+        debug_print(1, "GTFS for {{args.agency}} ready.")
+
+    # Passed at command line, or the gtfs directory for the agency
+    gtfs_filename = args.gtfs_filename or agency().get_gtfs_files().get_path()
+
     spec_file_list = [*args.tt_spec_files, *args.positional_spec_files]
 
     if spec_file_list == []:
+        if must_get_gtfs:
+            # It's OK to have no specs if we were just downloading GTFS.
+            # In this case, just quit.
+            sys.exit(0)
         print(
             "You need to specify at least one spec file.  Use the --help option for help."
         )
         my_arg_parser.print_usage()
         sys.exit(1)
-
-    set_debug_level(args.debug)
-    debug_print(2, "Successfully set debug level to 2.")
-
-    # Get the selected agency
-    debug_print(2, "Agency found:", args.agency)
-    runtime_config.set_agency(args.agency)
 
     input_dirname = (
         args.input_dirname
@@ -374,8 +396,6 @@ def main():
     if not os.path.isdir(output_dirname):
         print("Output dir", output_dirname, "does not exist.  Aborting.")
         sys.exit(1)
-
-    gtfs_filename = args.gtfs_filename or agency().gtfs_unzipped_local_path
 
     author = args.author or os.getenv("TIMETABLE_KIT_AUTHOR") or os.getenv("AUTHOR")
     if not author:

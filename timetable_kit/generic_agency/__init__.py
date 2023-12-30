@@ -13,6 +13,14 @@ from .agency import Agency
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-# These may require special handling
-gtfs_zip_local_path = None
-gtfs_unzipped_local_path = None
+
+# Object explaining where to find the GTFS & which can also download it
+# This is a dummy for generic_agency
+def get_gtfs_files():
+    """Retrieve the AgencyGTFSFiles object for the agency
+
+    For generic_agency, throws an error since this can't be done.
+    """
+    raise InputError(
+        "Generic agency doesn't have default GTFS -- specify GTFS at command line"
+    )

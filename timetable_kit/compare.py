@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # compare.py
 # Part of timetable_kit
-# Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Find timing differences on a route between similar services.
 
 Used to see how many services with different dates are actually the same service.
@@ -155,7 +155,9 @@ if __name__ == "__main__":
     set_debug_level(args.debug)
     runtime_config.set_agency(args.agency)
 
-    gtfs_filename = args.gtfs_filename or agency().gtfs_unzipped_local_path
+    # Passed at command line, or the gtfs directory for the agency
+    gtfs_filename = args.gtfs_filename or agency().get_gtfs_files().get_path()
+
     master_feed = initialize_feed(gtfs=gtfs_filename)
 
     route_long_name = args.route_long_name

@@ -1,3 +1,8 @@
+Cleanup:
+-- Moving GTFS file download to sane place.  Mostly done, but we have to do the two special cases:
+---- Hartford Line
+---- Maple Leaf
+
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
 2 -- implement alternating-line grey background style

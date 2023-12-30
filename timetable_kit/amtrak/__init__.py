@@ -14,7 +14,6 @@ from .agency import AgencyAmtrak
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
 
-# Where to find the GTFS
-from .get_gtfs import (
-    gtfs_unzipped_local_path,
-)
+# Function returning AgencyGTFSFiles object
+# which explains where to find the GTFS & which can also download it
+from .get_gtfs import get_gtfs_files

@@ -16,3 +16,7 @@ import timetable_kit.hartford_line.get_gtfs as get_gtfs
 
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
+
+# Function returning AgencyGTFSFiles object
+# which explains where to find the GTFS & which can also download it
+from .get_gtfs import get_gtfs_files
