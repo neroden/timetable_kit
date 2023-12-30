@@ -1,13 +1,9 @@
+# Used by developers as a symbolic link to ~/.local/share/timetable_kit
+/timetable_kit/local
+
 # Data directories for timetable_kit
 stations/
 station_stats/
-gtfs/
-
-# Typical downloaded GTFS files for timetable_kit
-# & generated merged GTFS files
-GTFS.zip
-gtfs.zip
-greyhound.zip
 
 # Generated output files for timetable_kit
 bad_stations.csv
