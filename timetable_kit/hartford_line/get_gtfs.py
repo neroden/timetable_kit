@@ -11,7 +11,11 @@ from zipfile import ZipFile
 # For loading the feeds for merging
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
-from timetable_kit.get_gtfs import AgencyGTFSFiles
+from timetable_kit.get_gtfs import (
+    AgencyGTFSFiles,
+    move_old_dir,
+    move_old_file,
+)
 import timetable_kit.amtrak as amtrak  # for get_gtfs_files
 
 # For the merge process
@@ -136,16 +140,7 @@ class HartfordLineGTFSFiles(AgencyGTFSFiles):
         # Writing it out unzipped is just as slow.
         # I didn't want to learn how to zip it.
         if self._merged_file.exists():
-            # Move the file out of the way as file.old
-            file_old = Path(str(self._merged_file) + ".old")
-            if file_old.exists():
-                try:
-                    Path.unlink(file_old)
-                except OSError as e:
-                    print(
-                        "Failed to remove {file_old} - at {e.filename} raised {e.strerror}."
-                    )
-            self._merged_file.rename(file_old)
+            move_old_file(self._merged_file)
 
         print("Writing zipped feed")
         merged_feed.write(self._merged_file)
@@ -154,15 +149,8 @@ class HartfordLineGTFSFiles(AgencyGTFSFiles):
         # Leave it open for inspection and for use by main timetable_kit program
         print("Unzipping feed at", self._merged_dir)
         if self._merged_dir.exists():
-            # Move the directory out of the way as dir.old
-            dir_old = str(_merged_dir) + ".old"
-            try:
-                shutil.rmtree(dir_old)
-            except OSError as e:
-                print(
-                    "Failed to remove {dir_old} - at {e.filename} raised {e.strerror}."
-                )
-            self._merged_dir.rename(dir_old)
+            move_old_file(self._merged_dir)
+
         self._merged_dir.mkdir(parents=True, exist_ok=False)
         with ZipFile(self._merged_file, "r") as my_zip:
             my_zip.extractall(path=self._merged_dir)
