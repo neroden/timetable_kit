@@ -15,7 +15,7 @@ canonical_gtfs_url = "https://content.amtrak.com/content/gtfs/GTFS.zip"
 _gtfs_files = AgencyGTFSFiles("amtrak", canonical_gtfs_url)
 
 
-# Extrenal interface.
+# External interface.
 def get_gtfs_files():
     """Retrieve the AgencyGTFSFiles object for the agency"""
     return _gtfs_files

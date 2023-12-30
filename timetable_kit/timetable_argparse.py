@@ -41,19 +41,19 @@ def add_gtfs_argument(parser: argparse.ArgumentParser):
         help="""Directory containing GTFS static data files,
                 or zipped GTFS static data feed,
                 or URL for zipped GTFS static data feed;
-                default is ~/.local/share/timetable_kit/<agency>/GTFS.zip""",
+                default is ~/.local/share/timetable_kit/<agency>/gtfs""",
         default=None,
     )
 
 
-def add_get_gtfs_argument():
+def add_get_gtfs_argument(parser: argparse.ArgumentParser):
     """Add the --get-gtfs argument to a parser."""
     parser.add_argument(
         "--get-gtfs",
         dest="get_gtfs",
         help="""Download the GTFS files for the specified agency.
-                  They will be stored at ~/.local/share/timetable_kit/<agency>/GTFS.zip""",
-        default=None,
+                  They will be stored at ~/.local/share/timetable_kit/<agency>/gtfs""",
+        action="store_true",
     )
 
 

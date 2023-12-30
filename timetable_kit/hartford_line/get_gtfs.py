@@ -34,7 +34,7 @@ canonical_gtfs_url = "https://www.ctrides.com/hlgtfs.zip"
 class HartfordLineGTFSFiles(AgencyGTFSFiles):
     def __init__(self: Self):
         """Initialize locations for Hartford Line GTFS files."""
-        super().__init__("hartford_line", canonical_gtfs_url)
+        super().__init__(agency_subdir="hartford_line", url=canonical_gtfs_url)
         self._amtrak_gtfs_files: AgencyGTFSFiles = amtrak.get_gtfs_files()
         self._merged_dir: Path = (
             self.agency_dir / "merged_gtfs"
@@ -149,19 +149,26 @@ class HartfordLineGTFSFiles(AgencyGTFSFiles):
         # Leave it open for inspection and for use by main timetable_kit program
         print("Unzipping feed at", self._merged_dir)
         if self._merged_dir.exists():
-            move_old_file(self._merged_dir)
+            move_old_dir(self._merged_dir)
 
         self._merged_dir.mkdir(parents=True, exist_ok=False)
         with ZipFile(self._merged_file, "r") as my_zip:
             my_zip.extractall(path=self._merged_dir)
             print("Extracted to " + str(self._merged_dir))
 
+    def is_downloaded(self: Self) -> bool:
+        """Return true if there is a GTFS file in the appropriate location
+
+        Used to avoid redundant downloading
+        """
+        return self._merged_file.exists()
+
 
 # This is our singleton global.
 _gtfs_files = HartfordLineGTFSFiles()
 
 
-# Extrenal interface.
+# External interface.
 def get_gtfs_files():
     """Retrieve the AgencyGTFSFiles object for the agency"""
     return _gtfs_files

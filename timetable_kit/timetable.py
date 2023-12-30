@@ -363,8 +363,8 @@ def main():
 
     # Retrieve the GTFS according to agency-specific methods
     if must_get_gtfs:
-        agency().get_gtfs_files().download_and_save_gtfs()
-        debug_print(1, "GTFS for {{args.agency}} ready.")
+        agency().get_gtfs_files().download_and_save()
+        debug_print(1, f"GTFS for {args.agency} ready.")
 
     # Passed at command line, or the gtfs directory for the agency
     gtfs_filename = args.gtfs_filename or agency().get_gtfs_files().get_path()

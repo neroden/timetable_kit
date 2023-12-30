@@ -32,4 +32,4 @@ Notes on particularly difficult timetables:
 * sunset-limited: thinks it's running to Orlando (timetable accounts for this)
 
 Files to assemble individual pages into a multi-page timetable end with ".list".
-Each one is a list of individual page output filenames (no suffix), in the correct order.
+Each one has an overall title in the top line.  The remaining lines are a list of individual page output filenames (no suffix), in the correct order.

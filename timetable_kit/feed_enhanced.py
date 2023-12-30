@@ -398,6 +398,57 @@ class FeedEnhanced(gtfs_kit.Feed):
                 today_feed = today_feed.filter_by_day_of_week(day_of_week)
         return today_feed
 
+    def filter_by_route_long_names(self: Self, route_names: list[str]):
+        """Filters a feed down to JUST the data for named routes (route_long_name). Erase the shapes data for
+        speed.
+
+        Returns the filtered feed.
+        """
+        # Used for the joint Amtrak/Via Maple Leaf "Frankenfeed"
+        new_feed = self.copy()
+
+        # Erase shapes.
+        new_feed.shapes = None
+
+        # Reduce routes to a single list.
+        new_routes = self.routes[self.routes["route_long_name"].isin(route_names)]
+        print(new_routes)
+        new_feed.routes = new_routes
+        # Extract the route_id.
+        route_row = new_routes.iloc[0]
+        route_id = route_row["route_id"]
+        # print(route_id)
+
+        # Filter trips.txt by the route_id.
+        new_trips = self.trips[self.trips.route_id == route_id]
+        # print(new_trips)
+        new_feed.trips = new_trips
+        # Get the service_id values.
+        service_ids = new_trips["service_id"].tolist()
+        # print(service_ids)
+        # Get the trip_id values.
+        trip_ids = new_trips["trip_id"].tolist()
+        # print(trip_ids)
+
+        # Filter calendar.txt by the service_id.
+        new_calendar = self.calendar[self.calendar["service_id"].isin(service_ids)]
+        # print(new_calendar)
+        new_feed.calendar = new_calendar
+
+        # Filter stop_times.txt by the trip_id.
+        new_stop_times = self.stop_times[self.stop_times["trip_id"].isin(trip_ids)]
+        # print(new_stop_times)
+        new_feed.stop_times = new_stop_times
+        # Get ths stop_id values. (will have some redundancy)
+        stop_ids = new_stop_times["stop_id"].tolist()
+        # print(stop_ids)
+
+        # Filter stops.txt by the stop_id.
+        new_stops = self.stops[self.stops["stop_id"].isin(stop_ids)]
+        # print(new_stops)
+        new_feed.stops = new_stops
+        return new_feed
+
     def get_single_trip(self: Self) -> Series:
         """If this feed contains only one trip, return the trip.
 

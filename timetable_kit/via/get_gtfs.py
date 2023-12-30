@@ -15,7 +15,7 @@ canonical_gtfs_url = "https://www.viarail.ca/sites/all/files/gtfs/viarail.zip"
 _gtfs_files = AgencyGTFSFiles("via", canonical_gtfs_url)
 
 
-# Extrenal interface.
+# External interface.
 def get_gtfs_files():
     """Retrieve the AgencyGTFSFiles object for the agency"""
     return _gtfs_files

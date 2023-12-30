@@ -15,7 +15,7 @@ canonical_gtfs_url = "http://gtfs.gis.flix.tech/gtfs_generic_us.zip"
 _gtfs_files = AgencyGTFSFiles("greyhound", canonical_gtfs_url)
 
 
-# Extrenal interface.
+# External interface.
 def get_gtfs_files():
     """Retrieve the AgencyGTFSFiles object for the agency"""
     return _gtfs_files

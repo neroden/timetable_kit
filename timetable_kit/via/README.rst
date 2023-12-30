@@ -13,8 +13,7 @@ You need to specify the agency.::
     ./timetable.py --agency via
     ./list_trains.py --agency via HLFX TRTO
 
-Work in progress.
+This works::
 
-Try this::
-
-  timetable.py --agency via -i specs_via ocean
+  * timetable.py --agency via --get-gtfs
+  * timetable.py --agency via ocean
