@@ -11,9 +11,9 @@ any other systems I've seen.
 
 Resources are loaded so that the user can override them.
 Current scheme:
-Priority 1 location -- current directory
-Priority 2 location -- suitable subdirectory of current
-Priority 3 location -- suitable subdirectory associated with THIS module
+Priority 1 location -- suitable subdirectory of ~/.local/share/timetable_kit
+(Directories for this are listed in the file_locations.py module)
+Priority 2 location -- suitable subdirectory associated with THIS module
 
 Several loaders are provided:
 template_loader -- looks in "templates" folder
@@ -45,13 +45,16 @@ from jinja2 import (
     PackageLoader,
 )
 
+# Used to expand a single-word subdirectory into a full list of directories to search
+from timetable_kit.file_locations import get_search_list
+
 # Here are the loaders and environments
 # Note that the PackageLoader is grabbing the parent package
 # of load_resources, which is undocumented behavior (FIXME)
 # but works
 template_loader = ChoiceLoader(
     [
-        FileSystemLoader([".", "templates"]),
+        FileSystemLoader(get_search_list("templates")),
         PackageLoader("timetable_kit.load_resources", package_path="templates"),
     ]
 )
@@ -67,7 +70,7 @@ template_environment = Environment(
 
 font_loader = ChoiceLoader(
     [
-        FileSystemLoader([".", "fonts"]),
+        FileSystemLoader(get_search_list("fonts")),
         PackageLoader("timetable_kit.load_resources", package_path="fonts"),
     ]
 )
@@ -78,7 +81,7 @@ font_environment = Environment(
 
 icon_loader = ChoiceLoader(
     [
-        FileSystemLoader([".", "icons"]),
+        FileSystemLoader(get_search_list("icons")),
         PackageLoader("timetable_kit.load_resources", package_path="icons"),
     ]
 )

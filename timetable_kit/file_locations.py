@@ -24,13 +24,13 @@ def get_timetable_kit_data_home(system: bool = False) -> Path:
 def get_search_list(base: PathLike) -> list[Path]:
     """Given a relative base resource type to search for (like "templates"), give a list of directories to search
 
-    Typically [".","./templates","~/.local/share/timetable_kit/templates","/var/lib/timetable_kit/templates"]
+    Typically ["~/.local/share/timetable_kit/templates","/var/lib/timetable_kit/templates"]
+
+    Search for files inside the Python package is done elsewhere, in load_resources.py
     """
     base = Path(base)
     assert not base.is_absolute()
     return [
-        Path("."),
-        base,
         xdg_data_home() / "timetable_kit" / base,
         Path("/var/lib/timetable_kit") / base,
     ]

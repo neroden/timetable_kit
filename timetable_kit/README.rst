@@ -27,6 +27,9 @@ tt-spec-documentation.rst contains documentation on the tt-spec format and futur
 * compare.py can be used to check services on different dates for changes.
 These are intended as utilities for designing your tt-spec files.
 
+If you want to add additional templates, icons, or fonts, put them in ~/.local/share/timetable_kit/[templates, icons, fonts]
+
+
 
 NOTES contains various notes on things learned, work in progress, etc.
 TODO is my to-do list.
