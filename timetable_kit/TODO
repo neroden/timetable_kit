@@ -1,5 +1,4 @@
 -- Switch to TOML
--- Move the Amtrak stations data into the XDG dir (this is a sloooow dataset)
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
