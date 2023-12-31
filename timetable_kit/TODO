@@ -1,4 +1,13 @@
+
+For making updates easier:
+-- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
+---- Splitter routine takes one TTSpec, returns a list of TTSpecs
+-- implement auto-search for valid reference dates
+---- catch breakage on a per-page basis or a per-file basis?
+
+Internal cleanup, high priority:
 -- Switch to TOML
+-- Implement search procedure for specs
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
@@ -7,12 +16,6 @@ For prettiness:
 Wishlist:
 10 -- "Reverse style" timetables with stations on top and trains on the left.  This would just be cool.
 (OK.  It would be AWESOME.)
-
-For making updates easier:
--- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
----- Splitter routine takes one TTSpec, returns a list of TTSpecs
--- implement auto-search for valid reference dates
----- catch breakage on a per-page basis or a per-file basis?
 
 For my Amish friend:
 -- verify that CSVs are working and prep some
