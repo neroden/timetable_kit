@@ -97,6 +97,9 @@ Examples
 
 This are some (probably out of date) timetables made using timetable_kit.
 
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/maple-leaf.jpg
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/vermont-to-upstate-ny.jpg
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/empire-builder.jpg
+.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/ocean.jpg
 .. image:: https://github.com/neroden/timetable_kit/raw/main/samples/richmond-weekday-nb.jpg
 .. image:: https://github.com/neroden/timetable_kit/raw/main/samples/jasper-prince-rupert.jpg
-.. image:: https://github.com/neroden/timetable_kit/raw/main/samples/upstate-ny-to-western-vermont-services.jpg
