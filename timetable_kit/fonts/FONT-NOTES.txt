@@ -27,6 +27,17 @@ The WAVE accessibility checker complains about sizes less than 13.75 px / 10.35p
 10.35pt is the minimum for DejaVu Sans (given that smaller text is at 80%)
 10.35pt is the minimum for Roboto (given that smaller text is at 80%)
 
+With regard to the choice of 6pt / 8px:
+
+https://en.wikipedia.org/wiki/Agate_(typography)
+"An agate (US) or ruby (UK) is a unit of typographical measure. 
+It is 5.5 typographical points, or about 1⁄13 inch (1.94 mm). 
+It can refer either to the height of a line of type or to a font that is 5.5 points.
+An agate font is commonly used to display statistical data or legal notices in newspapers.
+It is considered to be the smallest point size that can be printed on newsprint and remain legible."
+
+So we could probably go down to 5.5pt.
+
 -----
 
 Be aware: Most PDF viewers display PDFs at the wrong size.
