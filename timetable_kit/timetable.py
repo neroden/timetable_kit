@@ -131,7 +131,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
         if not os.path.exists(font_subdir):
             os.makedirs(font_subdir)
     # And font files within the directory
-    font_filenames = ["SpartanTT/SpartanTT-Bold.ttf", "SpartanTT/SpartanTT-Medium.ttf"]
+    font_filenames = ["SpartanTT/SpartanTT-Bold.woff2", "SpartanTT/SpartanTT-Medium.woff2"]
     for font_filename in font_filenames:
         font_file_source_path = source_dir / "fonts" / font_filename
         font_file_dest_path = fonts_dir / font_filename
