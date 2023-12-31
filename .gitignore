@@ -1,13 +1,7 @@
 # Used by developers as a symbolic link to ~/.local/share/timetable_kit
 /timetable_kit/local
 
-# Data directories for timetable_kit
-stations/
-station_stats/
-
 # Generated output files for timetable_kit
-bad_stations.csv
-stations.csv
 output/
 
 # Working files for Nano editor
@@ -147,6 +141,3 @@ dmypy.json
 
 # libreoffice calc
 .~lock.*.csv
-
-# pdfs generated with the tool
-*.pdf
