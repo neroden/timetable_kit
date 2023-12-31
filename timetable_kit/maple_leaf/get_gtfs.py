@@ -14,15 +14,14 @@ import pandas as pd
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
 # Mine
-from timetable_kit.get_gtfs import AgencyGTFSFiles  # for inheritance
-
 from timetable_kit.feed_enhanced import FeedEnhanced  # for filtering
 
 # For the merge
 from timetable_kit import amtrak
 from timetable_kit import via
-from timetable_kit.merge_gtfs import merge_feed
-from timetable_kit.merge_gtfs import remove_stop_code_column
+
+from timetable_kit.get_gtfs import AgencyGTFSFiles, move_old_dir, move_old_file
+from timetable_kit.merge_gtfs import merge_feed, remove_stop_code_column
 
 from timetable_kit.maple_leaf.station_data import (
     amtrak_code_to_via_code,

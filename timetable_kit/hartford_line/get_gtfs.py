@@ -19,8 +19,7 @@ from timetable_kit.get_gtfs import (
 import timetable_kit.amtrak as amtrak  # for get_gtfs_files
 
 # For the merge process
-from timetable_kit.merge_gtfs import merge_feed
-from timetable_kit.merge_gtfs import remove_stop_code_column
+from timetable_kit.merge_gtfs import merge_feed, remove_stop_code_column
 
 
 # GTFS seems to be at:
