@@ -1,5 +1,4 @@
-#! /usr/bin/env python3
-# amtrak/get_gtfs.py
+# get_gtfs.py
 # Part of timetable_kit
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Retrieve an agency's static GTFS data from the canonical location.
@@ -25,16 +24,20 @@ from zipfile import ZipFile
 
 import requests
 
+from timetable_kit.file_locations import get_timetable_kit_data_home
+
 
 def move_old_dir(dir: PathLike):
     """Move a named dir out of the way to dir.old"""
     # Move the directory out of the way as dir.old
-    dir_old = str(dir) + ".old"
-    if Path(dir_old).exists:
+    dir_old = Path(str(dir) + ".old")
+    if dir_old.exists:
         try:
-            shutil.rmtree(dir_old)
+            shutil.rmtree(str(dir_old))
         except OSError as e:
-            print(f"Failed to remove {dir_old} - at {e.filename} raised {e.strerror}.")
+            print(
+                f"Failed to remove dir {dir_old} - at {e.filename} raised {e.strerror}."
+            )
     dir.rename(dir_old)
 
 
@@ -65,14 +68,10 @@ class AgencyGTFSFiles:
         agency_subdir: name of subdir to use for agency data (eg "amtrak")
         system: Install in system directories rather than user home directory (not tested)
         """
-        if system:
-            _data_home = Path("/var/lib")
-        else:
-            _data_home = xdg_data_home()
-        _ttkit_data_home = _data_home / "timetable_kit"
         self.agency_dir: Path = (
-            _ttkit_data_home / agency_subdir
-        )  # ~/.local/share/timetable_kit/amtrak
+            get_timetable_kit_data_home(system=system) / agency_subdir
+        )
+        # Typically ~/.local/share/timetable_kit/amtrak
 
         self._file: Path = self.agency_dir / "gtfs.zip"  # File for zipped GTFS
         self._dir: Path = self.agency_dir / "gtfs"  # Directory for unzipped GTFS
