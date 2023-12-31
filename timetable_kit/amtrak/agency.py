@@ -274,7 +274,8 @@ class AgencyAmtrak(Agency):
         # Save lines on some timetables by putting the facility code on the same line as the station
         # This is needed at Boston for the Richmond timetable
         # Consider at Toronto for the sheer number of connecting services on the next line
-        return ["BOS", "BBY"]
+        # Save a line at Bennington Downtown for the Vermont busese
+        return ["BOS", "BBY", "BNI"]
 
     def stations_with_many_connections(self) -> list[str]:
         """Return a list of station codes which should get an extra line for
