@@ -16,9 +16,10 @@ Use gucharmap to find unicode characters.
 
 We can convert a SINGLE PAGE PDF to a JPEG as follows:
 (this is implemented in the current program):
-vips copy tt_foo.pdf[dpi=300] tt_foo.jpg
-A much slower alternative (it is readable) is:
-pdftoppm -jpeg -r 300 -singlefile tt_foo.pdf tt_foo
+vips copy tt_foo.pdf[dpi=300,page=0,n=1] tt_foo.jpg
+
+page picks out the first page (counting from zero)
+n tells how many pages to copy into the JPG
 
 Merging individual PDF pages can be done in an external program.
 We do not currently need to do this, but incase it's necessary:
