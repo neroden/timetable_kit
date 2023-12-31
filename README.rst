@@ -42,6 +42,8 @@ It uses Weasyprint to convert HTML timetables to PDF timetables.
 
 It's packaged as a package with Poetry, so presumably requires Poetry to install.
 
+It uses xdg-base-dirs to find out where to store its data.
+
 One of the tools uses the LXML module to parse Amtrak's station web pages.
 
 It uses VIPS (libvips) (command-line tool must be installed and in path) so convert single-page PDF timetables to JPG.
