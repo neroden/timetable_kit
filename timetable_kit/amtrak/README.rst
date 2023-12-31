@@ -9,6 +9,8 @@ within this directory to download the Amtrak station database:
 * ./json_stations.py download
 * ./json_stations.py process
 
+The database will be stored in ~/.local/share/timetable_kit/amtrak/stations
+
 You'll also need to download the Amtrak GTFS (done from the main timetable program):
 * ../timetable.py --agency=amtrak --get-gtfs
 

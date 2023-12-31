@@ -31,6 +31,8 @@ import pandas as pd
 
 import random
 
+from timetable_kit.file_locations import get_timetable_kit_data_home
+
 # SO.  It turns out that Amtrak's station database is exposed as JSON.  Here are the key URLs.
 
 # INITIALIZATION CODE
@@ -48,15 +50,8 @@ station_details_url_postfix = ".json"
 station_details_html_url_prefix = "https://www.amtrak.com/stations/"
 station_details_html_file_postfix = ".html"
 
-# Now, where to put the local cached copy?
-module_location = Path(__file__).parent
-stations_under_module = module_location / "stations"
-
-working_directory = Path(".")
-stations_under_wd = working_directory / "amtrak_stations"
-
-# Default to the one inside the module.
-station_details_dir = stations_under_module
+# Store the station details under ~/.local/share/timetable_kit/amtrak/stations
+station_details_dir = get_timetable_kit_data_home() / "amtrak" / "stations"
 
 
 #########
@@ -148,20 +143,16 @@ def station_details_local_path(station_code: str) -> Path:
 
 def download_station_details(station_code: str) -> str:
     """Download station details for one station as json text; return it."""
-    response = requests.get(station_details_url(station_code))
+    station_details_dir.mkdir(parents=True, exist_ok=True)
+
+    response = requests.get(
+        station_details_url(station_code), timeout=60
+    )  # Minute-long timeout
     # This suffers from the possibility of failure.
     my_text = response.text
     if response.status_code != requests.codes.ok:
         print(
-            "".join(
-                [
-                    "Download JSON for ",
-                    station_code,
-                    " returned error ",
-                    str(response.status_code),
-                    "; blanking file.",
-                ]
-            )
+            f"Download JSON for {station_code} returned error {response.status_code}; blanking file."
         )
         my_text = "{}"  # Don't fill with whatever garbage we got; this is valid JSON
     return my_text
@@ -169,6 +160,7 @@ def download_station_details(station_code: str) -> str:
 
 def save_station_details(station_code: str, station_details: str):
     """Save station details for one station to a suitable file."""
+    station_details_dir.mkdir(parents=True, exist_ok=True)
     with open(
         station_details_local_path(station_code), "w"
     ) as station_details_local_file:
@@ -242,15 +234,7 @@ def download_station_details_html(station_code: str) -> str:
     my_text = response.text
     if response.status_code != requests.codes.ok:
         print(
-            "".join(
-                [
-                    "Download HTML for ",
-                    station_code,
-                    " returned error ",
-                    str(response.status_code),
-                    "; blanking file.",
-                ]
-            )
+            f"Download HTML for { station_code } returned error { response.status_code }; blanking file."
         )
         my_text = ""  # Don't fill with whatever garbage we got; this is valid HTML
     return my_text
@@ -258,6 +242,7 @@ def download_station_details_html(station_code: str) -> str:
 
 def save_station_details_html(station_code: str, station_details: str):
     """Save station HTML for one station to a suitable file."""
+    station_details_dir.mkdir(parents=True, exist_ok=True)
     with open(
         station_details_html_local_path(station_code), "w"
     ) as station_details_html_local_file:
@@ -312,10 +297,8 @@ def download_all_stations(sleep_secs: float = 120.0):
         sleep(sleep_secs + rand_secs)
 
     # Then, cycle through the station codes
-    # Have to set up a StringIO wrapper
-    stations_json_as_file = StringIO(stations_json)
     # This line just works!
-    stations = pd.io.json.read_json(stations_json_as_file, orient="records")
+    stations = pd.io.json.read_json(StringIO(stations_json), orient="records")
     for code in stations["code"].to_list():
         download_one_station(code)
         if sleep_secs != 0.0:
@@ -388,12 +371,7 @@ def make_station_name_dict():
 
 def do_station_processing():
     # EXPERIMENTAL AND INCOMPLETE AND DUPLICATES CODE
-    local = True
-    # stations_json = None # fill in next
-    if local:
-        stations_json = load_stations_json()
-    else:
-        stations_json = download_stations_json()
+    stations_json = load_stations_json()
 
     # Believe it or not, this line JUST WORKS!!!!  Wow!
     # Have to set up a StringIO wrapper
@@ -402,7 +380,7 @@ def do_station_processing():
     stations = pd.io.json.read_json(stations_json_as_file, orient="records")
 
     # OK.  So let's dump-print that table...
-    stations_csv_path = Path("./stations.csv")
+    stations_csv_path = get_timetable_kit_data_home() / "amtrak" / "stations.csv"
     stations.to_csv(stations_csv_path, index=False)
     print("stations.csv dumped")
     # Note: 'country' is blank or CA for Canada (nothing else); stationAlias is of little value
@@ -424,10 +402,12 @@ def do_station_processing():
         else:
             cleaned_station_list.append(code)
 
-    bad_station_list_path = Path("./bad_stations.csv")
+    bad_stations_csv_path = (
+        get_timetable_kit_data_home() / "amtrak" / "bad_stations.csv"
+    )
     # Use PANDAS to dump to file, one per line
     df = pd.DataFrame(bad_station_list)
-    df.to_csv(bad_station_list_path, index=False, header=False)
+    df.to_csv(bad_stations_csv_path, index=False, header=False)
     print("bad_stations.csv dumped")
 
     return cleaned_station_list
@@ -465,14 +445,6 @@ def make_arg_parser():
         help="Process Amtrak stations data, running tests; a local copy must exist. INCOMPLETE",
         aliases=["p"],
     )
-    arg_parser.add_argument(
-        "--directory",
-        "-d",
-        help="""Local directory to store Amtrak JSON station details in.
-Default is within the module timetable_kit/amtrak/stations; but this might not be writable.
-Another good option is ./amtrak_stations""",
-        dest="stations_dir_name",
-    )
     return arg_parser
 
 
@@ -481,23 +453,13 @@ if __name__ == "__main__":
     arg_parser = make_arg_parser()
     args = arg_parser.parse_args()
 
-    if args.command_name is None:
-        arg_parser.print_help()
-
-    # This is ugly, clean it up later
-    if args.stations_dir_name:
-        # Possibly change the stations directory path globals
-        # NOTE, we are not in a function so do not need global keyword
-        station_details_dir = Path(args.stations_dir_name)
-    # Create the directory if it does not exist
-    if not station_details_dir.exists():
-        station_details_dir.mkdir(parents=True)
-
-    if args.command_name == "download":
-        if args.station_code is None:
-            download_all_stations(sleep_secs=args.sleep_secs)
-        else:
-            download_one_station(str.upper(args.station_code))
-    if args.command_name == "process":
-        do_station_processing()
-    sys.exit(0)
+    match args.command_name:
+        case None:
+            arg_parser.print_help()
+        case "download" | "down" | "d":
+            if args.station_code is None:
+                download_all_stations(sleep_secs=args.sleep_secs)
+            else:
+                download_one_station(str.upper(args.station_code))
+        case "process" | "p":
+            do_station_processing()

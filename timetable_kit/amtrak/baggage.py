@@ -48,10 +48,8 @@ def make_checked_baggage_dict() -> dict[str, bool]:
     """
     stations_json = load_stations_json()
 
-    # Have to set up a StringIO wrapper
-    stations_json_as_file = StringIO(stations_json)
     # This line just works!
-    stations = pd.io.json.read_json(stations_json_as_file, orient="records")
+    stations = pd.io.json.read_json(StringIO(stations_json), orient="records")
     station_list = stations["code"].to_list()
 
     checked_baggage_dict = {}

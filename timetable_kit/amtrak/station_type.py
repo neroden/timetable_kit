@@ -12,11 +12,11 @@ This has very similar code to baggage.py
 """
 
 import sys  # for sys.exit
-
+from io import StringIO  # Needed to parse JSON
 import pandas as pd
 
 # For parsing the HTML pages
-from lxml import html
+import lxml.html
 
 from timetable_kit.amtrak.json_stations import (
     load_stations_json,
@@ -109,7 +109,7 @@ def make_station_type_dicts() -> None:
     stations_json = load_stations_json()
 
     # Believe it or not, this line JUST WORKS!!!!  Wow!
-    stations = pd.io.json.read_json(stations_json, orient="records")
+    stations = pd.io.json.read_json(StringIO(stations_json), orient="records")
     station_list = stations["code"].to_list()
 
     global train_or_bus_dict
@@ -117,32 +117,37 @@ def make_station_type_dicts() -> None:
     train_or_bus_dict = {}
     shelter_dict = {}
 
+    print("Collecting station type information...")
     for station_code in station_list:
         station_details_html = None
         station_details_html = load_station_details_html(station_code)
 
         # This is the part where we use the lxml library.
-        html_tree = html.fromstring(station_details_html)
+        html_tree = lxml.html.fromstring(station_details_html)
         description_list = html_tree.xpath(
-            '//h5[@class="hero-banner-and-info__card_station-type"]/text()'
+            # '//h5[@class="hero-banner-and-info__card_station-type"]/text()'
+            # it could have additional classes, so the search has to be more complicated
+            '//h5[contains(concat(" ",@class," ")," hero-banner-and-info__card_station-type ")]/text()'
         )
         # For exotic reasons, the description is returned in a list.
         # This is usually a one-item list, but occasionally it comes out
         # as a multiple item list with duplicates.
         assert isinstance(description_list, list)  # Silence MyPy
         if not description_list:
-            debug_print(1, "no description for", station_code)
+            print(f"No description for {station_code}")
             continue
         if len(description_list) > 1:
-            debug_print(
-                1, "excess description for", station_code, ":", description_list
-            )
+            print(f"Excess description for {station_code} : {description_list}")
             # Only happens at VBC, and the two descriptions are identical
-        description = description_list[0]
+        assert isinstance(description_list[0], str)  # Silence MyPy
+        # May have stray newlines and whitespace; remove this
+        description = description_list[0].strip()
         if description not in station_types_decoding_map:
-            debug_print(1, "unexpected description for", station_code, ":", description)
+            print(f"Unexpected description for {station_code} : {description}")
+            # Fill... something in.
+            train_or_bus_dict[station_code] = False
+            shelter_dict[station_code] = False
         else:
-            assert isinstance(description, str)  # Silence MyPy
             [train_or_bus, shelter] = station_types_decoding_map[description]
             train_or_bus_dict[station_code] = bool(train_or_bus)
             shelter_dict[station_code] = bool(shelter_dict)
@@ -154,7 +159,7 @@ def make_station_type_dicts() -> None:
 # This accepts a station code and gives information about it
 if __name__ == "__main__":
     set_debug_level(2)
-    station_code = sys.argv[1].lower()
+    station_code = sys.argv[1].upper()
     print(
         station_code,
         "is train station?",
