@@ -1,3 +1,5 @@
+Internal cleanup, lower priority:
+-- see if we can use @cache and @cached_property decorators (import functools) to clean up memoized tables
 
 For making updates easier:
 -- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
