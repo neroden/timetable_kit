@@ -1,18 +1,21 @@
 # connecting_services/catalog.py
 # Part of timetable_kit
 #
-# Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023, 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """This module holds the list of known connecting services, with their icon files, CSS
 files, CSS class names, etc.
 
 It is automatically extracted from a CSV file in this package, specified in
 connecting_services_csv_filename
 
-The exported data is connecting_services_df (as a DataFrame) and
-connecting_services_dict (as a dict)
+The exported data is get_connecting_services_df() (as a DataFrame) and
+get_connecting_services_dict() (as a dict)
 """
 # For reading a string as a CSV
 from io import StringIO
+
+# For memoization.  This is crucial; these functions are slow.
+from functools import cache
 
 from jinja2 import Template  # for typehints
 
@@ -21,7 +24,6 @@ import pandas as pd
 
 # Mine
 from timetable_kit.debug import debug_print
-
 from timetable_kit.load_resources import (
     # For actually retrieving the desired CSV file from the package, as a string
     get_connecting_services_csv,
@@ -35,53 +37,57 @@ from timetable_kit.load_resources import (
 # This is the source filename
 connecting_services_csv_filename = "connecting_services.csv"
 
-# This is the global -- it's a public interface.
-connecting_services_dict: dict | None = None
-# This is also a global -- useful sometimes.
-connecting_services_df: dict | None = None
 
 # Internal use: Jinja templates after loading them
-_connecting_service_logo_tpl: Template | None = None
-_connecting_service_logo_key_tpl: Template | None = None
+# Load once, save using memoization
+@cache
+def _get_connecting_service_logo_tpl() -> Template:
+    """Return Jinja template for connecting service logo HTML.
+
+    Memoized.
+    """
+    return template_environment.get_template("connecting_service_logo.html")
 
 
-def _generate_logo_html(df_row):
-    """A clever routine to apply JINJA template to a row and get a value for a new
+@cache
+def _get_connecting_service_logo_key_tpl() -> Template:
+    """Return Jinja template for connecting service logo key HTML.
+
+    Memoized.
+    """
+    return template_environment.get_template("connecting_service_logo_key.html")
+
+
+# Not memoized!
+def _generate_logo_html(df_row: pd.Series) -> str:
+    """Apply JINJA template to a row and get a value for a new
     column, which will be the HTML to refer to the logo (in a station name box)"""
-    # Retrieve memoized Template, or build if necessary
-    if _connecting_service_logo_tpl is None:
-        initialize()
-    assert _connecting_service_logo_tpl is not None  # Silence MyPy
-    # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
-    output = _connecting_service_logo_tpl.render(params)
+    output = _get_connecting_service_logo_tpl().render(params)
     return output
 
 
-def _generate_logo_key_html(df_row):
-    """A clever routine to apply JINJA template to a row and get a value for a new
+# Not memoized!
+def _generate_logo_key_html(df_row: pd.Series) -> str:
+    """Apply JINJA template to a row and get a value for a new
     column, which will be the HTML to explain the logo in the symbol key for the
     timetable."""
-    # Retrieve memoized Template, or build if necessary
-    if _connecting_service_logo_key_tpl is None:
-        initialize()
-    assert _connecting_service_logo_key_tpl is not None  # Silence MyPy
-    # Note that a single row is a Series, so this is Series.todict
     params = df_row.to_dict()
-    output = _connecting_service_logo_key_tpl.render(params)
+    output = _get_connecting_service_logo_key_tpl().render(params)
     return output
 
 
-def initialize():
-    """Initialize the connecting services DataFrame and dict from a suitable file in the
-    package."""
-    # Don't print these, it interferes with output because debug_level isn't set yet.
-    # Consider wrapping the dict in a function and memoizing that way instead.
-    # debug_print(1, "Initializing connecting_services_df")
+@cache
+def get_connecting_services_df() -> pd.DataFrame:
+    """Return the DataFrame of connecting services information.
+
+    Memoized.  Computes on first use, then caches permanently.
+
+    Initialized from a .csv file in the package.  Takes a long time to construct.
+    """
+    debug_print(1, "Initializing get_connecting_services_df()")
 
     # First acquire the CSV file as a string
-    # This is a read-only global:
-    # global connecting_services_database_filename
     connecting_services_csv_str = get_connecting_services_csv(
         connecting_services_csv_filename
     )
@@ -89,21 +95,21 @@ def initialize():
     # Treat the string as a file
     pseudo_file = StringIO(connecting_services_csv_str)
 
-    # Now turn it into a dataframe (and hang onto it, this is a global)
-    global connecting_services_df
+    # Now turn it into a DataFrame
+    # (this is what we will return and cache)
     connecting_services_df = pd.read_csv(
         pseudo_file, index_col=False, header=0, dtype=str
     )
 
-    # This one is used to install the logo files:
+    # Add a column for the SVG filename:
     connecting_services_df["svg_filename"] = (
         connecting_services_df["logo_filename"] + ".svg"
     )
-    # This to accumulate CSS fragments:
+    # Add a column for the CSS fragment filename:
     connecting_services_df["css_filename"] = (
         connecting_services_df["logo_filename"] + ".css"
     )
-    # This is the CSS class names:
+    # Add a column for the CSS class names:
     # Must come before the Jinja template usage!
     connecting_services_df["class"] = connecting_services_df["service_code"] + "_logo"
 
@@ -111,26 +117,13 @@ def initialize():
     # "" or something falsy.  Do this in place.
     connecting_services_df.fillna("", inplace=True)
 
-    # Load the Jinja template environments to generate HTML
-    global _connecting_service_logo_tpl
-    global _connecting_service_logo_key_tpl
-    _connecting_service_logo_tpl = template_environment.get_template(
-        "connecting_service_logo.html"
-    )
-    _connecting_service_logo_key_tpl = template_environment.get_template(
-        "connecting_service_logo_key.html"
-    )
-    # Apply Jinja templates to the dataframe -- axis = 1 applies to each row
+    # Apply Jinja templates to the dataframe -- axis = "columns" applies function to each row
     connecting_services_df["logo_html"] = connecting_services_df.apply(
-        _generate_logo_html, axis=1
+        _generate_logo_html, axis="columns"
     )
     connecting_services_df["logo_key_html"] = connecting_services_df.apply(
-        _generate_logo_key_html, axis=1
+        _generate_logo_key_html, axis="columns"
     )
-
-    # Don't print these, it interferes with output because debug_level isn't set yet.
-    # Consider wrapping the dict in a function and memoizing.  TODO
-    # debug_print(1, "Initializing connecting services dict")
 
     # Reset the DataFrame index, in place, to be service_code
     # Must be done after generating "class" column
@@ -138,22 +131,30 @@ def initialize():
     # (including get_filenames_for_all_logos and get_css_for_all_logos)
     connecting_services_df.set_index("service_code", inplace=True)
 
-    # Now create the dict. service_code->{column->entry}
-    global connecting_services_dict
-    connecting_services_dict = connecting_services_df.to_dict(orient="index")
+    debug_print(1, "Initialized get_connecting_services_df()")
+    # Return (and cache!) the DataFrame
+    return connecting_services_df
 
-    # Don't print these, it interferes with output because debug_level isn't set yet.
-    # debug_print(1, "Connecting services dict initialized")
+
+@cache
+def get_connecting_services_dict() -> dict[str, dict[str, str]]:
+    """Return the dict of connecting services information.
+
+    Memoized.  Computes on first use, then caches permanently.
+
+    Format is service_code->{column->entry}
+    """
+    # Depends on initializing get_connecting_services_df() first
+    connecting_services_dict = get_connecting_services_df().to_dict(orient="index")
+    debug_print(1, "Connecting services dict initialized")
+    # Return (and cache!) the dict
+    return connecting_services_dict
 
 
 def get_filenames_for_all_logos() -> list[str]:
     """Get the list of filenames for logos (without directories), for installing with
     the HTML files."""
-    # Retrieve memoized DataFrame, or build if necessary
-    if connecting_services_df is None:
-        initialize()
-    assert connecting_services_df is not None  # Silence MyPy
-    logo_svg_filenames = connecting_services_df["svg_filename"].tolist()
+    logo_svg_filenames = get_connecting_services_df()["svg_filename"].tolist()
     # Pull the appropriate column, convert to a list
     # debug_print(1, logo_svg_filenames)
     filtered_logo_svg_filenames = [
@@ -166,11 +167,7 @@ def get_filenames_for_all_logos() -> list[str]:
 
 def get_css_for_all_logos() -> str:
     """Get the CSS code to style all the icons we're using."""
-    # Retrieve memoized DataFrame, or build if necessary
-    if connecting_services_df is None:
-        initialize()
-    assert connecting_services_df is not None  # Silence MyPy
-    logo_css_filenames = connecting_services_df["css_filename"].tolist()
+    logo_css_filenames = get_connecting_services_df()["css_filename"].tolist()
     logo_css_list = [
         get_logo_css(filename)
         for filename in logo_css_filenames
@@ -182,7 +179,4 @@ def get_css_for_all_logos() -> str:
 
 ##### TESTING CODE ######
 if __name__ == "__main__":
-    # Retrieve memoized DataFrame, or build if necessary
-    if connecting_services_df is None:
-        initialize()
-    print(connecting_services_dict)
+    print(get_connecting_services_dict())
