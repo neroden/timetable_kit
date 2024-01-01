@@ -62,9 +62,9 @@ from timetable_kit.page_layout import (
 from timetable_kit import connecting_services
 from timetable_kit import icons
 
-# This is a module-level global
-prepared_output_dirs = []
-prepared_output_dirs_for_rpa = []
+# Module-level globals for memoization
+_prepared_output_dirs = []
+_prepared_output_dirs_for_rpa = []
 
 
 def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
@@ -80,11 +80,11 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     # Memoize.
     # We would like to save on copying by caching the fact that we've done this.
     # for_rpa adds an extra file (a superset of the other version)
-    global prepared_output_dirs_for_rpa
-    global prepared_output_dirs
-    if str(output_dir) in prepared_output_dirs_for_rpa:
+    global _prepared_output_dirs_for_rpa
+    global _prepared_output_dirs
+    if str(output_dir) in _prepared_output_dirs_for_rpa:
         return
-    if not for_rpa and str(output_dir) in prepared_output_dirs:
+    if not for_rpa and str(output_dir) in _prepared_output_dirs:
         return
 
     source_dir = Path(__file__).parent
@@ -143,8 +143,8 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
 
     debug_print(1, "Fonts and icons copied to", output_dir)
     if for_rpa:
-        prepared_output_dirs_for_rpa.append(str(output_dir))
-    prepared_output_dirs.append(str(output_dir))
+        _prepared_output_dirs_for_rpa.append(str(output_dir))
+    _prepared_output_dirs.append(str(output_dir))
     return
 
 
