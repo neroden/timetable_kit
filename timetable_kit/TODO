@@ -1,3 +1,6 @@
+Top priority:
+-- switch to TOML
+
 Internal cleanup, lower priority:
 -- see if we can use @cache and @cached_property decorators (import functools) to clean up memoized tables
 
