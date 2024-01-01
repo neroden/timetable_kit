@@ -14,7 +14,7 @@ I am currently using WeasyPrint for HTML->PDF conversion because it is also a Py
 
 Use gucharmap to find unicode characters.
 
-We can convert a SINGLE PAGE PDF to a JPEG as follows:
+We can convert one or more pages out of a PDF to a JPEG as follows:
 (this is implemented in the current program):
 vips copy tt_foo.pdf[dpi=300,page=0,n=1] tt_foo.jpg
 
