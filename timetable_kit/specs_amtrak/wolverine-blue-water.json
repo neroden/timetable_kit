@@ -1,9 +1,0 @@
-{
-    "title": "Wolverine & Blue Water Timetable",
-    "heading": "Wolverine & Blue Water",
-    "aria_label": "Wolverine Blue Water",
-    "reference_date": "20240110",
-    "programmers_warning": "Wolverine trains have identical M-F and SaSu timetables but are listed separately, so days column is overridden: recheck this when GTFS changes.",
-    "key_tz": "true",
-    "for_rpa": "true"
-}

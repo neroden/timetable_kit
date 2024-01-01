@@ -1,0 +1,6 @@
+title = "Downeaster NB"
+heading = "Downeaster Northbound"
+aria_label = "Downeaster Northbound"
+landscape = true
+reference_date = "20240102"
+for_rpa = true

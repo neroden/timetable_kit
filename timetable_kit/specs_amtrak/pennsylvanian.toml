@@ -1,0 +1,9 @@
+title = "Pennsylvanian Timetable"
+heading = "Pennsylvanian"
+aria_label = "Pennsylvanian"
+reference_date = "20240120"
+bottom_text = "<b>The eastbound Capitol Limited connection is unreliable</b> due to delays caused by Norfolk Southern between Chicago and Pittsburgh."
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true

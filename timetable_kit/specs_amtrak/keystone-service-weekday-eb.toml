@@ -1,0 +1,10 @@
+title = "Keystone Weekday Eastbound Timetable"
+heading = "Keystone Service & Pennsylvanian: Weekday Eastbound"
+aria_label = "Keystone Weekday Eastbound"
+reference_date = "20240124"
+landscape = true
+key_baggage = true
+key_d = true
+key_r = true
+compress_credits = true
+for_rpa = true

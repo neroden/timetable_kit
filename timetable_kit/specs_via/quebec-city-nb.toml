@@ -1,0 +1,11 @@
+title = "Québec City Eastbound"
+heading = "Québec City services Eastbound"
+aria_label = "Québec City services Eastbound"
+reference_date = "20240120"
+bottom_text = "<b>Québec City</b>: Via Rail operates a shuttle between Sainte-Foy and Québec City (Gare du Palais) connecting to the Ocean in both directions; reservations are required.<br><b>Saint-Lambert:</b>No local service between Saint-Lambert and Montreal; use Exo."
+key_baggage = true
+key_r = true
+key_d = true
+wheelchair_advance_notice = true
+montreal_airport_shuttle = true
+for_rpa = true

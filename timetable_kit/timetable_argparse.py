@@ -67,7 +67,7 @@ def add_date_argument(parser: argparse.ArgumentParser):
         help="""Reference date.
                 GTFS data contains timetables for multiple time periods;
                 this produces the timetable valid as of the reference date.
-                This overrides any reference date set in the .json file in the tt-spec.
+                This overrides any reference date set in the aux / .toml file in the tt-spec.
                 Should be in YYYYMMDD format.
              """,
         type=str,
@@ -121,7 +121,7 @@ def add_input_dirname_argument(parser: argparse.ArgumentParser):
         "--input-dir",
         "-i",
         dest="input_dirname",
-        help="""Directory to find input .csv / .json files (tt-spec files) in.
+        help="""Directory to find input .csv & .toml (aux) files (tt-spec files) in.
                 Default is not to prefix a directory (use system default for lookup of files).
                 You can also set it using the TIMETABLE_KIT_INPUT_DIR environment variable.
              """,
@@ -136,7 +136,7 @@ def add_spec_files_argument(parser: argparse.ArgumentParser):
         "-l",
         dest="tt_spec_files",
         help="""Root of name of timetable spec file.
-                If you type "--spec cono", then "cono.csv" and "cono.json" files should exist.
+                If you type "--spec cono", then "cono.csv" and "cono.toml" files should exist.
                 The tt-spec format remains a work in progress.
                 For more information see the file tt-spec-documentation.rst.
 
@@ -166,7 +166,7 @@ def make_tt_arg_parser():
     """Make argument parser for timetable.py."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.json files).""",
+        description="""Produce printable HTML timetable from a tt-spec (foo.csv and foo.toml files).""",
     )
     add_spec_files_argument(parser)
     add_positional_spec_files_argument(parser)

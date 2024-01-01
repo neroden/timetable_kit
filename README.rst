@@ -3,6 +3,8 @@ Timetable Kit
 
 Timetable Kit (timetable_kit) is a Python toolkit for generating human-readable timetables from `General Transit Feed Specification (GTFS) <https://en.wikipedia.org/wiki/GTFS>` data.
 
+The user provides a "prototype" timetable in CSV form (with stations/stops along the left column and train numbers/trip numbers along the top row), along with a TOML file specifying options.  Then timetable_kit fills in the times and other info (from GTFS) and produces either HTML & CSS, PDF, or a plaintext CSV file.
+
 Development status
 ==================
 Timetable_kit remains under active development.
@@ -10,8 +12,7 @@ It is quite usable to create Amtrak timetables and VIA Rail Canada timetables.
 
 It has not yet been generalized to create timetables in general.
 
-Interfaces are moderately stable: old spec files should continue to work, mostly.
-New options continue to be added in spec files.
+Interfaces are moderately stable.  New options continue to be added in spec files.
 Command line options remain in a state of flux.
 The interface will change as needs are discovered while creating particular timetables.
 
@@ -22,7 +23,7 @@ the entire package is in a subdirectory called timetable_kit.
 
 The only exceptions are HOWTO, certain build files, this file, and LICENSE.
 
-In particular, data resources and documentation are all inside the package directory at
+In particular, data resources and documentation are largely inside the package directory at
 this time.  This may change.
 
 Dependencies
@@ -40,11 +41,13 @@ Timetable Kit also requires the jinja2 package.  Jinja2 templates are used exten
 
 It uses Weasyprint to convert HTML timetables to PDF timetables.
 
-It's packaged as a package with Poetry, so presumably requires Poetry to install.
+It uses tomlkit to read & write the TOML files.
 
 It uses xdg-base-dirs to find out where to store its data.
 
 One of the tools uses the LXML module to parse Amtrak's station web pages.
+
+It's packaged as a package with Poetry, so presumably requires Poetry to install.
 
 It uses VIPS (libvips) (command-line tool must be installed and in path) so convert single-page PDF timetables to JPG.
 You don't need vips unless you want to make JPG output.  You can also do this conversion yourself using your

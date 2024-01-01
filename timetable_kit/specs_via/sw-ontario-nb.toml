@@ -1,0 +1,9 @@
+title = "Corridor Southwest Ontario Toward Toronto"
+heading = "Southwest Ontario services Toward Toronto"
+aria_label = "Southwest Ontario Inbound"
+reference_date = "20240120"
+bottom_text = "The <b>Maple Leaf</b> is operated jointly by VIA Rail and <img class=\"amtrak_logo\" src=\"logos/Amtrak_logo_2.svg\" alt=\"Amtrak\" title=\"Amtrak\"><a href=\"https://www.amtrak.com/\">Amtrak</a>. See separate timetable for details."
+key_r = true
+key_d = true
+wheelchair_advance_notice = true
+for_rpa = true

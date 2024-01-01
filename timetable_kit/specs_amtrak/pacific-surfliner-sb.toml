@@ -1,0 +1,8 @@
+title = "Pacific Surfliner Southbound"
+heading = "Pacific Surliner: Southbound"
+aria_label = "Pacific Surfliner Southbound"
+landscape = true
+reference_date = "20240102"
+key_baggage = true
+key_d = true
+for_rpa = true

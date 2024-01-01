@@ -1,0 +1,8 @@
+title = "Empire Service Weekend Westbound"
+heading = "Empire Service: Weekend Westbound & Northbound"
+aria_label = "Empire Service Weekend Westbound"
+landscape = true
+reference_date = "20240102"
+key_baggage = true
+all_stations_accessible = true
+for_rpa = true

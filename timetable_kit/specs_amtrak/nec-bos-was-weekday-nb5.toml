@@ -1,0 +1,9 @@
+title = "Amtrak's Northeast Corridor: Weekday Northbound 5"
+heading = "Northeast Corridor: Weekday Northbound 5"
+reference_date = "20240102"
+landscape = true
+key_on_right = true
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true

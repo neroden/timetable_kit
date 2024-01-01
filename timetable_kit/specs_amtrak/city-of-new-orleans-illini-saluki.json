@@ -1,9 +1,0 @@
-{
-    "title": "City of New Orleans / Illini / Saluki Timetable",
-    "heading": "City of New Orleans, Illini, Saluki",
-    "aria_label": "City of New Orleans Illini Saluki",
-    "reference_date": "20231220",
-    "bottom_text": "<b>Note:</b><br>Amtrak only carries passengers between Homewood, IL and Chicago if they are connecting to another Amtrak train at Chicago.<br><a href=\"https://metra.com\">Metra</a> provides regular service between Homewood, IL and Chicago on the Metra Electric line.",
-    "key_baggage": true,
-    "for_rpa": "true"
-}

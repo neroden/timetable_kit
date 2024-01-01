@@ -15,7 +15,7 @@ import os  # For os.PathLike, for passing paths around
 from pathlib import Path, PurePath
 from typing import Type, Self, TypedDict
 
-import json
+import tomlkit
 import pandas as pd
 
 ############
@@ -137,14 +137,14 @@ class TTSpec:
         input_dir = Path(input_dir)
 
         # Accept the spec name with or without a suffix, for convenience
-        filename_base = filename.removesuffix(".csv").removesuffix(".json")
+        filename_base = filename.removesuffix(".csv").removesuffix(".toml")
 
         csv_path = input_dir / (filename_base + ".csv")
-        json_path = input_dir / (filename_base + ".json")
-        debug_print(1, "TTSpec csv_path", csv_path, "/ json_path", json_path)
+        toml_path = input_dir / (filename_base + ".toml")
+        debug_print(1, "TTSpec csv_path", csv_path, "/ toml_path", toml_path)
 
-        new_ttspec = cls(cls.read_json(json_path), cls.read_csv(csv_path))
-        # Fill in output_filename if it isn't in the json. (Edit in place.)
+        new_ttspec = cls(cls.read_toml(toml_path), cls.read_csv(csv_path))
+        # Fill in output_filename if it isn't in the aux. (Edit in place.)
         new_ttspec.aux.setdefault("output_filename", filename_base)
         # Fill in a reasonable value for the unique HTML ID.
         # TODO: do better with this.
@@ -153,20 +153,42 @@ class TTSpec:
 
     # These are here largely for namespacing purposes, to keep names short.
     @staticmethod
-    def read_json(file: os.PathLike | str) -> dict:
-        """Load the JSON file for the tt-spec."""
+    def read_toml(file: os.PathLike | str) -> dict:
+        """Load a TOML file (aux file) for the tt-spec."""
         path = Path(file)
         if path.is_file():
             with open(path, "r") as f:
                 auxfile_str = f.read()
-                aux = json.loads(auxfile_str)
-                debug_print(1, "tt-spec JSON file loaded")
+                # FIXME: maybe we can just use tomllib here?
+                # We do plan to potentially write out edited toml elsewhere
+                # which calls for tomlkit
+                aux = tomlkit.loads(auxfile_str)
+                debug_print(1, "tt-spec TOML (aux) file loaded")
                 return aux
             print("Shouldn't get here, file load failed.")
         else:
             # Make it blank, basically
-            debug_print(1, "No tt-spec JSON file.")
+            debug_print(1, "No tt-spec TOML (aux) file.")
             return {}
+
+    #    @staticmethod
+    #    def read_json(file: os.PathLike | str) -> dict:
+    #        """Load a JSON file for the tt-spec.
+    #
+    #        The preferred format is now TOML, but we keep this around as an alternative.
+    #        """
+    #        path = Path(file)
+    #        if path.is_file():
+    #            with open(path, "r") as f:
+    #                auxfile_str = f.read()
+    #                aux = json.loads(auxfile_str)
+    #                debug_print(1, "tt-spec JSON file loaded")
+    #                return aux
+    #            print("Shouldn't get here, file load failed.")
+    #        else:
+    #            # Make it blank, basically
+    #            debug_print(1, "No tt-spec JSON file.")
+    #            return {}
 
     @staticmethod
     def read_csv(file: os.PathLike | str) -> pd.DataFrame:
@@ -197,7 +219,7 @@ class TTSpec:
         return "tt_" + cleaned
 
     def __getitem__(self: Self, index):
-        """Return first the JSON, second the CSV."""
+        """Return first the aux, second the CSV."""
         # Allow unpacking
         return (self.aux, self.csv)[index]
 
@@ -678,7 +700,7 @@ def fill_tt_spec(
 
     # Extract vital information from the aux (aux) dict.
     if not spec.aux.get("reference_date"):
-        raise InputError("No reference date in .json or at command line!")
+        raise InputError("No reference date in aux file or at command line!")
     reference_date = str(spec.aux["reference_date"])
     debug_print(1, "Working with reference date ", reference_date)
 

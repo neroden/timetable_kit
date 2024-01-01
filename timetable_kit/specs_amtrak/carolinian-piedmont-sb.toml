@@ -1,0 +1,8 @@
+title = "Carolinian and Piedmont Southbound"
+heading = "Carolinian and Piedmont Southbound"
+aria_label = "Carolinian Piedmont Southbound"
+reference_date = "20240108"
+programmers_warning = "Train 80, 19, and 20 have weird variations on incoming NEC timings."
+key_baggage = true
+key_d = true
+for_rpa = true

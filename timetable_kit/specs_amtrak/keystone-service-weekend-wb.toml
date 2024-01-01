@@ -1,0 +1,10 @@
+title = "Keystone Weekend Westbound Timetable"
+heading = "Keystone Service & Pennsylvanian: Weekend Westbound"
+aria_label = "Keystone Weekend Westbound"
+reference_date = "20240124"
+landscape = true
+key_baggage = true
+key_d = true
+key_r = true
+compress_credits = true
+for_rpa = true

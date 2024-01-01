@@ -2,17 +2,18 @@
 # update_reference_dates.py
 # Part of timetable_kit
 # Copyright 2021, 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
-"""Update the reference dates in a whole bunch of .json spec files all at once.
+"""Update the reference dates in a whole bunch of .toml spec files all at once.
 
 A bit of a hackish workaround for a known piece of tedium during timetable updates.
 """
 
 import argparse
 import os  # for os.PathLike for type hints
-import re  # for the in-place file editing
-import shutil
-import tempfile
+import re  # for sanity-checking the argument
 from pathlib import Path
+
+# We read and write toml
+import tomlkit
 
 from timetable_kit.errors import InputError
 
@@ -31,7 +32,7 @@ def make_argparser():
     # Second positional argument is the directory, defaulting to specs_amtrak
     parser.add_argument(
         "directory",
-        help="Directory containing .json files to modify (e.g. ./specs_amtrak)",
+        help="Directory containing .toml files to modify (e.g. ./specs_amtrak)",
         nargs="?",
         default="./specs_amtrak",
     )
@@ -43,32 +44,6 @@ def make_argparser():
     return parser
 
 
-# This routine is ripped off wholesale from Cecil Curry's 2015 implementation at
-# https://stackoverflow.com/questions/4427542/how-to-do-sed-like-text-replace-with-python
-# Thanks to Cecil.
-
-
-def stream_edit_in_place(filename, pattern, repl):
-    """Perform the pure-Python equivalent of in-place `sed` substitution: e.g., `sed -i
-    -e 's/'${pattern}'/'${repl}' "${filename}"`."""
-    # For efficiency, precompile the passed regular expression.
-    pattern_compiled = re.compile(pattern)
-
-    # For portability, NamedTemporaryFile() defaults to mode "w+b" (i.e., binary
-    # writing with updating). This is usually a good thing. In this case,
-    # however, binary writing imposes non-trivial encoding constraints trivially
-    # resolved by switching to text writing. Let's do that.
-    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_file:
-        with open(filename) as src_file:
-            for line in src_file:
-                tmp_file.write(pattern_compiled.sub(repl, line))
-
-    # Overwrite the original file with the munged temporary file in a
-    # manner preserving file attributes (e.g., permissions).
-    shutil.copystat(filename, tmp_file.name)
-    shutil.move(tmp_file.name, filename)
-
-
 def update_reference_date_for_file(file: str | os.PathLike, new_date: str) -> None:
     """Update the reference date in one file."""
     # Sanity check.  Date must be 8 digits (YYYYMMDD).
@@ -76,10 +51,13 @@ def update_reference_date_for_file(file: str | os.PathLike, new_date: str) -> No
     if not re.fullmatch(test_pattern, new_date):
         raise InputError("Date is not in correct format: ", new_date)
 
-    # Search and replace.
-    search_pattern = r'"reference_date":\s*"([0-9]{8})"'
-    replace_string = "".join(['"reference_date": "', new_date, '"'])
-    stream_edit_in_place(file, search_pattern, replace_string)
+    with open(file, "r") as f:
+        my_toml = tomlkit.load(f)
+
+    my_toml["reference_date"] = new_date
+
+    with open(file, "w") as f:
+        tomlkit.dump(my_toml, f)
 
 
 if __name__ == "__main__":
@@ -89,7 +67,7 @@ if __name__ == "__main__":
     directory = Path(args.directory)
 
     for file in directory.iterdir():
-        if file.suffix == ".json":
+        if file.suffix == ".toml":
             if args.nec and not file.name.startswith("nec"):
                 print("Skipping", file)
                 continue

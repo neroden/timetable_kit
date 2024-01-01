@@ -3,7 +3,7 @@ TT-SPEC
 =======
 The "tt-spec" file format is a template used to generate the timetable
 This document describes format as currently implemented.
-It consists of a CSV file (foo.csv) and a JSON file (foo.json).
+It consists of a CSV file (foo.csv) and a TOML file (foo.toml).
 
 The tt-spec format remains a work in progress and may change at any time.
 
@@ -206,12 +206,12 @@ There may be additional special codes for these internal cells.
 So don't count on the free-writing interface 100%.
 For now, all the special codes start with a train number.
 
-JSON FILE
+TOML FILE
 -----------
-Associated with the .csv file is a .json file with the same primary name.
-(so, for cz.csv, use cz.json)
+Associated with the .csv file is a .toml file with the same primary name.
+(so, for cz.csv, use cz.toml)
 
-This is a JSON file with a list of key-value pairs.  So far the defined keys are:
+This is a TOML file with a list of key-value pairs.  So far the defined keys are:
 ::
  {
     "title": "This goes in the title bar of the HTML page",
@@ -265,7 +265,7 @@ output_filename is the base filename of the output files (so, "special.html", "s
 If omitted, this defaults to the same base filename as the spec file; this is here in case you want a *different*
 output file name from the file name for the spec file.
 
-In addition, every key in the .json file is passed through to the Jinja2 templates, allowing for flexibility.
+In addition, every key in the .toml file is passed through to the Jinja2 templates, allowing for flexibility.
 
 
 MULTI-PAGE TIMETABLES

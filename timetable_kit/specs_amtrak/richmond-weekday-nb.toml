@@ -1,0 +1,10 @@
+title = "Richmond & Hampton Roads Timetable - Weekday Northbound"
+heading = "Richmond & Hampton Roads - Weekday Northbound"
+amtrak_css_class = "amtrak-to-css"
+aria_label = "Richmond Weekday Northbound"
+reference_date = "20240124"
+bottom_text = "Carolinian #80 allows pickups at some additional stops on the NEC on Thursday, Friday, and Sunday."
+key_baggage = true
+key_d = true
+compress_credits = true
+for_rpa = true

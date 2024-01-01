@@ -1,18 +1,14 @@
-Top priority:
--- switch to TOML
+Internal cleanup, high priority:
+-- Implement search procedure for specs
 
 Internal cleanup, lower priority:
 -- see if we can use @cache and @cached_property decorators (import functools) to clean up memoized tables
 
 For making updates easier:
--- Read a JSON option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
+-- Read a TOML option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
 ---- Splitter routine takes one TTSpec, returns a list of TTSpecs
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
-
-Internal cleanup, high priority:
--- Switch to TOML
--- Implement search procedure for specs
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
@@ -75,9 +71,8 @@ Internal cleanup:
 6 -- Sanitize pathnames coming from command line and environment.
     We're very sloppy right now.
 
-7 -- add a way to specify "special CSS" in the JSON, in order to avoid duplicative work in the CSV.
-      Basically allow a CSS class, or several, to be embedded in the JSON and referenced in the CSV.
-    Easier after TOML conversion, methinks.
+7 -- add a way to specify "special CSS" in the TOML, in order to avoid duplicative work in the CSV.
+      Basically allow a CSS class, or several, to be embedded in the TOML and referenced in the CSV.
 
 8 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
 

@@ -18,7 +18,7 @@ Before runnning it to generate any timetable, you will have to download the rele
 Before running it to generate an Amtrak timetable, you will have to download the Amtrak stations database.  This is done in the amtrak/
 folder (see the file amtrak/README.rst in that folder).
 
-If you don't already have one, you will also need to write a tt-spec: this consists of a CSV file and a JSON file each in a special format.
+If you don't already have one, you will also need to write a tt-spec: this consists of a CSV file and a TOML (aux) file each in a special format.
 tt-spec-documentation.rst contains documentation on the tt-spec format and future plans for it.
 
 * list_trains.py gets all the trains from one station to another station (one way).
