@@ -155,7 +155,6 @@ def produce_several_timetables(
     do_csv=False,
     do_html=True,
     do_pdf=True,
-    do_jpg=False,
     author=None,
     command_line_reference_date=None,
     input_dirname=None,
@@ -281,36 +280,6 @@ def produce_several_timetables(
                 if not title:
                     title = spec.aux["title"] or "A Timetable"
 
-                if do_jpg:
-                    # This is awful.  JPG can only handle single pages.
-                    # So in this case run through all the steps...
-                    timetable_finished_html = produce_html_file(
-                        [new_page],
-                        title=spec.aux["title"] or "Timetable",
-                        for_rpa=for_rpa,
-                    )
-                    path_for_html = output_dir / Path(subspec_filename_base + ".html")
-                    with open(path_for_html, "w") as outfile:
-                        print(timetable_finished_html, file=outfile)
-                    debug_print(1, "Wrote HTML file", outfile.name)
-                    # Pick up already-created HTML, convert to PDF
-                    weasy_html_pathname = str(path_for_html)
-                    html_for_weasy = weasyHTML(filename=weasy_html_pathname)
-                    path_for_weasy = output_dir / Path(subspec_filename_base + ".pdf")
-                    html_for_weasy.write_pdf(path_for_weasy)
-                    debug_print(1, "Wrote PDF file", path_for_weasy)
-                    # Convert PDF to JPG
-                    path_for_jpg = output_dir / Path(subspec_filename_base + ".jpg")
-                    vips_command = "".join(
-                        [
-                            "vips copy ",
-                            str(path_for_weasy),
-                            "[dpi=300] ",
-                            str(path_for_jpg),
-                        ]
-                    )
-                    os.system(vips_command)
-                    debug_print(1, "Wrote JPG file", path_for_jpg)
         if do_html:
             # Out of the (inner) loop.
             # Produce complete multi-page HTML file.
@@ -416,7 +385,6 @@ def main():
         do_csv=args.do_csv,
         do_html=args.do_html,
         do_pdf=args.do_pdf,
-        do_jpg=args.do_jpg,
         author=author,
         command_line_reference_date=command_line_reference_date,
         input_dirname=input_dirname,

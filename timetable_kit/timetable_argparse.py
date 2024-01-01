@@ -203,16 +203,8 @@ def make_tt_arg_parser():
     parser.add_argument(
         "--no-pdf",
         dest="do_pdf",
-        help="""Do not produce PDF output file unless needed for JPG.  (Default is to produce PDF.  Note PDF is needed to produce JPG.)""",
+        help="""Do not produce PDF output file.  (Default is to produce PDF.)""",
         action="store_false",
-    )
-    parser.add_argument(
-        "--jpeg",
-        "--jpg",
-        "-j",
-        dest="do_jpg",
-        help="""Produce JPG output files (default is not to).  Requires that VIPS be installed.  Might only work on Linux.""",
-        action="store_true",
     )
     parser.add_argument(
         "--nopatch",

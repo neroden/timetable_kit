@@ -49,10 +49,6 @@ One of the tools uses the LXML module to parse Amtrak's station web pages.
 
 It's packaged as a package with Poetry, so presumably requires Poetry to install.
 
-It uses VIPS (libvips) (command-line tool must be installed and in path) so convert single-page PDF timetables to JPG.
-You don't need vips unless you want to make JPG output.  You can also do this conversion yourself using your
-preferred tool.
-
 
 Further Documentation
 =====================
