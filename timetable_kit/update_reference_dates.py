@@ -69,7 +69,7 @@ if __name__ == "__main__":
     for file in directory.iterdir():
         if file.suffix == ".toml":
             if args.nec and not file.name.startswith("nec"):
-                print("Skipping", file)
+                # print("Skipping", file)
                 continue
             print("Updating", file)
             update_reference_date_for_file(file, new_date)
