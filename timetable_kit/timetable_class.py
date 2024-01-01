@@ -7,6 +7,7 @@ Created when PANDAS's Styler wasn't doing what I wanted.
 """
 
 import os  # for os.PathLike
+from functools import cache  # for memoization
 
 import pandas as pd
 from pandas import DataFrame
@@ -86,16 +87,18 @@ class Timetable:
         self.text.to_csv(file, index=False, header=True)
         debug_print(1, "CSV written to", file)
 
+    # The order of decorators matters here.
+    # @classmethod must be on the outside
+    # @cache must be on the inside (caches one per class call)
     @classmethod
+    @cache
     def get_table_tpl(cls) -> Template:
         """Get the Jinja template for a whole table.
 
-        Memoized
+        Memoized.  (Retrieves once per class.)
         """
-        if cls._table_tpl is None:
-            cls._table_tpl = template_environment.get_template("table.html")
-        assert cls._table_tpl is not None
-        return cls._table_tpl
+        debug_print(1, "Retrieving template table.html")
+        return template_environment.get_template("table.html")
 
     def render(self) -> str:
         """Render a timetable to HTML, using Jinja"""
@@ -103,20 +106,16 @@ class Timetable:
         # df[col][row]
         # Do this in Jinja
 
-        # Retrieve with memoization
-        table_tpl = self.get_table_tpl()
-
-        t = self  # Make the dict shorter...
         params = {
-            "table_attributes": t.table_attributes,
-            "thead_row_nums": t.thead_row_nums,
-            "tbody_row_nums": t.tbody_row_nums,
-            "printable_col_nums": t.printable_col_nums,
+            "table_attributes": self.table_attributes,
+            "thead_row_nums": self.thead_row_nums,
+            "tbody_row_nums": self.tbody_row_nums,
+            "printable_col_nums": self.printable_col_nums,
             # These four are DataFrames
-            "text": t.text,
-            "classes": t.classes,
-            "th": t.th,
-            "attributes": t.attributes,
+            "text": self.text,
+            "classes": self.classes,
+            "th": self.th,
+            "attributes": self.attributes,
         }
-        output = table_tpl.render(params)
+        output = self.get_table_tpl().render(params)
         return output
