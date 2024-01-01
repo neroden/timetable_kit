@@ -7,7 +7,7 @@ license = "GNU Affero General Public License v3.0 or later"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-gtfs-kit = ">=5.2.0"
+gtfs-kit = ">=6.0.0"
 pandas = ">=2.1.4"
 Jinja2 = ">=3.1.2"
 weasyprint = ">=60.2"
