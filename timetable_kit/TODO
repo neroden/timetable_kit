@@ -1,9 +1,6 @@
 Internal cleanup, high priority:
 -- Implement search procedure for specs
 
-Internal cleanup, lower priority:
--- see if we can use @cache and @cached_property decorators (import functools) to clean up memoized tables
-
 For making updates easier:
 -- Read a TOML option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
 ---- Splitter routine takes one TTSpec, returns a list of TTSpecs
