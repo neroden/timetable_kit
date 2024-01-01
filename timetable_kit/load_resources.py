@@ -117,6 +117,7 @@ connecting_services_csv_environment = Environment(
 )
 
 
+# Called once per fontname, don't cache it
 def get_font_css(fontname: str) -> str:
     """Load a font CSS file (the ".css" will be appended -- don't include it) and return
     it as a string.
@@ -129,6 +130,7 @@ def get_font_css(fontname: str) -> str:
     return font_css_str
 
 
+# Called once per filename, don't cache it
 def get_icon_css(filename: str) -> str:
     """Load an icon CSS file (specify full filename including .css) and return it as a
     string.
@@ -141,6 +143,7 @@ def get_icon_css(filename: str) -> str:
     return icon_css_str
 
 
+# Not currently in use (for inlined SVGs which aren't working)
 def get_icon_svg(filename: str) -> str:
     """Load an icon SVG file (specify full filename including .svg) and return it as a
     string.
@@ -154,6 +157,7 @@ def get_icon_svg(filename: str) -> str:
     return icon_svg_str
 
 
+# Called once per filename, don't cache it
 def get_logo_css(filename: str) -> str:
     """Load a logo CSS file (specify full filename including .css) and return it as a
     string.
@@ -166,6 +170,7 @@ def get_logo_css(filename: str) -> str:
     return logo_css_str
 
 
+# Not currently in use (for inlined SVGs which aren't working)
 def get_logo_svg(filename: str) -> str:
     """Load a logo SVG file (specify full filename including .svg) and return it as a
     string.
@@ -179,6 +184,7 @@ def get_logo_svg(filename: str) -> str:
     return logo_svg_str
 
 
+# This is only called once, don't cache it
 def get_connecting_services_csv(filename: str) -> str:
     """Load a file (specify full filename) from the connecting_services subpackage and
     return it as a string.

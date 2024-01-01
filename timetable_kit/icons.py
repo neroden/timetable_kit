@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # icons.py
 # Part of timetable_kit
-# Copyright 2022 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2022, 2023, 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Stuff for dealing with icons.
 
 This is intended to be flexible in the future. Weasyprint can only handle icons
@@ -11,8 +11,10 @@ Referenced inline SVGs would be ideal for HTML-on-web output.
 
 For now, we do strictly icons referenced as img.
 """
+# Practically everything in this entire module is memoized.
+# Compute-once, use-repeatedly.
 
-# TODO: consider trying to eliminate the code duplication here
+from functools import cache  # For memoization
 
 from timetable_kit.load_resources import (
     # For retrieving CSS files which go with the SVG files
@@ -22,6 +24,7 @@ from timetable_kit.load_resources import (
 )
 
 
+# Called once to copy the files
 def get_filenames_for_all_icons() -> list[str]:
     """Determine the list of icon filenames which must be copied."""
     icon_filenames = [
@@ -34,6 +37,7 @@ def get_filenames_for_all_icons() -> list[str]:
     return icon_filenames
 
 
+# Called once per HTML document
 def get_css_for_all_icons() -> str:
     """Get the CSS code to style all the icons we're using."""
     full_css = "\n".join(
@@ -50,12 +54,11 @@ def get_css_for_all_icons() -> str:
 
 # Use if icon is not available
 accessible_letter = "W"
-# Memoized global
-accessible_icon_html: str | None = None
 
 
+@cache
 def get_accessible_icon_html(doing_html=True) -> str:
-    """Return suitable HTML for displaying the "wheelchair access" icon.
+    """Return suitable HTML or plaintext for displaying the "wheelchair access" icon.
 
     Amtrak's data does not show full accessibility.  This is being used for basic
     platform accessibility at this time.
@@ -63,14 +66,9 @@ def get_accessible_icon_html(doing_html=True) -> str:
     if not doing_html:
         return accessible_letter
 
-    global accessible_icon_html
-    if accessible_icon_html is None:
-        # Compute and memoize
-        accessible_icon_tpl = template_environment.get_template("icon_accessible.html")
-        params = {"accessible_letter": accessible_letter}
-        accessible_icon_html = accessible_icon_tpl.render(params)
-
-    return accessible_icon_html
+    accessible_icon_tpl = template_environment.get_template("icon_accessible.html")
+    params = {"accessible_letter": accessible_letter}
+    return accessible_icon_tpl.render(params)
 
 
 def get_accessible_icon_css():
@@ -80,25 +78,17 @@ def get_accessible_icon_css():
 
 # Use if icon is not available
 inaccessible_letter = "N"
-# Memoized global
-inaccessible_icon_html: str | None = None
 
 
+@cache
 def get_inaccessible_icon_html(doing_html=True) -> str:
-    """Return suitable HTML for displaying the "no wheelchair access" icon."""
+    """Return suitable HTML or plaintext for displaying the "no wheelchair access" icon."""
     if not doing_html:
         return inaccessible_letter
 
-    global inaccessible_icon_html
-    if inaccessible_icon_html is None:
-        # Compute and memoize
-        inaccessible_icon_tpl = template_environment.get_template(
-            "icon_inaccessible.html"
-        )
-        params = {"inaccessible_letter": inaccessible_letter}
-        inaccessible_icon_html = inaccessible_icon_tpl.render(params)
-
-    return inaccessible_icon_html
+    inaccessible_icon_tpl = template_environment.get_template("icon_inaccessible.html")
+    params = {"inaccessible_letter": inaccessible_letter}
+    return inaccessible_icon_tpl.render(params)
 
 
 def get_inaccessible_icon_css():
@@ -113,26 +103,17 @@ def get_inaccessible_icon_css():
 
 # Use if icon is not available
 baggage_letter = "G"
-# Memoized global
-baggage_icon_html: str | None = None
 
 
-def get_baggage_icon_html(embedded_svg=False, doing_html=True) -> str:
-    """Return suitable HTML for displaying the baggage icon.
-
-    If doing_html=False, return a suitable capital letter
-    """
+@cache
+def get_baggage_icon_html(doing_html=True) -> str:
+    """Return suitable HTML or plaintext for displaying the baggage icon."""
     if not doing_html:
         return baggage_letter
 
-    global baggage_icon_html
-    if baggage_icon_html is None:
-        # Compute and memoize
-        baggage_icon_tpl = template_environment.get_template("icon_baggage.html")
-        params = {"baggage_letter": baggage_letter}
-        baggage_icon_html = baggage_icon_tpl.render(params)
-
-    return baggage_icon_html
+    baggage_icon_tpl = template_environment.get_template("icon_baggage.html")
+    params = {"baggage_letter": baggage_letter}
+    return baggage_icon_tpl.render(params)
 
 
 def get_baggage_icon_css():
@@ -142,23 +123,17 @@ def get_baggage_icon_css():
 
 # Use if icon is not available
 bus_letter = "B"
-# Memoized global
-bus_icon_html: str | None = None
 
 
+@cache
 def get_bus_icon_html(doing_html=True) -> str:
-    """Return suitable HTML for displaying the bus icon."""
+    """Return suitable HTML or plaintext for displaying the bus icon."""
     if not doing_html:
         return bus_letter
 
-    global bus_icon_html
-    if bus_icon_html is None:
-        # Compute and memoize
-        bus_icon_tpl = template_environment.get_template("icon_bus.html")
-        params = {"bus_letter": bus_letter}
-        bus_icon_html = bus_icon_tpl.render(params)
-
-    return bus_icon_html
+    bus_icon_tpl = template_environment.get_template("icon_bus.html")
+    params = {"bus_letter": bus_letter}
+    return bus_icon_tpl.render(params)
 
 
 def get_bus_icon_css():
@@ -168,23 +143,17 @@ def get_bus_icon_css():
 
 # Use if icon is not available
 sleeper_letter = "S"
-# Memoized global
-sleeper_icon_html: str | None = None
 
 
+@cache
 def get_sleeper_icon_html(doing_html=True) -> str:
-    """Return suitable HTML for displaying the sleeper icon."""
+    """Return suitable HTML or plaintext for displaying the sleeper icon."""
     if not doing_html:
         return sleeper_letter
 
-    global sleeper_icon_html
-    if sleeper_icon_html is None:
-        # Compute and memoize
-        sleeper_icon_tpl = template_environment.get_template("icon_sleeper.html")
-        params = {"sleeper_letter": sleeper_letter}
-        sleeper_icon_html = sleeper_icon_tpl.render(params)
-
-    return sleeper_icon_html
+    sleeper_icon_tpl = template_environment.get_template("icon_sleeper.html")
+    params = {"sleeper_letter": sleeper_letter}
+    return sleeper_icon_tpl.render(params)
 
 
 def get_sleeper_icon_css():
