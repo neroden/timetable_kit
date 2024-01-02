@@ -21,6 +21,9 @@ from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
 from timetable_kit.runtime_config import agency_singleton
 
+# To sort by departure time regardless of how many days the trip is
+from timetable_kit.time import modulo24
+
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
     add_date_argument,
@@ -124,7 +127,15 @@ def sort_by_time_at_stop(
         filtered_stop_times.trip_id.isin(trip_id_list)
     ]
     # Note that GTFS requires departure_time even for the last stop.
-    sorted_filtered_stop_times = filtered_stop_times.sort_values(by=["departure_time"])
+
+    # Sneakily add an extra field to deal with over-24-hour trips.
+    filtered_stop_times["modified_departure_time"] = filtered_stop_times[
+        "departure_time"
+    ].apply(modulo24)
+
+    sorted_filtered_stop_times = filtered_stop_times.sort_values(
+        by=["modified_departure_time"]
+    )
     sorted_trip_ids = sorted_filtered_stop_times["trip_id"].to_list()
 
     # Catch the ones which didn't stop at this stop and add them to the end.

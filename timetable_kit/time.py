@@ -349,3 +349,12 @@ def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
         )
         time_str = html_time_str
     return time_str
+
+
+def modulo24(raw_timestr: str) -> str:
+    """Given a departure_time GTFS str, subtract full days and get a departure *time*.
+
+    Used to sort trains by departure time in list_trains.py.
+    """
+    time = explode_timestr(raw_timestr)
+    return f"{time.hour24: >2}:{time.min:0>2}:{time.sec:0>2}"
