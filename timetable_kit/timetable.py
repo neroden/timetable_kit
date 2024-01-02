@@ -18,8 +18,6 @@ import shutil  # To copy files
 from pathlib import Path
 import html  # for html.escape
 
-import xdg_base_dirs  # for storing information like GTFS
-
 from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
 ############
@@ -149,7 +147,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
 
 
 def produce_several_timetables(
-    spec_file_list,
+    list_file_list,
     *,
     gtfs_filename=None,
     do_csv=False,
@@ -195,93 +193,112 @@ def produce_several_timetables(
     # Acquire the feed, enhance it, do generic patching.
     master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
 
-    for spec_file in spec_file_list:
-        debug_print(1, "Producing timetable for", spec_file)
-        if spec_file.endswith(".list"):
-            (title, *subspec_files) = read_list_file(spec_file, input_dir=input_dirname)
-            output_filename_base = spec_file.removesuffix(".list")
+    # Loop over files specified at the command line
+    for list_file in list_file_list:
+        debug_print(1, "Producing timetable for", list_file)
+        if list_file.endswith(".list"):
+            (title, *spec_files) = read_list_file(list_file, input_dir=input_dirname)
+            output_filename_base = list_file.removesuffix(".list")
         else:
-            # Single file.  Treat as list...
-            subspec_files = [spec_file]
+            # Single file.  Treat as if it were a list of one
+            spec_files = [list_file]
             # Placeholders to fill later
             title = None
             output_filename_base = None
+
+        # Start the accumulating page list
         page_list: list[HtmlAndCss] = []
 
-        for_rpa = False  # Will be set true if true for any subspec file
-        for subspec_file in subspec_files:
+        for_rpa = False  # Will be set true if true for any spec file
+
+        # Loop over files within a list file
+        for spec_file in spec_files:
             # Load the tt-spec, both aux and csv
             # Also sets tt_id value in the aux
-            spec = TTSpec.from_files(subspec_file, input_dir=input_dirname)
+            spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
             # Set reference date override -- does nothing if passed "None"
             spec.set_reference_date(command_line_reference_date)
             # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
             reduced_feed = spec.filter_and_reduce_feed(master_feed)
+            # Note that we don't re-reduce the feed for a max-columns split spec (like the NEC).
+            # We could but we want the whole NEC NB/Weekday TT to be valid over the same dates...
 
-            subspec_filename_base = spec.aux["output_filename"]
+            # Find the date range on which the entire reduced feed is valid
+            (latest_start_date, earliest_end_date) = reduced_feed.get_valid_date_range()
+            debug_print(
+                1,
+                f"For {spec_file}: believed valid from {latest_start_date} to {earliest_end_date}",
+            )
+
+            spec_filename_base = spec.aux["output_filename"]
 
             if do_csv:
                 # CSV can only do one page at a time.  Use the subspec name.
+                # Also don't split big specs for CSV.  The end-user can do that.
                 t_plaintext: Timetable = fill_tt_spec(
                     spec, today_feed=reduced_feed, doing_html=False
                 )
                 # Note that there is a real danger of overwriting the source file.
                 # Avoid this by adding an extra suffix to the timetable name.
-                path_for_csv = output_dir / Path(subspec_filename_base + "-out.csv")
+                path_for_csv = output_dir / Path(spec_filename_base + "-out.csv")
                 t_plaintext.write_csv_file(path_for_csv)
 
             if do_html:
-                # Copy the icons and fonts to the output dir.
-                # This is memoized, so it won't duplicate work if you do multiple tables.
-                for_rpa = for_rpa or bool(
-                    spec.aux["for_rpa"]
-                )  # Set true if true on any spec
-                copy_supporting_files_to_output_dir(output_dir, for_rpa)
+                # Set true if true on any spec
+                for_rpa = for_rpa or bool(spec.aux["for_rpa"])
 
-                # Main timetable, same for HTML and PDF
-                t: Timetable = fill_tt_spec(
-                    spec, today_feed=reduced_feed, doing_html=True
-                )
-                # Set table-level attributes
-                # TO DO: move these into Timetable init FIXME TODO
-                table_id = "T_" + spec.aux["tt_id"]
-                table_aria_label = html.escape(spec.aux["table_aria_label"])
-                t.table_attributes = (
-                    'id="{table_id}" class="tt-table" aria-label="{table_aria_label}"'
-                )
-                # Render to HTML
-                timetable_styled_html = t.render()
-                debug_print(1, "HTML styled")
+                # OK!  This code is intended to simplify work on the NEC.
+                if spec.aux.get("max_columns_per_page", 0):
+                    debug_print(
+                        1,
+                        f'Splitting {spec_filename_base} spec with max columns {spec.aux["max_columns_per_page"]}',
+                    )
+                    split_specs = spec.split()
+                else:
+                    # Non-split spec: treat it as a list of one
+                    split_specs = [spec]
 
-                # Find the date range on which the entire reduced feed is valid
-                (
-                    latest_start_date,
-                    earliest_end_date,
-                ) = reduced_feed.get_valid_date_range()
-                debug_print(
-                    1, f"Believed valid from {latest_start_date} to {earliest_end_date}"
-                )
+                # Loop over specs split out programmatically from a single .csv file
+                for subspec in split_specs:
+                    # Main timetable, same for HTML and PDF
+                    t: Timetable = fill_tt_spec(
+                        subspec, today_feed=reduced_feed, doing_html=True
+                    )
+                    # Set table-level attributes
+                    # TO DO: move these into Timetable init FIXME TODO
+                    table_id = "T_" + subspec.aux["tt_id"]
+                    table_aria_label = html.escape(subspec.aux["table_aria_label"])
+                    t.table_attributes = 'id="{table_id}" class="tt-table" aria-label="{table_aria_label}"'
+                    # Render to HTML
+                    timetable_styled_html = t.render()
+                    debug_print(1, "HTML styled")
 
-                # Produce a final complete page, and associated page-specific CSS.
-                # Add it to the list of pages.
-                new_page = produce_html_page(
-                    timetable_styled_html,
-                    spec=spec,
-                    author=author,
-                    start_date=str(latest_start_date),
-                    end_date=str(earliest_end_date),
-                )
-                page_list.append(new_page)
+                    # Produce a final complete page, and associated page-specific CSS.
+                    # Add it to the list of pages.
+                    new_page = produce_html_page(
+                        timetable_styled_html,
+                        spec=subspec,
+                        author=author,
+                        start_date=str(latest_start_date),
+                        end_date=str(earliest_end_date),
+                    )
+                    page_list.append(new_page)
+                # End loop over specs split out programmatically from a single .csv file
 
+            # Still in loop over files within a list file
+            if do_html:
+                # This is done if the list file was really just a single spec file
                 # Fill these only if it wasn't filled by the list file
                 # i.e. only in the single-spec-file case
                 if not output_filename_base:
-                    output_filename_base = subspec_filename_base
+                    output_filename_base = spec_filename_base
                 if not title:
                     title = spec.aux["title"] or "A Timetable"
+            # End loop over files within a list file
 
+        # Out of loop over files within a list file
+        # Still in loop over files specified at the command line
         if do_html:
-            # Out of the (inner) loop.
             # Produce complete multi-page HTML file.
             timetable_finished_html = produce_html_file(
                 page_list, title=title, for_rpa=for_rpa
@@ -290,6 +307,11 @@ def produce_several_timetables(
             with open(path_for_html, "w") as outfile:
                 print(timetable_finished_html, file=outfile)
             debug_print(1, "Wrote HTML file", outfile.name)
+
+            # Copy the icons and fonts to the output dir.
+            # This is memoized, so it won't duplicate work if called repeatedly.
+            copy_supporting_files_to_output_dir(output_dir, for_rpa)
+
         if do_pdf:
             # Pick up already-created HTML, convert to PDF
             weasy_html_pathname = str(path_for_html)
@@ -298,6 +320,7 @@ def produce_several_timetables(
             html_for_weasy.write_pdf(path_for_weasy)
             debug_print(1, "Wrote PDF file", path_for_weasy)
         debug_print(1, "Done producing timetable for", spec_file)
+    # Out of loop over files specified at the command line
 
 
 def main():
@@ -380,7 +403,7 @@ def main():
     command_line_reference_date = args.reference_date  # Does not default, may be None
 
     produce_several_timetables(
-        spec_file_list=spec_file_list,
+        list_file_list=spec_file_list,
         gtfs_filename=gtfs_filename,
         do_csv=args.do_csv,
         do_html=args.do_html,
@@ -398,4 +421,3 @@ def main():
 ##########################
 if __name__ == "__main__":
     main()
-    sys.exit(0)

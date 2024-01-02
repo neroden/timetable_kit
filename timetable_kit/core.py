@@ -12,6 +12,7 @@ Includes the TTSpec type.
 # Other people's packages
 
 import os  # For os.PathLike, for passing paths around
+from copy import deepcopy  # For copying dicts properly
 from pathlib import Path, PurePath
 from typing import Type, Self, TypedDict
 
@@ -281,6 +282,97 @@ class TTSpec:
         self.csv = pd.concat([new_csv, stations_df]).fillna("").reset_index(drop=True)
         debug_print(1, "Augmented TTSpec:")
         debug_print(1, self.csv)
+
+    def split(self: Self) -> list[Self]:
+        """Split a TTSpec with lots of columns according to the max_columns_per_page parameter
+
+        This will only work if all the "special" columns are on the left edge of the spec.
+        Also absolutely requires a column_options row.  (FIXME.)
+        """
+        debug_print(1, "Starting CSV:")
+        debug_print(1, self.csv)
+        cols_per_page = self.aux.get("max_columns_per_page", 0)
+        if cols_per_page == 0:
+            # We are not splitting this timetable
+            return [self]
+
+        (row_count, column_count) = self.csv.shape
+        # column 0 is always the code column
+        for x in range(1, column_count):
+            column_key_str = str(self.csv.iloc[0, x]).strip()
+            if column_key_str.lower() not in special_column_names:
+                first_regular_column = x
+                break
+        else:
+            raise InputError(
+                "Failure splitting spec: No regular columns, only special columns"
+            )
+        debug_print(1, "First regular column", first_regular_column)
+
+        num_regular_columns = column_count - first_regular_column
+
+        # "Upside down floor division"
+        # effectively acts as ceiling division
+        num_pages = -(num_regular_columns // -cols_per_page)
+        # debug_print(1, "Number of pages", num_pages)
+
+        # Left section with the special columns
+        # Pandas slices do NOT include the end, like regular Python slices
+        # Make a copy so we can edit it
+        left_section = self.csv.iloc[:, 0:first_regular_column].copy()
+
+        # This is helpful to check fencepost errors
+        # debug_print(1, "Left section")
+        # debug_print(1, left_section)
+
+        # Accumulate the new specs
+        new_specs = []
+        for i in range(0, num_pages):
+            # Notice that i is 0-indexed, while the printed page number is 1-indexed
+            first_col = first_regular_column + i * cols_per_page
+            potential_post_final_col = first_col + cols_per_page
+            post_final_col = min(potential_post_final_col, column_count)
+
+            debug_print(1, f"Slicing columns from [{first_col} to {post_final_col})")
+            # Pandas slices do NOT include the end, like regular Python slices
+            # Make a copy so we can edit it
+            current_section = self.csv.iloc[:, first_col:post_final_col].copy()
+            # Insert "ardp" in the left column, row 1 (always column-options)
+            # Ugly and fragile.  FIXME.
+            current_section.iloc[1, 0] += " ardp"
+
+            # This is helpful to check fencepost errors
+            # debug_print(1, "Current section:")
+            # debug_print(1, current_section)
+
+            # Now join the left section to the data section, and reindex.
+            new_csv = left_section.join(current_section)
+            # Reset rows index
+            new_csv.reset_index(drop=True, inplace=True)
+            # Reset columns index
+            new_csv.columns = range(new_csv.shape[1])
+            # TODO: see if we can make this reindexing optional.
+
+            # Remember to copy the aux dict so we can change it
+            new_aux = deepcopy(self.aux)
+
+            new_spec = TTSpec(new_aux, new_csv)
+            del new_spec.aux["max_columns_per_page"]
+            new_spec.aux["heading"] += f" Page {i + 1}/{num_pages}"
+            new_spec.aux["aria_label"] += f" page {i + 1}"
+            # This one's critically important since IDs must be unique
+            new_spec.aux["tt_id"] += f"_page_{i + 1}"
+
+            # Wish we could do new_specs[i] = new_spec ?
+            new_specs.append(new_spec)
+
+            debug_print(1, f"Extracted spec {i} (page {i + 1})")
+            # This is helpful for debugging the split as a whole
+            # debug_print(1, new_spec.aux)
+            # debug_print(1, new_spec.csv)
+
+        # And return the list.
+        return new_specs
 
     def filter_and_reduce_feed(self: Self, master_feed: FeedEnhanced) -> FeedEnhanced:
         """Filter a master feed to trips relevant to this spec only.
