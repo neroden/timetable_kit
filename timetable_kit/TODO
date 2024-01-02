@@ -1,9 +1,16 @@
+Top priority:
+-- Prepare "unified" NEC specs for the other timetables
+weekday southbound is done
+weekday northbound
+saturday southbound
+saturday northbound
+sunday southbound
+sunday northbound
+
 Internal cleanup, high priority:
 -- Implement search procedure for specs
 
 For making updates easier:
--- Read a TOML option for "trains_per_page" -- if present, make multipage timetable (with mostly-shared CSS)
----- Splitter routine takes one TTSpec, returns a list of TTSpecs
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
 
