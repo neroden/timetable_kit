@@ -1,0 +1,13 @@
+title = "Amtrak's Northeast Corridor: Weekday Southbound"
+heading = "Northeast Corridor: Weekday Southbound"
+aria_label = "Northeast Corridor Weekday Southbound"
+reference_date = "20240120"
+# This timetable gets split programmatically
+max_columns_per_page = 9
+landscape = true
+key_on_right = true
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true
+
