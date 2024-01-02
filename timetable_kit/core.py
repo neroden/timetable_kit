@@ -334,19 +334,31 @@ class TTSpec:
 
         # Accumulate the new specs
         new_specs = []
+        orphan_flag = False
         for i in range(0, num_pages):
             # Notice that i is 0-indexed, while the printed page number is 1-indexed
             first_col = first_regular_column + i * cols_per_page
             potential_post_final_col = first_col + cols_per_page
             post_final_col = min(potential_post_final_col, column_count)
 
+            # Special "anti-orphan" code:
+            if (i == num_pages - 2) and (post_final_col == column_count - 1):
+                # Would leave one column for next page.
+                # Instead, leave two.
+                post_final_col -= 1
+                orphan_flag = True
+            if (i == num_pages - 1) and (orphan_flag == True):
+                # Pick up the extra column.
+                first_col -= 1
+
             debug_print(1, f"Slicing columns from [{first_col} to {post_final_col})")
             # Pandas slices do NOT include the end, like regular Python slices
             # Make a copy so we can edit it
             current_section = self.csv.iloc[:, first_col:post_final_col].copy()
-            # Insert "ardp" in the left column, row 1 (always column-options)
-            # Ugly and fragile.  FIXME.
-            current_section.iloc[1, 0] += " ardp"
+            if i > 0:
+                # Insert "ardp" in the left column, row 1 (always column-options)
+                # Ugly and fragile.  FIXME.
+                current_section.iloc[1, 0] += " ardp"
 
             # This is helpful to check fencepost errors
             # debug_print(1, "Current section:")
