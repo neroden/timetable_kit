@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # core.py
 # Part of timetable_kit
-# Copyright 2021, 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+# Copyright 2021, 2022, 2023, 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Handle tt-specs and generate timetables.
 
 core.py contains the core code for handling specs and filling in timetables.
@@ -22,6 +22,13 @@ import pandas as pd
 ############
 # My modules
 # This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
+from timetable_kit.time import (
+    get_zonediff,  # for "days"
+    explode_timestr,  # for "days"
+    day_string,  # for "days"
+    get_zone_str,  # for TZ column
+)
+
 from timetable_kit import text_presentation
 from timetable_kit import icons
 
@@ -1166,22 +1173,16 @@ def fill_tt_spec(
                             today_feed.stops.stop_id == reference_stop_id
                         ]
                         stop_tz = stop_df.iloc[0].stop_timezone
-                        zonediff = text_presentation.get_zonediff(
-                            stop_tz, agency_tz, reference_date
-                        )
+                        zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
                         # Get the day change for the reference stop (format is explained in text_presentation)
-                        departure = text_presentation.explode_timestr(
-                            timepoint.departure_time, zonediff
-                        )
+                        departure = explode_timestr(timepoint.departure_time, zonediff)
                         offset = int(departure.day)
                         # Finally, get the calendar (must be unique)
                         calendar = today_feed.calendar[
                             today_feed.calendar.service_id == my_trip.service_id
                         ]
                         # And fill in the actual string
-                        daystring = text_presentation.day_string(
-                            calendar, offset=offset
-                        )
+                        daystring = day_string(calendar, offset=offset)
                         # TODO: add some HTML styling here
                         t.text.iloc[y, x] = daystring
                     # Color this cell
@@ -1292,9 +1293,7 @@ def fill_tt_spec(
                     stop_df = today_feed.stops[today_feed.stops.stop_id == stop_id]
                     stop_tz = stop_df.iloc[0].stop_timezone
                     cell_css_list.append("timezone-cell")
-                    t.text.iloc[y, x] = text_presentation.get_zone_str(
-                        stop_tz, doing_html=doing_html
-                    )
+                    t.text.iloc[y, x] = get_zone_str(stop_tz, doing_html=doing_html)
                 case [_, _, _]:
                     # Line led by station code, column led by train numbers,
                     # cell empty or has a "cell code": the normal case -- we need to fill in a time.

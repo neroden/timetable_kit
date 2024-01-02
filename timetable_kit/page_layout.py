@@ -22,6 +22,7 @@ from timetable_kit.runtime_config import agency_singleton
 from timetable_kit.convenience_types import HtmlAndCss
 from timetable_kit.core import TTSpec
 
+from timetable_kit.time import gtfs_date_to_isoformat
 from timetable_kit import text_presentation
 from timetable_kit import icons
 from timetable_kit import connecting_services
@@ -87,8 +88,8 @@ def produce_html_page(
     ### Prepare Jinja template substitution:
 
     production_date_str = datetime.date.today().isoformat()
-    start_date_str = text_presentation.gtfs_date_to_isoformat(start_date)
-    end_date_str = text_presentation.gtfs_date_to_isoformat(end_date)
+    start_date_str = gtfs_date_to_isoformat(start_date)
+    end_date_str = gtfs_date_to_isoformat(end_date)
 
     html_params = {
         "page_id": page_id,
