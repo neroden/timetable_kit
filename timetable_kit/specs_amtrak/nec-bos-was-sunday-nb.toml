@@ -1,0 +1,13 @@
+title = "Amtrak's Northeast Corridor: Sunday Northbound"
+heading = "Northeast Corridor: Sunday Northbound"
+aria_label = "Northeast Corridor Sunday Northbound"
+reference_date = "20240121"
+# The Crescent often determines which dates work
+# This timetable gets split programmatically
+max_columns_per_page = 9
+landscape = true
+key_on_right = true
+key_baggage = true
+key_d = true
+key_r = true
+for_rpa = true
