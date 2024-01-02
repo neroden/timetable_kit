@@ -1,7 +1,14 @@
+Internal cleanup:
+-- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
+-- make duplicate TSNs a hard error specifically if used in a train spec.
+---- This is important to catch undefined behavior and force
+---- spec authors to revise the specs
+-- Consider doing an initial filter stage on the train list before filling the TT.
+
 Top priority:
 -- Prepare "unified" NEC specs for the other timetables
 weekday southbound is done
-weekday northbound
+weekday northbound is done
 saturday southbound
 saturday northbound
 sunday southbound
@@ -26,14 +33,11 @@ For my Amish friend:
 -- verify that CSVs are working and prep some
 
 For internal cleanliness & generalizing beyond Amtrak and VIA: 
--- consider breaking out a text_time.py from text_presentation.py
 -- Simplify Amtrak JSON->GTFS wheelchair access coding
 
 For making updates easier:
 -- Adapt check_ghost_trains.py to compare a list to weekday / saturday / sunday / weekend output
 from the ./list_trains.py program (this is currently largely manual)
-
--- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
 
 For VIA and generic timetables:
 1 -- start reading calendar_dates.txt
@@ -57,7 +61,7 @@ Internal cleanup:
 
 3 -- Test install and resolve other problematic directory references
 
-4 -- Resolve command-line functions in amtrak/ & via/ into a __main__.py
+4 -- Resolve command-line functions in amtrak/ & via/ elsewhere (half done)
 
 5 -- Improve calendar filtering for days of week
     Still not clear what the best approach for this is.
@@ -78,9 +82,6 @@ Internal cleanup:
 7 -- add a way to specify "special CSS" in the TOML, in order to avoid duplicative work in the CSV.
       Basically allow a CSS class, or several, to be embedded in the TOML and referenced in the CSV.
 
-8 -- lean on pre-existing code in GTFS_kit where possible (restrict_*)
-
-
 Fine for never:
 9 -- implement prototype spec generator using toposort to merge station lists.
      This is really a many-step process.
@@ -95,6 +96,7 @@ Fix:
 
 Known Amtrak GTFS bugs:
 - Bug in Arizona times (listing as Denver rather than Phoenix), reported & patched
+- Really weird Crescent timetabling (not technically a bug probably)
 -- Get Amtrak to fix GTFS days of operation:
 ---- Sunset Limited, Hiawatha, Silver Service 
 
