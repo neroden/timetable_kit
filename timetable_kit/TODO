@@ -5,12 +5,15 @@ Internal cleanup:
 ---- spec authors to revise the specs
 -- Consider doing an initial filter stage on the train list before filling the TT.
 
+Figure out how to do the "last two-row" automatically.
+This one little tiny problem is uglifying the NEC timetables.
+
 Top priority:
 -- Prepare "unified" NEC specs for the other timetables
 weekday southbound is done
 weekday northbound is done
 saturday southbound
-saturday northbound
+saturday northbound is done
 sunday southbound
 sunday northbound
 
