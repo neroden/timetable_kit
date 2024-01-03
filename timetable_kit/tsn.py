@@ -124,6 +124,54 @@ def make_tsn_and_day_to_trip_id_dict(feed: FeedEnhanced) -> dict[str, str]:
     return total_dict
 
 
+def make_train_spec_to_trip_id_dict(
+    feed: FeedEnhanced, train_specs: list[str], allow_dupes: bool = False
+) -> dict[str, str]:
+    """Make and return a dict mapping from either trip_short_name or trip_short_name + " " + day_of_week to
+    trip_id.
+
+    The feed should be filtered down to where this is unique.
+
+    This is designed for situations where a single tsn has different schedules on
+    different days of the week.  Annoying, and bad practice, but allowed by GTFS.
+
+    This takes a list of train_specs and only makes dict keys for things in that list.
+    It throws errors if there are duplicates, unless allow_dupes is passed.
+
+    FIXME: there must be only one space between tsn and day of week in a train_spec.
+    """
+    total_dict: dict = {}
+
+    # This is repetitive but works
+    for train_spec in train_specs:
+        for day in GTFS_DAYS:
+            if train_spec.endswith(day):
+                # Expensive but only runs for suffixed specs, which are rare
+                tsn = train_spec.removesuffix(day).strip()
+                day_feed = feed.filter_by_day_of_week(day)
+                break
+        else:  # Ran through all the GTFS_DAYS, no suffix
+            tsn = train_spec.strip()
+            day_feed = feed
+        assert day_feed is not None  # Silence MyPy
+        # Don't use the filter routine because we don't want to
+        # waste time filtering stop_times
+        matching_trips = day_feed.trips[day_feed.trips["trip_short_name"] == tsn]
+        num_rows = matching_trips.shape[0]
+        if num_rows == 0:
+            raise NoTripError(f"No trip found for {train_spec}")
+        if num_rows > 1:
+            if allow_dupes:
+                print("Warning: two trips found for {train_spec}")
+                # Here we will take the first trip found.
+                # Reasonable only when duplicate *identical* lines are present.
+            else:
+                raise TwoTripsError(f"Two trips found for {train_spec}")
+        sole_trip = matching_trips.iloc[0]
+        total_dict[train_spec] = sole_trip["trip_id"]
+    return total_dict
+
+
 def find_tsn_dupes(feed: FeedEnhanced) -> set[str]:
     """Find trip_short_names which have multiple trip_ids.  Returns the set of duplicate
     tsns.

@@ -1,13 +1,7 @@
 Internal cleanup:
--- Fail if duplicate TSNs are called, rather than warning (avoids trouble, forces disambiguation)
--- make duplicate TSNs a hard error specifically if used in a train spec.
----- This is important to catch undefined behavior and force
----- spec authors to revise the specs
--- Consider doing this in an initial filter stage on the train list before filling the TT.
--- Perhaps while caching first and last station, to solve the last-two-row problem.
-
-Figure out how to do the "last two-row" automatically.
-This one little tiny problem is uglifying the NEC timetables.
+-- Cache first and last station, to solve the last-two-row problem.
+-- Figure out how to do the "last two-row" automatically.
+-- This one little tiny problem is uglifying the NEC timetables.
 
 For making updates easier:
 -- implement auto-search for valid reference dates

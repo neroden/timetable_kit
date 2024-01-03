@@ -317,6 +317,7 @@ def produce_several_timetables(
             weasy_html_pathname = str(path_for_html)
             html_for_weasy = weasyHTML(filename=weasy_html_pathname)
             path_for_weasy = output_dir / Path(output_filename_base + ".pdf")
+            debug_print(1, "Writing PDF file...")
             html_for_weasy.write_pdf(path_for_weasy)
             debug_print(1, "Wrote PDF file", path_for_weasy)
         debug_print(1, "Done producing timetable for", spec_file)

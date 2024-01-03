@@ -248,6 +248,7 @@ This is a TOML file with a list of key-value pairs.  So far the defined keys are
     "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load.",
     "tt_id": "If present, this will have some prefixes added (P_, T_, etc) and be used to generate unique IDs for the HTML page.  Normally you should let the program determine these.",
     "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
+    "allow_duplicate_trips": "Normally timetable_kit will throw an error if a single train spec has multiple trip_ids for the reference date.  Since some GTFS datasets have duplicate trip lines (which are identical), this overrides this behavior and grabs a random one.  Use only if the GTFS has been vetted first!",
  }
 
 reference_date is critically important and is required unless passed at the command line.

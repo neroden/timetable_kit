@@ -58,8 +58,7 @@ from timetable_kit.timetable_styling import (
 from timetable_kit.tsn import (
     train_spec_to_tsn,
     find_tsn_dupes,
-    make_tsn_to_trip_id_dict,
-    make_tsn_and_day_to_trip_id_dict,
+    make_train_spec_to_trip_id_dict,
     stations_list_from_tsn,
     stations_list_from_trip_id,
 )
@@ -832,11 +831,17 @@ def fill_tt_spec(
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
     # This was the single slowest step in earlier versions of the code, using nearly all the runtime.
     # So we generate a dict for it.
-    tsn_to_trip_id = make_tsn_to_trip_id_dict(today_feed)
-    # Because of the problem of "same tsn, different day", we have to add the "91 monday" indices.
-    tsn_and_day_to_trip_id = make_tsn_and_day_to_trip_id_dict(today_feed)
-    # Merger of both dictionaries:
-    train_spec_to_trip_id = tsn_and_day_to_trip_id | tsn_to_trip_id
+
+    # We only generate the dict for trains which were in the train_specs_list in the first place.
+    train_specs_list = spec.get_train_specs_list()
+    # Note train_specs_list still contains "/" items, spread them out now
+    flattened_train_spec_set = flatten_train_specs_list(train_specs_list)
+    # Note that "91 monday" is a perfectly valid spec here
+    train_spec_to_trip_id = make_train_spec_to_trip_id_dict(
+        today_feed,
+        train_specs=flattened_train_spec_set,
+        allow_dupes=spec.aux.get("allow_duplicate_trips"),
+    )
 
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
