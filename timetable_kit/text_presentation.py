@@ -848,3 +848,11 @@ def style_updown(reverse: bool, doing_html=False) -> str:
 
     text = "".join(["<b>", text, "</b>"])
     return text
+
+
+def get_origin_destination_spacer(doing_html: bool) -> str:
+    """Return an appropriate spacer to keep an 'origin' or 'destination' row the right height."""
+    if not doing_html:
+        return ""
+    # Origin and destination are two lines; attempt to force this
+    return "".join(["&nbsp;", SAFE_BR, "&nbsp;"])

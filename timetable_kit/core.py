@@ -1212,6 +1212,13 @@ def fill_tt_spec(
                     # This is probably special text like "to Chicago".
                     # Copy the handwritten text over.
                     t.text.iloc[y, x] = raw_text
+                case ["origin" | "destination", "station" | "stations", _]:
+                    # Fill in the station column with blank space.
+                    # This prevents the line from "compacting" on pages with no origin cells,
+                    # Which is important for the NEC.
+                    t.text.iloc[y, x] = text_presentation.get_origin_destination_spacer(
+                        doing_html=doing_html
+                    )
                 case [
                     "origin" | "destination",
                     ck,
