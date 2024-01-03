@@ -11,8 +11,8 @@ This one little tiny problem is uglifying the NEC timetables.
 Top priority:
 -- Prepare "unified" NEC specs for the other timetables
 weekday southbound is done NYP-PHL and BOS-NYP
-weekday northbound is done PHL-NYP not NYP-BOS
-saturday southbound
+weekday northbound is done PHL-NYP and NYP-BOS
+saturday southbound is dont PHL-NYP and NYP-BOS
 saturday northbound is done PHL-NYP and NYP-BOS
 sunday southbound
 sunday northbound
