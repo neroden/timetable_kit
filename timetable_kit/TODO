@@ -3,26 +3,18 @@ Internal cleanup:
 -- make duplicate TSNs a hard error specifically if used in a train spec.
 ---- This is important to catch undefined behavior and force
 ---- spec authors to revise the specs
--- Consider doing an initial filter stage on the train list before filling the TT.
+-- Consider doing this in an initial filter stage on the train list before filling the TT.
+-- Perhaps while caching first and last station, to solve the last-two-row problem.
 
 Figure out how to do the "last two-row" automatically.
 This one little tiny problem is uglifying the NEC timetables.
 
-Top priority:
--- Prepare "unified" NEC specs for the other timetables
-weekday southbound is done NYP-PHL and BOS-NYP
-weekday northbound is done PHL-NYP and NYP-BOS
-saturday southbound is dont PHL-NYP and NYP-BOS
-saturday northbound is done PHL-NYP and NYP-BOS
-sunday southbound is done PHL-NYP and NYP-BOS
-sunday northbound
-
-Internal cleanup, high priority:
--- Implement search procedure for specs
-
 For making updates easier:
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
+
+Internal cleanup, high priority:
+-- Implement search procedure for specs
 
 For prettiness:
 1 -- get the "sleeper" symbol printing (the icon and hooks are ready)
