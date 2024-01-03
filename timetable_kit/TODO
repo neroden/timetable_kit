@@ -14,7 +14,7 @@ weekday southbound is done NYP-PHL and BOS-NYP
 weekday northbound is done PHL-NYP and NYP-BOS
 saturday southbound is dont PHL-NYP and NYP-BOS
 saturday northbound is done PHL-NYP and NYP-BOS
-sunday southbound
+sunday southbound is done PHL-NYP and NYP-BOS
 sunday northbound
 
 Internal cleanup, high priority:
