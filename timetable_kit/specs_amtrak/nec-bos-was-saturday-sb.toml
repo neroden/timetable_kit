@@ -1,10 +1,9 @@
 title = "Amtrak's Northeast Corridor: Saturday Southbound"
 heading = "Northeast Corridor: Saturday Southbound"
 aria_label = "Northeast Corridor Saturday Southbound"
-reference_date = "20240120"
-# The Crescent often determines which dates work
-# 97 missing on 01-21
+reference_date = "20240205"
 # This timetable gets split programmatically
+# Problem trains to double-check: 20, 80, 98
 max_columns_per_page = 9
 landscape = true
 key_on_right = true
