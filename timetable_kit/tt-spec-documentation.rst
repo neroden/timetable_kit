@@ -159,6 +159,9 @@ This is the only way to override the default "first train listed wins" behavior.
 This will also suppress the display of both arrival and departure time:
 "first" will only list departure time, and "last" will only list arrival time.
 They will also suppress the use of "R" and "D" notations, which are obvious on the first and last trains.
+Normally the program can detect first and last stations automatically from GTFS.
+But when it can't (for instance, when the train continues to more stations but you don't want to mention that,
+or if "ghost stations" are recorded in the GTFS) you can use these notations to correct behavior.
 
 These special codes are intended to be used only in four situations:
 -- first station on the timetable for a train
@@ -166,9 +169,9 @@ These special codes are intended to be used only in four situations:
 -- station where a train splits (list the station on two lines, and specify which line gets which tsn)
 -- station where a train connects to another (list the station on two lines, and specify which line gets which tsn)
 
-To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.
+To handle some really specialized display situations, it is also possible to write "8 first two_row" or "8 last two_row".  Normally a first or last station will cause single-row display, which is normally desirable.  However, sometimes there's another train on the row which needs two row display, so this can be overridden.  This usually works without user intervention but these are supplied for when it doesn't.
 
-Just "last" or "first" by itself, or "last two-row" or "first two-row", can also be used if there is only one train in the column; this is mainly needed to clean up display in some situations.
+Just "last" or "first" by itself, or "last two-row" or "first two-row", can also be used if there is only one train in the column; this is mainly needed to clean up display in some situations.  Not often any more.
 
 A cell may also contain the special code "blank". This is for clarity.  It will be equivalent to putting a single
 space character in the cell; it will show as a white cell.

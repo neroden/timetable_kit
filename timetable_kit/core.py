@@ -1424,11 +1424,6 @@ def fill_tt_spec(
                                 # It is a bus!
                                 is_bus = True
 
-                        # Normally we are two_row if the station calls for it,
-                        # but (hackishly) we allow the cell_codes to override it.
-                        # This isn't quite right as it should be station specific.
-                        two_row = is_ardp_station(station_code)
-
                         # MUST figure first_stop and last_stop
                         # ...which means we need to make earlier passes through the table FIXME
                         # But for now we can handle it with manual annotation in the spec
@@ -1437,10 +1432,26 @@ def fill_tt_spec(
                         if cell_codes:
                             is_first_stop = cell_codes["first"]
                             is_last_stop = cell_codes["last"]
-                            if is_first_stop or is_last_stop:
+                        # Now we can autodetect first or last stop.
+                        # Still allow manual override if not detected, though.
+                        if station_code == train_spec_to_first_stop[train_spec]:
+                            is_first_stop = True
+                        if station_code == train_spec_to_last_stop[train_spec]:
+                            is_last_stop = True
+
+                        # Normally we are two_row if the station calls for it,
+                        # but (hackishly) we allow the cell_codes to override it.
+                        # This isn't quite right as it should be station specific.
+                        two_row = is_ardp_station(station_code)
+
+                        if cell_codes:
+                            if not cell_codes["two_row"] and (
+                                cell_codes["first"] or cell_codes["last"]
+                            ):
+                                # Default to one-row in this special case.
                                 two_row = False
                             if cell_codes["two_row"]:
-                                # Allow spec creator to force two_row
+                                # Absolutely force two-row in this case.
                                 two_row = True
 
                         cell_text = text_presentation.timepoint_str(

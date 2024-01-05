@@ -1,8 +1,3 @@
-Internal cleanup:
--- Cache first and last station, to solve the last-two-row problem.
--- Figure out how to do the "last two-row" automatically.
--- This one little tiny problem is uglifying the NEC timetables.
-
 For making updates easier:
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
