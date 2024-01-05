@@ -845,6 +845,7 @@ def fill_tt_spec(
 
     # Create an inner function to get the trip from the tsn, using the dict we just made
     # Also depends on the today_feed
+    # Note: has redundant error checking, but probably best to leave that
     def trip_from_train_spec_local(train_spec: str) -> pd.Series:
         assert today_feed.trips is not None  # Silence MyPy
         try:
@@ -855,6 +856,16 @@ def fill_tt_spec(
         raise_error_if_not_one_row(my_trips)
         my_trip = my_trips.iloc[0]
         return my_trip
+
+    # For each train in the spec, archive first and last station.
+    # This is used for origin, for destination, and for auto-identifying
+    # layout of last and first station (arrival vs. departure) in two-row format.
+    train_spec_to_first_stop = {}
+    train_spec_to_last_stop = {}
+    for train_spec, trip_id in train_spec_to_trip_id.items():
+        stations_df_for_train_spec = stations_list_from_trip_id(today_feed, trip_id)
+        train_spec_to_first_stop[train_spec] = stations_df_for_train_spec.iat[0]
+        train_spec_to_last_stop[train_spec] = stations_df_for_train_spec.iat[-1]
 
     # Now, we need to determine whether the tsn is a bus.  This is actually in GTFS.
     # However, it has to be looked up by trip_id, so this needs to use the local version
@@ -914,8 +925,8 @@ def fill_tt_spec(
     debug_print(1, "Prepped timetable structure.")
 
     # Debug-print the spec in its "final" form
-    debug_print(1, "Spec CSV immediately before filling timetable:")
-    debug_print(1, spec.csv)
+    debug_print(3, "Spec CSV immediately before filling timetable:")
+    debug_print(3, spec.csv)
 
     # Go through the columns to get an ardp columns map -- cleaner than current implementation
     # FIXME.
@@ -1045,14 +1056,12 @@ def fill_tt_spec(
         # ...with column scope (although that's usually automatic)
         t.attributes.iloc[0, x] = 'scope="col" role="columnheader"'
 
-        # Cache this for use in "origin" and "destination";
-        # it only looks at the first tsn.
-        # It won't fill on special columns, which is OK
+        # There are several cases where we look only at the first train spec in the list,
+        # because we don't have a better way to do it yet.  FIXME.
+        # In these cases, "noheader" is not relevant, so remove it.
+        first_train_spec = None
         if train_specs:
-            train_spec = train_specs[0]  # Look only at the first train in the column
-            train_spec = train_spec.removesuffix("noheader").strip()
-            col_trip_id = train_spec_to_trip_id[train_spec]
-            stations_df_for_column = stations_list_from_trip_id(today_feed, col_trip_id)
+            first_train_spec = train_specs[0].removesuffix("noheader").strip()
 
         for y in range(1, row_count):  # First (0) row is the header
             station_code = str(spec.csv.iloc[y, 0])  # row y, column 0
@@ -1160,7 +1169,7 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0], route_from_train_spec_local
+                            first_train_spec, route_from_train_spec_local
                         )
                     )
                 case ["days" | "days-of-week", _, reference_stop_code]:
@@ -1173,9 +1182,9 @@ def fill_tt_spec(
                     # So get the reference stop_id / station code to use; user-specified
                     if len(train_specs) > 1:
                         print(
-                            "Warning: using only ", train_specs[0], " for days header"
+                            "Warning: using only ", first_train_spec, " for days header"
                         )
-                    my_trip = trip_from_train_spec_local(train_specs[0])
+                    my_trip = trip_from_train_spec_local(first_train_spec)
                     timepoint = today_feed.get_timepoint_from_trip_id(
                         my_trip.trip_id, reference_stop_id
                     )
@@ -1206,7 +1215,7 @@ def fill_tt_spec(
                     # FIXME, currently using color from first tsn only
                     cell_css_list.append(
                         get_time_column_stylings(
-                            train_specs[0], route_from_train_spec_local
+                            first_train_spec, route_from_train_spec_local
                         )
                     )
                 case [_, _, raw_text] if raw_text != "" and not cell_codes:
@@ -1236,7 +1245,7 @@ def fill_tt_spec(
                     # IF it is not in this timetable, print something appropriate
                     # Only looks at the first tsn.  (FIXME)
                     # Free-written text was checked earlier
-                    first_station_code = stations_df_for_column.iat[0]
+                    first_station_code = train_spec_to_first_stop[first_train_spec]
                     if first_station_code not in station_codes_list:
                         t.text.iloc[y, x] = agency_singleton().get_station_name_from(
                             first_station_code,
@@ -1250,7 +1259,7 @@ def fill_tt_spec(
                     # IF it is not in this timetable, print something appropriate
                     # Only looks at the first tsn. (FIXME)
                     # Free-written text was checked earlier
-                    last_station_code = stations_df_for_column.iat[-1]
+                    last_station_code = train_spec_to_last_stop[first_train_spec]
                     if last_station_code not in station_codes_list:
                         t.text.iloc[y, x] = agency_singleton().get_station_name_to(
                             last_station_code,
