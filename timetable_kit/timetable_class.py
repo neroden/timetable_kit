@@ -8,6 +8,7 @@ Created when PANDAS's Styler wasn't doing what I wanted.
 
 import os  # for os.PathLike
 from functools import cache  # for memoization
+import html  # for html.escape
 
 import pandas as pd
 from pandas import DataFrame
@@ -31,8 +32,11 @@ class Timetable:
     # Internal use: Jinja templates after loading
     _table_tpl: Template | None = None
 
-    def __init__(self, spec_df: pd.DataFrame) -> None:
-        """Pass in the CSV part of a spec as a dataframe, which is used only for its shape"""
+    def __init__(self, spec) -> None:
+        """Pass in a TTSpec, which is used for its shape and some of the aux values"""
+        # Note that we can't specify type on the spec due to circular imports -- FIXME
+
+        spec_df = spec.csv
         (row_index, col_index) = spec_df.axes
         # Timetable (text)
         self.text = pd.DataFrame(
@@ -73,9 +77,19 @@ class Timetable:
         self.printable_col_nums = range(1, self.col_count)
 
         debug_print(1, "Copied shape of spec.")
+
         # Things which go on the <table> tag
-        # We can get these from the TTSpec.  Fix after rearranging modules. FIXME
-        self.table_attributes = ""
+        # We can get these from the TTSpec.
+        # Note that this creates a circular import issue with typechecking.  FIXME if possible.
+
+        # This one must be set: bail if it isn't
+        table_id = "T_" + spec.aux["tt_id"]
+        # This one is optional, if missing we'll just say "Timetable"
+        aria_label = html.escape(spec.aux.get("aria_label", ""))
+        # Use fstring here
+        self.table_attributes = (
+            f'id="{table_id}" class="tt-table" aria-label="{aria_label} Timetable"'
+        )
 
     def write_csv_file(self, file: os.PathLike | str) -> None:
         """Write this out as a CSV file at the given path.

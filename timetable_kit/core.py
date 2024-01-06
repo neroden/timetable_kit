@@ -109,32 +109,19 @@ class TTSpec:
         Subroutine of TTSpec.__init__()
 
         This edits the dict in place.
+
+        This should be minimized so that the spec can be written out again
+        with minimal changes.  Do defaults elsewhere when possible.
         """
-        self.aux.setdefault("for_rpa", False)
-        # Affects a lot of things.
-        self.aux.setdefault("transposed", False)
-        # These are used when filling the timetable.
-        self.aux.setdefault("train_numbers_side_by_side", False)
-        self.aux.setdefault("dwell_secs_cutoff", 300)
-        self.aux.setdefault("use_bus_icon_in_cells", False)
-        self.aux.setdefault("box_time_characters", False)
-        self.aux.setdefault("times_24h", False)
-        # aria_label should be set in spec files.
-        # Derive table_aria_label from it by appending "Timetable"
-        # If it wasn't set, just use "Timetable".
-        self.aux.setdefault(
-            "table_aria_label", self.aux.get("aria_label", "") + " Timetable"
-        )
-        # These are used later, setting up the CSS
-        self.aux.setdefault("font_name", "SpartanTT")
-        self.aux.setdefault("font_size", "8px")  # 8px = 6pt
-        self.aux.setdefault("font_allow_ligatures", False)
+        pass
 
     def set_reference_date(self: Self, reference_date: GTFSDate | None):
         """Set the reference_date in the aux part of the TTSpec.
 
         If None is passed, does nothing (leaves it unchanged).
         """
+        # TODO: we want to eliminate this editing in place to allow for read/write
+        # without adding extra bits
         if reference_date:
             self.aux["reference_date"] = reference_date
 
@@ -151,6 +138,8 @@ class TTSpec:
         debug_print(1, "TTSpec csv_path", csv_path, "/ toml_path", toml_path)
 
         new_ttspec = cls(cls.read_toml(toml_path), cls.read_csv(csv_path))
+        # TODO: we want to eliminate this editing in place to allow for read/write
+        # without adding extra bits
         # Fill in output_filename if it isn't in the aux. (Edit in place.)
         new_ttspec.aux.setdefault("output_filename", filename_base)
         # Fill in a reasonable value for the unique HTML ID.
@@ -698,6 +687,7 @@ def make_stations_max_dwell_map(
 
     The spec's aux section should contain
     dwell_secs_cutoff: below this, we don't bother to list arrival and departure times both
+    Default is 300 (5 minutes)
 
     Expects a feed already filtered to a single date.
     The feed *may* be restricted to the relevant trains (but must contain all relevant trains).
@@ -707,7 +697,7 @@ def make_stations_max_dwell_map(
     If any train in tsns has a dwell time of dwell_secs or longer at a station,
     then the dict returns True for that station_code; otherwise False.
     """
-    dwell_secs_cutoff = spec.aux["dwell_secs_cutoff"]
+    dwell_secs_cutoff = spec.aux.get("dwell_secs_cutoff", 300)
     # First get stations and trains list from tt_spec.
     stations_list = spec.get_stations_list()
     train_specs_list = spec.get_train_specs_list()
@@ -768,10 +758,6 @@ def fill_tt_spec(
     spec: a TTSpec containing both the CSV spec and the auxilliary aux
     Most components of the aux are optional. The following are mandatory:
         reference_date
-        train_numbers_side_by_side
-        dwell_secs_cutoff
-        use_bus_icon_in_cells
-        box_time_characters
     (These will all be given good default values when creating a TTSpec.)
 
     today_feed: GTFS feed to work with.  Mandatory.
@@ -814,11 +800,12 @@ def fill_tt_spec(
     reference_date = str(spec.aux["reference_date"])
     debug_print(1, "Working with reference date ", reference_date)
 
-    times_24h = bool(spec.aux["times_24h"])
-    train_numbers_side_by_side = bool(spec.aux["train_numbers_side_by_side"])
-    use_bus_icon_in_cells = bool(spec.aux["use_bus_icon_in_cells"])
-    box_time_characters = bool(spec.aux["box_time_characters"])
-    transposed = bool(spec.aux["transposed"])
+    # Set correct defaults for various things not always in the aux
+    times_24h = bool(spec.aux.get("times_24h"))
+    train_numbers_side_by_side = bool(spec.aux.get("train_numbers_side_by_side"))
+    use_bus_icon_in_cells = bool(spec.aux.get("use_bus_icon_in_cells"))
+    box_time_characters = bool(spec.aux.get("box_time_characters"))
+    transposed = bool(spec.aux.get("transposed"))
 
     if "programmers_warning" in spec.aux:
         print("WARNING: ", spec.aux["programmers_warning"])
@@ -921,7 +908,7 @@ def fill_tt_spec(
     # th -- boolean table, is this a <th> cell?  Default False
     # classes -- string of CSS classes for each cell
     # attributes -- extra attribute definitions string for each cell
-    t = Timetable(spec.csv)
+    t = Timetable(spec)
     debug_print(1, "Prepped timetable structure.")
 
     # Debug-print the spec in its "final" form

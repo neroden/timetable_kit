@@ -219,8 +219,8 @@ This is a TOML file with a list of key-value pairs.  So far the defined keys are
  {
     "title": "This goes in the title bar of the HTML page",
     "heading": "This is the heading at the top of the page.  Will be prefixed by 'Amtrak's' or 'VIA Rail:' for those agencies.",
+    "aria_label": "This is a short name for the page, like 'Maple Leaf'; will be used to generate aria-label values for page landmarks for screenreaders.  You MUST include this.  Note underscore, not hyphen.",
     "agency_css_class": "Override the special agency CSS classes used for the timetable. Used to eliminate the automatic prefixing of 'Amtrak's' or to change the heading color.",
-    "aria_label": "This is a short name for the page, like 'Maple Leaf'; will be used to generate aria-label values for page landmarks for screenreaders.  You SHOULD include this.  Note underscore, not hyphen.",
     "output_filename": "special",
     "reference_date": "20220528",
     "top_text": "This will be printed prominently near the top of the timetable: should be used for special notes for this particular timetable or these particular trains.  Used for merged/split trains.",
@@ -250,7 +250,6 @@ This is a TOML file with a list of key-value pairs.  So far the defined keys are
     "box_time_characters": "If set, use CSS boxes to try to line up the times.  For fonts which lack tabular-nums.",
     "font_debugging": "If set, the backup font will be set to "cursive" to make it really obvious that your chosen font didn't load.",
     "tt_id": "If present, this will have some prefixes added (P_, T_, etc) and be used to generate unique IDs for the HTML page.  Normally you should let the program determine these.",
-    "table_aria_label": "This is a caption for the main table, used by screenreaders only. Usually you can let the program generate it from aria_label.  Note underscore, not hyphen.",
     "allow_duplicate_trips": "Normally timetable_kit will throw an error if a single train spec has multiple trip_ids for the reference date.  Since some GTFS datasets have duplicate trip lines (which are identical), this overrides this behavior and grabs a random one.  Use only if the GTFS has been vetted first!",
  }
 

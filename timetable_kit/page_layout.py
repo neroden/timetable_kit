@@ -146,14 +146,13 @@ def produce_html_page(
     else:
         backup_font_name = "sans-serif"
 
-    # Default fonts are now set elsewhere, way up in timetable.py in the TTSpec class.
-
+    # Default fonts are set here.
     per_page_css_params = {
         "page_id": page_id,
-        "font_name": spec.aux["font_name"],
+        "font_name": spec.aux.get("font_name", "SpartanTT"),
         "backup_font_name": backup_font_name,
-        "font_size": spec.aux["font_size"],
-        "font_allow_ligatures": spec.aux["font_allow_ligatures"],  # False
+        "font_size": spec.aux.get("font_size", "6pt"),
+        "font_allow_ligatures": spec.aux.get("font_allow_ligatures", False),
     }
     # Get the Jinja2 template environment (set up in load_resources module)
     # and use it to retrieve the correct template (complete with many includes)...

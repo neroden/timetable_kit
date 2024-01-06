@@ -16,7 +16,6 @@ import os  # for os.getenv
 import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 from pathlib import Path
-import html  # for html.escape
 
 from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
@@ -245,7 +244,7 @@ def produce_several_timetables(
 
             if do_html:
                 # Set true if true on any spec
-                for_rpa = for_rpa or bool(spec.aux["for_rpa"])
+                for_rpa = for_rpa or bool(spec.aux.get("for_rpa"))
 
                 # OK!  This code is intended to simplify work on the NEC.
                 if spec.aux.get("max_columns_per_page", 0):
@@ -264,11 +263,6 @@ def produce_several_timetables(
                     t: Timetable = fill_tt_spec(
                         subspec, today_feed=reduced_feed, doing_html=True
                     )
-                    # Set table-level attributes
-                    # TO DO: move these into Timetable init FIXME TODO
-                    table_id = "T_" + subspec.aux["tt_id"]
-                    table_aria_label = html.escape(subspec.aux["table_aria_label"])
-                    t.table_attributes = 'id="{table_id}" class="tt-table" aria-label="{table_aria_label}"'
                     # Render to HTML
                     timetable_styled_html = t.render()
                     debug_print(1, "HTML styled")
