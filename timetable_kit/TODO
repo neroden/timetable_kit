@@ -1,3 +1,5 @@
+-- Combine kingston-sub timetable pages.
+
 For making updates easier:
 -- implement auto-search for valid reference dates
 ---- catch breakage on a per-page basis or a per-file basis?
