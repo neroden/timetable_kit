@@ -3,7 +3,7 @@ column-options,,,ardp,,ardp,,,,,
 route-name,,,,,,,,,,
 days,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT,CLT
 updown,,,,,,,,,,
-,,,"<div style=""text-align: right;"">from</div>","<div style=""text-align: left;""> New Orleans</div>",,,,,,
+origin,,,,,,,,,,
 CLT,,,,,first,first,first,first,first,first
 KAN,,,,,,,,,,
 SAL,,,,,,,,,,
