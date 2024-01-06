@@ -2,6 +2,9 @@
 
 For making updates easier:
 -- implement auto-search for valid reference dates
+---- Move defaulting out of the TTSpec so that it can be written out without gaining entries
+---- Catch NoTripError, TwoTripsError, and timetables with one-day validity (possibly longer?)
+---- rewrite specs automagically 
 ---- catch breakage on a per-page basis or a per-file basis?
 
 Internal cleanup, high priority:
