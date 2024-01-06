@@ -2,8 +2,9 @@
 column-options,,,ardp,,,,,ardp
 route-name,,,,,,,,
 days,,,CVS,CVS,CVS,CVS,CVS,CVS
-RNK,,,first,from<br>New Orleans,from<br>New Orleans,,blank,first
-LYH,,,,,,,from<br>Chicago,
+origin,,,,,,,,
+RNK,,,first,blank,blank,,blank,first
+LYH,,,,,,,blank,
 CVS,,,,,,,,
 CLP,,,,,,,,
 MSS,,,,,,,,
