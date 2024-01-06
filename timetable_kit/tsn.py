@@ -12,7 +12,7 @@ of the week.  So we may need to map for days of the week as well.
 
 Also contains other routines which look up trips by tsn.
 """
-from timetable_kit.errors import NoTripError
+from timetable_kit.errors import ( NoTripError, TwoTripsError )
 from timetable_kit.debug import debug_print
 from timetable_kit.runtime_config import agency
 from timetable_kit.runtime_config import agency_singleton
