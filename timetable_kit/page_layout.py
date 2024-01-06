@@ -69,11 +69,11 @@ def produce_html_page(
     symbol_key_id = "SK_" + tt_id
 
     # We need to add the extras to make this a full HTML & CSS file now.
-    if spec.aux.get("landscape"):
-        debug_print(1, "Landscape orientation")
-
-    if spec.aux.get("key_on_right"):
-        debug_print(1, "Key on right")
+    # if spec.aux.get("landscape"):
+    #     debug_print(1, "Landscape orientation")
+    #
+    # if spec.aux.get("key_on_right"):
+    #     debug_print(1, "Key on right")
 
     # Key for connecting services:
     # First use the station codes list to get a list of all *relevant* services
