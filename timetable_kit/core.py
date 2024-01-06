@@ -284,8 +284,8 @@ class TTSpec:
         This will only work if all the "special" columns are on the left edge of the spec.
         Also absolutely requires a column_options row.  (FIXME.)
         """
-        debug_print(1, "Starting CSV:")
-        debug_print(1, self.csv)
+        debug_print(3, "Starting CSV:")
+        debug_print(3, self.csv)
         cols_per_page = self.aux.get("max_columns_per_page", 0)
         if cols_per_page == 0:
             # We are not splitting this timetable
