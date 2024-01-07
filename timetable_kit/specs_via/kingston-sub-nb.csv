@@ -1,0 +1,28 @@
+,access,stations,22,24,50,60,52,62,26 monday,26 friday,40,64,28,42,644,38,44,66,46,646,68,54,668,48
+column-options,,,ardp,,ardp,,,,,,,,,ardp,ardp,ardp,,,,,,,,
+omit,city pair (for checking against list_trains.py),,om,om,to,tm,to,tm,om,om,to,tm,om,to,to,om,to,tm,to,to,tm,to,tm,to
+omit,"calendar-days.txt #624, #34 suspended",,,,,,,,,,,,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,,,,,,,,,,,,
+days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW
+updown,,,,,,,,,,,,,,,,,,,,,,,,
+TRTO,,,blank,blank,first two-row,first two-row,first two-row,first two-row,blank,blank,first two-row,first two-row,blank,first,first,blank,first,first,first,first,first,first,first,first
+GUIL,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+OSHA,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+PHOP,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+CBRG,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+TRNJ,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+BLVL,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+NAPN,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+KGON,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+GANA,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+BRKV,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+CWLL,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+SMTF,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+FALL,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
+OTTW,,,first two-row,first two-row,last two-row,,last two-row,,first two-row,first two-row,last two-row,,first two-row,last two-row,last two-row,first two-row,last two-row,,last two-row,last two-row,,last two-row,,last two-row
+CSLM,,,,,blank,,blank,,,,blank,,,blank,blank,,blank,,blank,blank,,blank,,blank
+ALEX,,,,,blank,,blank,,,,blank,,,blank,blank,,blank,,blank,blank,,blank,,blank
+COTO,,,,,blank,,blank,,,,blank,,,blank,blank,,blank,,blank,blank,,blank,,blank
+DORV,,,,,blank,,blank,,,,blank,,,blank,blank,,blank,,blank,blank,,blank,,blank
+MTRL,,,,,blank,last,blank,last,,,blank,last,,blank,blank,last,blank,last,blank,blank,last,blank,last,blank
+destination,,,,,,,,,,,,,,,,,,,,,,,,

@@ -185,6 +185,36 @@ class AgencyVIA(Agency):
                 facility_name = "Pacific Central Station"
         return facility_name
 
+    def get_station_name_from(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """Get a phrase like "from Toronto" for the station."""
+        # Special case Quebec City -- this is very long
+        if doing_html == True and station_code == "QBEC":
+            return "from" + SAFE_BR + "Québec" + SAFE_BR + "City"
+        # Otherwise revert to default implementation
+        return super.get_station_name_from(
+            self,
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
+
+    def get_station_name_to(
+        self, station_code: str, doing_multiline_text=False, doing_html=True
+    ) -> str:
+        """Get a phrase like "to Toronto" for the station."""
+        # Special case Quebec City -- it's long
+        if doing_html == True and station_code == "QBEC":
+            return "to Québec" + SAFE_BR + "City"
+        # Otherwise revert to default implementation
+        return super.get_station_name_to(
+            self,
+            station_code,
+            doing_multiline_text=doing_multiline_text,
+            doing_html=doing_html,
+        )
+
     def get_station_name_pretty(
         self, station_code: str, doing_multiline_text=False, doing_html=True
     ) -> str:

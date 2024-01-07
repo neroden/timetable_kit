@@ -1,0 +1,12 @@
+title = "Corridor Montréal-Ottawa-Toronto Westbound"
+heading = "Montréal-Ottawa-Toronto services Westbound"
+aria_label = "Montréal Ottawa Toronto Westbound"
+reference_date = "20240120"
+# This timetable gets split programmatically
+max_columns_per_page = 11
+landscape = true
+key_r = true
+key_d = true
+wheelchair_advance_notice = true
+montreal_airport_shuttle = true
+for_rpa = true

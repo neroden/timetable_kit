@@ -1,0 +1,28 @@
+,access,stations,41,31,61,643,63,45,33,633,65,53,47,35,67,645,55,647,69,59,37,669,39
+column-options,,,ardp,ardp,,,,,,,,,,ardp,ardp,,,,,,,,
+omit,city pair (for checking against list_trains.py),,ot,mo,mt,ot,mt,ot,mo,mo,mt,ot,ot,mo,mt,ot,ot,ot,mt,ot,mo,mt,mo
+omit,"calendar-days.txt: #651, 655, 641, 43,  suspended","calendar-days.txt: 647 suspended, also 635, 637, 639",,,,,,,,,,,,,,,,,,,,,
+route-name,,,,,,,,,,,,,,,,,,,,,,,
+days,,,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW
+updown,,,,,,,,,,,,,,,,,,,,,,,
+origin,,,,,,,,,,,,,,,,,,,,,,,
+MTRL,,,blank,first two-row,first two-row,blank,first two-row,blank,,first two-row,first two-row,blank,blank,,first two-row,blank,blank,blank,first two-row,blank,,first two-row,
+DORV,,,blank,,,blank,,blank,,,,blank,blank,,,blank,blank,blank,,blank,,,
+COTO,,,blank,,,blank,,blank,,,,blank,blank,,,blank,blank,blank,,blank,,,
+ALEX,,,blank,,,blank,,blank,,,,blank,blank,,,blank,blank,blank,,blank,,,
+CSLM,,,blank,,,blank,,blank,,,,blank,blank,,,blank,blank,blank,,blank,,,
+OTTW,,,first two-row,,,first two-row,,first two-row,last two-row,last two-row,,first two-row,first two-row,last two-row,,first two-row,first two-row,first two-row,,first two-row,last two-row,,last two-row
+FALL,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+SMTF,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+CWLL,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+BRKV,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+GANA,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+KGON,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+NAPN,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+BLVL,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+TRNJ,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+CBRG,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+PHOP,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+OSHA,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+GUIL,,,,,,,,,blank,blank,,,,blank,,,,,,,blank,,blank
+TRTO,,,last,last,last,last,last,last,blank,blank,last,last,last,blank,last,last,last,last,last,last,blank,last,blank
