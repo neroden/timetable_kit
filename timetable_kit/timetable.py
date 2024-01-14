@@ -17,12 +17,17 @@ import os.path  # for os.path abilities including os.path.isdir
 import shutil  # To copy files
 from pathlib import Path
 
+from datetime import date, timedelta  # for seeking a valid reference date
+
 from weasyprint import HTML as weasyHTML  # type: ignore # Tell MyPy this has no type stubs
 
 ############
 # My modules
 # This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
 from timetable_kit import runtime_config
+
+# My errors, for seeking a valid reference date
+from timetable_kit.errors import NoTripError, TwoTripsError
 
 ####################################
 # Specific functions from my modules
@@ -143,6 +148,69 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
         _prepared_output_dirs_for_rpa.append(str(output_dir))
     _prepared_output_dirs.append(str(output_dir))
     return
+
+
+def search_date(
+    *,
+    input_dirname: str,
+    spec_file,
+    command_line_reference_date,
+    num_days,  # Number of days to try
+    gtfs_filename,
+    patch_the_feed,
+) -> None:
+    """For a single spec file, seek a valid date."""
+    # Acquire the feed, enhance it, do generic patching.
+    master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
+
+    # Load the tt-spec, both aux and csv
+    # Also sets tt_id value in the aux
+    spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
+    # Set reference date override -- does nothing if passed "None"
+    spec.set_reference_date(command_line_reference_date)
+    # Use datetime to convert to a "date" type
+    base_reference_date = date.fromisoformat(spec.aux["reference_date"])
+
+    for i in range(0, num_days):
+        # Use datetime to get the test date
+        new_date = base_reference_date + timedelta(days=i)
+        # Convert back to string and set
+        spec.set_reference_date(new_date.strftime("%Y%m%d"))
+        try:
+            # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
+            reduced_feed = spec.filter_and_reduce_feed(master_feed)
+            # Note that we don't re-reduce the feed for a max-columns split spec (like the NEC).
+            # We could but we want the whole NEC NB/Weekday TT to be valid over the same dates...
+
+            # Find the date range on which the entire reduced feed is valid
+            (latest_start_date, earliest_end_date) = reduced_feed.get_valid_date_range()
+            debug_print(
+                1,
+                f"For {spec_file}: believed valid from {latest_start_date} to {earliest_end_date}",
+            )
+            if not latest_start_date or not earliest_end_date:
+                debug_print(1, "Rejecting calendar with no validity")
+                continue
+            if latest_start_date == earliest_end_date:
+                debug_print(1, "Rejecting one-day calendar")
+                continue
+
+            # Test run.
+            t_plaintext: Timetable = fill_tt_spec(
+                spec, today_feed=reduced_feed, doing_html=False
+            )
+        except NoTripError:
+            debug_print(1, "No trip found: trying next date")
+            continue
+        except TwoTripsError:
+            debug_print(1, "No trip found: trying next date")
+            continue
+        else:
+            debug_print(1, f"Found good date {spec.aux['reference_date']}")
+            break
+    else:
+        # Made it out the end of the for loop.  Whoops...
+        debug_print(1, "Exhausted all dates without finding good date.")
 
 
 def produce_several_timetables(
@@ -396,6 +464,25 @@ def main():
     patch_the_feed = not args.nopatch
 
     command_line_reference_date = args.reference_date  # Does not default, may be None
+
+    # Special case for --search argument
+    if args.search is not None:
+        # This is hackish.  FIXME.
+        spec_file = spec_file_list[0].removesuffix(".toml").removesuffix(".csv")
+        num_days = args.search
+
+        # Ideally do this as part of regular processing.  FIXME
+        # But I didn't want to break anything
+        search_date(
+            input_dirname=input_dirname,
+            spec_file=spec_file,
+            command_line_reference_date=command_line_reference_date,
+            num_days=num_days,
+            gtfs_filename=gtfs_filename,
+            patch_the_feed=patch_the_feed,
+        )
+        # Bail out early
+        return
 
     produce_several_timetables(
         list_file_list=spec_file_list,
