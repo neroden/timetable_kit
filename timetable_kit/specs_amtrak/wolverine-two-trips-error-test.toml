@@ -1,0 +1,7 @@
+title = "Wolverine & Blue Water Error Testing Timetable"
+heading = "Wolverine & Blue Water (for Error Testing)"
+aria_label = "Wolverine Blue Water"
+reference_date = "20240110"
+programmers_warning = "This is used to make sure TwoTripsError will be correctly thrown when it should be.  Wolverine trains have identical M-F and SaSu timetables but are listed separately, so are useful for this."
+key_tz = true
+for_rpa = true
