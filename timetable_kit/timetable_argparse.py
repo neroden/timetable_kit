@@ -74,6 +74,20 @@ def add_date_argument(parser: argparse.ArgumentParser):
     )
 
 
+def add_search_argument(parser: argparse.ArgumentParser):
+    """Add the --search argument to the parser."""
+    parser.add_argument(
+        "--search",
+        dest="search",
+        help="""Instead of running the regular timetable generator,
+                search through reference dates for a "good" date, starting with the standard date and testing
+                the number of days specified here.
+             """,
+        type=int,
+    )
+
+
+
 def add_day_argument(parser: argparse.ArgumentParser):
     """Add the --day argument to a parser."""
     parser.add_argument(
@@ -179,6 +193,8 @@ def make_tt_arg_parser():
     add_debug_argument(parser)
     add_output_dirname_argument(parser)
     add_input_dirname_argument(parser)
+
+    add_search_argument(parser)
     parser.add_argument(
         "--author",
         "-w",
