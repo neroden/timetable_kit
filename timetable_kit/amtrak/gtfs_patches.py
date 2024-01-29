@@ -89,6 +89,32 @@ def patch_buses(feed: FeedEnhanced):
     feed.routes = routes
 
 
+def patch_hiawatha(feed: FeedEnhanced):
+    """Patch a bug where Hiawatha #343 is listed as departing late Thursday rather than late Friday.
+
+    The bug is because it starts so late it starts on Saturday, Eastern Standard Time.
+
+    Fix feed in place.
+    """
+
+    service_ids = set()
+    for index in feed.trips.index:
+        if feed.trips.loc[index, "trip_short_name"] == "343":
+            service_ids.add(feed.trips.loc[index, "service_id"])
+
+    # OK, found the late night Hiawatha.
+    # We should probably double-check the departure time: this applies if it departs at
+    # 11 PM Central or later.  But we don't.  Amtrak should fix this anyways.
+    new_calendar = feed.calendar
+    for index in new_calendar.index:
+        if new_calendar.loc[index, "service_id"] in service_ids:
+            if new_calendar.loc[index, "friday"] == 1:  # This is incorrrect.
+                debug_print(1, "Found #343 listed as running on Thursday, patching")
+                new_calendar.loc[index, "friday"] = 0
+                new_calendar.loc[index, "saturday"] = 1
+                feed.calendar = new_calendar
+
+
 def patch_coast_starlight(feed: FeedEnhanced):
     """Patch an old Coast Starlight bug.
 
@@ -192,6 +218,9 @@ def patch_feed(feed: FeedEnhanced):
 
     # Toronto pickup-only / dropoff-only problem
     patch_toronto(new_feed)
+
+    # Hiawatha #343 calendar error
+    patch_hiawatha(new_feed)
 
     # Patch accessibility information into GTFS
     patch_add_wheelchair_boarding(new_feed)
