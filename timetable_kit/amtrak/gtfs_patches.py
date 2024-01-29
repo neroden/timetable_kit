@@ -115,6 +115,44 @@ def patch_hiawatha(feed: FeedEnhanced):
                 feed.calendar = new_calendar
 
 
+def patch_sunset_limited(feed: FeedEnhanced):
+    """Patch a bug where Sunset Limited #2 has wrong departure days. 
+    It departs from LAX on Su/We/Fr and not Sa/Tu/Th
+
+    The bug is because it starts so late it starts on the following day in Eastern Standard Time.
+
+    Fix feed in place.
+    """
+
+    service_ids = set()
+    for index in feed.trips.index:
+        if feed.trips.loc[index, "trip_short_name"] == "2":
+            service_ids.add(feed.trips.loc[index, "service_id"])
+
+    # OK, found the eastbound Sunset Limited (#2).
+    # We should probably double-check the departure time: this applies if it departs at
+    # 9 PM Pacific or later.  But we don't.  Amtrak should fix this anyways.
+    new_calendar = feed.calendar
+    for index in new_calendar.index:
+        if new_calendar.loc[index, "service_id"] in service_ids:
+            if new_calendar.loc[index, "sunday"] == 1:  # This is incorrrect.
+                debug_print(1, "Found #2 listed as running on Saturday, patching")
+                new_calendar.loc[index, "sunday"] = 0
+                new_calendar.loc[index, "monday"] = 1
+                #feed.calendar = new_calendar
+            if new_calendar.loc[index, "wednesday"] == 1:  # This is incorrrect.
+                debug_print(1, "Found #2 listed as running on Tuesday, patching")
+                new_calendar.loc[index, "wednesday"] = 0
+                new_calendar.loc[index, "thursday"] = 1
+                #feed.calendar = new_calendar
+            if new_calendar.loc[index, "friday"] == 1:  # This is incorrrect.
+                debug_print(1, "Found #2 listed as running on Thursday, patching")
+                new_calendar.loc[index, "friday"] = 0
+                new_calendar.loc[index, "saturday"] = 1
+                #feed.calendar = new_calendar
+            feed.calendar = new_calendar
+
+
 def patch_coast_starlight(feed: FeedEnhanced):
     """Patch an old Coast Starlight bug.
 
@@ -221,6 +259,9 @@ def patch_feed(feed: FeedEnhanced):
 
     # Hiawatha #343 calendar error
     patch_hiawatha(new_feed)
+
+    # Sunset Limited #2 calendar error
+    patch_sunset_limited(new_feed)
 
     # Patch accessibility information into GTFS
     patch_add_wheelchair_boarding(new_feed)
