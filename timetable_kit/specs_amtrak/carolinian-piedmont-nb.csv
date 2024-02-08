@@ -1,5 +1,5 @@
 , access, station,20 monday,20 saturday,80 monday,80 sunday,72,74,76,78
-column-options,,,ardp,,ardp,,,,,
+column-options,,,ardp,,,,,,,ardp
 route-name,,,,,,,,,,
 days,,,CLT,CLT,CLT,CLT,CLT,CLT,CLT,CLT
 updown,,,,,,,,,,
