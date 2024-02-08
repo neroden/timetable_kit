@@ -118,6 +118,8 @@ other_checked_baggage_day_trains = {
     "43",  # Pennsylvanian
     "79",
     "80",  # Carolinian
+    "71",  # Piedmont
+    "72",  # Piedmont
     "73",
     "74",
     "75",
