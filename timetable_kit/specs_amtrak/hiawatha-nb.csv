@@ -1,5 +1,5 @@
-,stations,access,329,331,333,335,337,339,341,343
-column-options,,,ardp,,,,,,,days short-days-box
+,stations,access,329,331,1333,335,337,339,341,343
+column-options,,,ardp,,ardp,,,,,days short-days-box
 route-name,,,,,,,,,,
 days,,,CHI,CHI,CHI,CHI,CHI,CHI,CHI,CHI
 CHI,,,,,,,,,,
@@ -7,3 +7,4 @@ GLN,,,,,,,,,,
 SVT,,,,,,,,,,
 MKA,,,,,,,,,,
 MKE,,,,,,,,,,
+,,,,,"<div style=""text-align: center"">To Minnesota</div>",,,,,

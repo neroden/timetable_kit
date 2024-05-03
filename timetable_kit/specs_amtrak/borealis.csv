@@ -1,0 +1,20 @@
+,1333,7 / 27,access,station,8 / 28,1340
+column-options,ardp,,,,reverse,ardp reverse
+route-name,,,,,,
+days,CHI,CHI,,,MSP,MSP
+updown,,,,,,
+CHI,1333 first,7 first,,,8 last,1340 last
+GLN,,,,,,
+SVT,,,,,,
+MKA,,,,,,
+MKE,,,,,,
+CBS,,,,,,
+POG,,,,,,
+WDL,,,,,,
+TOH,,,,,,
+LSE,,,,,,
+WIN,,,,,,
+RDW,,,,,,
+MSP,1333 last,7 last,,,8 first,1340 first
+,,"<div style=""text-align: center"">Train <b>#7</b> to Seattle</div>",,,"<div style=""text-align: center"">Train <b>#8</b> from Seattle</div>",
+,,"<div style=""text-align: center"">Train <b>#27</b> to Portland</div>",,,"<div style=""text-align: center"">Train <b>#28</b> from Portland</div>",

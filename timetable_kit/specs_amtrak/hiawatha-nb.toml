@@ -1,7 +1,7 @@
 title = "Hiawatha Northbound"
 heading = "Hiawatha: Northbound"
 aria_label = "Hiawatha Northbound"
-reference_date = "20240102"
+reference_date = "20240528"
 top_text = "Check <a href=\"https://amtrakhiawatha.com\">AmtrakHiawatha.com</a> for additional and connecting bus service and updated schedules."
 key_baggage = true
 for_rpa = true
