@@ -274,7 +274,11 @@ class TTSpec:
         new_csv.iloc[0, 0] = ""  # Blank out key_code
         # The following will add the stations as desired.
         # It creates duplicate indexes, so we must reset the index.
-        self.csv = pd.concat([new_csv, stations_df]).fillna("").reset_index(drop=True)
+        self.csv = (
+            pd.concat([new_csv, stations_df], ignore_index=True)
+            .fillna("")
+            .reset_index(drop=True)
+        )
         debug_print(1, "Augmented TTSpec:")
         debug_print(1, self.csv)
 
