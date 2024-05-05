@@ -3,6 +3,9 @@
 
 # Generated output files for timetable_kit
 output/
+logos/*
+icons/*
+fonts/*
 
 # Working files for Nano editor
 .*.swp
