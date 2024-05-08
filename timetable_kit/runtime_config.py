@@ -7,6 +7,7 @@ needs to be "low-level".
 
 This data includes the critical choice of which agency's subpackage to use.
 """
+import pathlib
 # For sys.exit
 import sys
 
@@ -24,6 +25,7 @@ import timetable_kit.greyhound
 agency_name = None
 agency_package = None
 agency_input_dir = None
+timetable_kit_directory = pathlib.Path(__file__).parent
 
 # These are the choices which can be set at the command line.
 agency_choices = ["generic", "amtrak", "via", "hartford", "maple_leaf", "greyhound"]
@@ -47,32 +49,32 @@ def set_agency(agency: str):
             )
             agency_name = "Generic"
             agency_package = timetable_kit.generic_agency
-            agency_input_dir = "specs_generic"
+            agency_input_dir = timetable_kit_directory / "specs_generic"
         case "amtrak":
             debug_print(1, "Using Amtrak data")
             agency_name = "Amtrak"
             agency_package = timetable_kit.amtrak
-            agency_input_dir = "specs_amtrak"
+            agency_input_dir = timetable_kit_directory / "specs_amtrak"
         case "via":
             debug_print(1, "Using VIA Rail data")
             agency_name = "VIA Rail"
             agency_package = timetable_kit.via
-            agency_input_dir = "specs_via"
+            agency_input_dir = timetable_kit_directory / "specs_via"
         case "hartford":
             debug_print(1, "Using Hartford Line data with Amtrak data")
             agency_name = "Hartford Line"
             agency_package = timetable_kit.hartford_line
-            agency_input_dir = "specs_hartford"
+            agency_input_dir = timetable_kit_directory / "specs_hartford"
         case "maple_leaf":
             debug_print(1, "Using Amtrak and VIA Rail data for Maple Leaf")
             agency_name = "Maple Leaf"
             agency_package = timetable_kit.maple_leaf
-            agency_input_dir = "specs_maple_leaf"
+            agency_input_dir = timetable_kit_directory / "specs_maple_leaf"
         case "greyhound":
             debug_print(1, "Using Greyhound data (not fully functional)")
             agency_name = "Greyhound"
             agency_package = timetable_kit.greyhound
-            agency_input_dir = "specs_greyhound"
+            agency_input_dir = timetable_kit_directory / "specs_greyhound"
         case _:
             print("Invalid agency subpackage choice")
             sys.exit(1)
