@@ -1,38 +1,38 @@
-,11 / 6610 noheader / 5011 noheader, access, station,14 / 6619 noheader / 5014 noheader
-column-options,ardp,,,ardp reverse
-days,SEA,,,SEA
-updown,,,,
-SEA,11 first,,,14 last
-TAC,,,,
-OLW,,,,
-CTL,,,,
-KEL,,,,
-VAN,,,,
-PDX,,,,
-SLM,,,,
-ALY,,,,
-EUG,,,,
-CMO,,,,
-KFS,,,,
-DUN,,,,
-RDD,,,,
-CIC,,,,
-SAC,,,,
-DAV,,,,
-MTZ,,,,
-SFC,6610 first,,,6619 last
-EMY,6610 last,,,6619 first
-EMY,11,,,14
-EMY,5011 first,,,5014 last
-SFC,5011 last,,,5014 first
-OKJ,,,,
-SJC,,,,
-SNS,,,,
-PRB,,,,
-SLO,,,,
-SBA,,,,
-OXN,,,,
-SIM,,,,
-VNC,,,,
-BUR,,,,14
-LAX,11 last,,,14 first
+,11 / 6610 noheader / 5011 noheader,mile, access, station,14 / 6619 noheader / 5014 noheader
+column-options,ardp,,,,ardp reverse
+days,SEA,,,,SEA
+updown,,,,,
+SEA,11 first,0,,,14 last
+TAC,,39,,,
+OLW,,75,,,
+CTL,,94,,,
+KEL,,137,,,
+VAN,,177,,,
+PDX,,187,,,
+SLM,,239,,,
+ALY,,267,,,
+EUG,,310,,,
+CMO,,432,,,
+KFS,,505,,,
+DUN,,610,,,
+RDD,,665,,,
+CIC,,739,,,
+SAC,,824,,,
+DAV,,838,,,
+MTZ,,882,,,
+SFC,6610 first,blank,,,6619 last
+EMY,6610 last,blank,,,6619 first
+EMY,11,909,,,14
+EMY,5011 first,blank,,,5014 last
+SFC,5011 last,blank,,,5014 first
+OKJ,,914,,,
+SJC,,955,,,
+SNS,,1022,,,
+PRB,,1120,,,
+SLO,,1158,,,
+SBA,,1277,,,
+OXN,,1313,,,
+SIM,,1344,,,
+VNC,,1361,,,
+BUR,,1367,,,14
+LAX,11 last,1380,,,14 first

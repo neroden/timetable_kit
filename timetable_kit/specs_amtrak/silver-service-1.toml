@@ -1,7 +1,7 @@
 title = "Silver Service/Palmetto Timetable page 1"
 heading = "Silver Service & Palmetto - Carolinas & Georgia"
 aria_label = "Silver Service page 1"
-reference_date = "20240205"
+reference_date = "20240610"
 bottom_text = "<p class=\"top-text\"><b>See next page for services south of Savannah, Georgia to Florida.</b></p>"
 programmers_note = "Using dwell_secs_cutoff of 6 minutes to shorten timetable"
 dwell_secs_cutoff = 360

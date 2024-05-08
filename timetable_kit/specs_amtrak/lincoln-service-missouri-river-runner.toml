@@ -1,7 +1,7 @@
 title = "Lincoln Service & Missouri River Runner Timetable"
 heading = "Lincoln Service & Missouri River Runner"
 aria_label = "Lincoln Service River Runner"
-reference_date = "20240528"
+reference_date = "20240630"
 landscape = true
 key_baggage = true
 key_r = true

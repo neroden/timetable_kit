@@ -1,15 +1,15 @@
-,381,5,3,383,access,station,380,6,4,382
-column-options,ardp,,,ardp,,,reverse ardp,reverse,reverse,reverse ardp
-route-name,,,,,,,,,,
-days,CHI,CHI,CHI,CHI,,,CHI,CHI,CHI,CHI
-updown,,,,,,,,,,
-CHI,first,first,first,first,,,last,last,last,last
-LAG,,,,,,,,,,
-NPV,,,,,,,,,,
-PLO,,,,,,,,,,
-MDT,,,,,,,,,,
-PCT,,,,,,,,,,
-KEE,,,,,,,,,,
-GBB,,,,,,,,,,
-MAC,,to Denver,to Kansas City,,,,,from Denver,from Kansas City,
-QCY,last,& California,& California,last,,,first,& California,& California,first
+,381,5,3,383,mile,access,station,380,6,4,382
+column-options,ardp,,,ardp,,,,reverse ardp,reverse,reverse,reverse ardp
+route-name,,,,,,,,,,,
+days,CHI,CHI,CHI,CHI,,,,CHI,CHI,CHI,CHI
+updown,,,,,,,,,,,
+CHI,first,first,first,first,0,,,last,last,last,last
+LAG,,,,,14,,,,,,
+NPV,,,,,28,,,,,,
+PLO,,,,,52,,,,,,
+MDT,,,,,83,,,,,,
+PCT,,,,,104,,,,,,
+KEE,,,,,131,,,,,,
+GBB,,,,,162,,,,,,
+MAC,,to Denver,to Kansas City,,202,,,,from Denver,from Kansas City,
+QCY,last,& California,& California,last,258,,,first,& California,& California,first

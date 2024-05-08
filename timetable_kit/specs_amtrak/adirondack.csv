@@ -1,22 +1,22 @@
-,68, access, station,timezone,69
-column-options,days ardp,,,,days ardp reverse
-updown,,,,,
-omit,"To mark ""suspended"" in a column: ",,,,"<div style=""text-align: center;"">Suspended</div>"
-MTR,first,,,,last
-SLQ,,,,,
-RSP,,,,,
-PLB,,,,,
-WSP,,,,,
-POH,,,,,
-FTC,,,,,
-WHL,,,,,
-FED,,,,,
-SAR,,,,,
-SDY,,,,,
-ALB,,,,,
-HUD,,,,,
-RHI,,,,,
-POU,,,,,
-CRT,,,,,
-YNY,,,,,
-NYP,last,,,,first
+,68,mile, access, station,timezone,69
+column-options,days ardp,,,,,days ardp reverse
+updown,,,,,,
+omit,"To mark ""suspended"" in a column: ",,,,,"<div style=""text-align: center;"">Suspended</div>"
+MTR,first,0,,,,last
+SLQ,,4,,,,
+RSP,,49,,,,
+PLB,,72,,,,
+WSP,,112,,,,
+POH,,123,,,,
+FTC,,140,,,,
+WHL,,162,,,,
+FED,,184,,,,
+SAR,,203,,,,
+SDY,,222,,,,
+ALB,,240,,,,
+HUD,,268,,,,
+RHI,,293,,,,
+POU,,309,,,,
+CRT,,349,,,,
+YNY,,367,,,,
+NYP,last,381,,,,first

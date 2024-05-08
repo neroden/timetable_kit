@@ -17,6 +17,7 @@ re-enable ligatures.
 
 services_header_text, access_header_text, and timezone_header_text are spans in a header.
 The header usually has enlarged fonts, but these should have the same tiny font as the rest of the timetable.
+Also added mile_header_text to be tiny font. 
 
 Check on CSS priority and specificity when it comes to font sizes; this can get ugly!
 #}
@@ -27,7 +28,8 @@ Check on CSS priority and specificity when it comes to font sizes; this can get 
 {# A .services-header-text within the page #}
 #{{page_id}} .services-header-text,
 #{{page_id}} .access-header-text,
-#{{page_id}} .timezone-header-text
+#{{page_id}} .timezone-header-text,
+#{{page_id}} .mile-header-text
 {
     font-size: {{font_size}};
 {% if not font_allow_ligatures %}

@@ -1,7 +1,7 @@
 title = "Capitol Limited Timetable"
 heading = "Capitol Limited"
 aria_label = "Capitol Limited"
-reference_date = "20240120"
+reference_date = "20240505"
 key_baggage = true
 key_tz = true
 for_rpa = true

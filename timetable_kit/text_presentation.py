@@ -746,6 +746,16 @@ def get_station_column_header(doing_html=False):
     """
     return "Station"
 
+def get_mile_column_header(doing_html=False):
+    """Return the header for a column of mileage integers.
+
+    Currently just the word "Mile".
+    """
+    if doing_html:
+        return '<div class="mile-header-text">Mile</div>'
+    else:
+        return "Mile"
+
 
 def get_services_column_header(doing_html=False):
     """Return the header for a column of station services icons.

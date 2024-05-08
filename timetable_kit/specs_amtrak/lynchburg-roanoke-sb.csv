@@ -1,39 +1,39 @@
-, access, station,151,51,147 saturday,171,145 sunday,19 wednesday,19 friday
-column-options,,,ardp,,,,,ardp,
+,mile, access, station,151,51,147 saturday,171,145 sunday,19
+column-options,,,,ardp,,,,,
 route-name,,,,,,,,,
-days,,,CVS,CVS,CVS,CVS,CVS,CVS,CVS
-BOS,,,blank,blank,blank,first,blank,blank,blank
-BBY,,,blank,blank,blank,,blank,blank,blank
-RTE,,,blank,blank,See,,blank,blank,blank
-PVD,,,blank,blank,Hartford<br>Line,,blank,blank,blank
-KIN,,,blank,blank,timetable,,blank,blank,blank
-WLY,,,blank,blank,blank,,blank,blank,blank
-NLC,,,blank,blank,from<br>Hartford &,,blank,blank,blank
-OSB,,,blank,blank,Springfield,,blank,blank,blank
-NHV,,,blank,blank,,,blank,blank,blank
-BRP,,,blank,blank,,,blank,blank,blank
-STM,,,blank,blank,,,blank,blank,blank
-NRO,,,blank,blank,,,blank,blank,blank
-NYP,,,first two-row,first two-row,,,first two-row,first two-row,first two-row
-NWK,,,,,,,,,
-EWR,,,,,,,,,
-MET,,,,,,,,,
-NBK,,,,,,,,,
-PJC,,,,,,,,,
-TRE,,,,,,,,,
-PHL,,,,,,,,,
-WIL,,,,,,,,,
-NRK,,,,,,,,,
-ABE,,,,,,,,,
-BAL,,,,,,,,,
-BWI,,,,,,,,,
-NCR,,,,,,,,,
-WAS,,,,,,,,,
-ALX,,,,,,,,,
-BCV,,,,,,,,,
-MSS,,,,,,,,,
-CLP,,,,,,,,,
-CVS,,,,,,,,,
-LYH,,,,blank,,,,,
-RNK,,,last,blank,last,last,last,blank,blank
+days,,,,CVS,CVS,CVS,CVS,CVS,CVS
+BOS,0,,,blank,blank,blank,first,blank,blank
+BBY,1,,,blank,blank,blank,,blank,blank
+RTE,11,,,blank,blank,See,,blank,blank
+PVD,43,,,blank,blank,Hartford<br>Line,,blank,blank
+KIN,70,,,blank,blank,timetable,,blank,blank
+WLY,87,,,blank,blank,blank,,blank,blank
+NLC,105,,,blank,blank,from<br>Hartford &,,blank,blank
+OSB,123,,,blank,blank,Springfield,,blank,blank
+NHV,156,,,blank,blank,,,blank,blank
+BRP,173,,,blank,blank,,,blank,blank
+STM,195,,,blank,blank,,,blank,blank
+NRO,212,,,blank,blank,,,blank,blank
+NYP,231<hr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,,,first two-row,first two-row,,,first two-row,first two-row
+NWK,10,,,,,,,,
+EWR,13,,,,,,,,
+MET,24,,,,,,,,
+NBK,32,,,,,,,,
+PJC,48,,,,,,,,
+TRE,58,,,,,,,,
+PHL,91,,,,,,,,
+WIL,116,,,,,,,,
+NRK,128,,,,,,,,
+ABE,155,,,,,,,,
+BAL,185,,,,,,,,
+BWI,196,,,,,,,,
+NCR,217,,,,,,,,
+WAS,226,,,,,,,,
+ALX,234,,,,,,,,
+BCV,247,,,,,,,,
+MSS,259,,,,,,,,
+CLP,294,,,,,,,,
+CVS,338,,,,,,,,
+LYH,399,,,,blank,,,,
+RNK,452,,,last,blank,last,last,last,blank
 destination,,,,,,,,,

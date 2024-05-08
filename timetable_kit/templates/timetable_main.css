@@ -83,6 +83,10 @@ td.access-cell {
 td.timezone-cell {
     text-align: center;
 }
+/* Mileage cells align right */
+td.mile-cell {
+    text-align: right;
+}
 
 /**** HEADER TYPE CELLS ****/
 .tt-table .col_heading {
