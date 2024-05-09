@@ -1,27 +1,27 @@
-,91,97, access, station,98 saturday,92
-column-options,ardp,ardp,,,ardp reverse,ardp reverse
-route-name,,,,,,
-omit,,,,,98 varies on Sunday but not south of Savannah,
-days,NYP,NYP,,,"<div style=""text-align:center; font-weight:bold;"">Daily</div>",NYP
-updown,,,,,,
-,"<div style=""text-align:center;"">from New York</div>","<div style=""text-align:center;"">from New York</div>",,,"<div style=""text-align:center;"">to New York</div>","<div style=""text-align:center;"">to New York</div>"
-SAV,,,,,,
-JSP,,,,,,
-JAX,,,,,,
-PAK,,,,,,
-DLD,,,,,,
-WPK,,,,,,
-ORL,,,,,,
-KIS,,,,,,
-LAK,,,,,,
-TPA,,,,,,
-LKL,,,,,,
-WTH,,,,,,
-SBG,,,,,,
-OKE,,,,,,
-WPB,,,,,,
-DLB,,,,,,
-DFB,,,,,,
-FTL,,,,,,
-HOL,,,,,,
-MIA,91 last,97 last,,,98 saturday first,92 first
+,91,97,mile,mile, access, station,98 saturday,92
+column-options,ardp,ardp,,,,,ardp reverse,ardp reverse
+route-name,,,See<br>note 1,See<br>note 2,,,,
+omit,,,,,,,98 varies on Sunday but not south of Savannah,
+days,NYP,NYP,,,,,"<div style=""text-align:center; font-weight:bold;"">Daily</div>",NYP
+updown,,,,,,,,
+,"<div style=""text-align:center;"">from New York</div>","<div style=""text-align:center;"">from New York</div>",,,,,"<div style=""text-align:center;"">to New York</div>","<div style=""text-align:center;"">to New York</div>"
+SAV,,,871,830,,,,
+JSP,,,blank,882,,,,
+JAX,,,1019,978,,,,
+PAK,,,1077,1036,,,,
+DLD,,,1129,1088,,,,
+WPK,,,1161,1120,,,,
+ORL,,,1166,1125,,,,
+KIS,,,1184,1143,,,,
+LAK,,,1234,blank,,,,
+TPA,,,1265,blank,,,,
+LKL,,,1296,blank,,,,
+WTH,,,1313,1181,,,,
+SBG,,,1354,1222,,,,
+OKE,,,1396,blank,,,,
+WPB,,,1457,1325,,,,
+DLB,,,1475,1343,,,,
+DFB,,,1486,1354,,,,
+FTL,,,1500,1368,,,,
+HOL,,,1508,1376,,,,
+MIA,91 last,97 last,1522,1390,,,98 saturday first,92 first
