@@ -1,28 +1,28 @@
-,64 / 97-64 noheader,access,stations,63 / 98-63 noheader
-column-options,ardp,,,ardp reverse
-route-name,,,,
-,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>"
-days,NYP,,,NYP
-updown,,,,
-TWO,97-64 first,,,98-63 last
-OKL,97-64,,,98-63
-AST,97-64,,,98-63
-GMS,97-64,,,98-63
-SCA,97-64,,,98-63
-NFS,97-64,,,98-63
-NFL,64,,,63
-BFX,64,,,63
-BUF,64,,,63
-ROC,64,,,63
-SYR,64,,,63
-ROM,64,,,63
-UCA,64,,,63
-AMS,64,,,63
-SDY,64,,,63
-ALB,64,,,63
-HUD,64,,,63
-RHI,64,,,63
-POU,64,,,63
-CRT,64,,,63
-YNY,64,,,63
-NYP,64 last,,,63 first
+,64 / 97-64 noheader,mile,access,stations,63 / 98-63 noheader
+column-options,ardp,,,,ardp reverse
+route-name,,,,,
+,"<div style=""text-align: center;"">(Via Rail <b>#97</b>)</div>",,,,"<div style=""text-align: center;"">(Via Rail <b>#98</b>)</div>"
+days,NYP,,,,NYP
+updown,,,,,
+TWO,97-64 first,0,,,98-63 last
+OKL,97-64,21,,,98-63
+AST,97-64,32,,,98-63
+GMS,97-64,56,,,98-63
+SCA,97-64,71,,,98-63
+NFS,97-64,82,,,98-63
+NFL,64,84,,,63
+BFX,64,107,,,63
+BUF,64,113,,,63
+ROC,64,174,,,63
+SYR,64,253,,,63
+ROM,64,294,,,63
+UCA,64,307,,,63
+AMS,64,367,,,63
+SDY,64,385,,,63
+ALB,64,403,,,63
+HUD,64,430,,,63
+RHI,64,456,,,63
+POU,64,471,,,63
+CRT,64,512,,,63
+YNY,64,530,,,63
+NYP,64 last,544,,,63 first
