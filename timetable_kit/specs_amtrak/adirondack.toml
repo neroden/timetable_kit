@@ -1,7 +1,7 @@
 title = "Adirondack Timetable"
 heading = "Adirondack"
 aria_label = "Adirondack"
-top_text = "As of July 2023 the Adirondack has been intermittently suspended north of Albany.<br>Always check Amtrak.com for your exact date of travel.<br><br>Appropriate documentation (passports, visas, etc.) is needed to cross the US-Canadian border.<br>See government websites for details."
+top_text = "Adirondack service will be cancelled north of Saratoga Springs, NY between May 20 and approximately June 30. See <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for schedule adjustments.<br><br>Appropriate documentation (passports, visas, etc.) is needed to cross the US-Canadian border.<br>See government websites for details."
 reference_date = "20240505"
 key_d = true
 key_r = true
