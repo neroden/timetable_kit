@@ -2,7 +2,7 @@ title = "Adirondack Timetable"
 heading = "Adirondack"
 aria_label = "Adirondack"
 top_text = "Adirondack service will be cancelled north of Saratoga Springs, NY between May 20 and approximately June 30. See <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for schedule adjustments.<br><br>Appropriate documentation (passports, visas, etc.) is needed to cross the US-Canadian border.<br>See government websites for details."
-reference_date = "20240505"
+reference_date = "20240601"
 key_d = true
 key_r = true
 for_rpa = true

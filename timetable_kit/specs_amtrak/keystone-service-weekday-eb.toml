@@ -2,7 +2,7 @@ title = "Keystone Weekday Eastbound Timetable"
 heading = "Keystone Service & Pennsylvanian: Weekday Eastbound"
 aria_label = "Keystone Weekday Eastbound"
 top_text = "NOTE: Keystone work during summer 2024. Please see <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for the latest schedule adjustments."
-reference_date = "20240528"
+reference_date = "20240601"
 landscape = true
 key_baggage = true
 key_d = true

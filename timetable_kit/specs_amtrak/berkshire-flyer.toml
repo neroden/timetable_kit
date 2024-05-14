@@ -2,7 +2,7 @@ title = "Berkshire Flyer Timetable"
 heading = "Berkshire Flyer"
 aria_label = "Berkshire Flyer"
 top_text = "The Berkshire Flyer is a seasonal train service that runs on Fridays & Sundays from June 21, 2024 to Labor Day weekend 2024. The train will run on Monday Labor Day weekend (September 2, 2024).  See more information at <b><a href=\"https://www.berkshire-flyer.com/\">www.berkshire-flyer.com</a> and <b><a href=\"https://www.amtrak.com/berkshire-flyer-train\">www.amtrak.com/berkshire-flyer-train</a></b>"
-reference_date = "20240623"
+reference_date = "20240601"
 key_d = true
 key_r = true
 for_rpa = true

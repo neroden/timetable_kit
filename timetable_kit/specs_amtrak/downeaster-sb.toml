@@ -2,5 +2,5 @@ title = "Downeaster SB"
 heading = "Downeaster Southbound"
 aria_label = "Downeaster Southbound"
 landscape = true
-reference_date = "20240102"
+reference_date = "20240601"
 for_rpa = true

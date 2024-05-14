@@ -1,7 +1,7 @@
 title = "Empire Builder Timetable"
 heading = "Empire Builder"
 aria_label = "Empire Builder"
-reference_date = "20240505"
+reference_date = "20240601"
 top_text = "Trains 7 and 27 are the <b>same train</b> from Chicago to Spokane; cars separate to go to Seattle and Portland.<br>Trains 8 and 28 join at Spokane to become the <b>same train</b> from Spokane to Chicago."
 bottom_text = "<b>Note:</b><br>Browning, MT (BRO) is served only in winter.<br>East Glacier Park, MT (GPK) is served only in summer."
 train_numbers_side_by_side = true

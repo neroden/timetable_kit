@@ -1,7 +1,7 @@
 title = "Sunset Limited Timetable"
 heading = "Sunset Limited"
 aria_label = "Sunset Limited"
-reference_date = "20240505"
+reference_date = "20240601"
 key_baggage = true
 key_d = true
 key_r = true
