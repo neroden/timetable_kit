@@ -1,9 +1,9 @@
 title = "Corridor Montréal-Ottawa-Toronto Westbound"
 heading = "Montréal-Ottawa-Toronto services Westbound"
 aria_label = "Montréal Ottawa Toronto Westbound"
-reference_date = "20240505"
+reference_date = "20240527"
 # This timetable gets split programmatically
-max_columns_per_page = 11
+max_columns_per_page = 12
 landscape = true
 key_r = true
 key_d = true
