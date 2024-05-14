@@ -1,7 +1,7 @@
 title = "Corridor Toronto-Ottawa-Montréal Eastbound"
 heading = "Toronto-Ottawa-Montréal services Eastbound"
 aria_label = "Toronto Ottawa Montréal Eastbound"
-reference_date = "20240120"
+reference_date = "20240601"
 # This timetable gets split programmatically
 max_columns_per_page = 11
 landscape = true
