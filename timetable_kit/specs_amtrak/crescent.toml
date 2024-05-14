@@ -2,7 +2,7 @@ title = "Crescent Timetable"
 heading = "Crescent"
 aria_label = "Crescent"
 # There are a lot of broken schedule dates -- this one alone gets a full week schedule
-reference_date = "20240121"
+reference_date = "20240527"
 key_baggage = true
 key_d = true
 key_r = true

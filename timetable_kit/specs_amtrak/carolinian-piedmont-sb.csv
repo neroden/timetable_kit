@@ -1,30 +1,30 @@
-,access,station,71,73,75,77,79 sunday,79 monday,19
-column-options,,,ardp,,,,,,ardp
-route-name,,,,,,,,,
-days,,,CLT,CLT,CLT,CLT,CLT,CLT,NYP
-updown,,,,,,,,,
-NYP,,,blank,blank,blank,blank,first,first,first
-NWK,,,blank,blank,blank,blank,,,
-TRE,,,blank,blank,blank,blank,,,
-PHL,,,blank,blank,blank,blank,,,
-WIL,,,blank,blank,"<div style=""text-align: center;"">For</div>",blank,,,
-BAL,,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank,,,
-WAS,,,blank,blank,"<div style=""text-align: center;"">to Cary,<br>Raleigh,</div>",blank,,,
-ALX,,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank,,,
-QAN,,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank,,,
-FBG,,,blank,blank,"<div style=""text-align: center;"">see</div>",blank,,,
-RVR,,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>"
-PTB,,,blank,blank,"<div style=""text-align: center;""><b>(Silver Star)</b></div>",blank,,,
-RMT,,,blank,blank,blank,blank,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>"
-WLN,,,blank,blank,blank,blank,,,
-SSM,,,blank,blank,blank,blank,,,
-RGH,,,first two-row,first two-row,first two-row,first two-row,,,
-CYN,,,,,,,,,
-DNC,,,,,,,,,
-BNC,,,,,,,,,
-GRO,,,,,,,,,
-HPT,,,,,,,,,
-SAL,,,,,,,,,
-KAN,,,,,,,,,
-CLT,,,last,last,last,last,last,last,
-destination,,,,,,,,,
+,station,mile,access,71,73,75,77,79 sunday,79 monday,19
+column-options,,,,ardp,,,,,,ardp
+route-name,,,,,,,,,,
+days,,,,CLT,CLT,CLT,CLT,CLT,CLT,NYP
+updown,,,,,,,,,,
+NYP,,0,,blank,blank,blank,blank,first,first,first
+NWK,,10,,blank,blank,blank,blank,,,
+TRE,,58,,blank,blank,blank,blank,,,
+PHL,,91,,blank,blank,blank,blank,,,
+WIL,,116,,blank,blank,"<div style=""text-align: center;"">For</div>",blank,,,
+BAL,,185,,blank,blank,"<div style=""text-align: center;""><b>additional<br>service</b></div>",blank,,,
+WAS,,226,,blank,blank,"<div style=""text-align: center;"">to Cary,<br>Raleigh,</div>",blank,,,
+ALX,,234,,blank,blank,"<div style=""text-align: center;"">and all</div>",blank,,,
+QAN,,260,,blank,blank,"<div style=""text-align: center;"">points north</div>",blank,,,
+FBG,,280,,blank,blank,"<div style=""text-align: center;"">see</div>",blank,,,
+RVR,,335,,blank,blank,"<div style=""text-align: center;""><b>Silver Service</b><br>timetable</div>",blank,,,"<div style=""text-align: center;"">via<br>Lynchburg</div>"
+PTB,,363,,blank,blank,"<div style=""text-align: center;""><b>(Silver Star)</b></div>",blank,,,
+RMT,,461,,blank,blank,blank,blank,,,"<div style=""text-align: center;"">see <b>Crescent</b><br>timetable</div>"
+WLN,,477,,blank,blank,blank,blank,,,
+SSM,,503,,blank,blank,blank,blank,,,
+RGH,,532,,first two-row,first two-row,first two-row,first two-row,,,
+CYN,,540,,,,,,,,
+DNC,,558,,,,,,,,
+BNC,,592,,,,,,,,
+GRO,,613,,,,,,,,
+HPT,,629,,,,,,,,
+SAL,,663,,,,,,,,
+KAN,,679,,,,,,,,
+CLT,,705,,last,last,last,last,last,last,
+destination,,,,,,,,,,

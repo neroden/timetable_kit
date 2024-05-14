@@ -1,19 +1,19 @@
-,30, access, station,timezone,29
-column-options,days ardp,,,,days ardp reverse
-updown,,,,,
-CHI,30 first,,,,29 last
-SOB,,,,,
-EKH,,,,,
-WTI,,,,,
-TOL,,,,,
-SKY,,,,,
-ELY,,,,,
-CLE,,,,,
-ALC,,,,,
-PGH,,,,,
-COV,,,,,
-CUM,,,,,
-MRB,,,,,
-HFY,,,,,
-RKV,,,,,
-WAS,30 last,,,,29 first
+,30,mile, access, station,timezone,29
+column-options,days ardp,,,,,days ardp reverse
+updown,,,,,,
+CHI,30 first,0,,,,29 last
+SOB,,84,,,,
+EKH,,101,,,,
+WTI,,156,,,,
+TOL,,234,,,,
+SKY,,281,,,,
+ELY,,316,,,,
+CLE,,341,,,,
+ALC,,397,,,,
+PGH,,481,,,,
+COV,,541,,,,
+CUM,,634,,,,
+MRB,,706,,,,
+HFY,,725,,,,
+RKV,,764,,,,
+WAS,30 last,780,,,,29 first

@@ -1,53 +1,53 @@
-,7 / 27,access,station,timezone,8 / 28
-column-options,ardp days,,,,ardp reverse days
-updown,,,,,
-CHI,7 first,,,,8 last
-GLN,,,,,
-MKE,,,,,
-CBS,,,,,
-POG,,,,,
-WDL,,,,,
-TOH,,,,,
-LSE,,,,,
-WIN,,,,,
-RDW,,,,,
-MSP,,,,,
-SCD,,,,,
-SPL,,,,,
-DLK,,,,,
-FAR,,,,,
-GFK,,,,,
-DVL,,,,,
-RUG,,,,,
-MOT,,,,,
-STN,,,,,
-WTN,,,,,
-WPT,,,,,
-GGW,,,,,
-MAL,,,,,
-HAV,,,,,
-SBY,,,,,
-CUT,,,,,
-BRO,,,,,
-GPK,,,,,
-ESM,,,,,
-WGL,,,,,
-WFH,,,,,
-LIB,,,,,
-SPT,,,,,
-SPK,7 last,,,,8 first
-,<div style="text-align: center"><hr>Train <b>#7</b> to Seattle</div>,,,,<div style="text-align: center"><hr>Train <b>#8</b> from Seattle</div>
-SPK,7 first,,,,8 last
-EPH,,,,,
-WEN,,,,,
-LWA,,,,,
-EVR,,,,,
-EDM,,,,,
-SEA,7 last,,,,8 first
-,<div style="text-align: center"><hr>Train <b>#27</b> to Portland</div>,,,,<div style="text-align: center"><hr>Train <b>#28</b> from Portland</div>
-SPK,27 first,,,,28 last
-PSC,,,,,
-WIH,,,,,
-BNG,,,,,
-VAN,,,,,
-PDX,27 last,,,,28 first
+,7 / 27,mile,access,station,timezone,8 / 28
+column-options,ardp days,,,,,ardp reverse days
+updown,,,,,,
+CHI,7 first,0,,,,8 last
+GLN,,18,,,,
+MKE,,86,,,,
+CBS,,151,,,,
+POG,,179,,,,
+WDL,,196,,,,
+TOH,,241,,,,
+LSE,,282,,,,
+WIN,,309,,,,
+RDW,,372,,,,
+MSP,,411,,,,
+SCD,,487,,,,
+SPL,,553,,,,
+DLK,,615,,,,
+FAR,,663,,,,
+GFK,,738,,,,
+DVL,,823,,,,
+RUG,,880,,,,
+MOT,,941,,,,
+STN,,995,,,,
+WTN,,1062,,,,
+WPT,,1169,,,,
+GGW,,1218,,,,
+MAL,,1284,,,,
+HAV,,1371,,,,
+SBY,,1476,,,,
+CUT,,1500,,,,
+BRO,,1533,,,,
+GPK,,1548,,,,
+ESM,,1577,,,,
+WGL,,1604,,,,
+WFH,,1627,,,,
+LIB,,1729,,,,
+SPT,,1814,,,,
+SPK,7 last,1880,,,,8 first
+,"<div style=""text-align: center""><hr>Train <b>#7</b> to Seattle</div>",,,,,"<div style=""text-align: center""><hr>Train <b>#8</b> from Seattle</div>"
+SPK,7 first,1880,,,,8 last
+EPH,,1999,,,,
+WEN,,2051,,,,
+LWA,,2073,,,,
+EVR,,2172,,,,
+EDM,,2188,,,,
+SEA,7 last,2206,,,,8 first
+,"<div style=""text-align: center""><hr>Train <b>#27</b> to Portland</div>",,,,,"<div style=""text-align: center""><hr>Train <b>#28</b> from Portland</div>"
+SPK,27 first,1880,,,,28 last
+PSC,,2026,,,,
+WIH,,2151,,,,
+BNG,,2181,,,,
+VAN,,2246,,,,
+PDX,27 last,2256,,,,28 first

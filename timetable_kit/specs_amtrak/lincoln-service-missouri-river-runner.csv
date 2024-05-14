@@ -1,25 +1,25 @@
-,311,301,319,21,3,305,307,access,station,300,302,22,4,318,306,316
-column-options,ardp,ardp,ardp,,,,ardp,,,ardp reverse,reverse,reverse,reverse,ardp reverse,ardp reverse,ardp reverse
-route-name,,,,,,,,,,,,,,,,
-days,STL,STL,STL,STL,KCY,STL,STL,,,STL,STL,STL,KCY,STL,STL,STL
-updown,,,,,,,,,,,,,,,,
-CHI,blank,first,first,first,first,first,first,,,last,last,last,last,last,last,blank
-SMT,blank,,,,,,,,,,,,,,,blank
-JOL,blank,,,,,,,,,,,,,,,blank
-DWT,blank,,,,,,,,,,,,,,,blank
-PON,blank,,,,,,,,,,,,,,,blank
-BNL,blank,,,,,,,,,,,,,,,blank
-LCN,blank,,,,,,,,,,,,,,,blank
-SPI,blank,,,,,,,,,,,,,,,blank
-CRV,blank,,,,,,,,,,,,,,,blank
-ALN,blank,,,,,,,,,,,,,,,blank
-STL,first two-row,last two-row,,,,last two-row,last two-row,,,first two-row,first two-row,,,,first two-row,last two-row
-KWD,,blank,,"<div style=""text-align:center;"">to Texas</div>",,blank,blank,,,blank,blank,"<div style=""text-align:center;"">from Texas</div>",,,blank,
-WAH,,blank,,blank,"<div style=""text-align:center;"">via</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">via</div>",,blank,
-HEM,,blank,,blank,"<div style=""text-align:center;"">Galesburg</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">Galesburg</div>",,blank,
-JEF,,blank,,blank,"<div style=""text-align:center;"">& La Plata</div>",blank,blank,,,blank,blank,blank,"<div style=""text-align:center;"">& La Plata</div>",,blank,
-SED,,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank,
-WAR,,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank,
-LEE,,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank,
-IDP,,blank,,blank,,blank,blank,,,blank,blank,blank,,,blank,
-KCY,last,blank,last,blank,last,blank,blank,,,blank,blank,blank,first,first,blank,first
+,311,301,319,21,3,305,307,mile,access,station,300,302,22,4,318,306,316
+column-options,ardp,ardp,ardp,,,,ardp,,,,ardp reverse,reverse,reverse,reverse,ardp reverse,ardp reverse,ardp reverse
+route-name,,,,,,,,,,,,,,,,,
+days,STL,STL,STL,STL,KCY,STL,STL,,,,STL,STL,STL,KCY,STL,STL,STL
+updown,,,,,,,,,,,,,,,,,
+CHI,blank,first,first,first,first,first,first,0,,,last,last,last,last,last,last,blank
+SMT,blank,,,,,,,12,,,,,,,,,blank
+JOL,blank,,,,,,,37,,,,,,,,,blank
+DWT,blank,,,,,,,74,,,,,,,,,blank
+PON,blank,,,,,,,92,,,,,,,,,blank
+BNL,blank,,,,,,,124,,,,,,,,,blank
+LCN,blank,,,,,,,156,,,,,,,,,blank
+SPI,blank,,,,,,,185,,,,,,,,,blank
+CRV,blank,,,,,,,224,,,,,,,,,blank
+ALN,blank,,,,,,,257,,,,,,,,,blank
+STL,first two-row,last two-row,,,,last two-row,last two-row,284,,,first two-row,first two-row,,,,first two-row,last two-row
+KWD,,blank,,"<div style=""text-align:center;"">to Texas</div>",,blank,blank,297,,,blank,blank,"<div style=""text-align:center;"">from Texas</div>",,,blank,
+WAH,,blank,,blank,"<div style=""text-align:center;"">via</div>",blank,blank,335,,,blank,blank,blank,"<div style=""text-align:center;"">via</div>",,blank,
+HEM,,blank,,blank,"<div style=""text-align:center;"">Galesburg</div>",blank,blank,365,,,blank,blank,blank,"<div style=""text-align:center;"">Galesburg</div>",,blank,
+JEF,,blank,,blank,"<div style=""text-align:center;"">& La Plata</div>",blank,blank,409,,,blank,blank,blank,"<div style=""text-align:center;"">& La Plata</div>",,blank,
+SED,,blank,,blank,,blank,blank,473,,,blank,blank,blank,,,blank,
+WAR,,blank,,blank,,blank,blank,502,,,blank,blank,blank,,,blank,
+LEE,,blank,,blank,,blank,blank,544,,,blank,blank,blank,,,blank,
+IDP,,blank,,blank,,blank,blank,557,,,blank,blank,blank,,,blank,
+KCY,last,blank,last,blank,last,blank,blank,567,,,blank,blank,blank,first,first,blank,first

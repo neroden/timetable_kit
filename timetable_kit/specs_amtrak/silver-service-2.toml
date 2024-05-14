@@ -1,9 +1,9 @@
 title = "Silver Service/Palmetto Timetable page 2"
 heading = "Silver Service - Florida"
 aria_label = "Silver Service page 2"
-reference_date = "20240205"
+reference_date = "20240610"
 top_text = "See previous page for services from New York through Savannah, Georgia."
-bottom_text = "<b>Connections at Miami</b> require walking from Amtrak's Miami station to the <a href=\"https://en.wikipedia.org/wiki/Tri-Rail_and_Metrorail_Transfer_station\">Tri-Rail / Metrorail Transfer station</a>."
+bottom_text = "<p class=\"mile-header-text\">Mileage note 1 - Via Raleigh, Columbia and Tampa (Trains 79, 80, 91, 92)<br>Mileage note 2 - Via Fayetteville and Charleston (Trains 89, 90, 97, 98)</p><b>Connections at Miami</b> require walking from Amtrak's Miami station to the <a href=\"https://en.wikipedia.org/wiki/Tri-Rail_and_Metrorail_Transfer_station\">Tri-Rail / Metrorail Transfer station</a>."
 landscape = true
 key_on_right = true
 key_baggage = true

@@ -1,31 +1,32 @@
-,43 / 29 noheader,access,stations,42 / 30 noheader
-column-options,ardp,,,reverse ardp
-days,PHL,,,PHL
-updown,,,,
-NYP,43 first,,,42 first
-NWK,,,,
-TRE,,,,
-PHL,,,,
-PAO,,,,
-LNC,,,,
-ELT,,,,
-HAR,,,,
-LEW,,,,
-HGD,,,,
-TYR,,,,
-ALT,,,,
-JST,,,,
-LAB,,,,
-GNB,,,,
-PGH,43 last,,,42 first
-,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#29</b></div>",,,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#30</b></div>"
-PGH,29 first,,,30 last
-ALC,,,,
-CLE,,,,
-ELY,,,,
-SKY,,,,
-TOL,,,,
-WTI,,,,
-EKH,,,,
-SOB,,,,
-CHI,29 last,,,30 first
+,43 / 29 noheader,mile,access,stations,42 / 30 noheader
+column-options,ardp,,,,reverse ardp
+days,PHL,,,,PHL
+updown,,,,,
+NYP,43 first,0,,,42 first
+NWK,,10,,,
+TRE,,58,,,
+PHL,,91,,,
+PAO,,110,,,
+EXT,"<div style=""text-align:center;"">(Does not stop)</div>",118,,,
+LNC,,159,,,
+ELT,,177,,,
+HAR,,195,,,
+LEW,,256,,,
+HGD,,293,,,
+TYR,,313,,,
+ALT,,327,,,
+JST,,366,,,
+LAB,,403,,,
+GNB,,413,,,
+PGH,43 last,444,,,42 first
+,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#29</b></div>",,,,"<div style=""text-align: center;"">connection<br>via Capitol Limited<br><b>#30</b></div>"
+PGH,29 first,444,,,30 last
+ALC,,528,,,
+CLE,,584,,,
+ELY,,609,,,
+SKY,,644,,,
+TOL,,691,,,
+WTI,,769,,,
+EKH,,823,,,
+SOB,,841,,,
+CHI,29 last,925,,,30 first

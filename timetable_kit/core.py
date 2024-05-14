@@ -76,6 +76,7 @@ special_column_names = {
     "services",
     "access",
     "timezone",
+    "mile",
 }
 
 # Constant set for special row names.
@@ -984,6 +985,11 @@ def fill_tt_spec(
                 t.text.iloc[0, x] = text_presentation.get_timezone_column_header(
                     doing_html=doing_html
                 )
+            case "mile":
+                # in a span
+                t.text.iloc[0, x] = text_presentation.get_mile_column_header(
+                    doing_html=doing_html
+                )
             case _:
                 # it's actually a train, or several trains
                 # Check column options for reverse, days, ardp:
@@ -1213,8 +1219,12 @@ def fill_tt_spec(
                     # Line led by a station code,
                     # Or "origin", "destination", but cell already has a value.
                     # and the value isn't one of the special codes we check later.
-                    cell_css_list.append("special-cell")
-                    # This is probably special text like "to Chicago".
+                    if raw_text.isdigit():
+                        # This is probably a mileage integer
+                        cell_css_list.append("mile-cell")
+                    else: 
+                        # This is probably special text like "to Chicago".
+                        cell_css_list.append("special-cell")
                     # Copy the handwritten text over.
                     t.text.iloc[y, x] = raw_text
                 case ["origin" | "destination", "station" | "stations", _]:

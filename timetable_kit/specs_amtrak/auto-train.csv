@@ -1,6 +1,6 @@
-,53, access, station,52
-column-options,ardp,,,reverse ardp
-days,LOR,,,SFA
-updown,,,,
-LOR,first,,,last
-SFA,last,,,first
+,53,mile, access, station,52
+column-options,ardp,,,,reverse ardp
+days,LOR,,,,SFA
+updown,,,,,
+LOR,first,0,,,last
+SFA,last,855,,,first

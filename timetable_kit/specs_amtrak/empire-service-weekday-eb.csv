@@ -1,22 +1,22 @@
-,stations,232,234,236,280,240,238,284,290,48,244,64,68
-column-options,,,,,ardp,,,,,ardp,,ardp,ardp
-route-name,,,,,,,,,,,,,
-days,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
-,,,,,,,,,,,,"<span>From<br>Toronto, ON</span>",
-NFL,,blank,blank,blank,first two-row,blank,blank,first two-row,blank,blank,blank,,blank
-BFX,,blank,blank,blank,,blank,blank,,blank,"<span>From<br>Chicago, IL</span>",blank,,blank
-BUF,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
-ROC,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
-SYR,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
-ROM,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
-UCA,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
-AMS,,blank,blank,blank,,blank,blank,,"<span>From<br>Burlington, VT</span>",,blank,,"<span>From<br>Montreal, QC</span>"
-SAR,,blank,blank,blank,,blank,blank,,,,blank,,
-SDY,,blank,blank,blank,,blank,blank,,,,blank,,
-ALB,,first two-row,first two-row,first two-row,,first two-row,first two-row,,,,first two-row,,
-HUD,,,,,,,,,,,,,
-RHI,,,,,,,,,,,,,
-POU,,,,,,,,,,,,,
-CRT,,,,,,,,,,,,,
-YNY,,,,,,,,,,,,,
-NYP,,last,last,last,last,last,last,last,last,last,last,last,last
+,mile,access,stations,232,234,236,280,240,238,284,290,48,244,64,68
+column-options,,,,,,,ardp,,,,,ardp,,ardp,ardp
+route-name,,,,,,,,,,,,,,,
+days,,,,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP,NYP
+,,,,,,,,,,,,,,"<span>From<br>Toronto, ON</span>",
+NFL,0,,,blank,blank,blank,first two-row,blank,blank,first two-row,blank,blank,blank,,blank
+BFX,23,,,blank,blank,blank,,blank,blank,,blank,"<span>From<br>Chicago, IL</span>",blank,,blank
+BUF,29,,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
+ROC,90,,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
+SYR,169,,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
+ROM,210,,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
+UCA,223,,,blank,blank,blank,,blank,blank,,blank,,blank,,blank
+AMS,283,,,blank,blank,blank,,blank,blank,,"<span>From<br>Burlington, VT</span>",,blank,,"<span>From<br>Montreal, QC</span>"
+SAR,blank,,,blank,blank,blank,,blank,blank,,,,blank,,
+SDY,301,,,blank,blank,blank,,blank,blank,,,,blank,,
+ALB,319,,,first two-row,first two-row,first two-row,,first two-row,first two-row,,,,first two-row,,
+HUD,346,,,,,,,,,,,,,,
+RHI,372,,,,,,,,,,,,,,
+POU,387,,,,,,,,,,,,,,
+CRT,428,,,,,,,,,,,,,,
+YNY,446,,,,,,,,,,,,,,
+NYP,460,,,last,last,last,last,last,last,last,last,last,last,last,last

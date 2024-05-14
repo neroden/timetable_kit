@@ -1,24 +1,24 @@
-,821 / 8903 noheader / 21 noheader / 22 noheader / 3 noheader / 4 noheader,access,stations,822 / 8904 noheader / 21 noheader / 22 noheader / 3 noheader / 4 noheader
-column-options,ardp,,,reverse ardp
-days,OKC,,,OKC
-updown,,,,
-,"<div style=""text-align: center""><b>Southwest Chief #4</b><br>from the south and west</div>",,,"<div style=""text-align: center""><b>Southwest Chief #3</b><br>to the south and west</div>"
-NEW,4 last,,,3 first
-,"<div style=""text-align: center""><b>Southwest Chief #3</b><br>from the north and east</div>",,,"<div style=""text-align: center""><b>Southwest Chief #4</b><br>to the north and east</div>"
-NEW,3 last,,,4 first
-,"<div style=""text-align: center;"">Bus <b>#8903</b></div>",,,"<div style=""text-align: center;"">Bus <b>#8904</b></div>"
-NEW,8903 first,,,8904 last
-WIC,,,,
-OKC,8903 last,,,8904 first
-,"<div style=""text-align: center;""><b>Heartland Flyer #821</b></div>",,,"<div style=""text-align: center;""><b>Heartland Flyer #822</b></div>"
-OKC,821 first,,,822 last
-NOR,,,,
-PUR,,,,
-PVL,,,,
-ADM,,,,
-GLE,,,,
-FTW,821 last,,,822 first
-,"<div style=""text-align: center;""><b>Texas Eagle #21/#421</b><br>to the south and west</div>",,,"<div style=""text-align: center""><b>Texas Eagle #22/#422</b><br>from the south and west</div>"
-FTW,21 first,,,22 last
-,"<div style=""text-align: center;""><b>Texas Eagle #22/#422</b><br>to the north and east</div>",,,"<div style=""text-align: center""><b>Texas Eagle #21/#421</b><br>from the north and east</div>"
-FTW,22 first,,,21 last
+,821 / 8903 noheader / 21 noheader / 22 noheader / 3 noheader / 4 noheader,mile,access,stations,822 / 8904 noheader / 21 noheader / 22 noheader / 3 noheader / 4 noheader
+column-options,ardp,,,,reverse ardp
+days,OKC,,,,OKC
+updown,,,,,
+,"<div style=""text-align: center""><b>Southwest Chief #4</b><br>from the south and west</div>",blank,,,"<div style=""text-align: center""><b>Southwest Chief #3</b><br>to the south and west</div>"
+NEW,4 last,blank,,,3 first
+,"<div style=""text-align: center""><b>Southwest Chief #3</b><br>from the north and east</div>",blank,,,"<div style=""text-align: center""><b>Southwest Chief #4</b><br>to the north and east</div>"
+NEW,3 last,blank,,,4 first
+,"<div style=""text-align: center;"">Bus <b>#8903</b></div>",blank,,,"<div style=""text-align: center;"">Bus <b>#8904</b></div>"
+NEW,8903 first,0,,,8904 last
+WIC,,28,,,
+OKC,8903 last,189,,,8904 first
+,"<div style=""text-align: center;""><b>Heartland Flyer #821</b></div>",blank,,,"<div style=""text-align: center;""><b>Heartland Flyer #822</b></div>"
+OKC,821 first,0,,,822 last
+NOR,,20,,,
+PUR,,35,,,
+PVL,,57,,,
+ADM,,102,,,
+GLE,,141,,,
+FTW,821 last,206,,,822 first
+,"<div style=""text-align: center;""><b>Texas Eagle #21/#421</b><br>to the south and west</div>",blank,,,"<div style=""text-align: center""><b>Texas Eagle #22/#422</b><br>from the south and west</div>"
+FTW,21 first,blank,,,22 last
+,"<div style=""text-align: center;""><b>Texas Eagle #22/#422</b><br>to the north and east</div>",blank,,,"<div style=""text-align: center""><b>Texas Eagle #21/#421</b><br>from the north and east</div>"
+FTW,22 first,blank,,,21 last

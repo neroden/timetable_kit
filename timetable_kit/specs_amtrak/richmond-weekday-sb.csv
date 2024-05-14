@@ -1,43 +1,43 @@
-,access,station,67,89,79 monday,141,95,91,125,93,85,97
-column-options,,,ardp,,,,ardp,,,,,
-route-name,,,,,,,,,,,,
-days,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
-BOS,,,blank,blank,blank,blank,first,blank,blank,first,first,blank
-BBY,,,blank,blank,blank,blank,,blank,blank,,,blank
-RTE,,,On Fridays,blank,blank,blank,,blank,blank,,,blank
-PVD,,,train #65,blank,blank,from,,blank,blank,,,blank
-KIN,,,runs; see,blank,blank,Springfield,,blank,blank,,,blank
-WLY,,,weekend,blank,blank,MA,,blank,blank,,,blank
-MYS,,,schedule,blank,blank,(see,,blank,blank,,,blank
-NLC,,,blank,blank,blank,Hartford<br>Line,,blank,blank,,,blank
-OSB,,,blank,blank,blank,timetable),,blank,blank,,,blank
-NHV,,,blank,blank,blank,,,blank,blank,,,blank
-BRP,,,blank,blank,blank,,,blank,blank,,,blank
-STM,,,blank,blank,blank,,,blank,blank,,,blank
-NRO,,,blank,blank,blank,,,blank,blank,,,blank
-NYP,,,first two-row,first two-row,first two-row,,,first two-row,first two-row,,,first two-row
-NWK,,,,,,,,,,,,
-EWR,,,,,,,,,,,,
-MET,,,,,,,,,,,,
-NBK,,,,,,,,,,,,
-PJC,,,,,,,,,,,,
-TRE,,,,,,,,,,,,
-PHL,,,,,,,,,,,,
-WIL,,,,,,,,,,,,
-NRK,,,,,,,,,,,,
-ABE,,,,,,,,,,,,
-BAL,,,,,,,,,,,,
-BWI,,,,,,,,,,,,
-NCR,,,,,,,,,,,,
-WAS,,,,,,,,,,,,
-ALX,,,,,,,,,,,,
-WDB,,,,,,,,,,,,
-QAN,,,,,,,,,,,,
-FBG,,,,,,,,,,,,
-ASD,,,,,,,,,,,,
-RVR,,,,,,,,,,,,
-RVM,,,,,,,,,,,last,
-WBG,,,,,,,,,,,blank,
-NPN,,,last,,,,,,last,,blank,
-PTB,,,blank,,,,,,blank,,blank,
-NFK,,,blank,to Savannah,to Charlotte,last,last,to Miami,blank,last,blank,to Miami
+,mile,access,station,67,89,79 monday,141,95,91,125,93,85,97
+column-options,,,,ardp,,,,ardp,,,,,
+route-name,,,,,,,,,,,,,
+days,,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
+BOS,0,,,blank,blank,blank,blank,first,blank,blank,first,first,blank
+BBY,1,,,blank,blank,blank,blank,,blank,blank,,,blank
+RTE,11,,,On Fridays,blank,blank,blank,,blank,blank,,,blank
+PVD,43,,,train #65,blank,blank,from,,blank,blank,,,blank
+KIN,70,,,runs,blank,blank,Springfield,,blank,blank,,,blank
+WLY,87,,,weekend,blank,blank,MA,,blank,blank,,,blank
+MYS,96,,,schedule,blank,blank,(see,,blank,blank,,,blank
+NLC,105,,,blank,blank,blank,Hartford<br>Line,,blank,blank,,,blank
+OSB,123,,,blank,blank,blank,timetable),,blank,blank,,,blank
+NHV,156,,,blank,blank,blank,,,blank,blank,,,blank
+BRP,173,,,blank,blank,blank,,,blank,blank,,,blank
+STM,195,,,blank,blank,blank,,,blank,blank,,,blank
+NRO,212,,,blank,blank,blank,,,blank,blank,,,blank
+NYP,231<hr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,,,first two-row,first two-row,first two-row,,,first two-row,first two-row,,,first two-row
+NWK,10,,,,,,,,,,,,
+EWR,13,,,,,,,,,,,,
+MET,24,,,,,,,,,,,,
+NBK,32,,,,,,,,,,,,
+PJC,48,,,,,,,,,,,,
+TRE,58,,,,,,,,,,,,
+PHL,91,,,,,,,,,,,,
+WIL,116,,,,,,,,,,,,
+NRK,128,,,,,,,,,,,,
+ABE,155,,,,,,,,,,,,
+BAL,185,,,,,,,,,,,,
+BWI,196,,,,,,,,,,,,
+NCR,217,,,,,,,,,,,,
+WAS,226,,,,,,,,,,,,
+ALX,234,,,,,,,,,,,,
+WDB,250,,,,,,,,,,,,
+QAN,260,,,,,,,,,,,,
+FBG,280,,,,,,,,,,,,
+ASD,324,,,,,,,,,,,,
+RVR,335,,,,,,,,,,,,
+RVM,343,,,,,,,,,,,last,
+WBG,390,,,,,,,,,,,blank,
+NPN,413,,,last,,,,,,last,,blank,
+PTB,363,,,blank,,,,,,blank,,blank,
+NFK,448,,,blank,to Savannah,to Charlotte,last,last,to Miami,blank,last,blank,to Miami

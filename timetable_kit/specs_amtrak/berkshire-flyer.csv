@@ -1,11 +1,13 @@
-,1245,1235, access, station,timezone,1244,1234
-column-options,days ardp,days ardp,,,,days ardp reverse,days ardp reverse
-updown,,,,,,,
-NYP,,first,,,,last,
-YNY,,,,,,,
-CRT,,,,,,,
-POU,,,,,,,
-RHI,,,,,,,
-HUD,,,,,,,
-ALB,first,,,,,,last
-PIT,last,last,,,,first,first
+,1233,448,1235,mile, access, station,1246,449
+column-options,ardp,,ardp,,,,ardp reverse,ardp reverse
+route-name,,,,,,,,
+days,NYP,ALB,NYP,,,,PIT,PIT
+updown,,,,,,,,
+NYP,first,,first,0,,,last,
+YNY,,,,14,,,,
+CRT,,,,32,,,,
+POU,,,,73,,,,
+RHI,,,,88,,,,
+HUD,,"<div style=""text-align: center; font-weight:normal"">From Chicago</div>",,114,,,,"<div style=""text-align: center; font-weight:normal"">To Chicago</div>"
+ALB,,,,141,,,,
+PIT,last,last,last,190,,,first,first
