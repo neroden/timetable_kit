@@ -11,6 +11,11 @@ CSS file for the symbol key table (except fonts).
     margin-top: 2px;
 }
 
+/* If we need to put the symbol key on its own page */
+.symbol-key-own-page {
+    break-before: page;
+}
+
 /* This selects table data cells (td) descended from something (such as the table) of class symbol-key */
 .symbol-key td {
     vertical-align: top;

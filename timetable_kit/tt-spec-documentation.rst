@@ -231,6 +231,7 @@ This is a TOML file with a list of key-value pairs.  So far the defined keys are
     "times_24h": "Display times in 24-hour time, as 22:01 rather than the default 10:01P"
     "for_rpa": "If this is present, the timetable will be credited as being made for RPA"
     "key_on_right": "If present, put the symbol key on the right instead of under the timetable (for long timetables)",
+    "key_on_own_page": "If present, put the symbol key on the next page (for very long & wide timetables)"
     "key_baggage": "If present, include the key for checked baggage",
     "key_d": "If present, include the key for 'discharge passengers only' (D) ",
     "key_r": "If present, include the key for 'receive passengers only' (R) ",

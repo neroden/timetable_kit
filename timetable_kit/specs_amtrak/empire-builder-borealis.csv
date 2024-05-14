@@ -1,0 +1,52 @@
+,1333,7,27,mile,access,station,timezone,28,8,1340
+column-options,ardp,ardp,ardp,,,,,ardp reverse,ardp reverse,ardp reverse
+route-name,,,,,,,,,,
+omit,Since it's currently all daily it's safe to use an arbitrary station for the days,,,,,,,,,
+days,CHI,CHI,CHI,,,,,CHI,CHI,CHI
+updown,,,,,,,,,,
+CHI,1333 first,7 first,27 first,0,,,,28 last,8 last,1340 last
+GLN,,,,18,,,,,,
+MKE,,,,86,,,,,,
+CBS,,,,151,,,,,,
+POG,,,,179,,,,,,
+WDL,,,,196,,,,,,
+TOH,,,,241,,,,,,
+LSE,,,,282,,,,,,
+WIN,,,,309,,,,,,
+RDW,,,,372,,,,,,
+MSP,1333 last,,,411,,,,,,1340 first
+SCD,blank,,,487,,,,,,blank
+SPL,blank,,,553,,,,,,blank
+DLK,blank,,,615,,,,,,blank
+FAR,blank,,,663,,,,,,blank
+GFK,blank,,,738,,,,,,blank
+DVL,blank,,,823,,,,,,blank
+RUG,blank,,,880,,,,,,blank
+MOT,blank,,,941,,,,,,blank
+STN,blank,,,995,,,,,,blank
+WTN,blank,,,1062,,,,,,blank
+WPT,blank,,,1169,,,,,,blank
+GGW,blank,,,1218,,,,,,blank
+MAL,blank,,,1284,,,,,,blank
+HAV,blank,,,1371,,,,,,blank
+SBY,blank,,,1476,,,,,,blank
+CUT,blank,,,1500,,,,,,blank
+BRO,blank,,,1533,,,,,,blank
+GPK,blank,,,1548,,,,,,blank
+ESM,blank,,,1577,,,,,,blank
+WGL,blank,,,1604,,,,,,blank
+WFH,blank,,,1627,,,,,,blank
+LIB,blank,,,1729,,,,,,blank
+SPT,blank,,,1814,,,,,,blank
+SPK,blank,,,1880,,,,,,blank
+EPH,blank,,blank,1999,,,,blank,,blank
+WEN,blank,,blank,2051,,,,blank,,blank
+LWA,blank,,blank,2073,,,,blank,,blank
+EVR,blank,,blank,2172,,,,blank,,blank
+EDM,blank,,blank,2188,,,,blank,,blank
+SEA,blank,7 last,blank,2206,,,,blank,8 first,blank
+PSC,blank,blank,,2026,,,,,blank,blank
+WIH,blank,blank,,2151,,,,,blank,blank
+BNG,blank,blank,,2181,,,,,blank,blank
+VAN,blank,blank,,2246,,,,,blank,blank
+PDX,blank,blank,27 last,2256,,,,28 first,blank,blank
