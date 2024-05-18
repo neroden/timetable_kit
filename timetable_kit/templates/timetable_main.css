@@ -84,8 +84,10 @@ td.timezone-cell {
     text-align: center;
 }
 /* Mileage cells align right */
+/* And they require tabular numbers */
 td.mile-cell {
     text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 /**** HEADER TYPE CELLS ****/
