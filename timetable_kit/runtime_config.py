@@ -22,8 +22,8 @@ import timetable_kit.maple_leaf
 import timetable_kit.greyhound
 
 # These will get set elsewhere, later, by initialization code.
-agency_name = None
-agency_package = None
+agency_name: str = None
+agency_package: timetable_kit.generic_agency.AgencySingletonGetter = None
 agency_input_dir = None
 timetable_kit_directory = pathlib.Path(__file__).parent
 

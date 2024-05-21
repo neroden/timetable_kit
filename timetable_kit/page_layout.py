@@ -165,7 +165,7 @@ def produce_html_page(
     return result
 
 
-def produce_html_file(pages: list[HtmlAndCss], *, title, for_rpa=False):
+def produce_html_file(pages: list[HtmlAndCss], *, title, for_rpa=False, agency_special_css: str = ""):
     """
     Take a *list* of containers output by calling produce_html_page, which are like this:
     html_text -- an HTML <div> section for a page
@@ -189,7 +189,7 @@ def produce_html_file(pages: list[HtmlAndCss], *, title, for_rpa=False):
 
     # The @font-face directives:
     # Eventually the list of fonts should be passed in.  FIXME.
-    fonts = ["SpartanTT"]
+    fonts = ["SpartanTT", "Noto Sans", "Noto Sans Mono"]
     # It breaks Weasyprint to include references to nonexistent fonts,
     # So we have to make sure it only includes used fonts.
     # (Including nonexistent fonts works OK for rendering in Firefox, though.)
@@ -202,6 +202,7 @@ def produce_html_file(pages: list[HtmlAndCss], *, title, for_rpa=False):
         "icons_css": icons_css,
         "logos_css": logos_css,
         "font_faces_css": font_faces_css,
+        "agency_special_css": agency_special_css
     }
 
     html_file_params = {

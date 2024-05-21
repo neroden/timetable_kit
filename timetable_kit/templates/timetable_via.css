@@ -1,0 +1,40 @@
+{#
+timetable_via.css
+Part of timetable_kit
+Copyright 2024 Borketh. Licensed under GNU Affero GPLv3 or later.
+
+This CSS fragment is to override the default Amtrak style in favour of a take
+on older VIA timetables using their most recent style guide (as of 2024).
+#}
+
+.tt-table .via-special-css {
+    /* Stuff for the table as a whole */
+    border-style: hidden;
+}
+
+/* only add lines where they should be */
+.via-special-css .time-cell,
+.via-special-css .blank-cell,
+.via-special-css .station-cell,
+.via-special-css .special-cell,
+.via-special-css .color-day-train {
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-left-style: solid;
+    border-left-width: 2px;
+}
+
+/* Alternating colours, like the 2017 timetable, but using "Comfy White" from the style guide.
+It makes it slightly easier to read without introducing contrast issues. */
+tr:nth-child(odd) .via-special-css {
+    background-color: #FDF7D9;
+}
+
+td.station-cell .via-special-css,
+th.station-cell .via-special-css {
+    font-family: "Noto Sans", cursive; /* the cursive is for debugging */
+}
+
+td.time-cell .via-special-css {
+    font-family: "Noto Sans Mono", cursive
+}

@@ -7,6 +7,7 @@ This holds a class for "Agency" intended to be used as a singleton. It has an in
 Amtrak and others need to provide the same interface. This should be made easier by
 class inheritance.
 """
+from typing import Protocol
 
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.debug import debug_print
@@ -574,7 +575,13 @@ class Agency:
 _singleton = Agency()
 
 
-def get_singleton():
+def get_singleton() -> Agency:
     """Get singleton for generic agency."""
     global _singleton
     return _singleton
+
+
+class AgencySingletonGetter(Protocol):
+    @staticmethod
+    def get_singleton() -> Agency:
+        ...

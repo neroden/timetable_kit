@@ -225,6 +225,7 @@ def produce_several_timetables(
     input_dirname=None,
     output_dirname=None,
     patch_the_feed=True,
+    agency_special_css: str = ""
 ) -> None:
     """Main program to run from other Python programs.
 
@@ -363,7 +364,7 @@ def produce_several_timetables(
         if do_html:
             # Produce complete multi-page HTML file.
             timetable_finished_html = produce_html_file(
-                page_list, title=title, for_rpa=for_rpa
+                page_list, title=title, for_rpa=for_rpa, agency_special_css=agency_special_css
             )
             path_for_html = output_dir / Path(output_filename_base + ".html")
             with open(path_for_html, "w") as outfile:
@@ -495,6 +496,7 @@ def main():
         input_dirname=input_dirname,
         output_dirname=output_dirname,
         patch_the_feed=patch_the_feed,
+        agency_special_css=agency_singleton().agency_css_class()
     )
 
 

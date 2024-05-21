@@ -20,6 +20,7 @@
 {% include "agency_via.css" %}
 {% include "agency_maple_leaf.css" %}
 {% include "timetable_main.css" %}
+{% include "timetable_via.css" %}
 {% include "timetable_colors.css" %}
 {% include "time_boxes_characters.css" %}{# Used only if we're using a nontabular font. #}
 {% include "time_boxes_simple.css" %}
