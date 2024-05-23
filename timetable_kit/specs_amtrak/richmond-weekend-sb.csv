@@ -1,21 +1,21 @@
 ,mile,access,station,65,89,79 saturday,153,195,91,157,99,87,97
 column-options,,,,ardp,,,,ardp,,,,,
 route-name,,,,,,,,,,,,,
-days,,,,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
-BOS,0,,,blank,blank,blank,blank,first,blank,blank,first,first,blank
-BBY,1,,,blank,blank,blank,blank,,blank,blank,,,blank
-RTE,11,,,On Sundays,blank,blank,blank,,blank,blank,,,blank
-PVD,43,,,train #67,blank,blank,blank,,blank,from,,,blank
-KIN,70,,,runs, see,blank,blank,blank,,blank,Springfield,,blank
-WLY,87,,,weekday,blank,blank,blank,,blank,MA,,,blank
-MYS,96,,,schedule,blank,blank,blank,,blank,(see,,,blank
-NLC,105,,,blank,blank,blank,blank,,blank,Hartford<br>Line,,,blank
-OSB,123,,,blank,blank,blank,blank,,blank,timetable),,,blank
-NHV,156,,,blank,blank,blank,blank,,blank,,,,blank
-BRP,173,,,blank,blank,blank,blank,,blank,,,,blank
-STM,195,,,blank,blank,blank,blank,,blank,,,,blank
-NRO,212,,,blank,blank,blank,blank,,blank,,,,blank
-NYP,231<hr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,,,first two-row,first two-row,first two-row,first two-row,,first two-row,,,,first two-row
+days,,,,BOS,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR,RVR
+BOS,0,,,first,blank,blank,blank,first,blank,blank,first,first,blank
+BBY,1,,,,blank,blank,blank,,blank,blank,,,blank
+RTE,11,,,,blank,blank,blank,,blank,blank,,,blank
+PVD,43,,,,blank,blank,blank,,blank,from,,,blank
+KIN,70,,,,blank,blank,blank,,blank,Springfield,,,blank
+WLY,87,,,,blank,blank,blank,,blank,MA,,,blank
+MYS,96,,,,blank,blank,blank,,blank,(see,,,blank
+NLC,105,,,,blank,blank,blank,,blank,Hartford<br>Line,,,blank
+OSB,123,,,,blank,blank,blank,,blank,timetable),,,blank
+NHV,156,,,,blank,blank,blank,,blank,,,,blank
+BRP,173,,,,blank,blank,blank,,blank,,,,blank
+STM,195,,,,blank,blank,blank,,blank,,,,blank
+NRO,212,,,,blank,blank,blank,,blank,,,,blank
+NYP,231<hr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,,,,first two-row,first two-row,first two-row,,first two-row,,,,first two-row
 NWK,10,,,,,,,,,,,,
 EWR,13,,,,,,,,,,,,
 MET,24,,,,,,,,,,,,
