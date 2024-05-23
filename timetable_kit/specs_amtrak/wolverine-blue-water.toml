@@ -1,6 +1,7 @@
 title = "Wolverine & Blue Water Timetable"
 heading = "Wolverine & Blue Water"
 aria_label = "Wolverine Blue Water"
+top_text="NOTE: Effective May 6 until October 18, 2024 Trains 350 and 353 will operate on Fridays, Saturdays and Sundays only. Trains will operate normally on holidays.  See <a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a> for details."
 reference_date = "20240601"
 programmers_warning = "Wolverine trains have identical M-F and SaSu timetables but are listed separately, so days column is overridden: recheck this when GTFS changes. Also see Amtrak track construction notice https://www.amtrak.com/alert/wolverine-trains-350-353-temporarily-suspended.html - Trains 350 and 353 will operate on Fridays, Saturdays and Sundays only. Trains will operate normally on the following holidays: Memorial Day, Monday, May 27  Juneteenth, Wednesday, June 19  Independence Day, Thursday, July 4th  Labor Day, Monday, September 2"
 key_tz = true

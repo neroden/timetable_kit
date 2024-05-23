@@ -3,5 +3,5 @@ heading = "Pere Marquette"
 aria_label = "Pere Marquette"
 reference_date = "20240601"
 key_tz = true
-key_on_right = true
+key_on_right = false
 for_rpa = true
