@@ -1215,16 +1215,17 @@ def fill_tt_spec(
                             first_train_spec, route_from_train_spec_local
                         )
                     )
+                case [_, "mile", _]:
+                    # Mileage column (typically typed in by hand right now).
+                    cell_css_list.append("mile-cell")
+                    # Copy the handwritten text over.
+                    t.text.iloc[y, x] = raw_text
                 case [_, _, raw_text] if raw_text != "" and not cell_codes:
                     # Line led by a station code,
                     # Or "origin", "destination", but cell already has a value.
                     # and the value isn't one of the special codes we check later.
-                    if raw_text.isdigit():
-                        # This is probably a mileage integer
-                        cell_css_list.append("mile-cell")
-                    else: 
-                        # This is probably special text like "to Chicago".
-                        cell_css_list.append("special-cell")
+                    # This is probably special text like "to Chicago".
+                    cell_css_list.append("special-cell")
                     # Copy the handwritten text over.
                     t.text.iloc[y, x] = raw_text
                 case ["origin" | "destination", "station" | "stations", _]:
