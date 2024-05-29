@@ -9,3 +9,4 @@ key_d = true
 key_r = true
 compress_credits = true
 for_rpa = true
+key_on_right = true
