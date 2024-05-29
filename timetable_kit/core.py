@@ -1215,7 +1215,7 @@ def fill_tt_spec(
                             first_train_spec, route_from_train_spec_local
                         )
                     )
-                case [_, "mile", _]:
+                case [_, "mile", raw_text]:
                     # Mileage column (typically typed in by hand right now).
                     cell_css_list.append("mile-cell")
                     # Copy the handwritten text over.
