@@ -1,7 +1,7 @@
 title = "Lake Shore Limited Timetable"
 heading = "Lake Shore Limited"
 aria_label = "Lake Shore Limited"
-reference_date = "20240601"
+reference_date = "20240620"
 top_text = "Trains 48 and 448 are the <b>same train</b> from Chicago to Albany; cars separate to go to New York City and Boston.<br>Trains 49 and 449 join at Albany to become the <b>same train</b> from Albany to Chicago."
 key_baggage = true
 key_d = true

@@ -2,7 +2,7 @@ title = "Keystone Weekend Westbound Timetable"
 heading = "Keystone Service & Pennsylvanian: Weekend Westbound"
 aria_label = "Keystone Weekend Westbound"
 top_text = "NOTE: Keystone work during summer 2024. Please see <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for the latest schedule adjustments."
-reference_date = "20240601"
+reference_date = "20240620"
 landscape = true
 key_baggage = true
 key_d = true
