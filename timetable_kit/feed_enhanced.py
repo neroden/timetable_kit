@@ -12,7 +12,8 @@ with error checking to make sure there's exactly one trip.
 It also gets rid of the shapes table, because it's huge and we don't use it.
 """
 from collections.abc import Iterable
-from typing import Type, Self, NamedTuple
+from dataclasses import dataclass
+from typing import Type, Self, Optional
 
 from operator import not_  # Needed for bad_service_id filter
 
@@ -45,11 +46,17 @@ GTFS_DAYS = (
 headers, appropriately lowercase for the column headers."""
 
 
-class DateRange(NamedTuple):
+@dataclass
+class DateRange:
     """Used to track what dates a timetable is valid for."""
-
     latest_start_date: str
     earliest_end_date: str
+
+    def is_invalid(self) -> bool:
+        return not self.latest_start_date or not self.earliest_end_date
+
+    def is_one_day(self) -> bool:
+        return self.latest_start_date == self.earliest_end_date
 
 
 class FeedEnhanced(gtfs_kit.Feed):
@@ -58,20 +65,20 @@ class FeedEnhanced(gtfs_kit.Feed):
     def __init__(
         self,
         dist_units: str,
-        agency: DataFrame | None = None,
-        stops: DataFrame | None = None,
-        routes: DataFrame | None = None,
-        trips: DataFrame | None = None,
-        stop_times: DataFrame | None = None,
-        calendar: DataFrame | None = None,
-        calendar_dates: DataFrame | None = None,
-        fare_attributes: DataFrame | None = None,
-        fare_rules: DataFrame | None = None,
-        shapes: DataFrame | None = None,
-        frequencies: DataFrame | None = None,
-        transfers: DataFrame | None = None,
-        feed_info: DataFrame | None = None,
-        attributions: DataFrame | None = None,
+        agency:             Optional[DataFrame] = None,
+        stops:              Optional[DataFrame] = None,
+        routes:             Optional[DataFrame] = None,
+        trips:              Optional[DataFrame] = None,
+        stop_times:         Optional[DataFrame] = None,
+        calendar:           Optional[DataFrame] = None,
+        calendar_dates:     Optional[DataFrame] = None,
+        fare_attributes:    Optional[DataFrame] = None,
+        fare_rules:         Optional[DataFrame] = None,
+        shapes:             Optional[DataFrame] = None,
+        frequencies:        Optional[DataFrame] = None,
+        transfers:          Optional[DataFrame] = None,
+        feed_info:          Optional[DataFrame] = None,
+        attributions:       Optional[DataFrame] = None,
     ) -> None:
         # doing it long form instead of the mildly cursed way gtfs_kit does, because IDEs choke on that
         super().__init__(

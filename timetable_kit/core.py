@@ -127,7 +127,7 @@ class TTSpec:
             self.aux["reference_date"] = reference_date
 
     @classmethod
-    def from_files(cls: Type[Self], filename: str, input_dir: os.PathLike | str = "."):
+    def from_files(cls: Type[Self], filename: str, input_dir: os.PathLike | str = ".") -> Type[Self]:
         """Load a tt-spec from files, both the aux and the CSV."""
         input_dir = Path(input_dir)
 

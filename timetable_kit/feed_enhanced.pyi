@@ -4,35 +4,43 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 from collections.abc import Iterable
-from typing import Type, Self, NamedTuple
+from dataclasses import dataclass
+from typing import Type, Self, Optional
 
 from pandas import DataFrame, Series
 from gtfs_kit import Feed  # type: ignore # Tell MyPy this has no type stubs
 
 GTFS_DAYS: tuple[str, str, str, str, str, str, str]
 
-class DateRange(NamedTuple):
+@dataclass
+class DateRange:
     """Used to track what dates a timetable is valid for."""
 
     latest_start_date: str
     earliest_end_date: str
 
+    def is_invalid(self) -> bool:
+        ...
+
+    def is_one_day(self) -> bool:
+        ...
+
 class FeedEnhanced(Feed):
     dist_units: str
-    agency: DataFrame | None = None
-    stops: DataFrame | None = None
-    routes: DataFrame | None = None
-    trips: DataFrame | None = None
-    stop_times: DataFrame | None = None
-    calendar: DataFrame | None = None
-    calendar_dates: DataFrame | None = None
-    fare_attributes: DataFrame | None = None
-    fare_rules: DataFrame | None = None
-    shapes: DataFrame | None = None
-    frequencies: DataFrame | None = None
-    transfers: DataFrame | None = None
-    feed_info: DataFrame | None = None
-    attributions: DataFrame | None = None
+    agency:             Optional[DataFrame] = None
+    stops:              Optional[DataFrame] = None
+    routes:             Optional[DataFrame] = None
+    trips:              Optional[DataFrame] = None
+    stop_times:         Optional[DataFrame] = None
+    calendar:           Optional[DataFrame] = None
+    calendar_dates:     Optional[DataFrame] = None
+    fare_attributes:    Optional[DataFrame] = None
+    fare_rules:         Optional[DataFrame] = None
+    shapes:             Optional[DataFrame] = None
+    frequencies:        Optional[DataFrame] = None
+    transfers:          Optional[DataFrame] = None
+    feed_info:          Optional[DataFrame] = None
+    attributions:       Optional[DataFrame] = None
 
     @classmethod
     def enhance(cls: Type[Self], regular_feed: Feed) -> Self: ...
