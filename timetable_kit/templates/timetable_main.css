@@ -89,6 +89,19 @@ td.mile-cell {
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
+/* An HR within a mile cell is used to separate two different milepost counters */
+/* It should not be very thick.  Default margin-top and margin-bottom are way too big. */
+/* Default border styles don't look right either. Simple black line. */
+td.mile-cell hr {
+    height: 2px;
+    color: black;
+    background-color: black;
+    margin-top: 0px;
+    margin-bottom: 2px;
+    border-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 
 /**** HEADER TYPE CELLS ****/
 .tt-table .col_heading {

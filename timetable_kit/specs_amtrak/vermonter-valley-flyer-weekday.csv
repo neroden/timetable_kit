@@ -1,0 +1,41 @@
+,425 / 125,55,479 / 179,mile, access, station,56,486 / 86,494 / 94
+column-options,,ardp,,,,,ardp reverse,reverse,reverse
+route-name,,,,,,,,,
+days,SPG,SPG,SPG,,,,SPG,SPG,SPG
+updown,,,,,,,,,
+SAB,blank,55 first,blank,0,,,56 last,blank,blank
+ESX,blank,,blank,24,,,,blank,blank
+WAB,blank,,blank,47,,,,blank,blank
+MPR,blank,,blank,56,,,,blank,blank
+RPH,blank,,blank,86,,,,blank,blank
+WRJ,blank,,blank,118,,,,blank,blank
+WNM,blank,,blank,131,,,,blank,blank
+CLA,blank,,blank,140,,,,blank,blank
+BLF,blank,,blank,157,,,,blank,blank
+BRA,blank,,blank,181,,,,blank,blank
+GFD,425 first,,479 first,205,,,,486 last,494 last
+NHT,,,,224,,,,,
+HLK,,,,235,,,,,
+SPG,425 last,last,last,245,,,first,first,first
+,"<div class=""mini-header"">#125</div>",,,,,"<div class=""mini-header"">Amtrak connecting train</div>",,,
+SPG,125 first,first,first,245,,,last,last,last
+WNL,,,,260,,,,,
+HFD,,,,271,,,,,
+MDN,,,,289,,,,,
+NHV,last,last,479 last,307,,,first,486 first,494 first
+,"<div class=""mini-footer"">(MNR 1551)</div>","<div class=""mini-footer"">(MNR 1579)</div>",,,,"<div class=""mini-header"">Metro-North connecting train</div>","<div class=""mini-footer"">(MNR 1522)</div>","<div class=""mini-footer"">(MNR 1528)</div>","<div class=""mini-footer"">(MNR 1556)</div>"
+,,"<div class=""mini-footer"">through train</div>","<div class=""mini-header"">#179</div>",,,"<div class=""mini-header"">Amtrak connecting train</div>","<div class=""mini-footer"">through train</div>","<div class=""mini-header"">#86</div>","<div class=""mini-header"">#94</div>"
+NHV,first,first,179 first,307,,,last,86 last,94 last
+BRP,,,,324,,,,,
+STM,,,,346,,,,,
+NYP,,,179 last,382,,,,,
+NWK,,,,392,,,,,
+MET,,,,406,,,,,
+TRE,,,,440,,,,,
+PHL,,,,473,,,,,
+WIL,,,,498,,,,,
+BAL,,,,567,,,,,
+BWI,,,,578,,,,,
+NCR,,,,599,,,,,
+WAS,,55 last,,608,,,56 first,,
+,to Newport News,,,,,,,from Richmond,from Norfolk

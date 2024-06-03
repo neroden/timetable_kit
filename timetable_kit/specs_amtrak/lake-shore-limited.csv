@@ -1,36 +1,30 @@
-,48 / 448 tuesday,mile,access,station,timezone,49 / 449 tuesday
-column-options,ardp,,,,,ardp reverse
-days,CHI,,,,,CHI
-omit,In summer 2023 there is a separate schedule for 448/449 which skips Worcester on weekends sometimes.,,,,,
-omit,We want the timetable to show daily service,, we'll explain the Worcester thing in a note.,,,
-updown,,,,,,
-CHI,48 first,0,,,,49 last
-SOB,,84,,,,
-EKH,,101,,,,
-WTI,,156,,,,
-BYN,,181,,,,
-TOL,,234,,,,
-SKY,,281,,,,
-ELY,,316,,,,
-CLE,,341,,,,
-ERI,,436,,,,
-BUF,,528,,,,
-ROC,,589,,,,
-SYR,,668,,,,
-UCA,,722,,,,
-SDY,,800,,,,
-ALB,48 last,818,,,,49 first
-,"<div style=""text-align: center""><hr>Train <b>#48</b> to New York City</div>",,,,,"<div style=""text-align: center""><hr>Train <b>#49</b> from New York City</div>"
-ALB,48 first,818,,,,49 last
-RHI,,871,,,,
-POU,,886,,,,
-CRT,,927,,,,
-NYP,48 last,959,,,,49 first
-,"<div style=""text-align: center""><hr>Train <b>#448</b> to Boston</div>",,,,,"<div style=""text-align: center""><hr>Train <b>#449</b> from Boston</div>"
-ALB,448 tuesday first,818,,,,449 tuesday last
-PIT,,867,,,,
-SPG,,920,,,,
-WOR,,974,,,,
-FRA,,997,,,,
-BBY,,1017,,,,
-BOS,448 tuesday last,1018,,,,449 tuesday first
+,448,48,mile,access,station,timezone,449,49
+column-options,ardp,ardp,,,,,ardp reverse,ardp reverse
+days,CHI,CHI,,,,,CHI,CHI
+updown,,,,,,,,
+CHI,first,first,0,,,,last,last
+SOB,,,84,,,,,
+EKH,,,101,,,,,
+WTI,,,156,,,,,
+BYN,,,181,,,,,
+TOL,,,234,,,,,
+SKY,,,281,,,,,
+ELY,,,316,,,,,
+CLE,,,341,,,,,
+ERI,,,436,,,,,
+BUF,,,528,,,,,
+ROC,,,589,,,,,
+SYR,,,668,,,,,
+UCA,,,722,,,,,
+SDY,,,800,,,,,
+ALB,,,818,,,,,
+RHI,blank,,871,,,,blank,
+POU,blank,,886,,,,blank,
+CRT,blank,,927,,,,blank,
+NYP,blank,last,959,,,,blank,first
+PIT,,blank,867,,,,,blank
+SPG,,blank,920,,,,,blank
+WOR,,blank,974,,,,,blank
+FRA,,blank,997,,,,,blank
+BBY,,blank,1017,,,,,blank
+BOS,last,blank,1018,,,,first,blank
