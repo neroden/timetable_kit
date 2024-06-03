@@ -21,6 +21,7 @@
 {% include "agency_maple_leaf.css" %}
 {% include "timetable_main.css" %}
 {% include "timetable_colors.css" %}
+{% include "for_user.css" %}
 {% include "time_boxes_characters.css" %}{# Used only if we're using a nontabular font. #}
 {% include "time_boxes_simple.css" %}
 {% include "time_boxes_extras.css" %}

@@ -46,9 +46,14 @@ def get_time_column_stylings(train_spec, route_from_train_spec) -> str:
         # it's not a bus, it's a connecting train!
         color_css_class = "color-connecting-train"
     elif agency_singleton().is_sleeper_train(tsn):
+        # Note that this should come first and overrride is_specially_colored train
         color_css_class = "color-sleeper"
     elif agency_singleton().is_high_speed_train(tsn):
         color_css_class = "color-high-speed-train"
+    elif agency_singleton().is_specially_colored_train(tsn):
+        # This is used to distinguish connecting services on the Valley Flyer timetable
+        # Currently triggers for Hartford Line, Valley Flyer, and LSL / Texas Eagle branches
+        color_css_class = "color-specially-colored-train"
     else:
         color_css_class = "color-day-train"
     return color_css_class

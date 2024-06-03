@@ -302,6 +302,11 @@ class Agency:
         # For a generic agency, no.
         return False
 
+    def is_specially_colored_train(self, tsn: str) -> bool:
+        """Should this train get a special color in the timetable?"""
+        # For a generic agency, no.
+        return False
+
     def is_connecting_service(self, tsn: str) -> bool:
         """Should this be marked as a connecting service in the timetable?"""
         # This should be implemented by checking the agency file,

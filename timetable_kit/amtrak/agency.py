@@ -93,6 +93,10 @@ class AgencyAmtrak(Agency):
         """Should this train be marked as high-speed in the timetable?"""
         return special_data.is_high_speed_train(tsn)
 
+    def is_specially_colored_train(self, tsn: str) -> bool:
+        """Should this train get a special color in the timetable?"""
+        return special_data.is_specially_colored_train(tsn)
+
     def is_connecting_service(self, tsn: str) -> bool:
         """Should this be marked as a connecting service in the timetable?"""
         # This is not the ideal implementation.

@@ -1,0 +1,30 @@
+{#
+for_user.css
+Part of timetable_kit
+Copyright 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+
+This CSS fragment has CSS classes intended for direct use by the writer of the timetable spec
+(to be referenced in the .csv file)
+#}
+
+.mini-header {
+    /* Timetable spec creators can use this if you need to make a small header within a cell */
+    text-align: center;
+    font-weight: bold;
+}
+.mini-header hr {
+    /* Fix display of <hr> within a mini-header */
+    height: 2px;
+    color: black;
+    background-color: black;
+    margin-top: 0px;
+    margin-bottom: 2px;
+    border-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.mini-footer {
+    /* Timetable spec creators can use this if you need to make a small footer within a cell */
+    text-align: center;
+}

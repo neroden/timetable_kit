@@ -1,0 +1,40 @@
+,461 / 161,57,499,mile, access, station,400,54,488 / 88
+column-options,,ardp,,,,,,ardp reverse,reverse
+route-name,,,,,,,,,
+days,SPG,SPG,SPG,,,,SPG,SPG,SPG
+updown,,,,,,,,,
+SAB,blank,57 first,blank,0,,,blank,54 last,blank
+ESX,blank,,blank,24,,,blank,,blank
+WAB,blank,,blank,47,,,blank,,blank
+MPR,blank,,blank,56,,,blank,,blank
+RPH,blank,,blank,86,,,blank,,blank
+WRJ,blank,,blank,118,,,blank,,blank
+WNM,blank,,blank,131,,,blank,,blank
+CLA,blank,,blank,140,,,blank,,blank
+BLF,blank,,blank,157,,,blank,,blank
+BRA,blank,,blank,181,,,blank,,blank
+GFD,461 first,,499 first,205,,,last,,488 last
+NHT,,,,224,,,,,
+HLK,,,,235,,,,,
+SPG,last,,last,235,,,first,first,first
+SPG,first,,CTrail<br>#6411,245,,,blank,last,last
+WNL,,,provides,260,,,blank,,
+HFD,,,connecting,271,,,blank,,
+MDN,,,service to,289,,,blank,,
+NHV,461 last,last,New Haven,307,,,blank,first,488 first
+,"<div class=""mini-footer"">(MNR 6531)</div>","<div class=""mini-footer"">(MNR 6549)</div>",,,,"<div class=""mini-header"">Metro-North connecting train</div>",,"<div class=""mini-footer"">(MNR 6522)</div>","<div class=""mini-footer"">(MNR 6536)</div>"
+,"<div class=""mini-header"">#161</div>","<div class=""mini-footer"">through train</div>",,,,"<div class=""mini-header"">Amtrak connecting train</div>",,"<div class=""mini-footer"">through train</div>","<div class=""mini-header"">#88</div>"
+NHV,161 first,first,blank,307,,,blank,last,88 last
+BRP,,,blank,324,,,blank,,
+STM,,,blank,346,,,blank,,
+NYP,,,blank,382,,,blank,,
+NWK,,,blank,392,,,blank,,
+MET,,,blank,406,,,blank,,
+TRE,,,blank,440,,,blank,,
+PHL,,,blank,473,,,blank,,
+WIL,,,blank,498,,,blank,,
+BAL,,,blank,567,,,blank,,
+BWI,,,blank,578,,,blank,,
+NCR,,,blank,599,,,blank,,
+WAS,161 last,57 last,blank,608,,,blank,54 first,
+,,,,,,,,,from Norfolk
