@@ -91,7 +91,7 @@ class AgencyVIA(Agency):
         return "via-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
-        """Given today_feed and a route_id, produce a suitalbe name for a column
+        """Given today_feed and a route_id, produce a suitable name for a column
         subheading.
 
         The implementation is VIA-specific.
@@ -190,11 +190,10 @@ class AgencyVIA(Agency):
     ) -> str:
         """Get a phrase like "from Toronto" for the station."""
         # Special case Quebec City -- this is very long
-        if doing_html == True and station_code == "QBEC":
+        if doing_html is True and station_code == "QBEC":
             return "from" + SAFE_BR + "Québec" + SAFE_BR + "City"
         # Otherwise revert to default implementation
-        return super.get_station_name_from(
-            self,
+        return super().get_station_name_from(
             station_code,
             doing_multiline_text=doing_multiline_text,
             doing_html=doing_html,
@@ -205,11 +204,10 @@ class AgencyVIA(Agency):
     ) -> str:
         """Get a phrase like "to Toronto" for the station."""
         # Special case Quebec City -- it's long
-        if doing_html == True and station_code == "QBEC":
+        if doing_html is True and station_code == "QBEC":
             return "to Québec" + SAFE_BR + "City"
         # Otherwise revert to default implementation
-        return super.get_station_name_to(
-            self,
+        return super().get_station_name_to(
             station_code,
             doing_multiline_text=doing_multiline_text,
             doing_html=doing_html,
