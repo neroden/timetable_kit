@@ -1,23 +1,33 @@
 {#
 timetable_colors.css
 Part of timetable_kit
-Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
+Copyright 2022, 2023, 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 
 This CSS fragment colors cells according to the type of train they go with.
 #}
 
 .color-bus {
-    background-color: honeydew;
+    /* Amtrak timetables used green (I used honeydew) but I switched to red so I could use green for Vermont trains */
+    background-color: mistyrose;
 }
 .color-connecting-train {
+    /* pale orange */
     background-color: blanchedalmond;
 }
 .color-sleeper {
+    /* pale bluish purple */
     background-color: lavender;
 }
 .color-high-speed-train {
+    /* pale blue */
     background-color: aliceblue;
 }
 .color-day-train {
+    /* pale yellow */
     background-color: cornsilk;
+}
+.color-specially-colored-train {
+    /* Used to distinguish Valley Flyer from connecting NEC trains */
+    /* pale green, formerly used for buses */
+    background-color: honeydew;
 }

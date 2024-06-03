@@ -3,7 +3,7 @@ heading = "Empire Service: Weekday Westbound & Northbound"
 aria_label = "Empire Service Weekday Westbound"
 top_text = "NOTE: Empire Service corridor work during summer 2024. Please see <b><a href=\"https://www.amtrak.com/service-alerts-and-notices\">https://www.amtrak.com/service-alerts-and-notices</a></b> for the latest schedule adjustments."
 landscape = true
-reference_date = "20240601"
+reference_date = "20240620"
 key_baggage = true
 all_stations_accessible = true
 for_rpa = true

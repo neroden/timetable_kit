@@ -168,6 +168,25 @@ def is_high_speed_train(trip_short_name: str) -> bool:
     return False
 
 
+def is_specially_colored_train(trip_short_name: str) -> bool:
+    """Given a trip_short_name (train number) return "True" if we should color it
+    with a different color.
+
+    Used for Valley Flyer to separate Valley Flyer service from connecting NEC service.
+    """
+    if not trip_short_name.isdigit():
+        return False
+    tsn_as_number = int(trip_short_name)
+    # There's something interesting here.
+    # 400 series is used for:
+    # Hartford Line & Valley Flyer
+    # Alternate branches of LSL and Texas Eagle, which probably deserve the color change too?
+    # Sleeper color will and should override for those, however.
+    if 400 <= tsn_as_number <= 499:
+        return True
+    return False
+
+
 # "Major stations".  This is for timetable styling: making them bigger and bolder.
 # This should really be per-timetable but this is a start
 # (Empire doesn't call out NEC stations on connecting trains)

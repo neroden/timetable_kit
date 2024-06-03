@@ -1,7 +1,7 @@
 title = "Amtrak's Northeast Corridor: Saturday Northbound"
 heading = "Northeast Corridor: Saturday Northbound"
 aria_label = "Northeast Corridor Saturday Northbound"
-reference_date = "20240601"
+reference_date = "20240620"
 # This timetable gets split programmatically
 # Problem trains to double-check: 19, 79, 97
 max_columns_per_page = 9
