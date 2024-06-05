@@ -8,7 +8,6 @@ Used by multiple command-line programs
 
 # Other people's packages
 from pathlib import Path
-import datetime
 
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
@@ -18,11 +17,11 @@ from timetable_kit.debug import debug_print
 from timetable_kit.feed_enhanced import FeedEnhanced
 
 # For the Agency singleton
-from timetable_kit.runtime_config import agency_singleton
+from timetable_kit.timetable_class import TTConfig
 
 
 # INITIALIZATION CODE
-def initialize_feed(gtfs, patch_the_feed: bool = True) -> FeedEnhanced:
+def initialize_feed(config: TTConfig) -> FeedEnhanced:
     """Initialize the master_feed and related variables.
 
     Does some cleaning, and removal of the large shapes table which we don't use.
@@ -30,13 +29,13 @@ def initialize_feed(gtfs, patch_the_feed: bool = True) -> FeedEnhanced:
     Also does agency-specific patching -- optionally.
 
     Also initializes the agency singleton from the feed *after* that.
-    NOTE, this is a side-effect, not great coding style, FIXME
+    NOTE, this is a side effect, not great coding style, FIXME
 
-    gtfs: may be a filename or a Path.
+    config: TTConfig instance for configuring output
     """
 
-    debug_print(1, "Using GTFS file " + str(gtfs))
-    gtfs_path = Path(gtfs)
+    debug_print(1, "Using GTFS file " + str(config.gtfs_filename))
+    gtfs_path = Path(config.gtfs_filename)
     # The unit is only relevant if we read the shapes file; we currently don't.
     # Also affects display miles so default to "mi".
     plain_feed = gtfs_kit.read_feed(gtfs_path, dist_units="mi")
@@ -58,16 +57,16 @@ def initialize_feed(gtfs, patch_the_feed: bool = True) -> FeedEnhanced:
     master_feed = FeedEnhanced.enhance(plain_feed)
 
     # Patch the feed in an agency-specific fashion.
-    if patch_the_feed:
-        master_feed = agency_singleton().patch_feed(master_feed)
+    if config.patch_the_feed:
+        master_feed = config.agency.patch_feed(master_feed)
         debug_print(1, "Feed patched, hopefully")
     else:
         # Have to patch in the wheelchair access info regardless
-        master_feed = agency_singleton().patch_feed_wheelchair_access_only(master_feed)
+        master_feed = config.agency.patch_feed_wheelchair_access_only(master_feed)
         debug_print(1, "Feed patched for wheelchair access only")
 
     # Initialize the singleton from the feed
-    # (This has side-effects, note, not pass-by-value semantics)
-    agency_singleton().init_from_feed(master_feed)
+    # (This has side effects, note, not pass-by-value semantics)
+    config.agency.init_from_feed(master_feed)
 
     return master_feed

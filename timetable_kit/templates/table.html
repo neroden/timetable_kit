@@ -6,7 +6,7 @@ Looping Jinja2 file to generate a table.
 
 Used by styler.py.
 #}
-<table {{ table_attributes }} >
+<table {{ table_attributes }}>
   <thead>
 {% for row_num in thead_row_nums %}
 {%   include "table_row.html" %}

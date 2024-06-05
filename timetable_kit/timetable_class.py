@@ -7,16 +7,18 @@ Created when PANDAS's Styler wasn't doing what I wanted.
 """
 
 import os  # for os.PathLike
+from dataclasses import dataclass
 from functools import cache  # for memoization
 import html  # for html.escape
+from pathlib import Path
 
 import pandas as pd
-from pandas import DataFrame
 
 from jinja2 import Template  # for typehints
 
 # My packages
 from timetable_kit.debug import debug_print
+from timetable_kit.generic_agency import Agency
 
 # For the Jinja templates
 from timetable_kit.load_resources import template_environment
@@ -91,6 +93,10 @@ class Timetable:
             f'id="{table_id}" class="tt-table" aria-label="{aria_label} Timetable"'
         )
 
+    def set_agency_style(self, agency: Agency):
+        # this is stupid, FIXME
+        self.table_attributes = self.table_attributes.replace('class="', f'class="{agency.agency_css_class()} ')
+
     def write_csv_file(self, file: os.PathLike | str) -> None:
         """Write this out as a CSV file at the given path.
 
@@ -133,3 +139,28 @@ class Timetable:
         }
         output = self.get_table_tpl().render(params)
         return output
+
+
+@dataclass
+class TTConfig:
+
+    author: str
+    agency: Agency
+    sponsor: str  # for later
+
+    gtfs_filename: str | Path
+    input_dir: str | Path
+    output_dir: str | Path
+    reference_date: str
+
+    do_csv: bool
+    do_html: bool
+    do_pdf: bool
+    patch_the_feed: bool = True
+
+    def cascade_todos(self):
+        """
+        Post-init function to make sure prerequisites happen
+        """
+        self.do_html |= self.do_pdf
+        self.do_csv |= self.do_html

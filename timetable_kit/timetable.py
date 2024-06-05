@@ -34,6 +34,7 @@ from timetable_kit.errors import NoTripError, TwoTripsError
 # Note namespaces are separate for each file/module
 # Also note: python packaging is really sucky for direct script testing.
 from timetable_kit.debug import set_debug_level, debug_print
+from timetable_kit.feed_enhanced import DateRange
 from timetable_kit.file_handling import read_list_file
 
 from timetable_kit.convenience_types import HtmlAndCss
@@ -53,7 +54,7 @@ from timetable_kit.core import (
     fill_tt_spec,
 )
 from timetable_kit.timetable_class import (
-    Timetable,
+    Timetable, TTConfig,
 )
 from timetable_kit.page_layout import (
     produce_html_page,
@@ -69,7 +70,7 @@ _prepared_output_dirs = []
 _prepared_output_dirs_for_rpa = []
 
 
-def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
+def copy_supporting_files_to_output_dir(output_dir: str | Path, for_rpa=False):
     """Copy supporting files (icons, fonts) to the output directory.
 
     Necessary for Weasyprint, and for the HTML to display right.
@@ -77,7 +78,7 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
     # Copy the image files to the destination directory.
     # Necessary for weasyprint to work right!
 
-    output_dir = Path(output_dirname)
+    output_dir = Path(output_dir)
 
     # Memoize.
     # We would like to save on copying by caching the fact that we've done this.
@@ -151,23 +152,20 @@ def copy_supporting_files_to_output_dir(output_dirname, for_rpa=False):
 
 
 def search_date(
+    config: TTConfig,
     *,
-    input_dirname: str,
-    spec_file,
-    command_line_reference_date,
-    num_days,  # Number of days to try
-    gtfs_filename,
-    patch_the_feed,
+    spec_file: str,
+    num_days: int  # Number of days to try
 ) -> None:
     """For a single spec file, seek a valid date."""
     # Acquire the feed, enhance it, do generic patching.
-    master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
+    master_feed = initialize_feed(config)
 
     # Load the tt-spec, both aux and csv
     # Also sets tt_id value in the aux
-    spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
+    spec: TTSpec = TTSpec.from_files(spec_file, input_dir=config.input_dir)
     # Set reference date override -- does nothing if passed "None"
-    spec.set_reference_date(command_line_reference_date)
+    spec.set_reference_date(config.reference_date)
     # Use datetime to convert to a "date" type
     base_reference_date = date.fromisoformat(spec.aux["reference_date"])
 
@@ -183,20 +181,21 @@ def search_date(
             # We could but we want the whole NEC NB/Weekday TT to be valid over the same dates...
 
             # Find the date range on which the entire reduced feed is valid
-            (latest_start_date, earliest_end_date) = reduced_feed.get_valid_date_range()
+            date_range = reduced_feed.get_valid_date_range()
             debug_print(
                 1,
-                f"For {spec_file}: believed valid from {latest_start_date} to {earliest_end_date}",
+                f"For {spec_file}: believed valid from {date_range.latest_start_date} "
+                f"to {date_range.earliest_end_date}",
             )
-            if not latest_start_date or not earliest_end_date:
+            if date_range.is_invalid():
                 debug_print(1, "Rejecting calendar with no validity")
                 continue
-            if latest_start_date == earliest_end_date:
+            if date_range.is_one_day():
                 debug_print(1, "Rejecting one-day calendar")
                 continue
 
             # Test run.
-            t_plaintext: Timetable = fill_tt_spec(
+            _t_plaintext: Timetable = fill_tt_spec(
                 spec, today_feed=reduced_feed, doing_html=False
             )
         except NoTripError:
@@ -215,16 +214,7 @@ def search_date(
 
 def produce_several_timetables(
     list_file_list,
-    *,
-    gtfs_filename=None,
-    do_csv=False,
-    do_html=True,
-    do_pdf=True,
-    author=None,
-    command_line_reference_date=None,
-    input_dirname=None,
-    output_dirname=None,
-    patch_the_feed=True,
+    config: TTConfig
 ) -> None:
     """Main program to run from other Python programs.
 
@@ -232,39 +222,38 @@ def produce_several_timetables(
     filename. DOES take filenames and directory names.
     """
 
-    if not author:
+    if not config.author:
         print("produce_several_timetables: author is mandatory!")
         sys.exit(1)
 
-    if not input_dirname:
-        print("produce_several_timetables: input_dirname is mandatory!")
+    if not config.input_dir:
+        print("produce_several_timetables: input_dir is mandatory!")
         sys.exit(1)
-    debug_print(1, "Using input_dir", input_dirname)
+    debug_print(1, "Using input_dir", config.input_dir)
 
-    if not output_dirname:
-        print("produce_several_timetables: output_dirname is mandatory!")
+    if not config.output_dir:
+        print("produce_several_timetables: output_dir is mandatory!")
         sys.exit(1)
-    debug_print(1, "Using output_dir", output_dirname)
-    output_dir = Path(output_dirname)
+    debug_print(1, "Using output_dir", config.output_dir)
+    output_dir = Path(config.output_dir)
 
-    if not gtfs_filename:
+    if not config.gtfs_filename:
         print("produce_several_timetables: gtfs_filename is mandatory!")
         sys.exit(1)
 
     # Doing PDF requires doing HTML first.
-    if do_pdf:
-        do_html = True
+    config.cascade_todos()
 
     # The following are rather finicky in their ordering:
 
     # Acquire the feed, enhance it, do generic patching.
-    master_feed = initialize_feed(gtfs=gtfs_filename, patch_the_feed=patch_the_feed)
+    master_feed = initialize_feed(config)
 
     # Loop over files specified at the command line
     for list_file in list_file_list:
         debug_print(1, "Producing timetable for", list_file)
         if list_file.endswith(".list"):
-            (title, *spec_files) = read_list_file(list_file, input_dir=input_dirname)
+            (title, *spec_files) = read_list_file(list_file, input_dir=config.input_dir)
             output_filename_base = list_file.removesuffix(".list")
         else:
             # Single file.  Treat as if it were a list of one
@@ -282,24 +271,24 @@ def produce_several_timetables(
         for spec_file in spec_files:
             # Load the tt-spec, both aux and csv
             # Also sets tt_id value in the aux
-            spec = TTSpec.from_files(spec_file, input_dir=input_dirname)
+            spec = TTSpec.from_files(spec_file, input_dir=config.input_dir)
             # Set reference date override -- does nothing if passed "None"
-            spec.set_reference_date(command_line_reference_date)
+            spec.set_reference_date(config.reference_date)
             # Filter feed by reference date and by the train numbers (trip_short_names) in the spec header
             reduced_feed = spec.filter_and_reduce_feed(master_feed)
             # Note that we don't re-reduce the feed for a max-columns split spec (like the NEC).
             # We could but we want the whole NEC NB/Weekday TT to be valid over the same dates...
 
             # Find the date range on which the entire reduced feed is valid
-            (latest_start_date, earliest_end_date) = reduced_feed.get_valid_date_range()
+            date_range = reduced_feed.get_valid_date_range()
             debug_print(
                 1,
-                f"For {spec_file}: believed valid from {latest_start_date} to {earliest_end_date}",
+                f"For {spec_file}: believed valid from {date_range.latest_start_date} to {date_range.earliest_end_date}",
             )
 
             spec_filename_base = spec.aux["output_filename"]
 
-            if do_csv:
+            if config.do_csv:
                 # CSV can only do one page at a time.  Use the subspec name.
                 # Also don't split big specs for CSV.  The end-user can do that.
                 t_plaintext: Timetable = fill_tt_spec(
@@ -310,7 +299,7 @@ def produce_several_timetables(
                 path_for_csv = output_dir / Path(spec_filename_base + "-out.csv")
                 t_plaintext.write_csv_file(path_for_csv)
 
-            if do_html:
+            if config.do_html:
                 # Set true if true on any spec
                 for_rpa = for_rpa or bool(spec.aux.get("for_rpa"))
 
@@ -331,6 +320,7 @@ def produce_several_timetables(
                     t: Timetable = fill_tt_spec(
                         subspec, today_feed=reduced_feed, doing_html=True
                     )
+                    t.set_agency_style(config.agency)
                     # Render to HTML
                     timetable_styled_html = t.render()
                     debug_print(1, "HTML styled")
@@ -340,15 +330,14 @@ def produce_several_timetables(
                     new_page = produce_html_page(
                         timetable_styled_html,
                         spec=subspec,
-                        author=author,
-                        start_date=str(latest_start_date),
-                        end_date=str(earliest_end_date),
+                        config=config,
+                        date_range=date_range
                     )
                     page_list.append(new_page)
                 # End loop over specs split out programmatically from a single .csv file
 
             # Still in loop over files within a list file
-            if do_html:
+            if config.do_html:
                 # This is done if the list file was really just a single spec file
                 # Fill these only if it wasn't filled by the list file
                 # i.e. only in the single-spec-file case
@@ -360,10 +349,10 @@ def produce_several_timetables(
 
         # Out of loop over files within a list file
         # Still in loop over files specified at the command line
-        if do_html:
+        if config.do_html:
             # Produce complete multi-page HTML file.
             timetable_finished_html = produce_html_file(
-                page_list, title=title, for_rpa=for_rpa
+                page_list, title=title, for_rpa=for_rpa, agency_special_css=config.agency.agency_css_class()
             )
             path_for_html = output_dir / Path(output_filename_base + ".html")
             with open(path_for_html, "w") as outfile:
@@ -374,7 +363,7 @@ def produce_several_timetables(
             # This is memoized, so it won't duplicate work if called repeatedly.
             copy_supporting_files_to_output_dir(output_dir, for_rpa)
 
-        if do_pdf:
+        if config.do_pdf:
             # Pick up already-created HTML, convert to PDF
             weasy_html_pathname = str(path_for_html)
             html_for_weasy = weasyHTML(filename=weasy_html_pathname)
@@ -429,7 +418,7 @@ def main():
 
     spec_file_list = [*args.tt_spec_files, *args.positional_spec_files]
 
-    if spec_file_list == []:
+    if not spec_file_list:
         if must_get_gtfs:
             # It's OK to have no specs if we were just downloading GTFS.
             # In this case, just quit.
@@ -440,30 +429,49 @@ def main():
         my_arg_parser.print_usage()
         sys.exit(1)
 
-    input_dirname = (
+    input_dir = (
         args.input_dirname
         or runtime_config.agency_input_dir
         or os.getenv("TIMETABLE_KIT_INPUT_DIR")
         or "."
     )
-    if not os.path.isdir(input_dirname):
-        print("Input dir", input_dirname, "does not exist.  Aborting.")
+    if not os.path.isdir(input_dir):
+        print("Input dir", input_dir, "does not exist.  Aborting.")
         sys.exit(1)
 
-    output_dirname = args.output_dirname or os.getenv("TIMETABLE_KIT_OUTPUT_DIR") or "."
-    if not os.path.isdir(output_dirname):
-        print("Output dir", output_dirname, "does not exist.  Aborting.")
+    output_dir = (
+        args.output_dirname
+        or os.getenv("TIMETABLE_KIT_OUTPUT_DIR")
+        or "."
+    )
+    if not os.path.isdir(output_dir):
+        print("Output dir", output_dir, "does not exist.  Aborting.")
         sys.exit(1)
 
-    author = args.author or os.getenv("TIMETABLE_KIT_AUTHOR") or os.getenv("AUTHOR")
+    author = (
+        args.author
+        or os.getenv("TIMETABLE_KIT_AUTHOR")
+        or os.getenv("AUTHOR")
+    )
     if not author:
         print("--author is mandatory!")
         sys.exit(1)
 
-    # If nopatch, don't patch the feed.  Otherwise, do patch it.
-    patch_the_feed = not args.nopatch
+    config = TTConfig(
+        do_csv=args.do_csv,
+        do_html=args.do_html,
+        do_pdf=args.do_pdf,
 
-    command_line_reference_date = args.reference_date  # Does not default, may be None
+        author=author,
+        agency=agency_singleton(),
+        sponsor="RPA",  # TODO this should be configurable through cmdline, and have effects
+
+        gtfs_filename=gtfs_filename,
+        input_dir=input_dir,
+        output_dir=output_dir,
+        patch_the_feed=not args.nopatch,  # If nopatch, don't patch the feed.  Otherwise, do patch it.
+        reference_date=args.reference_date
+    )
 
     # Special case for --search argument
     if args.search is not None:
@@ -474,27 +482,16 @@ def main():
         # Ideally do this as part of regular processing.  FIXME
         # But I didn't want to break anything
         search_date(
-            input_dirname=input_dirname,
+            config,
             spec_file=spec_file,
-            command_line_reference_date=command_line_reference_date,
             num_days=num_days,
-            gtfs_filename=gtfs_filename,
-            patch_the_feed=patch_the_feed,
         )
         # Bail out early
         return
 
     produce_several_timetables(
         list_file_list=spec_file_list,
-        gtfs_filename=gtfs_filename,
-        do_csv=args.do_csv,
-        do_html=args.do_html,
-        do_pdf=args.do_pdf,
-        author=author,
-        command_line_reference_date=command_line_reference_date,
-        input_dirname=input_dirname,
-        output_dirname=output_dirname,
-        patch_the_feed=patch_the_feed,
+        config=config
     )
 
 

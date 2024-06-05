@@ -4,7 +4,7 @@ aria_label = "Toronto Ottawa"
 reference_date = "20240606"
 # This timetable gets split programmatically
 max_columns_per_page = 11
-landscape = true
+landscape = false
 key_r = true
 key_d = true
 wheelchair_advance_notice = true

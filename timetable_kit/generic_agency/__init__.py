@@ -8,10 +8,11 @@ Functions for a generic agency.
 
 
 # The Agency class type, for others to inherit from
-from .agency import Agency
+from .agency import Agency, AgencySingletonGetter
 
 # The singleton instance of a class, for stateful memoization
 from .agency import get_singleton
+from ..errors import InputError
 
 
 # Object explaining where to find the GTFS & which can also download it
