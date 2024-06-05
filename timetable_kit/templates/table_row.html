@@ -11,7 +11,7 @@ Used by styler.py.
 {#    This typically looks like: <td class="foo" role="bar">text</td> #}
       <{% if th[col_num][row_num] %}th{% else %}td{% endif %}{#
         #} class="row{{row_num}} col{{col_num}}{#
-        #} {{ classes[col_num][row_num] }} {{ agency_special_css }}"{# for some reason that doesn't add it...
+        #} {{ classes[col_num][row_num] }}"{#
         #} {{ attributes[col_num][row_num] }}>{{ text[col_num][row_num] }}{#
         #}</{% if th[col_num][row_num] %}th{% else %}td{% endif %}>
 {%   endfor %}{# col_num #}

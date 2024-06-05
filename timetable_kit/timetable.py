@@ -320,6 +320,7 @@ def produce_several_timetables(
                     t: Timetable = fill_tt_spec(
                         subspec, today_feed=reduced_feed, doing_html=True
                     )
+                    t.set_agency_style(config.agency)
                     # Render to HTML
                     timetable_styled_html = t.render()
                     debug_print(1, "HTML styled")

@@ -93,6 +93,10 @@ class Timetable:
             f'id="{table_id}" class="tt-table" aria-label="{aria_label} Timetable"'
         )
 
+    def set_agency_style(self, agency: Agency):
+        # this is stupid, FIXME
+        self.table_attributes = self.table_attributes.replace('class="', f'class="{agency.agency_css_class()} ')
+
     def write_csv_file(self, file: os.PathLike | str) -> None:
         """Write this out as a CSV file at the given path.
 
