@@ -4,7 +4,6 @@ omit,city pair (for checking against list_trains.py),,ot,ot,mo,mt,ot,ot,mt,ot,mo
 omit,"calendar-days.txt: #651, 655 suspended","calendar-days.txt: 647 suspended, also 635, 637, 639",,,,,,,,,,,,,,,,,,,,,,,
 route-name,,,,,,,,,,,,,,,,,,,,,,,,,
 days,,,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW
-updown,,,,,,,,,,,,,,,,,,,,,,,,,
 origin,,,,,,,,,,,,,,,,,,,,,,,,,
 MTRL,,,blank,blank,first two-row,first two-row,blank,blank,first two-row,blank,,first two-row,first two-row,blank,blank,,first two-row,blank,blank,blank,first two-row,blank,,first two-row,
 DORV,,,blank,blank,,,blank,blank,,blank,,,,blank,blank,,,blank,blank,blank,,blank,,,

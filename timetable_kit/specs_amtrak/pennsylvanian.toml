@@ -6,4 +6,4 @@ bottom_text = "<b>The eastbound Capitol Limited connection is unreliable</b> due
 key_baggage = true
 key_d = true
 key_r = true
-for_rpa = true
+

@@ -18,16 +18,14 @@ from timetable_kit.icons import (
     get_bus_icon_html,
     get_accessible_icon_html,
 )
+from timetable_kit.styles import StyleHandler
+from timetable_kit.utils import span_enclose
 from timetable_kit.tsn import train_spec_to_tsn
 
 # Time stuff
 from timetable_kit.time import (
     TimeTuple,
     get_zonediff,
-    explode_timestr,
-    day_string,
-    time_short_str_24,
-    time_short_str_12,
 )
 
 # Safe version of <br>
@@ -94,7 +92,7 @@ def get_rd_str(
     is_arrival_line=False,
     is_departure_line=False,
 ):
-    """Return a single character (default " ") with receive-only / discharge- only
+    """Return a single character (default " ") with receive-only / discharge-only
     annotation. "R" = Receive-only "D" = Discharge-only "L" = May leave early
     (unimplemented) "F" = Flag stop "*" = Not a regular passenger stop " " = Anything
     else.
@@ -136,7 +134,7 @@ def get_rd_str(
             # This seems to be the only way to identify the infamous "L",
             # which means that the train or bus is allowed to depart ahead of time
             #
-            # Obnoxiously, VIA Rail includes the column but it's blank,
+            # Obnoxiously, VIA Rail includes the column, but it's blank,
             # which really means "all 1".  Handle this elsewhere!
             # print("timepoint column found")  # Should not happen with Amtrak data
             if timepoint.timepoint == 0:  # and it says times aren't exact
@@ -229,13 +227,12 @@ def timepoint_str(
     stop_tz,
     agency_tz,
     reference_date,
+    style: StyleHandler,
     doing_html=False,
     box_time_characters=False,
     reverse=False,
     two_row=False,
     use_ar_dp_str=False,
-    bold_pm=True,
-    times_24h=False,
     use_daystring=False,
     long_days_box=False,
     short_days_box=False,
@@ -267,6 +264,7 @@ def timepoint_str(
     -- stop_tz: timezone for the stop
     -- agency_tz: timezone for the agency
     -- reference_date: reference date for time zone conversion (strictly speaking, needed only for Arizona)
+    -- style: The style handler that assists in style-specific formatting
     Options are many:
     -- two_row: This timepoint gets both arrival and departure rows (default is just one row)
     -- use_ar_dp_str: Use "Ar " and "Dp " or leave space for them (use only where appropriate)
@@ -275,8 +273,6 @@ def timepoint_str(
     -- box_time_characters: put each character in the time in an HTML box; default is False.
         For use with fonts which don't have tabular nums.  A nasty hack; best to use a font
         which does have tabular nums.
-    -- times_24h: use 24-hour military time (default is 12 hour time with "A" and "P" suffix)
-    -- bold_pm: make PM times bold (even in 24-hour time; only with doing_html)
     -- use_daystring: append a "MoWeFr" or "Daily" string.  Only used on infrequent services.
     -- long_days_box: Extra-long space for days, for SuMoTuWeTh five-day calendars.
     -- short_days_box: Extra-short space for days, for "Mo" one-day across-midnight trains.
@@ -300,119 +296,66 @@ def timepoint_str(
     if not doing_html:
         box_time_characters = False
 
-    # Pick function for the actual time printing
-    if times_24h:
-        time_str_func = time_short_str_24
-    else:
-        time_str_func = time_short_str_12
-
     zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
 
-    # Fill the TimeTuple and prep string for actual departure time
-    if pd.isna(timepoint.departure_time):
-        # Stupid finicky stuff for stops with *no specific time*
-        # VIA Rail Winnipeg-Churchill has this
-        departure_time_str = "---"
-        is_pm = 0
-    else:
-        departure = explode_timestr(timepoint.departure_time, zonediff)
-        departure_time_str = time_str_func(
-            departure, box_time_characters=box_time_characters
-        )
-        is_pm = departure.pm
-    if doing_html:
-        if bold_pm and is_pm == 1:
-            departure_time_str = "".join(["<b>", departure_time_str, "</b>"])
-        if times_24h:
-            departure_time_str = "".join(
-                ['<span class="box-time24">', departure_time_str, "</span>"]
-            )
+    def time_day_strings(time):
+        nonlocal zonediff, box_time_characters, doing_html, calendar
+        # Fill the TimeTuple and prep string for actual time
+        if pd.isna(time):
+            # Stupid finicky stuff for stops with *no specific time*
+            # VIA Rail Winnipeg-Churchill has this
+            return "---", ""
         else:
-            departure_time_str = "".join(
-                ['<span class="box-time12">', departure_time_str, "</span>"]
+            time_tup = TimeTuple.from_gtfs_time_string(time, zonediff)
+            time_string = style.format_time_string(
+                gtfs_timestr=time_tup,
+                tz_difference=zonediff,
+                html=doing_html,
+                use_box_spans=box_time_characters,
             )
+            if use_daystring:
+                # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
+                # It must be last and the entire time field must be left-justified as a result
+                day_string = style.format_day_string(
+                    calendar, time_tup.day, html=doing_html
+                )
+            else:
+                day_string = ""
+            return time_string, day_string
 
-    # Fill the TimeTuple and prep string for actual time
-    if pd.isna(timepoint.arrival_time):
-        # Stupid finicky stuff for stops with *no specific time*
-        # VIA Rail Winnipeg-Churchill has this
-        arrival_time_str = "---"
-        is_pm = 0
-    else:
-        arrival = explode_timestr(timepoint.arrival_time, zonediff)
-        arrival_time_str = time_str_func(
-            arrival, box_time_characters=box_time_characters
-        )
-        is_pm = arrival.pm
-    if doing_html:
-        if bold_pm and is_pm == 1:
-            arrival_time_str = "".join(["<b>", arrival_time_str, "</b>"])
-        if times_24h:
-            arrival_time_str = "".join(
-                ['<span class="box-time24">', arrival_time_str, "</span>"]
-            )
-        else:
-            arrival_time_str = "".join(
-                ['<span class="box-time12">', arrival_time_str, "</span>"]
-            )
-
+    departure_time_str, departure_day_str = time_day_strings(timepoint.departure_time)
+    arrival_time_str, arrival_daystring = time_day_strings(timepoint.arrival_time)
     # Need this for lines just containing "Ar" or "Dp"
-    blank_rd_str = ""
-    blank_time_str = ""
-    if doing_html:
-        blank_rd_str = "".join(['<span class="box-rd">', "", "</span>"])
-        if times_24h:
-            blank_time_str = "".join(['<span class="box-time24">', "", "</span>"])
-        else:
-            blank_time_str = "".join(['<span class="box-time12">', "", "</span>"])
+    blank_time_str = style.format_blank_time_string(html=doing_html)
+    blank_rd_str = span_enclose("box-rd") if doing_html else ""
 
     # Fill in the day strings, if we're using it
-    departure_daystring = ""
-    arrival_daystring = ""
     blank_daystring = ""
     if use_daystring:
-        if long_days_box:
-            days_box_class = "box-days-long"
-        elif short_days_box:
-            days_box_class = "box-days-short"
-        else:
-            days_box_class = "box-days"
-        # Note that daystring is VARIABLE LENGTH, and is the only variable-length field
-        # It must be last and the entire time field must be left-justified as a result
-        if pd.isna(timepoint.departure_time):
-            # No specified time
-            departure_daystring = ""
-        else:
-            departure_daystring = day_string(calendar, offset=departure.day)
-        if pd.isna(timepoint.arrival_time):
-            # No specified time
-            arrival_daystring = ""
-        else:
-            arrival_daystring = day_string(calendar, offset=arrival.day)
+        days_box_class = (
+            "box-days-long"
+            if long_days_box
+            else "box-days-short" if short_days_box else "box-days"
+        )
+
         if doing_html:
-            departure_daystring = "".join(
-                ['<span class="', days_box_class, '">', departure_daystring, "</span>"]
-            )
-            arrival_daystring = "".join(
-                ['<span class="', days_box_class, '">', arrival_daystring, "</span>"]
-            )
-            blank_daystring = "".join(
-                ['<span class="', days_box_class, '">', "", "</span>"]
-            )
+            departure_day_str = span_enclose(days_box_class, departure_day_str)
+            arrival_daystring = span_enclose(days_box_class, arrival_daystring)
+            blank_daystring = span_enclose(days_box_class)
         else:
             # Add a necessary spacer: CSS does it for us in HTML
-            departure_daystring = "".join([" ", departure_daystring])
-            arrival_daystring = "".join([" ", arrival_daystring])
-            blank_daystring = ""
+            departure_day_str = " " + departure_day_str
+            arrival_daystring = " " + arrival_daystring
 
     ar_str = ""  # If we are not adding the padding at all -- unwise with two_row
     dp_str = ""  # Again, if we are not adding the "Ar/Dp" at all
+    ardp_spacer = ""
     if use_ar_dp_str:
         if doing_html:
             # I'd like to make this read better in screen readers,
             # but there is no clean way to do it.  FIXME.
-            ar_str = '<span class="box-ardp">Ar</span>'
-            dp_str = '<span class="box-ardp">Dp</span>'
+            ar_str = span_enclose("box-ardp", "Ar")
+            dp_str = span_enclose("box-ardp", "Dp")
         else:
             ar_str = "Ar "
             dp_str = "Dp "
@@ -471,7 +414,7 @@ def timepoint_str(
                 ar_dp_str,
                 "" if no_rd else rd_str,
                 arrival_time_str if discharge_only else departure_time_str,
-                arrival_daystring if discharge_only else departure_daystring,
+                arrival_daystring if discharge_only else departure_day_str,
                 baggage_str,
                 bus_str,
             ]
@@ -601,7 +544,7 @@ def timepoint_str(
                     dp_str,
                     "" if no_rd else departure_rd_str,
                     departure_time_str,
-                    departure_daystring,
+                    departure_day_str,
                     departure_baggage_str,
                     departure_bus_str,
                 ]
@@ -746,6 +689,7 @@ def get_station_column_header(doing_html=False):
     """
     return "Station"
 
+
 def get_mile_column_header(doing_html=False):
     """Return the header for a column of mileage integers.
 
@@ -856,8 +800,7 @@ def style_updown(reverse: bool, doing_html=False) -> str:
         # Put arrows on right and left, with spaces
         text = " ".join([arrow, text, arrow])
 
-    text = "".join(["<b>", text, "</b>"])
-    return text
+    return f"<b>{text}</b>"
 
 
 def get_origin_destination_spacer(doing_html: bool) -> str:

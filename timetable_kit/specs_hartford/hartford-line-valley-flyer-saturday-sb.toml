@@ -8,4 +8,4 @@ bottom_text = "CTrail tickets are valid for all CTRail trains, and for Amtrak tr
 landscape = true
 key_d = true
 all_stations_accessible = true
-for_rpa = true
+

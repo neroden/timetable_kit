@@ -87,7 +87,6 @@ def add_search_argument(parser: argparse.ArgumentParser):
     )
 
 
-
 def add_day_argument(parser: argparse.ArgumentParser):
     """Add the --day argument to a parser."""
     parser.add_argument(
@@ -176,6 +175,17 @@ def add_positional_spec_files_argument(parser: argparse.ArgumentParser):
     )
 
 
+def add_style_argument(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "--style",
+        help="""
+             The filename of the style toml. Can be just the filename (like "via") - it will be found automagically.
+             """,
+        dest="style_filename",
+        default="default",
+    )
+
+
 def make_tt_arg_parser():
     """Make argument parser for timetable.py."""
     parser = argparse.ArgumentParser(
@@ -188,6 +198,7 @@ def make_tt_arg_parser():
     add_agency_argument(parser)
     add_gtfs_argument(parser)
     add_get_gtfs_argument(parser)
+    add_style_argument(parser)
 
     add_date_argument(parser)
     add_debug_argument(parser)

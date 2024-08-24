@@ -11,7 +11,7 @@ import argparse
 import sys  # for exit
 
 import pandas as pd
-from pandas import DataFrame, Series
+from pandas import Series
 
 from timetable_kit import runtime_config  # for the agency()
 from timetable_kit.debug import set_debug_level

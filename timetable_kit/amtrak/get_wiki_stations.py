@@ -11,12 +11,11 @@ Amtrak's JSON station data does not distinguish between train stations and bus s
 """
 
 import argparse
-from pathlib import Path
 import re
 from math import nan
+from pathlib import Path
 
 import pandas as pd
-
 
 arg_parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,

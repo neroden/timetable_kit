@@ -6,9 +6,7 @@
 This holds a class for "AgencyMapleLeaf" intended to be used as a singleton.
 """
 import timetable_kit.text_assembly as text_assembly
-
 from timetable_kit.amtrak import AgencyAmtrak
-from timetable_kit.via import AgencyVIA
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
@@ -16,6 +14,7 @@ from timetable_kit.maple_leaf.connecting_services_data import connecting_service
 
 # For getting VIA station codes to print them
 from timetable_kit.maple_leaf.station_data import amtrak_code_to_via_code
+from timetable_kit.via import AgencyVIA
 
 
 # This should mostly be based on Amtrak.
@@ -81,10 +80,6 @@ class AgencyMapleLeaf(AgencyAmtrak, AgencyVIA):
         ]
         print("Enhanced station list", enhanced_station_list)
         return super().get_all_connecting_services(enhanced_station_list)
-
-    def agency_css_class(self) -> str:
-        """Name of a CSS class for agency-specific styling."""
-        return "maple-leaf-special-css"
 
 
 # Establish the singleton

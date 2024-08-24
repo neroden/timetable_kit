@@ -9,18 +9,11 @@ Should not depend on anything else in timetable_kit,
 since it's used during initalization of every <agency>/get_gtfs.py file.
 """
 
-from typing import Self
-
-import sys  # for sys.exit
+import shutil  # for rmtree
 from os import PathLike
 from pathlib import Path
-import shutil  # for rmtree
-
-
-from xdg_base_dirs import xdg_data_home  # for where to put the files
-
+from typing import Self
 from zipfile import ZipFile
-
 
 import requests
 

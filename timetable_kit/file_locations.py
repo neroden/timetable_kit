@@ -21,7 +21,7 @@ def get_timetable_kit_data_home(system: bool = False) -> Path:
     return _data_home / "timetable_kit"
 
 
-def get_search_list(base: PathLike) -> list[Path]:
+def get_search_list(base: PathLike | str) -> list[Path]:
     """Given a relative base resource type to search for (like "templates"), give a list of directories to search
 
     Typically ["~/.local/share/timetable_kit/templates","/var/lib/timetable_kit/templates"]

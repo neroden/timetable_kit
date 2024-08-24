@@ -7,11 +7,10 @@ This should be reviewed every time Amtrak releases a new GTFS.
 """
 # TODO: all the Amtrak-specific stuff needs to be made object oriented in an "Amtrak object" perhaps
 
-from timetable_kit.debug import debug_print
-from timetable_kit.feed_enhanced import FeedEnhanced
-
 # Add the wheelchair boarding information from JSON into the GTFS
 from timetable_kit.amtrak.access import patch_add_wheelchair_boarding
+from timetable_kit.debug import debug_print
+from timetable_kit.feed_enhanced import FeedEnhanced
 
 arizona_stops_list = [
     # Sunset Limited
@@ -116,7 +115,7 @@ def patch_hiawatha(feed: FeedEnhanced):
 
 
 def patch_sunset_limited(feed: FeedEnhanced):
-    """Patch a bug where Sunset Limited #2 has wrong departure days. 
+    """Patch a bug where Sunset Limited #2 has wrong departure days.
     It departs from LAX on Su/We/Fr and not Sa/Tu/Th
 
     The bug is because it starts so late it starts on the following day in Eastern Standard Time.
@@ -139,17 +138,17 @@ def patch_sunset_limited(feed: FeedEnhanced):
                 debug_print(1, "Found #2 listed as running on Saturday, patching")
                 new_calendar.loc[index, "sunday"] = 0
                 new_calendar.loc[index, "monday"] = 1
-                #feed.calendar = new_calendar
+                # feed.calendar = new_calendar
             if new_calendar.loc[index, "wednesday"] == 1:  # This is incorrrect.
                 debug_print(1, "Found #2 listed as running on Tuesday, patching")
                 new_calendar.loc[index, "wednesday"] = 0
                 new_calendar.loc[index, "thursday"] = 1
-                #feed.calendar = new_calendar
+                # feed.calendar = new_calendar
             if new_calendar.loc[index, "friday"] == 1:  # This is incorrrect.
                 debug_print(1, "Found #2 listed as running on Thursday, patching")
                 new_calendar.loc[index, "friday"] = 0
                 new_calendar.loc[index, "saturday"] = 1
-                #feed.calendar = new_calendar
+                # feed.calendar = new_calendar
             feed.calendar = new_calendar
 
 

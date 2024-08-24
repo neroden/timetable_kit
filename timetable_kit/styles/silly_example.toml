@@ -1,0 +1,9 @@
+# chaos.
+[time]
+24h = false
+am = {style = "b i small", string = "in the morning"}
+pm = {style = "s u sup", string = "in the afternoon"}
+
+[day]
+format = "letters-CA"
+week_start = "wednesday"

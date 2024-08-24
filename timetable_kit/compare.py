@@ -12,7 +12,6 @@ import argparse
 
 # Mostly for agency defaulting
 from timetable_kit import runtime_config
-from timetable_kit.runtime_config import agency
 
 # My packages: Local module imports
 from timetable_kit.debug import set_debug_level
@@ -20,6 +19,7 @@ from timetable_kit.feed_enhanced import FeedEnhanced
 
 # To initialize the feed -- does type changes
 from timetable_kit.initialize import initialize_feed
+from timetable_kit.runtime_config import agency
 
 # Common arguments for the command line
 from timetable_kit.timetable_argparse import (
@@ -27,6 +27,7 @@ from timetable_kit.timetable_argparse import (
     add_gtfs_argument,
     add_debug_argument,
 )
+
 
 ### "Compare" Debugging routines to check for changes in timetable
 

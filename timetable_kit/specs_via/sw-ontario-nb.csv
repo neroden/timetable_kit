@@ -4,7 +4,6 @@ omit,"suspended: #80 (before #70), #88 (last train)",,,,,,,,
 omit,"When the Maple Leaf has a different weekend schedule, this is 698-63.  But starting in early July 2023, it doesn't any more.",,,,,,,,
 route-name,,,,,,,,,
 days,,,LNDN,TRTO,TRTO,TRTO,TRTO,TRTO,TRTO
-updown,,,,,,,,,
 omit,"VIA Rail's timing data for NY stations is WRONG as of July 2023, so don't use it!",,,,,,,,
 omit,NEWY,,blank,blank,blank,blank,blank,first,blank
 omit,YONK,,blank,blank,blank,blank,blank,,blank

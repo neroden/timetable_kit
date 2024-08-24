@@ -5,35 +5,33 @@
 
 This holds a class for "AgencyAmtrak" intended to be used as a singleton.
 """
-from timetable_kit.feed_enhanced import FeedEnhanced  # Mostly for typechecking
-
-from timetable_kit.generic_agency import Agency
-
-# for patch_feed
-import timetable_kit.amtrak.gtfs_patches as gtfs_patches
-
 # for patch_add_wheelchair_boarding
 import timetable_kit.amtrak.access as access
-
-# for sleeper trains, which trains have checked baggage, major stations, etc
-import timetable_kit.amtrak.special_data as special_data
 
 # for whether stations have checked baggage
 import timetable_kit.amtrak.baggage as baggage
 
+# for patch_feed
+import timetable_kit.amtrak.gtfs_patches as gtfs_patches
+
 # for get_station_name
 import timetable_kit.amtrak.json_stations as json_stations
 
+# for get_route_name
+import timetable_kit.amtrak.route_names as route_names
+
+# for sleeper trains, which trains have checked baggage, major stations, etc
+import timetable_kit.amtrak.special_data as special_data
+
 # for get_station_name_pretty (subroutines)
 import timetable_kit.text_assembly as text_assembly
-from timetable_kit.text_assembly import SAFE_BR
 
 # Map from station codes to connecting service names
 # This is stashed in a class variable
 from timetable_kit.amtrak.connecting_services_data import connecting_services_dict
-
-# for get_route_name
-import timetable_kit.amtrak.route_names as route_names
+from timetable_kit.feed_enhanced import FeedEnhanced  # Mostly for typechecking
+from timetable_kit.generic_agency import Agency
+from timetable_kit.text_assembly import SAFE_BR
 
 
 class AgencyAmtrak(Agency):
@@ -108,10 +106,6 @@ class AgencyAmtrak(Agency):
     def connecting_bus_key_sentence(self, doing_html=True) -> str:
         """Sentence to put in the symbol key for connecting bus services."""
         return "Connecting Bus Service (can be booked through Amtrak)"
-
-    def agency_css_class(self) -> str:
-        """Name of a CSS class for agency-specific styling."""
-        return "amtrak-special-css"
 
     def get_route_name(self, today_feed: FeedEnhanced, route_id: str) -> str:
         """Given today_feed and a route_id, produce a suitalbe name for a column

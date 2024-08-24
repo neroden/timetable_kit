@@ -8,7 +8,8 @@ VIA Rail specific CSS.
 
 {# Vary the color of the h1 heading. #}
 h1.via-special-css {
-    background-color: crimson;
+    background-color: #ffcc00;
+    color: black
 }
 /* Put this before the printed heading, but not in index lists of headings */
 h1.via-special-css::before {

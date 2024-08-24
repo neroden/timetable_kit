@@ -4,6 +4,6 @@ aria_label = "Cascades Southbound"
 reference_date = "20240620"
 programmers_warning = "Oregon Point buses missing.  Coast Starlight duplicate timetable problems."
 key_baggage = true
-for_rpa = true
+
 key_bus = true
 use_bus_icon_in_cells = true

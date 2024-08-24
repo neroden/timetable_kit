@@ -2,12 +2,15 @@
 # Part of timetable_kit
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Types used for extra type-checking."""
+from __future__ import annotations
 
 # Do this after working our way through the codebase to fix all calls
 # from typing import NewType
 
 # Do this for now
-from typing import TypeAlias, NewType, NamedTuple
+from typing import TypeAlias, NamedTuple
+
+from pandas import DataFrame, Series
 
 # This must be a date in YYYYMMDD format
 # type GTFSDate = NewType("GTFSDate", str)
@@ -28,3 +31,6 @@ class HtmlAndCss(NamedTuple):
 
     html_text: str
     css_text: str
+
+
+Calendar = DataFrame | Series

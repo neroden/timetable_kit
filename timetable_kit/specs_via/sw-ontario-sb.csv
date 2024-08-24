@@ -3,7 +3,6 @@ column-options,,,ardp,ardp,ardp,ardp,ardp,ardp,ardp
 omit,"suspended: #85 (comes after #71), #81 (comes after #87)",,,,,,,,
 route-name,,,,,,,,,
 days,,,TRTO,TRTO,TRTO,TRTO,TRTO,TRTO,TRTO
-updown,,,,,,,,,
 TRTO,,,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row,first two-row
 OAKV,,,,,,,,,
 ALDR,,,,,,,,,

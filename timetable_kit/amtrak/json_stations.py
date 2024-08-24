@@ -18,18 +18,14 @@ get_station_name is the primary one.
 # will download Amtrak's station files into the './stations/' directory
 # otherwise runs test case
 
-import sys
-from pathlib import Path
-from io import StringIO  # Needed to parse JSON
 import argparse
-
-import requests
-import json  # better for the details import
+import random
+from io import StringIO  # Needed to parse JSON
+from pathlib import Path
 from time import sleep  # Avoid slamming Amtrak's server too fast -- not needed
 
 import pandas as pd
-
-import random
+import requests
 
 from timetable_kit.file_locations import get_timetable_kit_data_home
 
@@ -72,6 +68,7 @@ def download_stations_json() -> str:
 
 def save_stations_json(stations_json: str):
     """Save Amtrak's basic stations database (json text) to a suitable file."""
+    stations_json_local_path().parent.mkdir(exist_ok=True)
     with open(stations_json_local_path(), "w") as stations_json_local_file:
         print(stations_json, file=stations_json_local_file)
 
@@ -448,8 +445,7 @@ def make_arg_parser():
     return arg_parser
 
 
-# MAIN PROGRAM
-if __name__ == "__main__":
+def main():
     arg_parser = make_arg_parser()
     args = arg_parser.parse_args()
 
@@ -463,3 +459,8 @@ if __name__ == "__main__":
                 download_one_station(str.upper(args.station_code))
         case "process" | "p":
             do_station_processing()
+
+
+# MAIN PROGRAM
+if __name__ == "__main__":
+    main()

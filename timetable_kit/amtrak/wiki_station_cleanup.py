@@ -9,9 +9,8 @@ therefore full of hardcoded filenames, and probably subject to bitrot. It is bet
 get station names from Amtrak's JSON data.
 """
 
-import pandas as pd
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
-
+import pandas as pd
 
 # Cities with multiple stations in the same city, requiring disambiguation
 two_station_cities = [

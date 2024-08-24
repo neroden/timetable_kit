@@ -21,6 +21,10 @@ def get_gtfs_files():
     return _gtfs_files
 
 
+def main():
+    get_gtfs_files().download_and_save()
+
+
 # MAIN PROGRAM
 if __name__ == "__main__":
-    get_gtfs_files().download_and_save()
+    main()

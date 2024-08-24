@@ -37,6 +37,7 @@ get_logo_css(filename: str) -> str
 get_logo_svg(filename: str) -> str
 get_connecting_services_csv(filename: str) -> str
 """
+from pathlib import Path
 
 from jinja2 import (
     Environment,
@@ -199,6 +200,26 @@ def get_connecting_services_csv(filename: str) -> str:
         connecting_services_csv_environment, filename
     )
     return connecting_services_csv_str
+
+
+def get_style_toml(filename: str) -> str:
+    """Load a style from either the user config directory or the default location.
+    The filename can just be the name or the full path. For example, "default" for the default style.
+    This is to enable directly passing the option from the command line.
+    """
+    if not filename.endswith(".toml"):
+        filename += ".toml"
+
+    maybe_paths = (
+        Path(filename),
+        *(_dir / filename for _dir in get_search_list("styles")),
+        Path(__file__).parent / "styles" / filename,
+    )
+
+    for path in maybe_paths:
+        if path.exists() and path.is_file():
+            with path.open() as f:
+                return f.read()  # return the first valid entry in the hierarchy
 
 
 # TESTING

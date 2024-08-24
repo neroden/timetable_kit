@@ -71,9 +71,9 @@ def revised_amtrak_agencies(agency):
     )
     # Edit the lookup table:
     # This was only needed for pre-2022 Amtrak data.
-    agency_lookup_table[
-        174
-    ] = "Amtrak Directly Operated Thruway Bus"  # Is "Amtrak" in feed
+    agency_lookup_table[174] = (
+        "Amtrak Directly Operated Thruway Bus"  # Is "Amtrak" in feed
+    )
     agency_lookup_table[192] = "Thruway Bus Operator 192"
     agency_lookup_table[1206] = "Thruway Bus Operator 1206"
     agency_lookup_table[1207] = "Thruway Bus Operator 1207"

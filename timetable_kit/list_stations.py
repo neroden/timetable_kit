@@ -9,7 +9,7 @@ import os  # For os.getenv
 import sys  # For sys.exit
 
 from timetable_kit import runtime_config  # for the agency()
-from timetable_kit.debug import debug_print, set_debug_level
+from timetable_kit.debug import set_debug_level
 from timetable_kit.initialize import initialize_feed
 from timetable_kit.runtime_config import agency  # for the agency()
 

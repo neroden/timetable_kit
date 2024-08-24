@@ -7,17 +7,22 @@ This holds a class for "Agency" intended to be used as a singleton. It has an in
 Amtrak and others need to provide the same interface. This should be made easier by
 class inheritance.
 """
-
-from timetable_kit.feed_enhanced import FeedEnhanced
-from timetable_kit.debug import debug_print
-
-# For text twiddling
-from timetable_kit import text_assembly
-from timetable_kit.text_assembly import href_wrap, and_clause, or_clause
-from timetable_kit.text_assembly import SAFE_BR
+from typing import Protocol
 
 # Find the HTML for a specific connecting agency's logo
 from timetable_kit.connecting_services import get_connecting_service_logo_html
+from timetable_kit.debug import debug_print
+from timetable_kit.feed_enhanced import FeedEnhanced
+
+# For text twiddling
+from timetable_kit.text_assembly import (
+    SAFE_BR,
+    station_name_to_single_line_text,
+    station_name_to_multiline_text,
+    href_wrap,
+    and_clause,
+    or_clause,
+)
 
 
 # Intended to be used both directly and by subclasses
@@ -327,11 +332,6 @@ class Agency:
         # There is probably a better way to do this.
         return False
 
-    def agency_css_class(self) -> str:
-        """Name of a CSS class for agency-specific styling."""
-        # Default is blank.  This generates class="".
-        return ""
-
     def get_all_connecting_services(self, station_list: list[str]) -> list[str]:
         """Given a list of station codes, return a list of services which connect (with
         no duplicates)"""
@@ -568,10 +568,10 @@ class Agency:
                 stop_name_raw, facility_name, station_code, major
             )
         elif doing_multiline_text:
-            reassemble = text_assembly.station_name_to_multiline_text
+            reassemble = station_name_to_multiline_text
             return reassemble(stop_name_raw, facility_name, station_code, major)
         else:
-            reassemble = text_assembly.station_name_to_single_line_text
+            reassemble = station_name_to_single_line_text
             return reassemble(stop_name_raw, facility_name, station_code, major)
 
 
@@ -579,7 +579,12 @@ class Agency:
 _singleton = Agency()
 
 
-def get_singleton():
+def get_singleton() -> Agency:
     """Get singleton for generic agency."""
     global _singleton
     return _singleton
+
+
+class AgencySingletonGetter(Protocol):
+    @staticmethod
+    def get_singleton() -> Agency: ...

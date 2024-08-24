@@ -6,4 +6,4 @@ landscape = true
 reference_date = "20240620"
 key_baggage = true
 all_stations_accessible = true
-for_rpa = true
+

@@ -5,8 +5,8 @@
 """This simply reverses the rows in a CSV file
 """
 import sys
-import pandas as pd
 
+import pandas as pd
 
 # TO DO: do a smarter parse of this.
 # Keep header rows at the top,

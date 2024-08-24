@@ -7,11 +7,9 @@ This holds a class for "AgencyGreyhound" intended to be used as a singleton.
 """
 from __future__ import annotations
 
+import timetable_kit.greyhound.gtfs_patches as gtfs_patches  # for patch_feed
 from timetable_kit.feed_enhanced import FeedEnhanced
 from timetable_kit.generic_agency import Agency
-
-# for patch_feed
-import timetable_kit.greyhound.gtfs_patches as gtfs_patches
 
 
 class AgencyGreyhound(Agency):

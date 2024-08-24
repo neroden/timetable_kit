@@ -1,0 +1,15 @@
+# Nathanael's Amtrak-inspired format, the default for timetable_kit
+[time]
+24h = false
+am = {style = "", string = "A"}
+pm = {style = "b", string = "P"}
+
+[day]
+format = {all = "Daily", some = "hyphen-2l"}
+week_start = "monday"
+
+[css]
+tag = "amtrak-special-css"
+
+[extra]
+for_rpa = true

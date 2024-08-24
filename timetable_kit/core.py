@@ -16,21 +16,12 @@ from copy import deepcopy  # For copying dicts properly
 from pathlib import Path, PurePath
 from typing import Type, Self, TypedDict
 
-import tomlkit
 import pandas as pd
+import tomlkit
 
-############
-# My modules
-# This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
-from timetable_kit.time import (
-    get_zonediff,  # for "days"
-    explode_timestr,  # for "days"
-    day_string,  # for "days"
-    get_zone_str,  # for TZ column
-)
-
-from timetable_kit import text_presentation
 from timetable_kit import icons
+from timetable_kit import text_presentation
+from timetable_kit.convenience_types import GTFSDate
 
 ####################################
 # Specific functions from my modules
@@ -43,13 +34,23 @@ from timetable_kit.errors import (
     TwoTripsError,
     InputError,
 )
-from timetable_kit.convenience_types import GTFSDate
-
 from timetable_kit.feed_enhanced import GTFS_DAYS, FeedEnhanced
 
 # We call these repeatedly, so give them shorthand names
-from timetable_kit.runtime_config import agency
 from timetable_kit.runtime_config import agency_singleton
+from timetable_kit.styles import StyleHandler
+
+############
+# My modules
+# This (runtime_config) stores critical data supplied at runtime such as the agency subpackage to use.
+from timetable_kit.time import (
+    get_zonediff,  # for "days"
+    get_zone_str,
+    TimeTuple,  # for TZ column
+)
+
+# For the new HTML layout engine
+from timetable_kit.timetable_class import Timetable
 
 # This is the big styler routine, lots of CSS; keep out of main namespace
 from timetable_kit.timetable_styling import (
@@ -62,10 +63,6 @@ from timetable_kit.tsn import (
     stations_list_from_tsn,
     stations_list_from_trip_id,
 )
-
-# For the new HTML layout engine
-from timetable_kit.timetable_class import Timetable
-
 
 # Constant set for the special column names.
 # These should not be interpreted as trip_short_names or train numbers.
@@ -101,6 +98,7 @@ class TTSpec:
     def __init__(self: Self, aux: dict, csv: pd.DataFrame) -> None:
         self.aux: dict = aux
         self.csv: pd.DataFrame = csv
+        self._column_options = self._extract_column_options()
         self.__set_aux_defaults()  # Set defaults for missing aux
         # Warning, this doesn't set crucial things like tt_id.
 
@@ -127,7 +125,9 @@ class TTSpec:
             self.aux["reference_date"] = reference_date
 
     @classmethod
-    def from_files(cls: Type[Self], filename: str, input_dir: os.PathLike | str = "."):
+    def from_files(
+        cls: Type[Self], filename: str, input_dir: os.PathLike | str = "."
+    ) -> Type[Self]:
         """Load a tt-spec from files, both the aux and the CSV."""
         input_dir = Path(input_dir)
 
@@ -238,9 +238,8 @@ class TTSpec:
 
         Requires a feed.  Requires that reference_date be set.
 
-        Note that this tucks on the end of the tt_spec.  A "second row" for column-
-        options will therefore be unaffected.  Other second rows may result in confusing
-        results.
+        Note that this tucks on the end of the tt_spec.  A "second row" for column_options
+        will therefore be unaffected.  Other second rows may result in confusing results.
 
         Prints the CSV.
         """
@@ -460,7 +459,7 @@ class TTSpec:
         ]
         return train_specs_list
 
-    def extract_column_options(self: Self):
+    def _extract_column_options(self: Self):
         """If this TTSpec has column-options in row 2 of the CSV, remove that row and
         fill in the column_options structure.
 
@@ -474,19 +473,18 @@ class TTSpec:
 
         We HAVE to reindex after removing the column_options from the CSV.
         """
-        self.column_options: list[list[str]]
+
         # Consider generalizing to allow column-options in other rows
         if str(self.csv.iloc[1, 0]).lower() not in ["column-options", "column_options"]:
             column_count = self.csv.shape[1]
             # What, there weren't any?  Make a list containing blank lists:
-            self.column_options = [[]] * column_count
+            return [[]] * column_count
             # No column-options row, so don't delete it
-            return
+
         # Now for the main version
         column_options_df = self.csv.iloc[1, 0:]  # second row, all of it
         column_options_raw_list = column_options_df.to_list()
         column_options_nested_list = [str(i).split() for i in column_options_raw_list]
-        self.column_options = column_options_nested_list
         # Now delete row 2.
         # This drops by index and not by actual row number, FIXME
         # Thankfully they're currently the same
@@ -495,8 +493,13 @@ class TTSpec:
         # We MUST reset the index so rows are numbered 0 to end without breaks
         # Drop old index, operate in place
         self.csv.reset_index(drop=True, inplace=True)
-        debug_print(1, "Column options separated from CSV:", self.column_options)
+        debug_print(1, "Column options separated from CSV:", column_options_nested_list)
         debug_print(6, "New CSV:", self.csv)
+        return column_options_nested_list
+
+    @property
+    def column_options(self):
+        return self._column_options
 
 
 class _CellCodes(TypedDict, total=False):
@@ -752,6 +755,7 @@ def raise_error_if_not_one_row(trips):
 
 def fill_tt_spec(
     spec: TTSpec,
+    style: StyleHandler,
     *,
     today_feed: FeedEnhanced,
     doing_html=False,
@@ -806,7 +810,6 @@ def fill_tt_spec(
     debug_print(1, "Working with reference date ", reference_date)
 
     # Set correct defaults for various things not always in the aux
-    times_24h = bool(spec.aux.get("times_24h"))
     train_numbers_side_by_side = bool(spec.aux.get("train_numbers_side_by_side"))
     use_bus_icon_in_cells = bool(spec.aux.get("use_bus_icon_in_cells"))
     box_time_characters = bool(spec.aux.get("box_time_characters"))
@@ -817,7 +820,6 @@ def fill_tt_spec(
 
     # Clean up the spec.
     spec.strip_omits()
-    spec.extract_column_options()  # Also removes column_options from main CSV dataframe
     spec.augment_from_key_cell(feed=today_feed)  # Expand "shorthand" specs
 
     # We have a filtered feed.  We're going to have to map from tsns to trip_ids, repeatedly.
@@ -1150,6 +1152,7 @@ def fill_tt_spec(
                     t.text.iloc[y, x] = text_presentation.style_updown(
                         reverse, doing_html=doing_html
                     )
+                    pass
                 case [
                     "days" | "days-of-week",
                     ck,
@@ -1198,14 +1201,18 @@ def fill_tt_spec(
                         stop_tz = stop_df.iloc[0].stop_timezone
                         zonediff = get_zonediff(stop_tz, agency_tz, reference_date)
                         # Get the day change for the reference stop (format is explained in text_presentation)
-                        departure = explode_timestr(timepoint.departure_time, zonediff)
+                        departure = TimeTuple.from_gtfs_time_string(
+                            timepoint.departure_time, zonediff
+                        )
                         offset = int(departure.day)
                         # Finally, get the calendar (must be unique)
                         calendar = today_feed.calendar[
                             today_feed.calendar.service_id == my_trip.service_id
                         ]
                         # And fill in the actual string
-                        daystring = day_string(calendar, offset=offset)
+                        daystring = style.format_day_string(
+                            calendar, offset=offset, html=doing_html
+                        )
                         # TODO: add some HTML styling here
                         t.text.iloc[y, x] = daystring
                     # Color this cell
@@ -1401,7 +1408,7 @@ def fill_tt_spec(
                             )
                         )
 
-                        calendar = None  # if not use_daystring, save time
+                        # calendar = None  # if not use_daystring, save time
                         if use_daystring:
                             calendar = today_feed.calendar[
                                 today_feed.calendar.service_id == my_trip.service_id
@@ -1461,12 +1468,12 @@ def fill_tt_spec(
                             stop_tz=stop_tz,
                             agency_tz=agency_tz,
                             reference_date=reference_date,
+                            style=style,
                             doing_html=doing_html,
                             box_time_characters=box_time_characters,
                             reverse=reverse,
                             two_row=two_row,
                             use_ar_dp_str=this_column_gets_ardp,
-                            times_24h=times_24h,
                             use_daystring=use_daystring,
                             calendar=calendar,
                             long_days_box=long_days_box,
@@ -1489,7 +1496,9 @@ def fill_tt_spec(
     t.classes.fillna(value="", inplace=True)
     # debug_print(1, "Classes table:", t.classes)
     # This is only set if it's "True"; fill in the "False" states.
-    t.th.fillna(value=False, inplace=True)
+    with pd.option_context("future.no_silent_downcasting", True):
+        t.th.fillna(value=False, inplace=True)
+        t.th.infer_objects(copy=False)
     # This is only set if it's not empty; fill in the "" states.
     t.attributes.fillna(value="", inplace=True)  # Correct default
 

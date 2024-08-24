@@ -4,23 +4,22 @@
 # Copyright 2022, 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Retrieve CT Rail Hartford Line's static GTFS data and merge with Amtrak's."""
 
-from typing import Self
 from pathlib import Path
+from typing import Self
 from zipfile import ZipFile
 
 # For loading the feeds for merging
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
 
+import timetable_kit.amtrak as amtrak  # for get_gtfs_files
 from timetable_kit.get_gtfs import (
     AgencyGTFSFiles,
     move_old_dir,
     move_old_file,
 )
-import timetable_kit.amtrak as amtrak  # for get_gtfs_files
 
 # For the merge process
 from timetable_kit.merge_gtfs import merge_feed, remove_stop_code_column
-
 
 # GTFS seems to be at:
 # https://www.cttransit.com/about/developers
@@ -173,6 +172,10 @@ def get_gtfs_files():
     return _gtfs_files
 
 
+def main():
+    get_gtfs_files().download_and_save()
+
+
 # MAIN PROGRAM
 if __name__ == "__main__":
-    get_gtfs_files().download_and_save()
+    main()

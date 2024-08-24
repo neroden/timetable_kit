@@ -3,20 +3,19 @@
 # Copyright 2021, 2022, 2023, 2024 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Module for processing GTFS times and producing strings.
 """
-
-from typing import NamedTuple  # for TimeTuple
+from __future__ import annotations
 
 from datetime import datetime, timedelta  # for time zones
+from functools import total_ordering
+from typing import NamedTuple  # for TimeTuple
 from zoneinfo import ZoneInfo  # still for time zones
-
-import pandas as pd  # Used for DataFrame
 
 # These are mine
 from timetable_kit.errors import GTFSError
-from timetable_kit.debug import debug_print
+from timetable_kit.utils import span_enclose
 
 
-def gtfs_date_to_isoformat(gtfs_date: str) -> str:
+def gtfs_date_to_isoformat(gtfs_date: str | int) -> str:
     """Given a GTFS date string, return an ISO format date string.
 
     This is a triviality: it converts 20220310 to 2022-03-10.
@@ -80,275 +79,63 @@ def get_zone_str(zone_name, doing_html=False):
     wrap."""
     letter = tz_letter_dict[zone_name]
     if doing_html:
-        return "".join(['<span class="box-tz">', letter, "</span>"])
+        return span_enclose("box-tz", letter)
     else:
         return letter
 
 
-# This dictionary of special cases for daystring is easier to read
-# than hand-writing all the if-thens.
-# The special cases are ones which don't need the "rotation trick"
-# (or, in the case of SaSu, where we want to *avoid* it)
-daystring_special_cases = {
-    (1, 1, 1, 1, 1, 1, 1): "Daily",
-    # Missing only one day
-    (1, 1, 1, 1, 1, 1, 0): "Mo-Sa",
-    (0, 1, 1, 1, 1, 1, 1): "Tu-Su",
-    (1, 0, 1, 1, 1, 1, 1): "We-Mo",
-    (1, 1, 0, 1, 1, 1, 1): "Th-Tu",
-    (1, 1, 1, 0, 1, 1, 1): "Fr-We",
-    (1, 1, 1, 1, 0, 1, 1): "Sa-Th",
-    (1, 1, 1, 1, 1, 0, 1): "Su-Fr",
-    # Missing two consecutive days (including Mo-Fr)
-    (1, 1, 1, 1, 1, 0, 0): "Mo-Fr",
-    (0, 1, 1, 1, 1, 1, 0): "Tu-Sa",
-    (0, 0, 1, 1, 1, 1, 1): "We-Su",
-    (1, 0, 0, 1, 1, 1, 1): "Th-Mo",
-    (1, 1, 0, 0, 1, 1, 1): "Fr-Tu",
-    (1, 1, 1, 0, 0, 1, 1): "Sa-We",
-    (1, 1, 1, 1, 0, 0, 1): "Su-Th",
-    # Missing three consecutive days
-    (1, 1, 1, 1, 0, 0, 0): "Mo-Th",
-    (0, 1, 1, 1, 1, 0, 0): "Tu-Fr",
-    (0, 0, 1, 1, 1, 1, 0): "We-Sa",
-    (0, 0, 0, 1, 1, 1, 1): "Th-Su",
-    (1, 0, 0, 0, 1, 1, 1): "Fr-Mo",
-    (1, 1, 0, 0, 0, 1, 1): "Sa-Tu",
-    (1, 1, 1, 0, 0, 0, 1): "Su-We",
-    # Missing four consecutive days
-    (1, 1, 1, 0, 0, 0, 0): "Mo-We",
-    (0, 1, 1, 1, 0, 0, 0): "Tu-Th",
-    (0, 0, 1, 1, 1, 0, 0): "We-Fr",
-    (0, 0, 0, 1, 1, 1, 0): "Th-Sa",
-    (0, 0, 0, 0, 1, 1, 1): "Fr-Su",
-    (1, 0, 0, 0, 0, 1, 1): "Sa-Mo",
-    (1, 1, 0, 0, 0, 0, 1): "Su-Tu",
-    # Only running two consecutive days
-    # (including SaSu, which we need to avoid SuSa in -1 offset cases)
-    (1, 1, 0, 0, 0, 0, 0): "MoTu",
-    (0, 1, 1, 0, 0, 0, 0): "TuWe",
-    (0, 0, 1, 1, 0, 0, 0): "WeTh",
-    (0, 0, 0, 1, 1, 0, 0): "ThFr",
-    (0, 0, 0, 0, 1, 1, 0): "FrSa",
-    (0, 0, 0, 0, 0, 1, 1): "SaSu",
-    (1, 0, 0, 0, 0, 0, 1): "SuMo",
-    # Only running on one day a week
-    (1, 0, 0, 0, 0, 0, 0): "Mo",
-    (0, 1, 0, 0, 0, 0, 0): "Tu",
-    (0, 0, 1, 0, 0, 0, 0): "We",
-    (0, 0, 0, 1, 0, 0, 0): "Th",
-    (0, 0, 0, 0, 1, 0, 0): "Fr",
-    (0, 0, 0, 0, 0, 1, 0): "Sa",
-    (0, 0, 0, 0, 0, 0, 1): "Su",
-}
-
-
-def day_string(calendar, offset: int = 0) -> str:
-    """Return "MoWeFr" style string for days of week.
-
-    Given a calendar DataTable which contains only a single row for a single service,
-    this returns a string like "Daily" or "MoWeFr" for the serviced days of the week.
-
-    Use offset to get the string for stops which are more than 24 hours after initial
-    depature. Beware of time zone changes!
-
-    I have had more requests for tweaks to this format than anything else!
-    """
-    days_of_service_list = calendar.to_dict("records")
-    # if there are zero or duplicate service records, we error out.
-    if len(days_of_service_list) == 0:
-        raise GTFSError("daystring() can't handle an empty calendar")
-    if len(days_of_service_list) >= 2:
-        raise GTFSError(
-            "daystring() can't handle two calendars for service_id: ",
-            days_of_service_list,
-        )
-    days_of_service = days_of_service_list[0]
-
-    # Use modulo to correct the offset to the range 0:6
-    # Note timezone differences can lead to -1 offset.
-    # Later stations on the route lead to positive offset.
-    offset %= 7
-
-    # OK.  Fast encoding version here as a list of 1s and 0s.
-    days_of_service_vector = [
-        days_of_service["monday"],
-        days_of_service["tuesday"],
-        days_of_service["wednesday"],
-        days_of_service["thursday"],
-        days_of_service["friday"],
-        days_of_service["saturday"],
-        days_of_service["sunday"],
-    ]
-
-    # Do the offset rotation.
-    def rotate_right(l, n):
-        return l[-n:] + l[:-n]
-
-    days_of_service_vector = rotate_right(days_of_service_vector, offset)
-
-    # Try the lookup-table path.
-    try:
-        daystring = daystring_special_cases[tuple(days_of_service_vector)]
-        return daystring
-    except KeyError:
-        pass
-
-    # Lookup-table path failed.
-    # Now we have to do it the hard way, by just patching days of the week together.
-    # This probably means the days of non-operation are non-consecutive (MWF or whatever).
-
-    # Now we get tricky.  We want the days of the week to line up as they cycle around the clock.
-    # This is kind of messy!  We always use the order of the original, zero-offset day.
-    # That's slightly wacky for the -1 offsets -- Su is first instead of Mo -- but that is OK.
-    daystring = ""
-    if days_of_service["monday"]:
-        daystring += ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"][offset]
-    if days_of_service["tuesday"]:
-        daystring += ["Tu", "We", "Th", "Fr", "Sa", "Su", "Mo"][offset]
-    if days_of_service["wednesday"]:
-        daystring += ["We", "Th", "Fr", "Sa", "Su", "Mo", "Tu"][offset]
-    if days_of_service["thursday"]:
-        daystring += ["Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"][offset]
-    if days_of_service["friday"]:
-        daystring += ["Fr", "Sa", "Su", "Mo", "Tu", "We", "Th"][offset]
-    if days_of_service["saturday"]:
-        daystring += ["Sa", "Su", "Mo", "Tu", "We", "Th", "Fr"][offset]
-    if days_of_service["sunday"]:
-        daystring += ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][offset]
-
-    if daystring == "":
-        raise GTFSError("No days of operation?!?")
-
-    # Generic case
-    return daystring
-
-
 # Timestr functions
+@total_ordering
 class TimeTuple(NamedTuple):
     """Class with time broken into pieces for printing."""
 
     day: int
-    pm: int
-    hour: int
+    pm: bool
+    hour12: int
     hour24: int
     min: int
     sec: int
 
+    @classmethod
+    def from_gtfs_time_string(
+        cls, timestr: str | TimeTuple, zonediff: int = 0
+    ) -> TimeTuple:
+        """Given a GTFS timestr, return a TimeTuple.
 
-def explode_timestr(timestr: str, zonediff: int = 0) -> TimeTuple:
-    """Given a GTFS timestr, return a TimeTuple.
+        TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour), 'hour24' ,'min',
+        'sec'.
 
-    TimeTuple is a namedtuple giving 'day', 'pm', 'hour' (12 hour), 'hour24' ,'min',
-    'sec'.
-
-    zonediff is the number of hours to adjust to convert to local time before exploding.
-    """
-    try:
-        longhours, mins, secs = [int(x) for x in timestr.split(":")]
-        longhours += zonediff  # this is the timezone adjustment
-    except Exception as exc:
-        # Winnipeg-Churchill timetable has NaNs -- don't let it get here!
-        raise GTFSError("Timestr didn't parse right", timestr) from exc
-        # Return all-zeroes to identify where it happened
-        # return TimeTuple(day=0,pm=0,hour=0,hour24=0,min=0,sec=0)
-    # Note: the following does the right thing for negative hours
-    # (which can be created by the timezone adjustment)
-    # It will give -1 days and positive hours24.
-    [days, hours24] = divmod(longhours, 24)
-    [pm, hours] = divmod(hours24, 12)
-    my_time = TimeTuple(day=days, pm=pm, hour=hours, hour24=hours24, min=mins, sec=secs)
-    # could do as dict, but seems cleaner this way
-    return my_time
-
-
-def time_short_str_24(time: TimeTuple, box_time_characters=False) -> str:
-    """Given an exploded TimeTuple, give a short version of the time suitable for a
-    timetable.
-
-    But do it in "military" format from 0:00 to 23:59.
-    doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
-    """
-    # Note that this is very explicitly designed to be fixed width
-    time_text = [
-        f"{time.hour24 : >2}",
-        ":",
-        f"{time.min    :0>2}",
-    ]
-    time_str = "".join(time_text)  # String suitable for plaintext
-    if box_time_characters:
-        # There are exactly five characters, by construction.  23:59 is largest.
-        html_time_str = "".join(
-            [
-                '<span class="box-digit">',
-                time_str[0],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[1],
-                "</span>",
-                '<span class="box-colon">',
-                time_str[2],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[3],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[4],
-                "</span>",
-            ]
+        zonediff is the number of hours to adjust to convert to local time before exploding.
+        """
+        if isinstance(timestr, TimeTuple):
+            return timestr
+        try:
+            longhours, mins, secs = [int(x) for x in timestr.split(":")]
+            longhours += zonediff  # this is the timezone adjustment
+        except Exception as exc:
+            # Winnipeg-Churchill timetable has NaNs -- don't let it get here!
+            raise GTFSError("Timestr didn't parse right", timestr) from exc
+            # Return all-zeroes to identify where it happened
+            # return TimeTuple(day=0,pm=0,hour=0,hour24=0,min=0,sec=0)
+        # Note: the following does the right thing for negative hours
+        # (which can be created by the timezone adjustment)
+        # It will give -1 days and positive hours24.
+        [days, hours24] = divmod(longhours, 24)
+        [pm, hours] = divmod(hours24, 12)
+        my_time = TimeTuple(
+            day=days, pm=bool(pm), hour12=hours, hour24=hours24, min=mins, sec=secs
         )
-        time_str = html_time_str
-    return time_str
+        # could do as dict, but seems cleaner this way
+        return my_time
 
+    def __lt__(self, other: TimeTuple) -> bool:
+        return self.modulo24_str() < other.modulo24_str()
 
-# Named constant useful for the next method:
-ampm_str = ["A", "P"]  # index into this to get the am or pm string
+    def __eq__(self, other: TimeTuple) -> bool:
+        return self.modulo24_str() == other.modulo24_str()
 
-
-def time_short_str_12(time: TimeTuple, box_time_characters=False) -> str:
-    """Given an exploded TimeTuple, give a short version of the time suitable for a
-    timetable.
-
-    Do it with AM and PM.
-    doing_html: Box each character in a html span, to simulate tabular numbers with non-tabular fonts.
-    """
-    # Note that this is very explicitly designed to be fixed width
-    hour = time.hour
-    if hour == 0:
-        hour = 12
-    time_text = [
-        f"{hour     : >2}",
-        ":",
-        f"{time.min :0>2}",
-        ampm_str[time.pm],
-    ]
-    time_str = "".join(time_text)  # String suitable for plaintext
-    if box_time_characters:
-        # There are exactly six characters, by construction. 12:59P is largest.
-        html_time_str = "".join(
-            [
-                '<span class="box-1">',
-                time_str[0],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[1],
-                "</span>",
-                '<span class="box-colon">',
-                time_str[2],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[3],
-                "</span>",
-                '<span class="box-digit">',
-                time_str[4],
-                "</span>",
-                '<span class="box-ap">',
-                time_str[5],
-                "</span>",
-            ]
-        )
-        time_str = html_time_str
-    return time_str
+    def modulo24_str(self) -> str:
+        return f"{self.hour24: >2}:{self.min:0>2}:{self.sec:0>2}"
 
 
 def modulo24(raw_timestr: str) -> str:
@@ -356,5 +143,5 @@ def modulo24(raw_timestr: str) -> str:
 
     Used to sort trains by departure time in list_trains.py.
     """
-    time = explode_timestr(raw_timestr)
-    return f"{time.hour24: >2}:{time.min:0>2}:{time.sec:0>2}"
+    time = TimeTuple.from_gtfs_time_string(raw_timestr)
+    return time.modulo24_str()

@@ -7,4 +7,4 @@ bottom_text = "<b>Amtrak does not carry local passengers</b> between Chicago, La
 key_baggage = true
 key_r = true
 key_d = true
-for_rpa = true
+

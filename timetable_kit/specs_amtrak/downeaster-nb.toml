@@ -3,4 +3,4 @@ heading = "Downeaster Northbound"
 aria_label = "Downeaster Northbound"
 landscape = true
 reference_date = "20240620"
-for_rpa = true
+

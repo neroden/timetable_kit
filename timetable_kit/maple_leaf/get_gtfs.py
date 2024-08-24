@@ -4,29 +4,19 @@
 # Copyright 2023 Nathanael Nerode.  Licensed under GNU Affero GPL v.3 or later.
 """Routines for creating a Maple Leaf GTFS from Amtrak's GTFS and VIA's GTFS."""
 
-import sys  # for sys.exit
-
 from typing import Self
-from pathlib import Path
-from zipfile import ZipFile
 
-import pandas as pd
 import gtfs_kit  # type: ignore # Tell MyPy this has no type stubs
-
-# Mine
-from timetable_kit.feed_enhanced import FeedEnhanced  # for filtering
 
 # For the merge
 from timetable_kit import amtrak
 from timetable_kit import via
-
-from timetable_kit.get_gtfs import AgencyGTFSFiles, move_old_dir, move_old_file
-from timetable_kit.merge_gtfs import merge_feed, remove_stop_code_column
-
+from timetable_kit.feed_enhanced import FeedEnhanced  # for filtering
+from timetable_kit.get_gtfs import AgencyGTFSFiles, move_old_file
 from timetable_kit.maple_leaf.station_data import (
-    amtrak_code_to_via_code,
     via_code_to_amtrak_code,
 )
+from timetable_kit.merge_gtfs import merge_feed, remove_stop_code_column
 
 
 def translate_via_stations_to_amtrak(via_ml_feed):
@@ -170,5 +160,9 @@ def get_gtfs_files():
     return _gtfs_files
 
 
-if __name__ == "__main__":
+def main():
     get_gtfs_files().download_and_save()
+
+
+if __name__ == "__main__":
+    main()

@@ -4,7 +4,6 @@ omit,city pair (for checking against list_trains.py),,om,om,to,tm,to,tm,om,om,to
 omit,"calendar-days.txt #624, #34 suspended",,,,,,,,,,,,,,,,,,,,,,,
 route-name,,,,,,,,,,,,,,,,,,,,,,,,
 days,,,OTTW,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,OTTW,OTTW,OTTW,TRTO,OTTW,OTTW,TRTO,OTTW,TRTO,OTTW
-updown,,,,,,,,,,,,,,,,,,,,,,,,
 TRTO,,,blank,blank,first two-row,first two-row,first two-row,first two-row,blank,blank,first two-row,first two-row,blank,first,first,blank,first,first,first,first,first,first,first,first
 GUIL,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,
 OSHA,,,blank,blank,,,,,blank,blank,,,blank,,,blank,,,,,,,,

@@ -1,0 +1,13 @@
+# Borketh's VIA-inspired style for use by Transport Action Canada
+[time]
+24h = true
+pm = {style = ""}
+
+[day]
+format = "numbers"
+
+[css]
+tag = "via-special-css"
+
+[extra]
+for_rpa = false

@@ -4,4 +4,4 @@ aria_label = "Wolverine Blue Water"
 reference_date = "20240620"
 programmers_warning = "This is used to make sure TwoTripsError will be correctly thrown when it should be.  Wolverine trains have identical M-F and SaSu timetables but are listed separately, so are useful for this."
 key_tz = true
-for_rpa = true
+

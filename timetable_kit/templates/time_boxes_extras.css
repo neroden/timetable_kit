@@ -38,9 +38,9 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: right;
     width: 1em;
 }
-.box-time12, box-time24 {
+.box-time12, .box-time24 {
     /* Padding between time and date or between time and right border */
-    padding-right: 0.5mm;
+    padding-right: 1mm;
 }
 .box-days {
     /* MoWeFr, align left */
@@ -63,4 +63,13 @@ To satisfy screen readers, we don't want nested tables.  This is the cleanest wa
     text-align: left;
     padding-right: 0.5mm;
     width: 2em;
+}
+
+.char-day-running {
+    font-weight: bold;
+}
+
+.char-day-absent {
+    font-weight: lighter;
+    color: lightgrey;
 }
